@@ -3,7 +3,7 @@
 # get get location of configs
 configs=$(pwd)
 
-declare -a array_of_files=(".vimrc" ".zshrc" "tmux.conf")
+declare -a array_of_files=(".vimrc" ".zshrc" ".tmux.conf")
 
 cd ~
 if [ ! backups ]; then

@@ -1,14 +1,10 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
-alias vim='/usr/local/bin/vim'
+
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
-source $ZSH/oh-my-zsh.sh
 set guifont=Liberation\ Mono\ for\ Powerline\ 10 
-# Set name of the theme to load. Optionally, if you set this to "random"
-# it'll load a random theme each time that oh-my-zsh is loaded.
-# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 ZSH_THEME="robbyrussell"
 
 # Uncomment the following line to use case-sensitive completion.
@@ -25,7 +21,7 @@ ZSH_THEME="robbyrussell"
 # export UPDATE_ZSH_DAYS=13
 
 # Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
+DISABLE_LS_COLORS="true"
 
 # Uncomment the following line to disable auto-setting terminal title.
 DISABLE_AUTO_TITLE="true"
@@ -61,6 +57,7 @@ plugins=(git)
 # export MANPATH="/usr/local/man:$MANPATH"
 
 HIST_IGNORE_SPACE=true
+source $ZSH/oh-my-zsh.sh
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
@@ -153,3 +150,4 @@ alias tt='tab-title'
 alias zshe="vim ~/.zshrc"
 alias zshr="source ~/.zshrc"
 alias portsinuse="lsof -i -P | grep -i 'listen'"
+alias vim='/usr/local/bin/vim'
