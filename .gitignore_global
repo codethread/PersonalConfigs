@@ -1,0 +1,8 @@
+*~
+*.swp*
+.DS_Store
+.settings
+bin
+node_modules
+.gitignore
+public

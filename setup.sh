@@ -3,7 +3,7 @@
 # get get location of configs
 configs=$(pwd)
 
-declare -a array_of_files=(".vimrc" ".zshrc" ".tmux.conf")
+array_of_files=( .??* )
 
 cd ~
 if [ ! backups ]; then
@@ -12,20 +12,24 @@ fi
 
 for file_name in "${array_of_files[@]}"
 do
-	echo 'func started with' $file_name
-	cd ~
+	if	[[ $file_name =~ .sw.?$ ]] || [[ $file_name =~ ^.git$ ]]
+	then
+		echo '>< ' ${file_name}
+	else
+		cd ~
 
-	if [ backups/$file_name ]; then
-		rm ~/backups/$file_name
+		if [ ~/backups/$file_name ]; then
+			rm ~/backups/$file_name
+		fi
+
+		mv $file_name backups
+
+		# if [ ./$file_name ]; then
+		# 	rm $file_name
+		# fi
+
+		ln -s ${configs}/${file_name} ${file_name}
+		echo '----->' $file_name 
 	fi
-
-	mv $file_name backups
-	
-	if [ $file_name ]; then
-		rm $file_name
-	fi
-
-	ln -s ${configs}/${file_name} ${file_name}
-	echo 'finished' $file_name 
 done
 

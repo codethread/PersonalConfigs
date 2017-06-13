@@ -15,6 +15,7 @@ Plugin 'tomtom/tcomment_vim' " Commenting
 " File Utils
 Plugin 'rking/ag.vim' " Used for searching like ack
 Plugin 'kien/ctrlp.vim'
+Plugin 'vim-syntastic/syntastic'
 
 " GUI changes
 Plugin 'tpope/vim-fugitive'
@@ -22,8 +23,9 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'bling/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'scrooloose/nerdtree.git'
+Plugin 'tpope/vim-obsession'
 
-"Plugin 'mxw/vim-jsx'
+Plugin 'mxw/vim-jsx'
 " Plugin 'reedes/vim-colors-pencil'
 " Plugin 'tpope/vim-cucumber'
 " Plugin 'tpope/vim-endwise'
@@ -46,6 +48,7 @@ Plugin 'scrooloose/nerdtree.git'
 
 " Languages
 Plugin 'elixir-lang/vim-elixir'
+Plugin 'pangloss/vim-javascript'
 
 " Color Schemes
 Plugin 'obsidian'
@@ -59,7 +62,15 @@ syntax on
 filetype plugin indent on
 
 syntax enable
+let g:jsx_ext_required = 0
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
 
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
 """""""""""""""""""""""""""""""""""""""""
 """""""""""" THEMES
 """""""""""""""""""""""""""""""""""""""""
@@ -89,11 +100,11 @@ map ,n :NERDTreeFind<CR>
 autocmd vimenter * set number
 "Use TAB to complete when typing words, else inserts TABs as usual.
 function! Tab_Or_Complete()
-	if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~'^\w'
-		return "\<C-N>"
-	else
-		return "\<Tab>"
-	endif
+		if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~'^\w'
+				return "\<C-N>"
+		else
+				return "\<Tab>"
+		endif
 endfunction
 
 :inoremap <Tab> <C-R>=Tab_Or_Complete()<CR>
@@ -102,5 +113,5 @@ let g:ctrlp_show_hidden = 1
 
 nmap <Tab> :b#<CR>
 let g:ctrlp_custom_ignore = {
-			\ 'dir': '\v[\/](\.git|tmp|node_modules)'
-\}
+						\ 'dir': '\v[\/](\.git|tmp|node_modules)'
+						\}
