@@ -142,9 +142,23 @@ alias gln="git log -n" #add a number for how many commits you want
 alias npmrebuild="rm -rf ./node_modules; npm cache clear; npm i"
 alias spages="pages start dev"
 alias skyport="NODE_ENV=integration npm start"
+alias ppp=$PPP_AUTHENTIFICATIO
 # Useful
 alias tt='tab-title'
 alias zshe="vim ~/.zshrc"
 alias zshr="source ~/.zshrc"
 alias portsinuse="lsof -i -P | grep -i 'listen'"
-alias vim='/usr/local/bin/vim'
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# Feed the output of ag into fzf
+# ag -g "" | fzf
+#
+# # Setting ag as the default source for fzf
+# export FZF_DEFAULT_COMMAND='ag -g ""'
+#
+# # Now fzf (w/o pipe) will use ag instead of find
+# fzf
+#
+# # To apply the command to CTRL-T as well
+# export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+# export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'

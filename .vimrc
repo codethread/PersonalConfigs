@@ -66,12 +66,24 @@ let g:jsx_ext_required = 0
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
+"
+" let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
-"""""""""""""""""""""""""""""""""""""""""
+" let g:syntastic_javascript_checkers = ['eslint'] " broken for some reason?>?
+
+" set tabstop=2 shiftwidth=2 expandtab
+set expandtab
+autocmd FileType javascript setlocal tabstop=4 shiftwidth=4
+autocmd FileType javascript.jsx setlocal tabstop=4 shiftwidth=4
+autocmd FileType elixir  setlocal tabstop=4 shiftwidth=4
+
+set clipboard=unnamed
+set cursorline
+set wildignore=*.keep,*~,*.swp
+
+""""""""""""""""""""""""""""""""""""""""
 """""""""""" THEMES
 """""""""""""""""""""""""""""""""""""""""
 " set background=dark
@@ -100,11 +112,11 @@ map ,n :NERDTreeFind<CR>
 autocmd vimenter * set number
 "Use TAB to complete when typing words, else inserts TABs as usual.
 function! Tab_Or_Complete()
-		if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~'^\w'
-				return "\<C-N>"
-		else
-				return "\<Tab>"
-		endif
+  if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~'^\w'
+    return "\<C-N>"
+  else
+    return "\<Tab>"
+  endif
 endfunction
 
 :inoremap <Tab> <C-R>=Tab_Or_Complete()<CR>
@@ -113,5 +125,11 @@ let g:ctrlp_show_hidden = 1
 
 nmap <Tab> :b#<CR>
 let g:ctrlp_custom_ignore = {
-						\ 'dir': '\v[\/](\.git|tmp|node_modules)'
-						\}
+      \ 'dir': '\v[\/](\.git|tmp|node_modules)'
+      \}
+
+
+nmap <silent> <C-k> :wincmd k<CR>
+nmap <silent> <C-j> :wincmd j<CR>
+nmap <silent> <C-h> :wincmd h<CR>
+nmap <silent> <C-l> :wincmd l<CR>

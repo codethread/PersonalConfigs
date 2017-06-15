@@ -24,10 +24,6 @@ do
 
 		mv $file_name backups
 
-		# if [ ./$file_name ]; then
-		# 	rm $file_name
-		# fi
-
 		ln -s ${configs}/${file_name} ${file_name}
 		echo '----->' $file_name 
 	fi
