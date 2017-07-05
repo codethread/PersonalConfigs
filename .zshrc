@@ -142,7 +142,10 @@ alias gln="git log -n" #add a number for how many commits you want
 alias npmrebuild="rm -rf ./node_modules; npm cache clear; npm i"
 alias spages="pages start dev"
 alias skyport="NODE_ENV=integration npm start"
-alias ppp=$PPP_AUTHENTIFICATIO
+alias ppp="echo 'you need pppd or ppps for dev or stage'"
+alias ppps="$PPP_STAGE $PPP_AUTHENTIFICATION"
+alias pppd="$PPP_DEV $PPP_AUTHENTIFICATION"
+alias pppc="GRAPHQL_ENDPOINT=https://skyport-graphql-piggy-bank-balance.cf.dev-paas.bskyb.com $PPP_AUTHENTIFICATION"
 # Useful
 alias tt='tab-title'
 alias zshe="vim ~/.zshrc"
