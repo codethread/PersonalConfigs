@@ -3,6 +3,7 @@
 	name = Adam
 [core]
 	excludesfile = /Users/adh23/.gitignore_global
+	editor = vim
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path = 

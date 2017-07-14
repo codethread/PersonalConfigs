@@ -7,40 +7,10 @@ export ZSH=$HOME/.oh-my-zsh
 set guifont=Liberation\ Mono\ for\ Powerline\ 10 
 ZSH_THEME="robbyrussell"
 
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
-
-# Uncomment the following line to use hyphen-insensitive completion. Case
-# sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
-
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
-
-# Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
-
 # Uncomment the following line to disable auto-setting terminal title.
 DISABLE_AUTO_TITLE="true"
 
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
+COMPLETION_WAITING_DOTS="true"
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
@@ -82,9 +52,10 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 set diffopt+=vertical
 
-export PATH="$PATH:./node_modules/.bin/"
+export PATH="$PATH:./node_modules/.bin"
 export PATH="$PATH:$HOME/elixir/bin"
 export PATH="/usr/local/opt/node@6/bin:$PATH"
+export PATH="/usr/local/sbin:$PATH"
 #----export NVM_DIR="$HOME/.nvm"
 #----. "/usr/local/opt/nvm/nvm.sh"
 
@@ -101,6 +72,17 @@ function tab-title() {
   echo -e "\033];$1\007"
 }
 
+function startppOnPortp() {
+    stuff="GRAPHQL_ENDPOINT=https://local.bskyb.com:"
+
+    if [ $1 ]
+    then
+       "$stuff$1 $PPP_AUTHENTIFICATION"
+    else
+        echo 'require port number'
+    fi
+}
+alias lkj="startppOnPortp" 
 # Alias
 # Github
 alias ga="git add"
@@ -141,6 +123,7 @@ alias gln="git log -n" #add a number for how many commits you want
 # alias git stash list="git stash list --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd)' --abbrev-commit --date=local"
 alias npmrebuild="rm -rf ./node_modules; npm cache clear; npm i"
 alias spages="pages start dev"
+alias stest="mv .env .notEnv || true  && npm run test:unit || true && mv .notEnv .env"
 alias skyport="NODE_ENV=integration npm start"
 alias ppp="echo 'you need pppd or ppps for dev or stage'"
 alias ppps="$PPP_STAGE $PPP_AUTHENTIFICATION"
@@ -151,6 +134,12 @@ alias tt='tab-title'
 alias zshe="vim ~/.zshrc"
 alias zshr="source ~/.zshrc"
 alias portsinuse="lsof -i -P | grep -i 'listen'"
+alias lookbusy="cd ~/PersonalConfigs; sh lookbusy.sh;"
+
+alias brewup='brew update; brew upgrade; brew prune; brew cleanup; brew doctor'
+
+alias cdp="cd /Users/adh23/Service/sky-pages"
+alias cdg="cd /Users/adh23/Service/skyport-graphql"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 # Feed the output of ag into fzf
@@ -165,3 +154,9 @@ alias portsinuse="lsof -i -P | grep -i 'listen'"
 # # To apply the command to CTRL-T as well
 # export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
+
+# Uncomment the following line if you want to disable marking untracked files
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
+

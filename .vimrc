@@ -78,8 +78,8 @@ set statusline+=%*
 set laststatus=2
 " let g:airline#extensions#tabline#enabled = 1
 
-let g:ale_lint_on_save = 1
-let g:ale_lint_on_text_changed = 'never'
+" let g:ale_lint_on_save = 1
+" let g:ale_lint_on_text_changed = 'normal'
 let g:ale_linters = { 'javascript': ['eslint'],}
 let g:ale_list_window_size = 3
 " " set tabstop=2 shiftwidth=2 expandtab

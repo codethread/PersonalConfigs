@@ -1,7 +1,9 @@
 ack
 autoconf
+cask
 cscope
 docker-machine
+emacs
 fzf
 gdbm
 htop
@@ -29,4 +31,3 @@ tmux
 vim
 wget
 xz
-
