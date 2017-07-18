@@ -7,6 +7,7 @@ export ZSH=$HOME/.oh-my-zsh
 set guifont=Liberation\ Mono\ for\ Powerline\ 10 
 # ZSH_THEME="robbyrussell"
 ZSH_THEME="michelebologna"
+# ZSH_THEME="random"
 
 # Uncomment the following line to disable auto-setting terminal title.
 DISABLE_AUTO_TITLE="true"

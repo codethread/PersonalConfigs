@@ -29,7 +29,7 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'bling/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'scrooloose/nerdtree.git'
-
+Plugin 'jeffkreeftmeijer/vim-numbertoggle'
 " Languages
 Plugin 'elixir-lang/vim-elixir'
 Plugin 'pangloss/vim-javascript'
@@ -44,6 +44,7 @@ Plugin 'reedes/vim-colors-pencil'
 
 " session handling
 Plugin 'tpope/vim-obsession'
+
 
 " Other stuff
 " Plugin 'reedes/vim-colors-pencil'
@@ -74,7 +75,7 @@ let g:jsx_ext_required = 0
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
-
+set bs=indent,eol,start " Allow backspacing over everything in insert mode
 set laststatus=2
 " let g:airline#extensions#tabline#enabled = 1
 let g:NERDTreeWinSize=60
