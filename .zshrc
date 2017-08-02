@@ -5,8 +5,12 @@
 export ZSH=$HOME/.oh-my-zsh
 
 set guifont=Liberation\ Mono\ for\ Powerline\ 10 
+
+ZSH_CUSTOM=$HOME/PersonalConfigs/zsh_custom
+
 # ZSH_THEME="robbyrussell"
-ZSH_THEME="michelebologna"
+# ZSH_THEME="michelebologna"
+ZSH_THEME="simple"
 # ZSH_THEME="random"
 
 # Uncomment the following line to disable auto-setting terminal title.
@@ -27,7 +31,8 @@ plugins=(git)
 
 HIST_IGNORE_SPACE=true
 source $ZSH/oh-my-zsh.sh
-
+# source $HOME/Service/skymobile-service/scripts/useful_scripts.sh
+#
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
@@ -126,7 +131,11 @@ alias gln="git log -n" #add a number for how many commits you want
 alias npmrebuild="rm -rf ./node_modules; npm cache clear; npm i"
 alias spages="pages start dev"
 alias stest="mv .env .notEnv || true  && npm run test:unit || true && mv .notEnv .env"
-alias skyport="NODE_ENV=integration npm start"
+
+alias skyport="echo 'you need to specify and env: skyportd or skyports'"
+alias skyportd="cp .env.f02 .env.integration || true && NODE_ENV=integration npm start"
+alias skyports="cp .env.e05 .env.integration || true && NODE_ENV=integration npm start"
+
 alias ppp="echo 'you need pppd or ppps for dev or stage'"
 alias ppps="$PPP_STAGE $PPP_AUTHENTIFICATION"
 alias pppd="$PPP_DEV $PPP_AUTHENTIFICATION"
@@ -137,11 +146,15 @@ alias zshe="vim ~/.zshrc"
 alias zshr="source ~/.zshrc"
 alias portsinuse="lsof -i -P | grep -i 'listen'"
 alias lookbusy="cd ~/PersonalConfigs; sh lookbusy.sh;"
+alias dpages="cd ~/Service/sky-pages; sh ~/deploy_pages.sh"
 
 alias brewup='brew update; brew upgrade; brew prune; brew cleanup; brew doctor'
 
 alias cdp="cd /Users/adh23/Service/sky-pages"
 alias cdg="cd /Users/adh23/Service/skyport-graphql"
+
+alias ef="exercism fetch"
+alias es="exercism submit"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 # Feed the output of ag into fzf

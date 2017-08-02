@@ -14,27 +14,30 @@ Plugin 'tomtom/tcomment_vim' " Commenting
 
 " File navigation
 Plugin 'rking/ag.vim' " Used for searching like ack
-Plugin 'ctrlpvim/ctrlp.vim'
+" Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'd11wtq/ctrlp_bdelete.vim'
-
-Plugin 'junegunn/fzf.vim'
-
+" Plugin '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim' 
 " Linting
 " Plugin 'vim-syntastic/syntastic'
 Plugin 'w0rp/ale' " async linting 
 
+Plugin 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plugin 'junegunn/fzf.vim'
+j
 " GUI changes
 Plugin 'tpope/vim-fugitive'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'bling/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'scrooloose/nerdtree.git'
-Plugin 'jeffkreeftmeijer/vim-numbertoggle'
+" Plugin 'jeffkreeftmeijer/vim-numbertoggle'
+
 " Languages
 Plugin 'elixir-lang/vim-elixir'
 Plugin 'pangloss/vim-javascript'
 " Plugin 'jelera/vim-javascript-syntax' " doesnt seem to do anything?
 Plugin 'mxw/vim-jsx'
+Plugin 'jparise/vim-graphql'
 
 " Color Schemes
 Plugin 'obsidian'
@@ -45,6 +48,7 @@ Plugin 'reedes/vim-colors-pencil'
 " session handling
 Plugin 'tpope/vim-obsession'
 
+Plugin 'diepm/vim-rest-console'
 
 " Other stuff
 " Plugin 'reedes/vim-colors-pencil'
@@ -69,6 +73,7 @@ call vundle#end()
 
 syntax on
 filetype plugin indent on
+set mouse=a
 
 syntax enable
 let g:jsx_ext_required = 0
@@ -135,6 +140,8 @@ let mapleader = ","
 
 :command! Json %!python -m json.tool
 map <Leader>j :Json<CR>
+map <Leader>. :Files<CR>
+map \ :Ag 
 
 let g:ctrlp_show_hidden = 1
 call ctrlp_bdelete#init()
@@ -157,3 +164,4 @@ nmap <silent> <C-k> :wincmd k<CR>
 nmap <silent> <C-j> :wincmd j<CR>
 nmap <silent> <C-h> :wincmd h<CR>
 nmap <silent> <C-l> :wincmd l<CR>
+
