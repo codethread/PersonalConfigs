@@ -96,6 +96,7 @@ set hlsearch
 set bs=indent,eol,start " Allow backspacing over everything in insert mode
 set laststatus=2
 :set dictionary="/usr/dict/words"
+autocmd vimenter * set number
 
 "---------------------------------------------------------------"
 "--- Appearance
@@ -127,10 +128,12 @@ let g:ale_list_window_size = 3
 "---------------------------------------------------------------"
 " set tabstop=2 shiftwidth=2 expandtab
 set expandtab
-autocmd FileType * setlocal tabstop=4 shiftwidth=4
+autocmd FileType * setlocal tabstop=2 shiftwidth=2
 autocmd FileType javascript setlocal tabstop=4 shiftwidth=4
 autocmd FileType javascript.jsx setlocal tabstop=4 shiftwidth=4
 autocmd FileType elixir  setlocal tabstop=4 shiftwidth=4
+autocmd FileType ruby  setlocal tabstop=2 shiftwidth=2
+autocmd FileType yaml  setlocal tabstop=2 shiftwidth=2
 
 
 "---------------------------------------------------------------"
@@ -187,7 +190,6 @@ command! -bang -nargs=* Ag
   \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
   \                 <bang>0)
 
-autocmd vimenter * set number
 
 "Use TAB to complete when typing words, else inserts TABs as usual.
 function! Tab_Or_Complete()

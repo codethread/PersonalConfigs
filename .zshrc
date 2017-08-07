@@ -12,7 +12,7 @@ ZSH_CUSTOM=$HOME/PersonalConfigs/zsh_custom
 # ZSH_THEME="michelebologna"
 ZSH_THEME="simple"
 # ZSH_THEME="random"
-
+#
 # Uncomment the following line to disable auto-setting terminal title.
 DISABLE_AUTO_TITLE="true"
 
@@ -31,6 +31,9 @@ plugins=(git)
 
 HIST_IGNORE_SPACE=true
 source $ZSH/oh-my-zsh.sh
+
+# source $HOME/.bin/tmuxinator.zsh
+export EDITOR='vim'
 # source $HOME/Service/skymobile-service/scripts/useful_scripts.sh
 #
 # You may need to manually set your language environment
@@ -131,6 +134,15 @@ alias gln="git log -n" #add a number for how many commits you want
 alias npmrebuild="rm -rf ./node_modules; npm cache clear; npm i"
 alias spages="pages start dev"
 alias stest="mv .env .notEnv || true  && npm run test:unit || true && mv .notEnv .env"
+
+alias lt="tmux ls"
+function kill_tmux_session() {
+  tmux kill-session -t $1;
+  tmux ls
+}
+alias kmux="kill_tmux_session"
+alias mux="tmuxinator start"
+alias allthethings="mux shared; mux pd d; mux sky"
 
 alias skyport="echo 'you need to specify and env: skyportd or skyports'"
 alias skyportd="cp .env.f02 .env.integration || true && NODE_ENV=integration npm start"
