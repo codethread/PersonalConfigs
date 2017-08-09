@@ -14,15 +14,8 @@ Plugin 'VundleVim/Vundle.vim'
 "-----------------------------------------
 Plugin 'tomtom/tcomment_vim' " Commenting
 
-" File navigation
-Plugin 'rking/ag.vim'
-Plugin 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plugin 'junegunn/fzf.vim'
-" Plugin 'ctrlpvim/ctrlp.vim'
-" Plugin 'd11wtq/ctrlp_bdelete.vim'
-
 "------------------------------------------
-"--- Linting
+"--- Linting / testing
 "-----------------------------------------
 " Plugin 'vim-syntastic/syntastic'
 Plugin 'w0rp/ale' " async linting 
@@ -59,7 +52,16 @@ Plugin 'reedes/vim-colors-pencil'
 "------------------------------------------
 "--- session handling
 "-----------------------------------------
-Plugin 'tpope/vim-obsession'
+" Plugin 'tpope/vim-obsession'
+
+"------------------------------------------
+"--- Utilities
+"-----------------------------------------
+Plugin 'rking/ag.vim'
+Plugin 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plugin 'junegunn/fzf.vim'
+" Plugin 'ctrlpvim/ctrlp.vim'
+" Plugin 'd11wtq/ctrlp_bdelete.vim'
 Plugin 'diepm/vim-rest-console'
 
 "------------------------------------------
@@ -154,6 +156,9 @@ nmap <silent> <C-j> :wincmd j<CR>
 nmap <silent> <C-h> :wincmd h<CR>
 nmap <silent> <C-l> :wincmd l<CR>
 
+nnoremap <silent> <Leader>+ :exe "vertical resize +10"<CR>
+nnoremap <silent> <Leader>- :exe "vertical resize -10"<CR>
+
 map <C-n> :NERDTreeToggle<CR>
 map ,n :NERDTreeFind<CR>
 
@@ -199,6 +204,7 @@ function! Tab_Or_Complete()
                 return "\<Tab>"
         endif
 endfunction
+
 "---------------------------------------------------------------"
 "--- Retired
 "---------------------------------------------------------------"

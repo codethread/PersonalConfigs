@@ -144,6 +144,8 @@ alias kmux="kill_tmux_session"
 alias mux="tmuxinator start"
 alias allthethings="mux shared; mux pd d; mux sky"
 
+alias portkeys="colordiff -u  <(awk -F'\"' '/\"/ { print \$2 }' vault-keys.json | sort -u) <(cut -d'=' -f1 .env.integration | sort -u) "
+
 alias skyport="echo 'you need to specify and env: skyportd or skyports'"
 alias skyportd="cp .env.f02 .env.integration || true && NODE_ENV=integration npm start"
 alias skyports="cp .env.e05 .env.integration || true && NODE_ENV=integration npm start"
