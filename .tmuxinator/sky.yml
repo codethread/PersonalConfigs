@@ -1,0 +1,42 @@
+# ~/.tmuxinator/sky.yml
+
+name: sky
+root: ~/
+windows:
+  - spages:
+      root: ~/Service/sky-pages
+      layout: main-vertical
+      panes:
+        - vim
+        - info_pane:
+          - sleep 1
+          - clear
+  - graphql:
+      root: ~/Service/skyport-graphql
+      layout: main-vertical
+      panes:
+        - vim
+        - info_pane:
+          - sleep 1
+          - clear
+  - ppp:
+      root: ~/Service/polaris-page-producer
+      layout: main-vertical
+      panes:
+        - vim
+        - info_pane:
+          - sleep 1
+          - clear
+  - .dotfiles:
+      root: ~/
+      layout: main-vertical
+      panes:
+        - vim .zshrc .vimrc .tmux.conf
+  - randoms:
+      root: ~/
+      layout: main-vertical
+      panes:
+        -
+        -
+        -
+  - overviewLink: tmux link-window -s shared:overview -t 0

@@ -1,0 +1,27 @@
+# ~/.tmuxinator/shared.yml
+
+name: shared
+root: ~/
+# Controls whether the tmux session should be attached to automatically. Defaults to true.
+attach: false
+windows:
+  - overview:
+      root: ~/
+      layout: tiled 
+      panes:
+        - skyport_view_pane:
+          - sleep 1
+          - clear
+          - touch  ~/tmp/port-log
+          - tail -F ~/tmp/port-log
+        - ppp_view_pane:
+          - sleep 1
+          - clear
+          - touch  ~/tmp/ppp-log
+          - tail -F ~/tmp/ppp-log
+        - pages_view_pane:
+          - sleep 1
+          - clear
+          - touch  ~/tmp/spages-log
+          - tail -F ~/tmp/spages-log
+        - htop

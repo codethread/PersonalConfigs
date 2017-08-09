@@ -1,0 +1,38 @@
+# ~/.tmuxinator/myProj.yml
+
+name: pd 
+root: ~/Service
+# Controls whether the tmux session should be attached to automatically. Defaults to true.
+attach: false
+windows:
+  - skyport:
+      root: ~/Service/skyport-graphql
+      layout: main-vertical
+      panes:
+        - skyport_logs:
+          - touch  ~/tmp/port-log
+          - skyport<%= @args[0] %> > ~/tmp/port-log
+        - skyport_keys:
+          - sleep 1
+          - portkeys
+        - clear
+  - ppp:
+      root: ~/Service/polaris-page-producer
+      layout: main-vertical
+      panes:
+        - ppp_logs:
+          - touch  ~/tmp/ppp-log
+          - ppp<%= @args[0] %> > ~/tmp/ppp-log
+        - redis-server
+  - sPages:
+      root: ~/Service/sky-pages
+      layout: main-vertical
+      panes:
+        - pages_log:
+          - touch  ~/tmp/spages-log
+          - spages > ~/tmp/spages-log
+        - random:
+          - sleep 1
+          - clear
+        - $EDITOR .env
+  - overviewLink: tmux link-window -s shared:overview -t 0
