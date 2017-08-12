@@ -1,6 +1,6 @@
 # ~/.tmuxinator/myProj.yml
 
-name: pd 
+name: spages 
 root: ~/Service
 # Controls whether the tmux session should be attached to automatically. Defaults to true.
 attach: false
@@ -23,7 +23,7 @@ windows:
       panes:
         - ppp_logs:
           - touch  ~/tmp/ppp-log
-          - ppp<%= @args[0] %> > ~/tmp/ppp-log
+          - run_ppp <%= @args[0] %> <%= @args[1] %> > ~/tmp/ppp-log
         - redis-server
   - sPages:
       root: ~/Service/sky-pages

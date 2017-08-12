@@ -142,6 +142,7 @@ function start_tmuxinator_with_params() {
   LOCALLY=false
   HELP=false
   GET_VERSION=false
+  DEBUG=false
 
   ENVIRONMENT=''
   APPLICATION=''
@@ -180,74 +181,87 @@ function start_tmuxinator_with_params() {
   # -------------------------------------------#
 
   # gets the flags and args from the bash command
-  while getopts a:e:lhv option
+  while getopts a:e:lhvx option
   do
     case "${option}" in
       a) APP=${OPTARG};;
       e) ENV=${OPTARG};;
       l) LOCALLY=true;;
+      x) DEBUG=true;;
       h) HELP=true;;
       v) GET_VERSION=true;;
     esac
   done
 
   #---------------------------------------------#
-  # SET UP APPLICATION
+  # IF HELP, VIEW HELP, ELSE RUN FUNCTION
   # -------------------------------------------#
 
-  # get chosen app ready to pass to tmuxinator CURRENTLY ONLY SUPPORTS SPAGES
-  case $APP in
-    *) APPLICATION='spages' && APP='';; #APP='' resets env for the check further down
-  esac
-
-  # display app info to user
-  if [[ "$APP" == '' ]]; then
-    echo 'no app specified, or app arg not valid'
-    echo 'running sky-pages with skyport and ppp'
-    echo ''
+  if $HELP; then
+    echo $HELP_MESSAGE
   else
+    #---------------------------------------------#
+    # SET UP APPLICATION
+    # -------------------------------------------#
+
+    # get chosen app ready to pass to tmuxinator CURRENTLY ONLY SUPPORTS SPAGES
+    case $APP in
+      *) APPLICATION='spages' && APP='';; #APP='' resets env for the check further down
+    esac
+
+    # display app info to user
+    if [[ "$APP" == '' ]]; then
+      echo 'no app specified, or app arg not valid'
+      echo 'running sky-pages with skyport and ppp'
+      echo ''
+    else
+    fi
+
+    #---------------------------------------------#
+    # IS THIS POINTING AT ANYTHING LOCAL?
+    # -------------------------------------------#
+
+    # this so far only exists for spages and will run it locally adn point spages and ppp at local skyport
+    if $LOCALLY; then
+      LOCAL_FLAG='-l'
+      echo 'local flag set, pointing spages at local skyport'
+      echo ''
+    fi
+
+    #---------------------------------------------#
+    # SET UP ENVIRONMENT
+    # -------------------------------------------#
+
+    # get chosen environement ready to pass to tmuxinator
+    case $ENV in
+      'F02') ENVIRONMENT='-d';;
+      'd') ENVIRONMENT='-d';;
+      'E05') ENVIRONMENT='-s';;
+      's') ENVIRONMENT='-s';;
+      *) ENVIRONMENT='-d' && ENV='';; #ENV='' resets env for the check further down
+    esac
+
+    # display env info to user
+    if [[ "$ENV" == '' ]]; then
+      echo 'no env specified, or env arg not valid'
+      echo 'pointing' $APPLICATION ' at development F02'
+      echo ''
+    else
+      echo 'env specified:' $ENV '=> pointing' $APPLICATION 'at' $ENVIRONMENT 'environment'
+      echo ''
+    fi
+
+    #---------------------------------------------#
+    # RUN TMUXINATOR WITH ARGS
+    # -------------------------------------------#
+
+    if $DEBUG; then
+      echo 'tmuxinator start' $APPLICATION $ENVIRONMENT $LOCAL_FLAG
+    else
+      tmuxinator start shared
+      tmuxinator start $APPLICATION $ENVIRONMENT $LOCAL_FLAG
+    fi
   fi
-
-  #---------------------------------------------#
-  # IS THIS POINTING AT ANYTHING LOCAL?
-  # -------------------------------------------#
-
-  # this so far only exists for spages and will run it locally adn point spages and ppp at local skyport
-  if $LOCALLY; then
-    APPLICATION=$APPLICATION'-locally'
-    echo 'local flag set, pointing spages at local skyport'
-    echo ''
-  fi
-
-  #---------------------------------------------#
-  # SET UP ENVIRONMENT
-  # -------------------------------------------#
-
-  # get chosen environement ready to pass to tmuxinator
-  case $ENV in
-    'F02') ENVIRONMENT='dev';;
-    'd') ENVIRONMENT='dev';;
-    'E05') ENVIRONMENT='stage';;
-    's') ENVIRONMENT='stage';;
-    *) ENVIRONMENT='dev' && ENV='';; #ENV='' resets env for the check further down
-  esac
-
-  # display env info to user
-  if [[ "$ENV" == '' ]]; then
-    echo 'no env specified, or env arg not valid'
-    echo 'pointing' $APPLICATION ' at development F02'
-    echo ''
-  else
-    echo 'env specified:' $ENV '=> pointing' $APPLICATION 'at' $ENVIRONMENT 'environment'
-    echo ''
-  fi
-
-  #---------------------------------------------#
-  # RUN TMUXINATOR WITH ARGS
-  # -------------------------------------------#
-
-  tmuxinator start shared
-  tmuxinator start $APPLICATION $ENVIRONMENT
 
   #---------------------------------------------#
   # EXTRA STUFF
@@ -255,10 +269,6 @@ function start_tmuxinator_with_params() {
 
   if $GET_VERSION; then
     echo $VERSION
-  fi
-
-  if $HELP; then
-    echo $HELP_MESSAGE
   fi
 }
 
@@ -293,6 +303,7 @@ function run_ppp() {
   ENV=''
   LOCALLY=false
   DEBUG=false
+  HELP=false
 
   ENVIORNMENT=''
   SKYPORT=''
@@ -302,60 +313,78 @@ function run_ppp() {
   # -------------------------------------------#
 
   # gets the flags and args from the bash command
-  while getopts e:ld option
+  while getopts dslxh option
   do
     case "${option}" in
-      e) ENV=${OPTARG};;
+      d) ENV='dev';;
+      s) ENV='stage';;
       l) LOCALLY=true;;
-      d) DEBUG=true;;
+      x) DEBUG=true;;
+      h) HELP=true;;
     esac
   done
 
+  
   #---------------------------------------------#
-  # SET UP ENVIRONMENT
+  # IF HELP, VIEW HELP, ELSE RUN FUNCTION
   # -------------------------------------------#
+  if $HELP; then
+    echo '
+    usage: run_ppp [flags]
 
-  case $ENV in
-    'd') ENVIRONMENT=$PPP_DEV && ENV='dev';;
-    'dev') ENVIRONMENT=$PPP_DEV && ENV='dev';;
-    's') ENVIRONMENT=$PPP_STAGE && ENV='stage';;
-    'stage') ENVIRONMENT=$PPP_STAGE && ENV='stage';;
-    *) ENVIRONMENT=$PPP_DEV && ENV='';; #ENV='' resets env for the check further down
-  esac
+    -d  points at dev f02 env
+    -s  points at stage E05 environment
+    -l  points at local graphql on port 2000
 
-  # display env info to user
-  if [[ "$ENV" == '' ]]; then
-    echo 'no env specified'
-    echo 'pointing at dev'
-    echo ''
+    -x  debugging mode: echos command without running
+    -h  display usage
+    '
   else
-    echo 'env specified: pointing at' $ENV
-    echo ''
-  fi
+    #---------------------------------------------#
+    # SET UP ENVIRONMENT
+    # -------------------------------------------#
 
-  #---------------------------------------------#
-  # POINT AT SKYPORT LOCALLY?
-  # -------------------------------------------#
-
-  if $LOCALLY; then
-    SKYPORT=$PPP_SKYPORT_LOCAL
-    echo 'local flag set, pointing spages at local skyport'
-    echo ''
-  else
     case $ENV in
-      'dev') SKYPORT=$PPP_SKYPORT_DEV;;
-      'stage') SKYPORT=$PPP_SKYPORT_STAGE;;
-      *) SKYPORT=$PPP_SKYPORT_DEV;;
+      'dev') ENVIRONMENT=$PPP_DEV;;
+      'stage') ENVIRONMENT=$PPP_STAGE;;
+      *) ENVIRONMENT=$PPP_DEV && ENV='';; #ENV='' resets env for the check further down
     esac
-  fi
 
-  #---------------------------------------------#
-  # RUN THAT SHIT
-  # -------------------------------------------#
-  if $DEBUG; then
-    echo "${SKYPORT} ${ENVIRONMENT} ${PPP_AUTHENTIFICATION}"
-  else
-    eval "${SKYPORT} ${ENVIRONMENT} ${PPP_AUTHENTIFICATION}"
+    # display env info to user
+    if [[ "$ENV" == '' ]]; then
+      ENV='dev'
+      echo 'no env specified'
+      echo 'pointing at dev'
+      echo ''
+    else
+      echo 'env specified: pointing at' $ENV
+      echo ''
+    fi
+
+    #---------------------------------------------#
+    # POINT AT SKYPORT LOCALLY?
+    # -------------------------------------------#
+
+    if $LOCALLY; then
+      SKYPORT=$PPP_SKYPORT_LOCAL
+      echo 'local flag set, pointing spages at local skyport'
+      echo ''
+    else
+      case $ENV in
+        'dev') SKYPORT=$PPP_SKYPORT_DEV;;
+        'stage') SKYPORT=$PPP_SKYPORT_STAGE;;
+        *) SKYPORT=$PPP_SKYPORT_DEV;;
+      esac
+    fi
+
+    #---------------------------------------------#
+    # RUN THAT SHIT
+    # -------------------------------------------#
+    if $DEBUG; then
+      echo "${SKYPORT} ${ENVIRONMENT} ${PPP_AUTHENTIFICATION}"
+    else
+      eval "${SKYPORT} ${ENVIRONMENT} ${PPP_AUTHENTIFICATION}"
+    fi
   fi
 }
 
