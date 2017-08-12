@@ -63,6 +63,7 @@ Plugin 'junegunn/fzf.vim'
 " Plugin 'ctrlpvim/ctrlp.vim'
 " Plugin 'd11wtq/ctrlp_bdelete.vim'
 Plugin 'diepm/vim-rest-console'
+Plugin 'tpope/vim-rhubarb'
 
 "------------------------------------------
 "--- Other stuff
@@ -87,7 +88,7 @@ call vundle#end()
 "--- Editor
 "---------------------------------------------------------------"
 filetype plugin indent on
-set clipboard=unnamed
+" set clipboard=unnamed
 set mouse=a
 set nowrap
 set wrapmargin=0

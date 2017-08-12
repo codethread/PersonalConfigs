@@ -24,7 +24,6 @@ COMPLETION_WAITING_DOTS="true"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git)
 
-
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -82,17 +81,6 @@ function tab-title() {
   echo -e "\033];$1\007"
 }
 
-function startppOnPortp() {
-    stuff="GRAPHQL_ENDPOINT=https://local.bskyb.com:"
-
-    if [ $1 ]
-    then
-       "$stuff$1 $PPP_AUTHENTIFICATION"
-    else
-        echo 'require port number'
-    fi
-}
-alias lkj="startppOnPortp" 
 # Alias
 # Github
 alias ga="git add"
@@ -141,31 +129,245 @@ function kill_tmux_session() {
   tmux ls
 }
 alias kmux="kill_tmux_session"
-alias mux="tmuxinator start"
+# alias mux="tmuxinator start"
+
+function start_tmuxinator_with_params() {
+  #---------------------------------------------#
+  # VARIABLES
+  # -------------------------------------------#
+
+  VERSION='version 1.0'
+  APP='spages'
+  ENV=''
+  LOCALLY=false
+  HELP=false
+  GET_VERSION=false
+
+  ENVIRONMENT=''
+  APPLICATION=''
+
+  HELP_MESSAGE='
+    Usage:
+      mux [flags with options] [flags with no options]
+      e.g: mux -a spages -e E05 -l (will run spages app with skyport and E05
+
+
+    Flags          Options                          Description
+
+    -a, --app      [ spages ]                       Chose app to start
+    -e, --env      [ F02 || d, E05 || s ]           Chose env, F02 or E05
+    -b, --binding  [ overview || o, attatch || a ]  Chose tmux binding options
+
+
+    Flags with no options 
+
+    -l, --local    If flag is present will 
+                   start skyport locally and 
+                   point sPages and PPP at it
+    -h, --help     output usage information
+    -V, --version  output the version number
+
+
+    Binding Options:
+
+    overview       opens all windows in a seperate tmux window 
+                   with name of app used and binds an overview to current view
+    attatch        binds new windows to current view 
+  '
+
+  #---------------------------------------------#
+  # GET ARGUMENTS
+  # -------------------------------------------#
+
+  # gets the flags and args from the bash command
+  while getopts a:e:lhv option
+  do
+    case "${option}" in
+      a) APP=${OPTARG};;
+      e) ENV=${OPTARG};;
+      l) LOCALLY=true;;
+      h) HELP=true;;
+      v) GET_VERSION=true;;
+    esac
+  done
+
+  #---------------------------------------------#
+  # SET UP APPLICATION
+  # -------------------------------------------#
+
+  # get chosen app ready to pass to tmuxinator CURRENTLY ONLY SUPPORTS SPAGES
+  case $APP in
+    *) APPLICATION='spages' && APP='';; #APP='' resets env for the check further down
+  esac
+
+  # display app info to user
+  if [[ "$APP" == '' ]]; then
+    echo 'no app specified, or app arg not valid'
+    echo 'running sky-pages with skyport and ppp'
+    echo ''
+  else
+  fi
+
+  #---------------------------------------------#
+  # IS THIS POINTING AT ANYTHING LOCAL?
+  # -------------------------------------------#
+
+  # this so far only exists for spages and will run it locally adn point spages and ppp at local skyport
+  if $LOCALLY; then
+    APPLICATION=$APPLICATION'-locally'
+    echo 'local flag set, pointing spages at local skyport'
+    echo ''
+  fi
+
+  #---------------------------------------------#
+  # SET UP ENVIRONMENT
+  # -------------------------------------------#
+
+  # get chosen environement ready to pass to tmuxinator
+  case $ENV in
+    'F02') ENVIRONMENT='dev';;
+    'd') ENVIRONMENT='dev';;
+    'E05') ENVIRONMENT='stage';;
+    's') ENVIRONMENT='stage';;
+    *) ENVIRONMENT='dev' && ENV='';; #ENV='' resets env for the check further down
+  esac
+
+  # display env info to user
+  if [[ "$ENV" == '' ]]; then
+    echo 'no env specified, or env arg not valid'
+    echo 'pointing' $APPLICATION ' at development F02'
+    echo ''
+  else
+    echo 'env specified:' $ENV '=> pointing' $APPLICATION 'at' $ENVIRONMENT 'environment'
+    echo ''
+  fi
+
+  #---------------------------------------------#
+  # RUN TMUXINATOR WITH ARGS
+  # -------------------------------------------#
+
+  tmuxinator start shared
+  tmuxinator start $APPLICATION $ENVIRONMENT
+
+  #---------------------------------------------#
+  # EXTRA STUFF
+  # -------------------------------------------#
+
+  if $GET_VERSION; then
+    echo $VERSION
+  fi
+
+  if $HELP; then
+    echo $HELP_MESSAGE
+  fi
+}
+
+alias mux="start_tmuxinator_with_params"
+
 alias allthethings="mux shared; mux pd d; mux sky"
 
 alias portkeys="colordiff -u  <(awk -F'\"' '/\"/ { print \$2 }' vault-keys.json | sort -u) <(cut -d'=' -f1 .env.integration | sort -u) "
 
-alias skyport="echo 'you need to specify and env: skyportd or skyports'"
-alias skyportd="cp .env.f02 .env.integration || true && NODE_ENV=integration npm start"
-alias skyports="cp .env.e05 .env.integration || true && NODE_ENV=integration npm start"
+alias skyport="echo 'you need to specify and env: skyport-development or skyport-stage'"
+alias skyport-development="cp .env.f02 .env.integration || true && NODE_ENV=integration npm start"
+alias skyport-d="skyport-development"
+alias skyport-stage="cp .env.e05 .env.integration || true && NODE_ENV=integration npm start"
+alias skyport-s="skyport-stage"
 
-alias ppp="echo 'you need pppd or ppps for dev or stage'"
-alias ppps="$PPP_STAGE $PPP_AUTHENTIFICATION"
-alias pppd="$PPP_DEV $PPP_AUTHENTIFICATION"
-alias pppc="GRAPHQL_ENDPOINT=https://skyport-graphql-piggy-bank-balance.cf.dev-paas.bskyb.com $PPP_AUTHENTIFICATION"
+alias ppp="run_ppp"
+
+function run_ppp() {
+
+  #---------------------------------------------#
+  # IMPORTANT: STORE PPP TOKENS IN LOCAL FILE
+  # - YOU MAY ALREADY HAVE THIS SO CHANGE NAME
+  # -------------------------------------------#
+ 
+  if [ -r ~/.ppp_private ]
+  then
+    source ~/.ppp_private
+  fi
+
+  #--------------------------------------------#
+  
+  ENV=''
+  LOCALLY=false
+  DEBUG=false
+
+  ENVIORNMENT=''
+  SKYPORT=''
+
+  #---------------------------------------------#
+  # GET ARGUMENTS
+  # -------------------------------------------#
+
+  # gets the flags and args from the bash command
+  while getopts e:ld option
+  do
+    case "${option}" in
+      e) ENV=${OPTARG};;
+      l) LOCALLY=true;;
+      d) DEBUG=true;;
+    esac
+  done
+
+  #---------------------------------------------#
+  # SET UP ENVIRONMENT
+  # -------------------------------------------#
+
+  case $ENV in
+    'd') ENVIRONMENT=$PPP_DEV && ENV='dev';;
+    'dev') ENVIRONMENT=$PPP_DEV && ENV='dev';;
+    's') ENVIRONMENT=$PPP_STAGE && ENV='stage';;
+    'stage') ENVIRONMENT=$PPP_STAGE && ENV='stage';;
+    *) ENVIRONMENT=$PPP_DEV && ENV='';; #ENV='' resets env for the check further down
+  esac
+
+  # display env info to user
+  if [[ "$ENV" == '' ]]; then
+    echo 'no env specified'
+    echo 'pointing at dev'
+    echo ''
+  else
+    echo 'env specified: pointing at' $ENV
+    echo ''
+  fi
+
+  #---------------------------------------------#
+  # POINT AT SKYPORT LOCALLY?
+  # -------------------------------------------#
+
+  if $LOCALLY; then
+    SKYPORT=$PPP_SKYPORT_LOCAL
+    echo 'local flag set, pointing spages at local skyport'
+    echo ''
+  else
+    case $ENV in
+      'dev') SKYPORT=$PPP_SKYPORT_DEV;;
+      'stage') SKYPORT=$PPP_SKYPORT_STAGE;;
+      *) SKYPORT=$PPP_SKYPORT_DEV;;
+    esac
+  fi
+
+  #---------------------------------------------#
+  # RUN THAT SHIT
+  # -------------------------------------------#
+  if $DEBUG; then
+    echo "${SKYPORT} ${ENVIRONMENT} ${PPP_AUTHENTIFICATION}"
+  else
+    eval "${SKYPORT} ${ENVIRONMENT} ${PPP_AUTHENTIFICATION}"
+  fi
+}
+
 # Useful
-alias tt='tab-title'
 alias zshe="vim ~/.zshrc"
 alias zshr="source ~/.zshrc"
 alias portsinuse="lsof -i -P | grep -i 'listen'"
-alias lookbusy="cd ~/PersonalConfigs; sh lookbusy.sh;"
-alias dpages="cd ~/Service/sky-pages; sh ~/deploy_pages.sh"
 
 alias brewup='brew update; brew upgrade; brew prune; brew cleanup; brew doctor'
 
 alias cdp="cd /Users/adh23/Service/sky-pages"
-alias cdg="cd /Users/adh23/Service/skyport-graphql"
+alias cds="cd /Users/adh23/Service/skyport-graphql"
 
 alias ef="exercism fetch"
 alias es="exercism submit"
