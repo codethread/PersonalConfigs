@@ -120,7 +120,6 @@ alias gln="git log -n" #add a number for how many commits you want
 # alias gsl="git stash list --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd)' --abbrev-commit --date=local"
 # alias git stash list="git stash list --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd)' --abbrev-commit --date=local"
 alias npmrebuild="rm -rf ./node_modules; npm cache clear; npm i"
-alias spages="pages start dev"
 alias stest="mv .env .notEnv || true  && npm run test:unit || true && mv .notEnv .env"
 
 alias lt="tmux ls"
@@ -131,7 +130,108 @@ function kill_tmux_session() {
 alias kmux="kill_tmux_session"
 # alias mux="tmuxinator start"
 
+SKY_SERVICE_FOLDER='/Users/adh23/Service'
+
+alias spages="start_sky_pages_with_params"
+function start_sky_pages_with_params() {
+  #---------------------------------------------#
+  # IMPORTANT: GRABS SKYPORT ENDPOINTS
+  # - YOU MAY ALREADY HAVE THIS SO CHANGE NAME
+  # -------------------------------------------#
+ 
+  if [ -r ~/.sky_private ]
+  then
+    source ~/.sky_private
+  fi
+
+  CHECKS=true
+  DEBUG=false
+  HELP=false
+  ENV='d'
+
+  PAGES_DOT_ENV=''
+
+  HELP_TEXT='
+  Runs sky-pages and sets .env with appropriate graphql endpoint
+
+  Usage: spages [-flag]
+
+  Flags
+  -d  sets env to dev / F02
+  -s  sets env to stage / E05
+  -l  sets env localhost:2000
+  -h  prints out help info
+  '
+
+  #---------------------------------------------#
+  # GET ARGUMENTS
+  # -------------------------------------------#
+
+  # gets the flags and args from the bash command
+  # add the new graphql address from private file 
+  while getopts dslhx option
+  do
+    case "${option}" in
+      d) ENV='d';; 
+      s) ENV='s';; 
+      l) ENV='l';; 
+      x) DEBUG=true;;
+      h) HELP=true;;
+    esac
+  done
+
+  if [ ! -d $SKY_SERVICE_FOLDER ]; then
+    echo ' you need to set up a SKY_SERVICE_FOLDER in your zshrc file pointing at the dir with your pages instalation '
+    CHECKS=false
+  fi
+
+  if [ ! -d $SKY_SERVICE_FOLDER'/sky-pages' ]; then
+    echo ' you dont have a sky-pages isntalltion at location '$SKY_SERVICE_FOLDER' '
+    CHECKS=false
+  fi
+
+  if [ ! -f $SKY_SERVICE_FOLDER'/sky-pages/.env' ]; then
+    echo 'pages .env file missing'
+    CHECKS=false
+  fi
+
+  if $HELP; then
+    echo $HELP_TEXT
+    CHECKS=false
+  fi
+
+  if $CHECKS; then
+    PAGES_DOT_ENV=$SKY_SERVICE_FOLDER'/sky-pages/.env'
+
+    # remove any old graphql address
+    sed -i -- '/GRAPHQL_ENDPOINT.*/d' $PAGES_DOT_ENV 
+
+    case $ENV in
+        d) echo $SKYPORT_DEV >> $PAGES_DOT_ENV ;;
+        s) echo $SKYPORT_STAGE >> $PAGES_DOT_ENV ;;
+        l) echo $SKYPORT_LOCAL >> $PAGES_DOT_ENV ;;
+    esac
+
+   if $DEBUG; then
+      echo '.env file now contains:'
+      cat $PAGES_DOT_ENV
+    else
+      pages start dev
+    fi
+
+  fi
+}
+
 function start_tmuxinator_with_params() {
+  #---------------------------------------------#
+  # IMPORTANT: GRABS SKYPORT ENDPOINTS
+  # - YOU MAY ALREADY HAVE THIS SO CHANGE NAME
+  # -------------------------------------------#
+ 
+  if [ -r ~/.sky_private ]
+  then
+    source ~/.sky_private
+  fi
   #---------------------------------------------#
   # VARIABLES
   # -------------------------------------------#
@@ -139,10 +239,16 @@ function start_tmuxinator_with_params() {
   VERSION='version 1.0'
   APP='spages'
   ENV=''
+  LOCAL_FLAG=''
   LOCALLY=false
   HELP=false
   GET_VERSION=false
   DEBUG=false
+
+  #---------------------------------------------#
+  # YOU WILL NEED TO SET THIS VAR UP LOCALLY 
+  # -------------------------------------------#
+  SKY_SERVICE_DIR=$SKY_SERVICE_FOLDER
 
   ENVIRONMENT=''
   APPLICATION=''
@@ -254,7 +360,6 @@ function start_tmuxinator_with_params() {
     #---------------------------------------------#
     # RUN TMUXINATOR WITH ARGS
     # -------------------------------------------#
-
     if $DEBUG; then
       echo 'tmuxinator start' $APPLICATION $ENVIRONMENT $LOCAL_FLAG
     else
@@ -293,9 +398,9 @@ function run_ppp() {
   # - YOU MAY ALREADY HAVE THIS SO CHANGE NAME
   # -------------------------------------------#
  
-  if [ -r ~/.ppp_private ]
+  if [ -r ~/.sky_private ]
   then
-    source ~/.ppp_private
+    source ~/.sky_private
   fi
 
   #--------------------------------------------#
@@ -305,7 +410,7 @@ function run_ppp() {
   DEBUG=false
   HELP=false
 
-  ENVIORNMENT=''
+  ENVIRONMENT=''
   SKYPORT=''
 
   #---------------------------------------------#
@@ -366,14 +471,14 @@ function run_ppp() {
     # -------------------------------------------#
 
     if $LOCALLY; then
-      SKYPORT=$PPP_SKYPORT_LOCAL
+      SKYPORT=$SKYPORT_LOCAL
       echo 'local flag set, pointing spages at local skyport'
       echo ''
     else
       case $ENV in
-        'dev') SKYPORT=$PPP_SKYPORT_DEV;;
-        'stage') SKYPORT=$PPP_SKYPORT_STAGE;;
-        *) SKYPORT=$PPP_SKYPORT_DEV;;
+        'dev') SKYPORT=$SKYPORT_DEV;;
+        'stage') SKYPORT=$SKYPORT_STAGE;;
+        *) SKYPORT=$SKYPORT_DEV;;
       esac
     fi
 

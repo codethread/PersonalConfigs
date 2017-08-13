@@ -31,7 +31,7 @@ windows:
       panes:
         - pages_log:
           - touch  ~/tmp/spages-log
-          - spages > ~/tmp/spages-log
+          - spages <%= @args[0] %> <%= @args[1] %> > ~/tmp/spages-log
         - random:
           - sleep 1
           - clear
