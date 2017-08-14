@@ -1,0 +1,83 @@
+# Alias
+# Github
+alias ga="git add"
+alias gaa="git add ."
+alias gaaa="git add -A"
+alias gb="git branch"
+alias gbd="git branch -d"
+alias gc="git commit"
+alias gf="git fetch"
+alias gcm="git commit -m"
+alias gco="git checkout"
+alias gcob="git checkout -b"
+alias gcom="git checkout master"
+alias gd="git diff"
+alias gda="git diff HEAD"
+alias gi="git init"
+alias gl="git log"
+alias glg="git log --graph --oneline --decorate --all"
+alias gld="git log --pretty=format:"%h %ad %s" --date=short --all"
+alias gm="git merge --no-ff"
+alias gp="git pull"
+alias gs="git status"
+alias gss="git status -s"
+alias gst="git stash"
+alias gstl="git stash list"
+alias gstp="git stash pop"
+alias gstd="git stash drop"
+alias grh="git reset --hard"
+alias grhm="git reset --hard origin/master"
+
+# new
+alias gln="git log -n" #add a number for how many commits you want
+# alias glo="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
+# alias gpo="git pull origin"
+# alias ga="git add"
+# alias gs="git status"
+# alias gsl="git stash list --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd)' --abbrev-commit --date=local"
+# alias git stash list="git stash list --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd)' --abbrev-commit --date=local"
+alias npmrebuild="rm -rf ./node_modules; npm cache clear; npm i"
+alias stest="mv .env .notEnv || true  && npm run test:unit || true && mv .notEnv .env"
+
+alias lt="tmux ls"
+function kill_tmux_session() {
+  tmux kill-session -t $1;
+  tmux ls
+}
+
+alias kmux="kill_tmux_session"
+# alias mux="tmuxinator start"
+
+SKY_SERVICE_FOLDER='/Users/adh23/Service'
+
+# FUNCTIONS_DIR=$HOME/.zsh_funcs
+# ^^ needed in below file
+source $SKY_SERVICE_FOLDER/skymobile-service/scripts/start_skyport.sh
+source $SKY_SERVICE_FOLDER/skymobile-service/scripts/start_ppp.sh
+source $SKY_SERVICE_FOLDER/skymobile-service/scripts/start_spages.sh
+source $SKY_SERVICE_FOLDER/skymobile-service/scripts/tmuxinator_app_with_params.sh
+
+# alias spages="start_sky_pages_with_params"
+
+alias mux="tmuxinator_app_with_params"
+alias allthethings="mux shared; mux pd d; mux sky"
+alias portkeys="colordiff -u  <(awk -F'\"' '/\"/ { print \$2 }' vault-keys.json | sort -u) <(cut -d'=' -f1 .env.integration | sort -u) "
+alias ppp="run_ppp"
+
+# Useful
+alias zshe="vim ~/.zshrc"
+alias zshr="source ~/.zshrc"
+alias portsinuse="lsof -i -P | grep -i 'listen'"
+
+alias brewup='brew update; brew upgrade; brew prune; brew cleanup; brew doctor'
+
+alias cdp="cd /Users/adh23/Service/sky-pages"
+alias cds="cd /Users/adh23/Service/skyport-graphql"
+
+alias ef="exercism fetch"
+alias es="exercism submit"
+
+
+function tab-title() {
+  echo -e "\033];$1\007"
+}
