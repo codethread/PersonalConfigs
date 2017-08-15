@@ -37,16 +37,11 @@ alias gln="git log -n" #add a number for how many commits you want
 # alias gsl="git stash list --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd)' --abbrev-commit --date=local"
 # alias git stash list="git stash list --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd)' --abbrev-commit --date=local"
 alias npmrebuild="rm -rf ./node_modules; npm cache clear; npm i"
-alias stest="mv .env .notEnv || true  && npm run test:unit || true && mv .notEnv .env"
+# alias stest="mv .env .notEnv || true  && npm run test:unit || true && mv .notEnv .env"
+alias stest="pages test --no-bail unit"
 
 alias lt="tmux ls"
-function kill_tmux_session() {
-  tmux kill-session -t $1;
-  tmux ls
-}
 
-alias kmux="kill_tmux_session"
-# alias mux="tmuxinator start"
 
 SKY_SERVICE_FOLDER='/Users/adh23/Service'
 
@@ -57,12 +52,17 @@ source $SKY_SERVICE_FOLDER/skymobile-service/scripts/start_ppp.sh
 source $SKY_SERVICE_FOLDER/skymobile-service/scripts/start_spages.sh
 source $SKY_SERVICE_FOLDER/skymobile-service/scripts/tmuxinator_app_with_params.sh
 
-# alias spages="start_sky_pages_with_params"
+source $HOME/PersonalConfigs/scripts/kill_tmux_session.sh
 
+alias kmux="kill_tmux_session"
+# alias mux="tmuxinator start"
+#
+alias spages="start_sky_pages"
+alias ppp="start_ppp"
 alias mux="tmuxinator_app_with_params"
+
 alias allthethings="mux shared; mux pd d; mux sky"
 alias portkeys="colordiff -u  <(awk -F'\"' '/\"/ { print \$2 }' vault-keys.json | sort -u) <(cut -d'=' -f1 .env.integration | sort -u) "
-alias ppp="run_ppp"
 
 # Useful
 alias zshe="vim ~/.zshrc"
