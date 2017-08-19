@@ -60,10 +60,10 @@ Plugin 'reedes/vim-colors-pencil'
 Plugin 'rking/ag.vim'
 Plugin 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plugin 'junegunn/fzf.vim'
-" Plugin 'ctrlpvim/ctrlp.vim'
-" Plugin 'd11wtq/ctrlp_bdelete.vim'
 Plugin 'diepm/vim-rest-console'
 Plugin 'tpope/vim-rhubarb'
+" Plugin 'ctrlpvim/ctrlp.vim' " replaced with fzf
+" Plugin 'd11wtq/ctrlp_bdelete.vim' " goes with ctrlp
 
 "------------------------------------------
 "--- Other stuff
@@ -92,7 +92,7 @@ filetype plugin indent on
 set mouse=a
 set nowrap
 set wrapmargin=0
-" set cursorline " breaking shit!
+set cursorline " breaking shit!
 set wildignore=*.keep,*~,*.swp
 " set incsearch
 set hlsearch
@@ -109,14 +109,14 @@ colorscheme tender
 
 let g:airline_powerline_fonts = 1
 let g:airline_theme = 'tender'
-" let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#enabled = 1
 
 let g:jsx_ext_required = 0
 set statusline+=%#warningmsg#
-" set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
+" set statusline+=%{SyntasticStatuslineFlag()} " no longer using syntastic
 
-let g:NERDTreeWinSize=60
+let g:NERDTreeWinSize=60 " nice big tree is it's easy to toggle off
 
 "---------------------------------------------------------------"
 "--- Linting
@@ -166,13 +166,19 @@ map ,n :NERDTreeFind<CR>
 :inoremap <Tab> <C-R>=Tab_Or_Complete()<CR>
 nmap <Tab> :b#<CR>
 
+ " formats single line string to json
 map <Leader>j :Json<CR>
-map <Leader>. :Files<CR>
+
+" fzf + ag commands
+map <C-p> :Files<CR>
 map <Leader>b :Buffers<CR>
 map <Leader>g :GFiles<CR>
 
 map \ :Ag<CR>
 map <C-\> :Ag!<CR>
+
+"find and replace
+map <Leader>. :%s/
 
 "delete without adding to clipboard
 nnoremap <leader>d "_d 

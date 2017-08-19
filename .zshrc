@@ -1,39 +1,23 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-# Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
+export EDITOR='vim'
 
 set guifont=Liberation\ Mono\ for\ Powerline\ 10 
 
 ZSH_CUSTOM=$HOME/PersonalConfigs/zsh_custom
-
-# ZSH_THEME="robbyrussell"
-# ZSH_THEME="michelebologna"
 ZSH_THEME="simple"
-# ZSH_THEME="random"
-#
-# Uncomment the following line to disable auto-setting terminal title.
 DISABLE_AUTO_TITLE="true"
-
 COMPLETION_WAITING_DOTS="true"
 
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
 plugins=(git)
 
-# User configuration
-
 # export MANPATH="/usr/local/man:$MANPATH"
-
 HIST_IGNORE_SPACE=true
 source $ZSH/oh-my-zsh.sh
 
 # source $HOME/.bin/tmuxinator.zsh
-export EDITOR='vim'
-# source $HOME/Service/skymobile-service/scripts/useful_scripts.sh
 
 set diffopt+=vertical
 
@@ -53,7 +37,14 @@ if which nodenv > /dev/null; then eval "$(nodenv init -)"; fi
 
 . $HOME/.asdf/asdf.sh
 
-source $HOME/.aliases
+# source all personal scripts
+for f in $HOME/.personal-scripts/*; do source $f; done
+
+# source all sky scripts
+SKY_SERVICE_FOLDER='/Users/adh23/Service'
+for f in $HOME/.mobile-service-scripts/*; do source $f; done
+
+source $HOME/.aliases.zsh
 
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
