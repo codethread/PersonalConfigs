@@ -4,7 +4,7 @@
 export ZSH=$HOME/.oh-my-zsh
 export EDITOR='vim'
 
-set guifont=Liberation\ Mono\ for\ Powerline\ 10 
+set guifont=Liberation\ Mono\ for\ Powerline\ 10
 
 ZSH_CUSTOM=$HOME/PersonalConfigs/zsh_custom
 ZSH_THEME="simple"
@@ -42,10 +42,9 @@ for f in $HOME/.personal-scripts/*; do source $f; done
 
 # source all sky scripts
 SKY_SERVICE_FOLDER='/Users/adh23/Service'
-for f in $HOME/.mobile-service-scripts/*; do source $f; done
+for f in $SKY_SERVICE_FOLDER/skymobile-service/scripts/*; do source $f; done
 
 source $HOME/.aliases.zsh
-
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 # Feed the output of ag into fzf
@@ -65,4 +64,3 @@ source $HOME/.aliases.zsh
 # under VCS as dirty. This makes repository status check for large repositories
 # much, much faster.
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
-

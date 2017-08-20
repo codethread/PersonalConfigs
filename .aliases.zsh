@@ -45,9 +45,11 @@ alias brewup='brew update; brew upgrade; brew prune; brew cleanup; brew doctor'
 # TMUXINATOR
 # -------------------------------------------#
 
-alias allthethings="mux shared; mux pd d; mux sky"
-# alias mux="tmuxinator start"
-alias lt="tmux ls"
+alias mux-a="mux spages; mux exc;"
+alias mux-i="tmuxinator start"
+alias mux-y="tmuxinator_list" # lists my tmuxinator ymls
+alias mux-lt="tmux ls" # lists all running sessions
+# muxs - see below 
 alias kmux="kill_tmux_session"
 
 #---------------------------------------------#
@@ -59,7 +61,7 @@ alias cfViewAll=""
 alias ppp="start_ppp"
 alias skyport="start_skyport"
 alias spages="start_spages"
-alias mux="tmuxinator_app_with_params"
+alias muxs="tmuxinator_spages"
 
 # alias stest="mv .env .notenv || true  && npm run test:unit || true && mv .notenv .env"
 alias stest="pages test --no-bail unit"
@@ -74,6 +76,3 @@ alias cds="cd /users/adh23/service/skyport-graphql"
 alias ef="exercism fetch"
 alias es="exercism submit"
 
-function tab-title() {
-  echo -e "\033];$1\007"
-}
