@@ -17,20 +17,27 @@ plugins=(git)
 HIST_IGNORE_SPACE=true
 source $ZSH/oh-my-zsh.sh
 
-# source $HOME/.bin/tmuxinator.zsh
 
 set diffopt+=vertical
+
+export SKY_SERVICE_FOLDER='/Users/adh23/Service'
 
 export PATH="$PATH:./node_modules/.bin"
 export PATH="$PATH:$HOME/elixir/bin"
 export PATH="/usr/local/opt/node@6/bin:$PATH"
 export PATH="/usr/local/sbin:$PATH"
+export PATH="$PATH:$HOME/Service/skymobile-service/scripts"
+# export PATH="$PATH:$HOME/PersonalConfigs/bin"
 #----export NVM_DIR="$HOME/.nvm"
 #----. "/usr/local/opt/nvm/nvm.sh"
 
 if [ -r ~/.zshrc_private ]
 then
   source ~/.zshrc_private
+fi
+
+if [ -r ~/.sky_private ]; then
+  source ~/.sky_private
 fi
 
 if which nodenv > /dev/null; then eval "$(nodenv init -)"; fi
@@ -40,9 +47,18 @@ if which nodenv > /dev/null; then eval "$(nodenv init -)"; fi
 # source all personal scripts
 for f in $HOME/.personal-scripts/*; do source $f; done
 
+
+#tmuxinator stuff
+source "$HOME/PersonalConfigs/bin/tmuxinator.zsh"
+for f in $HOME/PersonalConfigs/.tmuxinator/*; do ln -s -f $f ~/.tmuxinator; done
+for f in $HOME/Service/skymobile-service/tmuxinator/*; do ln -s -f $f ~/.tmuxinator; done
+#
+#
 # source all sky scripts
-SKY_SERVICE_FOLDER='/Users/adh23/Service'
-for f in $SKY_SERVICE_FOLDER/skymobile-service/scripts/*; do source $f; done
+# brew install tmux
+# gem install tmuxinator
+# ln -s ~/Service/skymobile-service/scripts/tmuxinator/spages.yml ~/PersonalConfigs/.tmuxinator
+# for f in $SKY_SERVICE_FOLDER/skymobile-service/scripts/*; do source $f; done
 
 source $HOME/.aliases.zsh
 

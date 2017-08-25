@@ -39,16 +39,15 @@ alias npmrebuild="rm -rf ./node_modules; npm cache clear; npm i"
 alias zshe="vim ~/.zshrc"
 alias zshr="source ~/.zshrc"
 alias portsinuse="lsof -i -p | grep -i 'listen'"
+alias lst="ls -1 -a -F -G"
 
 alias brewup='brew update; brew upgrade; brew prune; brew cleanup; brew doctor'
+alias cmds='cat ~/.aliases.zsh'
 #---------------------------------------------#
 # TMUXINATOR
 # -------------------------------------------#
 
 alias mux-a="mux spages; mux exc;"
-alias mux-i="tmuxinator start"
-alias mux-y="tmuxinator_list" # lists my tmuxinator ymls
-alias mux-lt="tmux ls" # lists all running sessions
 # muxs - see below 
 alias kmux="kill_tmux_session"
 
@@ -57,7 +56,6 @@ alias kmux="kill_tmux_session"
 # -------------------------------------------#
 # scripts
 # -------------------------------------------#
-alias cfViewAll=""
 alias ppp="start_ppp"
 alias skyport="start_skyport"
 alias spages="start_spages"
@@ -65,7 +63,8 @@ alias muxs="tmuxinator_spages"
 
 # alias stest="mv .env .notenv || true  && npm run test:unit || true && mv .notenv .env"
 alias stest="pages test --no-bail unit"
-alias portkeys="colordiff -u  <(awk -f'\"' '/\"/ { print \$2 }' vault-keys.json | sort -u) <(cut -d'=' -f1 .env.integration | sort -u) "
+alias portkeys="compare_skyport_vault_keys"
+alias dspages="deploy_pages"
 
 alias cdp="cd /users/adh23/service/sky-pages"
 alias cds="cd /users/adh23/service/skyport-graphql"

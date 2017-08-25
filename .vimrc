@@ -30,11 +30,13 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'bling/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'scrooloose/nerdtree.git'
+Plugin 'Xuyuanp/nerdtree-git-plugin'
 " Plugin 'jeffkreeftmeijer/vim-numbertoggle'
 
 "------------------------------------------
 "--- Languages
 "-----------------------------------------
+"
 Plugin 'elixir-lang/vim-elixir'
 Plugin 'pangloss/vim-javascript'
 " Plugin 'jelera/vim-javascript-syntax' " doesnt seem to do anything?
@@ -90,9 +92,10 @@ call vundle#end()
 filetype plugin indent on
 " set clipboard=unnamed
 set mouse=a
-set nowrap
+set nowrap!
 set wrapmargin=0
-set cursorline " breaking shit!
+" set cursorline " breaking shit!
+map <Leader>c :set cursorline!<CR>
 set wildignore=*.keep,*~,*.swp
 " set incsearch
 set hlsearch
@@ -109,7 +112,7 @@ colorscheme tender
 
 let g:airline_powerline_fonts = 1
 let g:airline_theme = 'tender'
-let g:airline#extensions#tabline#enabled = 1
+" let g:airline#extensions#tabline#enabled = 1
 
 let g:jsx_ext_required = 0
 set statusline+=%#warningmsg#
@@ -142,8 +145,8 @@ autocmd FileType yaml  setlocal tabstop=2 shiftwidth=2
 "---------------------------------------------------------------"
 "--- Mappings
 "---------------------------------------------------------------"
-let mapleader = ","
-
+" let mapleader = ","
+let mapleader = " " 
 " escape key
 ino jk <esc>
 cno jk <C-c>
@@ -161,7 +164,7 @@ nnoremap <silent> <Leader>+ :exe "vertical resize +10"<CR>
 nnoremap <silent> <Leader>- :exe "vertical resize -10"<CR>
 
 map <C-n> :NERDTreeToggle<CR>
-map ,n :NERDTreeFind<CR>
+map <Leader>n :NERDTreeFind<CR>
 
 :inoremap <Tab> <C-R>=Tab_Or_Complete()<CR>
 nmap <Tab> :b#<CR>
@@ -212,6 +215,49 @@ function! Tab_Or_Complete()
         endif
 endfunction
 
+"---------------------------------------------------------------"
+"--- NERdTREE stuff
+"---------------------------------------------------------------"
+" highlights
+function! NERDTreeHighlightFile(extension, fg, bg, guifg, guibg)
+  exec 'autocmd filetype nerdtree highlight ' . a:extension .' ctermbg='.  a:bg .' ctermfg='. a:fg .' guibg='. a:guibg .' guifg='. a:guifg
+  exec 'autocmd filetype nerdtree syn match ' . a:extension .' #^\s\+.*'.  a:extension .'$#'
+endfunction
+
+  " call NERDTreeHighlightFile('', 'yellow', 'none', 'yellow', '#151515')
+  " call NERDTreeHighlightFile('', 'green', 'none', 'green', '#151515')
+  " call NERDTreeHighlightFile('', 'cyan', 'none', 'cyan', '#151515')
+  " call NERDTreeHighlightFile('', 'blue', 'none', '#3366FF', '#151515')
+  " call NERDTreeHighlightFile('', 'Magenta', 'none', '#ff00ff', '#151515')
+  " call NERDTreeHighlightFile('', 'Red', 'none', 'red', '#151515')
+
+  " call NERDTreeHighlightFile('jade', 'green', 'none', 'green', '#151515')
+  " call NERDTreeHighlightFile('coffee', 'Red', 'none', 'red', '#151515')
+  " call NERDTreeHighlightFile('styl', 'cyan', 'none', 'cyan', '#151515')
+  "
+  " call NERDTreeHighlightFile('ini', 'yellow', 'none', 'yellow', '#151515')
+  " call NERDTreeHighlightFile('sh', 'yellow', 'none', 'yellow', '#151515')
+  " call NERDTreeHighlightFile('md', 'Magenta', 'none', '#ff00ff', '#151515')
+  " call NERDTreeHighlightFile('yml', 'Magenta', 'none', '#ff00ff', '#151515')
+  " call NERDTreeHighlightFile('config','Magenta', 'none', '#ff00ff', '#151515')
+  " call NERDTreeHighlightFile('conf', 'Magenta', 'none', '#ff00ff', '#151515') 
+  " call NERDTreeHighlightFile('zsh', 'Magenta', 'none', '#ff00ff', '#151515') 
+  "
+  " call NERDTreeHighlightFile('html', 'yellow', 'none', 'yellow', '#151515')
+  " call NERDTreeHighlightFile('css', 'green', 'none', 'green', '#151515')
+  " call NERDTreeHighlightFile('scss', 'Magenta', 'none', '#ff00ff', '#151515')
+  " call NERDTreeHighlightFile('sass', 'Magenta', 'none', '#ff00ff', '#151515')
+  "
+  " call NERDTreeHighlightFile('json', 'yellow', 'none', 'yellow', '#151515')
+
+  " call NERDTreeHighlightFile('js', 'Red', 'none', '#ffa500', '#151515')
+  " call NERDTreeHighlightFile('jsx', 'cyan', 'none', 'cyan', '#151515') " ott
+
+" closes nerdtree if only open
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" ignore files
+let NERDTreeIgnore = ['\.DAT$', '\.LOG1$', '\.LOG1$']
+let NERDTreeIgnore += ['\.png$','\.jpg$','\.gif$','\.mp3$','\.flac$', '\.ogg$', '\.mp4$','\.avi$','.webm$','.mkv$','\.pdf$', '\.zip$', '\.tar.gz$', '\.rar$']
 "---------------------------------------------------------------"
 "--- Retired
 "---------------------------------------------------------------"
