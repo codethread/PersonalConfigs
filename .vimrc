@@ -18,7 +18,7 @@ Plugin 'tomtom/tcomment_vim' " Commenting
 "--- Linting / testing
 "-----------------------------------------
 " Plugin 'vim-syntastic/syntastic'
-Plugin 'w0rp/ale' " async linting 
+Plugin 'w0rp/ale' " async linting
 Plugin 'ngmy/vim-rubocop'
 Plugin 'thoughtbot/vim-rspec'
 
@@ -146,7 +146,7 @@ autocmd FileType yaml  setlocal tabstop=2 shiftwidth=2
 "--- Mappings
 "---------------------------------------------------------------"
 " let mapleader = ","
-let mapleader = " " 
+let mapleader = " "
 " escape key
 ino jk <esc>
 cno jk <C-c>
@@ -184,15 +184,16 @@ map <C-\> :Ag!<CR>
 map <Leader>. :%s/
 
 "delete without adding to clipboard
-nnoremap <leader>d "_d 
+nnoremap <leader>d "_d
 vnoremap <leader>d "_d
 
-nnoremap <leader>D "_D 
-nnoremap <leader>dd "_dd 
+nnoremap <leader>D "_D
+nnoremap <leader>dd "_dd
 
 " paste and keep in clipboard
 vnoremap <leader>p "_dP
 
+nmap <leader>sw :StripTrailingWhitespaces<CR>
 
 "---------------------------------------------------------------"
 "--- Functions
@@ -214,6 +215,21 @@ function! Tab_Or_Complete()
                 return "\<Tab>"
         endif
 endfunction
+
+" via: http://rails-bestpractices.com/posts/60-remove-trailing-whitespace
+" Strip trailing whitespace
+function! <SID>StripTrailingWhitespaces()
+  " Preparation: save last search, and cursor position.
+  let _s=@/
+  let l = line(".")
+  let c = col(".")
+  " Do the business:
+  %s/\s\+$//e
+  " Clean up: restore previous search history, and cursor position
+  let @/=_s
+  call cursor(l, c)
+endfunction
+command! StripTrailingWhitespaces call <SID>StripTrailingWhitespaces()
 
 "---------------------------------------------------------------"
 "--- NERdTREE stuff
@@ -240,8 +256,8 @@ endfunction
   " call NERDTreeHighlightFile('md', 'Magenta', 'none', '#ff00ff', '#151515')
   " call NERDTreeHighlightFile('yml', 'Magenta', 'none', '#ff00ff', '#151515')
   " call NERDTreeHighlightFile('config','Magenta', 'none', '#ff00ff', '#151515')
-  " call NERDTreeHighlightFile('conf', 'Magenta', 'none', '#ff00ff', '#151515') 
-  " call NERDTreeHighlightFile('zsh', 'Magenta', 'none', '#ff00ff', '#151515') 
+  " call NERDTreeHighlightFile('conf', 'Magenta', 'none', '#ff00ff', '#151515')
+  " call NERDTreeHighlightFile('zsh', 'Magenta', 'none', '#ff00ff', '#151515')
   "
   " call NERDTreeHighlightFile('html', 'yellow', 'none', 'yellow', '#151515')
   " call NERDTreeHighlightFile('css', 'green', 'none', 'green', '#151515')
