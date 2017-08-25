@@ -1,37 +1,4 @@
 #---------------------------------------------#
-# GITHUB
-# -------------------------------------------#
-
-alias ga="git add"
-alias gb="git branch"
-alias gc="git commit"
-alias gf="git fetch"
-alias gco="git checkout"
-alias gcob="git checkout -b"
-alias gcom="git checkout master"
-alias gd="git diff"
-alias gda="git diff head"
-alias gi="git init"
-alias gl="git log"
-alias glg="git log --graph --oneline --decorate --all"
-alias gld="git log --pretty=format:"%h %ad %s" --date=short --all"
-alias gm="git merge --no-ff"
-alias gp="git pull"
-alias gs="git status"
-alias gss="git status -s"
-alias gst="git stash"
-alias gstl="git stash list"
-alias gstp="git stash pop"
-alias gstd="git stash drop"
-alias grh="git reset --hard"
-alias grhm="git reset --hard origin/master"
-
-alias gln="git log -n" #add a number for how many commits you want
-# alias glo="git log --graph --pretty=format:'%cred%h%creset -%c(yellow)%d%creset %s %cgreen(%cr) %c(bold blue)<%an>%creset' --abbrev-commit --date=relative"
-alias gsl="git stash list --pretty=format:'%cred%h%creset -%c(yellow)%d%creset %s %cgreen(%cd)' --abbrev-commit --date=local"
-# alias git stash list="git stash list --pretty=format:'%cred%h%creset -%c(yellow)%d%creset %s %cgreen(%cd)' --abbrev-commit --date=local"
-
-#---------------------------------------------#
 # UTILS
 # -------------------------------------------#
 alias npmrebuild="rm -rf ./node_modules; npm cache clear; npm i"
