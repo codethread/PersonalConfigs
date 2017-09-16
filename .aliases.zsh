@@ -42,3 +42,4 @@ alias cds="cd /users/adh23/service/skyport-graphql"
 alias ef="exercism fetch"
 alias es="exercism submit"
 
+alias ctags="`brew --prefix`/bin/ctags"

@@ -1,6 +1,6 @@
-# ~/.tmuxinator/exc.yml
+# ~/.tmuxinator/ruby.yml
 
-name: exc
+name: ruby
 root: ~/
 
 # Optional tmux socket
@@ -36,5 +36,18 @@ windows:
       layout: main-vertical
       panes:
         - vim
-        - 
+        -
         - irb
+  - robot:
+      root: ~/robot
+      layout: main-vertical
+      panes:
+        - vim -O game_handler.rb player.rb board.rb
+        - ruby game_handler.rb
+        - irb
+  - rails:
+    root: ~/Learning/blog
+    layout: main-vertical
+    panes:
+      - vim
+      - rails start --help

@@ -1,4 +1,16 @@
 #------------------------------------------
+#--- Exports
+#-----------------------------------------
+export PATH="$PATH:./node_modules/.bin"
+export PATH="$PATH:$HOME/elixir/bin"
+export PATH="/usr/local/opt/node@6/bin:$PATH"
+export PATH="/usr/local/sbin:$PATH"
+export PATH="$PATH:$HOME/PersonalConfigs/bin"
+
+export ZSH=$HOME/.oh-my-zsh
+export EDITOR='vim'
+
+#------------------------------------------
 #--- Settings
 #-----------------------------------------
 set guifont=Liberation\ Mono\ for\ Powerline\ 10
@@ -25,18 +37,6 @@ for f in $HOME/.personal-scripts/*; do source $f; done
 for f in $HOME/PersonalConfigs/.tmuxinator/*; do ln -s -f $f ~/.tmuxinator; done
 
 #------------------------------------------
-#--- Exports
-#-----------------------------------------
-export PATH="$PATH:./node_modules/.bin"
-export PATH="$PATH:$HOME/elixir/bin"
-export PATH="/usr/local/opt/node@6/bin:$PATH"
-export PATH="/usr/local/sbin:$PATH"
-export PATH="$PATH:$HOME/PersonalConfigs/bin"
-
-export ZSH=$HOME/.oh-my-zsh
-export EDITOR='vim'
-
-#------------------------------------------
 #--- Misc
 #-----------------------------------------
 if which nodenv > /dev/null; then eval "$(nodenv init -)"; fi
@@ -45,8 +45,5 @@ if which nodenv > /dev/null; then eval "$(nodenv init -)"; fi
 #--- Sky Stuff
 #-----------------------------------------
 export SKY_SERVICE_FOLDER='/Users/adh23/Service'
-export PATH="$PATH:$SKY_SERVICE_FOLDER/skymobile-service/scripts"
-
-for f in $HOME/Service/skymobile-service/tmuxinator/*; do ln -s -f $f ~/.tmuxinator; done
-
-[ -r ~/.sky_private ] && source ~/.sky_private
+export SKY_SERVICE_DEV_TOOLS=$SKY_SERVICE_FOLDER/skymobile-service/dev-tools
+[ -r $SKY_SERVICE_DEV_TOOLS/.sky.zsh ] && source $SKY_SERVICE_DEV_TOOLS/.sky.zsh

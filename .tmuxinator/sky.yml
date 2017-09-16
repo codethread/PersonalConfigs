@@ -46,7 +46,7 @@ windows:
       root: ~/
       layout: main-vertical
       panes:
-        - vim .zshrc .vimrc .tmux.conf
+        - vim -O .zshrc .vimrc .tmux.conf
   - cUrl:
       root: ~/
       panes:

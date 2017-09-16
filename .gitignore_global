@@ -8,3 +8,4 @@ bin
 node_modules
 .gitignore
 public
+tags
