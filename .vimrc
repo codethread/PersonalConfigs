@@ -16,6 +16,8 @@ Plugin 'christoomey/vim-sort-motion' " use gs
 Plugin 'tomtom/tcomment_vim' " Commenting
 Plugin 'tpope/vim-surround'
 Plugin 'junegunn/vim-easy-align'
+Plugin 'reedes/vim-pencil'
+
 "------------------------------------------
 "--- Linting / testing
 "-----------------------------------------
@@ -256,6 +258,24 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 " ignore files */
 let NERDTreeIgnore = ['\.DAT$', '\.LOG1$', '\.LOG1$']
 let NERDTreeIgnore += ['\.png$','\.jpg$','\.gif$','\.mp3$','\.flac$', '\.ogg$', '\.mp4$','\.avi$','.webm$','.mkv$','\.pdf$', '\.zip$', '\.tar.gz$', '\.rar$']
+
+"---------------------------------------------------------------"
+"--- Typing stuff
+"---------------------------------------------------------------"
+if has("spell")
+  " turn spelling on by default
+  set spell
+
+  " toggle spelling with F4 key
+  map <F4> :set spell!<CR><Bar>:echo "Spell Check: " . strpart("OffOn", 3 * &spell, 3)<CR>
+
+  " they were using white on white
+  highlight PmenuSel ctermfg=black ctermbg=lightgray
+
+  " limit it to just the top 10 items
+  set sps=best,10                    
+endif
+
 "---------------------------------------------------------------" */
 "--- Retired */
 "---------------------------------------------------------------" */
