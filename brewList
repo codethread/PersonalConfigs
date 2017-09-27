@@ -1,14 +1,20 @@
 ack
 autoconf
 cask
+colordiff
 cscope
+ctags
 docker-machine
+editorconfig
 emacs
+exercism
 fzf
 gdbm
+heroku
 htop
 icu4c
 jq
+kafka
 libevent
 libyaml
 mongodb
@@ -31,3 +37,4 @@ tmux
 vim
 wget
 xz
+zookeeper

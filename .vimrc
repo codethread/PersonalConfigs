@@ -17,6 +17,9 @@ Plugin 'tomtom/tcomment_vim' " Commenting
 Plugin 'tpope/vim-surround'
 Plugin 'junegunn/vim-easy-align'
 Plugin 'reedes/vim-pencil'
+Plugin 'tpope/vim-repeat'
+Plugin 'kshenoy/vim-signature'
+Plugin 'wikitopian/hardmode'
 
 "------------------------------------------
 "--- Linting / testing
@@ -73,6 +76,8 @@ Plugin 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plugin 'junegunn/fzf.vim'
 Plugin 'rking/ag.vim'
 Plugin 'tpope/vim-rhubarb'
+Plugin 'editorconfig/editorconfig-vim'
+
 " Plugin 'ctrlpvim/ctrlp.vim' " replaced with fzf
 " Plugin 'd11wtq/ctrlp_bdelete.vim' " goes with ctrlp
 
@@ -102,7 +107,7 @@ filetype plugin indent on
 " set clipboard=unnamed
 set mouse=a
 set wrapmargin=0
-" set cursorline " breaking shit!
+set cursorline " breaking shit!
 set re=1
 set relativenumber
 set wildignore=*.keep,*~,*.swp
@@ -123,9 +128,10 @@ color tender
 
 let g:airline_powerline_fonts = 1
 let g:airline_theme = 'tender'
-" let g:airline#extensions#tabline#enabled = 1
 
-let g:jsx_ext_required = 0
+" let g:airline#extensions#ale#enabled = 1
+
+" let g:jsx_ext_required = 0
 set statusline+=%#warningmsg#
 set statusline+=%*
 " set statusline+=%{SyntasticStatuslineFlag()} " no longer using syntastic
@@ -135,19 +141,18 @@ let g:NERDTreeWinSize=60 " nice big tree is it's easy to toggle off
 "---------------------------------------------------------------"
 "--- Linting
 "---------------------------------------------------------------"
-let g:ale_lint_on_save = 1
+" let g:ale_lint_on_save = 1
 " let g:ale_lint_on_text_changed = 'normal'
-let g:ale_linters = { 'javascript': ['eslint'],}
-let g:ale_list_window_size = 3
+let g:ale_linters = { 'javascript': ['eslint'] }
 
 "---------------------------------------------------------------"
 "--- Indentation
 "---------------------------------------------------------------"
 " set tabstop=2 shiftwidth=2 expandtab
 set expandtab
-autocmd FileType * setlocal tabstop=2 shiftwidth=2
-autocmd FileType javascript setlocal tabstop=4 shiftwidth=4
-autocmd FileType javascript.jsx setlocal tabstop=4 shiftwidth=4
+" autocmd FileType * setlocal tabstop=2 shiftwidth=2
+" autocmd FileType javascript setlocal tabstop=4 shiftwidth=4
+" autocmd FileType javascript.jsx setlocal tabstop=4 shiftwidth=4
 autocmd FileType elixir  setlocal tabstop=4 shiftwidth=4
 autocmd FileType ruby  setlocal tabstop=2 shiftwidth=2
 autocmd FileType yaml  setlocal tabstop=2 shiftwidth=2
@@ -162,19 +167,24 @@ let mapleader = " "
 ino jk <esc>
 cno jk <C-c>
 
-" remapping of ; to : for quick escape
-" map ; :
-" noremap ;; ;
+" MAPS ON COMMANDS I DONT LIKE
+" map <C-B>
+map <C-F> :%s/
+" map <C-G>
+nmap <silent> <C-H> :wincmd h<CR>
+nmap <silent> <C-J> :wincmd j<CR>
+nmap <silent> <C-K> :wincmd k<CR>
+nmap <silent> <C-L> :wincmd l<CR>
+map <C-N> :NERDTreeToggle<CR>
+map <C-P> :Files<CR>
+" map <C-Q>
+" map <C-Y>
+map <C-\> :Ag!<CR>
 
-nmap <silent> <C-k> :wincmd k<CR>
-nmap <silent> <C-j> :wincmd j<CR>
-nmap <silent> <C-h> :wincmd h<CR>
-nmap <silent> <C-l> :wincmd l<CR>
-
+" MAPS WITH LEADERS
 nnoremap <silent> <Leader>+ :exe "vertical resize +10"<CR>
 nnoremap <silent> <Leader>- :exe "vertical resize -10"<CR>
 
-map <C-n> :NERDTreeToggle<CR>
 map <Leader>n :NERDTreeFind<CR>
 
 :inoremap <Tab> <C-R>=Tab_Or_Complete()<CR>
@@ -184,15 +194,13 @@ nmap <Tab> :b#<CR>
 map <Leader>j :Json<CR>
 
 " fzf + ag commands
-map <C-p> :Files<CR>
 map <Leader>b :Buffers<CR>
-map <Leader>g :GFiles<CR>
+map <Leader>g :GFiles?<CR>
+map <Leader>m :Marks<CR>
+map <Leader>h :History
 
 map \ :Ag<CR>
-map <C-\> :Ag!<CR>
 
-"find and replace
-map <Leader>. :%s/
 
 
 "delete without adding to clipboard
@@ -201,9 +209,6 @@ vnoremap <leader>d "_d
 
 nnoremap <leader>D "_D
 nnoremap <leader>dd "_dd
-
-" paste and keep in clipboard
-vnoremap <leader>p "_dP
 
 nmap <leader>sw :StripTrailingWhitespaces<CR>
 
@@ -214,9 +219,14 @@ map <leader>col :ColorToggle<CR>
 map <leader>rn :set relativenumber!<CR>
 map <Leader>cl :set cursorline!<CR>
 map <Leader>w :set nowrap!<CR>
+
+nnoremap <leader>h <Esc>:call ToggleHardMode()<CR>
+
 "---------------------------------------------------------------"
 "--- Functions
 "---------------------------------------------------------------"
+autocmd VimEnter,BufNewFile,BufReadPost * silent! call HardMode()
+
 :command! Json %!python -m json.tool
 
 command! -bang -nargs=* Ag
@@ -263,9 +273,6 @@ let NERDTreeIgnore += ['\.png$','\.jpg$','\.gif$','\.mp3$','\.flac$', '\.ogg$', 
 "--- Typing stuff
 "---------------------------------------------------------------"
 if has("spell")
-  " turn spelling on by default
-  set spell
-
   " toggle spelling with F4 key
   map <F4> :set spell!<CR><Bar>:echo "Spell Check: " . strpart("OffOn", 3 * &spell, 3)<CR>
 
@@ -273,7 +280,7 @@ if has("spell")
   highlight PmenuSel ctermfg=black ctermbg=lightgray
 
   " limit it to just the top 10 items
-  set sps=best,10                    
+  set sps=best,10
 endif
 
 "---------------------------------------------------------------" */
