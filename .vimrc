@@ -20,6 +20,7 @@ Plugin 'reedes/vim-pencil'
 Plugin 'tpope/vim-repeat'
 Plugin 'kshenoy/vim-signature'
 Plugin 'wikitopian/hardmode'
+Plugin 'easymotion/vim-easymotion'
 
 "------------------------------------------
 "--- Linting / testing
@@ -119,6 +120,8 @@ set laststatus=2
 autocmd vimenter * set number
 set tags=tags;
 set nrformats-=octal
+let g:EasyMotion_smartcase = 1
+
 "---------------------------------------------------------------"
 "--- Appearance
 "---------------------------------------------------------------"
@@ -175,11 +178,27 @@ nmap <silent> <C-H> :wincmd h<CR>
 nmap <silent> <C-J> :wincmd j<CR>
 nmap <silent> <C-K> :wincmd k<CR>
 nmap <silent> <C-L> :wincmd l<CR>
+map <C-M> <Plug>(easymotion-prefix)
 map <C-N> :NERDTreeToggle<CR>
 map <C-P> :Files<CR>
 " map <C-Q>
 " map <C-Y>
 map <C-\> :Ag!<CR>
+
+" EASYMOTION MAPS
+nmap w <Plug>(easymotion-w)
+nmap W <Plug>(easymotion-W)
+nmap b <Plug>(easymotion-b)
+nmap B <Plug>(easymotion-B)
+nmap f <Plug>(easymotion-f)
+nmap t <Plug>(easymotion-t)
+" no working? vvv
+" imap  / <Plug>(easymotion-sn)
+" omap / <Plug>(easymotion-tn)
+map  n <Plug>(easymotion-n)
+map  N <Plug>(easymotion-N)
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
 
 " MAPS WITH LEADERS
 nnoremap <silent> <Leader>+ :exe "vertical resize +10"<CR>
@@ -189,9 +208,6 @@ map <Leader>n :NERDTreeFind<CR>
 
 :inoremap <Tab> <C-R>=Tab_Or_Complete()<CR>
 nmap <Tab> :b#<CR>
-
- " formats single line string to json
-map <Leader>j :Json<CR>
 
 " fzf + ag commands
 map <Leader>b :Buffers<CR>
@@ -225,7 +241,7 @@ nnoremap <leader>h <Esc>:call ToggleHardMode()<CR>
 "---------------------------------------------------------------"
 "--- Functions
 "---------------------------------------------------------------"
-autocmd VimEnter,BufNewFile,BufReadPost * silent! call HardMode()
+" autocmd VimEnter,BufNewFile,BufReadPost * silent! call HardMode()
 
 :command! Json %!python -m json.tool
 
