@@ -1,0 +1,30 @@
+# ~/.tmuxinator/dev.yml
+
+name: dev
+root: ~/
+
+windows:
+  - react-boilerplate:
+      root: ~/dev/js/react/react-boilerplate
+      layout: main-vertical
+      panes:
+        - vim
+        - ls
+  - github-tools:
+      root: ~/dev/js/node/github-tools
+      layout: main-vertical
+      panes:
+        - vim
+        - ls
+  - gql-basic:
+      root: ~/dev/js/graphql/gql-basic
+      layout: main-vertical
+      panes:
+        - vim
+        - ls
+  - monzo-gatekeeper:
+      root: ~/dev/js/node/monzo-gatekeeper
+      layout: main-vertical
+      panes:
+        - vim
+        - ls

@@ -5,55 +5,54 @@ root: ~/
 windows:
   - spages:
       root: ~/Service/sky-pages
-      layout: main-vertical
+      layout: even-vertical
       panes:
-        - vim
         - info_pane:
           - sleep 1
-          - clear
-        - pages_view_pane:
+          - spages -l
+        - vim_pane:
+          - vim
+        - spages_view_pane:
           - sleep 1
           - clear
-          - touch  ~/tmp/spages-log
-          - tail -F ~/tmp/spages-log
+          - gst
   - graphql:
       root: ~/Service/skyport-graphql
-      layout: main-vertical
+      layout: even-vertical
       panes:
-        - vim
         - info_pane:
           - sleep 1
-          - clear
+          - skyport -d
+        - vim_pane:
+          - vim
         - skyport_view_pane:
           - sleep 1
           - clear
-          - touch  ~/tmp/port-log
-          - tail -F ~/tmp/port-log
+          - gst
   - ppp:
       root: ~/Service/polaris-page-producer
-      layout: main-vertical
+      layout: even-vertical
       panes:
-        - vim
         - info_pane:
           - sleep 1
-          - clear
+          - redis-server
         - ppp_view_pane:
           - sleep 1
-          - clear
-          - touch  ~/tmp/ppp-log
-          - tail -F ~/tmp/ppp-log
+          - ppp -l
   - .dotfiles:
       root: ~/
-      layout: main-vertical
+      layout: even-vertical
       panes:
-        - vim -O .zshrc .vimrc .tmux.conf
-  - cUrl:
-      root: ~/
+        - vim -O .vimrc .zshrc
+  - service-scripts:
+      root: ~/Service/skymobile-service
+      layout: even-vertical
       panes:
-        - vim ~/pagesRest.rest
+        -
+        - vim
   - randoms:
       root: ~/
-      layout: main-vertical
+      layout: even-vertical
       panes:
         -
         -

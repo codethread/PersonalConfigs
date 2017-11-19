@@ -21,6 +21,7 @@ Plugin 'tpope/vim-repeat'
 Plugin 'kshenoy/vim-signature'
 Plugin 'wikitopian/hardmode'
 Plugin 'easymotion/vim-easymotion'
+Plugin 'ddrscott/vim-window'
 
 "------------------------------------------
 "--- Linting / testing
@@ -53,6 +54,9 @@ Plugin 'jparise/vim-graphql'
 Plugin 'mxw/vim-jsx'
 Plugin 'pangloss/vim-javascript'
 Plugin 'plasticboy/vim-markdown'
+Plugin 'kchmck/vim-coffee-script'
+" Plugin 'styled-components/vim-styled-components'
+Plugin 'chrisbra/csv.vim'
 
 "------------------------------------------
 "--- Color Schemes
@@ -78,6 +82,7 @@ Plugin 'junegunn/fzf.vim'
 Plugin 'rking/ag.vim'
 Plugin 'tpope/vim-rhubarb'
 Plugin 'editorconfig/editorconfig-vim'
+Plugin 'wakatime/vim-wakatime'
 
 " Plugin 'ctrlpvim/ctrlp.vim' " replaced with fzf
 " Plugin 'd11wtq/ctrlp_bdelete.vim' " goes with ctrlp
@@ -154,6 +159,7 @@ let g:ale_linters = { 'javascript': ['eslint'] }
 " set tabstop=2 shiftwidth=2 expandtab
 set expandtab
 " autocmd FileType * setlocal tabstop=2 shiftwidth=2
+autocmd FileType sh setlocal tabstop=2 shiftwidth=2
 " autocmd FileType javascript setlocal tabstop=4 shiftwidth=4
 " autocmd FileType javascript.jsx setlocal tabstop=4 shiftwidth=4
 autocmd FileType elixir  setlocal tabstop=4 shiftwidth=4
@@ -188,15 +194,19 @@ map <C-\> :Ag!<CR>
 " EASYMOTION MAPS
 nmap w <Plug>(easymotion-w)
 nmap W <Plug>(easymotion-W)
+nmap e <Plug>(easymotion-e)
+nmap E <Plug>(easymotion-E)
 nmap b <Plug>(easymotion-b)
 nmap B <Plug>(easymotion-B)
 nmap f <Plug>(easymotion-f)
+nmap F <Plug>(easymotion-F)
 nmap t <Plug>(easymotion-t)
+nmap T <Plug>(easymotion-T)
 " no working? vvv
 " imap  / <Plug>(easymotion-sn)
 " omap / <Plug>(easymotion-tn)
-map  n <Plug>(easymotion-n)
-map  N <Plug>(easymotion-N)
+" map  n <Plug>(easymotion-n)
+" map  N <Plug>(easymotion-N)
 map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
 
@@ -210,21 +220,22 @@ map <Leader>n :NERDTreeFind<CR>
 nmap <Tab> :b#<CR>
 
 " fzf + ag commands
+let g:fzf_layout = { 'down': '~40%' }
 map <Leader>b :Buffers<CR>
 map <Leader>g :GFiles?<CR>
 map <Leader>m :Marks<CR>
 map <Leader>h :History
+map \ :Fuzzyag<CR>
 
-map \ :Ag<CR>
 
-
+map <Leader>d :split dump<CR>
 
 "delete without adding to clipboard
-nnoremap <leader>d "_d
-vnoremap <leader>d "_d
-
-nnoremap <leader>D "_D
-nnoremap <leader>dd "_dd
+" nnoremap <leader>d "_d
+" vnoremap <leader>d "_d
+"
+" nnoremap <leader>D "_D
+" nnoremap <leader>dd "_dd
 
 nmap <leader>sw :StripTrailingWhitespaces<CR>
 
@@ -242,15 +253,13 @@ nnoremap <leader>h <Esc>:call ToggleHardMode()<CR>
 "--- Functions
 "---------------------------------------------------------------"
 " autocmd VimEnter,BufNewFile,BufReadPost * silent! call HardMode()
-
-:command! Json %!python -m json.tool
-
-command! -bang -nargs=* Ag
+command! -bang -nargs=* Fuzzyag
   \ call fzf#vim#ag(<q-args>,
   \                 <bang>0 ? fzf#vim#with_preview('up:60%')
   \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
   \                 <bang>0)
 
+:command! Json %!python -m json.tool
 
 "Use TAB to complete when typing words, else inserts TABs as usual.
 function! Tab_Or_Complete()
@@ -283,7 +292,22 @@ command! StripTrailingWhitespaces call <SID>StripTrailingWhitespaces()
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 " ignore files */
 let NERDTreeIgnore = ['\.DAT$', '\.LOG1$', '\.LOG1$']
-let NERDTreeIgnore += ['\.png$','\.jpg$','\.gif$','\.mp3$','\.flac$', '\.ogg$', '\.mp4$','\.avi$','.webm$','.mkv$','\.pdf$', '\.zip$', '\.tar.gz$', '\.rar$']
+let NERDTreeIgnore += [
+  \ '\.gif$',
+  \ '\.mp3$',
+  \ '\.flac$',
+  \ '\.ogg$',
+  \ '\.mp4$',
+  \ '\.avi$',
+  \ '.webm$',
+  \ '.mkv$',
+  \ '\.pdf$',
+  \ '\.zip$',
+  \ '\.tar.gz$',
+  \ '\.rar$']
+
+  " \ '\.png$',
+  " \ '\.jpg$',
 
 "---------------------------------------------------------------"
 "--- Typing stuff
@@ -298,6 +322,40 @@ if has("spell")
   " limit it to just the top 10 items
   set sps=best,10
 endif
+
+augroup pencil
+        autocmd!
+        autocmd FileType markdown,mkd call pencil#init()
+        autocmd FileType text         call pencil#init()
+augroup END
+
+"---------------------------------------------------------------" */
+"--- Windows and buffers
+"---------------------------------------------------------------" */
+" Unimpaired mapping
+nnoremap ]r :<C-U>call window#rotate(-1 * v:count1)<cr>
+nnoremap [r :<C-U>call window#rotate(1 * v:count1)<cr>
+
+" Improved window rotate to work with all layouts
+nmap <C-w>r ]r
+nmap <C-w><C-r> ]r
+
+" Improve window exchange to work with all layouts
+nnoremap <C-w>x :<C-U>call window#exchange(v:count)<cr>
+nnoremap <C-w><c-x> :<C-U>call window#exchange(v:count)<cr>
+
+" [g]lue windows together.
+"    l = glue to right side
+"    h = glue to left side
+"    j = glue to bottom
+"    k = glue to top
+"
+" `normal! 100zh` scrolls window contents into view since it gets messy when
+" narrower window tries refocuses its cursor.
+nnoremap <C-w>gl :<C-U>call window#join('rightbelow vsplit', v:count) <BAR>normal! 100zh<CR>
+nnoremap <C-w>gh :<C-U>call window#join('leftabove vsplit', v:count) <BAR>normal! 100zh<CR>
+nnoremap <C-w>gj :<C-U>call window#join('belowright split', v:count) <BAR>normal! 100zh<CR>
+nnoremap <C-w>gk :<C-U>call window#join('aboveleft split', v:count) <BAR>normal! 100zh<CR>
 
 "---------------------------------------------------------------" */
 "--- Retired */

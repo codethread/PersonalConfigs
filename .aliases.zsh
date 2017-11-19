@@ -15,7 +15,7 @@ alias cmds='cat ~/.aliases.zsh'
 # -------------------------------------------#
 
 alias mux-a="mux spages; mux exc;"
-# muxs - see below 
+# muxs - see below
 alias kmux="kill_tmux_session"
 
 #---------------------------------------------#
@@ -27,6 +27,7 @@ alias ppp="start_ppp"
 alias skyport="start_skyport"
 alias spages="start_spages"
 alias muxs="tmuxinator_spages"
+alias st="skyport_test_modified_files"
 
 # alias stest="mv .env .notenv || true  && npm run test:unit || true && mv .notenv .env"
 alias stest="pages test --no-bail unit"
@@ -34,7 +35,7 @@ alias portkeys="compare_skyport_vault_keys"
 alias dspages="deploy_pages"
 
 alias cdp="cd /users/adh23/service/sky-pages"
-alias cds="cd /users/adh23/service/skyport-graphql"
+alias cdg="cd /users/adh23/service/skyport-graphql"
 
 #---------------------------------------------#
 # MISC
@@ -43,3 +44,7 @@ alias ef="exercism fetch"
 alias es="exercism submit"
 
 alias ctags="`brew --prefix`/bin/ctags"
+
+alias als="cat ~/.aliases.zsh | grep \"^alias.\+=\\\"\""
+alias cdh="cat ~/.aliases.zsh | grep \"^alias cd.=\""
+

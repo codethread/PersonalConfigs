@@ -6,8 +6,8 @@ function setup_scripts() {
   array_of_files=( .??* )
 
   cd ~
-  if [ ! backups ]; then
-    mkdir backups
+  if [ ! .dot_env_backups ]; then
+    mkdir .dot_env_backups
   fi
 
   for file_name in "${array_of_files[@]}"
@@ -18,11 +18,11 @@ function setup_scripts() {
     else
       cd ~
 
-      if [ ~/backups/$file_name ]; then
-        rm ~/backups/$file_name
+      if [ ~/.dot_env_backups/$file_name ]; then
+        rm ~/.dot_env_backups/$file_name
       fi
 
-      mv $file_name backups
+      mv $file_name .dot_env_backups
 
       ln -s ${configs}/${file_name} ${file_name}
       echo '----->' $file_name 

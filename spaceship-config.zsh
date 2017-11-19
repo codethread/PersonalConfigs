@@ -1,7 +1,7 @@
 SPACESHIP_VI_MODE_SHOW=true
 SPACESHIP_VI_MODE_INSERT=""
 SPACESHIP_VI_MODE_NORMAL="⭐ "
-spaceship_vi_mode_enable
+# spaceship_vi_mode_enable
 
 SPACESHIP_DIR_SHOW=true
 # # GIT
