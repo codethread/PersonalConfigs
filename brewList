@@ -11,6 +11,7 @@ exercism
 fzf
 gdbm
 heroku
+heroku-node
 htop
 icu4c
 jq
@@ -34,6 +35,7 @@ ruby
 sqlite
 the_silver_searcher
 tmux
+tree
 vim
 wget
 xz
