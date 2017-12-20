@@ -45,12 +45,11 @@ Plugin 'xuyuanp/nerdtree-git-plugin'
 "------------------------------------------
 "--- Languages
 "-----------------------------------------
-"
 " Plugin 'jelera/vim-javascript-syntax' " doesnt seem to do anything?
 Plugin 'chrisbra/Colorizer'
 Plugin 'elixir-lang/vim-elixir'
 Plugin 'godlygeek/tabular'
-Plugin 'jparise/vim-graphql'
+" Plugin 'jparise/vim-graphql'
 Plugin 'mxw/vim-jsx'
 Plugin 'pangloss/vim-javascript'
 Plugin 'plasticboy/vim-markdown'
@@ -61,12 +60,8 @@ Plugin 'chrisbra/csv.vim'
 "------------------------------------------
 "--- Color Schemes
 "-----------------------------------------
-Plugin 'dracula/vim'
 Plugin 'jacoborus/tender.vim'
-Plugin 'morhetz/gruvbox'
-Plugin 'obsidian'
-Plugin 'tomasr/molokai'
-Plugin 'adlawson/vim-sorcerer'
+Plugin 'Reewr/vim-monokai-phoenix'
 
 "------------------------------------------
 "--- session handling
@@ -83,6 +78,14 @@ Plugin 'rking/ag.vim'
 Plugin 'tpope/vim-rhubarb'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'wakatime/vim-wakatime'
+" Plugin 'SirVer/ultisnips'
+" Plugin 'honza/vim-snippets'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'ternjs/tern_for_vim'
+Plugin 'metakirby5/codi.vim'
+Plugin 'Konfekt/vim-scratchpad'
+
+"---------------------------------------------------------------"
 
 " Plugin 'ctrlpvim/ctrlp.vim' " replaced with fzf
 " Plugin 'd11wtq/ctrlp_bdelete.vim' " goes with ctrlp
@@ -166,6 +169,23 @@ autocmd FileType elixir  setlocal tabstop=4 shiftwidth=4
 autocmd FileType ruby  setlocal tabstop=2 shiftwidth=2
 autocmd FileType yaml  setlocal tabstop=2 shiftwidth=2
 
+"---------------------------------------------------------------"
+"--- Utils
+"---------------------------------------------------------------"
+" let g:UltiSnipsExpandTrigger="<tab>"
+" let g:UltiSnipsJumpForwardTrigger="<c-b>"
+" let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+"---------------------------------------------------------------"
+"--- ScratchPads & COdi
+"---------------------------------------------------------------"
+let g:ycm_autoclose_preview_window_after_insertion = 1
+let g:codi#rightsplit = 0
+let g:codi#rightalign = 0
+let g:codi#width = 80
+
+let g:scratchpad_path = '.scratchpads'
+nmap dsp <Plug>(ToggleScratchPad)
 
 "---------------------------------------------------------------"
 "--- Mappings
@@ -216,7 +236,7 @@ nnoremap <silent> <Leader>- :exe "vertical resize -10"<CR>
 
 map <Leader>n :NERDTreeFind<CR>
 
-:inoremap <Tab> <C-R>=Tab_Or_Complete()<CR>
+" :inoremap <Tab> <C-R>=Tab_Or_Complete()<CR>
 nmap <Tab> :b#<CR>
 
 " fzf + ag commands
@@ -228,7 +248,7 @@ map <Leader>h :History
 map \ :Fuzzyag<CR>
 
 
-map <Leader>d :split dump<CR>
+" map <Leader>d :split dump<CR>
 
 "delete without adding to clipboard
 " nnoremap <leader>d "_d
@@ -248,6 +268,13 @@ map <Leader>cl :set cursorline!<CR>
 map <Leader>w :set nowrap!<CR>
 
 nnoremap <leader>h <Esc>:call ToggleHardMode()<CR>
+
+"---------------------------------------------------------------"
+"--- Macros
+"---------------------------------------------------------------"
+let @l='yy^Wwpi^M^[^WW' " send line to next cycled pane
+let @r='y^Wwpi^M^[^WW' " send selected region to next cycled pane
+let @b='0v/^\n^My^Wwpi^M^[^WW' " send current block to next cycled pane
 
 "---------------------------------------------------------------"
 "--- Functions
