@@ -5,33 +5,33 @@ root: ~/
 windows:
   - spages:
       root: ~/Service/sky-pages
-      layout: even-vertical
+      layout: main-vertical
       panes:
+        - vim_pane:
+          - vim
         - info_pane:
           - sleep 1
           - spages -l
-        - vim_pane:
-          - vim
         - spages_view_pane:
           - sleep 1
           - clear
           - gst
   - graphql:
       root: ~/Service/skyport-graphql
-      layout: even-vertical
+      layout: main-vertical
       panes:
+        - vim_pane:
+          - vim
         - info_pane:
           - sleep 1
           - skyport -d
-        - vim_pane:
-          - vim
         - skyport_view_pane:
           - sleep 1
           - clear
           - gst
   - ppp:
       root: ~/Service/polaris-page-producer
-      layout: even-vertical
+      layout: tiles
       panes:
         - info_pane:
           - sleep 1
@@ -40,19 +40,19 @@ windows:
           - sleep 1
           - ppp -l
   - .dotfiles:
-      root: ~/
-      layout: even-vertical
+      root: ~/PersonalConfigs
+      layout: main-vertical
       panes:
         - vim -O .vimrc .zshrc
   - service-scripts:
       root: ~/Service/skymobile-service
-      layout: even-vertical
+      layout: main-vertical
       panes:
-        -
         - vim
+        -
   - randoms:
       root: ~/
-      layout: even-vertical
+      layout: main-vertical
       panes:
         -
         -

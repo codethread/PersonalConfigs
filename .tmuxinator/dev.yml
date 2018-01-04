@@ -28,3 +28,9 @@ windows:
       panes:
         - vim
         - ls
+  - advent:
+      root: ~/dev/advent
+      layout: main-vertical
+      panes:
+        - vim
+        - ls

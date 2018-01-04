@@ -60,9 +60,7 @@ Plugin 'chrisbra/csv.vim'
 "------------------------------------------
 "--- Color Schemes
 "-----------------------------------------
-Plugin 'jacoborus/tender.vim'
-Plugin 'Reewr/vim-monokai-phoenix'
-
+" here use tender-adam in personal config
 "------------------------------------------
 "--- session handling
 "-----------------------------------------
@@ -95,8 +93,6 @@ Plugin 'Konfekt/vim-scratchpad'
 "-----------------------------------------
 " Plugin 'christoomey/vim-tmux-navigator'
 " Plugin 'craigemery/vim-autotag'
-" Plugin 'godlygeek/tabular'
-" Plugin 'kchmck/vim-coffee-script'
 " Plugin 'lchi/vim-toffee'
 " Plugin 'mustache/vim-mustache-handlebars'
 " Plugin 'sjl/vitality.vim'
@@ -105,7 +101,6 @@ Plugin 'Konfekt/vim-scratchpad'
 " Plugin 'tpope/vim-cucumber'
 " Plugin 'tpope/vim-dispatch'
 " Plugin 'tpope/vim-endwise'
-" Plugin 'tpope/vim-surround'
 
 call vundle#end()
 "
@@ -135,10 +130,10 @@ let g:EasyMotion_smartcase = 1
 "---------------------------------------------------------------"
 syntax enable
 " colorscheme obsidian
-color tender
+color tenderAdam
 
 let g:airline_powerline_fonts = 1
-let g:airline_theme = 'tender'
+let g:airline_theme = 'tenderAdam'
 
 " let g:airline#extensions#ale#enabled = 1
 
