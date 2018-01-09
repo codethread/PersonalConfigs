@@ -52,6 +52,7 @@ Plugin 'godlygeek/tabular'
 " Plugin 'jparise/vim-graphql'
 Plugin 'mxw/vim-jsx'
 Plugin 'pangloss/vim-javascript'
+Plugin 'othree/javascript-libraries-syntax.vim'
 Plugin 'plasticboy/vim-markdown'
 Plugin 'kchmck/vim-coffee-script'
 " Plugin 'styled-components/vim-styled-components'
@@ -137,20 +138,25 @@ set undoreload=10000
 "--- Appearance
 "---------------------------------------------------------------"
 syntax enable
-" colorscheme obsidian
 color tenderAdam
 
+"---------------------------------------------------------------"
+"--- Airline
+"---------------------------------------------------------------"
 let g:airline_powerline_fonts = 1
 let g:airline_theme = 'tenderAdam'
+let g:airline#extensions#ale#enabled = 1
+let g:airline#extensions#tabline#enabled = 1
 
-" let g:airline#extensions#ale#enabled = 1
+let g:airline_section_b = '%{split(getcwd(), "/")[-1]}' " dont really care for the branch
+" let g:airline_section_c = '%t'
+
+let g:airline_section_x = '%{bufnr("%")}'
+let g:airline_section_y = '%y'
 
 " let g:jsx_ext_required = 0
 set statusline+=%#warningmsg#
 set statusline+=%*
-" set statusline+=%{SyntasticStatuslineFlag()} " no longer using syntastic
-
-let g:NERDTreeWinSize=60 " nice big tree is it's easy to toggle off
 
 "---------------------------------------------------------------"
 "--- Linting
@@ -318,6 +324,8 @@ command! StripTrailingWhitespaces call <SID>StripTrailingWhitespaces()
 "---------------------------------------------------------------"
 "--- NERdTREE stuff
 "---------------------------------------------------------------"
+let g:NERDTreeWinSize=60 " nice big tree is it's easy to toggle off
+
 " closes nerdtree if only open
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 " ignore files */

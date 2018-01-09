@@ -186,6 +186,8 @@ hi jsExport guifg=#73cef4 ctermfg=81 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE
 hi jsExportDefault guifg=#c9d05c ctermfg=185 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE
 hi jsExportDefaultGroup guifg=#73cef4 ctermfg=81 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE
 hi jsFrom guifg=#73cef4 ctermfg=81 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE
+" hi jsSpreadExpression guifg=#f43753 ctermfg=203 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE
+" hi jsRestExpression guifg=#f43753 ctermfg=81 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE
 " hi jsStorageClass guifg=#66D9EF guibg=NONE gui=NONE ctermfg=81 ctermbg=NONE cterm=NONE
 " hi jsOperator guifg=#F92672 guibg=NONE gui=NONE ctermfg=197 ctermbg=NONE cterm=NONE
 " hi jsBooleanTrue guifg=#AE81FF guibg=NONE gui=NONE ctermfg=141 ctermbg=NONE cterm=NONE
@@ -248,8 +250,12 @@ hi jsFrom guifg=#73cef4 ctermfg=81 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE
 " hi jsFuncArgs guifg=#FD971F guibg=NONE gui=NONE ctermfg=208 ctermbg=NONE cterm=NONE
 " hi jsFuncArgRest guifg=#F92672 guibg=NONE gui=NONE ctermfg=197 ctermbg=NONE cterm=NONE
 " hi jsArrowFunction guifg=#66D9EF guibg=NONE gui=NONE ctermfg=81 ctermbg=NONE cterm=NONE
+
 " hi jsFuncCall guifg=#A6E22E guibg=NONE gui=NONE ctermfg=112 ctermbg=NONE cterm=NONE
-hi jsFuncCall guifg=#73cef4 ctermfg=81 guibg=NONE ctermbg=NONE gui=underline cterm=underline
+ hi jsFuncCall guifg=#A6E22E  ctermfg=185 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE
+" hi jsFuncCall guifg=#66D9EF ctermfg=81 guibg=NONE ctermbg=NONE gui=underline cterm=underline
+" hi jsFuncCall guifg=#66D9EF ctermfg=81 guibg=NONE ctermbg=NONE gui=underline cterm=bold
+
 hi plug2 guifg=#c9d05c ctermfg=185 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE
 hi plugH2 guifg=#73cef4 ctermfg=81 guibg=NONE ctermbg=NONE gui=bold cterm=bold
 hi plugBracket guifg=#b3deef ctermfg=153 guibg=NONE ctermbg=NONE gui=NONE cterm=NONE
