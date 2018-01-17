@@ -42,7 +42,7 @@ source $HOME/PersonalConfigs/spaceship-config.zsh
 # bindkey -e # comes after spacehip config
 
 for f in $HOME/.personal-scripts/*; do source $f; done
-for f in $HOME/PersonalConfigs/.tmuxinator/*; do ln -s -f $f ~/.tmuxinator; done
+for f in $HOME/PersonalConfigs/tmuxinator/*; do ln -s -f $f ~/.tmuxinator; done
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
