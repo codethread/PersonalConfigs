@@ -1,12 +1,7 @@
-*~
 *.swp*
 *.swo*
 *.swn*
 .DS_Store
-.settings
-bin
-node_modules
-.gitignore
-public
-tags
-.scratchpads
+.idea/
+.vscode/
+.scratchpads/
