@@ -40,6 +40,7 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'xuyuanp/nerdtree-git-plugin'
+Plugin 'gcmt/taboo.vim'
 " Plugin 'jeffkreeftmeijer/vim-numbertoggle'
 
 "------------------------------------------
@@ -49,10 +50,10 @@ Plugin 'xuyuanp/nerdtree-git-plugin'
 Plugin 'chrisbra/Colorizer'
 Plugin 'elixir-lang/vim-elixir'
 Plugin 'godlygeek/tabular'
-" Plugin 'jparise/vim-graphql'
+Plugin 'jparise/vim-graphql'
 Plugin 'mxw/vim-jsx'
 Plugin 'pangloss/vim-javascript'
-Plugin 'othree/javascript-libraries-syntax.vim'
+" Plugin 'othree/javascript-libraries-syntax.vim'
 Plugin 'plasticboy/vim-markdown'
 Plugin 'kchmck/vim-coffee-script'
 " Plugin 'styled-components/vim-styled-components'
@@ -139,6 +140,7 @@ set undoreload=10000
 "---------------------------------------------------------------"
 syntax enable
 color tenderAdam
+" set guioptions-=e
 
 "---------------------------------------------------------------"
 "--- Airline
@@ -275,6 +277,7 @@ map <leader>col :ColorToggle<CR>
 map <leader>rn :set relativenumber!<CR>
 map <Leader>cl :set cursorline!<CR>
 map <Leader>w :set nowrap!<CR>
+map <Leader>p <C-W>}
 
 nnoremap <leader>h <Esc>:call ToggleHardMode()<CR>
 
