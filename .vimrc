@@ -26,7 +26,6 @@ Plugin 'ddrscott/vim-window'
 "------------------------------------------
 "--- Linting / testing
 "-----------------------------------------
-" Plugin 'vim-syntastic/syntastic'
 Plugin 'ngmy/vim-rubocop'
 Plugin 'thoughtbot/vim-rspec'
 Plugin 'w0rp/ale' " async linting
@@ -41,7 +40,6 @@ Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'xuyuanp/nerdtree-git-plugin'
 Plugin 'gcmt/taboo.vim'
-" Plugin 'jeffkreeftmeijer/vim-numbertoggle'
 
 "------------------------------------------
 "--- Languages
@@ -53,8 +51,6 @@ Plugin 'godlygeek/tabular'
 Plugin 'jparise/vim-graphql'
 Plugin 'mxw/vim-jsx'
 Plugin 'pangloss/vim-javascript'
-" Plugin 'othree/javascript-libraries-syntax.vim'
-Plugin 'plasticboy/vim-markdown'
 Plugin 'kchmck/vim-coffee-script'
 " Plugin 'styled-components/vim-styled-components'
 Plugin 'chrisbra/csv.vim'
@@ -78,9 +74,9 @@ Plugin 'rking/ag.vim'
 Plugin 'tpope/vim-rhubarb'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'wakatime/vim-wakatime'
-" Plugin 'SirVer/ultisnips'
-" Plugin 'honza/vim-snippets'
-Plugin 'Valloric/YouCompleteMe'
+Plugin 'Valloric/YouCompleteMe' " snippet engine
+Plugin 'SirVer/ultisnips' " snippet tool
+Plugin 'honza/vim-snippets' " actual snippet examples
 Plugin 'ternjs/tern_for_vim'
 Plugin 'metakirby5/codi.vim'
 Plugin 'Konfekt/vim-scratchpad'
@@ -141,6 +137,7 @@ syntax enable
 color tenderAdam
 " set guioptions-=e
 
+" let g:pencil#textwidth = 44
 "---------------------------------------------------------------"
 "--- Airline
 "---------------------------------------------------------------"
@@ -165,6 +162,11 @@ set statusline+=%*
 " let g:ale_lint_on_save = 1
 " let g:ale_lint_on_text_changed = 'normal'
 let g:ale_linters = { 'javascript': ['eslint'] }
+
+"---------------------------------------------------------------"
+"--- SNippets
+"---------------------------------------------------------------"
+" autocmd FileType js UltiSnipsAddFiletypes javascript-react
 
 "---------------------------------------------------------------"
 "--- Indentation
@@ -200,6 +202,8 @@ nmap dsp <Plug>(ToggleScratchPad)
 "---------------------------------------------------------------"
 "--- Mappings
 "---------------------------------------------------------------"
+let g:UltiSnipsExpandTrigger="<C-b>"
+
 " let mapleader = ","
 let mapleader = " "
 " escape key
@@ -269,7 +273,6 @@ map \ :Fuzzyag<CR>
 
 nmap <leader>sw :StripTrailingWhitespaces<CR>
 
-map <leader>t :TableFormat<CR>
 map <leader>s :sort<CR>
 
 map <leader>col :ColorToggle<CR>

@@ -1,6 +1,7 @@
 *.swp*
 *.swo*
 *.swn*
+.nenv
 .DS_Store
 .idea/
 .vscode/

@@ -4,9 +4,10 @@
 export ZSH=$HOME/.oh-my-zsh
 
 export PATH="$PATH:$HOME/elixir/bin"
-export PATH="/usr/local/opt/node@6/bin:$PATH"
-export PATH="/usr/local/sbin:$PATH"
+# export PATH="/usr/local/opt/node@6/bin:$PATH"
+# export PATH="/usr/local/sbin:$PATH"
 export PATH="$PATH:$HOME/PersonalConfigs/bin"
+export PATH="$HOME/.nodenv/shims:$PATH"
 
 export EDITOR='vim'
 # export KEYTIMEOUT=100
@@ -25,7 +26,7 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 plugins=(git tmux)
 
 set guifont=Liberation\ Mono\ for\ Powerline\ 10
-set diffopt+=vertical
+# set diffopt+=vertical
 
 
 if which nodenv > /dev/null; then eval "$(nodenv init -)"; fi

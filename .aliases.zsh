@@ -12,6 +12,7 @@ alias brewup='brew update; brew upgrade; brew prune; brew cleanup; brew doctor'
 alias cmds='cat ~/.aliases.zsh'
 
 alias gbr="git branch | grep -v "master" | xargs git branch -D"
+alias gfuck="git fetch origin; git reset --hard origin/master"
 #---------------------------------------------#
 # TMUXINATOR
 # -------------------------------------------#
@@ -43,7 +44,7 @@ alias muxs="tmuxinator_spages"
 alias st="skyport_test_modified_files"
 
 # alias stest="mv .env .notenv || true  && npm run test:unit || true && mv .notenv .env"
-alias pt="mv .env .nenv; pages test unit; mv .nenv .env"
+alias pt="mv .env .nenv; pages test unit -q; mv .nenv .env"
 alias portkeys="compare_skyport_vault_keys"
 alias dspages="deploy_pages"
 

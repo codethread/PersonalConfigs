@@ -4,20 +4,8 @@ name: dev
 root: ~/
 
 windows:
-  - react-boilerplate:
-      root: ~/dev/js/react/react-boilerplate
-      layout: main-vertical
-      panes:
-        - vim
-        - ls
   - github-tools:
       root: ~/dev/js/node/github-tools
-      layout: main-vertical
-      panes:
-        - vim
-        - ls
-  - gql-basic:
-      root: ~/dev/js/graphql/gql-basic
       layout: main-vertical
       panes:
         - vim
@@ -34,3 +22,23 @@ windows:
       panes:
         - vim
         - ls
+  - functional-light:
+      root: ~/dev/js/frontend-masters/functional-light/exercises
+      layout: main-vertical
+      panes:
+        - vim
+        - ls
+  - gql-basic:
+      root: ~/dev/js/graphql/gql-basic
+      layout: main-vertical
+      panes:
+        - vim
+        - ls
+  - pr-dashboard:
+      root: ~/Service/pr-dashboard
+      layout: main-vertical
+      panes:
+        - vim
+        - npm start
+        - ls
+        - curl "http://localhost:1234" | jq

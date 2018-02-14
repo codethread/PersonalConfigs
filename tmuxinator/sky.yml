@@ -3,15 +3,16 @@
 name: sky
 root: ~/
 windows:
-  - spages:
+  - mobile:
       root: ~/Service/sky-pages
       layout: main-vertical
       panes:
         - vim_pane:
+          - cd ~/Service/sky-pages/apps/mobile
           - vim
         - info_pane:
           - sleep 1
-          - spages -l
+          - pages start dev
         - spages_view_pane:
           - sleep 1
           - clear
@@ -29,16 +30,18 @@ windows:
           - sleep 1
           - clear
           - gst
-  - ppp:
-      root: ~/Service/polaris-page-producer
-      layout: tiles
+  - skypages:
+      root: ~/Service/sky-pages
+      layout: main-vertical
       panes:
+        - vim_pane:
+          - vim
         - info_pane:
           - sleep 1
-          - redis-server
-        - ppp_view_pane:
+        - spages_view_pane:
           - sleep 1
-          - ppp -l
+          - clear
+          - gst
   - .dotfiles:
       root: ~/PersonalConfigs
       layout: main-vertical
