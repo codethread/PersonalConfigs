@@ -1,8 +1,10 @@
 [user]
-	email = adam.hall@sky.uk
-	name = Adam
+	email = adamhalldesigns@gmail.com
+	name = Adam Hall
+[includeIf "gitdir:~/Service/"]
+        path = ~/.sky.gitconfig
 [core]
-	excludesfile = /Users/adh23/.gitignore_global
+	excludesfile = ~/.gitignore_global
 	editor = vim
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"

@@ -54,6 +54,8 @@ Plugin 'pangloss/vim-javascript'
 Plugin 'kchmck/vim-coffee-script'
 " Plugin 'styled-components/vim-styled-components'
 Plugin 'chrisbra/csv.vim'
+Plugin 'leafgarland/typescript-vim'
+Plugin 'ianks/vim-tsx'
 
 "------------------------------------------
 "--- Color Schemes
@@ -152,7 +154,7 @@ let g:airline_section_b = '%{split(getcwd(), "/")[-1]}' " dont really care for t
 let g:airline_section_x = '%{bufnr("%")}'
 let g:airline_section_y = '%y'
 
-" let g:jsx_ext_required = 0
+let g:jsx_ext_required = 0
 set statusline+=%#warningmsg#
 set statusline+=%*
 
