@@ -34,3 +34,7 @@ function setup_scripts() {
   ln -s ~/PersonalConfigs/colors/airline/tenderAdam.vim ~/.vim/pack/my-packages/start/vim-airline-themes/autoload/airline/themes/
 
 }
+
+# on mac
+ln -s ~/PersonalConfigs/vsSettings.json ~/Library/Application\ Support/Code/User/settings.json
+

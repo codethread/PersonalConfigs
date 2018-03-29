@@ -1,9 +1,0 @@
-#!/bin/bash
-if [[ "$1" == '' ]]; then
-  echo 'no params: exiting'
-else
-  echo 'killing ' $1
-  docker ps | grep $1 | awk '{ print $1 }' | xargs docker kill
-fi
-
-

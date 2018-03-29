@@ -11,6 +11,7 @@ alias lst="ls -1 -a -F -G"
 alias brewup='brew update; brew upgrade; brew prune; brew cleanup; brew doctor'
 alias cmds='cat ~/.aliases.zsh'
 
+alias gcp="git cherry-pick"
 alias gbr="git branch | grep -v "master" | xargs git branch -D"
 alias gfuck="git fetch origin; git reset --hard origin/master"
 #---------------------------------------------#
@@ -39,7 +40,8 @@ alias cdh="cat ~/.aliases.zsh | grep \"^alias cd.=\""
 # -------------------------------------------#
 alias ppp="start_ppp"
 alias skyport="start_skyport"
-alias spages="start_spages"
+# alias spages="start_spages"
+alias spages="pages start dev --apps mobile,bill"
 alias muxs="tmuxinator_spages"
 alias st="skyport_test_modified_files"
 
@@ -50,4 +52,6 @@ alias dspages="deploy_pages"
 
 alias cdp="cd /users/adh23/service/sky-pages"
 alias cdg="cd /users/adh23/service/skyport-graphql"
+
+# for f in apps/mobile/**/*.jsx; do sed -i.bak "s/SWAP_ADDITIONAL_DAMGAE/SWAP_ADDITIONAL_DAMAGE/g" "$f"; done
 

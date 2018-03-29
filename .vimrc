@@ -331,7 +331,7 @@ command! StripTrailingWhitespaces call <SID>StripTrailingWhitespaces()
 "---------------------------------------------------------------"
 "--- NERdTREE stuff
 "---------------------------------------------------------------"
-let g:NERDTreeWinSize=60 " nice big tree is it's easy to toggle off
+let g:NERDTreeWinSize=40 " nice big tree is it's easy to toggle off
 
 " closes nerdtree if only open
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
