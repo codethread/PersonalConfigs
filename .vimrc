@@ -20,7 +20,7 @@ Plugin 'reedes/vim-pencil'
 Plugin 'tpope/vim-repeat'
 Plugin 'kshenoy/vim-signature'
 Plugin 'wikitopian/hardmode'
-Plugin 'easymotion/vim-easymotion'
+" Plugin 'easymotion/vim-easymotion'
 Plugin 'ddrscott/vim-window'
 
 "------------------------------------------
@@ -35,11 +35,16 @@ Plugin 'w0rp/ale' " async linting
 "-----------------------------------------
 Plugin 'airblade/vim-gitgutter'
 Plugin 'scrooloose/nerdtree.git'
+Plugin 'xuyuanp/nerdtree-git-plugin'
+" Plugin 'Shougo/vimfiler.vim'
+" Plugin 'Shougo/unite.vim'
+Plugin 'Shougo/denite.nvim'
 Plugin 'tpope/vim-fugitive'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
-Plugin 'xuyuanp/nerdtree-git-plugin'
 Plugin 'gcmt/taboo.vim'
+Plugin 'majutsushi/tagbar'
+Plugin 'hecal3/vim-leader-guide'
 
 "------------------------------------------
 "--- Languages
@@ -56,6 +61,7 @@ Plugin 'kchmck/vim-coffee-script'
 Plugin 'chrisbra/csv.vim'
 Plugin 'leafgarland/typescript-vim'
 Plugin 'ianks/vim-tsx'
+Plugin 'shirk/vim-gas'
 
 "------------------------------------------
 "--- Color Schemes
@@ -125,6 +131,7 @@ set tags=tags;
 set nrformats-=octal
 let g:EasyMotion_smartcase = 1
 let g:vim_markdown_folding_disabled = 1
+set fillchars=vert:│,fold:·
 "---------------------------------------------------------------"
 "--- Undo
 "---------------------------------------------------------------"
@@ -157,6 +164,7 @@ let g:airline_section_y = '%y'
 let g:jsx_ext_required = 0
 set statusline+=%#warningmsg#
 set statusline+=%*
+let g:fzf_layout = { 'down': '~40%' }
 
 "---------------------------------------------------------------"
 "--- Linting
@@ -183,6 +191,8 @@ autocmd FileType elixir  setlocal tabstop=4 shiftwidth=4
 autocmd FileType ruby  setlocal tabstop=2 shiftwidth=2
 autocmd FileType yaml  setlocal tabstop=2 shiftwidth=2
 
+autocmd BufNewFile,BufRead *.asm set syntax=nasm
+
 "---------------------------------------------------------------"
 "--- Utils
 "---------------------------------------------------------------"
@@ -204,14 +214,13 @@ nmap dsp <Plug>(ToggleScratchPad)
 "---------------------------------------------------------------"
 "--- Mappings
 "---------------------------------------------------------------"
-let g:UltiSnipsExpandTrigger="<C-b>"
-
 " let mapleader = ","
 let mapleader = " "
 " escape key
 ino jk <esc>
 cno jk <C-c>
 
+let g:UltiSnipsExpandTrigger="<C-b>"
 " MAPS ON COMMANDS I DONT LIKE
 " map <C-B>
 map <C-F> :%s/
@@ -220,70 +229,97 @@ nmap <silent> <C-H> :wincmd h<CR>
 nmap <silent> <C-J> :wincmd j<CR>
 nmap <silent> <C-K> :wincmd k<CR>
 nmap <silent> <C-L> :wincmd l<CR>
-map <C-M> <Plug>(easymotion-prefix)
+" map <C-M> <Plug>(easymotion-prefix)
 map <C-N> :NERDTreeToggle<CR>
 map <C-P> :Files<CR>
 " map <C-Q>
 " map <C-Y>
 map <C-\> :Ag!<CR>
 
-" EASYMOTION MAPS
-nmap w <Plug>(easymotion-w)
-nmap W <Plug>(easymotion-W)
-nmap e <Plug>(easymotion-e)
-nmap E <Plug>(easymotion-E)
-nmap b <Plug>(easymotion-b)
-nmap B <Plug>(easymotion-B)
-nmap f <Plug>(easymotion-f)
-nmap F <Plug>(easymotion-F)
-nmap t <Plug>(easymotion-t)
-nmap T <Plug>(easymotion-T)
-" no working? vvv
-" imap  / <Plug>(easymotion-sn)
-" omap / <Plug>(easymotion-tn)
-" map  n <Plug>(easymotion-n)
-" map  N <Plug>(easymotion-N)
-map <Leader>j <Plug>(easymotion-j)
-map <Leader>k <Plug>(easymotion-k)
-
-" MAPS WITH LEADERS
-nnoremap <silent> <Leader>+ :exe "vertical resize +10"<CR>
-nnoremap <silent> <Leader>- :exe "vertical resize -10"<CR>
-
-map <Leader>n :NERDTreeFind<CR>
-
 " :inoremap <Tab> <C-R>=Tab_Or_Complete()<CR>
 nmap <Tab> :b#<CR>
 
-" fzf + ag commands
-let g:fzf_layout = { 'down': '~40%' }
-map <Leader>b :Buffers<CR>
-map <Leader>g :GFiles?<CR>
-map <Leader>m :Marks<CR>
-map <Leader>h :History
+"---------------------------------------------------------------"
+"--- Dictionary Leader
+"---------------------------------------------------------------"
+let g:lmap = {}
+" 🚀
+nnoremap <silent> <Leader>+ :exe "vertical resize +10"<CR>
+nnoremap <silent> <Leader>- :exe "vertical resize -10"<CR>
+
+map <Leader>? :Commands<CR>
 map \ :Fuzzyag<CR>
 
-
-" map <Leader>d :split dump<CR>
-
-"delete without adding to clipboard
+let g:lmap.d = { 'name': ' -- Delete' }
 " nnoremap <leader>d "_d
 " vnoremap <leader>d "_d
-"
 " nnoremap <leader>D "_D
 " nnoremap <leader>dd "_dd
 
-nmap <leader>sw :StripTrailingWhitespaces<CR>
+let g:lmap.b = { 'name': ' -- Buffers' }
+map <Leader>bl :Buffers<CR>
+map <Leader>bn :bnext<CR>
+map <Leader>bo :enew<CR>
+map <Leader>bp :bprevious<CR>
+map <Leader>bs :sbprevious<CR>
+" map <Leader>by :YankWoleBuffer<CR>
 
-map <leader>s :sort<CR>
+let g:lmap.e = { 'name': ' -- Errors' }
+map <Leader>en :ALENext<CR>
+map <Leader>ep :ALEPrevious<CR>
 
-map <leader>col :ColorToggle<CR>
-map <leader>rn :set relativenumber!<CR>
-map <Leader>cl :set cursorline!<CR>
-map <Leader>w :set nowrap!<CR>
-map <Leader>p <C-W>}
+let g:lmap.g = { 'name': ' -- Global' }
+map <Leader>gh :History<CR>
+map <Leader>gl :set cursorline!<CR>
+map <Leader>gn :set nowrap!<CR>
+map <Leader>gs :SourceVimrc<CR>
+map <leader>gc :ColorToggle<CR>
+map <leader>gh <Esc>:call ToggleHardMode()<CR>
+map <leader>gr :set relativenumber!<CR>
+map <leader>gw :StripTrailingWhitespaces<CR>
 
-nnoremap <leader>h <Esc>:call ToggleHardMode()<CR>
+let g:lmap.l = { 'name': ' -- Layout' }
+map <Leader>ls :vsplit<CR>
+
+let g:lmap.m = { 'name': ' -- Motion(Easy)' }
+" EASYMOTION MAPS
+" nmap w <Plug>(easymotion-w)
+" nmap W <Plug>(easymotion-W)
+" nmap e <Plug>(easymotion-e)
+" nmap E <Plug>(easymotion-E)
+" nmap b <Plug>(easymotion-b)
+" nmap B <Plug>(easymotion-B)
+" nmap f <Plug>(easymotion-f)
+" nmap F <Plug>(easymotion-F)
+" nmap t <Plug>(easymotion-t)
+" nmap T <Plug>(easymotion-T)
+" map <Leader>j <Plug>(easymotion-j)
+" map <Leader>k <Plug>(easymotion-k)
+
+" let g:lmap.n = { 'name': ' -- Project' }
+map <Leader>n :NERDTreeFind<CR>
+
+let g:lmap.p = { 'name': ' -- Project' }
+map <Leader>pg :GFiles?<CR>
+map <Leader>pm :Marks<CR>
+map <Leader>pn <C-W>}
+map <Leader>pp :Files<CR>
+map <Leader>po :only<CR>
+
+let g:lmap.s = { 'name': ' -- Search' }
+map <leader>st :call fzf#vim#tags(expand("<cword>"))<CR>
+map <leader>sw :FindWordUnderCursor<CR>
+
+let g:lmap.t = { 'name': ' -- Tabs' }
+
+let g:lmap.u = { 'name': ' -- Utils' }
+map <leader>us :sort<CR>
+
+let g:lmap.z = { 'name': ' -- Folding' }
+
+call leaderGuide#register_prefix_descriptions("<Space>", "g:lmap")
+nnoremap <silent> <leader> :<c-u>LeaderGuide '<Space>'<CR>
+vnoremap <silent> <leader> :<c-u>LeaderGuideVisual '<Space>'<CR>
 
 "---------------------------------------------------------------"
 "--- Macros
@@ -291,6 +327,14 @@ nnoremap <leader>h <Esc>:call ToggleHardMode()<CR>
 let @l='yy^Wwpi^M^[^WW' " send line to next cycled pane
 let @r='y^Wwpi^M^[^WW' " send selected region to next cycled pane
 let @b='0v/^\n^My^Wwpi^M^[^WW' " send current block to next cycled pane
+
+"---------------------------------------------------------------"
+"--- Commands
+"---------------------------------------------------------------"
+command! FindWordUnderCursor :call fzf#vim#ag(expand("<cword>"))<CR>
+command! Json %!python -m json.tool
+command! StripTrailingWhitespaces call <SID>StripTrailingWhitespaces()
+command! SourceVimrc write | source ~/.vimrc
 
 "---------------------------------------------------------------"
 "--- Functions
@@ -301,8 +345,6 @@ command! -bang -nargs=* Fuzzyag
   \                 <bang>0 ? fzf#vim#with_preview('up:60%')
   \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
   \                 <bang>0)
-
-:command! Json %!python -m json.tool
 
 "Use TAB to complete when typing words, else inserts TABs as usual.
 function! Tab_Or_Complete()
@@ -326,12 +368,12 @@ function! <SID>StripTrailingWhitespaces()
   let @/=_s
   call cursor(l, c)
 endfunction
-command! StripTrailingWhitespaces call <SID>StripTrailingWhitespaces()
 
 "---------------------------------------------------------------"
 "--- NERdTREE stuff
 "---------------------------------------------------------------"
 let g:NERDTreeWinSize=40 " nice big tree is it's easy to toggle off
+" let g:NERDTreeWinPos = "right"
 
 " closes nerdtree if only open
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif

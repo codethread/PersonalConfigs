@@ -1,8 +1,21 @@
 {
-    "window.zoomLevel": 0,
-    "workbench.colorCustomizations": {
-        // "editor.background": "#ffffff"
-        // "editor.background": "#ffffff"
-    }
+    "vim.easymotion": true,
+    "vim.sneak": true,
+    "vim.incsearch": true,
+    "vim.useSystemClipboard": true,
+    "vim.useCtrlKeys": true,
+    "vim.hlsearch": true,
+    "vim.insertModeKeyBindings": [
+        {
+            "before": [
+                "j",
+                "k"
+            ],
+            "after": [
+                "<Esc>"
+            ]
+        }
+    ],
+    "vim.leader": "<space>",
+    "workbench.iconTheme": "vscode-icons",
 }
-

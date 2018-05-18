@@ -39,6 +39,3 @@ windows:
       layout: main-vertical
       panes:
         - vim
-        - npm start
-        - ls
-        - curl "http://localhost:1234" | jq

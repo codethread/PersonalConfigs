@@ -12,7 +12,6 @@ windows:
           - vim
         - info_pane:
           - sleep 1
-          - pages start dev
         - spages_view_pane:
           - sleep 1
           - clear
@@ -38,10 +37,11 @@ windows:
           - vim
         - info_pane:
           - sleep 1
+          - spages
         - spages_view_pane:
           - sleep 1
           - clear
-          - gst
+          - pages storybook -f apps/mobile -p 1234
   - .dotfiles:
       root: ~/PersonalConfigs
       layout: main-vertical
