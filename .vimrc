@@ -252,7 +252,7 @@ nnoremap <silent> <Leader>- :exe "vertical resize -10"<CR>
 map <Leader>? :Commands<CR>
 map \ :Fuzzyag<CR>
 
-let g:lmap.d = { 'name': ' -- Delete' }
+" let g:lmap.d = { 'name': ' -- Delete' }
 " nnoremap <leader>d "_d
 " vnoremap <leader>d "_d
 " nnoremap <leader>D "_D
@@ -283,7 +283,7 @@ map <leader>gw :StripTrailingWhitespaces<CR>
 let g:lmap.l = { 'name': ' -- Layout' }
 map <Leader>ls :vsplit<CR>
 
-let g:lmap.m = { 'name': ' -- Motion(Easy)' }
+" let g:lmap.m = { 'name': ' -- Motion(Easy)' }
 " EASYMOTION MAPS
 " nmap w <Plug>(easymotion-w)
 " nmap W <Plug>(easymotion-W)
@@ -308,16 +308,19 @@ map <Leader>pn <C-W>}
 map <Leader>pp :Files<CR>
 map <Leader>po :only<CR>
 
+let g:lmap.r = { 'name': 'global reg' }
+map <Leader>rr "*
+
 let g:lmap.s = { 'name': ' -- Search' }
 map <leader>st :call fzf#vim#tags(expand("<cword>"))<CR>
 map <leader>sw :FindWordUnderCursor<CR>
 
-let g:lmap.t = { 'name': ' -- Tabs' }
+" let g:lmap.t = { 'name': ' -- Tabs' }
 
 let g:lmap.u = { 'name': ' -- Utils' }
 map <leader>us :sort<CR>
 
-let g:lmap.z = { 'name': ' -- Folding' }
+" let g:lmap.z = { 'name': ' -- Folding' }
 
 call leaderGuide#register_prefix_descriptions("<Space>", "g:lmap")
 nnoremap <silent> <leader> :<c-u>LeaderGuide '<Space>'<CR>
