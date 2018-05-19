@@ -54,4 +54,7 @@ alias cdp="cd /users/adh23/service/sky-pages"
 alias cdg="cd /users/adh23/service/skyport-graphql"
 
 # for f in apps/mobile/**/*.jsx; do sed -i.bak "s/SWAP_ADDITIONAL_DAMGAE/SWAP_ADDITIONAL_DAMAGE/g" "$f"; done
+# for f in ./*.js; do sed -i.bak "s/RUN/READ/g" "$f"; done
+# curl -sLf https://spacevim.org/install.sh | bash
+# curl -sLf https://spacevim.org/install.sh | bash -s -- --uninstall
 

@@ -50,6 +50,7 @@ Plugin 'hecal3/vim-leader-guide'
 "--- Languages
 "-----------------------------------------
 " Plugin 'jelera/vim-javascript-syntax' " doesnt seem to do anything?
+Plugin 'sheerun/vim-polyglot'
 Plugin 'chrisbra/Colorizer'
 Plugin 'elixir-lang/vim-elixir'
 Plugin 'godlygeek/tabular'
@@ -62,6 +63,8 @@ Plugin 'chrisbra/csv.vim'
 Plugin 'leafgarland/typescript-vim'
 Plugin 'ianks/vim-tsx'
 Plugin 'shirk/vim-gas'
+" Plugin 'nikvdp/ejs-syntax'
+Plugin 'othree/html5.vim'
 
 "------------------------------------------
 "--- Color Schemes
@@ -161,7 +164,7 @@ let g:airline_section_b = '%{split(getcwd(), "/")[-1]}' " dont really care for t
 let g:airline_section_x = '%{bufnr("%")}'
 let g:airline_section_y = '%y'
 
-let g:jsx_ext_required = 0
+let g:jsx_ext_required = 1
 set statusline+=%#warningmsg#
 set statusline+=%*
 let g:fzf_layout = { 'down': '~40%' }
@@ -183,10 +186,9 @@ let g:ale_linters = { 'javascript': ['eslint'] }
 "---------------------------------------------------------------"
 " set tabstop=2 shiftwidth=2 expandtab
 set expandtab
-" autocmd FileType * setlocal tabstop=2 shiftwidth=2
+autocmd FileType * setlocal tabstop=2 shiftwidth=2
 autocmd FileType sh setlocal tabstop=2 shiftwidth=2
-" autocmd FileType javascript setlocal tabstop=4 shiftwidth=4
-" autocmd FileType javascript.jsx setlocal tabstop=4 shiftwidth=4
+autocmd FileType javascript setlocal tabstop=2 shiftwidth=2
 autocmd FileType elixir  setlocal tabstop=4 shiftwidth=4
 autocmd FileType ruby  setlocal tabstop=2 shiftwidth=2
 autocmd FileType yaml  setlocal tabstop=2 shiftwidth=2

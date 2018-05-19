@@ -4,7 +4,7 @@
 [includeIf "gitdir:~/Service/"]
         path = ~/.sky.gitconfig
 [core]
-	excludesfile = ~/.gitignore_global
+	excludesfile = /Users/adam/.gitignore_global
 	editor = vim
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
