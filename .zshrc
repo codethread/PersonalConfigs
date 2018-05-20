@@ -25,10 +25,7 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # plugins=(bundler gem git mix sudo tmux web-search)
 plugins=(git tmux)
 
-set guifont=Liberation\ Mono\ for\ Powerline\ 10
-# set diffopt+=vertical
-
-
+# set guifont=monofur\ for\ Powerline\ 10
 if which nodenv > /dev/null; then eval "$(nodenv init -)"; fi
 
 #------------------------------------------

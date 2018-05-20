@@ -91,6 +91,7 @@ Plugin 'honza/vim-snippets' " actual snippet examples
 Plugin 'ternjs/tern_for_vim'
 Plugin 'metakirby5/codi.vim'
 Plugin 'Konfekt/vim-scratchpad'
+Plugin 'craigemery/vim-autotag'
 
 "---------------------------------------------------------------"
 
@@ -147,13 +148,21 @@ set undoreload=10000
 "---------------------------------------------------------------"
 syntax enable
 color tenderAdam
+let g:tagbar_width = 30
+let g:tagbar_compact = 0
+let g:tagbar_autopreview = 0
+
+highlight TagbarSignature ctermfg=215
+autocmd VimEnter * nested :TagbarOpen
+
 " set guioptions-=e
+" set guifont=Source\ Code\ Pro\ Italic\ for\ Powerline\ 11
 
 " let g:pencil#textwidth = 44
 "---------------------------------------------------------------"
 "--- Airline
 "---------------------------------------------------------------"
-let g:airline_powerline_fonts = 1
+" let g:airline_powerline_fonts = 1
 let g:airline_theme = 'tenderAdam'
 let g:airline#extensions#ale#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
@@ -279,9 +288,11 @@ map <leader>gc :ColorToggle<CR>
 map <leader>gh <Esc>:call ToggleHardMode()<CR>
 map <leader>gr :set relativenumber!<CR>
 map <leader>gw :StripTrailingWhitespaces<CR>
+map <leader>g? :help index<CR>
 
 let g:lmap.l = { 'name': ' -- Layout' }
 map <Leader>ls :vsplit<CR>
+map <Leader>lt :TagBResise
 
 " let g:lmap.m = { 'name': ' -- Motion(Easy)' }
 " EASYMOTION MAPS
@@ -315,12 +326,29 @@ let g:lmap.s = { 'name': ' -- Search' }
 map <leader>st :call fzf#vim#tags(expand("<cword>"))<CR>
 map <leader>sw :FindWordUnderCursor<CR>
 
-" let g:lmap.t = { 'name': ' -- Tabs' }
+let g:lmap.t = { 'name': ' -- Tags' }
+map <leader>tf :Tags<CR>
+map <leader>tl :ts<CR>
+map <leader>tn :tn<CR>
+map <leader>tp :tp<CR>
+map <leader>tt <C-]>
+map <leader>th :TagbarToggle<CR>
+map <leader>tw :ts "<cword>"<CR>
 
 let g:lmap.u = { 'name': ' -- Utils' }
 map <leader>us :sort<CR>
 
-" let g:lmap.z = { 'name': ' -- Folding' }
+let g:lmap.w = { 'name': ' -- Windows' }
+map <leader>wa 1gt<CR>
+map <leader>ws 2gt<CR>
+map <leader>wd 3gt<CR>
+map <leader>wf 4gt<CR>
+map <leader>wn :tabNext<CR>
+map <leader>wN :tabnew<CR>
+map <leader>wp :tabprevious<CR>
+map <leader>wl :tabs<CR>
+
+let g:lmap.z = { 'name': ' -- Folding' }
 
 call leaderGuide#register_prefix_descriptions("<Space>", "g:lmap")
 nnoremap <silent> <leader> :<c-u>LeaderGuide '<Space>'<CR>
@@ -340,6 +368,7 @@ command! FindWordUnderCursor :call fzf#vim#ag(expand("<cword>"))<CR>
 command! Json %!python -m json.tool
 command! StripTrailingWhitespaces call <SID>StripTrailingWhitespaces()
 command! SourceVimrc write | source ~/.vimrc
+command! -nargs=1 TagBResise call ResiseTagBar(<f-args>)
 
 "---------------------------------------------------------------"
 "--- Functions
@@ -358,6 +387,12 @@ function! Tab_Or_Complete()
         else
                 return "\<Tab>"
         endif
+endfunction
+
+function! ResiseTagBar(size)
+  let g:tagbar_width = a:size
+  exe "TagbarToggle"
+  exe "TagbarOpen"
 endfunction
 
 " via: http://rails-bestpractices.com/posts/60-remove-trailing-whitespace

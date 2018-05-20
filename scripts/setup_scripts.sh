@@ -30,11 +30,11 @@ function setup_scripts() {
   done
 
   [ ! -d ~/.vim/colors ] && mkdir ~/.vim/colors
-  ln -s ~/PersonalConfigs/colors/tenderAdam.vim ~/.vim/colors
-  ln -s ~/PersonalConfigs/colors/airline/tenderAdam.vim ~/.vim/pack/my-packages/start/vim-airline-themes/autoload/airline/themes/
+  # ln -s ~/PersonalConfigs/colors/tenderAdam.vim ~/.vim/colors
+  # ln -s ~/PersonalConfigs/colors/airline/tenderAdam.vim ~/.vim/pack/my-packages/start/vim-airline-themes/autoload/airline/themes/
 
 }
 
 # on mac
-ln -s ~/PersonalConfigs/vsSettings.json ~/Library/Application\ Support/Code/User/settings.json
+# ln -s ~/PersonalConfigs/vsSettings.json ~/Library/Application\ Support/Code/User/settings.json
 
