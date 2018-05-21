@@ -45,6 +45,7 @@ Plugin 'vim-airline/vim-airline-themes'
 Plugin 'gcmt/taboo.vim'
 Plugin 'majutsushi/tagbar'
 Plugin 'hecal3/vim-leader-guide'
+Plugin 'Yggdroot/indentLine'
 
 "------------------------------------------
 "--- Languages
@@ -92,6 +93,7 @@ Plugin 'ternjs/tern_for_vim'
 Plugin 'metakirby5/codi.vim'
 Plugin 'Konfekt/vim-scratchpad'
 Plugin 'craigemery/vim-autotag'
+Plugin 'aaronbieber/vim-quicktask'
 
 "---------------------------------------------------------------"
 
@@ -154,6 +156,11 @@ let g:tagbar_autopreview = 0
 
 highlight TagbarSignature ctermfg=215
 autocmd VimEnter * nested :TagbarOpen
+
+let g:indentLine_char = get(g:, 'indentLine_char', '┊')
+let g:indentLine_concealcursor = 'niv'
+let g:indentLine_conceallevel = 2
+let g:indentLine_fileTypeExclude = ['help', 'man', 'startify', 'NERDTree']
 
 " set guioptions-=e
 " set guifont=Source\ Code\ Pro\ Italic\ for\ Powerline\ 11
@@ -311,6 +318,24 @@ map <Leader>lt :TagBResise
 
 " let g:lmap.n = { 'name': ' -- Project' }
 map <Leader>n :NERDTreeFind<CR>
+
+let g:lmap.o = { 'name': ' -- Quicktask' }
+let g:quicktask_no_mappings = 1
+map <Leader>oD  <Plug>TaskComplete
+map <Leader>oO  <Plug>AddTaskAbove
+map <Leader>oS  <Plug>AddSnipToTask
+map <Leader>oa  <Plug>ShowActiveTasksOnly
+map <Leader>oc  <Plug>AddChildTask
+map <Leader>od  <Plug>MoveTaskDown
+map <Leader>ofi <Plug>FindIncompleteTimestamps
+map <Leader>on  <Plug>AddNoteToTask
+map <Leader>oo  <Plug>AddTaskBelow
+map <Leader>os  <Plug>AddNextTimeToTask
+map <Leader>ou  <Plug>MoveTaskUp
+map <Leader>ov  <Plug>SelectTask
+map <Leader>ow  <Plug>ShowWatchedTasksOnly
+map <Leader>oy  <Plug>ShowTodayTasksOnly
+map <CR>        <Plug>OpenSnipUnderCursor
 
 let g:lmap.p = { 'name': ' -- Project' }
 map <Leader>pg :GFiles?<CR>
