@@ -7,6 +7,9 @@
 " Last Change: 2017/02/05 21:43
 " ===============================================================
 
+" :help highlight-default
+" pack/my-packages/start/vim-javascript/syntax/javascript.vim
+
 set background=dark
 hi clear
 if exists("syntax_on")
@@ -30,7 +33,7 @@ hi Folded ctermfg=242 ctermbg=234 cterm=NONE
 hi FoldColumn ctermfg=242 ctermbg=234 cterm=NONE
 hi IncSearch ctermfg=235 ctermbg=15 cterm=NONE
 hi LineNr ctermfg=242 ctermbg=NONE cterm=NONE
-hi MatchParen ctermfg=203 ctermbg=NONE cterm=bold
+hi MatchParen ctermfg=15 ctermbg=203 cterm=bold
 hi NonText ctermfg=238 ctermbg=NONE cterm=NONE
 hi Normal ctermfg=255 ctermbg=235 cterm=NONE
 hi PMenu ctermfg=235 ctermbg=81 cterm=NONE
@@ -116,9 +119,6 @@ hi helpHyperTextEntry ctermfg=185 ctermbg=NONE cterm=NONE
 hi helpHeadline ctermfg=81 ctermbg=NONE cterm=NONE
 hi helpSectionDelim ctermfg=242 ctermbg=NONE cterm=NONE
 hi helpNote ctermfg=203 ctermbg=NONE cterm=NONE
-hi javaScriptOperator ctermfg=185 ctermbg=NONE cterm=NONE
-hi javaScriptBraces ctermfg=153 ctermbg=NONE cterm=NONE
-hi javaScriptNull ctermfg=215 ctermbg=NONE cterm=NONE
 hi jsonEscape ctermfg=81 ctermbg=NONE cterm=NONE
 hi jsonNumber ctermfg=215 ctermbg=NONE cterm=NONE
 hi jsonBraces ctermfg=255 ctermbg=NONE cterm=NONE
@@ -159,103 +159,6 @@ hi GitGutterAdd ctermfg=185 ctermbg=NONE cterm=NONE
 hi GitGutterChange ctermfg=153 ctermbg=NONE cterm=NONE
 hi GitGutterDelete ctermfg=203 ctermbg=NONE cterm=NONE
 hi GitGutterChangeDelete ctermfg=203 ctermbg=NONE cterm=NONE
-hi javaScriptOpSymbols ctermfg=203 ctermbg=NONE cterm=NONE
-hi javaScriptParens ctermfg=153 ctermbg=NONE cterm=NONE
-hi javaScriptDocTags ctermfg=242 ctermbg=NONE cterm=NONE
-hi javaScriptDocSeeTag ctermfg=66 ctermbg=NONE cterm=NONE
-hi javaScriptBrowserObjects ctermfg=81 ctermbg=NONE cterm=NONE
-hi javaScriptDOMObjects ctermfg=81 ctermbg=NONE cterm=NONE
-hi javaScriptFuncArg ctermfg=215 ctermbg=NONE cterm=NONE
-hi jsParensIfElse ctermfg=153 ctermbg=NONE cterm=NONE
-hi jsObjectKey ctermfg=153 ctermbg=NONE cterm=NONE
-hi jsArrowFunction ctermfg=142 ctermbg=NONE cterm=NONE
-hi jsFunctionKey ctermfg=185 ctermbg=NONE cterm=NONE
-hi jsFuncName ctermfg=185 ctermbg=NONE cterm=NONE
-hi jsReturn ctermfg=203 ctermbg=NONE cterm=NONE
-hi jsObjectFuncName ctermfg=185 ctermbg=NONE cterm=NONE
-hi jsNull ctermfg=215 ctermbg=NONE cterm=NONE
-hi jsObjectColon ctermfg=203 ctermbg=NONE cterm=NONE
-hi jsParens ctermfg=153 ctermbg=NONE cterm=NONE
-hi jsFuncParens ctermfg=153 ctermbg=NONE cterm=NONE
-hi jsFuncArgs ctermfg=215 ctermbg=NONE cterm=NONE
-hi jsSpecial ctermfg=215 ctermbg=NONE cterm=NONE
-hi jsTemplateBraces ctermfg=203 ctermbg=NONE cterm=NONE
-hi jsGlobalObjects ctermfg=81 ctermbg=NONE cterm=NONE
-hi jsGlobalNodeObjects ctermfg=153 ctermbg=NONE cterm=NONE
-hi jsImport ctermfg=81 ctermbg=NONE cterm=NONE
-hi jsExport ctermfg=81 ctermbg=NONE cterm=NONE
-hi jsExportDefault ctermfg=185 ctermbg=NONE cterm=NONE
-hi jsExportDefaultGroup ctermfg=81 ctermbg=NONE cterm=NONE
-hi jsFrom ctermfg=81 ctermbg=NONE cterm=NONE
-" hi jsSpreadExpression ctermfg=203 ctermbg=NONE cterm=NONE
-" hi jsRestExpression ctermfg=81 ctermbg=NONE cterm=NONE
-" hi jsStorageClass ctermfg=81 ctermbg=NONE cterm=NONE
-" hi jsOperator ctermfg=197 ctermbg=NONE cterm=NONE
-" hi jsBooleanTrue ctermfg=141 ctermbg=NONE cterm=NONE
-" hi jsBooleanFalse ctermfg=141 ctermbg=NONE cterm=NONE
-" hi jsModules ctermfg=197 ctermbg=NONE cterm=NONE
-" hi jsModuleWords ctermfg=197 ctermbg=NONE cterm=NONE
-" hi jsOf ctermfg=197 ctermbg=NONE cterm=NONE
-" hi jsArgsObj ctermfg=81 ctermbg=NONE cterm=NONE
-" hi jsImportContainer ctermfg=197 ctermbg=NONE cterm=NONE
-" hi jsExportContainer ctermfg=197 ctermbg=NONE cterm=NONE
-" hi jsCommentTodo ctermfg=103 ctermbg=NONE cterm=NONE
-" hi jsLineComment ctermfg=67 ctermbg=NONE cterm=italic
-" hi jsEnvComment ctermfg=67 ctermbg=NONE cterm=italic
-" hi jsCvsTag ctermfg=67 ctermbg=NONE cterm=italic
-" hi jsComment ctermfg=67 ctermbg=NONE cterm=italic
-" hi jsBlockComment ctermfg=67 ctermbg=NONE cterm=italic
-" hi jsDocTags ctermfg=103 ctermbg=NONE cterm=NONE
-" hi jsDocType ctermfg=103 ctermbg=NONE cterm=NONE
-" hi jsDocTypeNoParam ctermfg=103 ctermbg=NONE cterm=NONE
-" hi jsDocParam ctermfg=103 ctermbg=NONE cterm=NONE
-" hi jsDocSeeTag ctermfg=103 ctermbg=NONE cterm=NONE
-" hi jsTemplateVar ctermfg=185 ctermbg=NONE cterm=NONE
-" hi jsStringD ctermfg=185 ctermbg=NONE cterm=NONE
-" hi jsStringS ctermfg=185 ctermbg=NONE cterm=NONE
-" hi jsTemplateString ctermfg=185 ctermbg=NONE cterm=NONE
-" hi jsTemplateBraces ctermfg=112 ctermbg=NONE cterm=NONE
-" hi jsTaggedTemplate ctermfg=185 ctermbg=NONE cterm=NONE
-" hi jsRegexpCharClass ctermfg=185 ctermbg=NONE cterm=NONE
-" hi jsRegexpBoundary ctermfg=185 ctermbg=NONE cterm=NONE
-" hi jsRegexpBackRef ctermfg=185 ctermbg=NONE cterm=NONE
-" hi jsRegexpQuantifier ctermfg=185 ctermbg=NONE cterm=NONE
-" hi jsRegexpOr ctermfg=185 ctermbg=NONE cterm=NONE
-" hi jsRegexpMod ctermfg=185 ctermbg=NONE cterm=NONE
-" hi jsRegexpSpecial ctermfg=185 ctermbg=NONE cterm=NONE
-" hi jsRegexpGroup ctermfg=185 ctermbg=NONE cterm=NONE
-" hi jsRegexpString ctermfg=185 ctermbg=NONE cterm=NONE
-" hi jsNumber ctermfg=141 ctermbg=NONE cterm=NONE
-" hi jsFloat ctermfg=141 ctermbg=NONE cterm=NONE
-" hi jsObjectKey ctermfg=185 ctermbg=NONE cterm=NONE
-" hi jsFunctionKey ctermfg=112 ctermbg=NONE cterm=NONE
-" hi jsDecorator ctermfg=112 ctermbg=NONE cterm=NONE
-" hi jsDecoratorFunction ctermfg=112 ctermbg=NONE cterm=NONE
-" hi jsStatement ctermfg=197 ctermbg=NONE cterm=NONE
-" hi jsConditional ctermfg=197 ctermbg=NONE cterm=NONE
-" hi jsRepeat ctermfg=197 ctermbg=NONE cterm=NONE
-" hi jsLabel ctermfg=197 ctermbg=NONE cterm=NONE
-" hi jsKeyword ctermfg=197 ctermbg=NONE cterm=NONE
-" hi jsClass ctermfg=81 ctermbg=NONE cterm=NONE
-" hi jsAsyncKeyword ctermfg=81 ctermbg=NONE cterm=NONE
-" hi jsGlobalObjects ctermfg=81 ctermbg=NONE cterm=NONE
-" hi jsGlobalNodeObjects ctermfg=81 ctermbg=NONE cterm=italic
-" hi jsThis ctermfg=81 ctermbg=NONE cterm=italic
-" hi jsExceptions ctermfg=197 ctermbg=NONE cterm=NONE
-" hi jsBuiltins ctermfg=81 ctermbg=NONE cterm=NONE
-" hi jsFutureKeys ctermfg=81 ctermbg=NONE cterm=NONE
-" hi jsHtmlEvents ctermfg=81 ctermbg=NONE cterm=NONE
-" hi jsTernaryIfOperator ctermfg=197 ctermbg=NONE cterm=NONE
-" hi jsGenerator ctermfg=197 ctermbg=NONE cterm=NONE
-" hi jsFuncName ctermfg=112 ctermbg=NONE cterm=NONE
-" hi jsFuncArgs ctermfg=208 ctermbg=NONE cterm=NONE
-" hi jsFuncArgRest ctermfg=197 ctermbg=NONE cterm=NONE
-" hi jsArrowFunction ctermfg=81 ctermbg=NONE cterm=NONE
-
-" hi jsFuncCall ctermfg=112 ctermbg=NONE cterm=NONE
- hi jsFuncCall  ctermfg=185 ctermbg=NONE cterm=NONE
-" hi jsFuncCall ctermfg=81 ctermbg=NONE cterm=underline
-" hi jsFuncCall ctermfg=81 ctermbg=NONE cterm=bold
 
 hi plug2 ctermfg=185 ctermbg=NONE cterm=NONE
 hi plugH2 ctermfg=81 ctermbg=NONE cterm=bold
@@ -282,19 +185,54 @@ hi vimError ctermfg=255 ctermbg=203 cterm=NONE
 hi xmlNamespace ctermfg=215 ctermbg=NONE cterm=NONE
 hi xmlAttribPunct ctermfg=203 ctermbg=NONE cterm=NONE
 hi xmlProcessingDelim ctermfg=203 ctermbg=NONE cterm=NONE
-hi javascriptOpSymbol ctermfg=203 ctermbg=NONE cterm=NONE
-hi javascriptDocNotation ctermfg=242 ctermbg=NONE cterm=NONE
-hi javascriptDocNamedParamType ctermfg=66 ctermbg=NONE cterm=NONE
-hi javascriptDocParamName ctermfg=58 ctermbg=NONE cterm=NONE
-hi javascriptDocParamType ctermfg=66 ctermbg=NONE cterm=NONE
-hi javascriptTemplateSB ctermfg=203 ctermbg=NONE cterm=NONE
-hi javascriptRepeat ctermfg=185 ctermbg=NONE cterm=NONE
-hi javascriptObjectLabelColon ctermfg=203 ctermbg=NONE cterm=NONE
-hi javascriptObjectMethodName ctermfg=185 ctermbg=NONE cterm=NONE
-hi javascriptFuncName ctermfg=185 ctermbg=NONE cterm=NONE
 hi yamlFlowString ctermfg=180 ctermbg=NONE cterm=NONE
 hi yamlFlowStringDelimiter ctermfg=255 ctermbg=NONE cterm=NONE
 hi yamlKeyValueDelimiter ctermfg=203 ctermbg=NONE cterm=NONE
+
+hi javaScriptOpSymbols ctermfg=203 ctermbg=NONE cterm=NONE
+hi javaScriptParens ctermfg=153 ctermbg=NONE cterm=NONE
+hi javaScriptDocTags ctermfg=242 ctermbg=NONE cterm=NONE
+hi javaScriptDocSeeTag ctermfg=66 ctermbg=NONE cterm=NONE
+hi javaScriptBrowserObjects ctermfg=81 ctermbg=NONE cterm=NONE
+hi javaScriptDOMObjects ctermfg=81 ctermbg=NONE cterm=NONE
+hi javaScriptFuncArg ctermfg=215 ctermbg=NONE cterm=NONE
+hi javaScriptOperator ctermfg=185 ctermbg=NONE cterm=NONE
+hi javaScriptBraces ctermfg=153 ctermbg=NONE cterm=NONE
+hi javaScriptNull ctermfg=215 ctermbg=NONE cterm=NONE
+
+hi jsAsyncKeyword ctermfg=203 ctermbg=NONE cterm=NONE
+hi jsForAwait ctermfg=203 ctermbg=NONE cterm=NONE
+hi jsParensIfElse ctermfg=153 ctermbg=NONE cterm=NONE
+hi jsObjectKey ctermfg=153 ctermbg=NONE cterm=NONE
+hi jsArrowFunction ctermfg=142 ctermbg=NONE cterm=NONE
+hi jsFunctionKey ctermfg=185 ctermbg=NONE cterm=NONE
+hi jsFuncName ctermfg=185 ctermbg=NONE cterm=NONE
+hi jsReturn ctermfg=203 ctermbg=NONE cterm=NONE
+hi jsObjectFuncName ctermfg=185 ctermbg=NONE cterm=NONE
+hi jsNull ctermfg=215 ctermbg=NONE cterm=NONE
+hi jsObjectColon ctermfg=203 ctermbg=NONE cterm=NONE
+" hi jsFuncParens ctermfg=153 ctermbg=NONE cterm=NONE
+hi jsFuncArgs ctermfg=215 ctermbg=NONE cterm=NONE
+hi jsFuncCall  ctermfg=185 ctermbg=NONE cterm=bold
+hi jsSpecial ctermfg=215 ctermbg=NONE cterm=NONE
+hi jsTemplateBraces ctermfg=203 ctermbg=NONE cterm=NONE
+hi jsGlobalObjects ctermfg=81 ctermbg=NONE cterm=NONE
+hi jsGlobalNodeObjects ctermfg=153 ctermbg=NONE cterm=NONE
+hi jsImport ctermfg=81 ctermbg=NONE cterm=NONE
+hi jsExport ctermfg=81 ctermbg=NONE cterm=NONE
+hi jsExportDefault ctermfg=185 ctermbg=NONE cterm=NONE
+hi jsExportDefaultGroup ctermfg=81 ctermbg=NONE cterm=NONE
+hi jsFrom ctermfg=81 ctermbg=NONE cterm=NONE
+" hi jsParen ctermfg=153 ctermbg=NONE cterm=NONE
+hi jsParenDecorator ctermfg=203 ctermbg=NONE cterm=NONE
+hi jsParenIfElse   ctermfg=215 ctermbg=NONE cterm=NONE
+hi jsParenRepeat   ctermfg=215 ctermbg=NONE cterm=NONE
+hi jsParenSwitch   ctermfg=215 ctermbg=NONE cterm=NONE
+hi jsParenCatch    ctermfg=215 ctermbg=NONE cterm=NONE
+hi jsClassDefinition ctermfg=185 ctermbg=NONE cterm=bold
+
+" syntax match bracks contained /[{}]/
+hi jsBracket ctermfg=185 ctermbg=NONE cterm=NONE
 
 let g:terminal_color_foreground = "#282828"
 let g:terminal_color_background = "#eeeeee"
@@ -314,6 +252,8 @@ let g:terminal_color_12 = "#b3deef"
 let g:terminal_color_13 = "#d3b987"
 let g:terminal_color_14 = "#73cef4"
 let g:terminal_color_15 = "#ffffff"
+
+
 
 " ===================================
 " Generated by Estilo 1.3.3

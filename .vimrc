@@ -155,7 +155,7 @@ let g:tagbar_compact = 0
 let g:tagbar_autopreview = 0
 
 highlight TagbarSignature ctermfg=215
-autocmd VimEnter * nested :TagbarOpen
+" autocmd VimEnter * nested :TagbarOpen
 
 let g:indentLine_char = get(g:, 'indentLine_char', '┊')
 let g:indentLine_concealcursor = 'niv'
@@ -169,7 +169,7 @@ let g:indentLine_fileTypeExclude = ['help', 'man', 'startify', 'NERDTree']
 "---------------------------------------------------------------"
 "--- Airline
 "---------------------------------------------------------------"
-" let g:airline_powerline_fonts = 1
+let g:airline_powerline_fonts = 1
 let g:airline_theme = 'tenderAdam'
 let g:airline#extensions#ale#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
@@ -189,8 +189,18 @@ let g:fzf_layout = { 'down': '~40%' }
 "--- Linting
 "---------------------------------------------------------------"
 " let g:ale_lint_on_save = 1
-" let g:ale_lint_on_text_changed = 'normal'
+let g:ale_lint_on_text_changed = 'normal'
+let g:ale_lint_delay = 0
+let g:ale_lint_on_insert_leave = 1
 let g:ale_linters = { 'javascript': ['eslint'] }
+let g:ale_fix_on_save = 1
+let b:ale_fixers = {
+      \   'javascript': [
+      \       'eslint',
+      \   ],
+      \}
+
+" {buffer, lines -> filter(lines, 'v:val !=~ ''^\s*//''')}, " removes comments
 
 "---------------------------------------------------------------"
 "--- SNippets
@@ -202,12 +212,12 @@ let g:ale_linters = { 'javascript': ['eslint'] }
 "---------------------------------------------------------------"
 " set tabstop=2 shiftwidth=2 expandtab
 set expandtab
-autocmd FileType * setlocal tabstop=2 shiftwidth=2
-autocmd FileType sh setlocal tabstop=2 shiftwidth=2
-autocmd FileType javascript setlocal tabstop=2 shiftwidth=2
-autocmd FileType elixir  setlocal tabstop=4 shiftwidth=4
-autocmd FileType ruby  setlocal tabstop=2 shiftwidth=2
-autocmd FileType yaml  setlocal tabstop=2 shiftwidth=2
+" autocmd FileType * setlocal tabstop=2 shiftwidth=2
+" autocmd FileType sh setlocal tabstop=2 shiftwidth=2
+" autocmd FileType javascript setlocal tabstop=2 shiftwidth=2
+" autocmd FileType elixir  setlocal tabstop=4 shiftwidth=4
+" autocmd FileType ruby  setlocal tabstop=2 shiftwidth=2
+" autocmd FileType yaml  setlocal tabstop=2 shiftwidth=2
 
 autocmd BufNewFile,BufRead *.asm set syntax=nasm
 
@@ -275,27 +285,34 @@ map \ :Fuzzyag<CR>
 " nnoremap <leader>dd "_dd
 
 let g:lmap.b = { 'name': ' -- Buffers' }
+map <Leader>bd :DiffSaved<CR>
+map <Leader>bf :Format<CR>
 map <Leader>bl :Buffers<CR>
 map <Leader>bn :bnext<CR>
 map <Leader>bo :enew<CR>
 map <Leader>bp :bprevious<CR>
 map <Leader>bs :sbprevious<CR>
-" map <Leader>by :YankWoleBuffer<CR>
+map <Leader>by :YankWoleBuffer<CR>
+
+command! Format normal gg=G''
+command! YankWoleBuffer normal gg"*yG
 
 let g:lmap.e = { 'name': ' -- Errors' }
-map <Leader>en :ALENext<CR>
-map <Leader>ep :ALEPrevious<CR>
+map <Leader>ef :ALEFix<CR>
+map <Leader>el :lopen<CR>
+map <Leader>en :ALENextWrap<CR>
+map <Leader>ep :ALEPreviousWrap<CR>
 
 let g:lmap.g = { 'name': ' -- Global' }
 map <Leader>gh :History<CR>
 map <Leader>gl :set cursorline!<CR>
 map <Leader>gn :set nowrap!<CR>
 map <Leader>gs :SourceVimrc<CR>
+map <leader>g? :help index<CR>
 map <leader>gc :ColorToggle<CR>
 map <leader>gh <Esc>:call ToggleHardMode()<CR>
 map <leader>gr :set relativenumber!<CR>
 map <leader>gw :StripTrailingWhitespaces<CR>
-map <leader>g? :help index<CR>
 
 let g:lmap.l = { 'name': ' -- Layout' }
 map <Leader>ls :vsplit<CR>
@@ -348,33 +365,42 @@ let g:lmap.r = { 'name': 'global reg' }
 map <Leader>rr "*
 
 let g:lmap.s = { 'name': ' -- Search' }
-map <leader>st :call fzf#vim#tags(expand("<cword>"))<CR>
+map <leader>st :CursorInTags<CR>
 map <leader>sw :FindWordUnderCursor<CR>
+
+command! CursorInTags :call fzf#vim#tags(expand("<cword>"))<CR>
 
 let g:lmap.t = { 'name': ' -- Tags' }
 map <leader>tf :Tags<CR>
 map <leader>tl :ts<CR>
 map <leader>tn :tn<CR>
 map <leader>tp :tp<CR>
-map <leader>tt <C-]>
+map <leader>tt :FindTag<CR>
 map <leader>th :TagbarToggle<CR>
 map <leader>tw :ts "<cword>"<CR>
+
+command! FindTag normal <C-]>
 
 let g:lmap.u = { 'name': ' -- Utils' }
 map <leader>us :sort<CR>
 
 let g:lmap.w = { 'name': ' -- Windows' }
-map <leader>wa 1gt<CR>
-map <leader>ws 2gt<CR>
-map <leader>wd 3gt<CR>
-map <leader>wf 4gt<CR>
+map <leader>wa :GoToTab1<CR>
+map <leader>ws :GoToTab2<CR>
+map <leader>wd :GoToTab3<CR>
+map <leader>wf :GoToTab4<CR>
 map <leader>wn :tabNext<CR>
 map <leader>wN :tabnew<CR>
 map <leader>wp :tabprevious<CR>
 map <leader>wl :tabs<CR>
 
-let g:lmap.z = { 'name': ' -- Folding' }
+command! GoToTab1 normal 1gt
+command! GoToTab2 normal 2gt
+command! GoToTab3 normal 3gt
+command! GoToTab4 normal 4gt
 
+let g:lmap.z = { 'name': ' -- Folding' }
+" let g:leaderGuide_hspace = 6
 call leaderGuide#register_prefix_descriptions("<Space>", "g:lmap")
 nnoremap <silent> <leader> :<c-u>LeaderGuide '<Space>'<CR>
 vnoremap <silent> <leader> :<c-u>LeaderGuideVisual '<Space>'<CR>
@@ -394,24 +420,25 @@ command! Json %!python -m json.tool
 command! StripTrailingWhitespaces call <SID>StripTrailingWhitespaces()
 command! SourceVimrc write | source ~/.vimrc
 command! -nargs=1 TagBResise call ResiseTagBar(<f-args>)
+command! DiffSaved call DiffWithSaved()
 
 "---------------------------------------------------------------"
 "--- Functions
 "---------------------------------------------------------------"
 " autocmd VimEnter,BufNewFile,BufReadPost * silent! call HardMode()
 command! -bang -nargs=* Fuzzyag
-  \ call fzf#vim#ag(<q-args>,
-  \                 <bang>0 ? fzf#vim#with_preview('up:60%')
-  \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \                 <bang>0)
+      \ call fzf#vim#ag(<q-args>,
+      \                 <bang>0 ? fzf#vim#with_preview('up:60%')
+      \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
+      \                 <bang>0)
 
 "Use TAB to complete when typing words, else inserts TABs as usual.
 function! Tab_Or_Complete()
-        if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~'^\w'
-                return "\<C-N>"
-        else
-                return "\<Tab>"
-        endif
+  if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~'^\w'
+    return "\<C-N>"
+  else
+    return "\<Tab>"
+  endif
 endfunction
 
 function! ResiseTagBar(size)
@@ -434,6 +461,14 @@ function! <SID>StripTrailingWhitespaces()
   call cursor(l, c)
 endfunction
 
+function! DiffWithSaved()
+  let filetype=&ft
+  diffthis
+  vnew | r # | normal! 1Gdd
+  diffthis
+  exe "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . filetype
+endfunction
+
 "---------------------------------------------------------------"
 "--- NERdTREE stuff
 "---------------------------------------------------------------"
@@ -441,25 +476,26 @@ let g:NERDTreeWinSize=40 " nice big tree is it's easy to toggle off
 " let g:NERDTreeWinPos = "right"
 
 " closes nerdtree if only open
+autocmd vimenter * NERDTree
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 " ignore files */
 let NERDTreeIgnore = ['\.DAT$', '\.LOG1$', '\.LOG1$']
 let NERDTreeIgnore += [
-  \ '\.gif$',
-  \ '\.mp3$',
-  \ '\.flac$',
-  \ '\.ogg$',
-  \ '\.mp4$',
-  \ '\.avi$',
-  \ '.webm$',
-  \ '.mkv$',
-  \ '\.pdf$',
-  \ '\.zip$',
-  \ '\.tar.gz$',
-  \ '\.rar$']
+      \ '\.gif$',
+      \ '\.mp3$',
+      \ '\.flac$',
+      \ '\.ogg$',
+      \ '\.mp4$',
+      \ '\.avi$',
+      \ '.webm$',
+      \ '.mkv$',
+      \ '\.pdf$',
+      \ '\.zip$',
+      \ '\.tar.gz$',
+      \ '\.rar$']
 
-  " \ '\.png$',
-  " \ '\.jpg$',
+" \ '\.png$',
+" \ '\.jpg$',
 
 "---------------------------------------------------------------"
 "--- Typing stuff
@@ -476,9 +512,9 @@ if has("spell")
 endif
 
 augroup pencil
-        autocmd!
-        autocmd FileType markdown,mkd call pencil#init()
-        autocmd FileType text         call pencil#init()
+  autocmd!
+  autocmd FileType markdown,mkd call pencil#init()
+  autocmd FileType text         call pencil#init()
 augroup END
 
 "---------------------------------------------------------------" */

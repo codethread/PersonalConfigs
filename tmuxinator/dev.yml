@@ -4,14 +4,20 @@ name: dev
 root: ~/
 
 windows:
-  - github-tools:
-      root: ~/dev/js/node/github-tools
+  - pancake:
+      root: ~/dev/js/node/pancake-api
       layout: main-vertical
       panes:
         - vim
         - ls
-  - monzo-gatekeeper:
-      root: ~/dev/js/node/monzo-gatekeeper
+  - pr-dashboard:
+      root: ~/Service/pr-dashboard
+      layout: main-vertical
+      panes:
+        - vim
+        - ls
+  - node-apps:
+      root: ~/dev/js/node
       layout: main-vertical
       panes:
         - vim
@@ -22,20 +28,9 @@ windows:
       panes:
         - vim
         - ls
-  - functional-light:
-      root: ~/dev/js/frontend-masters/functional-light/exercises
+  - fem:
+      root: ~/dev/frontend-masters
       layout: main-vertical
       panes:
         - vim
         - ls
-  - gql-basic:
-      root: ~/dev/js/graphql/gql-basic
-      layout: main-vertical
-      panes:
-        - vim
-        - ls
-  - pr-dashboard:
-      root: ~/Service/pr-dashboard
-      layout: main-vertical
-      panes:
-        - vim

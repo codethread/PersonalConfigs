@@ -32,6 +32,7 @@ alias ctags="`brew --prefix`/bin/ctags"
 
 alias als="cat ~/.aliases.zsh | grep \"^alias.\+=\\\"\""
 alias cdh="cat ~/.aliases.zsh | grep \"^alias cd.=\""
+alias serv="python -m SimpleHTTPServer 8005"
 
 #---------------------------------------------#
 # SKY
@@ -41,14 +42,15 @@ alias cdh="cat ~/.aliases.zsh | grep \"^alias cd.=\""
 alias ppp="start_ppp"
 alias skyport="start_skyport"
 # alias spages="start_spages"
-alias spages="pages start dev --apps mobile,bill"
+alias spages="pages start dev --apps mobile,bill,employee-engagement"
 alias muxs="tmuxinator_spages"
 alias st="skyport_test_modified_files"
+alias dp="docker_deploy_nimbus"
+alias ctagp="ctags -R apps/ && ctags -R -a src/"
 
 # alias stest="mv .env .notenv || true  && npm run test:unit || true && mv .notenv .env"
 alias pt="mv .env .nenv; pages test unit -q; mv .nenv .env"
 alias portkeys="compare_skyport_vault_keys"
-alias dspages="deploy_pages"
 
 alias cdp="cd /users/adh23/service/sky-pages"
 alias cdg="cd /users/adh23/service/skyport-graphql"
