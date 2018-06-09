@@ -36,7 +36,7 @@ hi LineNr ctermfg=242 ctermbg=NONE cterm=NONE
 hi MatchParen ctermfg=15 ctermbg=203 cterm=bold
 hi NonText ctermfg=238 ctermbg=NONE cterm=NONE
 hi Normal ctermfg=255 ctermbg=235 cterm=NONE
-hi PMenu ctermfg=197 ctermbg=81 cterm=NONE
+hi PMenu ctermfg=235 ctermbg=81 cterm=NONE
 hi PMenuSel ctermfg=235 ctermbg=185 cterm=NONE
 hi PmenuSbar ctermfg=180 ctermbg=180 cterm=NONE
 hi PmenuThumb ctermfg=215 ctermbg=215 cterm=NONE
