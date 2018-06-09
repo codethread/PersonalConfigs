@@ -1,18 +1,18 @@
-ctermfg=081
-ctermfg=153
-ctermfg=203
-ctermfg=197
-ctermfg=185
-ctermfg=180
-ctermfg=215
-ctermfg=010
-ctermfg=255
-ctermfg=242
+ctermfg=081 cyan
+ctermfg=153 blue
+ctermfg=203 bad red
+ctermfg=197 nice red
+ctermfg=185 yellow
+ctermfg=180 brown
+ctermfg=215 orange
+ctermfg=010 green
+ctermfg=255 white
+ctermfg=242 light grey
 ctermfg=066
-ctermfg=238
-ctermfg=236
-ctermfg=235
-ctermfg=234
+ctermfg=238 status bar
+ctermfg=236 
+ctermfg=235 background
+ctermfg=234 black
 
 ctermfg=000 ctermfg=001 ctermfg=002 ctermfg=003 ctermfg=004 ctermfg=005 ctermfg=006 ctermfg=007
 ctermfg=008 ctermfg=009 ctermfg=010 ctermfg=011 ctermfg=012 ctermfg=013 ctermfg=014 ctermfg=015

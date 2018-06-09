@@ -33,6 +33,7 @@ alias ctags="`brew --prefix`/bin/ctags"
 alias als="cat ~/.aliases.zsh | grep \"^alias.\+=\\\"\""
 alias cdh="cat ~/.aliases.zsh | grep \"^alias cd.=\""
 alias serv="python -m SimpleHTTPServer 8005"
+alias vo="vim \$(fzf)"
 
 #---------------------------------------------#
 # SKY

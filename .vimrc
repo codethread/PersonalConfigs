@@ -56,8 +56,8 @@ Plugin 'chrisbra/Colorizer'
 Plugin 'elixir-lang/vim-elixir'
 Plugin 'godlygeek/tabular'
 Plugin 'jparise/vim-graphql'
-Plugin 'mxw/vim-jsx'
 Plugin 'pangloss/vim-javascript'
+Plugin 'mxw/vim-jsx'
 Plugin 'kchmck/vim-coffee-script'
 " Plugin 'styled-components/vim-styled-components'
 Plugin 'chrisbra/csv.vim'
@@ -80,9 +80,9 @@ Plugin 'othree/html5.vim'
 "--- Utilities
 "-----------------------------------------
 Plugin 'diepm/vim-rest-console'
+Plugin 'rking/ag.vim'
 Plugin 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plugin 'junegunn/fzf.vim'
-Plugin 'rking/ag.vim'
 Plugin 'tpope/vim-rhubarb'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'wakatime/vim-wakatime'
@@ -115,11 +115,10 @@ Plugin 'aaronbieber/vim-quicktask'
 " Plugin 'tpope/vim-endwise'
 
 call vundle#end()
-"
+
 "---------------------------------------------------------------"
 "--- Editor
 "---------------------------------------------------------------"
-filetype plugin indent on
 " set clipboard=unnamed
 set mouse=a
 set wrapmargin=0
@@ -157,11 +156,6 @@ let g:tagbar_autopreview = 0
 highlight TagbarSignature ctermfg=215
 " autocmd VimEnter * nested :TagbarOpen
 
-let g:indentLine_char = get(g:, 'indentLine_char', '┊')
-let g:indentLine_concealcursor = 'niv'
-let g:indentLine_conceallevel = 2
-let g:indentLine_fileTypeExclude = ['help', 'man', 'startify', 'NERDTree']
-
 " set guioptions-=e
 " set guifont=Source\ Code\ Pro\ Italic\ for\ Powerline\ 11
 
@@ -180,10 +174,25 @@ let g:airline_section_b = '%{split(getcwd(), "/")[-1]}' " dont really care for t
 let g:airline_section_x = '%{bufnr("%")}'
 let g:airline_section_y = '%y'
 
-let g:jsx_ext_required = 1
+let g:jsx_ext_required = 0
 set statusline+=%#warningmsg#
 set statusline+=%*
 let g:fzf_layout = { 'down': '~40%' }
+let g:fzf_action = { 'ctrl-l': 'vsplit' }
+let g:fzf_colors = {
+                        \ 'fg':      ['fg', 'Normal'],
+                        \ 'bg':      ['bg', 'Normal'],
+                        \ 'hl':      ['fg', 'Comment'],
+                        \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+                        \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+                        \ 'hl+':     ['fg', 'Statement'],
+                        \ 'info':    ['fg', 'PreProc'],
+                        \ 'border':  ['fg', 'Ignore'],
+                        \ 'prompt':  ['fg', 'Conditional'],
+                        \ 'pointer': ['fg', 'Exception'],
+                        \ 'marker':  ['fg', 'Keyword'],
+                        \ 'spinner': ['fg', 'Label'],
+                        \ 'header':  ['fg', 'Comment'] }
 
 "---------------------------------------------------------------"
 "--- Linting
@@ -195,10 +204,10 @@ let g:ale_lint_on_insert_leave = 1
 let g:ale_linters = { 'javascript': ['eslint'] }
 let g:ale_fix_on_save = 1
 let b:ale_fixers = {
-      \   'javascript': [
-      \       'eslint',
-      \   ],
-      \}
+                        \   'javascript': [
+                        \       'eslint',
+                        \   ],
+                        \}
 
 " {buffer, lines -> filter(lines, 'v:val !=~ ''^\s*//''')}, " removes comments
 
@@ -210,6 +219,7 @@ let b:ale_fixers = {
 "---------------------------------------------------------------"
 "--- Indentation
 "---------------------------------------------------------------"
+filetype plugin indent on
 " set tabstop=2 shiftwidth=2 expandtab
 set expandtab
 " autocmd FileType * setlocal tabstop=2 shiftwidth=2
@@ -220,6 +230,11 @@ set expandtab
 " autocmd FileType yaml  setlocal tabstop=2 shiftwidth=2
 
 autocmd BufNewFile,BufRead *.asm set syntax=nasm
+
+let g:indentLine_char = get(g:, 'indentLine_char', '┊')
+let g:indentLine_concealcursor = 'niv'
+let g:indentLine_conceallevel = 2
+let g:indentLine_fileTypeExclude = ['help', 'man', 'startify', 'NERDTree']
 
 "---------------------------------------------------------------"
 "--- Utils
@@ -427,46 +442,46 @@ command! DiffSaved call DiffWithSaved()
 "---------------------------------------------------------------"
 " autocmd VimEnter,BufNewFile,BufReadPost * silent! call HardMode()
 command! -bang -nargs=* Fuzzyag
-      \ call fzf#vim#ag(<q-args>,
-      \                 <bang>0 ? fzf#vim#with_preview('up:60%')
-      \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
-      \                 <bang>0)
+                        \ call fzf#vim#ag(<q-args>,
+                        \                 <bang>0 ? fzf#vim#with_preview('up:60%')
+                        \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
+                        \                 <bang>0)
 
 "Use TAB to complete when typing words, else inserts TABs as usual.
 function! Tab_Or_Complete()
-  if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~'^\w'
-    return "\<C-N>"
-  else
-    return "\<Tab>"
-  endif
+        if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~'^\w'
+                return "\<C-N>"
+        else
+                return "\<Tab>"
+        endif
 endfunction
 
 function! ResiseTagBar(size)
-  let g:tagbar_width = a:size
-  exe "TagbarToggle"
-  exe "TagbarOpen"
+        let g:tagbar_width = a:size
+        exe "TagbarToggle"
+        exe "TagbarOpen"
 endfunction
 
 " via: http://rails-bestpractices.com/posts/60-remove-trailing-whitespace
 " Strip trailing whitespace
 function! <SID>StripTrailingWhitespaces()
-  " Preparation: save last search, and cursor position.
-  let _s=@/
-  let l = line(".")
-  let c = col(".")
-  " Do the business:
-  %s/\s\+$//e
-  " Clean up: restore previous search history, and cursor position
-  let @/=_s
-  call cursor(l, c)
+        " Preparation: save last search, and cursor position.
+        let _s=@/
+        let l = line(".")
+        let c = col(".")
+        " Do the business:
+        %s/\s\+$//e
+        " Clean up: restore previous search history, and cursor position
+        let @/=_s
+        call cursor(l, c)
 endfunction
 
 function! DiffWithSaved()
-  let filetype=&ft
-  diffthis
-  vnew | r # | normal! 1Gdd
-  diffthis
-  exe "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . filetype
+        let filetype=&ft
+        diffthis
+        vnew | r # | normal! 1Gdd
+        diffthis
+        exe "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . filetype
 endfunction
 
 "---------------------------------------------------------------"
@@ -476,23 +491,23 @@ let g:NERDTreeWinSize=40 " nice big tree is it's easy to toggle off
 " let g:NERDTreeWinPos = "right"
 
 " closes nerdtree if only open
-autocmd vimenter * NERDTree
+" autocmd vimenter * NERDTree
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 " ignore files */
 let NERDTreeIgnore = ['\.DAT$', '\.LOG1$', '\.LOG1$']
 let NERDTreeIgnore += [
-      \ '\.gif$',
-      \ '\.mp3$',
-      \ '\.flac$',
-      \ '\.ogg$',
-      \ '\.mp4$',
-      \ '\.avi$',
-      \ '.webm$',
-      \ '.mkv$',
-      \ '\.pdf$',
-      \ '\.zip$',
-      \ '\.tar.gz$',
-      \ '\.rar$']
+                        \ '\.gif$',
+                        \ '\.mp3$',
+                        \ '\.flac$',
+                        \ '\.ogg$',
+                        \ '\.mp4$',
+                        \ '\.avi$',
+                        \ '.webm$',
+                        \ '.mkv$',
+                        \ '\.pdf$',
+                        \ '\.zip$',
+                        \ '\.tar.gz$',
+                        \ '\.rar$']
 
 " \ '\.png$',
 " \ '\.jpg$',
@@ -501,20 +516,20 @@ let NERDTreeIgnore += [
 "--- Typing stuff
 "---------------------------------------------------------------"
 if has("spell")
-  " toggle spelling with F4 key
-  map <F4> :set spell!<CR><Bar>:echo "Spell Check: " . strpart("OffOn", 3 * &spell, 3)<CR>
+        " toggle spelling with F4 key
+        map <F4> :set spell!<CR><Bar>:echo "Spell Check: " . strpart("OffOn", 3 * &spell, 3)<CR>
 
-  " they were using white on white
-  highlight PmenuSel ctermfg=black ctermbg=lightgray
+        " they were using white on white
+        highlight PmenuSel ctermfg=black ctermbg=lightgray
 
-  " limit it to just the top 10 items
-  set sps=best,10
+        " limit it to just the top 10 items
+        set sps=best,10
 endif
 
 augroup pencil
-  autocmd!
-  autocmd FileType markdown,mkd call pencil#init()
-  autocmd FileType text         call pencil#init()
+        autocmd!
+        autocmd FileType markdown,mkd call pencil#init()
+        autocmd FileType text         call pencil#init()
 augroup END
 
 "---------------------------------------------------------------" */
