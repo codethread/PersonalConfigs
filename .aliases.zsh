@@ -34,6 +34,7 @@ alias als="cat ~/.aliases.zsh | grep \"^alias.\+=\\\"\""
 alias cdh="cat ~/.aliases.zsh | grep \"^alias cd.=\""
 alias serv="python -m SimpleHTTPServer 8005"
 alias vo="vim \$(fzf)"
+alias pipes="pipes.sh -f 60 -s 8"
 
 #---------------------------------------------#
 # SKY

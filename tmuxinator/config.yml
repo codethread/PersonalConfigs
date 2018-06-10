@@ -1,0 +1,15 @@
+# ~/.tmuxinator/config.yml
+
+name: config
+root: ~/
+
+windows:
+  - pancake:
+      root: ~/PersonalConfigs
+      layout: main-vertical
+      panes:
+        - vim single_scripts/tmux_template.conf
+        - rubypanel:
+          - when-changed -iv ./tmux_template.conf 'ruby ./color_config.rb'
+        - echo `tput sitm`italics`tput ritm`
+

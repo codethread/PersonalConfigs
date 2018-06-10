@@ -149,11 +149,12 @@ set undoreload=10000
 "---------------------------------------------------------------"
 syntax enable
 color tenderAdam
+
 let g:tagbar_width = 30
 let g:tagbar_compact = 0
 let g:tagbar_autopreview = 0
 
-highlight TagbarSignature ctermfg=215
+hi TagbarSignature ctermfg=215
 " autocmd VimEnter * nested :TagbarOpen
 
 " set guioptions-=e
@@ -178,7 +179,7 @@ let g:jsx_ext_required = 1
 set statusline+=%#warningmsg#
 set statusline+=%*
 let g:fzf_layout = { 'down': '~40%' }
-let g:fzf_action = { 
+let g:fzf_action = {
                         \ 'ctrl-l': 'vsplit',
                         \ 'ctrl-t': 'vsplit',
                         \ }
