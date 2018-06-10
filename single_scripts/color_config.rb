@@ -5,13 +5,15 @@ contents = File.read("./tmux_template.conf")
 colours = {
         "{{PRIME_COLOR}}" => "colour81",
         "{{SECONDARY}}" => "colour153",
-        "{{THIRD}}" => "colour242",
+        "{{BASE_EMPHASIS}}" => "colour242",
         "{{BASE}}" => "colour238",
         "{{BACKGROUND}}" => "colour235",
         "{{ERROR}}" => "colour197",
         "{{CONTRAST}}" => "colour185",
         "{{TEXT_CONTRAST}}" => "colour236",
-        "{{WHITE}}" => "colour0",
+        "{{BLACK}}" => "colour234",
+        "{{LIGHT_GREY}}" => "colour250",
+        "{{WHITE}}" => "colour255",
 }
 
 result = contents.gsub(/{{(.+?)}}/, colours)

@@ -178,7 +178,15 @@ let g:jsx_ext_required = 1
 set statusline+=%#warningmsg#
 set statusline+=%*
 let g:fzf_layout = { 'down': '~40%' }
-let g:fzf_action = { 'ctrl-l': 'vsplit' }
+let g:fzf_action = { 
+                        \ 'ctrl-l': 'vsplit',
+                        \ 'ctrl-t': 'vsplit',
+                        \ }
+let g:fzf_action = {
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-x': 'split',
+  \ 'ctrl-l': 'vsplit' }
+
 let g:fzf_colors = {
                         \ 'fg':      ['fg', 'Normal'],
                         \ 'bg':      ['bg', 'Normal'],
@@ -292,6 +300,7 @@ nnoremap <silent> <Leader>- :exe "vertical resize -10"<CR>
 
 map <Leader>? :Commands<CR>
 map \ :Fuzzyag<CR>
+map <C-\> :Fuzzyag!<CR>
 
 " let g:lmap.d = { 'name': ' -- Delete' }
 " nnoremap <leader>d "_d
