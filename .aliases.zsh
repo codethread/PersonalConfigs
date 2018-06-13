@@ -6,6 +6,7 @@ alias npmrebuild="rm -rf ./node_modules; npm cache clear; npm i"
 alias zshe="vim ~/.zshrc"
 alias zshr="source ~/.zshrc"
 alias portsinuse="lsof -i -p | grep -i 'listen'"
+alias ports="echo lsof -i tcp:3000"
 alias lst="ls -1 -a -F -G"
 
 alias brewup='brew update; brew upgrade; brew prune; brew cleanup; brew doctor'

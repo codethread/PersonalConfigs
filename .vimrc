@@ -231,9 +231,9 @@ let b:ale_fixers = {
 filetype plugin indent on
 " set tabstop=2 shiftwidth=2 expandtab
 set expandtab
-" autocmd FileType * setlocal tabstop=2 shiftwidth=2
+autocmd FileType * setlocal tabstop=2 shiftwidth=2
 " autocmd FileType sh setlocal tabstop=2 shiftwidth=2
-" autocmd FileType javascript setlocal tabstop=2 shiftwidth=2
+autocmd FileType javascript.jsx setlocal tabstop=4 shiftwidth=4
 " autocmd FileType elixir  setlocal tabstop=4 shiftwidth=4
 " autocmd FileType ruby  setlocal tabstop=2 shiftwidth=2
 " autocmd FileType yaml  setlocal tabstop=2 shiftwidth=2
@@ -498,6 +498,8 @@ endfunction
 "--- NERdTREE stuff
 "---------------------------------------------------------------"
 let g:NERDTreeWinSize=40 " nice big tree is it's easy to toggle off
+let NERDTreeMinimalUI=1
+let NERDTreeStatusline="%{ getcwd() }"
 " let g:NERDTreeWinPos = "right"
 
 " closes nerdtree if only open
