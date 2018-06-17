@@ -1,10 +1,15 @@
 {
     "plugins": {
-        "es_modules": {}
+        "commonjs": {},
+        "node": {},
+        "requirejs": {},
+        "node_resolve": {}
     },
     "libs": [
         "ecma5",
-        "ecma6"
+        "ecma6",
+        "react"
     ],
-    "ecmaVersion": 6
+    "ecmaVersion": 6,
+    "ecmaVersion": true
 }

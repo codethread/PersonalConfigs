@@ -1,25 +1,31 @@
-// {
-//     "vim.easymotion": true,
-//     "vim.sneak": true,
-//     "vim.incsearch": true,
-//     "vim.useSystemClipboard": true,
-//     "vim.useCtrlKeys": true,
-//     "vim.hlsearch": true,
-//     "vim.insertModeKeyBindings": [
-//         {
-//             "before": [
-//                 "j",
-//                 "k"
-//             ],
-//             "after": [
-//                 "<Esc>"
-//             ]
-//         }
-//     ],
-//     "vim.leader": "<space>",
-//     "workbench.iconTheme": "vscode-icons",
-// }
 {
+    "vim.easymotion": true,
+    "vim.sneak": true,
+    "vim.incsearch": true,
+    "vim.useSystemClipboard": true,
+    "vim.useCtrlKeys": true,
+    "vim.hlsearch": true,
+    "vim.insertModeKeyBindings": [
+        {
+            "before": [
+                "j",
+                "k"
+            ],
+            "after": [
+                "<Esc>"
+            ]
+        }
+    ],
+    "vim.leader": "<space>",
+    "vim.statusBarColorControl": true,
+    "vim.statusBarColors": {
+        "normal": ["#8FBCBB", "#434C5E"],
+        "insert": "#BF616A",
+        "visual": "#B48EAD",
+        "visualline": "#B48EAD",
+        "visualblock": "#A3BE8C",
+        "replace": "#D08770"
+    },
     "editor.cursorBlinking": "blink",
     "editor.fontSize": 12,
     "editor.parameterHints": false,
@@ -34,7 +40,6 @@
     "editor.rulers": [100],
     "workbench.editor.openPositioning": "last",
     "files.insertFinalNewline": true,
-    "workbench.sideBar.location": "right",
     "window.newWindowDimensions": "maximized",
     "editor.formatOnType": true,
     // "search.exclude": {
@@ -69,15 +74,19 @@
     "files.useExperimentalFileWatcher": true,
     "editor.smoothScrolling": true,
     "workbench.colorCustomizations": {
-      "tab.activeBorder": "#73add8",
-      "badge.background": "#73add8",
-      "badge.foreground": "#ffffff",
-      "activityBarBadge.background": "#73add8",
-      "activityBarBadge.foreground": "#ffffff",
-      "editorCursor.foreground": "#73add8",
-      "editorLineNumber.foreground": "#4a4a4a",
-      "focusBorder": "#73add8",
-      "editorIndentGuide.activeBackground": "#aaaaaa"
+        "tab.activeBorder": "#73add8",
+        "badge.background": "#73add8",
+        "badge.foreground": "#ffffff",
+        "activityBarBadge.background": "#73add8",
+        "activityBarBadge.foreground": "#ffffff",
+        "editorCursor.foreground": "#73add8",
+        "editorLineNumber.foreground": "#4a4a4a",
+        "focusBorder": "#73add8",
+        "editorIndentGuide.activeBackground": "#aaaaaa",
+        "statusBar.background": "#8FBCBB",
+        "statusBar.noFolderBackground": "#8FBCBB",
+        "statusBar.debuggingBackground": "#8FBCBB",
+        "statusBar.foreground": "#434C5E"
     },
     "editor.cursorStyle": "block",
     "editor.find.seedSearchStringFromSelection": false,
@@ -86,5 +95,12 @@
     "explorer.confirmDragAndDrop": false,
     "[php]": {},
     "vsicons.dontShowNewVersionMessage": true,
-    "workbench.editor.labelFormat": "short"
+    "workbench.editor.labelFormat": "short",
+    "files.exclude": {
+      "node_modules/": true,
+      "**/*.swp": true,
+      "tags": true,
+      ".idea/": true,
+      ".vscode/": true,
+    }
   }

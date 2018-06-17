@@ -22,6 +22,7 @@ Plugin 'kshenoy/vim-signature'
 Plugin 'wikitopian/hardmode'
 " Plugin 'easymotion/vim-easymotion'
 Plugin 'ddrscott/vim-window'
+Plugin 'danro/rename.vim'
 
 "------------------------------------------
 "--- Linting / testing
@@ -34,10 +35,10 @@ Plugin 'w0rp/ale' " async linting
 "--- GUI changes
 "-----------------------------------------
 Plugin 'airblade/vim-gitgutter'
+" Plugin 'Shougo/vimfiler.vim'
 Plugin 'scrooloose/nerdtree.git'
 Plugin 'xuyuanp/nerdtree-git-plugin'
-" Plugin 'Shougo/vimfiler.vim'
-" Plugin 'Shougo/unite.vim'
+Plugin 'Shougo/unite.vim'
 Plugin 'Shougo/denite.nvim'
 Plugin 'tpope/vim-fugitive'
 Plugin 'vim-airline/vim-airline'
@@ -51,6 +52,8 @@ Plugin 'Yggdroot/indentLine'
 "--- Languages
 "-----------------------------------------
 " Plugin 'jelera/vim-javascript-syntax' " doesnt seem to do anything?
+Plugin 'moll/vim-node'
+" Plugin 'tpope/vim-apathy'
 Plugin 'sheerun/vim-polyglot'
 Plugin 'chrisbra/Colorizer'
 Plugin 'elixir-lang/vim-elixir'
@@ -93,6 +96,7 @@ Plugin 'ternjs/tern_for_vim'
 Plugin 'metakirby5/codi.vim'
 Plugin 'Konfekt/vim-scratchpad'
 Plugin 'craigemery/vim-autotag'
+" Plugin 'taglist.vim'
 Plugin 'aaronbieber/vim-quicktask'
 
 "---------------------------------------------------------------"
@@ -212,11 +216,7 @@ let g:ale_lint_delay = 0
 let g:ale_lint_on_insert_leave = 1
 let g:ale_linters = { 'javascript': ['eslint'] }
 let g:ale_fix_on_save = 1
-let b:ale_fixers = {
-                        \   'javascript': [
-                        \       'eslint',
-                        \   ],
-                        \}
+let b:ale_fixers = { 'javascript': ['eslint'] }
 
 " {buffer, lines -> filter(lines, 'v:val !=~ ''^\s*//''')}, " removes comments
 
@@ -243,7 +243,8 @@ autocmd BufNewFile,BufRead *.asm set syntax=nasm
 let g:indentLine_char = get(g:, 'indentLine_char', '┊')
 let g:indentLine_concealcursor = 'niv'
 let g:indentLine_conceallevel = 2
-let g:indentLine_fileTypeExclude = ['help', 'man', 'startify', 'NERDTree']
+" let g:indentLine_fileTypeExclude = ['help', 'man', 'startify', 'NERDTree']
+let g:indentLine_fileTypeExclude = ['help', 'man', 'startify']
 
 "---------------------------------------------------------------"
 "--- Utils
@@ -256,6 +257,14 @@ let g:indentLine_fileTypeExclude = ['help', 'man', 'startify', 'NERDTree']
 "--- ScratchPads & COdi
 "---------------------------------------------------------------"
 let g:ycm_autoclose_preview_window_after_insertion = 1
+let g:ycm_collect_identifiers_from_tags_files = 1
+let g:ycm_add_preview_to_completeopt = 1
+" let g:ycm_key_invoke_completion = '<C-Space>'
+let g:ycm_key_invoke_completion = ''
+" let g:ycm_key_detailed_diagnostics = '<leader>d'
+let g:ycm_key_detailed_diagnostics = ''
+
+
 let g:codi#rightsplit = 0
 let g:codi#rightalign = 0
 let g:codi#width = 80
@@ -282,7 +291,8 @@ nmap <silent> <C-J> :wincmd j<CR>
 nmap <silent> <C-K> :wincmd k<CR>
 nmap <silent> <C-L> :wincmd l<CR>
 " map <C-M> <Plug>(easymotion-prefix)
-map <C-N> :NERDTreeToggle<CR>
+" map <C-N> :NERDTreeToggle<CR>
+map <C-N> :e.<CR>
 map <C-P> :Files<CR>
 " map <C-Q>
 " map <C-Y>
@@ -359,7 +369,7 @@ map <Leader>lt :TagBResise
 " map <Leader>k <Plug>(easymotion-k)
 
 " let g:lmap.n = { 'name': ' -- Project' }
-map <Leader>n :NERDTreeFind<CR>
+" map <Leader>n :NERDTreeFind<CR>
 
 let g:lmap.o = { 'name': ' -- Quicktask' }
 let g:quicktask_no_mappings = 1
@@ -390,10 +400,75 @@ let g:lmap.r = { 'name': 'global reg' }
 map <Leader>rr "*
 
 let g:lmap.s = { 'name': ' -- Search' }
+map <leader>sd :call SearchForDefinition(expand("<cword>"))<CR>
 map <leader>st :CursorInTags<CR>
 map <leader>sw :FindWordUnderCursor<CR>
 
 command! CursorInTags :call fzf#vim#tags(expand("<cword>"))<CR>
+
+function! SearchForDefinition(name)
+  " try tags first
+  try
+    exec 'tag ' . a:name
+    return
+  catch
+    call getcwd() " seems i need a catch so this will do
+  endtry
+
+  let workdir = getcwd()
+  " searchdec seems a little shakey so this is more reliable
+  normal gg
+  call search(a:name)
+  " miny hack to get to the file name
+  " echo search("\(\'\|\"\)") ,-- no idea why this doesnt work yet
+  if search("\"") == 0
+    let pos = search("\'")
+  endif
+
+  let [_,lnum,col; rest] = getcurpos()
+  let nChar = col+1
+  " find out if relative or global
+  let dec = matchstr(getline('.'), '\%' . nChar . 'c.')
+  if dec =~ '\.'
+    exec 'cd '. expand('%:p:h')
+  endif
+
+  " file or dir?
+  let dir = globpath(expand("<cfile>"), '*')
+  if dir != ''
+    " a directory so go to index
+    let [file] = getcompletion(expand("<cfile>") . '/i', 'file') " go to index
+  else
+    " a file
+    let [file] = getcompletion(expand("<cfile>"), 'file')
+  endif
+
+  if &mod
+    exec 'vsplit ' . file
+  else
+    exec 'e ' . file
+  endif
+
+  " go to the definition or export
+  if search(a:name) == 0
+    call search('default') " js specific
+  endif
+
+  " put the cd back in order
+  exec 'cd '. workdir
+  if dir != ''
+    " see if we have finished
+    let [_,lnum,col; rest] = getcurpos()
+    let pos = search('/')
+    call cursor(lnum, col)
+    if lnum == pos
+      " likely an import on this line so recurse
+      call SearchForDefinition(expand("<cword>"))
+    endif
+  endif
+endfunction
+
+command! YankWoleBuffer normal gg"*yG
 
 let g:lmap.t = { 'name': ' -- Tags' }
 map <leader>tf :Tags<CR>
@@ -497,14 +572,18 @@ endfunction
 "---------------------------------------------------------------"
 "--- NERdTREE stuff
 "---------------------------------------------------------------"
-let g:NERDTreeWinSize=40 " nice big tree is it's easy to toggle off
-let NERDTreeMinimalUI=1
-let NERDTreeStatusline="%{ getcwd() }"
+" :let g:vimfiler_as_default_explorer = 1
+" let g:NERDTreeWinSize=40 " nice big tree is it's easy to toggle off
+" let NERDTreeMinimalUI=1
+" let NERDTreeStatusline="%{ getcwd() }"
+let NERDTreeHijackNetrw=1
 " let g:NERDTreeWinPos = "right"
 
 " closes nerdtree if only open
 " autocmd vimenter * NERDTree
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+" autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
 " ignore files */
 let NERDTreeIgnore = ['\.DAT$', '\.LOG1$', '\.LOG1$']
 let NERDTreeIgnore += [

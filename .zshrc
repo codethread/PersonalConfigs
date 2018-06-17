@@ -39,12 +39,13 @@ source $HOME/PersonalConfigs/spaceship-config.zsh
 
 # bindkey -e # comes after spacehip config
 
-for f in $HOME/PersonalConfigs/scripts*; do source $f; done
+for f in $HOME/PersonalConfigs/scripts/*; do source $f; done
 for f in $HOME/PersonalConfigs/tmuxinator/*; do ln -s -f $f ~/.tmuxinator; done
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export FZF_DEFAULT_COMMAND='fd --hidden --type f --exclude \.git\/'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+source $HOME/PersonalConfigs/enhancd/init.sh
 
 #------------------------------------------
 #--- Sky Stuff

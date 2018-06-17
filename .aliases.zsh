@@ -50,6 +50,7 @@ alias muxs="tmuxinator_spages"
 alias st="skyport_test_modified_files"
 alias dp="docker_deploy_nimbus"
 alias ctagp="ctags -R apps/ && ctags -R -a src/"
+alias npml="npm -g ls --depth=0"
 
 # alias stest="mv .env .notenv || true  && npm run test:unit || true && mv .notenv .env"
 alias pt="mv .env .nenv; pages test unit -q; mv .nenv .env"

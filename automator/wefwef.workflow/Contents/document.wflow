@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AMApplicationBuild</key>
+	<string>444.1</string>
+	<key>AMApplicationVersion</key>
+	<string>2.8</string>
+	<key>AMDocumentVersion</key>
+	<string>2</string>
+	<key>actions</key>
+	<array>
+		<dict>
+			<key>action</key>
+			<dict>
+				<key>AMAccepts</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Types</key>
+					<array>
+						<string>com.apple.systemimageutility.image-object</string>
+					</array>
+				</dict>
+				<key>AMActionVersion</key>
+				<string>1.8</string>
+				<key>AMApplication</key>
+				<array>
+					<string>System Image Utility</string>
+				</array>
+				<key>AMParameterProperties</key>
+				<dict>
+					<key>packageList</key>
+					<dict/>
+				</dict>
+				<key>AMProvides</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Types</key>
+					<array>
+						<string>com.apple.systemimageutility.image-object</string>
+					</array>
+				</dict>
+				<key>AMRequiredResources</key>
+				<array/>
+				<key>ActionBundlePath</key>
+				<string>/System/Library/CoreServices/Applications/System Image Utility.app/Contents/Library/Automator/Add Packages and Post-Install Scripts.action</string>
+				<key>ActionName</key>
+				<string>Add Packages and Post-Install Scripts</string>
+				<key>ActionParameters</key>
+				<dict>
+					<key>packageList</key>
+					<array/>
+				</dict>
+				<key>BundleIdentifier</key>
+				<string>com.apple.SystemImageUtility.AddPackages</string>
+				<key>CFBundleVersion</key>
+				<string>1.8</string>
+				<key>CanShowSelectedItemsWhenRun</key>
+				<true/>
+				<key>CanShowWhenRun</key>
+				<true/>
+				<key>Category</key>
+				<array>
+					<string>AMCategorySystem</string>
+				</array>
+				<key>Class Name</key>
+				<string>AddPackages</string>
+				<key>InputUUID</key>
+				<string>C27DD9BA-D515-4728-9738-428BE7EBD7D8</string>
+				<key>Keywords</key>
+				<array>
+					<string>System</string>
+					<string>Image</string>
+					<string>Utility</string>
+				</array>
+				<key>OutputUUID</key>
+				<string>9E5724BF-D653-4100-A781-360B669EF6CA</string>
+				<key>UUID</key>
+				<string>1B2E9F34-A635-4579-9E5E-ADCA4B9042D9</string>
+				<key>UnlocalizedApplications</key>
+				<array>
+					<string>System Image Utility</string>
+				</array>
+				<key>arguments</key>
+				<dict>
+					<key>0</key>
+					<dict>
+						<key>default value</key>
+						<array/>
+						<key>name</key>
+						<string>packageList</string>
+						<key>required</key>
+						<string>0</string>
+						<key>type</key>
+						<string>0</string>
+						<key>uuid</key>
+						<string>0</string>
+					</dict>
+				</dict>
+				<key>conversionLabel</key>
+				<integer>0</integer>
+				<key>isViewVisible</key>
+				<true/>
+				<key>location</key>
+				<string>309.000000:298.000000</string>
+				<key>nibPath</key>
+				<string>/System/Library/CoreServices/Applications/System Image Utility.app/Contents/Library/Automator/Add Packages and Post-Install Scripts.action/Contents/Resources/Base.lproj/main.nib</string>
+			</dict>
+			<key>isViewVisible</key>
+			<true/>
+		</dict>
+	</array>
+	<key>connectors</key>
+	<dict/>
+	<key>workflowMetaData</key>
+	<dict>
+		<key>serviceInputTypeIdentifier</key>
+		<string>com.apple.Automator.text</string>
+		<key>serviceOutputTypeIdentifier</key>
+		<string>com.apple.Automator.nothing</string>
+		<key>serviceProcessesInput</key>
+		<integer>0</integer>
+		<key>workflowTypeIdentifier</key>
+		<string>com.apple.Automator.servicesMenu</string>
+	</dict>
+</dict>
+</plist>
