@@ -3,32 +3,6 @@
 name: sky
 root: ~/
 windows:
-  - mobile:
-      root: ~/Service/sky-pages
-      layout: main-vertical
-      panes:
-        - vim_pane:
-          - cd ~/Service/sky-pages/apps/mobile
-          - vim
-        - info_pane:
-          - sleep 1
-        - spages_view_pane:
-          - sleep 1
-          - clear
-          - gst
-  - graphql:
-      root: ~/Service/skyport-graphql
-      layout: main-vertical
-      panes:
-        - vim_pane:
-          - vim
-        - info_pane:
-          - sleep 1
-          - skyport -d
-        - skyport_view_pane:
-          - sleep 1
-          - clear
-          - gst
   - skypages:
       root: ~/Service/sky-pages
       layout: main-vertical
@@ -42,6 +16,19 @@ windows:
           - sleep 1
           - clear
           - pages storybook -f apps/mobile -p 1234
+  - graphql:
+      root: ~/Service/skyport-graphql
+      layout: main-vertical
+      panes:
+        - vim_pane:
+          - vim
+        - info_pane:
+          - sleep 1
+          - skyport -d
+        - skyport_view_pane:
+          - sleep 1
+          - clear
+          - gst
   - .dotfiles:
       root: ~/PersonalConfigs
       layout: main-vertical

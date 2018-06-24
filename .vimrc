@@ -23,6 +23,7 @@ Plugin 'wikitopian/hardmode'
 " Plugin 'easymotion/vim-easymotion'
 Plugin 'ddrscott/vim-window'
 Plugin 'danro/rename.vim'
+Plugin 'mbbill/undotree'
 
 "------------------------------------------
 "--- Linting / testing
@@ -47,6 +48,8 @@ Plugin 'gcmt/taboo.vim'
 Plugin 'majutsushi/tagbar'
 Plugin 'hecal3/vim-leader-guide'
 Plugin 'Yggdroot/indentLine'
+Plugin 'junegunn/goyo.vim'
+Plugin 'junegunn/seoul256.vim'
 
 "------------------------------------------
 "--- Languages
@@ -141,13 +144,23 @@ set nrformats-=octal
 let g:EasyMotion_smartcase = 1
 let g:vim_markdown_folding_disabled = 1
 set fillchars=vert:│,fold:·
+set scrolloff=5
 "---------------------------------------------------------------"
 "--- Undo
 "---------------------------------------------------------------"
-set undodir=~/.vim/undo
-set undofile
-set undolevels=1000
-set undoreload=10000
+" set undolevels=1000
+" set undoreload=10000
+let vimDir = '$HOME/.vim'
+let &runtimepath.=','.vimDir
+" Keep undo history across sessions by storing it in a file
+if has('persistent_undo')
+  let myUndoDir = expand(vimDir . '/undodir')
+  " Create dirs
+  call system('mkdir ' . vimDir)
+  call system('mkdir ' . myUndoDir)
+  let &undodir = myUndoDir
+  set undofile
+endif
 "---------------------------------------------------------------"
 "--- Appearance
 "---------------------------------------------------------------"
@@ -165,13 +178,17 @@ hi TagbarSignature ctermfg=215
 " set guifont=Source\ Code\ Pro\ Italic\ for\ Powerline\ 11
 
 " let g:pencil#textwidth = 44
+
+let g:goyo_width = 120 " default 80
+let g:goyo_height = 95 "(default: 85%)
+let g:goyo_linenr = 1 " (default: 0)
 "---------------------------------------------------------------"
 "--- Airline
 "---------------------------------------------------------------"
 let g:airline_powerline_fonts = 1
 let g:airline_theme = 'tenderAdam'
 let g:airline#extensions#ale#enabled = 1
-let g:airline#extensions#tabline#enabled = 1
+" let g:airline#extensions#tabline#enabled = 1
 
 let g:airline_section_b = '%{split(getcwd(), "/")[-1]}' " dont really care for the branch
 " let g:airline_section_c = '%t'
@@ -231,7 +248,7 @@ let b:ale_fixers = { 'javascript': ['eslint'] }
 filetype plugin indent on
 " set tabstop=2 shiftwidth=2 expandtab
 set expandtab
-autocmd FileType * setlocal tabstop=2 shiftwidth=2
+autocmd FileType * setlocal tabstop=4 shiftwidth=4
 " autocmd FileType sh setlocal tabstop=2 shiftwidth=2
 autocmd FileType javascript.jsx setlocal tabstop=4 shiftwidth=4
 " autocmd FileType elixir  setlocal tabstop=4 shiftwidth=4
@@ -243,8 +260,8 @@ autocmd BufNewFile,BufRead *.asm set syntax=nasm
 let g:indentLine_char = get(g:, 'indentLine_char', '┊')
 let g:indentLine_concealcursor = 'niv'
 let g:indentLine_conceallevel = 2
-" let g:indentLine_fileTypeExclude = ['help', 'man', 'startify', 'NERDTree']
-let g:indentLine_fileTypeExclude = ['help', 'man', 'startify']
+let g:indentLine_fileTypeExclude = ['help', 'man', 'startify', 'NERDTree']
+" let g:indentLine_fileTypeExclude = ['help', 'man', 'startify']
 
 "---------------------------------------------------------------"
 "--- Utils
@@ -291,8 +308,8 @@ nmap <silent> <C-J> :wincmd j<CR>
 nmap <silent> <C-K> :wincmd k<CR>
 nmap <silent> <C-L> :wincmd l<CR>
 " map <C-M> <Plug>(easymotion-prefix)
-" map <C-N> :NERDTreeToggle<CR>
-map <C-N> :e.<CR>
+map <C-N> :NERDTreeToggle<CR>
+" map <C-N> :e.<CR>
 map <C-P> :Files<CR>
 " map <C-Q>
 " map <C-Y>
@@ -313,12 +330,6 @@ map <Leader>? :Commands<CR>
 map \ :Fuzzyag<CR>
 map <C-\> :Fuzzyag!<CR>
 
-" let g:lmap.d = { 'name': ' -- Delete' }
-" nnoremap <leader>d "_d
-" vnoremap <leader>d "_d
-" nnoremap <leader>D "_D
-" nnoremap <leader>dd "_dd
-
 let g:lmap.b = { 'name': ' -- Buffers' }
 map <Leader>bd :DiffSaved<CR>
 map <Leader>bf :Format<CR>
@@ -331,6 +342,12 @@ map <Leader>by :YankWoleBuffer<CR>
 
 command! Format normal gg=G''
 command! YankWoleBuffer normal gg"*yG
+
+" let g:lmap.d = { 'name': ' -- Delete' }
+" nnoremap <leader>d "_d
+" vnoremap <leader>d "_d
+" nnoremap <leader>D "_D
+" nnoremap <leader>dd "_dd
 
 let g:lmap.e = { 'name': ' -- Errors' }
 map <Leader>ef :ALEFix<CR>
@@ -352,6 +369,7 @@ map <leader>gw :StripTrailingWhitespaces<CR>
 let g:lmap.l = { 'name': ' -- Layout' }
 map <Leader>ls :vsplit<CR>
 map <Leader>lt :TagBResise
+map <Leader>ll :Goyo<CR>
 
 " let g:lmap.m = { 'name': ' -- Motion(Easy)' }
 " EASYMOTION MAPS
@@ -369,7 +387,7 @@ map <Leader>lt :TagBResise
 " map <Leader>k <Plug>(easymotion-k)
 
 " let g:lmap.n = { 'name': ' -- Project' }
-" map <Leader>n :NERDTreeFind<CR>
+map <Leader>n :NERDTreeFind<CR>
 
 let g:lmap.o = { 'name': ' -- Quicktask' }
 let g:quicktask_no_mappings = 1
@@ -405,69 +423,6 @@ map <leader>st :CursorInTags<CR>
 map <leader>sw :FindWordUnderCursor<CR>
 
 command! CursorInTags :call fzf#vim#tags(expand("<cword>"))<CR>
-
-function! SearchForDefinition(name)
-  " try tags first
-  try
-    exec 'tag ' . a:name
-    return
-  catch
-    call getcwd() " seems i need a catch so this will do
-  endtry
-
-  let workdir = getcwd()
-  " searchdec seems a little shakey so this is more reliable
-  normal gg
-  call search(a:name)
-  " miny hack to get to the file name
-  " echo search("\(\'\|\"\)") ,-- no idea why this doesnt work yet
-  if search("\"") == 0
-    let pos = search("\'")
-  endif
-
-  let [_,lnum,col; rest] = getcurpos()
-  let nChar = col+1
-  " find out if relative or global
-  let dec = matchstr(getline('.'), '\%' . nChar . 'c.')
-  if dec =~ '\.'
-    exec 'cd '. expand('%:p:h')
-  endif
-
-  " file or dir?
-  let dir = globpath(expand("<cfile>"), '*')
-  if dir != ''
-    " a directory so go to index
-    let [file] = getcompletion(expand("<cfile>") . '/i', 'file') " go to index
-  else
-    " a file
-    let [file] = getcompletion(expand("<cfile>"), 'file')
-  endif
-
-  if &mod
-    exec 'vsplit ' . file
-  else
-    exec 'e ' . file
-  endif
-
-  " go to the definition or export
-  if search(a:name) == 0
-    call search('default') " js specific
-  endif
-
-  " put the cd back in order
-  exec 'cd '. workdir
-  if dir != ''
-    " see if we have finished
-    let [_,lnum,col; rest] = getcurpos()
-    let pos = search('/')
-    call cursor(lnum, col)
-    if lnum == pos
-      " likely an import on this line so recurse
-      call SearchForDefinition(expand("<cword>"))
-    endif
-  endif
-endfunction
-
 command! YankWoleBuffer normal gg"*yG
 
 let g:lmap.t = { 'name': ' -- Tags' }
@@ -483,6 +438,7 @@ command! FindTag normal <C-]>
 
 let g:lmap.u = { 'name': ' -- Utils' }
 map <leader>us :sort<CR>
+map <leader>uu :UndotreeToggle<CR>
 
 let g:lmap.w = { 'name': ' -- Windows' }
 map <leader>wa :GoToTab1<CR>
@@ -573,16 +529,16 @@ endfunction
 "--- NERdTREE stuff
 "---------------------------------------------------------------"
 " :let g:vimfiler_as_default_explorer = 1
-" let g:NERDTreeWinSize=40 " nice big tree is it's easy to toggle off
-" let NERDTreeMinimalUI=1
-" let NERDTreeStatusline="%{ getcwd() }"
+let g:NERDTreeWinSize=40 " nice big tree is it's easy to toggle off
+let NERDTreeMinimalUI=1
+let NERDTreeStatusline="%{ getcwd() }"
 let NERDTreeHijackNetrw=1
 " let g:NERDTreeWinPos = "right"
 
 " closes nerdtree if only open
 " autocmd vimenter * NERDTree
 
-" autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " ignore files */
 let NERDTreeIgnore = ['\.DAT$', '\.LOG1$', '\.LOG1$']
@@ -650,6 +606,84 @@ nnoremap <C-w>gl :<C-U>call window#join('rightbelow vsplit', v:count) <BAR>norma
 nnoremap <C-w>gh :<C-U>call window#join('leftabove vsplit', v:count) <BAR>normal! 100zh<CR>
 nnoremap <C-w>gj :<C-U>call window#join('belowright split', v:count) <BAR>normal! 100zh<CR>
 nnoremap <C-w>gk :<C-U>call window#join('aboveleft split', v:count) <BAR>normal! 100zh<CR>
+
+"---------------------------------------------------------------" */
+"--- Search for definition */
+"---------------------------------------------------------------" */
+" not saying this is pretty but at least it works
+function! SearchForDefinition(name)
+  " try tags first
+  " try | exec 'tag ' . a:name | return | catch | silent | endtry
+
+  let quotes = "['" . '"]' 
+  let langspecific = "\\(from \\|require(\\)"
+  let patt = '\<' . a:name . '\>' . '\_[^;]\{-}' . langspecific . quotes . '.\+' . quotes . "[\s;)]*\$"
+
+  if search(patt, 'b') == 0 " look for import
+      call search('\(' . a:name . '\|export default\)') " look for export
+      return
+  endif
+
+  call search(quotes, 'e') " go to file name
+  " find out if relative or global
+  " js specific index file check
+  let workdir = getcwd()
+
+
+  let isRel = nr2char(strgetchar(getline('.'), col('.'))) =~ '\.'
+  if isRel
+      exec 'cd '. expand('%:p:h')
+  endif
+
+  let options = globpath(expand("<cfile>"), '*',0,1)
+  if len(options) == 0 " length = 0 path
+      try 
+          let [file] = getcompletion(expand("<cfile>") . '.', 'file')
+      catch
+          echo 'node module'
+          return
+      endtry
+  else
+      let [file] = getcompletion(expand("<cfile>") . '/index', 'file')
+  endif
+
+  if &mod " modified so open split
+      exec 'vsplit ' . file
+  else
+      exec 'e ' . file
+  endif
+
+  " put the cd back in order
+  exec 'cd '. workdir
+
+  " recurse
+  call SearchForDefinition(a:name)
+endfunction
+
+"---------------------------------------------------------------" */
+"--- Retired */
+"---------------------------------------------------------------" */
+function! s:goyo_enter()
+  silent !tmux set status off
+  silent !tmux list-panes -F '\#F' | grep -q Z || tmux resize-pane -Z
+  set noshowmode
+  set noshowcmd
+  " set scrolloff=999
+  " Limelight
+endfunction
+
+function! s:goyo_leave()
+  silent !tmux set status on
+  silent !tmux resize-pane -Z
+  set showmode
+  set showcmd
+  " set scrolloff=5
+  " Limelight!
+endfunction
+
+autocmd! User GoyoEnter nested call <SID>goyo_enter()
+autocmd! User GoyoLeave nested call <SID>goyo_leave()
+
 
 "---------------------------------------------------------------" */
 "--- Retired */
