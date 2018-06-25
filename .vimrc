@@ -156,12 +156,12 @@ let vimDir = '$HOME/.vim'
 let &runtimepath.=','.vimDir
 " Keep undo history across sessions by storing it in a file
 if has('persistent_undo')
-  let myUndoDir = expand(vimDir . '/undodir')
-  " Create dirs
-  call system('mkdir ' . vimDir)
-  call system('mkdir ' . myUndoDir)
-  let &undodir = myUndoDir
-  set undofile
+    let myUndoDir = expand(vimDir . '/undodir')
+    " Create dirs
+    call system('mkdir ' . vimDir)
+    call system('mkdir ' . myUndoDir)
+    let &undodir = myUndoDir
+    set undofile
 endif
 "---------------------------------------------------------------"
 "--- Appearance
@@ -202,36 +202,39 @@ let g:goyo_linenr = 1 " (default: 0)
 " let g:airline_theme = 'tenderAdam'
 let g:airline_theme='snazzy'
 let g:airline#extensions#ale#enabled = 1
+let g:airline#extensions#tagbar#enabled = 0
+
+let g:airline#extensions#default#layout = [
+            \ [ 'a', 'b', 'c' ],
+            \ [ 'x', 'z', 'error', 'warning' ]
+            \ ]
 
 let g:airline_section_b = '%{split(getcwd(), "/")[-1]}' " dont really care for the branch
-" let g:airline_section_c = '%t'
-
-let g:airline_section_x = '%{bufnr("%")}'
-let g:airline_section_y = '%t'
+let g:airline_section_c = '%t'
 
 let g:jsx_ext_required = 1
 set statusline+=%#warningmsg#
 set statusline+=%*
 let g:fzf_layout = { 'down': '~40%' }
 let g:fzf_action = {
-  \ 'ctrl-t': 'tab split',
-  \ 'ctrl-x': 'split',
-  \ 'ctrl-l': 'vsplit' }
+            \ 'ctrl-t': 'tab split',
+            \ 'ctrl-x': 'split',
+            \ 'ctrl-l': 'vsplit' }
 
 let g:fzf_colors = {
-                        \ 'fg':      ['fg', 'Normal'],
-                        \ 'bg':      ['bg', 'Normal'],
-                        \ 'hl':      ['fg', 'Comment'],
-                        \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-                        \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-                        \ 'hl+':     ['fg', 'Statement'],
-                        \ 'info':    ['fg', 'PreProc'],
-                        \ 'border':  ['fg', 'Ignore'],
-                        \ 'prompt':  ['fg', 'Conditional'],
-                        \ 'pointer': ['fg', 'Exception'],
-                        \ 'marker':  ['fg', 'Keyword'],
-                        \ 'spinner': ['fg', 'Label'],
-                        \ 'header':  ['fg', 'Comment'] }
+            \ 'fg':      ['fg', 'Normal'],
+            \ 'bg':      ['bg', 'Normal'],
+            \ 'hl':      ['fg', 'Comment'],
+            \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+            \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+            \ 'hl+':     ['fg', 'Statement'],
+            \ 'info':    ['fg', 'PreProc'],
+            \ 'border':  ['fg', 'Ignore'],
+            \ 'prompt':  ['fg', 'Conditional'],
+            \ 'pointer': ['fg', 'Exception'],
+            \ 'marker':  ['fg', 'Keyword'],
+            \ 'spinner': ['fg', 'Label'],
+            \ 'header':  ['fg', 'Comment'] }
 
 "---------------------------------------------------------------"
 "--- Linting
@@ -489,46 +492,46 @@ command! DiffSaved call DiffWithSaved()
 "---------------------------------------------------------------"
 " autocmd VimEnter,BufNewFile,BufReadPost * silent! call HardMode()
 command! -bang -nargs=* Fuzzyag
-                        \ call fzf#vim#ag(<q-args>,
-                        \                 <bang>0 ? fzf#vim#with_preview('up:60%')
-                        \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
-                        \                 <bang>0)
+            \ call fzf#vim#ag(<q-args>,
+            \                 <bang>0 ? fzf#vim#with_preview('up:60%')
+            \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
+            \                 <bang>0)
 
 "Use TAB to complete when typing words, else inserts TABs as usual.
 function! Tab_Or_Complete()
-        if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~'^\w'
-                return "\<C-N>"
-        else
-                return "\<Tab>"
-        endif
+    if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~'^\w'
+        return "\<C-N>"
+    else
+        return "\<Tab>"
+    endif
 endfunction
 
 function! ResiseTagBar(size)
-        let g:tagbar_width = a:size
-        exe "TagbarToggle"
-        exe "TagbarOpen"
+    let g:tagbar_width = a:size
+    exe "TagbarToggle"
+    exe "TagbarOpen"
 endfunction
 
 " via: http://rails-bestpractices.com/posts/60-remove-trailing-whitespace
 " Strip trailing whitespace
 function! <SID>StripTrailingWhitespaces()
-        " Preparation: save last search, and cursor position.
-        let _s=@/
-        let l = line(".")
-        let c = col(".")
-        " Do the business:
-        %s/\s\+$//e
-        " Clean up: restore previous search history, and cursor position
-        let @/=_s
-        call cursor(l, c)
+    " Preparation: save last search, and cursor position.
+    let _s=@/
+    let l = line(".")
+    let c = col(".")
+    " Do the business:
+    %s/\s\+$//e
+    " Clean up: restore previous search history, and cursor position
+    let @/=_s
+    call cursor(l, c)
 endfunction
 
 function! DiffWithSaved()
-        let filetype=&ft
-        diffthis
-        vnew | r # | normal! 1Gdd
-        diffthis
-        exe "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . filetype
+    let filetype=&ft
+    diffthis
+    vnew | r # | normal! 1Gdd
+    diffthis
+    exe "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . filetype
 endfunction
 
 "---------------------------------------------------------------"
@@ -549,18 +552,18 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 " ignore files */
 let NERDTreeIgnore = ['\.DAT$', '\.LOG1$', '\.LOG1$']
 let NERDTreeIgnore += [
-                        \ '\.gif$',
-                        \ '\.mp3$',
-                        \ '\.flac$',
-                        \ '\.ogg$',
-                        \ '\.mp4$',
-                        \ '\.avi$',
-                        \ '.webm$',
-                        \ '.mkv$',
-                        \ '\.pdf$',
-                        \ '\.zip$',
-                        \ '\.tar.gz$',
-                        \ '\.rar$']
+            \ '\.gif$',
+            \ '\.mp3$',
+            \ '\.flac$',
+            \ '\.ogg$',
+            \ '\.mp4$',
+            \ '\.avi$',
+            \ '.webm$',
+            \ '.mkv$',
+            \ '\.pdf$',
+            \ '\.zip$',
+            \ '\.tar.gz$',
+            \ '\.rar$']
 
 " \ '\.png$',
 " \ '\.jpg$',
@@ -569,20 +572,20 @@ let NERDTreeIgnore += [
 "--- Typing stuff
 "---------------------------------------------------------------"
 if has("spell")
-        " toggle spelling with F4 key
-        map <F4> :set spell!<CR><Bar>:echo "Spell Check: " . strpart("OffOn", 3 * &spell, 3)<CR>
+    " toggle spelling with F4 key
+    map <F4> :set spell!<CR><Bar>:echo "Spell Check: " . strpart("OffOn", 3 * &spell, 3)<CR>
 
-        " they were using white on white
-        highlight PmenuSel ctermfg=black ctermbg=lightgray
+    " they were using white on white
+    highlight PmenuSel ctermfg=black ctermbg=lightgray
 
-        " limit it to just the top 10 items
-        set sps=best,10
+    " limit it to just the top 10 items
+    set sps=best,10
 endif
 
 augroup pencil
-        autocmd!
-        autocmd FileType markdown,mkd call pencil#init()
-        autocmd FileType text         call pencil#init()
+    autocmd!
+    autocmd FileType markdown,mkd call pencil#init()
+    autocmd FileType text         call pencil#init()
 augroup END
 
 "---------------------------------------------------------------" */
@@ -618,73 +621,73 @@ nnoremap <C-w>gk :<C-U>call window#join('aboveleft split', v:count) <BAR>normal!
 "---------------------------------------------------------------" */
 " not saying this is pretty but at least it works
 function! SearchForDefinition(name)
-  " try tags first
-  " try | exec 'tag ' . a:name | return | catch | silent | endtry
+    " try tags first
+    " try | exec 'tag ' . a:name | return | catch | silent | endtry
 
-  let quotes = "['" . '"]'
-  let langspecific = "\\(from \\|require(\\)"
-  let patt = '\<' . a:name . '\>' . '\_[^;]\{-}' . langspecific . quotes . '.\+' . quotes . "[\s;)]*\$"
+    let quotes = "['" . '"]'
+    let langspecific = "\\(from \\|require(\\)"
+    let patt = '\<' . a:name . '\>' . '\_[^;]\{-}' . langspecific . quotes . '.\+' . quotes . "[\s;)]*\$"
 
-  if search(patt, 'b') == 0 " look for import
-      call search('\(' . a:name . '\|export default\)') " look for export
-      return
-  endif
+    if search(patt, 'b') == 0 " look for import
+        call search('\(' . a:name . '\|export default\)') " look for export
+        return
+    endif
 
-  call search(quotes, 'e') " go to file name
-  " find out if relative or global
-  " js specific index file check
-  let workdir = getcwd()
+    call search(quotes, 'e') " go to file name
+    " find out if relative or global
+    " js specific index file check
+    let workdir = getcwd()
 
 
-  let isRel = nr2char(strgetchar(getline('.'), col('.'))) =~ '\.'
-  if isRel
-      exec 'cd '. expand('%:p:h')
-  endif
+    let isRel = nr2char(strgetchar(getline('.'), col('.'))) =~ '\.'
+    if isRel
+        exec 'cd '. expand('%:p:h')
+    endif
 
-  let options = globpath(expand("<cfile>"), '*',0,1)
-  if len(options) == 0 " length = 0 path
-      try
-          let [file] = getcompletion(expand("<cfile>") . '.', 'file')
-      catch
-          echo 'node module'
-          return
-      endtry
-  else
-      let [file] = getcompletion(expand("<cfile>") . '/index', 'file')
-  endif
+    let options = globpath(expand("<cfile>"), '*',0,1)
+    if len(options) == 0 " length = 0 path
+        try
+            let [file] = getcompletion(expand("<cfile>") . '.', 'file')
+        catch
+            echo 'node module'
+            return
+        endtry
+    else
+        let [file] = getcompletion(expand("<cfile>") . '/index', 'file')
+    endif
 
-  if &mod " modified so open split
-      exec 'vsplit ' . file
-  else
-      exec 'e ' . file
-  endif
+    if &mod " modified so open split
+        exec 'vsplit ' . file
+    else
+        exec 'e ' . file
+    endif
 
-  " put the cd back in order
-  exec 'cd '. workdir
+    " put the cd back in order
+    exec 'cd '. workdir
 
-  " recurse
-  call SearchForDefinition(a:name)
+    " recurse
+    call SearchForDefinition(a:name)
 endfunction
 
 "---------------------------------------------------------------" */
 "--- Retired */
 "---------------------------------------------------------------" */
 function! s:goyo_enter()
-  silent !tmux set status off
-  silent !tmux list-panes -F '\#F' | grep -q Z || tmux resize-pane -Z
-  set noshowmode
-  set noshowcmd
-  " set scrolloff=999
-  " Limelight
+    silent !tmux set status off
+    silent !tmux list-panes -F '\#F' | grep -q Z || tmux resize-pane -Z
+    set noshowmode
+    set noshowcmd
+    " set scrolloff=999
+    " Limelight
 endfunction
 
 function! s:goyo_leave()
-  silent !tmux set status on
-  silent !tmux resize-pane -Z
-  set showmode
-  set showcmd
-  " set scrolloff=5
-  " Limelight!
+    silent !tmux set status on
+    silent !tmux resize-pane -Z
+    set showmode
+    set showcmd
+    " set scrolloff=5
+    " Limelight!
 endfunction
 
 autocmd! User GoyoEnter nested call <SID>goyo_enter()
