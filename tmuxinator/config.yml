@@ -10,6 +10,7 @@ windows:
       panes:
         - vim single_scripts/tmux_template.conf
         - rubypanel:
+          - cd ./single_scripts
           - when-changed -iv ./tmux_template.conf 'ruby ./color_config.rb'
         - echo `tput sitm`italics`tput ritm`
 

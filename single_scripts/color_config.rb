@@ -2,7 +2,7 @@ contents = File.read("./tmux_template.conf")
 
 # test_string = "hello {{PRIME_COLOR}}"
 
-colours = {
+tender_colours = {
         "{{PRIME_COLOR}}" => "colour81",
         "{{SECONDARY}}" => "colour153",
         "{{BASE_EMPHASIS}}" => "colour242",
@@ -16,7 +16,14 @@ colours = {
         "{{WHITE}}" => "colour255",
 }
 
-result = contents.gsub(/{{(.+?)}}/, colours)
+snazzy_colours = {
+        "{{PRIME_COLOR}}" => "magenta",
+        "{{TEXT}}" => "blue",
+        "{{BASE}}" => "#686868",
+        "{{BACKGROUND}}" => "#282a36",
+}
+
+result = contents.gsub(/{{(.+?)}}/, snazzy_colours)
 
 File.open("../../.tmux.conf", 'w') { |file| file.write(result) }
 

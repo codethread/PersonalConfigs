@@ -77,6 +77,8 @@ Plugin 'othree/html5.vim'
 "--- Color Schemes
 "-----------------------------------------
 " here use tender-adam in personal config
+Plugin 'connorholyday/vim-snazzy'
+Plugin 'blueshirts/darcula'
 "------------------------------------------
 "--- session handling
 "-----------------------------------------
@@ -166,16 +168,27 @@ endif
 "---------------------------------------------------------------"
 syntax enable
 color tenderAdam
+" colorscheme darcula
 
 let g:tagbar_width = 30
 let g:tagbar_compact = 0
 let g:tagbar_autopreview = 0
 
-hi TagbarSignature ctermfg=215
 " autocmd VimEnter * nested :TagbarOpen
 
-" set guioptions-=e
-" set guifont=Source\ Code\ Pro\ Italic\ for\ Powerline\ 11
+if has('gui_running')
+    set guioptions=
+    set guifont=Hack\ Regular:h11
+    set lines=50 columns=108 linespace=3
+    color snazzy
+    let g:SnazzyTransparent = 1
+    set shellcmdflag=-ic
+    let $BASH_ENV = "~/.bash_aliases"
+else
+    " hi TagbarSignature ctermfg=215
+endif
+
+
 
 " let g:pencil#textwidth = 44
 
@@ -187,6 +200,7 @@ let g:goyo_linenr = 1 " (default: 0)
 "---------------------------------------------------------------"
 let g:airline_powerline_fonts = 1
 let g:airline_theme = 'tenderAdam'
+" let g:airline_theme='dracula'
 let g:airline#extensions#ale#enabled = 1
 " let g:airline#extensions#tabline#enabled = 1
 

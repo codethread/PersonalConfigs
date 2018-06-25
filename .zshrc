@@ -15,12 +15,13 @@ export EDITOR='vim'
 #------------------------------------------
 #--- Settings
 #-----------------------------------------
-ZSH_THEME="spaceship"
-ZSH_CUSTOM=$HOME/PersonalConfigs/zsh_custom
+# ZSH_THEME="spaceship"
+# ZSH_CUSTOM=$HOME/PersonalConfigs/zsh_custom
 DISABLE_AUTO_TITLE="true"
 COMPLETION_WAITING_DOTS="true"
 HIST_IGNORE_SPACE=true
 DISABLE_UNTRACKED_FILES_DIRTY="true"
+
 
 # plugins=(bundler gem git mix sudo tmux web-search)
 plugins=(git tmux)
@@ -35,9 +36,7 @@ source $ZSH/oh-my-zsh.sh
 source $HOME/.asdf/asdf.sh
 source $HOME/.aliases.zsh
 
-source $HOME/PersonalConfigs/spaceship-config.zsh
-
-# bindkey -e # comes after spacehip config
+# source $HOME/PersonalConfigs/spaceship-config.zsh
 
 for f in $HOME/PersonalConfigs/scripts/*; do source $f; done
 for f in $HOME/PersonalConfigs/tmuxinator/*; do ln -s -f $f ~/.tmuxinator; done
@@ -47,6 +46,10 @@ export FZF_DEFAULT_COMMAND='fd --hidden --type f --exclude \.git\/'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 source $HOME/enhancd/init.sh
 
+autoload -U promptinit; promptinit
+prompt pure
+
+source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 #------------------------------------------
 #--- Sky Stuff
 #-----------------------------------------
