@@ -139,7 +139,7 @@ set incsearch
 set hlsearch
 set bs=indent,eol,start " Allow backspacing over everything in insert mode
 set laststatus=2
-:set dictionary="/usr/dict/words"
+set dictionary="/usr/dict/words"
 autocmd vimenter * set number
 set tags=tags;
 set nrformats-=octal
@@ -167,8 +167,10 @@ endif
 "--- Appearance
 "---------------------------------------------------------------"
 syntax enable
-color tenderAdam
-" colorscheme darcula
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum" " something to do with vim in a terminal
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+" color tenderAdam
+color snazzy
 
 let g:tagbar_width = 30
 let g:tagbar_compact = 0
@@ -180,8 +182,6 @@ if has('gui_running')
     set guioptions=
     set guifont=Hack\ Regular:h11
     set lines=50 columns=108 linespace=3
-    color snazzy
-    let g:SnazzyTransparent = 1
     set shellcmdflag=-ic
     let $BASH_ENV = "~/.bash_aliases"
 else
@@ -198,26 +198,21 @@ let g:goyo_linenr = 1 " (default: 0)
 "---------------------------------------------------------------"
 "--- Airline
 "---------------------------------------------------------------"
-let g:airline_powerline_fonts = 1
-let g:airline_theme = 'tenderAdam'
-" let g:airline_theme='dracula'
+" let g:airline_powerline_fonts = 1
+" let g:airline_theme = 'tenderAdam'
+let g:airline_theme='snazzy'
 let g:airline#extensions#ale#enabled = 1
-" let g:airline#extensions#tabline#enabled = 1
 
 let g:airline_section_b = '%{split(getcwd(), "/")[-1]}' " dont really care for the branch
 " let g:airline_section_c = '%t'
 
 let g:airline_section_x = '%{bufnr("%")}'
-let g:airline_section_y = '%y'
+let g:airline_section_y = '%t'
 
 let g:jsx_ext_required = 1
 set statusline+=%#warningmsg#
 set statusline+=%*
 let g:fzf_layout = { 'down': '~40%' }
-let g:fzf_action = {
-                        \ 'ctrl-l': 'vsplit',
-                        \ 'ctrl-t': 'vsplit',
-                        \ }
 let g:fzf_action = {
   \ 'ctrl-t': 'tab split',
   \ 'ctrl-x': 'split',
@@ -444,11 +439,8 @@ map <leader>tf :Tags<CR>
 map <leader>tl :ts<CR>
 map <leader>tn :tn<CR>
 map <leader>tp :tp<CR>
-map <leader>tt :FindTag<CR>
-map <leader>th :TagbarToggle<CR>
+map <leader>tt :TagbarToggle<CR>
 map <leader>tw :ts "<cword>"<CR>
-
-command! FindTag normal <C-]>
 
 let g:lmap.u = { 'name': ' -- Utils' }
 map <leader>us :sort<CR>
@@ -629,7 +621,7 @@ function! SearchForDefinition(name)
   " try tags first
   " try | exec 'tag ' . a:name | return | catch | silent | endtry
 
-  let quotes = "['" . '"]' 
+  let quotes = "['" . '"]'
   let langspecific = "\\(from \\|require(\\)"
   let patt = '\<' . a:name . '\>' . '\_[^;]\{-}' . langspecific . quotes . '.\+' . quotes . "[\s;)]*\$"
 
@@ -651,7 +643,7 @@ function! SearchForDefinition(name)
 
   let options = globpath(expand("<cfile>"), '*',0,1)
   if len(options) == 0 " length = 0 path
-      try 
+      try
           let [file] = getcompletion(expand("<cfile>") . '.', 'file')
       catch
           echo 'node module'
