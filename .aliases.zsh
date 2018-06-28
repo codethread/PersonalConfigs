@@ -36,6 +36,7 @@ alias cdh="cat ~/.aliases.zsh | grep \"^alias cd.=\""
 alias serv="python -m SimpleHTTPServer 8005"
 alias vo="vim \$(fzf)"
 alias pipes="pipes.sh -f 60 -s 8"
+alias gql="pbpaste | jq '.info.message | split(\result:\") | .[1] | fromjson' "
 
 #---------------------------------------------#
 # SKY

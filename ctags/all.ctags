@@ -1,0 +1,9 @@
+--exclude=app_build
+--exclude=bin
+--exclude=build
+--exclude=config
+--exclude=coverage
+--exclude=dist
+--exclude=nb-config
+--exclude=node_modules
+--exclude=tmp

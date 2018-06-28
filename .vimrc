@@ -64,6 +64,7 @@ Plugin 'godlygeek/tabular'
 Plugin 'jparise/vim-graphql'
 Plugin 'pangloss/vim-javascript'
 Plugin 'mxw/vim-jsx'
+Plugin 'elzr/vim-json'
 Plugin 'kchmck/vim-coffee-script'
 " Plugin 'styled-components/vim-styled-components'
 Plugin 'chrisbra/csv.vim'
@@ -203,6 +204,7 @@ let g:goyo_linenr = 1 " (default: 0)
 let g:airline_theme='snazzy'
 let g:airline#extensions#ale#enabled = 1
 let g:airline#extensions#tagbar#enabled = 0
+let g:airline#extensions#tabline#enabled = 1
 
 let g:airline#extensions#default#layout = [
             \ [ 'a', 'b', 'c' ],
@@ -210,11 +212,10 @@ let g:airline#extensions#default#layout = [
             \ ]
 
 let g:airline_section_b = '%{split(getcwd(), "/")[-1]}' " dont really care for the branch
-let g:airline_section_c = '%t'
+" let g:airline_section_c = '%t'
 
 let g:jsx_ext_required = 1
-set statusline+=%#warningmsg#
-set statusline+=%*
+
 let g:fzf_layout = { 'down': '~40%' }
 let g:fzf_action = {
             \ 'ctrl-t': 'tab split',
@@ -244,8 +245,8 @@ let g:ale_lint_on_text_changed = 'normal'
 let g:ale_lint_delay = 0
 let g:ale_lint_on_insert_leave = 1
 let g:ale_linters = { 'javascript': ['eslint'] }
-let g:ale_fix_on_save = 1
-let b:ale_fixers = { 'javascript': ['eslint'] }
+" let g:ale_fix_on_save = 1
+let g:ale_fixers = { 'javascript': ['eslint'] }
 
 " {buffer, lines -> filter(lines, 'v:val !=~ ''^\s*//''')}, " removes comments
 
@@ -344,22 +345,21 @@ map <C-\> :Fuzzyag!<CR>
 
 let g:lmap.b = { 'name': ' -- Buffers' }
 map <Leader>bd :DiffSaved<CR>
-map <Leader>bf :Format<CR>
 map <Leader>bl :Buffers<CR>
 map <Leader>bn :bnext<CR>
 map <Leader>bo :enew<CR>
 map <Leader>bp :bprevious<CR>
 map <Leader>bs :sbprevious<CR>
-map <Leader>by :YankWoleBuffer<CR>
 
-command! Format normal gg=G''
-command! YankWoleBuffer normal gg"*yG
-
-" let g:lmap.d = { 'name': ' -- Delete' }
+let g:lmap.d = { 'name': ' -- Delete' }
 " nnoremap <leader>d "_d
 " vnoremap <leader>d "_d
 " nnoremap <leader>D "_D
-" nnoremap <leader>dd "_dd
+nnoremap <leader>dd "_d
+
+let g:lmap.d = { 'name': ' -- File' }
+map <Leader>fy :YankWoleBuffer<CR>
+map <Leader>ff :call Format()<CR>
 
 let g:lmap.e = { 'name': ' -- Errors' }
 map <Leader>ef :ALEFix<CR>
@@ -376,48 +376,14 @@ map <leader>g? :help index<CR>
 map <leader>gc :ColorToggle<CR>
 map <leader>gh <Esc>:call ToggleHardMode()<CR>
 map <leader>gr :set relativenumber!<CR>
-map <leader>gw :StripTrailingWhitespaces<CR>
 
 let g:lmap.l = { 'name': ' -- Layout' }
 map <Leader>ls :vsplit<CR>
 map <Leader>lt :TagBResise
 map <Leader>ll :Goyo<CR>
 
-" let g:lmap.m = { 'name': ' -- Motion(Easy)' }
-" EASYMOTION MAPS
-" nmap w <Plug>(easymotion-w)
-" nmap W <Plug>(easymotion-W)
-" nmap e <Plug>(easymotion-e)
-" nmap E <Plug>(easymotion-E)
-" nmap b <Plug>(easymotion-b)
-" nmap B <Plug>(easymotion-B)
-" nmap f <Plug>(easymotion-f)
-" nmap F <Plug>(easymotion-F)
-" nmap t <Plug>(easymotion-t)
-" nmap T <Plug>(easymotion-T)
-" map <Leader>j <Plug>(easymotion-j)
-" map <Leader>k <Plug>(easymotion-k)
-
 " let g:lmap.n = { 'name': ' -- Project' }
 map <Leader>n :NERDTreeFind<CR>
-
-let g:lmap.o = { 'name': ' -- Quicktask' }
-let g:quicktask_no_mappings = 1
-map <Leader>oD  <Plug>TaskComplete
-map <Leader>oO  <Plug>AddTaskAbove
-map <Leader>oS  <Plug>AddSnipToTask
-map <Leader>oa  <Plug>ShowActiveTasksOnly
-map <Leader>oc  <Plug>AddChildTask
-map <Leader>od  <Plug>MoveTaskDown
-map <Leader>ofi <Plug>FindIncompleteTimestamps
-map <Leader>on  <Plug>AddNoteToTask
-map <Leader>oo  <Plug>AddTaskBelow
-map <Leader>os  <Plug>AddNextTimeToTask
-map <Leader>ou  <Plug>MoveTaskUp
-map <Leader>ov  <Plug>SelectTask
-map <Leader>ow  <Plug>ShowWatchedTasksOnly
-map <Leader>oy  <Plug>ShowTodayTasksOnly
-map <CR>        <Plug>OpenSnipUnderCursor
 
 let g:lmap.p = { 'name': ' -- Project' }
 map <Leader>pg :GFiles?<CR>
@@ -433,9 +399,6 @@ let g:lmap.s = { 'name': ' -- Search' }
 map <leader>sd :call SearchForDefinition(expand("<cword>"))<CR>
 map <leader>st :CursorInTags<CR>
 map <leader>sw :FindWordUnderCursor<CR>
-
-command! CursorInTags :call fzf#vim#tags(expand("<cword>"))<CR>
-command! YankWoleBuffer normal gg"*yG
 
 let g:lmap.t = { 'name': ' -- Tags' }
 map <leader>tf :Tags<CR>
@@ -459,6 +422,25 @@ map <leader>wN :tabnew<CR>
 map <leader>wp :tabprevious<CR>
 map <leader>wl :tabs<CR>
 
+let g:lmap.o = { 'name': ' -- Quicktask' }
+let g:quicktask_no_mappings = 1
+map <Leader>oD  <Plug>TaskComplete
+map <Leader>oO  <Plug>AddTaskAbove
+map <Leader>oS  <Plug>AddSnipToTask
+map <Leader>oa  <Plug>ShowActiveTasksOnly
+map <Leader>oc  <Plug>AddChildTask
+map <Leader>od  <Plug>MoveTaskDown
+map <Leader>ofi <Plug>FindIncompleteTimestamps
+map <Leader>on  <Plug>AddNoteToTask
+map <Leader>oo  <Plug>AddTaskBelow
+map <Leader>os  <Plug>AddNextTimeToTask
+map <Leader>ou  <Plug>MoveTaskUp
+map <Leader>ov  <Plug>SelectTask
+map <Leader>ow  <Plug>ShowWatchedTasksOnly
+map <Leader>oy  <Plug>ShowTodayTasksOnly
+map <CR>        <Plug>OpenSnipUnderCursor
+
+
 command! GoToTab1 normal 1gt
 command! GoToTab2 normal 2gt
 command! GoToTab3 normal 3gt
@@ -480,22 +462,25 @@ let @b='0v/^\n^My^Wwpi^M^[^WW' " send current block to next cycled pane
 "---------------------------------------------------------------"
 "--- Commands
 "---------------------------------------------------------------"
-command! FindWordUnderCursor :call fzf#vim#ag(expand("<cword>"))<CR>
+command! FindWordUnderCursor :call fzf#vim#ag(expand("<cword>"))
+command! YankWoleBuffer normal gg"*yG
 command! Json %!python -m json.tool
-command! StripTrailingWhitespaces call <SID>StripTrailingWhitespaces()
+" command! StripTrailingWhitespaces call <SID>StripTrailingWhitespaces()
 command! SourceVimrc write | source ~/.vimrc
 command! -nargs=1 TagBResise call ResiseTagBar(<f-args>)
 command! DiffSaved call DiffWithSaved()
+command! CursorInTags :call fzf#vim#tags(expand("<cword>"))<CR>
+command! YankWoleBuffer normal gg"*yG
 
-"---------------------------------------------------------------"
-"--- Functions
-"---------------------------------------------------------------"
-" autocmd VimEnter,BufNewFile,BufReadPost * silent! call HardMode()
 command! -bang -nargs=* Fuzzyag
             \ call fzf#vim#ag(<q-args>,
             \                 <bang>0 ? fzf#vim#with_preview('up:60%')
             \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
             \                 <bang>0)
+"---------------------------------------------------------------"
+"--- Functions
+"---------------------------------------------------------------"
+" autocmd VimEnter,BufNewFile,BufReadPost * silent! call HardMode()
 
 "Use TAB to complete when typing words, else inserts TABs as usual.
 function! Tab_Or_Complete()
@@ -514,7 +499,7 @@ endfunction
 
 " via: http://rails-bestpractices.com/posts/60-remove-trailing-whitespace
 " Strip trailing whitespace
-function! <SID>StripTrailingWhitespaces()
+function! StripTrailingWhitespaces()
     " Preparation: save last search, and cursor position.
     let _s=@/
     let l = line(".")
@@ -534,6 +519,17 @@ function! DiffWithSaved()
     exe "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . filetype
 endfunction
 
+function! Format()
+    let _s=@/
+    let l = line(".")
+    let c = col(".")
+    " Do the business:
+    %s/\s\+$//e
+    " Clean up: restore previous search history, and cursor position
+    let @/=_s
+    normal gg=G
+    call cursor(l, c)
+endfunction
 "---------------------------------------------------------------"
 "--- NERdTREE stuff
 "---------------------------------------------------------------"
