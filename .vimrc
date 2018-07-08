@@ -1,130 +1,131 @@
-set nocompatible              " be iMproved, required
-filetype off                  " required
+if empty(glob('~/.vim/autoload/plug.vim'))
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+                \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/pack/my-packages/start/Vundle.vim
-
-call vundle#begin('~/.vim/pack/my-packages/start')
-
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
-
+call plug#begin('~/.vim/plugged')
 "------------------------------------------
 "--- Editing
 "-----------------------------------------
-Plugin 'christoomey/vim-sort-motion' " use gs
-Plugin 'tomtom/tcomment_vim' " Commenting
-Plugin 'tpope/vim-surround'
-Plugin 'junegunn/vim-easy-align'
-Plugin 'reedes/vim-pencil'
-Plugin 'tpope/vim-repeat'
-Plugin 'kshenoy/vim-signature'
-Plugin 'wikitopian/hardmode'
-" Plugin 'easymotion/vim-easymotion'
-Plugin 'ddrscott/vim-window'
-Plugin 'danro/rename.vim'
-Plugin 'mbbill/undotree'
-
+Plug 'christoomey/vim-sort-motion' " use gs
+Plug 'tomtom/tcomment_vim' " Commenting
+Plug 'tpope/vim-surround'
+Plug 'junegunn/vim-easy-align'
+Plug 'reedes/vim-pencil'
+Plug 'tpope/vim-repeat'
+Plug 'kshenoy/vim-signature'
+Plug 'wikitopian/hardmode'
+" Plug 'easymotion/vim-easymotion'
+Plug 'ddrscott/vim-window'
+Plug 'danro/rename.vim'
+Plug 'mbbill/undotree'
+Plug 'Raimondi/delimitMate'
+"
 "------------------------------------------
 "--- Linting / testing
 "-----------------------------------------
-Plugin 'ngmy/vim-rubocop'
-Plugin 'thoughtbot/vim-rspec'
-Plugin 'w0rp/ale' " async linting
+Plug 'ngmy/vim-rubocop'
+Plug 'thoughtbot/vim-rspec'
+Plug 'w0rp/ale' " async linting
 
 "------------------------------------------
 "--- GUI changes
 "-----------------------------------------
-Plugin 'airblade/vim-gitgutter'
-" Plugin 'Shougo/vimfiler.vim'
-Plugin 'scrooloose/nerdtree.git'
-Plugin 'xuyuanp/nerdtree-git-plugin'
-Plugin 'Shougo/unite.vim'
-Plugin 'Shougo/denite.nvim'
-Plugin 'tpope/vim-fugitive'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'gcmt/taboo.vim'
-Plugin 'majutsushi/tagbar'
-Plugin 'hecal3/vim-leader-guide'
-Plugin 'Yggdroot/indentLine'
-Plugin 'junegunn/goyo.vim'
-Plugin 'junegunn/seoul256.vim'
+Plug 'airblade/vim-gitgutter'
+" Plug 'Shougo/vimfiler.vim'
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'xuyuanp/nerdtree-git-plugin'
+Plug 'Shougo/denite.nvim'
+Plug 'tpope/vim-fugitive'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'gcmt/taboo.vim'
+Plug 'majutsushi/tagbar'
+Plug 'hecal3/vim-leader-guide'
+Plug 'Yggdroot/indentLine'
+Plug 'junegunn/goyo.vim'
+Plug 'junegunn/seoul256.vim'
 
 "------------------------------------------
 "--- Languages
 "-----------------------------------------
-" Plugin 'jelera/vim-javascript-syntax' " doesnt seem to do anything?
-Plugin 'moll/vim-node'
-" Plugin 'tpope/vim-apathy'
-Plugin 'sheerun/vim-polyglot'
-Plugin 'chrisbra/Colorizer'
-Plugin 'elixir-lang/vim-elixir'
-Plugin 'godlygeek/tabular'
-Plugin 'jparise/vim-graphql'
-Plugin 'pangloss/vim-javascript'
-Plugin 'mxw/vim-jsx'
-Plugin 'elzr/vim-json'
-Plugin 'kchmck/vim-coffee-script'
-" Plugin 'styled-components/vim-styled-components'
-Plugin 'chrisbra/csv.vim'
-Plugin 'leafgarland/typescript-vim'
-Plugin 'ianks/vim-tsx'
-Plugin 'shirk/vim-gas'
-" Plugin 'nikvdp/ejs-syntax'
-Plugin 'othree/html5.vim'
+" Plug 'jelera/vim-javascript-syntax' " doesnt seem to do anything?
+" Plug 'natebosch/vim-lsc'
+Plug 'autozimu/LanguageClient-neovim', {
+            \ 'branch': 'next',
+            \ 'do': 'bash install.sh',
+            \ }
+Plug 'moll/vim-node'
+" Plug 'tpope/vim-apathy'
+Plug 'sheerun/vim-polyglot'
+Plug 'chrisbra/Colorizer'
+Plug 'elixir-lang/vim-elixir'
+Plug 'godlygeek/tabular'
+Plug 'jparise/vim-graphql'
+Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
+Plug 'elzr/vim-json'
+Plug 'kchmck/vim-coffee-script'
+" Plug 'styled-components/vim-styled-components'
+Plug 'chrisbra/csv.vim'
+Plug 'leafgarland/typescript-vim'
+Plug 'ianks/vim-tsx'
+Plug 'shirk/vim-gas'
+" Plug 'nikvdp/ejs-syntax'
+Plug 'othree/html5.vim'
 
 "------------------------------------------
 "--- Color Schemes
 "-----------------------------------------
 " here use tender-adam in personal config
-Plugin 'connorholyday/vim-snazzy'
-Plugin 'blueshirts/darcula'
+Plug 'connorholyday/vim-snazzy'
+Plug 'blueshirts/darcula'
 "------------------------------------------
 "--- session handling
 "-----------------------------------------
-" Plugin 'tpope/vim-obsession'
+" Plug 'tpope/vim-obsession'
 
 "------------------------------------------
 "--- Utilities
 "-----------------------------------------
-Plugin 'diepm/vim-rest-console'
-Plugin 'rking/ag.vim'
-Plugin 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plugin 'junegunn/fzf.vim'
-Plugin 'tpope/vim-rhubarb'
-Plugin 'editorconfig/editorconfig-vim'
-Plugin 'wakatime/vim-wakatime'
-Plugin 'Valloric/YouCompleteMe' " snippet engine
-Plugin 'SirVer/ultisnips' " snippet tool
-Plugin 'honza/vim-snippets' " actual snippet examples
-Plugin 'ternjs/tern_for_vim'
-Plugin 'metakirby5/codi.vim'
-Plugin 'Konfekt/vim-scratchpad'
-Plugin 'craigemery/vim-autotag'
-" Plugin 'taglist.vim'
-Plugin 'aaronbieber/vim-quicktask'
+Plug 'diepm/vim-rest-console'
+Plug 'rking/ag.vim'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'tpope/vim-rhubarb'
+Plug 'editorconfig/editorconfig-vim'
+Plug 'wakatime/vim-wakatime'
+Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
+Plug 'SirVer/ultisnips' " snippet tool
+Plug 'honza/vim-snippets' " actual snippet examples
+" Plug 'ternjs/tern_for_vim', { 'do': 'npm i'}
+Plug 'metakirby5/codi.vim'
+Plug 'Konfekt/vim-scratchpad'
+Plug 'craigemery/vim-autotag'
+" Plug 'taglist.vim'
+Plug 'aaronbieber/vim-quicktask'
 
 "---------------------------------------------------------------"
 
-" Plugin 'ctrlpvim/ctrlp.vim' " replaced with fzf
-" Plugin 'd11wtq/ctrlp_bdelete.vim' " goes with ctrlp
+" Plug 'ctrlpvim/ctrlp.vim' " replaced with fzf
+" Plug 'd11wtq/ctrlp_bdelete.vim' " goes with ctrlp
 
 "------------------------------------------
 "--- Other stuff
 "-----------------------------------------
-" Plugin 'christoomey/vim-tmux-navigator'
-" Plugin 'craigemery/vim-autotag'
-" Plugin 'lchi/vim-toffee'
-" Plugin 'mustache/vim-mustache-handlebars'
-" Plugin 'sjl/vitality.vim'
-" Plugin 'slim-template/vim-slim'
-" Plugin 'terryma/vim-multiple-cursors'
-" Plugin 'tpope/vim-cucumber'
-" Plugin 'tpope/vim-dispatch'
-" Plugin 'tpope/vim-endwise'
+" Plug 'christoomey/vim-tmux-navigator'
+" Plug 'craigemery/vim-autotag'
+" Plug 'lchi/vim-toffee'
+" Plug 'mustache/vim-mustache-handlebars'
+" Plug 'sjl/vitality.vim'
+" Plug 'slim-template/vim-slim'
+" Plug 'terryma/vim-multiple-cursors'
+" Plug 'tpope/vim-cucumber'
+" Plug 'tpope/vim-dispatch'
+" Plug 'tpope/vim-endwise'
 
-call vundle#end()
+call plug#end()
 
 "---------------------------------------------------------------"
 "--- Editor
@@ -147,7 +148,9 @@ set nrformats-=octal
 let g:EasyMotion_smartcase = 1
 let g:vim_markdown_folding_disabled = 1
 set fillchars=vert:│,fold:·
-set scrolloff=5
+set scrolloff=3
+set splitright
+set splitbelow
 "---------------------------------------------------------------"
 "--- Undo
 "---------------------------------------------------------------"
@@ -164,6 +167,32 @@ if has('persistent_undo')
     let &undodir = myUndoDir
     set undofile
 endif
+
+"---------------------------------------------------------------"
+"--- Lsc
+"---------------------------------------------------------------"
+" let g:lsc_auto_map = v:true
+" let g:lsc_server_commands = {
+"   \ 'css': 'css-languageserver --stdio',
+"   \ 'less': 'css-languageserver --stdio',
+"   \ 'html': 'html-languageserver --stdio',
+"   \ 'dockerfile': 'docker-langserver --stdio',
+"   \ 'javascript': 'javascript-typescript-stdio',
+"   \ 'javascript.jsx': 'javascript-typescript-stdio',
+"   \ 'typescript': 'javascript-typescript-stdio',
+"   \}
+let g:LanguageClient_serverCommands = {
+            \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+            \ 'javascript': ['javascript-typescript-stdio'],
+            \ 'javascript.jsx': ['javascript-typescript-stdio'],
+            \ }
+nnoremap <F5> :call LanguageClient_contextMenu()<CR>
+nnoremap <silent> <C-]> :call LanguageClient#textDocument_definition()<CR>
+nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+
+" autocmd CompleteDone * silent! pclose
+autocmd BufNewFile,BufRead *.graphql nnoremap gd <C-]>
+
 "---------------------------------------------------------------"
 "--- Appearance
 "---------------------------------------------------------------"
@@ -189,6 +218,34 @@ else
     " hi TagbarSignature ctermfg=215
 endif
 
+let  red      =  '#ff5c57'
+let  green    =  '#5af78e'
+let  yellow   =  '#f3f99d'
+let  blue     =  '#57c7ff'
+let  magenta  =  '#ff6ac1'
+let  cyan     =  '#9aedfe'
+let  orange     =  '#fecc9a'
+
+hi NonText guifg=bg
+hi Comment cterm=italic gui=italic
+
+:exe 'hi SpellBad    guifg=white guibg='.red
+:exe 'hi MatchParen  guifg='.red
+:exe 'hi Search  cterm=underline gui=underline guibg=bg guifg='.green
+
+:exe 'hi jsFuncArgs  guifg='.yellow.' cterm=italic'
+:exe 'hi jsParen  guifg='.orange
+:exe 'hi jsFuncCall  guifg='.cyan.' cterm=italic'
+:exe 'hi jsObjectKey guifg='.blue
+:exe 'hi jsTemplateBraces  guifg='.blue
+:exe 'hi jsImport  guifg='.blue
+:exe 'hi jsFrom  guifg='.blue
+
+:exe 'hi jsonBraces  guifg='.magenta
+:exe 'hi jsonKeyword  guifg='.magenta.' gui=bold cterm=bold'
+:exe 'hi jsonString  guifg='.cyan
+:exe 'hi jsonBoolean  guifg='.green
+:exe 'hi jsonNumber  guifg='.blue
 
 
 " let g:pencil#textwidth = 44
@@ -245,8 +302,8 @@ let g:ale_lint_on_text_changed = 'normal'
 let g:ale_lint_delay = 0
 let g:ale_lint_on_insert_leave = 1
 let g:ale_linters = { 'javascript': ['eslint'] }
-" let g:ale_fix_on_save = 1
 let g:ale_fixers = { 'javascript': ['eslint'] }
+" let g:ale_fix_on_save = 1
 
 " {buffer, lines -> filter(lines, 'v:val !=~ ''^\s*//''')}, " removes comments
 
@@ -269,6 +326,7 @@ autocmd FileType javascript.jsx setlocal tabstop=4 shiftwidth=4
 " autocmd FileType yaml  setlocal tabstop=2 shiftwidth=2
 
 autocmd BufNewFile,BufRead *.asm set syntax=nasm
+autocmd BufNewFile,BufRead *.js.snap set syntax=javascript.jsx
 
 let g:indentLine_char = get(g:, 'indentLine_char', '┊')
 let g:indentLine_concealcursor = 'niv'
@@ -346,8 +404,9 @@ map <C-\> :Fuzzyag!<CR>
 let g:lmap.b = { 'name': ' -- Buffers' }
 map <Leader>bd :DiffSaved<CR>
 map <Leader>bl :Buffers<CR>
+map <Leader>bc :BufOnly<CR>
 map <Leader>bn :bnext<CR>
-map <Leader>bo :enew<CR>
+map <Leader>bn :enew<CR>
 map <Leader>bp :bprevious<CR>
 map <Leader>bs :sbprevious<CR>
 
@@ -477,6 +536,7 @@ command! -bang -nargs=* Fuzzyag
             \                 <bang>0 ? fzf#vim#with_preview('up:60%')
             \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
             \                 <bang>0)
+
 "---------------------------------------------------------------"
 "--- Functions
 "---------------------------------------------------------------"
@@ -698,3 +758,6 @@ autocmd! User GoyoLeave nested call <SID>goyo_leave()
 "                         \} */
 " let g:ctrlp_show_hidden = 1 */
 " call ctrlp_bdelete#init() */
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"

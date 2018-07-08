@@ -4,9 +4,21 @@ name: config
 root: ~/
 
 windows:
-  - pancake:
+  - .main:
       root: ~/PersonalConfigs
-      layout: main-vertical
+      layout: main-horizontal
+      panes:
+        - vim_pane:
+          - vim -O .vimrc .zshrc
+        - vim_folder:
+          - cd ~/.vim
+          - ls
+        - raw:
+          - cd /usr/share/vim/vim80
+          - ls
+  - tmux:
+      root: ~/PersonalConfigs
+      layout: main-horizontal
       panes:
         - vim single_scripts/tmux_template.conf
         - rubypanel:

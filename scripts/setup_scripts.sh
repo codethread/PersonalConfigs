@@ -1,5 +1,5 @@
 #!/bin/bash
-function setup_scripts() {
+setup_scripts() {
   # get get location of configs
   configs=$(pwd)
 

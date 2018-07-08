@@ -2,6 +2,7 @@
 # UTILS
 # -------------------------------------------#
 alias npmrebuild="rm -rf ./node_modules; npm cache clear; npm i"
+alias npg="node_g_installs"
 
 alias zshe="vim ~/.zshrc"
 alias zshr="source ~/.zshrc"

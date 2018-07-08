@@ -29,11 +29,6 @@ windows:
           - sleep 1
           - clear
           - gst
-  - .dotfiles:
-      root: ~/PersonalConfigs
-      layout: main-vertical
-      panes:
-        - vim -O .vimrc .zshrc
   - service-scripts:
       root: ~/Service/skymobile-service
       layout: main-vertical
