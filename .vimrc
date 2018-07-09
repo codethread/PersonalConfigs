@@ -192,6 +192,7 @@ nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
 
 " autocmd CompleteDone * silent! pclose
 autocmd BufNewFile,BufRead *.graphql nnoremap gd <C-]>
+autocmd BufNewFile,BufRead *.tsx set filetype=javascript.jsx
 
 "---------------------------------------------------------------"
 "--- Appearance

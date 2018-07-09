@@ -8,6 +8,8 @@ export PATH="$PATH:$HOME/elixir/bin"
 # export PATH="/usr/local/sbin:$PATH"
 export PATH="$PATH:$HOME/PersonalConfigs/bin"
 export PATH="$HOME/.nodenv/shims:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
+
 
 export EDITOR='vim'
 # export KEYTIMEOUT=100
