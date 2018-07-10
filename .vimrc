@@ -19,9 +19,11 @@ Plug 'wikitopian/hardmode'
 " Plug 'easymotion/vim-easymotion'
 Plug 'ddrscott/vim-window'
 Plug 'danro/rename.vim'
-Plug 'mbbill/undotree'
+" Plug 'mbbill/undotree'
 Plug 'Raimondi/delimitMate'
-"
+Plug 'plasticboy/vim-markdown'
+Plug 'kannokanno/previm'
+
 "------------------------------------------
 "--- Linting / testing
 "-----------------------------------------
@@ -38,8 +40,8 @@ Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'xuyuanp/nerdtree-git-plugin'
 Plug 'Shougo/denite.nvim'
 Plug 'tpope/vim-fugitive'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+Plug 'vim-airline/vim-airline', { 'on': [] }
+Plug 'vim-airline/vim-airline-themes', { 'on': [] }
 Plug 'gcmt/taboo.vim'
 Plug 'majutsushi/tagbar'
 Plug 'hecal3/vim-leader-guide'
@@ -95,13 +97,12 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-rhubarb'
 Plug 'editorconfig/editorconfig-vim'
-Plug 'wakatime/vim-wakatime'
-Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
-Plug 'SirVer/ultisnips' " snippet tool
-Plug 'honza/vim-snippets' " actual snippet examples
+" Plug 'wakatime/vim-wakatime'
+Plug 'Valloric/YouCompleteMe', { 'do': './install.py', 'on': [] }
+Plug 'SirVer/ultisnips', { 'on': [] }
+Plug 'honza/vim-snippets', { 'on': [] } " actual snippet examples
 " Plug 'ternjs/tern_for_vim', { 'do': 'npm i'}
-Plug 'metakirby5/codi.vim'
-Plug 'Konfekt/vim-scratchpad'
+Plug 'metakirby5/codi.vim', { 'on': 'Codi' }
 Plug 'craigemery/vim-autotag'
 " Plug 'taglist.vim'
 Plug 'aaronbieber/vim-quicktask'
@@ -127,6 +128,14 @@ Plug 'aaronbieber/vim-quicktask'
 
 call plug#end()
 
+augroup load_ultisnips
+    autocmd!
+    autocmd InsertEnter * call plug#load('YouCompleteMe') | autocmd! load_ultisnips
+    autocmd InsertEnter * call plug#load('ultisnips') | autocmd! load_ultisnips
+    autocmd InsertEnter * call plug#load('vim-snippets') | autocmd! load_ultisnips
+    autocmd CursorMoved * call plug#load('vim-airline') | autocmd! load_ultisnips
+    autocmd CursorMoved * call plug#load('vim-airline-themes') | autocmd! load_ultisnips
+augroup END
 "---------------------------------------------------------------"
 "--- Editor
 "---------------------------------------------------------------"
@@ -151,6 +160,7 @@ set fillchars=vert:│,fold:·
 set scrolloff=3
 set splitright
 set splitbelow
+set grepprg=rg\ --vimgrep
 "---------------------------------------------------------------"
 "--- Undo
 "---------------------------------------------------------------"
@@ -167,6 +177,13 @@ if has('persistent_undo')
     let &undodir = myUndoDir
     set undofile
 endif
+let g:previm_open_cmd = 'open -a Safari'
+
+augroup PrevimSettings
+    autocmd!
+    autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+augroup END
+
 
 "---------------------------------------------------------------"
 "--- Lsc
@@ -250,6 +267,8 @@ hi Comment cterm=italic gui=italic
 
 
 " let g:pencil#textwidth = 44
+let g:vim_markdown_conceal = 0
+let g:vim_markdown_fenced_languages = ['csharp=cs', 'vim=viml', 'sh=bash', 'js=javascript', 'jsx=javascript.jsx']
 
 let g:goyo_width = 120 " default 80
 let g:goyo_height = 95 "(default: 85%)
@@ -348,18 +367,18 @@ let g:indentLine_fileTypeExclude = ['help', 'man', 'startify', 'NERDTree']
 let g:ycm_autoclose_preview_window_after_insertion = 1
 let g:ycm_collect_identifiers_from_tags_files = 1
 let g:ycm_add_preview_to_completeopt = 1
-" let g:ycm_key_invoke_completion = '<C-Space>'
 let g:ycm_key_invoke_completion = ''
-" let g:ycm_key_detailed_diagnostics = '<leader>d'
 let g:ycm_key_detailed_diagnostics = ''
+"
+" let g:ycm_key_invoke_completion = '<C-Space>'
+" let g:ycm_key_detailed_diagnostics = '<leader>d'
 
 
 let g:codi#rightsplit = 0
 let g:codi#rightalign = 0
 let g:codi#width = 80
 
-let g:scratchpad_path = '.scratchpads'
-nmap dsp <Plug>(ToggleScratchPad)
+" nmap dsp <Plug>(ToggleScratchPad)
 
 "---------------------------------------------------------------"
 "--- Mappings
@@ -420,6 +439,7 @@ nnoremap <leader>dd "_d
 let g:lmap.d = { 'name': ' -- File' }
 map <Leader>fy :YankWoleBuffer<CR>
 map <Leader>ff :call Format()<CR>
+map <Leader>ft :TableFormat<CR>
 
 let g:lmap.e = { 'name': ' -- Errors' }
 map <Leader>ef :ALEFix<CR>
@@ -436,6 +456,7 @@ map <leader>g? :help index<CR>
 map <leader>gc :ColorToggle<CR>
 map <leader>gh <Esc>:call ToggleHardMode()<CR>
 map <leader>gr :set relativenumber!<CR>
+map <leader>gg :PencilToggle<CR>
 
 let g:lmap.l = { 'name': ' -- Layout' }
 map <Leader>ls :vsplit<CR>
@@ -538,6 +559,18 @@ command! -bang -nargs=* Fuzzyag
             \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
             \                 <bang>0)
 
+command! -bang -nargs=* Find
+            \ call fzf#vim#grep('rg
+            \ --column
+            \ --line-number
+            \ --no-heading
+            \ --fixed-strings
+            \ --ignore-case
+            \ --hidden
+            \ --follow
+            \ --glob "!.git/*"
+            \ --color "always" '.shellescape(<q-args>), 1, <bang>0)
+
 "---------------------------------------------------------------"
 "--- Functions
 "---------------------------------------------------------------"
@@ -639,9 +672,11 @@ if has("spell")
     set sps=best,10
 endif
 
+let g:pencil#wrapModeDefault = 'soft'
+
 augroup pencil
     autocmd!
-    autocmd FileType markdown,mkd call pencil#init()
+    " autocmd FileType markdown,mkd call pencil#init()
     autocmd FileType text         call pencil#init()
 augroup END
 
@@ -759,6 +794,7 @@ autocmd! User GoyoLeave nested call <SID>goyo_leave()
 "                         \} */
 " let g:ctrlp_show_hidden = 1 */
 " call ctrlp_bdelete#init() */
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
+"
+" inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+" inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
