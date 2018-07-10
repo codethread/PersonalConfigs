@@ -41,7 +41,8 @@ Plug 'xuyuanp/nerdtree-git-plugin'
 Plug 'Shougo/denite.nvim'
 Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline', { 'on': [] }
-Plug 'vim-airline/vim-airline-themes', { 'on': [] }
+" Plug 'vim-airline/vim-airline-themes', { 'on': [] }
+Plug 'vim-airline/vim-airline-themes'
 Plug 'gcmt/taboo.vim'
 Plug 'majutsushi/tagbar'
 Plug 'hecal3/vim-leader-guide'
@@ -128,13 +129,16 @@ Plug 'aaronbieber/vim-quicktask'
 
 call plug#end()
 
+augroup load_airline
+    autocmd!
+    autocmd CursorMoved * call plug#load('vim-airline') | autocmd! load_airline
+augroup END
+
 augroup load_ultisnips
     autocmd!
     autocmd InsertEnter * call plug#load('YouCompleteMe') | autocmd! load_ultisnips
     autocmd InsertEnter * call plug#load('ultisnips') | autocmd! load_ultisnips
     autocmd InsertEnter * call plug#load('vim-snippets') | autocmd! load_ultisnips
-    autocmd CursorMoved * call plug#load('vim-airline') | autocmd! load_ultisnips
-    autocmd CursorMoved * call plug#load('vim-airline-themes') | autocmd! load_ultisnips
 augroup END
 "---------------------------------------------------------------"
 "--- Editor
