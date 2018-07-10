@@ -129,6 +129,7 @@ Plug 'aaronbieber/vim-quicktask'
 
 call plug#end()
 
+" tidy this shit
 augroup load_airline
     autocmd!
     autocmd CursorMoved * call plug#load('vim-airline') | autocmd! load_airline
@@ -136,9 +137,20 @@ augroup END
 
 augroup load_ultisnips
     autocmd!
-    autocmd InsertEnter * call plug#load('YouCompleteMe') | autocmd! load_ultisnips
-    autocmd InsertEnter * call plug#load('ultisnips') | autocmd! load_ultisnips
-    autocmd InsertEnter * call plug#load('vim-snippets') | autocmd! load_ultisnips
+    autocmd FileType ruby,javascript call plug#load('ultisnips')
+                \| execute 'autocmd! load_ultisnips' | doautocmd FileType
+augroup END
+
+augroup load_ycm
+    autocmd!
+    autocmd FileType ruby,javascript call plug#load('YouCompleteMe')
+                \| execute 'autocmd! load_ycm' | doautocmd FileType
+augroup END
+
+augroup load_vim_snips
+    autocmd!
+    autocmd FileType ruby,javascript call plug#load('vim-snippets')
+                \| execute 'autocmd! load_vim_snips' | doautocmd FileType
 augroup END
 "---------------------------------------------------------------"
 "--- Editor
