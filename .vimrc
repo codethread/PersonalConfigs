@@ -99,14 +99,28 @@ Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-rhubarb'
 Plug 'editorconfig/editorconfig-vim'
 " Plug 'wakatime/vim-wakatime'
-Plug 'Valloric/YouCompleteMe', { 'do': './install.py', 'on': [] }
-Plug 'SirVer/ultisnips', { 'on': [] }
-Plug 'honza/vim-snippets', { 'on': [] } " actual snippet examples
+"
 " Plug 'ternjs/tern_for_vim', { 'do': 'npm i'}
 Plug 'metakirby5/codi.vim', { 'on': 'Codi' }
 Plug 'craigemery/vim-autotag'
 " Plug 'taglist.vim'
 Plug 'aaronbieber/vim-quicktask'
+"
+"------------------------------------------
+"--- Completion
+"-----------------------------------------
+" Plug 'Valloric/YouCompleteMe', { 'do': './install.py', 'on': [] }
+
+" Plug 'Shougo/deoplete.nvim'
+Plug 'ncm2/ncm2' " TODO this is slow
+Plug 'ncm2/ncm2-path'
+Plug 'roxma/nvim-yarp'
+Plug 'roxma/vim-hug-neovim-rpc'
+
+" Plug 'ajh17/VimCompletesMe'
+
+" Plug 'SirVer/ultisnips', { 'on': [] }
+" Plug 'honza/vim-snippets', { 'on': [] } " actual snippet examples
 
 "---------------------------------------------------------------"
 
@@ -134,31 +148,38 @@ augroup load_airline
     autocmd!
     autocmd CursorMoved * call plug#load('vim-airline') | autocmd! load_airline
 augroup END
+   " enable ncm2 for all buffer
+       autocmd BufEnter * call ncm2#enable_for_buffer()
+   "
+   "         " note that must keep noinsert in completeopt, the others is
+   "         optional
+               set completeopt=noinsert,menuone,noselect
 
-augroup load_ultisnips
-    autocmd!
-    autocmd FileType ruby,javascript call plug#load('ultisnips')
-                \| execute 'autocmd! load_ultisnips' | doautocmd FileType
-augroup END
+" let g:deoplete#enable_at_startup = 1
+" augroup load_ultisnips
+"     autocmd!
+"     autocmd FileType ruby,javascript call plug#load('ultisnips')
+"                 \| execute 'autocmd! load_ultisnips' | doautocmd FileType
+" augroup END
 
-augroup load_ycm
-    autocmd!
-    autocmd FileType ruby,javascript call plug#load('YouCompleteMe')
-                \| execute 'autocmd! load_ycm' | doautocmd FileType
-augroup END
+" augroup load_ycm
+"     autocmd!
+"     autocmd FileType ruby,javascript call plug#load('YouCompleteMe')
+"                 \| execute 'autocmd! load_ycm' | doautocmd FileType
+" augroup END
 
-augroup load_vim_snips
-    autocmd!
-    autocmd FileType ruby,javascript call plug#load('vim-snippets')
-                \| execute 'autocmd! load_vim_snips' | doautocmd FileType
-augroup END
+" augroup load_vim_snips
+"     autocmd!
+"     autocmd FileType ruby,javascript call plug#load('vim-snippets')
+"                 \| execute 'autocmd! load_vim_snips' | doautocmd FileType
+" augroup END
 "---------------------------------------------------------------"
 "--- Editor
 "---------------------------------------------------------------"
 " set clipboard=unnamed
 set mouse=a
 set wrapmargin=0
-set cursorline " breaking shit!
+" set cursorline " breaking shit!
 set re=1
 set relativenumber
 set wildignore=*.keep,*~,*.swp
@@ -214,6 +235,7 @@ augroup END
 "   \ 'javascript.jsx': 'javascript-typescript-stdio',
 "   \ 'typescript': 'javascript-typescript-stdio',
 "   \}
+
 let g:LanguageClient_serverCommands = {
             \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
             \ 'javascript': ['javascript-typescript-stdio'],
@@ -223,7 +245,8 @@ nnoremap <F5> :call LanguageClient_contextMenu()<CR>
 nnoremap <silent> <C-]> :call LanguageClient#textDocument_definition()<CR>
 nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
 
-" autocmd CompleteDone * silent! pclose
+autocmd CompleteDone * silent! pclose
+
 autocmd BufNewFile,BufRead *.graphql nnoremap gd <C-]>
 autocmd BufNewFile,BufRead *.tsx set filetype=javascript.jsx
 
@@ -380,11 +403,11 @@ let g:indentLine_fileTypeExclude = ['help', 'man', 'startify', 'NERDTree']
 "---------------------------------------------------------------"
 "--- ScratchPads & COdi
 "---------------------------------------------------------------"
-let g:ycm_autoclose_preview_window_after_insertion = 1
-let g:ycm_collect_identifiers_from_tags_files = 1
-let g:ycm_add_preview_to_completeopt = 1
-let g:ycm_key_invoke_completion = ''
-let g:ycm_key_detailed_diagnostics = ''
+" let g:ycm_autoclose_preview_window_after_insertion = 1
+" let g:ycm_collect_identifiers_from_tags_files = 1
+" let g:ycm_add_preview_to_completeopt = 1
+" let g:ycm_key_invoke_completion = ''
+" let g:ycm_key_detailed_diagnostics = ''
 "
 " let g:ycm_key_invoke_completion = '<C-Space>'
 " let g:ycm_key_detailed_diagnostics = '<leader>d'
@@ -814,3 +837,20 @@ autocmd! User GoyoLeave nested call <SID>goyo_leave()
 " inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 " inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 " inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
+" inoremap ^P ^X^O
+" inoremap './<C-X><C-F> <C-O>:lcd %:p:h<CR><C-X><C-F>
+"
+"         :inoremap ^F ^X^F
+"             :inoremap ^D ^X^D
+"                 :inoremap ^L ^X^L
+"
+"    function! CleverTab()
+"           if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+"                     return "\<Tab>"
+"                            else
+"                                      return "\<C-N>"
+"                                             endif
+"                                                 endfunction
+"                                                     inoremap <Tab>
+"                                                     <C-R>=CleverTab()<CR>
+"
