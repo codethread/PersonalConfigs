@@ -36,7 +36,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'Shougo/denite.nvim'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
-Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline' " TODO slows startup replace
 Plug 'vim-airline/vim-airline-themes'
 Plug 'gcmt/taboo.vim'
 Plug 'majutsushi/tagbar'
@@ -160,6 +160,7 @@ set completeopt=noinsert,menuone,noselect " note that must keep noinsert in comp
 "--- Tiny Plugins
 "---------------------------------------------------------------"
 " let g:EasyMotion_smartcase = 1
+let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
 let g:tagbar_width = 30
 let g:tagbar_compact = 0
