@@ -16,6 +16,7 @@ alias cmds='cat ~/.aliases.zsh'
 alias gcp="git cherry-pick"
 alias gbr="git branch | grep -v "master" | xargs git branch -D"
 alias gfuck="git fetch origin; git reset --hard origin/master"
+alias gh="open \`git remote -v | grep git@github.com | grep fetch | head -1 | cut -f2 | cut -d' ' -f1 | sed -e's/:/\//' -e 's/git@/http:\/\//'\`"
 #---------------------------------------------#
 # TMUXINATOR
 # -------------------------------------------#
