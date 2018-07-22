@@ -5,7 +5,7 @@ root: ~/
 windows:
   - skypages:
       root: ~/Service/sky-pages
-      layout: main-vertical
+      layout: main-horizontal
       panes:
         - vim_pane:
           - vim
@@ -18,7 +18,7 @@ windows:
           - pages storybook -f apps/mobile -p 1234
   - graphql:
       root: ~/Service/skyport-graphql
-      layout: main-vertical
+      layout: main-horizontal
       panes:
         - vim_pane:
           - vim
@@ -31,13 +31,13 @@ windows:
           - gst
   - service-scripts:
       root: ~/Service/skymobile-service
-      layout: main-vertical
+      layout: main-horizontal
       panes:
         - vim
         -
   - randoms:
       root: ~/
-      layout: main-vertical
+      layout: main-horizontal
       panes:
         -
         -

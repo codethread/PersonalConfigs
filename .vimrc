@@ -16,13 +16,11 @@ Plug 'reedes/vim-pencil'
 Plug 'tpope/vim-repeat'
 Plug 'kshenoy/vim-signature'
 Plug 'wikitopian/hardmode'
-" Plug 'easymotion/vim-easymotion'
 Plug 'ddrscott/vim-window'
 Plug 'danro/rename.vim'
-" Plug 'mbbill/undotree'
-Plug 'Raimondi/delimitMate'
 Plug 'plasticboy/vim-markdown'
 Plug 'kannokanno/previm'
+Plug 'godlygeek/tabular'
 
 "------------------------------------------
 "--- Linting / testing
@@ -35,36 +33,26 @@ Plug 'w0rp/ale' " async linting
 "--- GUI changes
 "-----------------------------------------
 Plug 'airblade/vim-gitgutter'
-" Plug 'Shougo/vimfiler.vim'
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
-Plug 'xuyuanp/nerdtree-git-plugin'
 Plug 'Shougo/denite.nvim'
 Plug 'tpope/vim-fugitive'
-Plug 'vim-airline/vim-airline', { 'on': [] }
-" Plug 'vim-airline/vim-airline-themes', { 'on': [] }
+Plug 'tpope/vim-rhubarb'
+Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'gcmt/taboo.vim'
 Plug 'majutsushi/tagbar'
 Plug 'hecal3/vim-leader-guide'
 Plug 'Yggdroot/indentLine'
 Plug 'junegunn/goyo.vim'
-Plug 'junegunn/seoul256.vim'
+Plug 'connorholyday/vim-snazzy'
 
 "------------------------------------------
 "--- Languages
 "-----------------------------------------
-" Plug 'jelera/vim-javascript-syntax' " doesnt seem to do anything?
-" Plug 'natebosch/vim-lsc'
-Plug 'autozimu/LanguageClient-neovim', {
-            \ 'branch': 'next',
-            \ 'do': 'bash install.sh',
-            \ }
+Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
 Plug 'moll/vim-node'
-" Plug 'tpope/vim-apathy'
 Plug 'sheerun/vim-polyglot'
 Plug 'chrisbra/Colorizer'
 Plug 'elixir-lang/vim-elixir'
-Plug 'godlygeek/tabular'
 Plug 'jparise/vim-graphql'
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
@@ -75,19 +63,7 @@ Plug 'chrisbra/csv.vim'
 Plug 'leafgarland/typescript-vim'
 Plug 'ianks/vim-tsx'
 Plug 'shirk/vim-gas'
-" Plug 'nikvdp/ejs-syntax'
 Plug 'othree/html5.vim'
-
-"------------------------------------------
-"--- Color Schemes
-"-----------------------------------------
-" here use tender-adam in personal config
-Plug 'connorholyday/vim-snazzy'
-Plug 'blueshirts/darcula'
-"------------------------------------------
-"--- session handling
-"-----------------------------------------
-" Plug 'tpope/vim-obsession'
 
 "------------------------------------------
 "--- Utilities
@@ -96,91 +72,74 @@ Plug 'diepm/vim-rest-console'
 Plug 'rking/ag.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-Plug 'tpope/vim-rhubarb'
 Plug 'editorconfig/editorconfig-vim'
-" Plug 'wakatime/vim-wakatime'
-"
-" Plug 'ternjs/tern_for_vim', { 'do': 'npm i'}
 Plug 'metakirby5/codi.vim', { 'on': 'Codi' }
 Plug 'craigemery/vim-autotag'
-" Plug 'taglist.vim'
 Plug 'aaronbieber/vim-quicktask'
 "
 "------------------------------------------
 "--- Completion
 "-----------------------------------------
-" Plug 'Valloric/YouCompleteMe', { 'do': './install.py', 'on': [] }
-
-" Plug 'Shougo/deoplete.nvim'
-Plug 'ncm2/ncm2' " TODO this is slow
-Plug 'ncm2/ncm2-path'
-Plug 'roxma/nvim-yarp'
-Plug 'roxma/vim-hug-neovim-rpc'
-
-" Plug 'ajh17/VimCompletesMe'
-
-" Plug 'SirVer/ultisnips', { 'on': [] }
-" Plug 'honza/vim-snippets', { 'on': [] } " actual snippet examples
-
-"---------------------------------------------------------------"
-
-" Plug 'ctrlpvim/ctrlp.vim' " replaced with fzf
-" Plug 'd11wtq/ctrlp_bdelete.vim' " goes with ctrlp
+Plug 'ncm2/ncm2' | Plug 'roxma/nvim-yarp' | Plug 'roxma/vim-hug-neovim-rpc' | Plug 'ncm2/ncm2-path'
 
 "------------------------------------------
-"--- Other stuff
+"--- Disabled
 "-----------------------------------------
-" Plug 'christoomey/vim-tmux-navigator'
-" Plug 'craigemery/vim-autotag'
-" Plug 'lchi/vim-toffee'
-" Plug 'mustache/vim-mustache-handlebars'
-" Plug 'sjl/vitality.vim'
-" Plug 'slim-template/vim-slim'
-" Plug 'terryma/vim-multiple-cursors'
-" Plug 'tpope/vim-cucumber'
-" Plug 'tpope/vim-dispatch'
-" Plug 'tpope/vim-endwise'
+" Plug 'easymotion/vim-easymotion' " XXX too annoying
+" Plug 'mbbill/undotree' " XXX barely used
+" Plug 'Raimondi/delimitMate' " XXX this annoys me too much
+" Plug 'xuyuanp/nerdtree-git-plugin' "XXX messy tree
+" Plug 'Valloric/YouCompleteMe', { 'do': './install.py', 'on': [] } " XXX using ncm2 instead
+" Plug 'ternjs/tern_for_vim', { 'do': 'npm i'}
+" Plug 'Shougo/deoplete.nvim' " XXX using ncm2 instead
+" Plug 'wakatime/vim-wakatime'
+" Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' } " XXX using builtin
+"---------------------------------------------------------------"
 
 call plug#end()
 
-" tidy this shit
-augroup load_airline
-    autocmd!
-    autocmd CursorMoved * call plug#load('vim-airline') | autocmd! load_airline
-augroup END
-   " enable ncm2 for all buffer
-       autocmd BufEnter * call ncm2#enable_for_buffer()
-   "
-   "         " note that must keep noinsert in completeopt, the others is
-   "         optional
-               set completeopt=noinsert,menuone,noselect
+"---------------------------------------------------------------"
+"--- Indentation
+"---------------------------------------------------------------"
+filetype plugin indent on " Needs to go before autocmds
+syntax enable " Needs to go before autocmds
 
-" let g:deoplete#enable_at_startup = 1
-" augroup load_ultisnips
-"     autocmd!
-"     autocmd FileType ruby,javascript call plug#load('ultisnips')
-"                 \| execute 'autocmd! load_ultisnips' | doautocmd FileType
-" augroup END
+set expandtab
 
-" augroup load_ycm
-"     autocmd!
-"     autocmd FileType ruby,javascript call plug#load('YouCompleteMe')
-"                 \| execute 'autocmd! load_ycm' | doautocmd FileType
-" augroup END
+"---------------------------------------------------------------"
+"--- autocmd
+"---------------------------------------------------------------"
+if !exists("autocommands_loaded")
+    let autocommands_loaded = 1
+    autocmd VimEnter * set number
 
-" augroup load_vim_snips
-"     autocmd!
-"     autocmd FileType ruby,javascript call plug#load('vim-snippets')
-"                 \| execute 'autocmd! load_vim_snips' | doautocmd FileType
-" augroup END
+    autocmd BufNewFile,BufRead *.graphql nnoremap gd <C-]>
+
+    autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+    autocmd BufNewFile,BufRead *.asm set syntax=nasm
+    autocmd BufNewFile,BufRead *.tsx set filetype=javascript.jsx
+    autocmd BufNewFile,BufRead *.js.snap set syntax=javascript.jsx
+
+    autocmd FileType * setlocal tabstop=4 shiftwidth=4
+    " autocmd FileType sh setlocal tabstop=2 shiftwidth=2
+    " autocmd FileType javascript setlocal tabstop=4 shiftwidth=4
+    " autocmd FileType javascript.jsx setlocal tabstop=4 shiftwidth=4
+    " autocmd FileType elixir  setlocal tabstop=4 shiftwidth=4
+    " autocmd FileType ruby  setlocal tabstop=2 shiftwidth=2
+    " autocmd FileType yaml  setlocal tabstop=2 shiftwidth=2
+
+    autocmd BufEnter * call ncm2#enable_for_buffer() " enable ncm2 for all buffer
+    autocmd CompleteDone * silent! pclose
+endif
+
 "---------------------------------------------------------------"
 "--- Editor
 "---------------------------------------------------------------"
 " set clipboard=unnamed
 set mouse=a
 set wrapmargin=0
-" set cursorline " breaking shit!
-set re=1
+" set cursorline " XXX slow
+set regexpengine=1 " TODO really slow without this??
 set relativenumber
 set wildignore=*.keep,*~,*.swp
 set incsearch
@@ -188,16 +147,59 @@ set hlsearch
 set bs=indent,eol,start " Allow backspacing over everything in insert mode
 set laststatus=2
 set dictionary="/usr/dict/words"
-autocmd vimenter * set number
 set tags=tags;
 set nrformats-=octal
-let g:EasyMotion_smartcase = 1
-let g:vim_markdown_folding_disabled = 1
 set fillchars=vert:│,fold:·
 set scrolloff=3
 set splitright
 set splitbelow
 set grepprg=rg\ --vimgrep
+set completeopt=noinsert,menuone,noselect " note that must keep noinsert in completeopt, the others is optional
+
+"---------------------------------------------------------------"
+"--- Tiny Plugins
+"---------------------------------------------------------------"
+" let g:EasyMotion_smartcase = 1
+
+let g:tagbar_width = 30
+let g:tagbar_compact = 0
+let g:tagbar_autopreview = 0
+" autocmd VimEnter * nested :TagbarOpen
+
+let g:indentLine_char = get(g:, 'indentLine_char', '┊')
+let g:indentLine_concealcursor = 'niv'
+let g:indentLine_conceallevel = 2
+let g:indentLine_fileTypeExclude = ['help', 'man', 'startify', 'NERDTree']
+" let g:indentLine_fileTypeExclude = ['help', 'man', 'startify']
+
+let g:previm_open_cmd = 'open -a Safari'
+"
+let g:vim_markdown_folding_disabled = 1
+let g:vim_markdown_conceal = 0
+" let g:markdown_fenced_languages = [
+let g:vim_markdown_fenced_languages = [
+            \ 'csharp=cs',
+            \ 'vim=viml',
+            \ 'sh=bash',
+            \ 'javascript',
+            \ 'typescript=javascript' ]
+
+let g:goyo_width = 120 " default 80
+let g:goyo_height = 95 "(default: 85%)
+let g:goyo_linenr = 1 " (default: 0)
+
+let g:pencil#textwidth = 44
+let g:pencil#wrapModeDefault = 'soft'
+
+let g:codi#rightsplit = 0
+let g:codi#rightalign = 0
+let g:codi#width = 80
+
+" autocmd FileType js UltiSnipsAddFiletypes javascript-react
+" let g:UltiSnipsExpandTrigger="<tab>"
+" let g:UltiSnipsJumpForwardTrigger="<c-b>"
+" let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
 "---------------------------------------------------------------"
 "--- Undo
 "---------------------------------------------------------------"
@@ -205,6 +207,7 @@ set grepprg=rg\ --vimgrep
 " set undoreload=10000
 let vimDir = '$HOME/.vim'
 let &runtimepath.=','.vimDir
+
 " Keep undo history across sessions by storing it in a file
 if has('persistent_undo')
     let myUndoDir = expand(vimDir . '/undodir')
@@ -214,56 +217,33 @@ if has('persistent_undo')
     let &undodir = myUndoDir
     set undofile
 endif
-let g:previm_open_cmd = 'open -a Safari'
-
-augroup PrevimSettings
-    autocmd!
-    autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
-augroup END
 
 
 "---------------------------------------------------------------"
 "--- Lsc
 "---------------------------------------------------------------"
-" let g:lsc_auto_map = v:true
-" let g:lsc_server_commands = {
-"   \ 'css': 'css-languageserver --stdio',
-"   \ 'less': 'css-languageserver --stdio',
-"   \ 'html': 'html-languageserver --stdio',
-"   \ 'dockerfile': 'docker-langserver --stdio',
-"   \ 'javascript': 'javascript-typescript-stdio',
-"   \ 'javascript.jsx': 'javascript-typescript-stdio',
-"   \ 'typescript': 'javascript-typescript-stdio',
-"   \}
-
 let g:LanguageClient_serverCommands = {
             \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+            \ 'css': ['css-languageserver --stdio'],
             \ 'javascript': ['javascript-typescript-stdio'],
+            \ 'typescript': ['javascript-typescript-stdio'],
             \ 'javascript.jsx': ['javascript-typescript-stdio'],
+            \ 'html': ['html-languageserver --stdio'],
+            \ 'dockerfile': ['docker-langserver --stdio'],
             \ }
+
 nnoremap <F5> :call LanguageClient_contextMenu()<CR>
 nnoremap <silent> <C-]> :call LanguageClient#textDocument_definition()<CR>
 nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
 
-autocmd CompleteDone * silent! pclose
-
-autocmd BufNewFile,BufRead *.graphql nnoremap gd <C-]>
-autocmd BufNewFile,BufRead *.tsx set filetype=javascript.jsx
-
 "---------------------------------------------------------------"
 "--- Appearance
 "---------------------------------------------------------------"
-syntax enable
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum" " something to do with vim in a terminal
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+
 " color tenderAdam
 color snazzy
-
-let g:tagbar_width = 30
-let g:tagbar_compact = 0
-let g:tagbar_autopreview = 0
-
-" autocmd VimEnter * nested :TagbarOpen
 
 if has('gui_running')
     set guioptions=
@@ -271,8 +251,6 @@ if has('gui_running')
     set lines=50 columns=108 linespace=3
     set shellcmdflag=-ic
     let $BASH_ENV = "~/.bash_aliases"
-else
-    " hi TagbarSignature ctermfg=215
 endif
 
 let  red      =  '#ff5c57'
@@ -281,7 +259,7 @@ let  yellow   =  '#f3f99d'
 let  blue     =  '#57c7ff'
 let  magenta  =  '#ff6ac1'
 let  cyan     =  '#9aedfe'
-let  orange     =  '#fecc9a'
+let  orange   =  '#fecc9a'
 
 hi NonText guifg=bg
 hi Comment cterm=italic gui=italic
@@ -289,6 +267,8 @@ hi Comment cterm=italic gui=italic
 :exe 'hi SpellBad    guifg=white guibg='.red
 :exe 'hi MatchParen  guifg='.red
 :exe 'hi Search  cterm=underline gui=underline guibg=bg guifg='.green
+:exe 'hi Boolean guifg='.green
+:exe 'hi Number guifg='.orange
 
 :exe 'hi jsFuncArgs  guifg='.yellow.' cterm=italic'
 :exe 'hi jsParen  guifg='.orange
@@ -305,13 +285,6 @@ hi Comment cterm=italic gui=italic
 :exe 'hi jsonNumber  guifg='.blue
 
 
-" let g:pencil#textwidth = 44
-let g:vim_markdown_conceal = 0
-let g:vim_markdown_fenced_languages = ['csharp=cs', 'vim=viml', 'sh=bash', 'js=javascript', 'jsx=javascript.jsx']
-
-let g:goyo_width = 120 " default 80
-let g:goyo_height = 95 "(default: 85%)
-let g:goyo_linenr = 1 " (default: 0)
 "---------------------------------------------------------------"
 "--- Airline
 "---------------------------------------------------------------"
@@ -329,9 +302,12 @@ let g:airline#extensions#default#layout = [
 
 let g:airline_section_b = '%{split(getcwd(), "/")[-1]}' " dont really care for the branch
 " let g:airline_section_c = '%t'
-
 let g:jsx_ext_required = 1
 
+
+"---------------------------------------------------------------"
+"--- FZF
+"---------------------------------------------------------------"
 let g:fzf_layout = { 'down': '~40%' }
 let g:fzf_action = {
             \ 'ctrl-t': 'tab split',
@@ -367,57 +343,99 @@ let g:ale_fixers = { 'javascript': ['eslint'] }
 " {buffer, lines -> filter(lines, 'v:val !=~ ''^\s*//''')}, " removes comments
 
 "---------------------------------------------------------------"
-"--- SNippets
+"--- NERDTree stuff
 "---------------------------------------------------------------"
-" autocmd FileType js UltiSnipsAddFiletypes javascript-react
-
-"---------------------------------------------------------------"
-"--- Indentation
-"---------------------------------------------------------------"
-filetype plugin indent on
-" set tabstop=2 shiftwidth=2 expandtab
-set expandtab
-autocmd FileType * setlocal tabstop=4 shiftwidth=4
-" autocmd FileType sh setlocal tabstop=2 shiftwidth=2
-autocmd FileType javascript.jsx setlocal tabstop=4 shiftwidth=4
-" autocmd FileType elixir  setlocal tabstop=4 shiftwidth=4
-" autocmd FileType ruby  setlocal tabstop=2 shiftwidth=2
-" autocmd FileType yaml  setlocal tabstop=2 shiftwidth=2
-
-autocmd BufNewFile,BufRead *.asm set syntax=nasm
-autocmd BufNewFile,BufRead *.js.snap set syntax=javascript.jsx
-
-let g:indentLine_char = get(g:, 'indentLine_char', '┊')
-let g:indentLine_concealcursor = 'niv'
-let g:indentLine_conceallevel = 2
-let g:indentLine_fileTypeExclude = ['help', 'man', 'startify', 'NERDTree']
-" let g:indentLine_fileTypeExclude = ['help', 'man', 'startify']
-
-"---------------------------------------------------------------"
-"--- Utils
-"---------------------------------------------------------------"
-" let g:UltiSnipsExpandTrigger="<tab>"
-" let g:UltiSnipsJumpForwardTrigger="<c-b>"
-" let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-
-"---------------------------------------------------------------"
-"--- ScratchPads & COdi
-"---------------------------------------------------------------"
-" let g:ycm_autoclose_preview_window_after_insertion = 1
-" let g:ycm_collect_identifiers_from_tags_files = 1
-" let g:ycm_add_preview_to_completeopt = 1
-" let g:ycm_key_invoke_completion = ''
-" let g:ycm_key_detailed_diagnostics = ''
+" let g:NERDTreeWinSize=40 " nice big tree is it's easy to toggle off
+" let NERDTreeMinimalUI=1
+" let NERDTreeStatusline="%{ getcwd() }"
+" let NERDTreeHijackNetrw=1
 "
-" let g:ycm_key_invoke_completion = '<C-Space>'
-" let g:ycm_key_detailed_diagnostics = '<leader>d'
+
+" autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+" let NERDTreeIgnore = ['\.DAT$', '\.LOG1$', '\.LOG1$']
+" let NERDTreeIgnore += [
+"             \ '\.gif$',
+"             \ '\.mp3$',
+"             \ '\.flac$',
+"             \ '\.ogg$',
+"             \ '\.mp4$',
+"             \ '\.avi$',
+"             \ '.webm$',
+"             \ '.mkv$',
+"             \ '\.pdf$',
+"             \ '\.zip$',
+"             \ '\.tar.gz$',
+"             \ '\.rar$']
+
+let g:netrw_liststyle = 3
+let g:netrw_banner = 1
+
+"---------------------------------------------------------------"
+"--- Typing stuff
+"---------------------------------------------------------------"
+if has("spell")
+    " toggle spelling with F4 key
+    map <F4> :set spell!<CR><Bar>:echo "Spell Check: " . strpart("OffOn", 3 * &spell, 3)<CR>
+
+    " they were using white on white
+    highlight PmenuSel ctermfg=black ctermbg=lightgray
+
+    " limit it to just the top 10 items
+    set sps=best,10
+endif
+
+"---------------------------------------------------------------" */
+"--- Windows and buffers
+"---------------------------------------------------------------" */
+" Unimpaired mapping
+nnoremap ]r :<C-U>call window#rotate(-1 * v:count1)<cr>
+nnoremap [r :<C-U>call window#rotate(1 * v:count1)<cr>
+
+" Improved window rotate to work with all layouts
+nmap <C-w>r ]r
+nmap <C-w><C-r> ]r
+" Improve window exchange to work with all layouts
+nnoremap <C-w>x :<C-U>call window#exchange(v:count)<cr>
+nnoremap <C-w><c-x> :<C-U>call window#exchange(v:count)<cr>
+
+" [g]lue windows together.
+"    l = glue to right side
+"    h = glue to left side
+"    j = glue to bottom
+"    k = glue to top
+"
+" `normal! 100zh` scrolls window contents into view since it gets messy when
+" narrower window tries refocuses its cursor.
+nnoremap <C-w>gl :<C-U>call window#join('rightbelow vsplit', v:count) <BAR>normal! 100zh<CR>
+nnoremap <C-w>gh :<C-U>call window#join('leftabove vsplit', v:count) <BAR>normal! 100zh<CR>
+nnoremap <C-w>gj :<C-U>call window#join('belowright split', v:count) <BAR>normal! 100zh<CR>
+nnoremap <C-w>gk :<C-U>call window#join('aboveleft split', v:count) <BAR>normal! 100zh<CR>
 
 
-let g:codi#rightsplit = 0
-let g:codi#rightalign = 0
-let g:codi#width = 80
+"---------------------------------------------------------------" */
+"--- GOYO
+"---------------------------------------------------------------" */
+function! s:goyo_enter()
+    silent !tmux set status off
+    silent !tmux list-panes -F '\#F' | grep -q Z || tmux resize-pane -Z
+    set noshowmode
+    set noshowcmd
+    " set scrolloff=999
+    " Limelight
+endfunction
 
-" nmap dsp <Plug>(ToggleScratchPad)
+function! s:goyo_leave()
+    silent !tmux set status on
+    silent !tmux resize-pane -Z
+    set showmode
+    set showcmd
+    " set scrolloff=5
+    " Limelight!
+endfunction
+
+autocmd! User GoyoEnter nested call <SID>goyo_enter()
+autocmd! User GoyoLeave nested call <SID>goyo_leave()
 
 "---------------------------------------------------------------"
 "--- Mappings
@@ -428,7 +446,8 @@ let mapleader = " "
 ino jk <esc>
 cno jk <C-c>
 
-let g:UltiSnipsExpandTrigger="<C-b>"
+" let g:UltiSnipsExpandTrigger="<C-b>" " XXX no longer used
+
 " MAPS ON COMMANDS I DONT LIKE
 " map <C-B>
 map <C-F> :%s/
@@ -437,37 +456,47 @@ nmap <silent> <C-H> :wincmd h<CR>
 nmap <silent> <C-J> :wincmd j<CR>
 nmap <silent> <C-K> :wincmd k<CR>
 nmap <silent> <C-L> :wincmd l<CR>
-" map <C-M> <Plug>(easymotion-prefix)
-map <C-N> :NERDTreeToggle<CR>
+" map <C-N> :NERDTreeToggle<CR>
+map <C-N> :Explore<CR>
+map <leader>n :Vexplore<CR>
 " map <C-N> :e.<CR>
 map <C-P> :Files<CR>
 " map <C-Q>
 " map <C-Y>
 map <C-\> :Ag!<CR>
+inoremap <expr> <C-Space> pumvisible() \|\| &omnifunc == '' ?
+            \ "\<lt>C-n>" :
+            \ "\<lt>C-x>\<lt>C-o><c-r>=pumvisible() ?" .
+            \ "\"\\<lt>c-n>\\<lt>c-p>\\<lt>c-n>\" :" .
+            \ "\" \\<lt>bs>\\<lt>C-n>\"\<CR>"
+imap <C-@> <C-Space>
 
 " :inoremap <Tab> <C-R>=Tab_Or_Complete()<CR>
 nmap <Tab> :b#<CR>
 
 "---------------------------------------------------------------"
-"--- Dictionary Leader
+"--- Dictionary leader
 "---------------------------------------------------------------"
 let g:lmap = {}
 " 🚀
-nnoremap <silent> <Leader>+ :exe "vertical resize +10"<CR>
-nnoremap <silent> <Leader>- :exe "vertical resize -10"<CR>
+nnoremap <silent> <leader>+ :exe "vertical resize +10"<CR>
+nnoremap <silent> <leader>- :exe "vertical resize -10"<CR>
 
-map <Leader>? :Commands<CR>
+map <leader>? :Commands<CR>
 map \ :Fuzzyag<CR>
 map <C-\> :Fuzzyag!<CR>
 
 let g:lmap.b = { 'name': ' -- Buffers' }
-map <Leader>bd :DiffSaved<CR>
-map <Leader>bl :Buffers<CR>
-map <Leader>bc :BufOnly<CR>
-map <Leader>bn :bnext<CR>
-map <Leader>bn :enew<CR>
-map <Leader>bp :bprevious<CR>
-map <Leader>bs :sbprevious<CR>
+map <leader>bN :enew<CR>
+map <leader>bb :SplitPreviousBuffer<CR>
+map <leader>bc :BufOnly<CR>
+map <leader>bd :DiffSaved<CR>
+map <leader>bl :Buffers<CR>
+map <leader>bn :bnext<CR>
+map <leader>bp :bprevious<CR>
+map <leader>bq :DeleteFileAndBuff<CR>
+map <leader>br :rename<space>
+map <leader>by :YankWoleBuffer<CR>
 
 let g:lmap.d = { 'name': ' -- Delete' }
 " nnoremap <leader>d "_d
@@ -475,45 +504,38 @@ let g:lmap.d = { 'name': ' -- Delete' }
 " nnoremap <leader>D "_D
 nnoremap <leader>dd "_d
 
-let g:lmap.d = { 'name': ' -- File' }
-map <Leader>fy :YankWoleBuffer<CR>
-map <Leader>ff :call Format()<CR>
-map <Leader>ft :TableFormat<CR>
-
 let g:lmap.e = { 'name': ' -- Errors' }
-map <Leader>ef :ALEFix<CR>
-map <Leader>el :lopen<CR>
-map <Leader>en :ALENextWrap<CR>
-map <Leader>ep :ALEPreviousWrap<CR>
+map <leader>ef :ALEFix<CR>
+map <leader>el :lopen<CR>
+map <leader>en :ALENextWrap<CR>
+map <leader>ep :ALEPreviousWrap<CR>
 
 let g:lmap.g = { 'name': ' -- Global' }
-map <Leader>gh :History<CR>
-map <Leader>gl :set cursorline!<CR>
-map <Leader>gn :set nowrap!<CR>
-map <Leader>gs :SourceVimrc<CR>
 map <leader>g? :help index<CR>
 map <leader>gc :ColorToggle<CR>
-map <leader>gh <Esc>:call ToggleHardMode()<CR>
-map <leader>gr :set relativenumber!<CR>
 map <leader>gg :PencilToggle<CR>
+map <leader>gh :History<CR>
+map <leader>gh <Esc>:call ToggleHardMode()<CR>
+map <leader>gl :set cursorline!<CR>
+map <leader>gn :set nowrap!<CR>
+map <leader>gp :call pencil#init()<CR>
+map <leader>gr :set relativenumber!<CR>
+map <leader>gs :SourceVimrc<CR>
 
 let g:lmap.l = { 'name': ' -- Layout' }
-map <Leader>ls :vsplit<CR>
-map <Leader>lt :TagBResise
-map <Leader>ll :Goyo<CR>
 
 " let g:lmap.n = { 'name': ' -- Project' }
-map <Leader>n :NERDTreeFind<CR>
+" map <leader>n :NERDTreeFind<CR>
 
 let g:lmap.p = { 'name': ' -- Project' }
-map <Leader>pg :GFiles?<CR>
-map <Leader>pm :Marks<CR>
-map <Leader>pn <C-W>}
-map <Leader>pp :Files<CR>
-map <Leader>po :only<CR>
+map <leader>pg :GFiles?<CR>
+map <leader>pm :Marks<CR>
+map <leader>pn <C-W>}
+map <leader>po :only<CR>
+map <leader>pp :Files<CR>
 
 let g:lmap.r = { 'name': 'global reg' }
-map <Leader>rr "*
+map <leader>rr "*
 
 let g:lmap.s = { 'name': ' -- Search' }
 map <leader>sd :call SearchForDefinition(expand("<cword>"))<CR>
@@ -525,52 +547,52 @@ map <leader>tf :Tags<CR>
 map <leader>tl :ts<CR>
 map <leader>tn :tn<CR>
 map <leader>tp :tp<CR>
-map <leader>tt :TagbarToggle<CR>
 map <leader>tw :ts "<cword>"<CR>
 
 let g:lmap.u = { 'name': ' -- Utils' }
+map <leader>uf :call Format()<CR>
+map <leader>up :PrevimOpen<CR>
 map <leader>us :sort<CR>
+map <leader>ut :TableFormat<CR>
 map <leader>uu :UndotreeToggle<CR>
 
 let g:lmap.w = { 'name': ' -- Windows' }
-map <leader>wa :GoToTab1<CR>
-map <leader>ws :GoToTab2<CR>
-map <leader>wd :GoToTab3<CR>
-map <leader>wf :GoToTab4<CR>
-map <leader>wn :tabNext<CR>
 map <leader>wN :tabnew<CR>
-map <leader>wp :tabprevious<CR>
 map <leader>wl :tabs<CR>
+map <leader>wn :tabNext<CR>
+map <leader>wo :Goyo<CR>
+map <leader>wp :pclose<CR>
+map <leader>wp :tabprevious<CR>
+map <leader>wT :TagBResise
+map <leader>wt :TagbarToggle<CR>
+map <leader>ww :vsplit<CR>
 
 let g:lmap.o = { 'name': ' -- Quicktask' }
 let g:quicktask_no_mappings = 1
-map <Leader>oD  <Plug>TaskComplete
-map <Leader>oO  <Plug>AddTaskAbove
-map <Leader>oS  <Plug>AddSnipToTask
-map <Leader>oa  <Plug>ShowActiveTasksOnly
-map <Leader>oc  <Plug>AddChildTask
-map <Leader>od  <Plug>MoveTaskDown
-map <Leader>ofi <Plug>FindIncompleteTimestamps
-map <Leader>on  <Plug>AddNoteToTask
-map <Leader>oo  <Plug>AddTaskBelow
-map <Leader>os  <Plug>AddNextTimeToTask
-map <Leader>ou  <Plug>MoveTaskUp
-map <Leader>ov  <Plug>SelectTask
-map <Leader>ow  <Plug>ShowWatchedTasksOnly
-map <Leader>oy  <Plug>ShowTodayTasksOnly
-map <CR>        <Plug>OpenSnipUnderCursor
+map <leader>oD  <Plug>TaskComplete
+map <leader>oO  <Plug>AddTaskAbove
+map <leader>oS  <Plug>AddSnipToTask
+map <leader>oa  <Plug>ShowActiveTasksOnly
+map <leader>oc  <Plug>AddChildTask
+map <leader>od  <Plug>MoveTaskDown
+map <leader>ofi <Plug>FindIncompleteTimestamps
+map <leader>on  <Plug>AddNoteToTask
+map <leader>oo  <Plug>AddTaskBelow
+map <leader>os  <Plug>AddNextTimeToTask
+map <leader>ou  <Plug>MoveTaskUp
+map <leader>ov  <Plug>SelectTask
+map <leader>ow  <Plug>ShowWatchedTasksOnly
+map <leader>oy  <Plug>ShowTodayTasksOnly
+" map <CR>        <Plug>OpenSnipUnderCursor
 
-
-command! GoToTab1 normal 1gt
-command! GoToTab2 normal 2gt
-command! GoToTab3 normal 3gt
-command! GoToTab4 normal 4gt
+" command! GoToTab1 normal 1gt " XXX never used
 
 let g:lmap.z = { 'name': ' -- Folding' }
 " let g:leaderGuide_hspace = 6
+
 call leaderGuide#register_prefix_descriptions("<Space>", "g:lmap")
-nnoremap <silent> <leader> :<c-u>LeaderGuide '<Space>'<CR>
-vnoremap <silent> <leader> :<c-u>LeaderGuideVisual '<Space>'<CR>
+nnoremap <silent> <leader> :<c-u>leaderGuide '<Space>'<CR>
+vnoremap <silent> <leader> :<c-u>leaderGuideVisual '<Space>'<CR>
 
 "---------------------------------------------------------------"
 "--- Macros
@@ -582,15 +604,16 @@ let @b='0v/^\n^My^Wwpi^M^[^WW' " send current block to next cycled pane
 "---------------------------------------------------------------"
 "--- Commands
 "---------------------------------------------------------------"
+command! DeleteFileAndBuff :call delete(expand('%')) | bd
 command! FindWordUnderCursor :call fzf#vim#ag(expand("<cword>"))
 command! YankWoleBuffer normal gg"*yG
 command! Json %!python -m json.tool
-" command! StripTrailingWhitespaces call <SID>StripTrailingWhitespaces()
 command! SourceVimrc write | source ~/.vimrc
 command! -nargs=1 TagBResise call ResiseTagBar(<f-args>)
 command! DiffSaved call DiffWithSaved()
 command! CursorInTags :call fzf#vim#tags(expand("<cword>"))<CR>
 command! YankWoleBuffer normal gg"*yG
+command! SplitPreviousBuffer :vsplit | bprevious
 
 command! -bang -nargs=* Fuzzyag
             \ call fzf#vim#ag(<q-args>,
@@ -613,8 +636,6 @@ command! -bang -nargs=* Find
 "---------------------------------------------------------------"
 "--- Functions
 "---------------------------------------------------------------"
-" autocmd VimEnter,BufNewFile,BufReadPost * silent! call HardMode()
-
 "Use TAB to complete when typing words, else inserts TABs as usual.
 function! Tab_Or_Complete()
     if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~'^\w'
@@ -663,94 +684,7 @@ function! Format()
     normal gg=G
     call cursor(l, c)
 endfunction
-"---------------------------------------------------------------"
-"--- NERdTREE stuff
-"---------------------------------------------------------------"
-" :let g:vimfiler_as_default_explorer = 1
-let g:NERDTreeWinSize=40 " nice big tree is it's easy to toggle off
-let NERDTreeMinimalUI=1
-let NERDTreeStatusline="%{ getcwd() }"
-let NERDTreeHijackNetrw=1
-" let g:NERDTreeWinPos = "right"
 
-" closes nerdtree if only open
-" autocmd vimenter * NERDTree
-
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-
-" ignore files */
-let NERDTreeIgnore = ['\.DAT$', '\.LOG1$', '\.LOG1$']
-let NERDTreeIgnore += [
-            \ '\.gif$',
-            \ '\.mp3$',
-            \ '\.flac$',
-            \ '\.ogg$',
-            \ '\.mp4$',
-            \ '\.avi$',
-            \ '.webm$',
-            \ '.mkv$',
-            \ '\.pdf$',
-            \ '\.zip$',
-            \ '\.tar.gz$',
-            \ '\.rar$']
-
-" \ '\.png$',
-" \ '\.jpg$',
-
-"---------------------------------------------------------------"
-"--- Typing stuff
-"---------------------------------------------------------------"
-if has("spell")
-    " toggle spelling with F4 key
-    map <F4> :set spell!<CR><Bar>:echo "Spell Check: " . strpart("OffOn", 3 * &spell, 3)<CR>
-
-    " they were using white on white
-    highlight PmenuSel ctermfg=black ctermbg=lightgray
-
-    " limit it to just the top 10 items
-    set sps=best,10
-endif
-
-let g:pencil#wrapModeDefault = 'soft'
-
-augroup pencil
-    autocmd!
-    " autocmd FileType markdown,mkd call pencil#init()
-    autocmd FileType text         call pencil#init()
-augroup END
-
-"---------------------------------------------------------------" */
-"--- Windows and buffers
-"---------------------------------------------------------------" */
-" Unimpaired mapping
-nnoremap ]r :<C-U>call window#rotate(-1 * v:count1)<cr>
-nnoremap [r :<C-U>call window#rotate(1 * v:count1)<cr>
-
-" Improved window rotate to work with all layouts
-nmap <C-w>r ]r
-nmap <C-w><C-r> ]r
-
-" Improve window exchange to work with all layouts
-nnoremap <C-w>x :<C-U>call window#exchange(v:count)<cr>
-nnoremap <C-w><c-x> :<C-U>call window#exchange(v:count)<cr>
-
-" [g]lue windows together.
-"    l = glue to right side
-"    h = glue to left side
-"    j = glue to bottom
-"    k = glue to top
-"
-" `normal! 100zh` scrolls window contents into view since it gets messy when
-" narrower window tries refocuses its cursor.
-nnoremap <C-w>gl :<C-U>call window#join('rightbelow vsplit', v:count) <BAR>normal! 100zh<CR>
-nnoremap <C-w>gh :<C-U>call window#join('leftabove vsplit', v:count) <BAR>normal! 100zh<CR>
-nnoremap <C-w>gj :<C-U>call window#join('belowright split', v:count) <BAR>normal! 100zh<CR>
-nnoremap <C-w>gk :<C-U>call window#join('aboveleft split', v:count) <BAR>normal! 100zh<CR>
-
-"---------------------------------------------------------------" */
-"--- Search for definition */
-"---------------------------------------------------------------" */
-" not saying this is pretty but at least it works
 function! SearchForDefinition(name)
     " try tags first
     " try | exec 'tag ' . a:name | return | catch | silent | endtry
@@ -800,57 +734,3 @@ function! SearchForDefinition(name)
     call SearchForDefinition(a:name)
 endfunction
 
-"---------------------------------------------------------------" */
-"--- Retired */
-"---------------------------------------------------------------" */
-function! s:goyo_enter()
-    silent !tmux set status off
-    silent !tmux list-panes -F '\#F' | grep -q Z || tmux resize-pane -Z
-    set noshowmode
-    set noshowcmd
-    " set scrolloff=999
-    " Limelight
-endfunction
-
-function! s:goyo_leave()
-    silent !tmux set status on
-    silent !tmux resize-pane -Z
-    set showmode
-    set showcmd
-    " set scrolloff=5
-    " Limelight!
-endfunction
-
-autocmd! User GoyoEnter nested call <SID>goyo_enter()
-autocmd! User GoyoLeave nested call <SID>goyo_leave()
-
-
-"---------------------------------------------------------------" */
-"--- Retired */
-"---------------------------------------------------------------" */
-" let g:ctrlp_custom_ignore = { */
-"                         \ 'dir': '\v[\/](\.git|tmp|node_modules|app_build|build)' */
-"                         \} */
-" let g:ctrlp_show_hidden = 1 */
-" call ctrlp_bdelete#init() */
-"
-" inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-" inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
-" inoremap ^P ^X^O
-" inoremap './<C-X><C-F> <C-O>:lcd %:p:h<CR><C-X><C-F>
-"
-"         :inoremap ^F ^X^F
-"             :inoremap ^D ^X^D
-"                 :inoremap ^L ^X^L
-"
-"    function! CleverTab()
-"           if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
-"                     return "\<Tab>"
-"                            else
-"                                      return "\<C-N>"
-"                                             endif
-"                                                 endfunction
-"                                                     inoremap <Tab>
-"                                                     <C-R>=CleverTab()<CR>
-"
