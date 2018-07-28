@@ -74,7 +74,7 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'metakirby5/codi.vim', { 'on': 'Codi' }
-Plug 'craigemery/vim-autotag'
+" Plug 'craigemery/vim-autotag'
 Plug 'aaronbieber/vim-quicktask'
 "
 "------------------------------------------
