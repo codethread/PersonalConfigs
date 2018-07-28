@@ -495,7 +495,7 @@ map <leader>bd :DiffSaved<CR>
 map <leader>bl :Buffers<CR>
 map <leader>bn :bnext<CR>
 map <leader>bp :bprevious<CR>
-map <leader>bq :DeleteFileAndBuff<CR>
+map <leader>bq :DeleteFileAndBuff<CR> 
 map <leader>br :rename<space>
 map <leader>by :YankWoleBuffer<CR>
 
@@ -522,6 +522,7 @@ map <leader>gn :set nowrap!<CR>
 map <leader>gp :call pencil#init()<CR>
 map <leader>gr :set relativenumber!<CR>
 map <leader>gs :SourceVimrc<CR>
+map <leader>gv :vsplit ~/.vimrc<CR>
 
 let g:lmap.l = { 'name': ' -- Layout' }
 
@@ -592,8 +593,8 @@ let g:lmap.z = { 'name': ' -- Folding' }
 " let g:leaderGuide_hspace = 6
 
 call leaderGuide#register_prefix_descriptions("<Space>", "g:lmap")
-nnoremap <silent> <leader> :<c-u>leaderGuide '<Space>'<CR>
-vnoremap <silent> <leader> :<c-u>leaderGuideVisual '<Space>'<CR>
+nnoremap <silent> <leader> :<c-u>LeaderGuide '<Space>'<CR>
+vnoremap <silent> <leader> :<c-u>LeaderGuideVisual '<Space>'<CR>
 
 "---------------------------------------------------------------"
 "--- Macros
@@ -605,6 +606,7 @@ let @b='0v/^\n^My^Wwpi^M^[^WW' " send current block to next cycled pane
 "---------------------------------------------------------------"
 "--- Commands
 "---------------------------------------------------------------"
+"TODO put a check inside DeleteFileAndBuff
 command! DeleteFileAndBuff :call delete(expand('%')) | bd
 command! FindWordUnderCursor :call fzf#vim#ag(expand("<cword>"))
 command! YankWoleBuffer normal gg"*yG
