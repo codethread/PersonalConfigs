@@ -268,7 +268,7 @@ hi Comment cterm=italic gui=italic
 :exe 'hi SpellBad    guifg=white guibg='.red
 :exe 'hi MatchParen  guifg='.red
 :exe 'hi Search  cterm=underline gui=underline guibg=bg guifg='.green
-:exe 'hi Boolean guifg='.green
+:exe 'hi Boolean guifg='.magenta
 :exe 'hi Number guifg='.orange
 
 :exe 'hi jsFuncArgs  guifg='.yellow.' cterm=italic'
@@ -284,7 +284,6 @@ hi Comment cterm=italic gui=italic
 :exe 'hi jsonString  guifg='.cyan
 :exe 'hi jsonBoolean  guifg='.green
 :exe 'hi jsonNumber  guifg='.blue
-
 
 "---------------------------------------------------------------"
 "--- Airline
