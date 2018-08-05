@@ -22,6 +22,9 @@ alias mkssh="openssl rsa -in ~/.ssh/id_rsa | openssl base64 | tr -d '\n' | pbcop
 
 alias docker_clean_images='docker rmi $(docker images -a --filter=dangling=true -q)'
 alias docker_clean_ps='docker rm $(docker ps --filter=status=exited --filter=status=created -q)'
+
+alias ramda="~/PersonalConfigs/single_scripts/ramda"
+
 #---------------------------------------------#
 # TMUXINATOR
 # -------------------------------------------#
