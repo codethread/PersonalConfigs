@@ -37,6 +37,7 @@ if which nodenv > /dev/null; then eval "$(nodenv init -)"; fi
 source $ZSH/oh-my-zsh.sh
 source $HOME/.asdf/asdf.sh
 source $HOME/.aliases.zsh
+source $HOME/.cargo/env
 
 # source $HOME/PersonalConfigs/spaceship-config.zsh
 

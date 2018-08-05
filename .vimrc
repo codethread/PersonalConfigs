@@ -552,6 +552,7 @@ map <leader>tw :ts "<cword>"<CR>
 
 let g:lmap.u = { 'name': ' -- Utils' }
 map <leader>uf :call Format()<CR>
+map <leader>uj :Json<CR>
 map <leader>up :PrevimOpen<CR>
 map <leader>us :sort<CR>
 map <leader>ut :TableFormat<CR>
