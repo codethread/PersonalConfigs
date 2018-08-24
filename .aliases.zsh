@@ -14,6 +14,7 @@ alias portsinuse="lsof -i -p | grep -i 'listen'"
 alias ports="echo lsof -i tcp:3000"
 alias lst="ls -1 -a -F -G"
 alias pathis="echo $PATH | tr -s ':' '\n'"
+alias ramda="~/PersonalConfigs/single_scripts/ramda"
 
 #---------------------------------------------#
 # RUNNERS
