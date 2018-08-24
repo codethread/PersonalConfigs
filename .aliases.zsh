@@ -73,12 +73,13 @@ alias spc="ctags -R apps/ && ctags -R -a src/"
 #---------------------------------------------#
 # SKYPORT
 # -------------------------------------------#
-alias glg="cd /users/adh23/service/skyport-graphql"
-alias gls="start_skyport"
-alias gls="start_skyport"
-alias glt="skyport_test_modified_files"
+alias gqg="cd /users/adh23/service/skyport-graphql"
+alias gqs="start_skyport"
+alias gqt="skyport_test_modified_files"
 alias gqj="skyportJq"
-alias gqk="compare_skyport_vault_keys"
+alias gqv="compare_skyport_vault_keys"
+alias gqc="ctags -R src/schema/"
+alias gqd="NODE_ENV=integration npm run debug"
 
 #---------------------------------------------#
 # OTHER
