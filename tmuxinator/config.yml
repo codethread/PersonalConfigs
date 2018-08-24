@@ -4,12 +4,22 @@ name: config
 root: ~/
 
 windows:
-  - .main:
+  - main:
       root: ~/PersonalConfigs
       layout: main-horizontal
       panes:
         - vim_pane:
           - vim -O .vimrc .zshrc
+        - folder:
+          - ls
+        - something:
+          - ls
+  - vim:
+      root: ~/PersonalConfigs
+      layout: main-horizontal
+      panes:
+        - vim_pane:
+          - vim .vimrc
         - vim_folder:
           - cd ~/.vim
           - ls

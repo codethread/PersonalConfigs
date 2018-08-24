@@ -135,7 +135,7 @@ endif
 "---------------------------------------------------------------"
 "--- Editor
 "---------------------------------------------------------------"
-" set clipboard=unnamed
+set clipboard=unnamed " just too annoying without this
 set mouse=a
 set wrapmargin=0
 " set cursorline " XXX slow
@@ -223,6 +223,9 @@ endif
 "---------------------------------------------------------------"
 "--- Lsc
 "---------------------------------------------------------------"
+"java https://github.com/Ruin0x11/intellij-lsp-server
+"java https://github.com/eclipse/eclipse.jdt.ls
+" \ 'java': ['/usr/local/bin/jdtls'], life's too short to get this to work
 let g:LanguageClient_serverCommands = {
             \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
             \ 'css': ['css-languageserver --stdio'],
