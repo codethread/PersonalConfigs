@@ -9,32 +9,55 @@ windows:
       panes:
         - vim_pane:
           - vim
-        - info_pane:
-          - sleep 1
-          - spages
         - spages_view_pane:
           - sleep 1
           - clear
-          - pages storybook -f apps/mobile -p 1234
+        - info_pane:
+          - sleep 1
+          - sps
   - graphql:
       root: ~/Service/skyport-graphql
       layout: main-horizontal
       panes:
         - vim_pane:
           - vim
-        - info_pane:
-          - sleep 1
-          - skyport -d
         - skyport_view_pane:
           - sleep 1
           - clear
           - gst
+        - info_pane:
+          - sleep 1
+          - gqs -d
   - service-scripts:
       root: ~/Service/skymobile-service
       layout: main-horizontal
       panes:
         - vim
         -
+  - lib:
+      root: ~/Service/pages-lib
+      layout: main-horizontal
+      panes:
+        - vim_pane:
+          - vim
+        - spages_view_pane:
+          - sleep 1
+          - clear
+        - info_pane:
+          - sleep 1
+          - lis
+  - apps:
+      root: ~/Service/pages-apps
+      layout: main-horizontal
+      panes:
+        - vim_pane:
+          - vim
+        - spages_view_pane:
+          - sleep 1
+          - clear
+        - info_pane:
+          - sleep 1
+          - pas
   - randoms:
       root: ~/
       layout: main-horizontal

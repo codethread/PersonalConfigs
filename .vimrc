@@ -21,6 +21,7 @@ Plug 'danro/rename.vim'
 Plug 'plasticboy/vim-markdown'
 Plug 'kannokanno/previm'
 Plug 'godlygeek/tabular'
+Plug 'justinmk/vim-sneak'
 
 "------------------------------------------
 "--- Linting / testing
@@ -60,8 +61,8 @@ Plug 'elzr/vim-json'
 Plug 'kchmck/vim-coffee-script'
 " Plug 'styled-components/vim-styled-components'
 Plug 'chrisbra/csv.vim'
-Plug 'leafgarland/typescript-vim'
-Plug 'ianks/vim-tsx'
+Plug 'leafgarland/typescript-vim' | Plug 'peitalin/vim-jsx-typescript'
+" Plug 'Quramy/tsuquyomi'
 Plug 'shirk/vim-gas'
 Plug 'othree/html5.vim'
 
@@ -76,6 +77,8 @@ Plug 'editorconfig/editorconfig-vim'
 Plug 'metakirby5/codi.vim', { 'on': 'Codi' }
 " Plug 'craigemery/vim-autotag'
 Plug 'aaronbieber/vim-quicktask'
+Plug 'wakatime/vim-wakatime'
+Plug 'tpope/vim-scriptease'
 "
 "------------------------------------------
 "--- Completion
@@ -85,15 +88,14 @@ Plug 'ncm2/ncm2' | Plug 'roxma/nvim-yarp' | Plug 'roxma/vim-hug-neovim-rpc' | Pl
 "------------------------------------------
 "--- Disabled
 "-----------------------------------------
-" Plug 'easymotion/vim-easymotion' " XXX too annoying
+Plug 'easymotion/vim-easymotion' " XXX too annoying
 " Plug 'mbbill/undotree' " XXX barely used
 " Plug 'Raimondi/delimitMate' " XXX this annoys me too much
 " Plug 'xuyuanp/nerdtree-git-plugin' "XXX messy tree
 " Plug 'Valloric/YouCompleteMe', { 'do': './install.py', 'on': [] } " XXX using ncm2 instead
 " Plug 'ternjs/tern_for_vim', { 'do': 'npm i'}
 " Plug 'Shougo/deoplete.nvim' " XXX using ncm2 instead
-" Plug 'wakatime/vim-wakatime'
-" Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' } " XXX using builtin
+Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] } " XXX using builtin
 "---------------------------------------------------------------"
 
 call plug#end()
@@ -117,8 +119,13 @@ if !exists("autocommands_loaded")
 
     autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
     autocmd BufNewFile,BufRead *.asm set syntax=nasm
+    autocmd BufNewFile,BufRead *.ts set filetype=javascript.jsx
     autocmd BufNewFile,BufRead *.tsx set filetype=javascript.jsx
-    autocmd BufNewFile,BufRead *.js.snap set syntax=javascript.jsx
+    autocmd BufNewFile,BufRead *.js set filetype=javascript.jsx
+    autocmd BufNewFile,BufRead *.jsx set filetype=javascript.jsx
+    " autocmd BufNewFile,BufRead *.tsx set filetype=typescript.tsx
+    " autocmd BufNewFile,BufRead *.ts set filetype=typescript.tsx
+    " autocmd BufNewFile,BufRead *.js.snap set syntax=typescript.tsx
 
     autocmd FileType * setlocal tabstop=4 shiftwidth=4
     " autocmd FileType sh setlocal tabstop=2 shiftwidth=2
@@ -219,6 +226,35 @@ if has('persistent_undo')
     set undofile
 endif
 
+"---------------------------------------------------------------"
+"--- Automcomplete / ncm
+"---------------------------------------------------------------"
+" supress the annoying 'match x of y', 'The only match' and 'Pattern not found' messages
+set shortmess+=c
+" enable auto complete for `<backspace>`, `<c-w>` keys.
+" known issue https://github.com/ncm2/ncm2/issues/7
+au TextChangedI * call ncm2#auto_trigger()
+" When the <Enter> key is pressed while the popup menu is visible, it only
+" hides the menu. Use this mapping to close the menu and also start a new
+" line.
+" inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+au User Ncm2Plugin call ncm2#register_source({
+            \ 'name' : 'css',
+            \ 'priority': 9, 
+            \ 'subscope_enable': 1,
+            \ 'scope': ['css','scss'],
+            \ 'mark': 'css',
+            \ 'word_pattern': '[\w\-]+',
+            \ 'complete_pattern': ':\s*',
+            \ 'on_complete': ['ncm2#on_complete#omni', 'csscomplete#CompleteCSS'],
+            \ })
+
+set completefunc=LanguageClient#complete
+
+" pauses for 0.3 seconds after txt change before post to server
+let g:LanguageClient_changeThrottle = 0.3
 
 "---------------------------------------------------------------"
 "--- Lsc
@@ -226,6 +262,7 @@ endif
 "java https://github.com/Ruin0x11/intellij-lsp-server
 "java https://github.com/eclipse/eclipse.jdt.ls
 " \ 'java': ['/usr/local/bin/jdtls'], life's too short to get this to work
+let g:LanguageClient_diagnosticsEnable = 0
 let g:LanguageClient_serverCommands = {
             \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
             \ 'css': ['css-languageserver --stdio'],
@@ -251,7 +288,9 @@ color snazzy
 
 if has('gui_running')
     set guioptions=
-    set guifont=Hack\ Regular:h11
+    " set guifont=Hack\ Regular:h11
+    set macligatures
+    set guifont=Fira\ Code:h12
     set lines=50 columns=108 linespace=3
     set shellcmdflag=-ic
     let $BASH_ENV = "~/.bash_aliases"
@@ -264,6 +303,9 @@ let  blue     =  '#57c7ff'
 let  magenta  =  '#ff6ac1'
 let  cyan     =  '#9aedfe'
 let  orange   =  '#fecc9a'
+let  turqoise =  '#5af4ce'
+let  light_v  =  '#d69eff'
+let coral = '#FF776E'
 
 hi NonText guifg=bg
 hi Comment cterm=italic gui=italic
@@ -272,21 +314,69 @@ hi Comment cterm=italic gui=italic
 :exe 'hi MatchParen  guifg='.red
 :exe 'hi Search  cterm=underline gui=underline guibg=bg guifg='.green
 :exe 'hi Boolean guifg='.magenta
-:exe 'hi Number guifg='.orange
+:exe 'hi Number guifg='.turqoise
 
-:exe 'hi jsFuncArgs  guifg='.yellow.' cterm=italic'
-:exe 'hi jsParen  guifg='.orange
-:exe 'hi jsFuncCall  guifg='.cyan.' cterm=italic'
-:exe 'hi jsObjectKey guifg='.blue
-:exe 'hi jsTemplateBraces  guifg='.blue
 :exe 'hi jsImport  guifg='.blue
 :exe 'hi jsFrom  guifg='.blue
+:exe 'hi jsFuncArgs  guifg='.coral.' cterm=italic'
+:exe 'hi jsFuncCall  guifg='.light_v.' cterm=italic'
+:exe 'hi jsThis  guifg='.coral.' cterm=bold'
+
+:exe 'hi jsObjectKey guifg='.blue
+:exe 'hi jsObjectFuncName  guifg='.cyan
+
+:exe 'hi jsParens  guifg='.magenta
+:exe 'hi jsIfElseBraces      guifg='.magenta 
+:exe 'hi jsTryCatchBraces    guifg='.magenta 
+:exe 'hi jsFinallyBraces     guifg='.magenta 
+:exe 'hi jsSwitchBraces      guifg='.magenta 
+" :exe 'hi jsRepeatBraces      guifg='.magenta 
+:exe 'hi jsDestructuringBraces guifg='.turqoise
+:exe 'hi jsArrowFunction guifg='.turqoise
+
+:exe 'hi jsFuncBraces  guifg='.magenta
+:exe 'hi jsFuncParens  guifg='.light_v
+:exe 'hi jsTemplateBraces  guifg='.magenta
+:exe 'hi jsObjectBraces  guifg='.turqoise
+:exe 'hi jsArrayBraces  guifg='.turqoise
+
+:exe 'hi jsClassValue  guifg='.green
+
+syntax region jsxAttributeBraces
+    \ contained
+    \ start=+=\@<={+
+    \ end=+}\ze\%(\/\|\n\|\s\|>\)+
+    \ contains=TOP
+    \ keepend
+    \ extend
+
+" jsx props
+:exe 'hi Type cterm=italic guifg='.cyan
+" jsx closing tag
+" :exe 'hi Identifier guifg='.turqoise
+
+:exe 'hi xmlTagName  cterm=bold guifg='.blue
+:exe 'hi xmlTag cterm=bold guifg='.blue
+
+:exe 'hi xmlEndTag  guifg='.blue
+:exe 'hi jsxCloseString  guifg='.blue
+
+:exe 'hi jsSpecial  guifg='.green
+:exe 'hi jsxAttributeBraces  guifg='.green
+:exe 'hi htmlEndTag  guifg='.green
+:exe 'hi htmlTagName  guifg='.green
+:exe 'hi jsxAttrib guifg='.green
+
 
 :exe 'hi jsonBraces  guifg='.magenta
 :exe 'hi jsonKeyword  guifg='.magenta.' gui=bold cterm=bold'
 :exe 'hi jsonString  guifg='.cyan
 :exe 'hi jsonBoolean  guifg='.green
 :exe 'hi jsonNumber  guifg='.blue
+
+  syn match typescriptFunction "(super\s*|constructor\s*)" contained nextgroup=typescriptVars
+  syn match typescriptParameters "([a-zA-Z0-9_?.$][\w?.$]*)\s*:\s*([a-zA-Z0-9_?.$][\w?.$]*)" contained skipwhite
+  syn region typescriptVars start="(" end=")" contained contains=typescriptParameters transparent keepend
 
 "---------------------------------------------------------------"
 "--- Airline
@@ -305,7 +395,7 @@ let g:airline#extensions#default#layout = [
 
 let g:airline_section_b = '%{split(getcwd(), "/")[-1]}' " dont really care for the branch
 " let g:airline_section_c = '%t'
-let g:jsx_ext_required = 1
+let g:jsx_ext_required = 0
 
 
 "---------------------------------------------------------------"
@@ -336,15 +426,25 @@ let g:fzf_colors = {
 "--- Linting
 "---------------------------------------------------------------"
 " let g:ale_lint_on_save = 1
-let g:ale_lint_on_text_changed = 'normal'
-let g:ale_lint_delay = 0
+" let g:ale_lint_on_text_changed = 'normal'
 let g:ale_lint_on_insert_leave = 1
-let g:ale_linters = { 'javascript': ['eslint'] }
+let g:ale_lint_delay = 500
+let g:ale_linters = { 
+            \ 'javascript': ['eslint', 'prettier'],
+            \ 'json': ['prettier'],
+            \ 'graphql': ['prettier'],
+            \}
 let g:ale_fixers = { 
-            \'javascript': ['eslint', 'prettier'],
+            \ 'javascript': ['eslint'],
+            \ 'json': ['prettier'],
+            \ 'graphql': ['prettier'],
+            \ 'yml': ['prettier'],
             \ 'css': ['prettier'],
             \ 'markdown': ['prettier'],
             \}
+
+let g:ale_sign_error = '🤮'
+let g:ale_sign_warning = '🤢'
 " let g:ale_fix_on_save = 1
 
 " {buffer, lines -> filter(lines, 'v:val !=~ ''^\s*//''')}, " removes comments
@@ -352,28 +452,28 @@ let g:ale_fixers = {
 "---------------------------------------------------------------"
 "--- NERDTree stuff
 "---------------------------------------------------------------"
-" let g:NERDTreeWinSize=40 " nice big tree is it's easy to toggle off
-" let NERDTreeMinimalUI=1
-" let NERDTreeStatusline="%{ getcwd() }"
-" let NERDTreeHijackNetrw=1
-"
+let g:NERDTreeWinSize=40 " nice big tree is it's easy to toggle off
+let NERDTreeMinimalUI=1
+let NERDTreeStatusline="%{ getcwd() }"
+let NERDTreeHijackNetrw=1
 
-" autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
-" let NERDTreeIgnore = ['\.DAT$', '\.LOG1$', '\.LOG1$']
-" let NERDTreeIgnore += [
-"             \ '\.gif$',
-"             \ '\.mp3$',
-"             \ '\.flac$',
-"             \ '\.ogg$',
-"             \ '\.mp4$',
-"             \ '\.avi$',
-"             \ '.webm$',
-"             \ '.mkv$',
-"             \ '\.pdf$',
-"             \ '\.zip$',
-"             \ '\.tar.gz$',
-"             \ '\.rar$']
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+let NERDTreeIgnore = ['\.DAT$', '\.LOG1$', '\.LOG1$']
+let NERDTreeIgnore += [
+            \ '\.gif$',
+            \ '\.mp3$',
+            \ '\.flac$',
+            \ '\.ogg$',
+            \ '\.mp4$',
+            \ '\.avi$',
+            \ '.webm$',
+            \ '.mkv$',
+            \ '\.pdf$',
+            \ '\.zip$',
+            \ '\.tar.gz$',
+            \ '\.rar$']
 
 let g:netrw_liststyle = 3
 let g:netrw_banner = 1
@@ -463,9 +563,17 @@ nmap <silent> <C-H> :wincmd h<CR>
 nmap <silent> <C-J> :wincmd j<CR>
 nmap <silent> <C-K> :wincmd k<CR>
 nmap <silent> <C-L> :wincmd l<CR>
-" map <C-N> :NERDTreeToggle<CR>
-map <C-N> :Explore<CR>
-map <leader>n :Vexplore<CR>
+map <C-N> :NERDTreeToggle<CR>
+" function! FileFinder(position)
+"     " position like Ex Sex Vex
+"     echo expand("%:.:h")
+"     exec a:position . " ." . expand("%:.:h")
+" endfunction
+"
+" map <C-N> :e %:h<CR>
+" " map <C-N> :call FileFinder("Vex")<CR>
+" " map <leader>n :Vexplore<CR>
+" map <leader>n :Lex<CR>
 " map <C-N> :e.<CR>
 map <C-P> :Files<CR>
 " map <C-Q>
@@ -479,8 +587,8 @@ inoremap <expr> <C-Space> pumvisible() \|\| &omnifunc == '' ?
 imap <C-@> <C-Space>
 
 " :inoremap <Tab> <C-R>=Tab_Or_Complete()<CR>
-nmap <Tab> :b#<CR>
-
+" nmap <Tab> :b#<CR>
+"
 "---------------------------------------------------------------"
 "--- Dictionary leader
 "---------------------------------------------------------------"
@@ -503,6 +611,7 @@ map <leader>bn :bnext<CR>
 map <leader>bp :bprevious<CR>
 map <leader>bq :DeleteFileAndBuff<CR> 
 map <leader>br :rename<space>
+map <leader>bt :b#<CR>
 map <leader>by :YankWoleBuffer<CR>
 
 let g:lmap.d = { 'name': ' -- Delete' }
@@ -533,7 +642,7 @@ map <leader>gv :vsplit ~/.vimrc<CR>
 let g:lmap.l = { 'name': ' -- Layout' }
 
 " let g:lmap.n = { 'name': ' -- Project' }
-" map <leader>n :NERDTreeFind<CR>
+map <leader>n :NERDTreeFind<CR>
 
 let g:lmap.p = { 'name': ' -- Project' }
 map <leader>pg :GFiles?<CR>
@@ -647,13 +756,13 @@ command! -bang -nargs=* Find
 "--- Functions
 "---------------------------------------------------------------"
 "Use TAB to complete when typing words, else inserts TABs as usual.
-function! Tab_Or_Complete()
-    if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~'^\w'
-        return "\<C-N>"
-    else
-        return "\<Tab>"
-    endif
-endfunction
+" function! Tab_Or_Complete()
+"     if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~'^\w'
+"         return "\<C-N>"
+"     else
+"         return "\<Tab>"
+"     endif
+" endfunction
 
 function! ResiseTagBar(size)
     let g:tagbar_width = a:size

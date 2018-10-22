@@ -4,6 +4,7 @@
 alias zshe="vim ~/.zshrc"
 alias zshr="source ~/.zshrc"
 alias vo="vim \$(fzf)"
+alias mvim="/Applications/MacVim.app/Contents/bin/mvim"
 alias als="cat ~/.aliases.zsh | grep \"^alias.\+=\\\"\" | fzf"
 alias ctags="`brew --prefix`/bin/ctags"
 
@@ -68,8 +69,22 @@ alias kmux="kill_tmux_session"
 alias spg="cd /users/adh23/service/sky-pages"
 alias sps="pages start dev --apps mobile,bill,mysky | lolcat"
 alias spt="mv .env .nenv; pages test unit -q; mv .nenv .env; alert"
-alias spd="docker_deploy_nimbus"
 alias spc="ctags -R apps/ && ctags -R -a src/"
+
+alias spd="docker_deploy_nimbus"
+alias spn="git pull; npm i; sps"
+
+#---------------------------------------------#
+# Pages-lib
+# -------------------------------------------#
+alias lig="cd /users/adh23/service/sky-pages"
+alias lis="yarn storybook:start"
+
+#---------------------------------------------#
+# pages-apps
+# -------------------------------------------#
+alias pag="cd /users/adh23/service/sky-pages"
+alias pas="yarn start:dev"
 
 #---------------------------------------------#
 # SKYPORT
@@ -77,17 +92,17 @@ alias spc="ctags -R apps/ && ctags -R -a src/"
 alias gqg="cd /users/adh23/service/skyport-graphql"
 alias gqs="start_skyport"
 alias gqt="skyport_test_modified_files"
-alias gqj="skyportJq"
-alias gqv="compare_skyport_vault_keys"
 alias gqc="ctags -R src/schema/"
-alias gqd="NODE_ENV=integration npm run debug"
+
+alias gqv="compare_skyport_vault_keys"
 
 #---------------------------------------------#
 # OTHER
 # -------------------------------------------#
 alias ppp="start_ppp"
 
-alias poco="watch -n20 slack chat send -tx 'PCOO?' -ch 'D35J9H880'"
+alias poco="watch -n0.2 slack chat send -tx 'PCOO?' -ch 'D35J9H880'"
+alias sam="watch -n0.2 slack chat send -tx '🍆' -ch 'D3VFV16U8'"
 alias graeme="slack chat send -tx 'built' -ch 'D3U9RFCE8'"
 
 # alias skyport="start_skyport | jq -R -r '. as $line | try fromjson .info.message | split(\"options:\") | .[1] | fromjson'"

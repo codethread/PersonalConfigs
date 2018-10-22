@@ -8,5 +8,6 @@ node_g_installs() {
     npm i -g vscode-css-languageserver-bin
     npm i -g vscode-html-languageserver-bin
     npm i -g eslint 
+    npm i -g npm-merge-driver 
     npm i -g tern 
 }
