@@ -68,6 +68,7 @@ alias kmux="kill_tmux_session"
 # -------------------------------------------#
 alias spg="cd /users/adh23/service/sky-pages"
 alias sps="pages start dev --apps mobile,bill,mysky | lolcat"
+alias spu="pages start dev --apps unicorn | lolcat"
 alias spt="mv .env .nenv; pages test unit -q; mv .nenv .env; alert"
 alias spc="ctags -R apps/ && ctags -R -a src/"
 
@@ -77,8 +78,13 @@ alias spn="git pull; npm i; sps"
 #---------------------------------------------#
 # Pages-lib
 # -------------------------------------------#
-alias lig="cd /users/adh23/service/sky-pages"
-alias lis="yarn storybook:start"
+alias libg="cd /users/adh23/service/sky-pages"
+alias libs="yarn storybook:start"
+
+# build
+alias liba="yarn build:apollo-content"
+alias libo="yarn build:organisms"
+alias libm="yarn build:molecules"
 
 #---------------------------------------------#
 # pages-apps

@@ -45,7 +45,7 @@ windows:
           - clear
         - info_pane:
           - sleep 1
-          - lis
+          - libs
   - apps:
       root: ~/Service/pages-apps
       layout: main-horizontal

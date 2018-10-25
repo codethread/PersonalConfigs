@@ -22,6 +22,7 @@ Plug 'plasticboy/vim-markdown'
 Plug 'kannokanno/previm'
 Plug 'godlygeek/tabular'
 Plug 'justinmk/vim-sneak'
+Plug 'tmhedberg/matchit'
 
 "------------------------------------------
 "--- Linting / testing
@@ -33,38 +34,32 @@ Plug 'w0rp/ale' " async linting
 "------------------------------------------
 "--- GUI changes
 "-----------------------------------------
+Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] }
 Plug 'airblade/vim-gitgutter'
 Plug 'Shougo/denite.nvim'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
-Plug 'vim-airline/vim-airline' " TODO slows startup replace
-Plug 'vim-airline/vim-airline-themes'
+" Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
+Plug 'itchyny/lightline.vim'
 Plug 'gcmt/taboo.vim'
 Plug 'majutsushi/tagbar'
 Plug 'hecal3/vim-leader-guide'
 Plug 'Yggdroot/indentLine'
 Plug 'junegunn/goyo.vim'
 Plug 'connorholyday/vim-snazzy'
+Plug 'joshdick/onedark.vim'
+Plug 'chrisbra/Colorizer'
 
 "------------------------------------------
 "--- Languages
 "-----------------------------------------
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
-Plug 'moll/vim-node'
 Plug 'sheerun/vim-polyglot'
-Plug 'chrisbra/Colorizer'
-Plug 'elixir-lang/vim-elixir'
-Plug 'jparise/vim-graphql'
-Plug 'pangloss/vim-javascript'
-Plug 'mxw/vim-jsx'
-Plug 'elzr/vim-json'
-Plug 'kchmck/vim-coffee-script'
+Plug 'peitalin/vim-jsx-typescript' "| Plug 'Quramy/tsuquyomi'
+Plug 'moll/vim-node'
 " Plug 'styled-components/vim-styled-components'
 Plug 'chrisbra/csv.vim'
-Plug 'leafgarland/typescript-vim' | Plug 'peitalin/vim-jsx-typescript'
-" Plug 'Quramy/tsuquyomi'
 Plug 'shirk/vim-gas'
-Plug 'othree/html5.vim'
 
 "------------------------------------------
 "--- Utilities
@@ -95,7 +90,6 @@ Plug 'easymotion/vim-easymotion' " XXX too annoying
 " Plug 'Valloric/YouCompleteMe', { 'do': './install.py', 'on': [] } " XXX using ncm2 instead
 " Plug 'ternjs/tern_for_vim', { 'do': 'npm i'}
 " Plug 'Shougo/deoplete.nvim' " XXX using ncm2 instead
-Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] } " XXX using builtin
 "---------------------------------------------------------------"
 
 call plug#end()
@@ -117,15 +111,18 @@ if !exists("autocommands_loaded")
 
     autocmd BufNewFile,BufRead *.graphql nnoremap gd <C-]>
 
+    autocmd BufNewFile,BufRead *.js nnoremap <silent> gD :call LanguageClient#textDocument_definition()<CR>
+    autocmd BufNewFile,BufRead *.jsx nnoremap <silent> gD :call LanguageClient#textDocument_definition()<CR>
+
     autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
     autocmd BufNewFile,BufRead *.asm set syntax=nasm
     autocmd BufNewFile,BufRead *.ts set filetype=javascript.jsx
     autocmd BufNewFile,BufRead *.tsx set filetype=javascript.jsx
-    autocmd BufNewFile,BufRead *.js set filetype=javascript.jsx
-    autocmd BufNewFile,BufRead *.jsx set filetype=javascript.jsx
+
+    " autocmd BufNewFile,BufRead *.js set filetype=typescript.jsx
+    " autocmd BufNewFile,BufRead *.jsx set filetype=typescript.jsx
     " autocmd BufNewFile,BufRead *.tsx set filetype=typescript.tsx
     " autocmd BufNewFile,BufRead *.ts set filetype=typescript.tsx
-    " autocmd BufNewFile,BufRead *.js.snap set syntax=typescript.tsx
 
     autocmd FileType * setlocal tabstop=4 shiftwidth=4
     " autocmd FileType sh setlocal tabstop=2 shiftwidth=2
@@ -146,15 +143,15 @@ set clipboard=unnamed " just too annoying without this
 set mouse=a
 set wrapmargin=0
 " set cursorline " XXX slow
+" set relativenumber
 set regexpengine=1 " TODO really slow without this??
-set relativenumber
 set wildignore=*.keep,*~,*.swp
 set incsearch
 set hlsearch
 set bs=indent,eol,start " Allow backspacing over everything in insert mode
 set laststatus=2
 set dictionary="/usr/dict/words"
-set tags=tags;
+set tags=.tags;
 set nrformats-=octal
 set fillchars=vert:│,fold:·
 set scrolloff=3
@@ -162,6 +159,14 @@ set splitright
 set splitbelow
 set grepprg=rg\ --vimgrep
 set completeopt=noinsert,menuone,noselect " note that must keep noinsert in completeopt, the others is optional
+set wildmenu
+set path+=**
+
+"---------------------------------------------------------------"
+"--- Debug
+"---------------------------------------------------------------"
+" set verbose=9
+" set verbosefile=~/vim_debug.txt
 
 "---------------------------------------------------------------"
 "--- Tiny Plugins
@@ -202,6 +207,8 @@ let g:pencil#wrapModeDefault = 'soft'
 let g:codi#rightsplit = 0
 let g:codi#rightalign = 0
 let g:codi#width = 80
+
+" let g:jsx_ext_required = 0
 
 " autocmd FileType js UltiSnipsAddFiletypes javascript-react
 " let g:UltiSnipsExpandTrigger="<tab>"
@@ -274,7 +281,7 @@ let g:LanguageClient_serverCommands = {
             \ }
 
 nnoremap <F5> :call LanguageClient_contextMenu()<CR>
-nnoremap <silent> <C-]> :call LanguageClient#textDocument_definition()<CR>
+" nnoremap <silent> <C-]> :call LanguageClient#textDocument_definition()<CR>
 nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
 
 "---------------------------------------------------------------"
@@ -283,11 +290,13 @@ nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum" " something to do with vim in a terminal
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 
+let g:onedark_termcolors=256
 " color tenderAdam
 color snazzy
+" colorscheme onedark
 
 if has('gui_running')
-    set guioptions=
+    set guioptions=e
     " set guifont=Hack\ Regular:h11
     set macligatures
     set guifont=Fira\ Code:h12
@@ -305,98 +314,70 @@ let  cyan     =  '#9aedfe'
 let  orange   =  '#fecc9a'
 let  turqoise =  '#5af4ce'
 let  light_v  =  '#d69eff'
-let coral = '#FF776E'
+let  coral    = '#FF776E'
 
-hi NonText guifg=bg
-hi Comment cterm=italic gui=italic
+" import
+:exe 'hi typescriptReserved     guifg='.blue
+:exe 'hi typescriptEndColons    guifg=fg'
+:exe 'hi typescriptBraces       guifg='.magenta
+:exe 'hi typescriptParens       guifg='.turqoise
 
-:exe 'hi SpellBad    guifg=white guibg='.red
-:exe 'hi MatchParen  guifg='.red
-:exe 'hi Search  cterm=underline gui=underline guibg=bg guifg='.green
-:exe 'hi Boolean guifg='.magenta
-:exe 'hi Number guifg='.turqoise
+" const 
+:exe 'hi typescriptIdentifier   guifg='.blue.'      cterm=bold' 
+:exe 'hi typescriptOpSymbols    guifg='.turqoise
 
-:exe 'hi jsImport  guifg='.blue
-:exe 'hi jsFrom  guifg='.blue
-:exe 'hi jsFuncArgs  guifg='.coral.' cterm=italic'
-:exe 'hi jsFuncCall  guifg='.light_v.' cterm=italic'
-:exe 'hi jsThis  guifg='.coral.' cterm=bold'
+:exe 'hi typescriptOpSymbols    guifg='.turqoise
 
-:exe 'hi jsObjectKey guifg='.blue
-:exe 'hi jsObjectFuncName  guifg='.cyan
+:exe 'hi typescript  guifg='.blue
 
-:exe 'hi jsParens  guifg='.magenta
-:exe 'hi jsIfElseBraces      guifg='.magenta 
-:exe 'hi jsTryCatchBraces    guifg='.magenta 
-:exe 'hi jsFinallyBraces     guifg='.magenta 
-:exe 'hi jsSwitchBraces      guifg='.magenta 
-" :exe 'hi jsRepeatBraces      guifg='.magenta 
-:exe 'hi jsDestructuringBraces guifg='.turqoise
-:exe 'hi jsArrowFunction guifg='.turqoise
+:exe 'hi xmlAttrib  cterm=italic guifg='.cyan
+:exe 'hi xmlEqual    guifg='.turqoise
+" light blues
+hi xmlTagName guifg=#59ACE5
+hi xmlTag guifg=#59ACE5
+"
+" " dark blues
+hi xmlEndTag guifg=#2974a1
+hi jsxCloseString guifg=#2974a1
+hi htmlTag guifg=#2974a1
+hi htmlEndTag guifg=#2974a1
+hi htmlTagName guifg=#59ACE5
+hi jsxAttrib guifg=#1BD1C1
+:exe 'hi jsxRegion guifg='.coral
+:exe 'hi jsxChild guifg='.magenta
 
-:exe 'hi jsFuncBraces  guifg='.magenta
-:exe 'hi jsFuncParens  guifg='.light_v
-:exe 'hi jsTemplateBraces  guifg='.magenta
-:exe 'hi jsObjectBraces  guifg='.turqoise
-:exe 'hi jsArrayBraces  guifg='.turqoise
-
-:exe 'hi jsClassValue  guifg='.green
-
-syntax region jsxAttributeBraces
-    \ contained
-    \ start=+=\@<={+
-    \ end=+}\ze\%(\/\|\n\|\s\|>\)+
-    \ contains=TOP
-    \ keepend
-    \ extend
-
-" jsx props
-:exe 'hi Type cterm=italic guifg='.cyan
-" jsx closing tag
-" :exe 'hi Identifier guifg='.turqoise
-
-:exe 'hi xmlTagName  cterm=bold guifg='.blue
-:exe 'hi xmlTag cterm=bold guifg='.blue
-
-:exe 'hi xmlEndTag  guifg='.blue
-:exe 'hi jsxCloseString  guifg='.blue
-
-:exe 'hi jsSpecial  guifg='.green
-:exe 'hi jsxAttributeBraces  guifg='.green
-:exe 'hi htmlEndTag  guifg='.green
-:exe 'hi htmlTagName  guifg='.green
-:exe 'hi jsxAttrib guifg='.green
-
-
-:exe 'hi jsonBraces  guifg='.magenta
-:exe 'hi jsonKeyword  guifg='.magenta.' gui=bold cterm=bold'
-:exe 'hi jsonString  guifg='.cyan
-:exe 'hi jsonBoolean  guifg='.green
-:exe 'hi jsonNumber  guifg='.blue
-
-  syn match typescriptFunction "(super\s*|constructor\s*)" contained nextgroup=typescriptVars
-  syn match typescriptParameters "([a-zA-Z0-9_?.$][\w?.$]*)\s*:\s*([a-zA-Z0-9_?.$][\w?.$]*)" contained skipwhite
-  syn region typescriptVars start="(" end=")" contained contains=typescriptParameters transparent keepend
-
+" :exe 'hi xmlTag cterm=bold guifg='.blue
+"
+"
+" :exe 'hi xmlEndTag  guifg='.blue
+" :exe 'hi jsxCloseString  guifg='.blue
 "---------------------------------------------------------------"
 "--- Airline
 "---------------------------------------------------------------"
 " let g:airline_powerline_fonts = 1
 " let g:airline_theme = 'tenderAdam'
-let g:airline_theme='snazzy'
-let g:airline#extensions#ale#enabled = 1
-let g:airline#extensions#tagbar#enabled = 0
-let g:airline#extensions#tabline#enabled = 1
+" let g:airline_theme='onedark'
 
-let g:airline#extensions#default#layout = [
-            \ [ 'a', 'b', 'c' ],
-            \ [ 'x', 'z', 'error', 'warning' ]
-            \ ]
+" let g:airline_theme='snazzy'
+" let g:airline#extensions#ale#enabled = 1
+" let g:airline#extensions#tagbar#enabled = 0
+" let g:airline#extensions#tabline#enabled = 1
+" let g:airline#extensions#default#layout = [
+"             \ [ 'a', 'b', 'c' ],
+"             \ [ 'x', 'z', 'error', 'warning' ]
+"             \ ]
+" let g:airline_section_b = '%{split(getcwd(), "/")[-1]}' " dont really care for the branch
+" " let g:airline_section_c = '%t'
 
-let g:airline_section_b = '%{split(getcwd(), "/")[-1]}' " dont really care for the branch
-" let g:airline_section_c = '%t'
-let g:jsx_ext_required = 0
+let g:lightline = {
+    \ 'colorscheme': 'snazzy',
+    \ }
 
+let g:lightline.tabline = {
+  \   'left': [ ['tabs'] ],
+  \   'right': [ ['close'] ]
+  \ }
+set showtabline=2  " Show tabline
 
 "---------------------------------------------------------------"
 "--- FZF
@@ -443,8 +424,8 @@ let g:ale_fixers = {
             \ 'markdown': ['prettier'],
             \}
 
-let g:ale_sign_error = '🤮'
-let g:ale_sign_warning = '🤢'
+let g:ale_sign_error = '✘'
+let g:ale_sign_warning = '▹'
 " let g:ale_fix_on_save = 1
 
 " {buffer, lines -> filter(lines, 'v:val !=~ ''^\s*//''')}, " removes comments
@@ -474,9 +455,6 @@ let NERDTreeIgnore += [
             \ '\.zip$',
             \ '\.tar.gz$',
             \ '\.rar$']
-
-let g:netrw_liststyle = 3
-let g:netrw_banner = 1
 
 "---------------------------------------------------------------"
 "--- Typing stuff
@@ -804,52 +782,91 @@ function! Format()
     call cursor(l, c)
 endfunction
 
-function! SearchForDefinition(name)
-    " try tags first
-    " try | exec 'tag ' . a:name | return | catch | silent | endtry
+"---------------------------------------------------------------"
+"--- One dark
+"---------------------------------------------------------------"
 
-    let quotes = "['" . '"]'
-    let langspecific = "\\(from \\|require(\\)"
-    let patt = '\<' . a:name . '\>' . '\_[^;]\{-}' . langspecific . quotes . '.\+' . quotes . "[\s;)]*\$"
-
-    if search(patt, 'b') == 0 " look for import
-        call search('\(' . a:name . '\|export default\)') " look for export
-        return
-    endif
-
-    call search(quotes, 'e') " go to file name
-    " find out if relative or global
-    " js specific index file check
-    let workdir = getcwd()
-
-
-    let isRel = nr2char(strgetchar(getline('.'), col('.'))) =~ '\.'
-    if isRel
-        exec 'cd '. expand('%:p:h')
-    endif
-
-    let options = globpath(expand("<cfile>"), '*',0,1)
-    if len(options) == 0 " length = 0 path
-        try
-            let [file] = getcompletion(expand("<cfile>") . '.', 'file')
-        catch
-            echo 'node module'
-            return
-        endtry
-    else
-        let [file] = getcompletion(expand("<cfile>") . '/index', 'file')
-    endif
-
-    if &mod " modified so open split
-        exec 'vsplit ' . file
-    else
-        exec 'e ' . file
-    endif
-
-    " put the cd back in order
-    exec 'cd '. workdir
-
-    " recurse
-    call SearchForDefinition(a:name)
-endfunction
-
+" """"""""""""" Color Schemes """"""""""""""""
+" set termguicolors
+" colorscheme onedark
+"
+" highlight Normal guibg=#21242a
+" highlight MatchParen guifg=#C678DD guibg=#504066
+" highlight LineNr    guifg=#151822
+" highlight CursorLineNr guifg=#56B6C2
+" highlight Error guifg=#f57373 guibg=#804040
+" highlight vimError guifg=#f57373 guibg=#804040
+"
+" hi IndentGuidesEven guibg=#21242a guifg=#1f1f28
+" hi IndentGuidesOdd guibg=#262a36 guifg=#1f1f28
+" hi Comment cterm=italic guifg=#4a5158
+" hi String guifg=#98C379 guibg=#2a2e34
+"
+" """ browns
+" " function params: numbers and constants
+" hi Statement guifg=#907161
+" hi Conditional guifg=#907161
+" hi Keyword guifg=#56B6C2
+" hi Function guifg=#56B6C2
+"
+" " Yellows
+" hi Number guifg=#E5C07B
+" hi Special guifg=#E5C07B
+" hi Boolean guifg=#E5C07B
+"
+" " purple
+" hi CtrlPMatch guifg=#ba9ef7
+" hi Visual guibg=#364652
+"
+" " medium red: if else operators
+" hi Preproc guifg=#e86868
+" hi Type guifg=#e86868
+"
+"
+"
+" """""" vim-jsx ONLY
+" hi Identifier cterm=italic
+"
+" " Blues
+" " light blues
+" hi xmlTagName guifg=#59ACE5
+" hi xmlTag guifg=#59ACE5
+"
+" " dark blues
+" hi xmlEndTag guifg=#2974a1
+" hi jsxCloseString guifg=#2974a1
+" hi htmlTag guifg=#2974a1
+" hi htmlEndTag guifg=#2974a1
+" hi htmlTagName guifg=#59ACE5
+" hi jsxAttrib guifg=#1BD1C1
+"
+" " cyan
+" hi Constant guifg=#56B6C2
+" hi typescriptBraces guifg=#56B6C2
+" hi typescriptEndColons guifg=#56B6C2
+" hi typescriptRef guifg=#56B6C2
+" hi typescriptPropietaryMethods guifg=#56B6C2
+" hi typescriptEventListenerMethods guifg=#56B6C2
+" hi typescriptFunction guifg=#56B6C2
+" hi typescriptVars guifg=#56B6C2
+" hi typescriptParen guifg=#56B6C2
+" hi typescriptDotNotation guifg=#56B6C2
+" hi typescriptBracket guifg=#56B6C2
+" hi typescriptBlock guifg=#56B6C2
+" hi typescriptJFunctions guifg=#56B6C2
+" hi typescriptSFunctions guifg=#56B6C2
+" hi typescriptInterpolationDelimiter guifg=#56B6C2
+" hi typescriptIdentifier guifg=#907161 cterm=italic
+"
+" hi typescriptStatement guifg=#C678DD
+" hi tsxRegion guifg=#C678DD
+" hi tsxAttrib guifg=#56B6C2
+"
+" " javascript
+" hi jsParens guifg=#56B6C2
+" hi jsObjectBraces guifg=#C678DD
+" hi jsFuncBraces guifg=#56B6C2
+" hi jsObjectFuncName guifg=#D19A66
+" hi jsObjectKey guifg=#56B6C2
+"
+"
