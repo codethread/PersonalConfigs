@@ -100,7 +100,6 @@ call plug#end()
 filetype plugin indent on " Needs to go before autocmds
 syntax enable " Needs to go before autocmds
 
-set expandtab
 
 "---------------------------------------------------------------"
 "--- autocmd
@@ -108,59 +107,51 @@ set expandtab
 if !exists("autocommands_loaded")
     let autocommands_loaded = 1
     autocmd VimEnter * set number
+    autocmd BufEnter * 
+                \ call ncm2#enable_for_buffer() " enable ncm2 for all buffer
+                \ if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
-    autocmd BufNewFile,BufRead *.graphql nnoremap gd <C-]>
-
-    autocmd BufNewFile,BufRead *.js nnoremap <silent> gD :call LanguageClient#textDocument_definition()<CR>
-    autocmd BufNewFile,BufRead *.jsx nnoremap <silent> gD :call LanguageClient#textDocument_definition()<CR>
+    autocmd CompleteDone * silent! pclose
+    autocmd TextChangedI * call ncm2#auto_trigger()
 
     autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
-    autocmd BufNewFile,BufRead *.asm set syntax=nasm
-    autocmd BufNewFile,BufRead *.ts set filetype=javascript.jsx
-    autocmd BufNewFile,BufRead *.tsx set filetype=javascript.jsx
 
-    " autocmd BufNewFile,BufRead *.js set filetype=typescript.jsx
-    " autocmd BufNewFile,BufRead *.jsx set filetype=typescript.jsx
-    " autocmd BufNewFile,BufRead *.tsx set filetype=typescript.tsx
-    " autocmd BufNewFile,BufRead *.ts set filetype=typescript.tsx
+    autocmd BufNewFile,BufRead *.{ts,tsx,js,jsx} 
+                \ set filetype=javascript.jsx |
+                \ nnoremap <silent> gD :call LanguageClient#textDocument_definition()<CR>
 
     autocmd FileType * setlocal tabstop=4 shiftwidth=4
-    " autocmd FileType sh setlocal tabstop=2 shiftwidth=2
-    " autocmd FileType javascript setlocal tabstop=4 shiftwidth=4
-    " autocmd FileType javascript.jsx setlocal tabstop=4 shiftwidth=4
-    " autocmd FileType elixir  setlocal tabstop=4 shiftwidth=4
-    " autocmd FileType ruby  setlocal tabstop=2 shiftwidth=2
-    " autocmd FileType yaml  setlocal tabstop=2 shiftwidth=2
-
-    autocmd BufEnter * call ncm2#enable_for_buffer() " enable ncm2 for all buffer
-    autocmd CompleteDone * silent! pclose
 endif
 
 "---------------------------------------------------------------"
 "--- Editor
 "---------------------------------------------------------------"
-set clipboard=unnamed " just too annoying without this
-set mouse=a
-set wrapmargin=0
-" set cursorline " XXX slow
-" set relativenumber
-set regexpengine=1 " TODO really slow without this??
-set wildignore=*.keep,*~,*.swp
-set incsearch
-set hlsearch
-set bs=indent,eol,start " Allow backspacing over everything in insert mode
-set laststatus=2
+
+set backspace=indent,eol,start              " Allow backspacing over everything in insert mode
+set clipboard=unnamed                       " just too annoying without this
+set completefunc=LanguageClient#complete
+set completeopt=noinsert,menuone,noselect   " note that must keep noinsert in completeopt, the others is optional
+" set cursorline                              " XXX slow
 set dictionary="/usr/dict/words"
-set tags=.tags;
-set nrformats-=octal
-set fillchars=vert:│,fold:·
-set scrolloff=3
-set splitright
-set splitbelow
+set expandtab
+set fillchars=vert:│,fold:·                 " char between panels
 set grepprg=rg\ --vimgrep
-set completeopt=noinsert,menuone,noselect " note that must keep noinsert in completeopt, the others is optional
-set wildmenu
+set hlsearch
+set incsearch
+set laststatus=2
+set mouse=a
+set nrformats-=octal
 set path+=**
+set regexpengine=1                          " TODO really slow without this??
+" set relativenumber                          " XXX slow
+set scrolloff=3
+set shortmess+=c
+set splitbelow
+set splitright
+set tags=.tags;
+set wildignore=*.keep,*~,*.swp
+set wildmenu
+set wrapmargin=0
 
 "---------------------------------------------------------------"
 "--- Debug
@@ -177,25 +168,30 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 let g:tagbar_width = 30
 let g:tagbar_compact = 0
 let g:tagbar_autopreview = 0
-" autocmd VimEnter * nested :TagbarOpen
 
 let g:indentLine_char = get(g:, 'indentLine_char', '┊')
 let g:indentLine_concealcursor = 'niv'
 let g:indentLine_conceallevel = 2
 let g:indentLine_fileTypeExclude = ['help', 'man', 'startify', 'NERDTree']
-" let g:indentLine_fileTypeExclude = ['help', 'man', 'startify']
 
 let g:previm_open_cmd = 'open -a Safari'
 "
 let g:vim_markdown_folding_disabled = 1
 let g:vim_markdown_conceal = 0
-" let g:markdown_fenced_languages = [
+
+" csharp=cs means csharp highlights as cs
 let g:vim_markdown_fenced_languages = [
-            \ 'csharp=cs',
-            \ 'vim=viml',
-            \ 'sh=bash',
+            \ 'coffee',
+            \ 'css',
+            \ 'erb=eruby',
             \ 'javascript',
-            \ 'typescript=javascript' ]
+            \ 'typescript',
+            \ 'js=javascript',
+            \ 'json=javascript',
+            \ 'ruby',
+            \ 'sass',
+            \ 'xml'
+            \ ]
 
 let g:goyo_width = 120 " default 80
 let g:goyo_height = 95 "(default: 85%)
@@ -208,7 +204,7 @@ let g:codi#rightsplit = 0
 let g:codi#rightalign = 0
 let g:codi#width = 80
 
-" let g:jsx_ext_required = 0
+let g:jsx_ext_required = 0
 
 " autocmd FileType js UltiSnipsAddFiletypes javascript-react
 " let g:UltiSnipsExpandTrigger="<tab>"
@@ -236,15 +232,6 @@ endif
 "---------------------------------------------------------------"
 "--- Automcomplete / ncm
 "---------------------------------------------------------------"
-" supress the annoying 'match x of y', 'The only match' and 'Pattern not found' messages
-set shortmess+=c
-" enable auto complete for `<backspace>`, `<c-w>` keys.
-" known issue https://github.com/ncm2/ncm2/issues/7
-au TextChangedI * call ncm2#auto_trigger()
-" When the <Enter> key is pressed while the popup menu is visible, it only
-" hides the menu. Use this mapping to close the menu and also start a new
-" line.
-" inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 au User Ncm2Plugin call ncm2#register_source({
@@ -258,10 +245,8 @@ au User Ncm2Plugin call ncm2#register_source({
             \ 'on_complete': ['ncm2#on_complete#omni', 'csscomplete#CompleteCSS'],
             \ })
 
-set completefunc=LanguageClient#complete
 
-" pauses for 0.3 seconds after txt change before post to server
-let g:LanguageClient_changeThrottle = 0.3
+let g:LanguageClient_changeThrottle = 0.3 " pauses for 0.3 seconds after txt change before post to server
 
 "---------------------------------------------------------------"
 "--- Lsc
@@ -281,9 +266,7 @@ let g:LanguageClient_serverCommands = {
             \ }
 
 nnoremap <F5> :call LanguageClient_contextMenu()<CR>
-" nnoremap <silent> <C-]> :call LanguageClient#textDocument_definition()<CR>
 nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
-
 "---------------------------------------------------------------"
 "--- Appearance
 "---------------------------------------------------------------"
@@ -305,52 +288,6 @@ if has('gui_running')
     let $BASH_ENV = "~/.bash_aliases"
 endif
 
-let  red      =  '#ff5c57'
-let  green    =  '#5af78e'
-let  yellow   =  '#f3f99d'
-let  blue     =  '#57c7ff'
-let  magenta  =  '#ff6ac1'
-let  cyan     =  '#9aedfe'
-let  orange   =  '#fecc9a'
-let  turqoise =  '#5af4ce'
-let  light_v  =  '#d69eff'
-let  coral    = '#FF776E'
-
-" import
-:exe 'hi typescriptReserved     guifg='.blue
-:exe 'hi typescriptEndColons    guifg=fg'
-:exe 'hi typescriptBraces       guifg='.magenta
-:exe 'hi typescriptParens       guifg='.turqoise
-
-" const 
-:exe 'hi typescriptIdentifier   guifg='.blue.'      cterm=bold' 
-:exe 'hi typescriptOpSymbols    guifg='.turqoise
-
-:exe 'hi typescriptOpSymbols    guifg='.turqoise
-
-:exe 'hi typescript  guifg='.blue
-
-:exe 'hi xmlAttrib  cterm=italic guifg='.cyan
-:exe 'hi xmlEqual    guifg='.turqoise
-" light blues
-hi xmlTagName guifg=#59ACE5
-hi xmlTag guifg=#59ACE5
-"
-" " dark blues
-hi xmlEndTag guifg=#2974a1
-hi jsxCloseString guifg=#2974a1
-hi htmlTag guifg=#2974a1
-hi htmlEndTag guifg=#2974a1
-hi htmlTagName guifg=#59ACE5
-hi jsxAttrib guifg=#1BD1C1
-:exe 'hi jsxRegion guifg='.coral
-:exe 'hi jsxChild guifg='.magenta
-
-" :exe 'hi xmlTag cterm=bold guifg='.blue
-"
-"
-" :exe 'hi xmlEndTag  guifg='.blue
-" :exe 'hi jsxCloseString  guifg='.blue
 "---------------------------------------------------------------"
 "--- Airline
 "---------------------------------------------------------------"
@@ -439,7 +376,6 @@ let NERDTreeStatusline="%{ getcwd() }"
 let NERDTreeHijackNetrw=1
 
 
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 let NERDTreeIgnore = ['\.DAT$', '\.LOG1$', '\.LOG1$']
 let NERDTreeIgnore += [

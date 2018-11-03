@@ -28,7 +28,7 @@ hi ALEWarning cterm=underline,italic
 :exe 'hi jsFuncCall  guifg='.light_v.' cterm=italic'
 :exe 'hi jsThis  guifg='.coral.' cterm=bold'
 
-:exe 'hi jsObjectKey guifg='.blue
+:exe 'hi jsObjectKey guifg='.cyan
 :exe 'hi jsObjectFuncName  guifg='.cyan
 
 :exe 'hi jsParens  guifg='.magenta
@@ -39,6 +39,7 @@ hi ALEWarning cterm=underline,italic
 " :exe 'hi jsRepeatBraces      guifg='.magenta 
 :exe 'hi jsDestructuringBraces guifg='.turqoise
 :exe 'hi jsArrowFunction guifg='.turqoise
+:exe 'hi jsClassFuncName guifg='.magenta.' cterm=underline'
 
 :exe 'hi jsFuncBraces  guifg='.magenta
 :exe 'hi jsFuncParens  guifg='.light_v
@@ -62,9 +63,9 @@ hi ALEWarning cterm=underline,italic
 " :exe 'hi Identifier guifg='.turqoise
 
 :exe 'hi xmlTagName  cterm=bold guifg='.blue
-:exe 'hi xmlTag cterm=bold guifg='.blue
-
-:exe 'hi xmlEndTag  guifg='.blue
+:exe 'hi xmlTag cterm=bold guifg='.turqoise
+" :exe 'hi xmlEndTag  guifg='.turqoise
+"
 :exe 'hi jsxCloseString  guifg='.blue
 
 :exe 'hi jsSpecial  guifg='.magenta

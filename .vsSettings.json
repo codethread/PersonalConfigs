@@ -1,0 +1,80 @@
+{
+  "[php]": {},
+  "editor.cursorStyle": "block",
+  "editor.fontLigatures": true,
+  "editor.fontFamily": "'Fira Code', 'Roboto Mono', Menlo, Monaco, 'Courier New', monospace",
+  "editor.autoIndent": true,
+  "editor.cursorBlinking": "blink",
+  "editor.dragAndDrop": true,
+  "editor.fontSize": 12,
+  "editor.formatOnType": true,
+  "editor.minimap.enabled": false,
+  // "editor.smoothScrolling": true,
+  "editor.renderIndentGuides": true,
+  "editor.renderLineHighlight": "all",
+  "editor.rulers": [100],
+  "editor.wordWrap": "on",
+  "explorer.confirmDragAndDrop": true,
+  "files.insertFinalNewline": true,
+  "files.exclude": {
+    "node_modules/": true,
+    "**/*.swp": true,
+    "tags": true,
+    ".idea/": true,
+    ".vscode/": true
+  },
+  "git.confirmSync": false,
+  "git.enableSmartCommit": true,
+  "scss.validate": false,
+  "terminal.integrated.cursorBlinking": false,
+  "window.newWindowDimensions": "maximized",
+  "window.openFoldersInNewWindow": "on",
+  "window.restoreWindows": "all",
+  "window.title": "${rootName}${separator}${activeEditorMedium}",
+  "window.titleBarStyle": "custom",
+  "workbench.editor.enablePreview": false,
+  "workbench.editor.openPositioning": "last",
+  "workbench.startupEditor": "newUntitledFile",
+  "workbench.colorTheme": "Panda Syntax",
+  "workbench.editor.labelFormat": "short",
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/tmp": true,
+    "**/dist": true,
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true
+  },
+  // "workbench.colorCustomizations": {
+  //   "statusBar.background": "#BF616A",
+  //   "statusBar.noFolderBackground": "#BF616A",
+  //   "statusBar.debuggingBackground": "#BF616A"
+  // },
+  "workbench.iconTheme": "vscode-icons",
+  "window.zoomLevel": 0,
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  //////// VIM
+  // "vim.easymotion": true,
+  // "vim.sneak": true,
+  // "vim.useSystemClipboard": true,
+  // "vim.hlsearch": true,
+  // "vim.leader": "<space>",
+  // "vim.insertModeKeyBindings": [
+  //   {
+  //     "before": ["j", "k"],
+  //     "after": ["<Esc>"]
+  //   }
+  // ],
+  // "vim.statusBarColorControl": true,
+  // "vim.statusBarColors": {
+  //   "normal": ["#8FBCBB", "#434C5E"],
+  //   "insert": "#BF616A",
+  //   "visual": "#b48ead",
+  //   "visualline": "#B48EAD",
+  //   "visualblock": "#A3BE8C",
+  //   "replace": "#D08770"
+  // },
+}

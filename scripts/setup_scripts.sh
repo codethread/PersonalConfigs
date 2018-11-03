@@ -37,5 +37,5 @@ setup_scripts() {
 }
 
 # on mac
-# ln -s ~/PersonalConfigs/vsSettings.json ~/Library/Application\ Support/Code/User/settings.json
+# ln -s ~/PersonalConfigs/.vsSettings.json ~/Library/Application\ Support/Code/User/settings.json
 
