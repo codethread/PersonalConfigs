@@ -1,0 +1,16 @@
+# ~/.tmuxinator/tmux.yml
+
+name: tmux
+root: ~/
+
+windows:
+  - tmux:
+      root: ~/PersonalConfigs
+      layout: main-horizontal
+      panes:
+        - vim colors+fonts/tmux/tmux_template.conf
+        - rubypanel:
+          - cd colors+fonts/tmux
+          - when-changed -iv ./tmux_template.conf 'ruby ./color_config.rb'
+        - echo `tput sitm`italics`tput ritm`
+

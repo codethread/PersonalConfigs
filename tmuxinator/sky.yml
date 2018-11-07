@@ -3,18 +3,17 @@
 name: sky
 root: ~/
 windows:
-  - skypages:
-      root: ~/Service/sky-pages
+  - Lib:
+      root: ~/Service/pages-lib
       layout: main-horizontal
       panes:
         - vim_pane:
           - vim
-        - spages_view_pane:
-          - sleep 1
-          - clear
         - info_pane:
-          - sleep 1
-          - sps
+          - yarn link:pages-apps
+          - yarn watch:pages-apps
+        - spages_view_pane:
+          - yarn link:sky-pages
   - graphql:
       root: ~/Service/skyport-graphql
       layout: main-horizontal
@@ -28,14 +27,8 @@ windows:
         - info_pane:
           - sleep 1
           - gqs -d
-  - service-scripts:
-      root: ~/Service/skymobile-service
-      layout: main-horizontal
-      panes:
-        - vim
-        -
-  - lib:
-      root: ~/Service/pages-lib
+  - skyPages:
+      root: ~/Service/sky-pages
       layout: main-horizontal
       panes:
         - vim_pane:
@@ -44,9 +37,9 @@ windows:
           - sleep 1
           - clear
         - info_pane:
-          - sleep 1
-          - libs
-  - apps:
+          - sleep 10
+          - sps
+  - pApps:
       root: ~/Service/pages-apps
       layout: main-horizontal
       panes:
@@ -58,6 +51,14 @@ windows:
         - info_pane:
           - sleep 1
           - pas
+  - ◎: echo 'hi'
+  - ◎: echo 'hi'
+  - service-scripts:
+      root: ~/Service/skymobile-service
+      layout: main-horizontal
+      panes:
+        - vim
+        -
   - randoms:
       root: ~/
       layout: main-horizontal

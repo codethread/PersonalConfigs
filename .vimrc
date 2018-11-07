@@ -74,6 +74,7 @@ Plug 'metakirby5/codi.vim', { 'on': 'Codi' }
 Plug 'aaronbieber/vim-quicktask'
 Plug 'wakatime/vim-wakatime'
 Plug 'tpope/vim-scriptease'
+Plug 'skywind3000/asyncrun.vim'
 "
 "------------------------------------------
 "--- Completion
@@ -121,7 +122,10 @@ if !exists("autocommands_loaded")
                 \ nnoremap <silent> gD :call LanguageClient#textDocument_definition()<CR>
 
     autocmd FileType * setlocal tabstop=4 shiftwidth=4
+    autocmd User AsyncRunStop let g:asyncrun_status="✓"
+    autocmd User AsyncRunStart let g:asyncrun_status="❁ "
 endif
+
 
 "---------------------------------------------------------------"
 "--- Editor
@@ -306,9 +310,39 @@ endif
 " let g:airline_section_b = '%{split(getcwd(), "/")[-1]}' " dont really care for the branch
 " " let g:airline_section_c = '%t'
 
-let g:lightline = {
-    \ 'colorscheme': 'snazzy',
-    \ }
+let g:asyncrun_status = "" 
+function! AsyncJobStatus()
+    return g:asyncrun_status
+endfunction
+
+function! LightlineFilename()
+    " let root = fnamemodify(get(b:, 'git_dir'), ':h')
+    let root = fnamemodify(get(b:, 'gitbranch_path'), ':h:h')
+    let path = expand('%:p')
+    if path[:len(root)-1] ==# root
+        return path[len(root)+1:]
+    endif
+    return expand('%')
+endfunction
+
+  let g:lightline = {
+              \ 'colorscheme': 'snazzy',
+              \ 'active': {
+              \   'left': [ [ 'mode', 'paste' ],
+              \             [ 'readonly', 'filepath', 'modified' ] ],
+              \   'right': [ [ 'lineinfo' ],
+              \            [ 'percent' ],
+              \            [ 'asyncJob', 'filetype' ] ],
+              \ },
+              \ 'component_function': {
+              \   'asyncJob': 'AsyncJobStatus',
+              \   'filepath': 'LightlineFilename',
+              \ },
+              \ }
+
+  let g:lightline.inactive = {
+              \ 'left': [ [ 'filepath', 'modified' ] ],
+              \ }
 
 let g:lightline.tabline = {
   \   'left': [ ['tabs'] ],
@@ -527,6 +561,9 @@ map <leader>bq :DeleteFileAndBuff<CR>
 map <leader>br :rename<space>
 map <leader>bt :b#<CR>
 map <leader>by :YankWoleBuffer<CR>
+
+" let g:lmap.c = { 'name': ' -- Ctags' }
+map <leader>c :call GenerateCtags()<CR>
 
 let g:lmap.d = { 'name': ' -- Delete' }
 " nnoremap <leader>d "_d

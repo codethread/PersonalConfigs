@@ -1,4 +1,5 @@
 #!/bin/bash
+
 node_g_installs() {
     npm i -g babel-cli
     npm i -g create-react-app 

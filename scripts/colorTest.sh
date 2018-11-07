@@ -1,4 +1,5 @@
 #!/bin/bash
+
 colorTest() {
     # Test Italics
     echo `tput sitm`italics`tput ritm`

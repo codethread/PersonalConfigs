@@ -1,4 +1,5 @@
 #!/bin/bash
+
 kill_tmux_session() {
     if [[ "$1" == '' ]]; then
         echo 'no params: killing spages'

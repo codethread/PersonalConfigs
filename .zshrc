@@ -42,7 +42,7 @@ source $HOME/.cargo/env
 # source $HOME/PersonalConfigs/spaceship-config.zsh
 
 for f in $HOME/PersonalConfigs/scripts/*; do source $f; done
-for f in $HOME/PersonalConfigs/bin/*; do ln -s -f $f /usr/local/bin; done
+# for f in $HOME/PersonalConfigs/bin/*; do ln -s -f $f /usr/local/bin; done
 for f in $HOME/PersonalConfigs/tmuxinator/*; do ln -s -f $f ~/.tmuxinator; done
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

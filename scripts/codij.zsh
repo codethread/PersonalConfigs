@@ -1,5 +1,6 @@
-# Codi
+#!/bin/zsh
 # Usage: codi [filetype] [filename]
+
 codi() {
         local syntax="${1:-javascript}"
         shift
@@ -11,6 +12,7 @@ codi() {
                 hi NonText ctermfg=0 |\
                 Codi $syntax" "javascript"
 }
+
 codij() {
         # vim -c "set bt=nofile | Codi javascript" dmp.javascript
         vim -c "Codi javascript | let ale_enabled = 0" dmp.javascript
