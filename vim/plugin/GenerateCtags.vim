@@ -1,12 +1,13 @@
 function! GenerateCtags()
     let dir = split(getcwd(),'/')[-1]
+    let ctag = 'ctags -f .tags -R'
     let mapping = {
-                \ "sky-pages": "ctags -f .tags -R apps/{mobile,unicorn}/**/*[^test].{js,jsx} && ctags -f .tags -R -a src/",
-                \ "skyport-graphql": "ctags -f .tags -R src/schema/",
-                \ "pages-lib": "ctags -f .tags -R packages/*/src/**/*[^spec].{js,jsx}",
+                \ 'sky-pages': ctag.' apps/{mobile,unicorn}/**/*[^test].{js,jsx} && '.ctag.' src/',
+                \ 'skyport-graphql': ctag.'ctags -f .tags -R src/schema/',
+                \ 'pages-lib': ctag.' packages/*/src/**/*[^spec].{js,jsx}',
                 \ }
 
-    let default = "ctags -f .tags -R ."
+    let default = ctag.' .'
     exec 'AsyncRun! '. get(mapping, expand(dir), default)
-    echo ''
+    echo 'tags => '. get(mapping, expand(dir), default)
 endfunction

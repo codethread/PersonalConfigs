@@ -44,6 +44,8 @@ alias dci='docker rmi $(docker images -a --filter=dangling=true -q)' #docker_cle
 alias dcp='docker rm $(docker ps --filter=status=exited --filter=status=created -q)' #docker_clean_ps
 alias dcup='docker-compose up'
 alias dcdn='docker-compose down'
+alias dick="docker ps | grep '[a-z0-9]' | awk '{ print $1 }' | xargs docker kill"
+
 
 #---------------------------------------------#
 # GIT
@@ -110,7 +112,7 @@ alias gqv="compare_skyport_vault_keys"
 alias ppp="start_ppp"
 
 alias poco="watch -n0.2 slack chat send -tx 'PCOO?' -ch 'D35J9H880'"
-alias sam="watch -n0.2 slack chat send -tx '🍆' -ch 'D3VFV16U8'"
+alias sam="slack chat send -tx ${SLACK_MESSAGE} -ch 'D3VFV16U8'"
 alias graeme="slack chat send -tx 'built' -ch 'D3U9RFCE8'"
 alias ste="watch -n0.2 slack chat send -tx 'ಠ_ಠ' -ch 'DAFGH3E79'"
 
