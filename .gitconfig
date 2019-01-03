@@ -1,8 +1,6 @@
 [user]
 	email = adamhalldesigns@gmail.com
 	name = Adam Hall
-[includeIf "gitdir:~/Service/"]
-  path = ~/.sky.gitconfig
 [core]
 	excludesfile = ~/.gitignore_global
 	editor = vim
