@@ -16,6 +16,7 @@ alias ports="echo lsof -i tcp:3000"
 alias lst="ls -1 -a -F -G"
 alias pathis="echo $PATH | tr -s ':' '\n'"
 alias ramda="~/PersonalConfigs/single_scripts/ramda"
+alias finder='open -a 'Finder' .'
 
 #---------------------------------------------#
 # RUNNERS
@@ -36,6 +37,8 @@ alias pipes="pipes.sh -f 60 -s 8"
 alias npc="rm -rf ./node_modules; npm cache clear; npm i"
 alias npg="node_g_installs"
 alias npl="npm -g ls --depth=0"
+alias npl="npm -g ls --depth=0"
+alias yy="cat package.json | jq -S '.scripts' | fzf"
 
 #---------------------------------------------#
 # DOCKER
@@ -50,12 +53,17 @@ alias dick="docker ps | grep '[a-z0-9]' | awk '{ print $1 }' | xargs docker kill
 #---------------------------------------------#
 # GIT
 # -------------------------------------------#
+alias gBranch="git rev-parse --abbrev-ref HEAD"
 alias gignore="git rm -r --cached .; git add .; git commit -m '.gitignore is now working'"
+alias gmm="git checkout master && git pull && git checkout - && git rebase master"
 alias gcp="git cherry-pick"
 alias gkill="git branch | grep -v "master" | xargs git branch -D"
-alias gfuck="git fetch origin; git reset --hard origin/master"
+alias gfuck="git fetch origin; git reset --hard origin/${gBranch}"
+alias gnah="git reset --hard; git clean -df"
 alias gh="open \`git remote -v | grep git@github.com | grep fetch | head -1 | cut -f2 | cut -d' ' -f1 | sed -e's/:/\//' -e 's/git@/http:\/\//'\`"
 alias gr="git rebase -i HEAD~$1"
+alias gclean="git clean -dfX"
+alias gwip="git add . && git commit -nm 'wip'"
 
 #---------------------------------------------#
 # TMUXINATOR
@@ -71,8 +79,8 @@ alias kmux="kill_tmux_session"
 # SPAGES
 # -------------------------------------------#
 alias spg="cd /users/adh23/service/sky-pages"
-alias sps="pages start dev --apps mobile,bill,mysky | lolcat"
-alias spu="pages start dev --apps unicorn | lolcat"
+alias sps="pages start dev --apps mobile,bill,mysky,mobile-bill | lolcat"
+alias spu="pages start dev --apps mobile-service | lolcat"
 alias spt="mv .env .nenv; pages test unit -q; mv .nenv .env; alert"
 alias spc="ctags -R apps/ && ctags -R -a src/"
 
@@ -115,13 +123,3 @@ alias poco="watch -n0.2 slack chat send -tx 'PCOO?' -ch 'D35J9H880'"
 alias sam="slack chat send -tx ${SLACK_MESSAGE} -ch 'D3VFV16U8'"
 alias graeme="slack chat send -tx 'built' -ch 'D3U9RFCE8'"
 alias ste="watch -n0.2 slack chat send -tx 'ಠ_ಠ' -ch 'DAFGH3E79'"
-
-
-# alias skyport="start_skyport | jq -R -r '. as $line | try fromjson .info.message | split(\"options:\") | .[1] | fromjson'"
-# alias spages="start_spages"
-# alias stest="mv .env .notenv || true  && npm run test:unit || true && mv .notenv .env"
-# for f in apps/mobile/**/*.jsx; do sed -i.bak "s/SWAP_ADDITIONAL_DAMGAE/SWAP_ADDITIONAL_DAMAGE/g" "$f"; done
-# for f in ./*.js; do sed -i.bak "s/RUN/READ/g" "$f"; done
-# curl -sLf https://spacevim.org/install.sh | bash
-# curl -sLf https://spacevim.org/install.sh | bash -s -- --uninstall
-
