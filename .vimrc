@@ -15,7 +15,7 @@ Plug 'junegunn/vim-easy-align'
 Plug 'reedes/vim-pencil'
 Plug 'tpope/vim-repeat'
 Plug 'kshenoy/vim-signature'
-Plug 'wikitopian/hardmode'
+Plug 'takac/vim-hardtime'
 Plug 'ddrscott/vim-window'
 Plug 'danro/rename.vim'
 Plug 'plasticboy/vim-markdown'
@@ -34,12 +34,11 @@ Plug 'w0rp/ale' " async linting
 "------------------------------------------
 "--- GUI changes
 "-----------------------------------------
-Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] }
+Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] } | Plug 'ryanoasis/vim-devicons'
 Plug 'airblade/vim-gitgutter'
 Plug 'Shougo/denite.nvim'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
-" Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
 Plug 'itchyny/lightline.vim'
 Plug 'gcmt/taboo.vim'
 Plug 'majutsushi/tagbar'
@@ -70,7 +69,6 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'metakirby5/codi.vim', { 'on': 'Codi' }
-" Plug 'craigemery/vim-autotag'
 Plug 'aaronbieber/vim-quicktask'
 Plug 'wakatime/vim-wakatime'
 Plug 'tpope/vim-scriptease'
@@ -84,13 +82,16 @@ Plug 'ncm2/ncm2' | Plug 'roxma/nvim-yarp' | Plug 'roxma/vim-hug-neovim-rpc' | Pl
 "------------------------------------------
 "--- Disabled
 "-----------------------------------------
-Plug 'easymotion/vim-easymotion' " XXX too annoying
+" Plug 'easymotion/vim-easymotion' " XXX too annoying
 " Plug 'mbbill/undotree' " XXX barely used
 " Plug 'Raimondi/delimitMate' " XXX this annoys me too much
 " Plug 'xuyuanp/nerdtree-git-plugin' "XXX messy tree
 " Plug 'Valloric/YouCompleteMe', { 'do': './install.py', 'on': [] } " XXX using ncm2 instead
 " Plug 'ternjs/tern_for_vim', { 'do': 'npm i'}
 " Plug 'Shougo/deoplete.nvim' " XXX using ncm2 instead
+" Plug 'wikitopian/hardmode' " XXX hjkl are sometimes really uesful 
+" Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes' " XXX slow!
+" Plug 'craigemery/vim-autotag' " XXX maybe if i use other langs
 "---------------------------------------------------------------"
 
 call plug#end()
@@ -147,7 +148,7 @@ set mouse=a
 set nrformats-=octal
 set path+=**
 set regexpengine=1                          " TODO really slow without this??
-" set relativenumber                          " XXX slow
+set relativenumber                          " XXX slow
 set scrolloff=3
 set shortmess+=c
 set splitbelow
@@ -156,6 +157,7 @@ set tags=.tags;
 set wildignore=*.keep,*~,*.swp
 set wildmenu
 set wrapmargin=0
+set showtabline=2  " Show tabline
 
 "---------------------------------------------------------------"
 "--- Debug
@@ -209,6 +211,8 @@ let g:codi#rightalign = 0
 let g:codi#width = 80
 
 let g:jsx_ext_required = 0
+
+let g:hardtime_default_on = 0
 
 " autocmd FileType js UltiSnipsAddFiletypes javascript-react
 " let g:UltiSnipsExpandTrigger="<tab>"
@@ -284,9 +288,9 @@ color snazzy
 
 if has('gui_running')
     set guioptions=e
-    " set guifont=Hack\ Regular:h11
     set macligatures
     set guifont=Fira\ Code:h12
+    " set guifont=Hack\ Regular:h11
     set lines=50 columns=108 linespace=3
     set shellcmdflag=-ic
     let $BASH_ENV = "~/.bash_aliases"
@@ -310,6 +314,9 @@ endif
 " let g:airline_section_b = '%{split(getcwd(), "/")[-1]}' " dont really care for the branch
 " " let g:airline_section_c = '%t'
 
+"---------------------------------------------------------------"
+"--- Lightline
+"---------------------------------------------------------------"
 let g:asyncrun_status = "" 
 function! AsyncJobStatus()
     return g:asyncrun_status
@@ -348,7 +355,6 @@ let g:lightline.tabline = {
   \   'left': [ ['tabs'] ],
   \   'right': [ ['close'] ]
   \ }
-set showtabline=2  " Show tabline
 
 "---------------------------------------------------------------"
 "--- FZF
@@ -391,7 +397,8 @@ let g:ale_fixers = {
             \ 'json': ['prettier'],
             \ 'graphql': ['prettier'],
             \ 'yml': ['prettier'],
-            \ 'css': ['prettier'],
+            \ 'css': ['stylelint'],
+            \ 'scss': ['stylelint'],
             \ 'markdown': ['prettier'],
             \}
 
@@ -412,6 +419,10 @@ let NERDTreeHijackNetrw=1
 
 
 let NERDTreeIgnore = ['\.DAT$', '\.LOG1$', '\.LOG1$']
+let NERDTreeIgnore += [
+            \ '\.swp$',
+            \ '.git',
+            \ 'node_modules']
 let NERDTreeIgnore += [
             \ '\.gif$',
             \ '\.mp3$',
@@ -582,7 +593,8 @@ map <leader>g? :help index<CR>
 map <leader>gc :ColorToggle<CR>
 map <leader>gg :PencilToggle<CR>
 map <leader>gh :History<CR>
-map <leader>gh <Esc>:call ToggleHardMode()<CR>
+" map <leader>gh <Esc>:call ToggleHardMode()<CR>
+map <leader>gh :HardTimeToggle<CR>
 map <leader>gl :set cursorline!<CR>
 map <leader>gn :set nowrap!<CR>
 map <leader>gp :call pencil#init()<CR>
@@ -754,92 +766,3 @@ function! Format()
     normal gg=G
     call cursor(l, c)
 endfunction
-
-"---------------------------------------------------------------"
-"--- One dark
-"---------------------------------------------------------------"
-
-" """"""""""""" Color Schemes """"""""""""""""
-" set termguicolors
-" colorscheme onedark
-"
-" highlight Normal guibg=#21242a
-" highlight MatchParen guifg=#C678DD guibg=#504066
-" highlight LineNr    guifg=#151822
-" highlight CursorLineNr guifg=#56B6C2
-" highlight Error guifg=#f57373 guibg=#804040
-" highlight vimError guifg=#f57373 guibg=#804040
-"
-" hi IndentGuidesEven guibg=#21242a guifg=#1f1f28
-" hi IndentGuidesOdd guibg=#262a36 guifg=#1f1f28
-" hi Comment cterm=italic guifg=#4a5158
-" hi String guifg=#98C379 guibg=#2a2e34
-"
-" """ browns
-" " function params: numbers and constants
-" hi Statement guifg=#907161
-" hi Conditional guifg=#907161
-" hi Keyword guifg=#56B6C2
-" hi Function guifg=#56B6C2
-"
-" " Yellows
-" hi Number guifg=#E5C07B
-" hi Special guifg=#E5C07B
-" hi Boolean guifg=#E5C07B
-"
-" " purple
-" hi CtrlPMatch guifg=#ba9ef7
-" hi Visual guibg=#364652
-"
-" " medium red: if else operators
-" hi Preproc guifg=#e86868
-" hi Type guifg=#e86868
-"
-"
-"
-" """""" vim-jsx ONLY
-" hi Identifier cterm=italic
-"
-" " Blues
-" " light blues
-" hi xmlTagName guifg=#59ACE5
-" hi xmlTag guifg=#59ACE5
-"
-" " dark blues
-" hi xmlEndTag guifg=#2974a1
-" hi jsxCloseString guifg=#2974a1
-" hi htmlTag guifg=#2974a1
-" hi htmlEndTag guifg=#2974a1
-" hi htmlTagName guifg=#59ACE5
-" hi jsxAttrib guifg=#1BD1C1
-"
-" " cyan
-" hi Constant guifg=#56B6C2
-" hi typescriptBraces guifg=#56B6C2
-" hi typescriptEndColons guifg=#56B6C2
-" hi typescriptRef guifg=#56B6C2
-" hi typescriptPropietaryMethods guifg=#56B6C2
-" hi typescriptEventListenerMethods guifg=#56B6C2
-" hi typescriptFunction guifg=#56B6C2
-" hi typescriptVars guifg=#56B6C2
-" hi typescriptParen guifg=#56B6C2
-" hi typescriptDotNotation guifg=#56B6C2
-" hi typescriptBracket guifg=#56B6C2
-" hi typescriptBlock guifg=#56B6C2
-" hi typescriptJFunctions guifg=#56B6C2
-" hi typescriptSFunctions guifg=#56B6C2
-" hi typescriptInterpolationDelimiter guifg=#56B6C2
-" hi typescriptIdentifier guifg=#907161 cterm=italic
-"
-" hi typescriptStatement guifg=#C678DD
-" hi tsxRegion guifg=#C678DD
-" hi tsxAttrib guifg=#56B6C2
-"
-" " javascript
-" hi jsParens guifg=#56B6C2
-" hi jsObjectBraces guifg=#C678DD
-" hi jsFuncBraces guifg=#56B6C2
-" hi jsObjectFuncName guifg=#D19A66
-" hi jsObjectKey guifg=#56B6C2
-"
-"
