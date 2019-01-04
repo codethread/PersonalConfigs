@@ -40,6 +40,10 @@ autoload -U promptinit; promptinit
 prompt pure
 
 source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# JQ_COLORS=1;30:0;39:0;39:0;39:0;32:1;39:1;39
+export JQ_COLORS="1;30:0;31:0;32:0;35:0;33:1;35:1;35"
+
 #------------------------------------------
 #--- Sky Stuff
 #-----------------------------------------

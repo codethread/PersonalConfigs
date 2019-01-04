@@ -108,7 +108,8 @@ alias pas="yarn start:dev"
 # SKYPORT
 # -------------------------------------------#
 alias gqg="cd /users/adh23/service/skyport-graphql"
-alias gqs="start_skyport"
+alias gqss="start_skyport"
+function gqs () { start_skyport "$1" | skyportJq }
 alias gqt="skyport_test_modified_files"
 alias gqc="ctags -R src/schema/"
 
