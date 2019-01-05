@@ -49,7 +49,7 @@ export JQ_COLORS="1;30:0;31:0;32:0;35:0;33:1;35:1;35"
 #-----------------------------------------
 export SKY_SERVICE_FOLDER='/Users/adh23/Service'
 export SKY_SERVICE_DEV_TOOLS=$SKY_SERVICE_FOLDER/skymobile-service/dev-tools
-[ -r $SKY_SERVICE_DEV_TOOLS/.sky.zsh ] && source $SKY_SERVICE_DEV_TOOLS/.sky.zsh
+[ -r $SKY_SERVICE_DEV_TOOLS/.sky.sh ] && source $SKY_SERVICE_DEV_TOOLS/.sky.sh
 
 #------------------------------------------
 #------------------------------------------
