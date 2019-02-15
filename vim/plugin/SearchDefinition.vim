@@ -9,7 +9,8 @@ function! HandleJsConfig()
     endtry
 endfunction
 
-function! SearchForDefinition(name, callCount)
+function! SearchForDefinition(name, callCount, commands)
+
     " try tags first
     " try | exec 'tag ' . a:object | return | catch | silent | endtry
     let object = a:name
@@ -69,8 +70,11 @@ function! SearchForDefinition(name, callCount)
         endtry
     endif
 
+    echo a:commands
     if &mod " modified so open split
         exec 'vsplit ' . file
+    elseif has_key(a:commands, 'split')
+        exec a:commands.split . ' ' . file
     else
         exec 'e ' . file
     endif
@@ -79,9 +83,9 @@ function! SearchForDefinition(name, callCount)
     exec 'cd '. workdir
 
     if isMethod
-        call SearchForDefinition(a:name, (a:callCount + 1))
+        call SearchForDefinition(a:name, (a:callCount + 1), a:commands)
     else
-        call SearchForDefinition(object, (a:callCount + 1))
+        call SearchForDefinition(object, (a:callCount + 1), a:commands)
     endif
 endfunction
 

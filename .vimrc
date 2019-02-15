@@ -657,7 +657,8 @@ let g:lmap.r = { 'name': 'global reg' }
 map <leader>rr "*
 
 let g:lmap.s = { 'name': ' -- Search' }
-map <leader>sd :call SearchForDefinition(expand("<cword>"), 1)<CR>
+map <leader>sd :call SearchForDefinition(expand("<cword>"), 1, {})<CR>
+map <leader>ss :call SearchForDefinition(expand("<cword>"), 1, {'split': 'vsplit'})<CR>
 map <leader>st :CursorInTags<CR>
 map <leader>sw :FindWordUnderCursor<CR>
 
