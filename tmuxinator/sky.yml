@@ -5,49 +5,50 @@ root: ~/
 windows:
   - Lib:
       root: ~/Service/pages-lib
-      layout: main-horizontal
+      layout: main-vertical
       panes:
         - vim_pane:
           - vim
         - info_pane:
-          - yarn link:pages-apps
-          - yarn watch:pages-apps
-        - spages_view_pane:
-          - yarn link:sky-pages
+          - libs
+          # - yarn link:pages-apps
+          # - yarn watch:pages-apps
+        # - spages_view_pane:
+        #   - yarn link:sky-pages
   - graphql:
       root: ~/Service/skyport-graphql
-      layout: main-horizontal
+      layout: main-vertical
       panes:
         - vim_pane:
           - vim
-        - skyport_view_pane:
-          - sleep 1
-          - clear
-          - gst
+        # - skyport_view_pane:
+        #   - sleep 1
+        #   - clear
+        #   - gst
         - info_pane:
           - sleep 1
           - gqs -d
   - skyPages:
       root: ~/Service/sky-pages
-      layout: main-horizontal
+      layout: main-vertical
       panes:
         - vim_pane:
           - vim
-        - spages_view_pane:
-          - sleep 1
-          - clear
+        # - spages_view_pane:
+        #   - sleep 1
+        #   - clear
         - info_pane:
           - sleep 10
           - sps
   - pApps:
       root: ~/Service/pages-apps
-      layout: main-horizontal
+      layout: main-vertical
       panes:
         - vim_pane:
           - vim
-        - spages_view_pane:
-          - sleep 1
-          - clear
+        # - spages_view_pane:
+        #   - sleep 1
+        #   - clear
         - info_pane:
           - sleep 1
           - pas
@@ -55,13 +56,13 @@ windows:
   - ◎: echo 'hi'
   - service-scripts:
       root: ~/Service/skymobile-service
-      layout: main-horizontal
+      layout: main-vertical
       panes:
         - vim
         -
   - randoms:
       root: ~/
-      layout: main-horizontal
+      layout: main-vertical
       panes:
         -
         -

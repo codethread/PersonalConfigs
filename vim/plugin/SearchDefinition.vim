@@ -1,13 +1,33 @@
-function! SearchForDefinition(name)
+function! HandleJsConfig()
+    try
+        let jsconfig = ParseJSON(system('cat ' . getcwd() . '/jsconfig.json'))
+        let baseUrl = jsconfig.compilerOptions.baseUrl
+        let paths = jsconfig.compilerOptions.paths
+        return [baseUrl, paths]
+    catch
+        echo 'no jsconfig.json'
+    endtry
+endfunction
+
+function! SearchForDefinition(name, callCount)
     " try tags first
-    " try | exec 'tag ' . a:name | return | catch | silent | endtry
+    " try | exec 'tag ' . a:object | return | catch | silent | endtry
+    let object = a:name
+    let isMethod = 0
+    if a:callCount == 1
+        let isMethod = substitute(expand("<cWORD>"), '\([a-zA-Z\.]\+\)(*.*', '\1', "g") =~ '\.'
+        if isMethod
+            normal B
+            let object = expand("<cword>")
+        endif
+    endif
 
     let quotes = "['" . '"]'
     let langspecific = "\\(from \\|require(\\)"
-    let patt = '\<' . a:name . '\>' . '\_[^;]\{-}' . langspecific . quotes . '.\+' . quotes . "[\s;)]*\$"
+    let patt = '\<' . object . '\>' . '\_[^;]\{-}' . langspecific . quotes . '.\+' . quotes . "[\s;)]*\$"
 
     if search(patt, 'b') == 0 " look for import
-        call search('\(' . a:name . '\|export default\)') " look for export
+        call search('\(' . object . '\|export default\)') " look for export
         return
     endif
 
@@ -16,23 +36,37 @@ function! SearchForDefinition(name)
     " js specific index file check
     let workdir = getcwd()
 
-
     let isRel = nr2char(strgetchar(getline('.'), col('.'))) =~ '\.'
     if isRel
         exec 'cd '. expand('%:p:h')
+        let pathUnderCursor = expand("<cfile>")
+    else
+        " if needs be can do more with paths, for now just use baseurl
+        let [baseUrl, paths] = HandleJsConfig()
+        let rootPath = substitute(baseUrl, '\(./\|.\)', "", "")
+        let pathUnderCursor = rootPath . expand("<cfile>")
     endif
 
-    let options = globpath(expand("<cfile>"), '*',0,1)
-    if len(options) == 0 " length = 0 path
+    let files = getcompletion(pathUnderCursor . '.', 'file')
+    if len(files) >= 1
         try
-            let [file] = getcompletion(expand("<cfile>") . '.', 'file')
+            if len(files) == 0
+                let [file] = getcompletion(pathUnderCursor, 'file')
+            else
+                let [file; rest] = filter(files, 'v:val =~ "\\(\.js\\|\.jsx\\)"')
+            endif
         catch
+            " not supporting node modules for now
             echo 'node module'
             exec 'cd '. workdir
             return
         endtry
     else
-        let [file] = getcompletion(expand("<cfile>") . '/index', 'file')
+        try 
+            let [file; rest] = getcompletion(pathUnderCursor . '/index', 'file')
+        catch
+            echo 'no index?'
+        endtry
     endif
 
     if &mod " modified so open split
@@ -44,6 +78,10 @@ function! SearchForDefinition(name)
     " put the cd back in order
     exec 'cd '. workdir
 
-    " recurse
-    call SearchForDefinition(a:name)
+    if isMethod
+        call SearchForDefinition(a:name, (a:callCount + 1))
+    else
+        call SearchForDefinition(object, (a:callCount + 1))
+    endif
 endfunction
+

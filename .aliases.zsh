@@ -58,7 +58,7 @@ alias gignore="git rm -r --cached .; git add .; git commit -m '.gitignore is now
 alias gmm="git checkout master && git pull && git checkout - && git rebase master"
 alias gcp="git cherry-pick"
 alias gkill="git branch | grep -v "master" | xargs git branch -D"
-alias gfuck="git fetch origin; git reset --hard origin/${gBranch}"
+alias gfuck="git fetch origin; git reset --hard origin ${gBranch}"
 alias gnah="git reset --hard; git clean -df"
 alias gh="open \`git remote -v | grep git@github.com | grep fetch | head -1 | cut -f2 | cut -d' ' -f1 | sed -e's/:/\//' -e 's/git@/http:\/\//'\`"
 alias gr="git rebase -i HEAD~$1"
@@ -92,6 +92,7 @@ alias spn="git pull; npm i; sps"
 # -------------------------------------------#
 alias libg="cd /users/adh23/service/sky-pages"
 alias libs="yarn storybook:start"
+alias libc="slack chat send -tx '@Waldorf akamai delete cache https://static.skyassets.com/content-api/v1/mobile-service-hub/app' -ch 'C7Y53DL90'"
 
 # build
 alias liba="yarn build:apollo-content"
@@ -108,8 +109,8 @@ alias pas="yarn start:dev"
 # SKYPORT
 # -------------------------------------------#
 alias gqg="cd /users/adh23/service/skyport-graphql"
-alias gqss="start_skyport"
-function gqs () { start_skyport "$1" | skyportJq }
+alias gqs="start_skyport"
+# function gqs () { start_skyport "$1" | skyportJq }
 alias gqt="skyport_test_modified_files"
 alias gqc="ctags -R src/schema/"
 

@@ -9,20 +9,20 @@ call plug#begin('~/.vim/plugged')
 "--- Editing
 "-----------------------------------------
 Plug 'christoomey/vim-sort-motion' " use gs
-Plug 'tomtom/tcomment_vim' " Commenting
-Plug 'tpope/vim-surround'
-Plug 'junegunn/vim-easy-align'
-Plug 'reedes/vim-pencil'
-Plug 'tpope/vim-repeat'
-Plug 'kshenoy/vim-signature'
-Plug 'takac/vim-hardtime'
-Plug 'ddrscott/vim-window'
 Plug 'danro/rename.vim'
-Plug 'plasticboy/vim-markdown'
-Plug 'kannokanno/previm'
+Plug 'ddrscott/vim-window'
 Plug 'godlygeek/tabular'
+Plug 'junegunn/vim-easy-align'
 Plug 'justinmk/vim-sneak'
+Plug 'kannokanno/previm'
+Plug 'kshenoy/vim-signature'
+Plug 'reedes/vim-pencil'
+Plug 'takac/vim-hardtime'
 Plug 'tmhedberg/matchit'
+Plug 'tomtom/tcomment_vim' " Commenting
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-surround'
+Plug 'vim-scripts/ParseJSON'
 
 "------------------------------------------
 "--- Linting / testing
@@ -35,44 +35,46 @@ Plug 'w0rp/ale' " async linting
 "--- GUI changes
 "-----------------------------------------
 Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] } | Plug 'ryanoasis/vim-devicons'
-Plug 'airblade/vim-gitgutter'
 Plug 'Shougo/denite.nvim'
+Plug 'Yggdroot/indentLine'
+Plug 'airblade/vim-gitgutter'
+Plug 'chrisbra/Colorizer'
+Plug 'connorholyday/vim-snazzy'
+Plug 'gcmt/taboo.vim'
+Plug 'hecal3/vim-leader-guide'
+Plug 'itchyny/lightline.vim'
+Plug 'joshdick/onedark.vim'
+Plug 'junegunn/goyo.vim'
+Plug 'majutsushi/tagbar'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
-Plug 'itchyny/lightline.vim'
-Plug 'gcmt/taboo.vim'
-Plug 'majutsushi/tagbar'
-Plug 'hecal3/vim-leader-guide'
-Plug 'Yggdroot/indentLine'
-Plug 'junegunn/goyo.vim'
-Plug 'connorholyday/vim-snazzy'
-Plug 'joshdick/onedark.vim'
-Plug 'chrisbra/Colorizer'
+Plug 'tpope/vim-vinegar'
+" Plug 'plasticboy/vim-markdown'
 
 "------------------------------------------
 "--- Languages
 "-----------------------------------------
-Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
-Plug 'sheerun/vim-polyglot'
-Plug 'peitalin/vim-jsx-typescript' "| Plug 'Quramy/tsuquyomi'
-Plug 'moll/vim-node'
 " Plug 'styled-components/vim-styled-components'
+Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
 Plug 'chrisbra/csv.vim'
+Plug 'moll/vim-node'
+Plug 'peitalin/vim-jsx-typescript' "| Plug 'Quramy/tsuquyomi'
+Plug 'sheerun/vim-polyglot'
 Plug 'shirk/vim-gas'
 
 "------------------------------------------
 "--- Utilities
 "-----------------------------------------
+Plug 'aaronbieber/vim-quicktask'
 Plug 'diepm/vim-rest-console'
-Plug 'rking/ag.vim'
+Plug 'editorconfig/editorconfig-vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-Plug 'editorconfig/editorconfig-vim'
 Plug 'metakirby5/codi.vim', { 'on': 'Codi' }
-Plug 'aaronbieber/vim-quicktask'
-Plug 'wakatime/vim-wakatime'
-Plug 'tpope/vim-scriptease'
+Plug 'rking/ag.vim'
 Plug 'skywind3000/asyncrun.vim'
+Plug 'tpope/vim-scriptease'
+Plug 'wakatime/vim-wakatime'
 "
 "------------------------------------------
 "--- Completion
@@ -82,16 +84,16 @@ Plug 'ncm2/ncm2' | Plug 'roxma/nvim-yarp' | Plug 'roxma/vim-hug-neovim-rpc' | Pl
 "------------------------------------------
 "--- Disabled
 "-----------------------------------------
+" Plug 'Raimondi/delimitMate' " XXX this annoys me too much
+" Plug 'Shougo/deoplete.nvim' " XXX using ncm2 instead
+" Plug 'Valloric/YouCompleteMe', { 'do': './install.py', 'on': [] } " XXX using ncm2 instead
+" Plug 'craigemery/vim-autotag' " XXX maybe if i use other langs
 " Plug 'easymotion/vim-easymotion' " XXX too annoying
 " Plug 'mbbill/undotree' " XXX barely used
-" Plug 'Raimondi/delimitMate' " XXX this annoys me too much
-" Plug 'xuyuanp/nerdtree-git-plugin' "XXX messy tree
-" Plug 'Valloric/YouCompleteMe', { 'do': './install.py', 'on': [] } " XXX using ncm2 instead
 " Plug 'ternjs/tern_for_vim', { 'do': 'npm i'}
-" Plug 'Shougo/deoplete.nvim' " XXX using ncm2 instead
-" Plug 'wikitopian/hardmode' " XXX hjkl are sometimes really uesful 
 " Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes' " XXX slow!
-" Plug 'craigemery/vim-autotag' " XXX maybe if i use other langs
+" Plug 'wikitopian/hardmode' " XXX hjkl are sometimes really uesful 
+" Plug 'xuyuanp/nerdtree-git-plugin' "XXX messy tree
 "---------------------------------------------------------------"
 
 call plug#end()
@@ -118,11 +120,13 @@ if !exists("autocommands_loaded")
 
     autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
 
-    autocmd BufNewFile,BufRead *.{ts,tsx,js,jsx} 
-                \ set filetype=javascript.jsx |
-                \ nnoremap <silent> gD :call LanguageClient#textDocument_definition()<CR>
+    autocmd BufNewFile,BufRead *.{ts,tsx,jsx} 
+                \ set filetype=javascript.jsx
 
-    autocmd FileType * setlocal tabstop=4 shiftwidth=4
+    autocmd FileType * 
+                \ setlocal tabstop=4 shiftwidth=4 |
+                \ call LC_maps()
+
     autocmd User AsyncRunStop let g:asyncrun_status="✓"
     autocmd User AsyncRunStart let g:asyncrun_status="❁ "
 endif
@@ -134,6 +138,7 @@ endif
 
 set backspace=indent,eol,start              " Allow backspacing over everything in insert mode
 set clipboard=unnamed                       " just too annoying without this
+set omnifunc=LanguageClient#complete
 set completefunc=LanguageClient#complete
 set completeopt=noinsert,menuone,noselect   " note that must keep noinsert in completeopt, the others is optional
 " set cursorline                              " XXX slow
@@ -242,19 +247,19 @@ endif
 "---------------------------------------------------------------"
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
-au User Ncm2Plugin call ncm2#register_source({
-            \ 'name' : 'css',
-            \ 'priority': 9, 
-            \ 'subscope_enable': 1,
-            \ 'scope': ['css','scss'],
-            \ 'mark': 'css',
-            \ 'word_pattern': '[\w\-]+',
-            \ 'complete_pattern': ':\s*',
-            \ 'on_complete': ['ncm2#on_complete#omni', 'csscomplete#CompleteCSS'],
-            \ })
+" au User Ncm2Plugin call ncm2#register_source({
+"             \ 'name' : 'css',
+"             \ 'priority': 9, 
+"             \ 'subscope_enable': 1,
+"             \ 'scope': ['css','scss'],
+"             \ 'mark': 'css',
+"             \ 'word_pattern': '[\w\-]+',
+"             \ 'complete_pattern': ':\s*',
+"             \ 'on_complete': ['ncm2#on_complete#omni', 'csscomplete#CompleteCSS'],
+"             \ })
 
 
-let g:LanguageClient_changeThrottle = 0.3 " pauses for 0.3 seconds after txt change before post to server
+let g:LanguageClient_changeThrottle = 0.1 " pauses for 0.3 seconds after txt change before post to server
 
 "---------------------------------------------------------------"
 "--- Lsc
@@ -262,19 +267,33 @@ let g:LanguageClient_changeThrottle = 0.3 " pauses for 0.3 seconds after txt cha
 "java https://github.com/Ruin0x11/intellij-lsp-server
 "java https://github.com/eclipse/eclipse.jdt.ls
 " \ 'java': ['/usr/local/bin/jdtls'], life's too short to get this to work
-let g:LanguageClient_diagnosticsEnable = 0
+" let g:LanguageClient_diagnosticsEnable = 0
 let g:LanguageClient_serverCommands = {
             \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
             \ 'css': ['css-languageserver --stdio'],
             \ 'javascript': ['javascript-typescript-stdio'],
-            \ 'typescript': ['javascript-typescript-stdio'],
             \ 'javascript.jsx': ['javascript-typescript-stdio'],
             \ 'html': ['html-languageserver --stdio'],
             \ 'dockerfile': ['docker-langserver --stdio'],
             \ }
+" let g:LanguageClient_loggingLevel = 'TRACE'
+" let g:LanguageClient_loggingFile =  glob('~/.local/share/nvim/LanguageClient.log')
+" let g:LanguageClient_serverStderr = glob('~/.local/share/nvim/LanguageServer.log')
 
-nnoremap <F5> :call LanguageClient_contextMenu()<CR>
-nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+function! LC_maps()
+    if has_key(g:LanguageClient_serverCommands, &filetype)
+        nnoremap <buffer> <silent> K :call LanguageClient#textDocument_hover()<cr>
+        nnoremap <buffer> <silent> gd :call LanguageClient#textDocument_definition()<CR>
+        nnoremap <buffer> <silent> gD :call LanguageClient#textDocument_definition({'gotoCmd': 'vsplit'})<CR>
+        nnoremap <buffer> <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+        nnoremap <buffer> <silent> <F5> :call LanguageClient_contextMenu()<cr>
+    endif
+endfunction
+
+
+" nnoremap <F5> :call LanguageClient_contextMenu()<CR>
+" nnoremap <silent> gh :call LanguageClient#textDocument_hover()<CR>
+" nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
 "---------------------------------------------------------------"
 "--- Appearance
 "---------------------------------------------------------------"
@@ -359,7 +378,7 @@ let g:lightline.tabline = {
 "---------------------------------------------------------------"
 "--- FZF
 "---------------------------------------------------------------"
-let g:fzf_layout = { 'down': '~40%' }
+let g:fzf_layout = { 'down': '~20%' }
 let g:fzf_action = {
             \ 'ctrl-t': 'tab split',
             \ 'ctrl-x': 'split',
@@ -386,13 +405,14 @@ let g:fzf_colors = {
 " let g:ale_lint_on_save = 1
 " let g:ale_lint_on_text_changed = 'normal'
 let g:ale_lint_on_insert_leave = 1
-let g:ale_lint_delay = 500
+let g:ale_lint_delay = 100
 let g:ale_linters = { 
             \ 'javascript': ['eslint', 'prettier'],
             \ 'json': ['prettier'],
             \ 'graphql': ['prettier'],
             \}
 let g:ale_fixers = { 
+            \ 'bash': ['/usr/local/bin/shellcheck'],
             \ 'javascript': ['eslint'],
             \ 'json': ['prettier'],
             \ 'graphql': ['prettier'],
@@ -593,7 +613,6 @@ map <leader>g? :help index<CR>
 map <leader>gc :ColorToggle<CR>
 map <leader>gg :PencilToggle<CR>
 map <leader>gh :History<CR>
-" map <leader>gh <Esc>:call ToggleHardMode()<CR>
 map <leader>gh :HardTimeToggle<CR>
 map <leader>gl :set cursorline!<CR>
 map <leader>gn :set nowrap!<CR>
@@ -602,7 +621,27 @@ map <leader>gr :set relativenumber!<CR>
 map <leader>gs :SourceVimrc<CR>
 map <leader>gv :vsplit ~/.vimrc<CR>
 
-let g:lmap.l = { 'name': ' -- Layout' }
+function! s:my_displayfunc()
+    let g:leaderGuide#displayname =
+                \ substitute(g:leaderGuide#displayname, '\c<cr>$', '', '')
+    let g:leaderGuide#displayname = 
+                \ substitute(g:leaderGuide#displayname, '^<Plug>', '', '')
+endfunction
+let g:leaderGuide_displayfunc = [function("s:my_displayfunc")]
+
+let g:lmap.l = { 'name': ' -- LSP' }
+map <Plug>GoTo-Def :call LanguageClient#textDocument_definition()<CR>
+map <leader>ld <Plug>GoTo-Def
+" nnoremap <leader>ld :call LanguageClient#textDocument_definition()<CR>
+map <leader>lr :call LanguageClient#textDocument_rename()<CR>
+map <leader>lf :call LanguageClient#textDocument_formatting()<CR>
+map <leader>lt :call LanguageClient#textDocument_typeDefinition()<CR>
+map <leader>lx :call LanguageClient#textDocument_references()<CR>
+map <leader>la :call LanguageClient_workspace_applyEdit()<CR>
+map <leader>lc :call LanguageClient#textDocument_completion()<CR>
+map <leader>lh :call LanguageClient#textDocument_hover()<CR>
+map <leader>ls :call LanguageClient_textDocument_documentSymbol()<CR>
+map <leader>lm :call LanguageClient_contextMenu()<CR>
 
 " let g:lmap.n = { 'name': ' -- Project' }
 map <leader>n :NERDTreeFind<CR>
@@ -618,7 +657,7 @@ let g:lmap.r = { 'name': 'global reg' }
 map <leader>rr "*
 
 let g:lmap.s = { 'name': ' -- Search' }
-map <leader>sd :call SearchForDefinition(expand("<cword>"))<CR>
+map <leader>sd :call SearchForDefinition(expand("<cword>"), 1)<CR>
 map <leader>st :CursorInTags<CR>
 map <leader>sw :FindWordUnderCursor<CR>
 

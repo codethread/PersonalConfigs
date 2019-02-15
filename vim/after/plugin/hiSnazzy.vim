@@ -9,6 +9,19 @@ let  turqoise =  '#5af4ce'
 let  light_v  =  '#d69eff'
 let  coral    = '#FF776E'
 
+let  ui_0     =  '#F9F9F9'
+let  ui_1     =  '#f9f9ff'
+let  ui_2     =  '#eff0eb'
+let  ui_3     =  '#e2e4e5'
+let  ui_4     =  '#a1a6a8'
+let  ui_5     =  '#848688'
+let  ui_6     =  '#5e6c70'
+let  ui_7     =  '#536991'
+let  ui_8     =  '#606580'
+let  ui_9     =  '#3a3d4d'
+let  ui_11    =  '#282a36'
+let  ui_12    =  '#192224'
+
 hi NonText guifg=bg
 hi Comment cterm=italic gui=italic
 
@@ -89,3 +102,9 @@ hi ALEWarning cterm=underline,italic
 :exe 'hi jsonString  guifg='.cyan
 :exe 'hi jsonBoolean  guifg='.green
 :exe 'hi jsonNumber  guifg='.blue
+
+" GRAPHQL
+:exe 'hi graphqlString  guifg='.ui_8
+:exe 'hi graphqlType guifg='.light_v
+:exe 'hi graphqlStructure guifg='.magenta.' cterm=underline'
+" :exe 'hi graphqlName guifg='.light_v

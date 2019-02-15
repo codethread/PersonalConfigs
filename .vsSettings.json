@@ -1,11 +1,11 @@
 {
-  "[php]": {},
   "editor.cursorStyle": "block",
   "editor.fontLigatures": true,
   "editor.fontFamily": "'Fira Code', 'Roboto Mono', Menlo, Monaco, 'Courier New', monospace",
   "editor.autoIndent": true,
   "editor.cursorBlinking": "blink",
   "editor.dragAndDrop": true,
+  "explorer.confirmDragAndDrop": true,
   "editor.fontSize": 12,
   "editor.formatOnType": true,
   "editor.minimap.enabled": false,
@@ -14,14 +14,13 @@
   "editor.renderLineHighlight": "all",
   "editor.rulers": [100],
   "editor.wordWrap": "on",
-  "explorer.confirmDragAndDrop": true,
   "files.insertFinalNewline": true,
   "files.exclude": {
     "node_modules/": true,
     "**/*.swp": true,
     "tags": true,
     ".idea/": true,
-    ".vscode/": true
+    ".vscode/": false
   },
   "git.confirmSync": false,
   "git.enableSmartCommit": true,
@@ -35,7 +34,6 @@
   "workbench.editor.enablePreview": false,
   "workbench.editor.openPositioning": "last",
   "workbench.startupEditor": "newUntitledFile",
-  "workbench.colorTheme": "Panda Syntax",
   "workbench.editor.labelFormat": "short",
   "search.exclude": {
     "**/node_modules": true,
@@ -48,33 +46,48 @@
     "**/CVS": true,
     "**/.DS_Store": true
   },
-  // "workbench.colorCustomizations": {
-  //   "statusBar.background": "#BF616A",
-  //   "statusBar.noFolderBackground": "#BF616A",
-  //   "statusBar.debuggingBackground": "#BF616A"
-  // },
   "workbench.iconTheme": "vscode-icons",
   "window.zoomLevel": 0,
   "javascript.updateImportsOnFileMove.enabled": "always",
+  "workbench.panel.defaultLocation": "right",
   //////// VIM
-  // "vim.easymotion": true,
-  // "vim.sneak": true,
-  // "vim.useSystemClipboard": true,
-  // "vim.hlsearch": true,
-  // "vim.leader": "<space>",
-  // "vim.insertModeKeyBindings": [
-  //   {
-  //     "before": ["j", "k"],
-  //     "after": ["<Esc>"]
-  //   }
-  // ],
-  // "vim.statusBarColorControl": true,
-  // "vim.statusBarColors": {
-  //   "normal": ["#8FBCBB", "#434C5E"],
-  //   "insert": "#BF616A",
-  //   "visual": "#b48ead",
-  //   "visualline": "#B48EAD",
-  //   "visualblock": "#A3BE8C",
-  //   "replace": "#D08770"
+  "vim.easymotion": true,
+  "vim.sneak": true,
+  "vim.useSystemClipboard": true,
+  "vim.hlsearch": true,
+  "vim.leader": "<space>",
+  "vim.insertModeKeyBindings": [
+    {
+      "before": ["j", "k"],
+      "after": ["<Esc>"]
+    }
+  ],
+  "vim.normalModeKeyBindingsNonRecursive": [
+    // {
+    //   "before": ["<leader>", "m"],
+    //   "commands": [
+    //     "bookmarks.toggle"
+    //   ]
+    // },
+    // {
+    //   "before": ["<leader>", "b"],
+    //   "commands": [
+    //     "bookmarks.listFromAllFiles"
+    //   ]
+    // },
+    {
+      "before": ["<leader>", "b", "l"],
+      "commands": [
+        "open-buffers.openBuffer"
+      ]
+    }
+  ],
+  // "workbench.colorCustomizations": {
+  //   "statusBar.background": "#8FBCBB",
+  //   "statusBar.noFolderBackground": "#8FBCBB",
+  //   "statusBar.debuggingBackground": "#8FBCBB"
   // },
+  "editor.lineNumbers": "relative",
+  "vsicons.dontShowNewVersionMessage": true,
+  "workbench.colorTheme": "Panda Syntax"
 }
