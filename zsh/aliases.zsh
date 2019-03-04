@@ -5,7 +5,7 @@ alias zshe="vim ~/.zshrc"
 alias zshr="source ~/.zshrc"
 alias vo="vim \$(fzf)"
 alias mvim="/Applications/MacVim.app/Contents/bin/mvim"
-alias als="cat ~/.aliases.zsh | grep \"^alias.\+=\\\"\" | fzf"
+alias als="eval \$(cat ${ALIASES} | grep \"^alias.\+=\\\"\" | fzf -i --header='[run:]' | sed -E \"s:alias.*\\\"(.*)\\\":\\1:\" )"
 alias ctags="`brew --prefix`/bin/ctags"
 
 #---------------------------------------------#
@@ -13,17 +13,18 @@ alias ctags="`brew --prefix`/bin/ctags"
 # -------------------------------------------#
 alias portsinuse="lsof -i -p | grep -i 'listen'"
 alias ports="echo lsof -i tcp:3000"
-alias lst="ls -1 -a -F -G"
+alias ll="ls -1 -a -F -G" # list all column
 alias pathis="echo $PATH | tr -s ':' '\n'"
 alias ramda="~/PersonalConfigs/single_scripts/ramda"
 alias finder='open -a 'Finder' .'
+alias butter='echo "Lucy says stop coding and relax 🐼"'
 
 #---------------------------------------------#
 # RUNNERS
 # -------------------------------------------#
 alias brewup='brew update; brew doctor; brew upgrade; brew cleanup'
 alias alert="osascript -e 'display notification \"Task Finished\" with title \"CMD\"'; afplay /System/Library/Sounds/Glass.aiff"
-alias ser="python -m SimpleHTTPServer $1"
+alias ser="python -m SimpleHTTPServer $1" # start server
 
 #---------------------------------------------#
 # RARE USE
@@ -48,7 +49,6 @@ alias dcp='docker rm $(docker ps --filter=status=exited --filter=status=created 
 alias dcup='docker-compose up'
 alias dcdn='docker-compose down'
 alias dick="docker ps | grep '[a-z0-9]' | awk '{ print $1 }' | xargs docker kill"
-
 
 #---------------------------------------------#
 # GIT
@@ -94,6 +94,7 @@ alias libg="cd /users/adh23/service/sky-pages"
 alias libs="yarn storybook:start"
 alias libc="slack chat send -tx '@Waldorf akamai delete cache https://static.skyassets.com/content-api/v1/mobile-service-hub/app' -ch 'C7Y53DL90'"
 
+alias libapollo="git cherry-pick 613033541867eb1b1f52d303b007d6193101aef2"
 # build
 alias liba="yarn build:apollo-content"
 alias libo="yarn build:organisms"
@@ -113,7 +114,6 @@ alias gqs="start_skyport"
 # function gqs () { start_skyport "$1" | skyportJq }
 alias gqt="skyport_test_modified_files"
 alias gqc="ctags -R src/schema/"
-
 alias gqv="compare_skyport_vault_keys"
 
 #---------------------------------------------#
@@ -122,6 +122,6 @@ alias gqv="compare_skyport_vault_keys"
 alias ppp="start_ppp"
 
 alias poco="watch -n0.2 slack chat send -tx 'PCOO?' -ch 'D35J9H880'"
-alias sam="slack chat send -tx ${SLACK_MESSAGE} -ch 'D3VFV16U8'"
+# alias sam="slack chat send -tx ${SLACK_MESSAGE} -ch 'D3VFV16U8'"
 alias graeme="slack chat send -tx 'built' -ch 'D3U9RFCE8'"
 alias ste="watch -n0.2 slack chat send -tx 'ಠ_ಠ' -ch 'DAFGH3E79'"

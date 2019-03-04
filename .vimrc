@@ -49,7 +49,7 @@ Plug 'majutsushi/tagbar'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-vinegar'
-" Plug 'plasticboy/vim-markdown'
+Plug 'plasticboy/vim-markdown'
 
 "------------------------------------------
 "--- Languages
@@ -162,7 +162,7 @@ set tags=.tags;
 set wildignore=*.keep,*~,*.swp
 set wildmenu
 set wrapmargin=0
-set showtabline=2  " Show tabline
+set showtabline=1  " Show tabline
 
 "---------------------------------------------------------------"
 "--- Debug
@@ -370,10 +370,11 @@ endfunction
               \ 'left': [ [ 'filepath', 'modified' ] ],
               \ }
 
-let g:lightline.tabline = {
-  \   'left': [ ['tabs'] ],
-  \   'right': [ ['close'] ]
-  \ }
+
+" let g:lightline.tabline = {
+"   \   'left': [ ['tabs'] ],
+"   \   'right': [ ['close'] ]
+"   \ }
 
 "---------------------------------------------------------------"
 "--- FZF
@@ -743,6 +744,14 @@ command! -bang -nargs=* Fuzzyag
             \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
             \                 <bang>0)
 
+" Similarly, we can apply it to fzf#vim#grep. To use ripgrep instead of ag:
+" command! -bang -nargs=* Fuzzyag
+"             \ call fzf#vim#grep(
+"             \   'rg --column --line-number --no-heading --color=always --smart-case'.shellescape(<q-args>), 1,
+"             \   <bang>0 ? fzf#vim#with_preview('up:60%')
+"             \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+"             \   <bang>0)
+
 command! -bang -nargs=* Find
             \ call fzf#vim#grep('rg
             \ --column
@@ -806,3 +815,31 @@ function! Format()
     normal gg=G
     call cursor(l, c)
 endfunction
+
+let  red      =  '#ff5c57'
+let  green    =  '#5af78e'
+let  yellow   =  '#f3f99d'
+let  blue     =  '#57c7ff'
+let  magenta  =  '#ff6ac1'
+let  cyan     =  '#9aedfe'
+let  orange   =  '#fecc9a'
+let  turqoise =  '#5af4ce'
+let  light_v  =  '#d69eff'
+let  coral    = '#FF776E'
+
+let  ui_0     =  '#F9F9F9'
+let  ui_1     =  '#f9f9ff'
+let  ui_2     =  '#eff0eb'
+let  ui_3     =  '#e2e4e5'
+let  ui_4     =  '#a1a6a8'
+let  ui_5     =  '#848688'
+let  ui_6     =  '#5e6c70'
+let  ui_7     =  '#536991'
+let  ui_8     =  '#606580'
+let  ui_9     =  '#3a3d4d'
+let  ui_11    =  '#282a36'
+let  ui_12    =  '#192224'
+
+:exe 'hi TabLineFill  guibg=bg'
+:exe 'hi TabLine  guifg='.ui_8.' guibg=bg'
+:exe 'hi TabLineSel  guifg='.ui_3

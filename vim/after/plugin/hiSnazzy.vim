@@ -25,6 +25,10 @@ let  ui_12    =  '#192224'
 hi NonText guifg=bg
 hi Comment cterm=italic gui=italic
 
+:exe 'hi TabLineFill  guibg=bg'
+:exe 'hi TabLine  guifg='.ui_8.' guibg=bg'
+:exe 'hi TabLineSel  guifg='.ui_3
+
 :exe 'hi ALEError cterm=underline,italic,bold guifg='.coral
 hi ALEWarning cterm=underline,italic
 
@@ -108,3 +112,5 @@ hi ALEWarning cterm=underline,italic
 :exe 'hi graphqlType guifg='.light_v
 :exe 'hi graphqlStructure guifg='.magenta.' cterm=underline'
 " :exe 'hi graphqlName guifg='.light_v
+"
+

@@ -1,6 +1,6 @@
-# ~/.tmuxinator/sky.yml
+# ~/.tmuxinator/sky-vim.yml
 
-name: sky
+name: sky-vim
 root: ~/
 windows:
   - Lib:
@@ -8,29 +8,35 @@ windows:
       layout: main-vertical
       panes:
         - vim_pane:
-            - code .
-            - vim
+          - vim
         - info_pane:
-            - libs
-        - watch_pane:
-            - yarn watch:pages-apps
+          - libs
+          # - yarn link:pages-apps
+          # - yarn watch:pages-apps
+        # - spages_view_pane:
+        #   - yarn link:sky-pages
   - graphql:
       root: ~/Service/skyport-graphql
       layout: main-vertical
       panes:
         - vim_pane:
-          - code .
           - vim
+        # - skyport_view_pane:
+        #   - sleep 1
+        #   - clear
+        #   - gst
         - info_pane:
           - sleep 1
-          - gqs -s
+          - gqs -d
   - skyPages:
       root: ~/Service/sky-pages
       layout: main-vertical
       panes:
         - vim_pane:
-          - code .
           - vim
+        # - spages_view_pane:
+        #   - sleep 1
+        #   - clear
         - info_pane:
           - sleep 10
           - sps
@@ -39,14 +45,25 @@ windows:
       layout: main-vertical
       panes:
         - vim_pane:
-            -clear
-            - vim
+          - vim
+        # - spages_view_pane:
+        #   - sleep 1
+        #   - clear
         - info_pane:
           - sleep 1
           - pas
+  - ◎: echo 'hi'
+  - ◎: echo 'hi'
   - service-scripts:
       root: ~/Service/skymobile-service
       layout: main-vertical
       panes:
         - vim
+        -
+  - randoms:
+      root: ~/
+      layout: main-vertical
+      panes:
+        -
+        -
         -
