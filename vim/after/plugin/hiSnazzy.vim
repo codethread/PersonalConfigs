@@ -25,11 +25,15 @@ let  ui_12    =  '#192224'
 hi NonText guifg=bg
 hi Comment cterm=italic gui=italic
 
-:exe 'hi TabLineFill  guibg=bg'
-:exe 'hi TabLine  guifg='.ui_8.' guibg=bg'
-:exe 'hi TabLineSel  guifg='.ui_3
+:exe 'hi TabLineFill  guibg='.ui_9
+:exe 'hi TabLine  guifg='.ui_4.' guibg='.ui_9
+:exe 'hi TabLineSel  guifg='.cyan.' guibg='.ui_9
 
 :exe 'hi ALEError cterm=underline,italic,bold guifg='.coral
+" :exe 'hi ALEErrorSign guifg='.coral
+:exe 'hi ALEErrorSign guifg='.magenta
+:exe 'hi ALEWarningSign guifg='.magenta
+
 hi ALEWarning cterm=underline,italic
 
 :exe 'hi SpellBad    guifg=white guibg='.red

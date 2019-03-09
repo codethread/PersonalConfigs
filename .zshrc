@@ -6,6 +6,7 @@ export EDITOR='vim'
 
 export PATH="$PATH:$HOME/.nodenv/shims"
 export PATH="$PATH:$HOME/.cargo/bin"
+export PATH="$PATH:$HOME/.cargo/bin"
 
 # JQ_COLORS=1;30:0;39:0;39:0;39:0;32:1;39:1;39
 export JQ_COLORS="1;30:0;31:0;32:0;35:0;33:1;35:1;35"
@@ -37,8 +38,10 @@ source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 #------------------------------------------
 export CONFIGS="$HOME/PersonalConfigs"
+export PATH="$PATH:$CONFIGS/bin"
 export ALIASES="$CONFIGS/zsh/aliases.zsh"
 source $ALIASES
+source "$CONFIGS/zsh/shortcuts.zsh"
 
 for f in $CONFIGS/zsh/bin/*; do source $f; done
 for f in $CONFIGS/scripts/*; do source $f; done

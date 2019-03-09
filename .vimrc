@@ -23,6 +23,7 @@ Plug 'tomtom/tcomment_vim' " Commenting
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'vim-scripts/ParseJSON'
+Plug 'tpope/vim-abolish' " coerce words such as crs: coerce to snake_case
 
 "------------------------------------------
 "--- Linting / testing
@@ -163,6 +164,7 @@ set wildignore=*.keep,*~,*.swp
 set wildmenu
 set wrapmargin=0
 set showtabline=1  " Show tabline
+set signcolumn=yes
 
 "---------------------------------------------------------------"
 "--- Debug
@@ -267,7 +269,7 @@ let g:LanguageClient_changeThrottle = 0.1 " pauses for 0.3 seconds after txt cha
 "java https://github.com/Ruin0x11/intellij-lsp-server
 "java https://github.com/eclipse/eclipse.jdt.ls
 " \ 'java': ['/usr/local/bin/jdtls'], life's too short to get this to work
-" let g:LanguageClient_diagnosticsEnable = 0
+let g:LanguageClient_diagnosticsEnable = 0
 let g:LanguageClient_serverCommands = {
             \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
             \ 'css': ['css-languageserver --stdio'],
@@ -815,31 +817,3 @@ function! Format()
     normal gg=G
     call cursor(l, c)
 endfunction
-
-let  red      =  '#ff5c57'
-let  green    =  '#5af78e'
-let  yellow   =  '#f3f99d'
-let  blue     =  '#57c7ff'
-let  magenta  =  '#ff6ac1'
-let  cyan     =  '#9aedfe'
-let  orange   =  '#fecc9a'
-let  turqoise =  '#5af4ce'
-let  light_v  =  '#d69eff'
-let  coral    = '#FF776E'
-
-let  ui_0     =  '#F9F9F9'
-let  ui_1     =  '#f9f9ff'
-let  ui_2     =  '#eff0eb'
-let  ui_3     =  '#e2e4e5'
-let  ui_4     =  '#a1a6a8'
-let  ui_5     =  '#848688'
-let  ui_6     =  '#5e6c70'
-let  ui_7     =  '#536991'
-let  ui_8     =  '#606580'
-let  ui_9     =  '#3a3d4d'
-let  ui_11    =  '#282a36'
-let  ui_12    =  '#192224'
-
-:exe 'hi TabLineFill  guibg=bg'
-:exe 'hi TabLine  guifg='.ui_8.' guibg=bg'
-:exe 'hi TabLineSel  guifg='.ui_3

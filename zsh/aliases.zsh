@@ -1,11 +1,15 @@
 #---------------------------------------------#
 # EDITOR-ish
 # -------------------------------------------#
-alias zshe="vim ~/.zshrc"
-alias zshr="source ~/.zshrc"
+alias zz="vim ~/.zshrc" # open zsh
+alias vv="vim ~/.vimrc" # open vim config
+alias aa="vim ${ALIASES}" # open aliases
+
+alias zr="source ~/.zshrc"
 alias vo="vim \$(fzf)"
 alias mvim="/Applications/MacVim.app/Contents/bin/mvim"
 alias als="eval \$(cat ${ALIASES} | grep \"^alias.\+=\\\"\" | fzf -i --header='[run:]' | sed -E \"s:alias.*\\\"(.*)\\\":\\1:\" )"
+alias nps="echo \$(cat package.json | jq -S '.scripts' | fzf -i --header='[run:]')"
 alias ctags="`brew --prefix`/bin/ctags"
 
 #---------------------------------------------#
@@ -64,6 +68,7 @@ alias gh="open \`git remote -v | grep git@github.com | grep fetch | head -1 | cu
 alias gr="git rebase -i HEAD~$1"
 alias gclean="git clean -dfX"
 alias gwip="git add . && git commit -nm 'wip'"
+alias gl="git --no-pager log -n 5"
 
 #---------------------------------------------#
 # TMUXINATOR
@@ -90,9 +95,8 @@ alias spn="git pull; npm i; sps"
 #---------------------------------------------#
 # Pages-lib
 # -------------------------------------------#
-alias libg="cd /users/adh23/service/sky-pages"
+alias libg="cd /users/adh23/service/pages-lib"
 alias libs="yarn storybook:start"
-alias libc="slack chat send -tx '@Waldorf akamai delete cache https://static.skyassets.com/content-api/v1/mobile-service-hub/app' -ch 'C7Y53DL90'"
 
 alias libapollo="git cherry-pick 613033541867eb1b1f52d303b007d6193101aef2"
 # build
@@ -103,7 +107,7 @@ alias libm="yarn build:molecules"
 #---------------------------------------------#
 # pages-apps
 # -------------------------------------------#
-alias pag="cd /users/adh23/service/sky-pages"
+alias pag="cd /users/adh23/service/pages-apps"
 alias pas="yarn start:dev"
 
 #---------------------------------------------#
@@ -120,6 +124,7 @@ alias gqv="compare_skyport_vault_keys"
 # OTHER
 # -------------------------------------------#
 alias ppp="start_ppp"
+alias cs="slack chat send -tx '@Waldorf akamai delete cache https://static.skyassets.com/content-api/v1/mobile-service-hub/app' -ch 'C7Y53DL90'"
 
 alias poco="watch -n0.2 slack chat send -tx 'PCOO?' -ch 'D35J9H880'"
 # alias sam="slack chat send -tx ${SLACK_MESSAGE} -ch 'D3VFV16U8'"
