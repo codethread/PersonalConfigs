@@ -25,6 +25,9 @@ let  ui_12    =  '#192224'
 hi NonText guifg=bg
 hi Comment cterm=italic gui=italic
 
+:exe 'hi Folded  guifg='.cyan.' guibg='.ui_9
+" :exe 'hi FoldColumn  guifg='.cyan.' guibg='.ui_9
+
 :exe 'hi TabLineFill  guibg='.ui_9
 :exe 'hi TabLine  guifg='.ui_4.' guibg='.ui_9
 :exe 'hi TabLineSel  guifg='.cyan.' guibg='.ui_9

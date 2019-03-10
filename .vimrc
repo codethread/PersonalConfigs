@@ -1,3 +1,22 @@
+"
+"      ___       _______       ___      .___  ___.  __     _______.   
+"     /   \     |       \     /   \     |   \/   | (_ )   /       |   
+"    /  ^  \    |  .--.  |   /  ^  \    |  \  /  |  |/   |   (----`   
+"   /  /_\  \   |  |  |  |  /  /_\  \   |  |\/|  |        \   \       
+"  /  _____  \  |  '--'  | /  _____  \  |  |  |  |    .----)   |      
+" /__/     \__\ |_______/ /__/     \__\ |__|  |__|    |_______/       
+" ____    ____  __  .___  ___. .______        ______ 
+" \   \  /   / |  | |   \/   | |   _  \      /      |
+"  \   \/   /  |  | |  \  /  | |  |_)  |    |  ,----'
+"   \      /   |  | |  |\/|  | |      /     |  |     
+"    \    /    |  | |  |  |  | |  |\  \----.|  `----.
+"     \__/     |__| |__|  |__| | _| `._____| \______|
+" 
+
+""""""""""""""""""
+"  Setup  "
+""""""""""""""""""
+
 if empty(glob('~/.vim/autoload/plug.vim'))
     silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
                 \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -5,9 +24,10 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 
 call plug#begin('~/.vim/plugged')
-"------------------------------------------
-"--- Editing
-"-----------------------------------------
+
+"""""""""""""""""""
+"  Editing "
+""""""""""""""""""
 Plug 'christoomey/vim-sort-motion' " use gs
 Plug 'danro/rename.vim'
 Plug 'ddrscott/vim-window'
@@ -25,16 +45,16 @@ Plug 'tpope/vim-surround'
 Plug 'vim-scripts/ParseJSON'
 Plug 'tpope/vim-abolish' " coerce words such as crs: coerce to snake_case
 
-"------------------------------------------
-"--- Linting / testing
-"-----------------------------------------
+"""""""""""""""""""
+"  Linting / testing "
+""""""""""""""""""
 Plug 'ngmy/vim-rubocop'
 Plug 'thoughtbot/vim-rspec'
 Plug 'w0rp/ale' " async linting
 
-"------------------------------------------
-"--- GUI changes
-"-----------------------------------------
+"""""""""""""""""""
+"  GUI changes "
+""""""""""""""""""
 Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] } | Plug 'ryanoasis/vim-devicons'
 Plug 'Shougo/denite.nvim'
 Plug 'Yggdroot/indentLine'
@@ -52,9 +72,9 @@ Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-vinegar'
 Plug 'plasticboy/vim-markdown'
 
-"------------------------------------------
-"--- Languages
-"-----------------------------------------
+"""""""""""""""""""
+"  Languages "
+""""""""""""""""""
 " Plug 'styled-components/vim-styled-components'
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
 Plug 'chrisbra/csv.vim'
@@ -63,9 +83,9 @@ Plug 'peitalin/vim-jsx-typescript' "| Plug 'Quramy/tsuquyomi'
 Plug 'sheerun/vim-polyglot'
 Plug 'shirk/vim-gas'
 
-"------------------------------------------
-"--- Utilities
-"-----------------------------------------
+"""""""""""""""""""
+"  Utilities "
+""""""""""""""""""
 Plug 'aaronbieber/vim-quicktask'
 Plug 'diepm/vim-rest-console'
 Plug 'editorconfig/editorconfig-vim'
@@ -77,14 +97,14 @@ Plug 'skywind3000/asyncrun.vim'
 Plug 'tpope/vim-scriptease'
 Plug 'wakatime/vim-wakatime'
 "
-"------------------------------------------
-"--- Completion
-"-----------------------------------------
+"""""""""""""""""""
+"  Completion "
+""""""""""""""""""
 Plug 'ncm2/ncm2' | Plug 'roxma/nvim-yarp' | Plug 'roxma/vim-hug-neovim-rpc' | Plug 'ncm2/ncm2-path'
 
-"------------------------------------------
-"--- Disabled
-"-----------------------------------------
+"""""""""""""""""""
+"  Disabled "
+""""""""""""""""""
 " Plug 'Raimondi/delimitMate' " XXX this annoys me too much
 " Plug 'Shougo/deoplete.nvim' " XXX using ncm2 instead
 " Plug 'Valloric/YouCompleteMe', { 'do': './install.py', 'on': [] } " XXX using ncm2 instead
@@ -95,20 +115,19 @@ Plug 'ncm2/ncm2' | Plug 'roxma/nvim-yarp' | Plug 'roxma/vim-hug-neovim-rpc' | Pl
 " Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes' " XXX slow!
 " Plug 'wikitopian/hardmode' " XXX hjkl are sometimes really uesful 
 " Plug 'xuyuanp/nerdtree-git-plugin' "XXX messy tree
-"---------------------------------------------------------------"
 
 call plug#end()
 
-"---------------------------------------------------------------"
-"--- Indentation
-"---------------------------------------------------------------"
+""""""""""""""""""""
+"  Indentation "
+""""""""""""""""""""
 filetype plugin indent on " Needs to go before autocmds
 syntax enable " Needs to go before autocmds
 
 
-"---------------------------------------------------------------"
-"--- autocmd
-"---------------------------------------------------------------"
+""""""""""""""""""""
+"  autocmd "
+""""""""""""""""""""
 if !exists("autocommands_loaded")
     let autocommands_loaded = 1
     autocmd VimEnter * set number
@@ -133,9 +152,9 @@ if !exists("autocommands_loaded")
 endif
 
 
-"---------------------------------------------------------------"
-"--- Editor
-"---------------------------------------------------------------"
+""""""""""""""""""""
+"  Editor "
+""""""""""""""""""""
 
 set backspace=indent,eol,start              " Allow backspacing over everything in insert mode
 set clipboard=unnamed                       " just too annoying without this
@@ -165,16 +184,19 @@ set wildmenu
 set wrapmargin=0
 set showtabline=1  " Show tabline
 set signcolumn=yes
+set foldmethod=syntax
 
-"---------------------------------------------------------------"
-"--- Debug
-"---------------------------------------------------------------"
+let g:vimsyn_folding='af'
+
+""""""""""""""""""""
+"  Debug "
+""""""""""""""""""""
 " set verbose=9
 " set verbosefile=~/vim_debug.txt
 
-"---------------------------------------------------------------"
-"--- Tiny Plugins
-"---------------------------------------------------------------"
+""""""""""""""""""""
+"  Tiny Plugins "
+""""""""""""""""""""
 " let g:EasyMotion_smartcase = 1
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
@@ -226,9 +248,9 @@ let g:hardtime_default_on = 0
 " let g:UltiSnipsJumpForwardTrigger="<c-b>"
 " let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
-"---------------------------------------------------------------"
-"--- Undo
-"---------------------------------------------------------------"
+""""""""""""""""""""
+"  Undo "
+""""""""""""""""""""
 " set undolevels=1000
 " set undoreload=10000
 let vimDir = '$HOME/.vim'
@@ -244,9 +266,9 @@ if has('persistent_undo')
     set undofile
 endif
 
-"---------------------------------------------------------------"
-"--- Automcomplete / ncm
-"---------------------------------------------------------------"
+""""""""""""""""""""
+"  Automcomplete / ncm "
+""""""""""""""""""""
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " au User Ncm2Plugin call ncm2#register_source({
@@ -263,9 +285,9 @@ inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 let g:LanguageClient_changeThrottle = 0.1 " pauses for 0.3 seconds after txt change before post to server
 
-"---------------------------------------------------------------"
-"--- Lsc
-"---------------------------------------------------------------"
+""""""""""""""""""""
+"  Lsc "
+""""""""""""""""""""
 "java https://github.com/Ruin0x11/intellij-lsp-server
 "java https://github.com/eclipse/eclipse.jdt.ls
 " \ 'java': ['/usr/local/bin/jdtls'], life's too short to get this to work
@@ -296,9 +318,9 @@ endfunction
 " nnoremap <F5> :call LanguageClient_contextMenu()<CR>
 " nnoremap <silent> gh :call LanguageClient#textDocument_hover()<CR>
 " nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
-"---------------------------------------------------------------"
-"--- Appearance
-"---------------------------------------------------------------"
+""""""""""""""""""""
+"  Appearance "
+""""""""""""""""""""
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum" " something to do with vim in a terminal
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 
@@ -317,9 +339,9 @@ if has('gui_running')
     let $BASH_ENV = "~/.bash_aliases"
 endif
 
-"---------------------------------------------------------------"
-"--- Airline
-"---------------------------------------------------------------"
+""""""""""""""""""""
+"  Airline "
+""""""""""""""""""""
 " let g:airline_powerline_fonts = 1
 " let g:airline_theme = 'tenderAdam'
 " let g:airline_theme='onedark'
@@ -335,9 +357,9 @@ endif
 " let g:airline_section_b = '%{split(getcwd(), "/")[-1]}' " dont really care for the branch
 " " let g:airline_section_c = '%t'
 
-"---------------------------------------------------------------"
-"--- Lightline
-"---------------------------------------------------------------"
+""""""""""""""""""""
+"  Lightline "
+""""""""""""""""""""
 let g:asyncrun_status = "" 
 function! AsyncJobStatus()
     return g:asyncrun_status
@@ -378,9 +400,9 @@ endfunction
 "   \   'right': [ ['close'] ]
 "   \ }
 
-"---------------------------------------------------------------"
-"--- FZF
-"---------------------------------------------------------------"
+""""""""""""""""""""
+"  FZF "
+""""""""""""""""""""
 let g:fzf_layout = { 'down': '~20%' }
 let g:fzf_action = {
             \ 'ctrl-t': 'tab split',
@@ -402,9 +424,9 @@ let g:fzf_colors = {
             \ 'spinner': ['fg', 'Label'],
             \ 'header':  ['fg', 'Comment'] }
 
-"---------------------------------------------------------------"
-"--- Linting
-"---------------------------------------------------------------"
+""""""""""""""""""""
+"  Linting "
+""""""""""""""""""""
 " let g:ale_lint_on_save = 1
 " let g:ale_lint_on_text_changed = 'normal'
 let g:ale_lint_on_insert_leave = 1
@@ -431,9 +453,9 @@ let g:ale_sign_warning = '▹'
 
 " {buffer, lines -> filter(lines, 'v:val !=~ ''^\s*//''')}, " removes comments
 
-"---------------------------------------------------------------"
-"--- NERDTree stuff
-"---------------------------------------------------------------"
+""""""""""""""""""""
+"  NERDTree stuff "
+""""""""""""""""""""
 let g:NERDTreeWinSize=40 " nice big tree is it's easy to toggle off
 let NERDTreeMinimalUI=1
 let NERDTreeStatusline="%{ getcwd() }"
@@ -460,9 +482,9 @@ let NERDTreeIgnore += [
             \ '\.tar.gz$',
             \ '\.rar$']
 
-"---------------------------------------------------------------"
-"--- Typing stuff
-"---------------------------------------------------------------"
+""""""""""""""""""""
+"  Typing stuff "
+""""""""""""""""""""
 if has("spell")
     " toggle spelling with F4 key
     map <F4> :set spell!<CR><Bar>:echo "Spell Check: " . strpart("OffOn", 3 * &spell, 3)<CR>
@@ -474,9 +496,9 @@ if has("spell")
     set sps=best,10
 endif
 
-"---------------------------------------------------------------" */
-"--- Windows and buffers
-"---------------------------------------------------------------" */
+""""""""""""""""""""
+"  Windows and buffers "
+""""""""""""""""""""
 " Unimpaired mapping
 nnoremap ]r :<C-U>call window#rotate(-1 * v:count1)<cr>
 nnoremap [r :<C-U>call window#rotate(1 * v:count1)<cr>
@@ -502,9 +524,9 @@ nnoremap <C-w>gj :<C-U>call window#join('belowright split', v:count) <BAR>normal
 nnoremap <C-w>gk :<C-U>call window#join('aboveleft split', v:count) <BAR>normal! 100zh<CR>
 
 
-"---------------------------------------------------------------" */
-"--- GOYO
-"---------------------------------------------------------------" */
+"""""""""""""""""""" */
+"  GOYO "
+"""""""""""""""""""" */
 function! s:goyo_enter()
     silent !tmux set status off
     silent !tmux list-panes -F '\#F' | grep -q Z || tmux resize-pane -Z
@@ -526,9 +548,9 @@ endfunction
 autocmd! User GoyoEnter nested call <SID>goyo_enter()
 autocmd! User GoyoLeave nested call <SID>goyo_leave()
 
-"---------------------------------------------------------------"
-"--- Mappings
-"---------------------------------------------------------------"
+""""""""""""""""""""
+"  Mappings"
+""""""""""""""""""""
 " let mapleader = ","
 let mapleader = " "
 " escape key
@@ -571,9 +593,9 @@ imap <C-@> <C-Space>
 " :inoremap <Tab> <C-R>=Tab_Or_Complete()<CR>
 " nmap <Tab> :b#<CR>
 "
-"---------------------------------------------------------------"
-"--- Dictionary leader
-"---------------------------------------------------------------"
+""""""""""""""""""""
+"  Dictionary leader"
+""""""""""""""""""""
 let g:lmap = {}
 " 🚀
 nnoremap <silent> <leader>+ :exe "vertical resize +10"<CR>
@@ -718,16 +740,16 @@ call leaderGuide#register_prefix_descriptions("<Space>", "g:lmap")
 nnoremap <silent> <leader> :<c-u>LeaderGuide '<Space>'<CR>
 vnoremap <silent> <leader> :<c-u>LeaderGuideVisual '<Space>'<CR>
 
-"---------------------------------------------------------------"
-"--- Macros
-"---------------------------------------------------------------"
+""""""""""""""""""""
+"  Macros"
+""""""""""""""""""""
 let @l='yy^Wwpi^M^[^WW' " send line to next cycled pane
 let @r='y^Wwpi^M^[^WW' " send selected region to next cycled pane
 let @b='0v/^\n^My^Wwpi^M^[^WW' " send current block to next cycled pane
 
-"---------------------------------------------------------------"
-"--- Commands
-"---------------------------------------------------------------"
+""""""""""""""""""""
+"  Commands
+""""""""""""""""""""
 "TODO put a check inside DeleteFileAndBuff
 command! DeleteFileAndBuff :call delete(expand('%')) | bd
 command! FindWordUnderCursor :call fzf#vim#ag(expand("<cword>"))
@@ -766,9 +788,9 @@ command! -bang -nargs=* Find
             \ --glob "!.git/*"
             \ --color "always" '.shellescape(<q-args>), 1, <bang>0)
 
-"---------------------------------------------------------------"
-"--- Functions
-"---------------------------------------------------------------"
+"""""""""""""""""""""
+"  Functions
+""""""""""""""""""""
 "Use TAB to complete when typing words, else inserts TABs as usual.
 " function! Tab_Or_Complete()
 "     if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~'^\w'
@@ -817,3 +839,65 @@ function! Format()
     normal gg=G
     call cursor(l, c)
 endfunction
+""""""""""""""""""""""""
+"  THIS IS A CATEGORY  "
+""""""""""""""""""""""""
+" https://vi.stackexchange.com/questions/3814/is-there-a-best-practice-to-fold-a-vimrc-file
+"" Autofolding .vimrc
+" see http://vimcasts.org/episodes/writing-a-custom-fold-expression/
+""" defines a foldlevel for each line of code
+function! VimFolds(lnum)
+  let s:thisline = getline(a:lnum)
+  if match(s:thisline, '^"" ') >= 0
+    return '>2'
+  endif
+  if match(s:thisline, '^""" ') >= 0
+    return '>3'
+  endif
+  let s:two_following_lines = 0
+  if line(a:lnum) + 2 <= line('$')
+    let s:line_1_after = getline(a:lnum+1)
+    let s:line_2_after = getline(a:lnum+2)
+    let s:two_following_lines = 1
+  endif
+  if !s:two_following_lines
+      return '='
+    endif
+  else
+    if (match(s:thisline, '^"""""') >= 0) &&
+       \ (match(s:line_1_after, '^"  ') >= 0) &&
+       \ (match(s:line_2_after, '^""""') >= 0)
+      return '>1'
+    else
+      return '='
+    endif
+  endif
+endfunction
+
+""" defines a foldtext
+function! VimFoldText()
+  " handle special case of normal comment first
+  let s:info = '('.string(v:foldend-v:foldstart).' l)'
+  if v:foldlevel == 1
+    let s:line = ' ● '.getline(v:foldstart+1)[3:-2]
+  elseif v:foldlevel == 2
+    let s:line = '   ◇  '.getline(v:foldstart)[3:]
+  elseif v:foldlevel == 3
+    let s:line = '     ▪ '.getline(v:foldstart)[4:]
+  endif
+  if strwidth(s:line) > 80 - len(s:info) - 3
+    return s:line[:79-len(s:info)-3+len(s:line)-strwidth(s:line)].'...'.s:info
+  else
+    return s:line.repeat(' ', 80 - strwidth(s:line) - len(s:info)).s:info
+  endif
+endfunction
+
+""" set foldsettings automatically for vim files
+augroup fold_vimrc
+  autocmd!
+  autocmd FileType vim 
+                   \ setlocal foldmethod=expr |
+                   \ setlocal foldexpr=VimFolds(v:lnum) |
+                   \ setlocal foldtext=VimFoldText() |
+     "              \ set foldcolumn=2 foldminlines=2
+augroup END
