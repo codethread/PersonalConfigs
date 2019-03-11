@@ -549,7 +549,7 @@ let g:indentLine_conceallevel = 2
 let g:indentLine_fileTypeExclude = ['help', 'man', 'startify', 'NERDTree']
 
 "" Previm -- open md in safari
-let g:previm_open_cmd = 'open -a Safari'
+let g:previm_open_cmd = 'open -a "/Applications/Google Chrome.app"'
 "
 "" Vim markdown -- needs addressing for speed
 let g:vim_markdown_folding_disabled = 1
