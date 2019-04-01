@@ -77,22 +77,6 @@ fi
 # ZSH_THEME="spaceship"
 # ZSH_CUSTOM=$HOME/PersonalConfigs/zsh_custom
 # source $HOME/PersonalConfigs/spaceship-config.zsh
-_fzf_complete_git() {
-    ARGS="$@"
-    local branches
-    branches=$(git branch -vv --all)
-    if [[ $ARGS == 'git co'* ]]; then
-        _fzf_complete "--reverse --multi" "$@" < <(
-            echo $branches
-        )
-    else
-        eval "zle ${fzf_default_completion:-expand-or-complete}"
-    fi
-}
-
-_fzf_complete_git_post() {
-    awk '{print $1}'
-}
 
 #------------------------------------------
 #--- ALWAYS LAST
