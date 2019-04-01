@@ -4,6 +4,7 @@
 alias zz="vim ~/.zshrc" # open zsh
 alias vv="vim ~/.vimrc" # open vim config
 alias aa="vim ${ALIASES}" # open aliases
+alias bi="brew install"
 
 alias zr="source ~/.zshrc"
 alias vo="vim \$(fzf)"
@@ -79,6 +80,7 @@ alias kmux="kill_tmux_session"
 ##############################################
 # SKY
 ##############################################
+alias uni="unicorn_build"
 
 #---------------------------------------------#
 # SPAGES
@@ -97,6 +99,8 @@ alias spn="git pull; npm i; sps"
 # -------------------------------------------#
 alias libg="cd /users/adh23/service/pages-lib"
 alias libs="yarn storybook:start"
+alias libt="yarn test --watch --coverage --changedSince=master"
+
 
 alias libapollo="git cherry-pick 613033541867eb1b1f52d303b007d6193101aef2"
 # build

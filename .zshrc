@@ -62,8 +62,9 @@ prompt pure
 #--- Sky Stuff
 #-----------------------------------------
 if [[ $(whoami) =~ 'adh23' ]]; then
-    export SKYPORT_GRAPHQL_DIR='/Users/adh23/Service/skyport-graphql'
-    export SKY_SERVICE_FOLDER='/Users/adh23/Service'
+    export TOOLKIT_PATH="$HOME/Sky/toolkit"
+    export SKY_SERVICE_FOLDER="$HOME/Service"
+    export SKYPORT_GRAPHQL_DIR="$SKY_SERVICE_FOLDER/skyport-graphql"
     export SKY_SERVICE_DEV_TOOLS=$SKY_SERVICE_FOLDER/skymobile-service/dev-tools
     [ -r $SKY_SERVICE_DEV_TOOLS/.sky.sh ] && source $SKY_SERVICE_DEV_TOOLS/.sky.sh
 fi
@@ -76,6 +77,22 @@ fi
 # ZSH_THEME="spaceship"
 # ZSH_CUSTOM=$HOME/PersonalConfigs/zsh_custom
 # source $HOME/PersonalConfigs/spaceship-config.zsh
+_fzf_complete_git() {
+    ARGS="$@"
+    local branches
+    branches=$(git branch -vv --all)
+    if [[ $ARGS == 'git co'* ]]; then
+        _fzf_complete "--reverse --multi" "$@" < <(
+            echo $branches
+        )
+    else
+        eval "zle ${fzf_default_completion:-expand-or-complete}"
+    fi
+}
+
+_fzf_complete_git_post() {
+    awk '{print $1}'
+}
 
 #------------------------------------------
 #--- ALWAYS LAST

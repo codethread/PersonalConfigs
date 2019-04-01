@@ -5,6 +5,7 @@
 "" Autofolding .vimrc
 " see http://vimcasts.org/episodes/writing-a-custom-fold-expression/
 """ defines a foldlevel for each line of code
+
 function! VimFolds(lnum)
     let s:thisline = getline(a:lnum)
     if match(s:thisline, '^"" ') >= 0

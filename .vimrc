@@ -123,7 +123,11 @@ if !exists("autocommands_loaded")
     autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
     autocmd BufNewFile,BufRead *.{ts,tsx,jsx} set filetype=javascript.jsx
 
-    autocmd FileType * setlocal tabstop=4 shiftwidth=4
+    autocmd FileType * setlocal tabstop=4 shiftwidth=4 
+
+    autocmd FileType javascript,javascript.jsx 
+                \ setlocal foldmethod=syntax |
+                \ normal zR
 
     autocmd CompleteDone * silent! pclose
     autocmd User AsyncRunStop let g:asyncrun_status="✓"
@@ -164,6 +168,11 @@ set showtabline=1  " Show tabline
 set signcolumn=yes
 set ignorecase
 set smartcase " search ignores case unless capitals present
+set foldnestmax=3
+set noshowmode
+" set foldlevelstart=20 " useful for making sure all folds are expanded on
+" opening
+" set foldminlines=5
 
 "" Spelling
 if has("spell")
@@ -376,6 +385,12 @@ map <leader>gr :set relativenumber!<CR>
 map <leader>gs :SourceVimrc<CR>
 command! SourceVimrc write | source ~/.vimrc
 map <leader>gv :vsplit ~/.vimrc<CR>
+
+"" l - Log
+let g:lmap.l = { 'name': ' -- Log' }
+map <leader>ll yiwoconsole.log('\n<C-r>0:', <C-r>0);<C-[>k
+map <leader>ld :%s/.*console.log.*\n//g<CR>
+
 
 "" o - Help
 let g:lmap.h = { 'name': ' -- Help' }
