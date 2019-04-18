@@ -86,6 +86,8 @@ Plug 'rking/ag.vim'
 Plug 'skywind3000/asyncrun.vim'
 Plug 'tpope/vim-scriptease'
 Plug 'wakatime/vim-wakatime'
+Plug 'tpope/vim-projectionist'
+Plug 'tpope/vim-unimpaired'
 
 "" Completion
 Plug 'ncm2/ncm2' | Plug 'roxma/nvim-yarp' | Plug 'roxma/vim-hug-neovim-rpc' | Plug 'ncm2/ncm2-path'
@@ -252,18 +254,24 @@ function! LightlineFilename()
     return expand('%')
 endfunction
 
+function! LightlineFiletype()
+    return winwidth(0) > 89 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
+endfunction
+
+
   let g:lightline = {
               \ 'colorscheme': 'snazzy',
               \ 'active': {
               \   'left': [ [ 'mode', 'paste' ],
               \             [ 'readonly', 'filepath', 'modified' ] ],
               \   'right': [ [ 'lineinfo' ],
-              \            [ 'percent' ],
-              \            [ 'asyncJob', 'filetype' ] ],
+              \            [ 'filetype' ],
+              \            [ 'asyncJob' ] ],
               \ },
               \ 'component_function': {
               \   'asyncJob': 'AsyncJobStatus',
               \   'filepath': 'LightlineFilename',
+              \   'filetype': 'LightlineFiletype',
               \ },
               \ }
 
@@ -365,7 +373,7 @@ map <leader>fo <Plug>fold_out
 map <Plug>fold_in zc
 map <leader>fi <Plug>fold_in
 
-map <Plug>fold_out_all zO
+map <Plug>fold_out_all zR
 map <leader>fO <Plug>fold_out_all
 
 map <Plug>fold_in_all zm
@@ -410,7 +418,8 @@ map <leader>pg :GFiles?<CR>
 map <leader>pm :Marks<CR>
 map <leader>pn <C-W>}
 map <leader>po :only<CR>
-map <leader>pp :Files<CR>
+map <leader>pp :AV<CR>
+map <leader>pt :Files<CR>
 
 "" o - Quicktask
 let g:lmap.o = { 'name': ' -- Quicktask' }

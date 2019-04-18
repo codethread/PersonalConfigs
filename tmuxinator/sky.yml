@@ -3,47 +3,40 @@
 name: sky
 root: ~/
 windows:
-  - Lib:
-      root: ~/Service/pages-lib
-      layout: main-vertical
-      panes:
-        - vim_pane:
-            - code .
-            - vim
-        - info_pane:
-            - libs
-        - watch_pane:
-            - yarn watch:pages-apps
-  - graphql:
-      root: ~/Service/skyport-graphql
-      layout: main-vertical
-      panes:
-        - vim_pane:
-          - code .
-          - vim
-        - info_pane:
-          - sleep 1
-          - gqs -s
-  - skyPages:
-      root: ~/Service/sky-pages
-      layout: main-vertical
-      panes:
-        - vim_pane:
-          - code .
-          - vim
-        - info_pane:
-          - sleep 10
-          - sps
   - pApps:
       root: ~/Service/pages-apps
       layout: main-vertical
       panes:
         - vim_pane:
-            -clear
+            - clear
             - vim
         - info_pane:
           - sleep 1
           - pas
+  - graphql:
+      root: ~/Service/skyport-graphql
+      layout: main-vertical
+      panes:
+        - vim_pane:
+          - vim
+        - info_pane:
+          - sleep 1
+          - gqs -d
+  - skyPages:
+      root: ~/Service/sky-pages
+      layout: main-vertical
+      panes:
+        - vim_pane:
+          - vim
+        - info_pane:
+          - sleep 10
+          - sps
+  - pLib:
+      root: ~/Service/pages-lib
+      layout: main-vertical
+      panes:
+        - vim
+        - 
   - service-scripts:
       root: ~/Service/skymobile-service
       layout: main-vertical
