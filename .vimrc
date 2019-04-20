@@ -32,21 +32,22 @@ Plug 'ddrscott/vim-window'
 Plug 'godlygeek/tabular'
 Plug 'junegunn/vim-easy-align'
 Plug 'justinmk/vim-sneak'
-Plug 'kannokanno/previm'
 Plug 'kshenoy/vim-signature'
 Plug 'reedes/vim-pencil'
-Plug 'takac/vim-hardtime'
 Plug 'tmhedberg/matchit'
 Plug 'tomtom/tcomment_vim' " Commenting
+Plug 'tpope/vim-abolish' " coerce words such as crs: coerce to snake_case
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
 Plug 'vim-scripts/ParseJSON'
-Plug 'tpope/vim-abolish' " coerce words such as crs: coerce to snake_case
 
 "" Linting / testing
 Plug 'ngmy/vim-rubocop'
 Plug 'thoughtbot/vim-rspec'
 Plug 'w0rp/ale' " async linting
+Plug 'janko/vim-test'
+
 
 "" GUI changes
 Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] } | Plug 'ryanoasis/vim-devicons'
@@ -61,10 +62,7 @@ Plug 'itchyny/lightline.vim'
 Plug 'joshdick/onedark.vim'
 Plug 'junegunn/goyo.vim'
 Plug 'majutsushi/tagbar'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-vinegar'
-Plug 'plasticboy/vim-markdown'
 
 "" Languages
 " Plug 'styled-components/vim-styled-components'
@@ -74,20 +72,27 @@ Plug 'moll/vim-node'
 Plug 'peitalin/vim-jsx-typescript' "| Plug 'Quramy/tsuquyomi'
 Plug 'sheerun/vim-polyglot'
 Plug 'shirk/vim-gas'
+Plug 'plasticboy/vim-markdown'
 
 "" Utilities
 Plug 'aaronbieber/vim-quicktask'
 Plug 'diepm/vim-rest-console'
-Plug 'editorconfig/editorconfig-vim'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
 Plug 'metakirby5/codi.vim', { 'on': 'Codi' }
-Plug 'rking/ag.vim'
 Plug 'skywind3000/asyncrun.vim'
 Plug 'tpope/vim-scriptease'
 Plug 'wakatime/vim-wakatime'
+Plug 'kannokanno/previm'
+Plug 'takac/vim-hardtime'
+
+"" Projects
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rhubarb'
+Plug 'airblade/vim-rooter'
 Plug 'tpope/vim-projectionist'
-Plug 'tpope/vim-unimpaired'
+Plug 'rking/ag.vim'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'editorconfig/editorconfig-vim'
 
 "" Completion
 Plug 'ncm2/ncm2' | Plug 'roxma/nvim-yarp' | Plug 'roxma/vim-hug-neovim-rpc' | Plug 'ncm2/ncm2-path'
@@ -115,7 +120,6 @@ syntax enable " Needs to go before autocmds
 if !exists("autocommands_loaded")
     let autocommands_loaded = 1
 
-    autocmd VimEnter * set number
     autocmd BufEnter * call LC_maps()
                 \ | call ncm2#enable_for_buffer() " enable ncm2 for all buffer
                 \ | if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) q endif
@@ -172,6 +176,8 @@ set ignorecase
 set smartcase " search ignores case unless capitals present
 set foldnestmax=3
 set noshowmode
+" set number " XXX challenge
+set hidden " allows hiding modified buffers
 " set foldlevelstart=20 " useful for making sure all folds are expanded on
 " opening
 " set foldminlines=5
@@ -379,6 +385,12 @@ map <leader>fO <Plug>fold_out_all
 map <Plug>fold_in_all zm
 map <leader>fI <Plug>fold_in_all
 
+"" F - File
+let g:lmap.F = { 'name': ' -- File' }
+" map <Plug>fold_out :call TestFile()<CR>
+map <Plug>test_file :call TestFile(expand('%:p'), getcwd())<CR>
+map <leader>FF <Plug>test_file
+
 "" g - Global
 let g:lmap.g = { 'name': ' -- Global' }
 map <leader>g? :help index<CR>
@@ -544,6 +556,16 @@ function! Format()
     call cursor(l, c)
 endfunction
 
+function! TestFile(file, project)
+    let skyportTest = "NODE_ENV=test npx mocha --watch test/setup.js "
+
+    " call term_start([&shell, &shellcmdflag, "echo ".a:file])
+    let options = {
+        \ 'term_name': 't:lovely test',
+        \ 'norestore': 'true',
+        \ }
+    call term_start([&shell, &shellcmdflag, "" . skyportTest . a:file], options)
+endfunction
 "Use TAB to complete when typing words, else inserts TABs as usual.
 " function! Tab_Or_Complete()
 "     if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~'^\w'
@@ -655,6 +677,17 @@ nnoremap <C-w>gh :<C-U>call window#join('leftabove vsplit', v:count) <BAR>normal
 nnoremap <C-w>gj :<C-U>call window#join('belowright split', v:count) <BAR>normal! 100zh<CR>
 nnoremap <C-w>gk :<C-U>call window#join('aboveleft split', v:count) <BAR>normal! 100zh<CR>
 
+"" Rooter
+let g:rooter_silent_chdir = 1
+
+"" Vim-Test
+function! SkyportTransform(cmd) abort
+    let skyportTest = "NODE_ENV=test npx mocha test/setup.js "
+    return skyportTest . a:cmd
+endfunction
+
+let g:test#custom_transformations = {'mocha': function('SkyportTransform')}
+let g:test#transformation = 'mocha'
 
 """"""""""""""""""""
 "  Source Settings "
