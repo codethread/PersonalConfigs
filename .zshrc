@@ -52,8 +52,8 @@ for f in $CONFIGS/tmuxinator/*; do ln -s -f $f ~/.tmuxinator; done
 #--- Extend Terminal
 #-----------------------------------------
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*" --glob "!**/*.lock"'
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_DEFAULT_COMMAND='fd --type d --exclude "{Library,Music,Applications,Pictures,Unity,VirtualBox VMs,WebstormProjects,Tools,node_modules,.git}"'
+export FZF_CTRL_T_COMMAND='rg --files --no-messages --hidden --follow --glob "!.git/*" --glob "!**/*.lock"'
 
 autoload -U promptinit; promptinit
 prompt pure

@@ -63,7 +63,7 @@ Plug 'joshdick/onedark.vim'
 Plug 'junegunn/goyo.vim'
 Plug 'majutsushi/tagbar'
 Plug 'tpope/vim-vinegar'
-
+Plug 'mhinz/vim-startify'
 "" Languages
 " Plug 'styled-components/vim-styled-components'
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
@@ -138,6 +138,8 @@ if !exists("autocommands_loaded")
     autocmd CompleteDone * silent! pclose
     autocmd User AsyncRunStop let g:asyncrun_status="✓"
     autocmd User AsyncRunStart let g:asyncrun_status="❁ "
+    autocmd FileType fzf set laststatus=0 noshowmode noruler
+                \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 endif
 
 """"""""""""""""""""
@@ -170,13 +172,15 @@ set tags=.tags;
 set wildignore=*.keep,*~,*.swp
 set wildmenu
 set wrapmargin=0
-set showtabline=1  " Show tabline
+set showtabline=2  " Show tabline
 set signcolumn=yes
 set ignorecase
 set smartcase " search ignores case unless capitals present
 set foldnestmax=3
 set noshowmode
+" set t_Co=256
 " set number " XXX challenge
+" set notermguicolors
 set hidden " allows hiding modified buffers
 " set foldlevelstart=20 " useful for making sure all folds are expanded on
 " opening
@@ -220,9 +224,10 @@ color snazzy
 
 "" GUI
 if has('gui_running')
-    set guioptions=e
-    set macligatures
+    set guioptions=ec
+    " set macligatures XXX SLOW
     set guifont=Fira\ Code:h12
+    " set termguicolors
     " set guifont=Hack\ Regular:h11
     set lines=50 columns=108 linespace=3
     set shellcmdflag=-ic
@@ -264,28 +269,39 @@ function! LightlineFiletype()
     return winwidth(0) > 89 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
 endfunction
 
+command! LightlineReload call LightlineReload()
 
-  let g:lightline = {
-              \ 'colorscheme': 'snazzy',
-              \ 'active': {
-              \   'left': [ [ 'mode', 'paste' ],
-              \             [ 'readonly', 'filepath', 'modified' ] ],
-              \   'right': [ [ 'lineinfo' ],
-              \            [ 'filetype' ],
-              \            [ 'asyncJob' ] ],
-              \ },
-              \ 'component_function': {
-              \   'asyncJob': 'AsyncJobStatus',
-              \   'filepath': 'LightlineFilename',
-              \   'filetype': 'LightlineFiletype',
-              \ },
-              \ }
+function! LightlineReload()
+    call lightline#init()
+    call lightline#colorscheme()
+    call lightline#update()
+endfunction
 
-  let g:lightline.inactive = {
-              \ 'left': [ [ 'filepath', 'modified' ] ],
-              \ }
+let g:lightline = {
+            \ 'colorscheme': 'wombat',
+            \ 'enable': {
+            \   'statusline': 1,
+            \   'tabline': 0
+            \ },
+            \ 'active': {
+            \   'left': [ [ 'mode', 'paste' ],
+            \             [ 'readonly', 'filepath', 'modified' ] ],
+            \   'right': [ [ 'lineinfo' ],
+            \            [ 'filetype' ],
+            \            [ 'gitbranch' ],
+            \            [ 'asyncJob' ] ],
+            \ },
+            \ 'component_function': {
+            \   'asyncJob': 'AsyncJobStatus',
+            \   'gitbranch': 'fugitive#head',
+            \   'filepath': 'LightlineFilename',
+            \   'filetype': 'LightlineFiletype',
+            \ },
+            \ }
 
-
+let g:lightline.inactive = {
+            \ 'left': [ [ 'filepath', 'modified' ] ],
+            \ }
 " let g:lightline.tabline = {
 "   \   'left': [ ['tabs'] ],
 "   \   'right': [ ['close'] ]
@@ -310,8 +326,8 @@ nmap <silent> <C-K> :wincmd k<CR>
 nmap <silent> <C-L> :wincmd l<CR>
 map <C-N> :NERDTreeToggle<CR>
 map <C-P> :Files<CR>
-map <C-\> :Fuzzyag!<CR>
-map \ :Fuzzyag<CR>
+map <C-\> :Rg<CR>
+map \ :Ag<CR>
 
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 inoremap <expr> <C-Space> pumvisible() \|\| &omnifunc == '' ?
@@ -343,6 +359,7 @@ command! SplitPreviousBuffer :vsplit | bprevious
 map <leader>bc :BufOnly<CR>
 map <leader>bd :DiffSaved<CR>
 command! DiffSaved call DiffWithSaved()
+map <leader>bk :Bkill!<CR>
 map <leader>bl :Buffers<CR>
 map <leader>bn :bnext<CR>
 map <leader>bp :bprevious<CR>
@@ -387,8 +404,7 @@ map <leader>fI <Plug>fold_in_all
 
 "" F - File
 let g:lmap.F = { 'name': ' -- File' }
-" map <Plug>fold_out :call TestFile()<CR>
-map <Plug>test_file :call TestFile(expand('%:p'), getcwd())<CR>
+map <Plug>test_file :call Testfile(expand('%:p'), getcwd())<CR>
 map <leader>FF <Plug>test_file
 
 "" g - Global
@@ -430,8 +446,13 @@ map <leader>pg :GFiles?<CR>
 map <leader>pm :Marks<CR>
 map <leader>pn <C-W>}
 map <leader>po :only<CR>
-map <leader>pp :AV<CR>
-map <leader>pt :Files<CR>
+map <leader>pt :TestFile<CR>
+map <leader>pn :TestNearest<CR>
+
+"" P - Projects
+let g:lmap.P = { 'name': ' -- Projects' }
+map <Plug>Find_Project :FZF ~<CR>
+map <leader>PP <Plug>Find_Project
 
 "" o - Quicktask
 let g:lmap.o = { 'name': ' -- Quicktask' }
@@ -556,7 +577,9 @@ function! Format()
     call cursor(l, c)
 endfunction
 
-function! TestFile(file, project)
+function! Testfile(file, project)
+    let alternate_file = s:alternate_file()
+    echo alternate_file
     let skyportTest = "NODE_ENV=test npx mocha --watch test/setup.js "
 
     " call term_start([&shell, &shellcmdflag, "echo ".a:file])
@@ -564,7 +587,18 @@ function! TestFile(file, project)
         \ 'term_name': 't:lovely test',
         \ 'norestore': 'true',
         \ }
+    return alternate_file
     call term_start([&shell, &shellcmdflag, "" . skyportTest . a:file], options)
+endfunction
+
+function! s:alternate_file() abort
+  let alternate_file = ''
+
+  if empty(alternate_file) && exists('g:loaded_projectionist')
+    let alternate_file = get(filter(projectionist#query_file('alternate'), 'filereadable(v:val)'), 0, '')
+  endif
+
+  return alternate_file
 endfunction
 "Use TAB to complete when typing words, else inserts TABs as usual.
 " function! Tab_Or_Complete()
@@ -682,12 +716,14 @@ let g:rooter_silent_chdir = 1
 
 "" Vim-Test
 function! SkyportTransform(cmd) abort
-    let skyportTest = "NODE_ENV=test npx mocha test/setup.js "
-    return skyportTest . a:cmd
+    let skyportTest = "NODE_ENV=test "
+    return skyportTest . a:cmd . ' --file test/setup.js'
 endfunction
 
 let g:test#custom_transformations = {'mocha': function('SkyportTransform')}
 let g:test#transformation = 'mocha'
+let test#strategy = 'vimterminal'
+" let test#javascript#mocha#options = '--file test/setup.js'
 
 """"""""""""""""""""
 "  Source Settings "
