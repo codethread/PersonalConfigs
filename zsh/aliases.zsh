@@ -99,6 +99,7 @@ alias spn="git pull; npm i; sps"
 # -------------------------------------------#
 alias libg="cd /users/adh23/service/pages-lib"
 alias libs="yarn storybook:start"
+alias libw="yarn watch:pages-apps"
 alias libt="yarn test --watch --coverage --changedSince=master"
 
 

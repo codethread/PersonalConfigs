@@ -1,20 +1,4 @@
 " " Colors
-" let  red       =  '#ff5c57'
-" let  c_red     =  '203'
-" let  green     =  '#5af78e'
-" let  c_green   =  '84'
-" let  yellow    =  '#f3f99d'
-" let  c_yellow  =  '229'
-" let  blue      =  '#57c7ff'
-" let  c_blue    =  '60'
-" let  magenta   =  '#ff6ac1'
-" let  c_magenta =  '205'
-" let  cyan      =  '#9aedfe'
-" let  c_cyan    =  '117'
-" let  orange    =  '#fecc9a'
-" let  turqoise  =  '#5af4ce'
-" let  light_v   =  '#d69eff'
-" let  coral     =  '#FF776E'
 let  red       =  '#ff5c57'
 let  c_red     =  '001'
 let  green     =  '#5af78e'
@@ -48,11 +32,18 @@ let  ui_7     =  '#536991'
 let  ui_8     =  '#606580'
 let  c_ui_8     =  '60'
 let  ui_9     =  '#3a3d4d'
-let  c_ui_9     =  '239' " bit off
+let  c_ui_9     =  '236' " bit off
 let  ui_11    =  '#282a36'
 
-" let g:SnazzyTransparent=1
 " Editor
+" highlight SignColumn ctermbg=
+let g:gitgutter_override_sign_column_highlight = 0
+hi SignColumn           guibg=bg ctermbg=000
+hi GitGutterAdd         ctermbg=000 ctermfg=002
+hi GitGutterChange      ctermbg=000 ctermfg=003
+hi GitGutterDelete      ctermbg=000 ctermfg=001
+hi GitGutterChangeDelete    ctermbg=000 ctermfg=001
+
 :exe 'hi NonText        guibg=bg ctermbg=000 ctermfg=000'
 :exe 'hi Comment        cterm=italic gui=italic'
 :exe 'hi SpellBad       guifg=white guibg='.red.' ctermfg=255 ctermbg='.c_red
@@ -62,10 +53,11 @@ let  ui_11    =  '#282a36'
 :exe 'hi Number         guifg='.turqoise
 
 :exe 'hi Folded         guifg='.cyan.' guibg='.ui_9.' ctermfg='.c_cyan.' ctermbg='.c_ui_9
-
-:exe 'hi TabLineFill    guibg='.ui_9.' ctermbg='.c_ui_9
-:exe 'hi TabLine        guifg='.ui_4.' guibg='.ui_9.' ctermfg='.c_ui_4.' ctermbg='.c_ui_9
-:exe 'hi TabLineSel     guifg='.cyan.' guibg='.ui_9. ' ctermfg='.c_cyan.' ctermbg='.c_ui_9
+:exe 'hi VertSplit ctermfg='.c_ui_8.' ctermbg=000'
+      "
+:exe 'hi TabLineFill    guibg='.ui_9.' ctermbg=000'
+:exe 'hi TabLineSel     guifg='.cyan.' guibg='.ui_9. ' ctermfg='.c_magenta.' ctermbg=000 cterm=underline'
+:exe 'hi TabLine        guifg='.ui_4.' guibg='.ui_9.' ctermfg='.c_ui_4.' ctermbg=000 cterm=underline'
 
 " ALE
 :exe 'hi ALEError       cterm=underline,italic,bold guifg='.coral.' ctermfg='.c_coral
@@ -88,11 +80,12 @@ hi ALEWarning           cterm=underline,italic
 
 
 " Javascript
-:exe 'hi jsImport   guifg='.blue.' ctermfg='.c_blue
-:exe 'hi jsFrom     guifg='.blue.' ctermfg='.c_blue
-:exe 'hi jsFuncArgs guifg='.coral.' ctermfg='.c_coral.' cterm=italic'
-:exe 'hi jsFuncCall guifg='.light_v.' ctermfg='.c_light_v.' cterm=italic'
-:exe 'hi jsThis     guifg='.coral.' ctermfg='.c_coral.' cterm=bold'
+:exe 'hi jsImport       guifg='.blue.' ctermfg='.c_blue
+:exe 'hi jsFrom         guifg='.blue.' ctermfg='.c_blue
+:exe 'hi jsFuncArgs     guifg='.coral.' ctermfg='.c_coral.' cterm=italic'
+:exe 'hi jsFuncCall     guifg='.light_v.' ctermfg='.c_light_v.' cterm=italic'
+:exe 'hi jsThis         guifg='.coral.' ctermfg='.c_coral.' cterm=bold'
+:exe 'hi jsStorageClass guifg='.blue.' ctermfg='.c_blue.' cterm=bold'
 
 :exe 'hi jsObjectKey        guifg='.cyan.' ctermfg='.c_cyan
 :exe 'hi jsObjectFuncName   guifg='.cyan.' ctermfg='.c_cyan
@@ -118,32 +111,11 @@ hi ALEWarning           cterm=underline,italic
 
 
 " jsx
-" :exe 'hi jsClassValue  guifg='.green
-
-" syntax region jsxAttributeBraces
-"     \ contained
-"     \ start=+=\@<={+
-"     \ end=+}\ze\%(\/\|\n\|\s\|>\)+
-"     \ contains=TOP
-"     \ keepend
-"     \ extend
-
-" jsx props
 :exe 'hi Type cterm=italic guifg='.cyan.' ctermfg='.c_cyan
-" jsx closing tag
-" :exe 'hi Identifier guifg='.turqoise
-
 :exe 'hi xmlTagName  cterm=bold guifg='.blue.' ctermfg='.c_blue
 :exe 'hi xmlTag      cterm=bold guifg='.turqoise.' ctermfg='.c_turqoise
 :exe 'hi xmlEndTag   guifg='.turqoise.' ctermfg='.c_turqoise
-"
 :exe 'hi jsxCloseString  guifg='.blue.' ctermfg='.c_blue
-
 :exe 'hi jsSpecial  guifg='.magenta.' ctermfg='.c_blue
-" :exe 'hi jsxAttributeBraces  guifg='.green
-" :exe 'hi htmlEndTag  guifg='.green
-" :exe 'hi htmlTagName  guifg='.green
-" :exe 'hi jsxAttrib guifg='.green
 :exe 'hi typescriptReserved  guifg='.blue.' ctermfg='c_blue
-:exe 'hi jsFrom  guifg='.blue.' ctermfg='.c_blue
 

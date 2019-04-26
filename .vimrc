@@ -256,7 +256,6 @@ function! AsyncJobStatus()
 endfunction
 
 function! LightlineFilename()
-    " let root = fnamemodify(get(b:, 'git_dir'), ':h')
     let root = fnamemodify(get(b:, 'gitbranch_path'), ':h:h')
     let path = expand('%:p')
     if path[:len(root)-1] ==# root
@@ -267,6 +266,14 @@ endfunction
 
 function! LightlineFiletype()
     return winwidth(0) > 89 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
+endfunction
+
+function! LightlineFugitive()
+    if exists('*fugitive#head')
+        let branch = fugitive#head()
+        return branch !=# '' ? ''.branch : ''
+    endif
+    return ''
 endfunction
 
 command! LightlineReload call LightlineReload()
@@ -293,7 +300,7 @@ let g:lightline = {
             \ },
             \ 'component_function': {
             \   'asyncJob': 'AsyncJobStatus',
-            \   'gitbranch': 'fugitive#head',
+            \   'gitbranch': 'LightlineFugitive',
             \   'filepath': 'LightlineFilename',
             \   'filetype': 'LightlineFiletype',
             \ },
@@ -326,8 +333,8 @@ nmap <silent> <C-K> :wincmd k<CR>
 nmap <silent> <C-L> :wincmd l<CR>
 map <C-N> :NERDTreeToggle<CR>
 map <C-P> :Files<CR>
-map <C-\> :Rg<CR>
-map \ :Ag<CR>
+" map <C-\> :Ag<CR> XXX seems to keep dumping to qf
+map \ :Rg<CR>
 
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 inoremap <expr> <C-Space> pumvisible() \|\| &omnifunc == '' ?
@@ -338,6 +345,9 @@ inoremap <expr> <C-Space> pumvisible() \|\| &omnifunc == '' ?
 imap <C-@> <C-Space>
 " :inoremap <Tab> <C-R>=Tab_Or_Complete()<CR>
 
+" terminals
+tnoremap <C-[> <C-W>N
+tnoremap <C-\> <C-W>:b#<CR>
 "" macros
 let @l='yy^Wwpi^M^[^WW' " send line to next cycled pane
 let @r='y^Wwpi^M^[^WW' " send selected region to next cycled pane
@@ -419,7 +429,7 @@ map <leader>gn :set nowrap!<CR>
 map <leader>gp :call pencil#init()<CR>
 map <leader>gr :set relativenumber!<CR>
 map <leader>gs :SourceVimrc<CR>
-command! SourceVimrc write | source ~/.vimrc
+command! SourceVimrc write | so ~/.vimrc | so ~/PersonalConfigs/vim/after/plugin/color_overrides.vim
 map <leader>gv :vsplit ~/.vimrc<CR>
 
 "" l - Log
@@ -487,13 +497,37 @@ command! CursorInTags :call fzf#vim#tags(expand("<cword>"))<CR>
 map <leader>sw :FindWordUnderCursor<CR>
 command! FindWordUnderCursor :call fzf#vim#ag(expand("<cword>"))
 
-"" t - Tags
-let g:lmap.t = { 'name': ' -- Tags' }
-map <leader>tf :Tags<CR>
-map <leader>tl :ts<CR>
-map <leader>tn :tn<CR>
-map <leader>tp :tp<CR>
-map <leader>tw :ts "<cword>"<CR>
+"" t - Terminal
+let g:lmap.t = { 'name': ' -- Terminal' }
+map <leader>tt :ter ++curwin<CR>
+function! DefaultTerminalOptions(name) 
+    let t_options = {
+            \ 'term_name': a:name,
+            \ 'hidden': 1,
+            \ 'term_finish': 'close',
+            \}
+    return t_options
+endfunction
+
+map <leader>tss :call term_start(
+            \ [&shell, &shellcmdflag, "cd $SKYPORT_GRAPHQL_DIR; start_skyport"],
+            \ DefaultTerminalOptions('t:skyport'))<CR>:echo 'skyport started'<CR>
+
+map <leader>tsa :call term_start(
+            \ [&shell, &shellcmdflag, "cd ~/Service/pages-apps; yarn start:dev"],
+            \ DefaultTerminalOptions('t:papps'))<CR>:echo 'papps started'<CR>
+
+map <leader>tsl :call term_start(
+            \ [&shell, &shellcmdflag, "cd ~/Service/pages-lib; yarn watch"],
+            \ DefaultTerminalOptions('t:papps'))<CR>:echo 'papps started'<CR>
+
+"" T - Tags
+let g:lmap.T = { 'name': ' -- Tags' }
+map <leader>Tf :Tags<CR>
+map <leader>Tl :ts<CR>
+map <leader>Tn :tn<CR>
+map <leader>Tp :tp<CR>
+map <leader>Tw :ts "<cword>"<CR>
 
 "" u - Utils
 let g:lmap.u = { 'name': ' -- Utils' }
@@ -576,39 +610,6 @@ function! Format()
     normal gg=G
     call cursor(l, c)
 endfunction
-
-function! Testfile(file, project)
-    let alternate_file = s:alternate_file()
-    echo alternate_file
-    let skyportTest = "NODE_ENV=test npx mocha --watch test/setup.js "
-
-    " call term_start([&shell, &shellcmdflag, "echo ".a:file])
-    let options = {
-        \ 'term_name': 't:lovely test',
-        \ 'norestore': 'true',
-        \ }
-    return alternate_file
-    call term_start([&shell, &shellcmdflag, "" . skyportTest . a:file], options)
-endfunction
-
-function! s:alternate_file() abort
-  let alternate_file = ''
-
-  if empty(alternate_file) && exists('g:loaded_projectionist')
-    let alternate_file = get(filter(projectionist#query_file('alternate'), 'filereadable(v:val)'), 0, '')
-  endif
-
-  return alternate_file
-endfunction
-"Use TAB to complete when typing words, else inserts TABs as usual.
-" function! Tab_Or_Complete()
-"     if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~'^\w'
-"         return "\<C-N>"
-"     else
-"         return "\<Tab>"
-"     endif
-" endfunction
-
 
 """"""""""""""""""""
 "  Plugin Configs  "
@@ -720,10 +721,24 @@ function! SkyportTransform(cmd) abort
     return skyportTest . a:cmd . ' --file test/setup.js'
 endfunction
 
+function! VimVterminal(cmd)
+    call term_start([&shell, &shellcmdflag, a:cmd], {
+            \ 'term_name': 't:test',
+            \ 'vertical': 1,
+            \})
+
+    au BufLeave <buffer> wincmd p
+    nnoremap <buffer> <Enter> :q<CR>
+    redraw
+    echo "Press <Enter> to exit test runner terminal (<Ctrl-C> first if command is still running)"
+endfunction
+
+
 let g:test#custom_transformations = {'mocha': function('SkyportTransform')}
 let g:test#transformation = 'mocha'
-let test#strategy = 'vimterminal'
-" let test#javascript#mocha#options = '--file test/setup.js'
+
+let g:test#custom_strategies = {'vimVterminal': function('VimVterminal')}
+let test#strategy = 'vimVterminal'
 
 """"""""""""""""""""
 "  Source Settings "
