@@ -346,8 +346,9 @@ imap <C-@> <C-Space>
 " :inoremap <Tab> <C-R>=Tab_Or_Complete()<CR>
 
 " terminals
-tnoremap <C-[> <C-W>N
-tnoremap <C-\> <C-W>:b#<CR>
+tnoremap <C-g> <C-W>N
+tnoremap <expr> <C-\> "\<c-w>".(winnr() !=# 1 ? ':q' : ':b#')."\n"
+
 "" macros
 let @l='yy^Wwpi^M^[^WW' " send line to next cycled pane
 let @r='y^Wwpi^M^[^WW' " send selected region to next cycled pane
