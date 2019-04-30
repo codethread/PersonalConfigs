@@ -50,7 +50,7 @@ Plug 'janko/vim-test'
 
 
 "" GUI changes
-Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] } | Plug 'ryanoasis/vim-devicons'
+" Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] } | Plug 'ryanoasis/vim-devicons'
 Plug 'Shougo/denite.nvim'
 Plug 'Yggdroot/indentLine'
 Plug 'airblade/vim-gitgutter'
@@ -123,6 +123,7 @@ if !exists("autocommands_loaded")
     autocmd BufEnter * call LC_maps()
                 \ | call ncm2#enable_for_buffer() " enable ncm2 for all buffer
                 \ | if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) q endif
+                " \ | call ChangeRootDir()
 
     autocmd TextChangedI * call ncm2#auto_trigger()
 
@@ -138,8 +139,8 @@ if !exists("autocommands_loaded")
     autocmd CompleteDone * silent! pclose
     autocmd User AsyncRunStop let g:asyncrun_status="✓"
     autocmd User AsyncRunStart let g:asyncrun_status="❁ "
-    autocmd FileType fzf set laststatus=0 noshowmode noruler
-                \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+    " autocmd FileType fzf set laststatus=0 noshowmode noruler
+    "             \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 endif
 
 """"""""""""""""""""
@@ -464,6 +465,8 @@ map <leader>pn :TestNearest<CR>
 let g:lmap.P = { 'name': ' -- Projects' }
 map <Plug>Find_Project :FZF ~<CR>
 map <leader>PP <Plug>Find_Project
+" map <leader>PP :Projects<CR>
+" map <leader>Pg <Plug>Foo
 
 "" o - Quicktask
 let g:lmap.o = { 'name': ' -- Quicktask' }
@@ -488,6 +491,7 @@ map <leader>oy  <Plug>ShowTodayTasksOnly
 "" r - Regex
 let g:lmap.r = { 'name': 'global reg' }
 map <leader>rr "*
+
 
 "" s - Search
 let g:lmap.s = { 'name': ' -- Search' }
@@ -612,6 +616,11 @@ function! Format()
     call cursor(l, c)
 endfunction
 
+"" ChangeRootDir
+function! ChangeRootDir() 
+    let root = FindRootDirectory()
+    exe ':cd '.root
+endfunction
 """"""""""""""""""""
 "  Plugin Configs  "
 """"""""""""""""""""
@@ -714,7 +723,9 @@ nnoremap <C-w>gj :<C-U>call window#join('belowright split', v:count) <BAR>normal
 nnoremap <C-w>gk :<C-U>call window#join('aboveleft split', v:count) <BAR>normal! 100zh<CR>
 
 "" Rooter
+" let g:rooter_manual_only = 1
 let g:rooter_silent_chdir = 1
+" exposes FindRootDirectory()
 
 "" Vim-Test
 function! SkyportTransform(cmd) abort

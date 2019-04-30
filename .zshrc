@@ -19,7 +19,7 @@ COMPLETION_WAITING_DOTS="true"
 HIST_IGNORE_SPACE=true
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 
-plugins=(git tmux)
+plugins=(git)
 
 if which nodenv > /dev/null; then eval "$(nodenv init -)"; fi
 
@@ -96,5 +96,5 @@ if [ -n "$PATH" ]; then
 fi
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="/Users/adh23/.sdkman"
-[[ -s "/Users/adh23/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/adh23/.sdkman/bin/sdkman-init.sh"
+# export SDKMAN_DIR="/Users/adh23/.sdkman"
+# [[ -s "/Users/adh23/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/adh23/.sdkman/bin/sdkman-init.sh"

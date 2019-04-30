@@ -1,10 +1,7 @@
-""""""""""""""""""""
-"  NERDTree stuff "
-""""""""""""""""""""
 let g:NERDTreeWinSize=40 " nice big tree is it's easy to toggle off
 let NERDTreeMinimalUI=1
 let NERDTreeStatusline="%{ getcwd() }"
-let NERDTreeHijackNetrw=1
+let NERDTreeHijackNetrw=0
 
 
 

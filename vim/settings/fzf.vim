@@ -42,3 +42,25 @@ command! Files call fzf#run(fzf#wrap({
             \ 'source': 'fd -t f --hidden --follow -E ".git/" .',
             \ 'options': '--prompt '. getcwd() .'/'
             \ }))
+
+" WIP
+command! Projects call fzf#run(fzf#wrap({
+            \ 'source': 'fd --type d --exclude "{Library,Music,Applications,Pictures,Unity,VirtualBox VMs,WebstormProjects,Tools,node_modules,.git}" .',
+            \ 'dir': '~',
+            \ 'sink': {dir -> FileInProj(dir)},
+            \ 'options': '--prompt Projects: '
+            \}))
+
+function! FileInProj(dir)
+    let home = shellescape(fnamemodify('~', ':p'))
+    call fzf#run(fzf#wrap({
+                \ 'source': 'fd -t f --hidden -E ".git/" .',
+                \ 'dir': home.a:dir.'/',
+                \ 'sink': {file -> OpenFileOnly(a:dir, file)},
+                \ 'options': '--prompt '. a:dir .'/'
+                \}))
+endfunction
+
+function! OpenFileOnly(project, file)
+    exe 'e ~/'.a:project.'/'.a:file
+endfunction

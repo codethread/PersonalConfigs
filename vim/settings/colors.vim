@@ -38,12 +38,15 @@ let  ui_11    =  '#282a36'
 " Editor
 " highlight SignColumn ctermbg=
 let g:gitgutter_override_sign_column_highlight = 0
+
 hi SignColumn           guibg=bg ctermbg=000
 hi GitGutterAdd         ctermbg=000 ctermfg=002
 hi GitGutterChange      ctermbg=000 ctermfg=003
 hi GitGutterDelete      ctermbg=000 ctermfg=001
 hi GitGutterChangeDelete    ctermbg=000 ctermfg=001
 
+:exe 'hi netrwDir       guibg=bg ctermbg=000 ctermfg=003'
+:exe 'hi NERDTreeDir    guibg=bg ctermbg=000 ctermfg='.c_light_v
 :exe 'hi NonText        guibg=bg ctermbg=000 ctermfg=000'
 :exe 'hi Comment        cterm=italic gui=italic'
 :exe 'hi SpellBad       guifg=white guibg='.red.' ctermfg=255 ctermbg='.c_red
