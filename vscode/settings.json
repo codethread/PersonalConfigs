@@ -121,6 +121,7 @@
     "titleBar"
   ],
   "workbench.panel.defaultLocation": "right",
+<<<<<<< HEAD
   "peacock.favoriteColors": [
     {
       "name": "Angular Red",
@@ -166,5 +167,6 @@
       "name": "Vue Green",
       "value": "#42b883"
     }
-  ]
+  ],
+  "editor.codeLens": false
 }

@@ -362,6 +362,16 @@ let g:lmap = {}
 nnoremap <silent> <leader>+ :exe "vertical resize +10"<CR>
 nnoremap <silent> <leader>- :exe "vertical resize -10"<CR>
 
+"" a - AsyncRun
+let g:asyncrun_open = 8
+let g:lmap.a = { 'name': ' -- Async' }
+map <leader>aa :AsyncRun 
+map <leader>ac :ccl<CR>
+map <leader>ap :AsyncRun <C-r>0<CR>
+
+"" A - AsyncStop
+map <leader>A :AsyncStop<CR>
+
 "" b - Buffers
 let g:lmap.b = { 'name': ' -- Buffers' }
 map <leader>bN :enew<CR>
