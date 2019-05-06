@@ -20,6 +20,7 @@ let  c_light_v   =  '183'
 let  coral     =  '#FF776E'
 let  c_coral     =  '209'
 
+let  c_bg_bright     =  '008'
 let  ui_0     =  '#F9F9F9'
 let  ui_1     =  '#f9f9ff'
 let  ui_2     =  '#eff0eb'
@@ -55,7 +56,7 @@ hi GitGutterChangeDelete    ctermbg=000 ctermfg=001
 :exe 'hi Boolean        guifg='.magenta.' ctermfg='.c_magenta
 :exe 'hi Number         guifg='.turqoise
 
-:exe 'hi Folded         guifg='.cyan.' guibg='.ui_9.' ctermfg='.c_cyan.' ctermbg='.c_ui_9
+:exe 'hi Folded         guifg='.cyan.' guibg='.ui_9.' ctermfg='.c_cyan.' ctermbg='.c_bg_bright
 :exe 'hi VertSplit ctermfg='.c_ui_8.' ctermbg=000'
       "
 :exe 'hi TabLineFill    guibg='.ui_9.' ctermbg=000'

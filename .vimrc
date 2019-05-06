@@ -523,6 +523,7 @@ function! DefaultTerminalOptions(name)
     return t_options
 endfunction
 
+let g:lmap.t.s = { 'name': ' -- Script' }
 map <leader>tss :call term_start(
             \ [&shell, &shellcmdflag, "cd $SKYPORT_GRAPHQL_DIR; start_skyport"],
             \ DefaultTerminalOptions('t:skyport'))<CR>:echo 'skyport started'<CR>
