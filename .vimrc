@@ -32,7 +32,6 @@ Plug 'ddrscott/vim-window'
 Plug 'godlygeek/tabular'
 Plug 'junegunn/vim-easy-align'
 Plug 'justinmk/vim-sneak'
-Plug 'kshenoy/vim-signature'
 Plug 'reedes/vim-pencil'
 Plug 'tmhedberg/matchit'
 Plug 'tomtom/tcomment_vim' " Commenting
@@ -40,30 +39,28 @@ Plug 'tpope/vim-abolish' " coerce words such as crs: coerce to snake_case
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
-Plug 'vim-scripts/ParseJSON'
 
 "" Linting / testing
+Plug 'janko/vim-test'
 Plug 'ngmy/vim-rubocop'
 Plug 'thoughtbot/vim-rspec'
 Plug 'w0rp/ale' " async linting
-Plug 'janko/vim-test'
 
 
 "" GUI changes
 " Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] } | Plug 'ryanoasis/vim-devicons'
-Plug 'Shougo/denite.nvim'
+" Plug 'Shougo/denite.nvim' " XXX what's using this?
 Plug 'Yggdroot/indentLine'
 Plug 'airblade/vim-gitgutter'
 Plug 'chrisbra/Colorizer'
 Plug 'connorholyday/vim-snazzy'
-Plug 'gcmt/taboo.vim'
+Plug 'gcmt/taboo.vim' " utils for handling tabs
 Plug 'hecal3/vim-leader-guide'
 Plug 'itchyny/lightline.vim'
-Plug 'joshdick/onedark.vim'
 Plug 'junegunn/goyo.vim'
+Plug 'kshenoy/vim-signature' " displays marks in column
 Plug 'majutsushi/tagbar'
-Plug 'tpope/vim-vinegar'
-Plug 'mhinz/vim-startify'
+
 "" Languages
 " Plug 'styled-components/vim-styled-components'
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
@@ -75,18 +72,17 @@ Plug 'shirk/vim-gas'
 Plug 'plasticboy/vim-markdown'
 
 "" Utilities
-Plug 'aaronbieber/vim-quicktask'
-Plug 'diepm/vim-rest-console'
-Plug 'metakirby5/codi.vim', { 'on': 'Codi' }
 Plug 'skywind3000/asyncrun.vim'
 Plug 'tpope/vim-scriptease'
 Plug 'wakatime/vim-wakatime'
 Plug 'kannokanno/previm'
 Plug 'takac/vim-hardtime'
+Plug 'vim-scripts/ParseJSON'
 
-"" Projects
+"" Project management
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
+Plug 'tpope/vim-vinegar'
 Plug 'airblade/vim-rooter'
 Plug 'tpope/vim-projectionist'
 Plug 'rking/ag.vim'
@@ -96,6 +92,14 @@ Plug 'editorconfig/editorconfig-vim'
 
 "" Completion
 Plug 'ncm2/ncm2' | Plug 'roxma/nvim-yarp' | Plug 'roxma/vim-hug-neovim-rpc' | Plug 'ncm2/ncm2-path'
+
+"" Apps
+Plug 'aaronbieber/vim-quicktask'
+Plug 'itchyny/calendar.vim'
+Plug 'jceb/vim-orgmode'
+Plug 'mhinz/vim-startify'
+Plug 'diepm/vim-rest-console'
+Plug 'metakirby5/codi.vim', { 'on': 'Codi' }
 
 "" Disabled
 " Plug 'Raimondi/delimitMate' " XXX this annoys me too much
@@ -138,8 +142,8 @@ if !exists("autocommands_loaded")
     autocmd CompleteDone * silent! pclose
     autocmd User AsyncRunStop let g:asyncrun_status="✓"
     autocmd User AsyncRunStart let g:asyncrun_status="❁ "
-    autocmd FileType fzf set laststatus=0 noshowmode noruler
-                \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+    " autocmd FileType fzf set laststatus=0 noshowmode noruler
+    "             \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 endif
 
 """"""""""""""""""""
@@ -468,14 +472,14 @@ map <leader>pm :Marks<CR>
 map <leader>pn <C-W>}
 map <leader>po :only<CR>
 map <leader>pt :TestFile<CR>
+map <leader>pw :TestFile '--watch'<CR>
 map <leader>pn :TestNearest<CR>
 
 "" P - Projects
 let g:lmap.P = { 'name': ' -- Projects' }
-" map <Plug>Find_Project :FZF ~<CR>
-" map <leader>PP <Plug>Find_Project
-map <leader>PP :Projects<CR>
-" map <leader>Pg <Plug>Foo
+map <Plug>Find_Project :FZF ~<CR>
+map <leader>PP <Plug>Find_Project
+map <leader>Pg :Projects<CR>
 
 "" o - Quicktask
 let g:lmap.o = { 'name': ' -- Quicktask' }
@@ -762,6 +766,9 @@ let g:test#transformation = 'mocha'
 
 let g:test#custom_strategies = {'vimVterminal': function('VimVterminal')}
 let test#strategy = 'vimVterminal'
+
+"" Calendar.vim
+let g:calendar_google_calendar = 1
 
 """"""""""""""""""""
 "  Source Settings "

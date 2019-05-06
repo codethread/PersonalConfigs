@@ -46,14 +46,12 @@ command! Files call fzf#run(fzf#wrap({
 command! Projects call fzf#run(fzf#wrap({
             \ 'source': 'fd --type d --exclude "{Library,Music,Applications,Pictures,Unity,VirtualBox VMs,WebstormProjects,Tools,node_modules,.git}" .',
             \ 'dir': '~',
-            \ 'sink': {dir -> FileInProj(dir)},
+            \ 'sink': 'ProjectFiles',
             \ 'options': '--prompt Projects: '
             \}))
 
-function! FileInProj(dir)
-    call fzf#run(fzf#wrap({
-                \ 'source': 'fd -t f --hidden -E ".git/" .',
-                \ 'dir': '~/'.a:dir.'/',
-                \ 'options': '--prompt '. a:dir .'/'
-                \}))
-endfunction
+command! -nargs=1 ProjectFiles call fzf#run(fzf#wrap({
+            \ 'source': 'fd -t f --hidden -E ".git/" .',
+            \ 'dir': '~/'. <f-args> ,
+            \ 'options': '--prompt '. <f-args> .'/'
+            \}))

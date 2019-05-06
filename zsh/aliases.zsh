@@ -16,10 +16,13 @@ alias ctags="`brew --prefix`/bin/ctags"
 #---------------------------------------------#
 # HELPERS
 # -------------------------------------------#
+alias ll="ls -1 -a -F -G" # list all column
+alias lc='colorls -A --sd --gs'
+alias pathis="echo $PATH | tr -s ':' '\n'"
+
 alias portsinuse="lsof -i -p | grep -i 'listen'"
 alias ports="echo lsof -i tcp:3000"
-alias ll="ls -1 -a -F -G" # list all column
-alias pathis="echo $PATH | tr -s ':' '\n'"
+
 alias ramda="~/PersonalConfigs/single_scripts/ramda"
 alias finder='open -a 'Finder' .'
 alias butter='echo "Lucy says stop coding and relax 🐼"'
