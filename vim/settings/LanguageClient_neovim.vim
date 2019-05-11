@@ -1,6 +1,3 @@
-""""""""""""""""""""
-"  LanguageClient  "
-""""""""""""""""""""
 let g:LanguageClient_changeThrottle = 0.1 " pauses for x seconds after txt change before post to server
 let g:LanguageClient_diagnosticsEnable = 0
 let g:LanguageClient_serverCommands = {

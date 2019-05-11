@@ -38,6 +38,12 @@ command! -bang -nargs=* Rg
             \ --follow
             \ --glob "!.git/*" '.shellescape(<q-args>), 1, <bang>0)
 
+command! VimPlugins call fzf#run(fzf#wrap({ 
+            \ 'source': 'fd -t d --hidden --follow -E "{.git,fixtures}" .',
+            \ 'dir': '~/.vim',
+            \ 'options': '--prompt VimPlugins'
+            \ }))
+
 command! Files call fzf#run(fzf#wrap({ 
             \ 'source': 'fd -t f --hidden --follow -E ".git/" .',
             \ 'options': '--prompt '. getcwd() .'/'

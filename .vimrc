@@ -38,6 +38,7 @@ Plug 'tomtom/tcomment_vim' " Commenting
 Plug 'tpope/vim-abolish' " coerce words such as crs: coerce to snake_case
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-speeddating'
 Plug 'tpope/vim-unimpaired'
 
 "" Linting / testing
