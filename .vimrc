@@ -46,7 +46,6 @@ Plug 'ngmy/vim-rubocop'
 Plug 'thoughtbot/vim-rspec'
 Plug 'w0rp/ale' " async linting
 
-
 "" GUI changes
 " Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] } | Plug 'ryanoasis/vim-devicons'
 " Plug 'Shougo/denite.nvim' " XXX what's using this?
@@ -138,6 +137,8 @@ if !exists("autocommands_loaded")
     autocmd FileType javascript,javascript.jsx 
                 \ setlocal foldmethod=syntax |
                 \ normal zR
+
+    autocmd BufEnter * call LayerSet()   
 
     autocmd CompleteDone * silent! pclose
     autocmd User AsyncRunStop let g:asyncrun_status="✓"
@@ -447,11 +448,8 @@ map <leader>gs :SourceVimrc<CR>
 command! SourceVimrc write | so ~/.vimrc | so ~/PersonalConfigs/vim/after/plugin/color_overrides.vim
 map <leader>gv :vsplit ~/.vimrc<CR>
 
-"" l - Log
-let g:lmap.l = { 'name': ' -- Log' }
-map <leader>ll yiwoconsole.log('\n<C-r>0:', <C-r>0);<C-[>k
-map <leader>ld :%s/.*console.log.*\n//g<CR>
-
+"" l - Langauge Layer
+" see Layer_Functions
 
 "" o - Help
 let g:lmap.h = { 'name': ' -- Help' }
@@ -583,6 +581,8 @@ call leaderGuide#register_prefix_descriptions("<Space>", "g:lmap")
 nnoremap <silent> <leader> :<c-u>LeaderGuide '<Space>'<CR>
 vnoremap <silent> <leader> :<c-u>LeaderGuideVisual '<Space>'<CR>
 
+nnoremap <leader><leader> :
+
 """"""""""""""
 "  Functions "
 """"""""""""""
@@ -635,6 +635,53 @@ function! ChangeRootDir()
     let root = FindRootDirectory()
     exe ':cd '.root
 endfunction
+
+"" Layer_Functions
+function! LayerSet()
+    let cleanFiletype = substitute(&ft, "\.jsx", "", "")
+    let filetype = substitute(cleanFiletype, ".", "\\U\\0", "")
+    if exists("*Layer".filetype)
+        call CleanMap('l')
+        exe "call Layer".filetype."()"
+    endif
+endfunction
+
+function! CleanMap(letter)
+    for key in ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
+        exe 'map <leader>'.a:letter.key.' <Nop>'
+        exe 'unmap <leader>'.a:letter.key
+    endfor
+endfunction
+
+function! LayerVim()
+    let g:lmap.l = { 'name': ' -- L:Vimscript' }
+    map <leader>ll yiwoecho '<C-r>0:'. <C-r>0<C-[>k
+endfunction
+
+function! LayerJavascript()
+    let g:lmap.l = { 'name': ' -- L:Javascript' }
+    map <leader>ll yiwoconsole.log('\n<C-r>0:', <C-r>0);<C-[>k
+    map <leader>ld :%s/.*console.log.*\n//g<CR>
+endfunction
+
+function! LayerRust()
+    let g:lmap.l = { 'name': ' -- L:Rust' }
+    map <leader>lf :call TerminalVert("rustc ".expand('%:p')." && ".expand('%:p:r'), expand('%:t'))<CR>
+endfunction
+
+function! TerminalVert(cmd, ...)
+    let name = get(a:, 1, 'quick')
+    call term_start([&shell, &shellcmdflag, a:cmd], {
+            \ 'term_name': 't:'.name,
+            \ 'vertical': 1,
+            \})
+
+    au BufLeave <buffer> wincmd p
+    nnoremap <buffer> <Enter> :q<CR>
+    redraw
+    echo "Press <Enter> to exit terminal (<Ctrl-C> first if command is still running)"
+endfunction
+
 """"""""""""""""""""
 "  Plugin Configs  "
 """"""""""""""""""""

@@ -46,8 +46,48 @@ hi GitGutterChange      ctermbg=000 ctermfg=003
 hi GitGutterDelete      ctermbg=000 ctermfg=001
 hi GitGutterChangeDelete    ctermbg=000 ctermfg=001
 
+" CSS only for non gui
+:exe 'hi cssBoxProp      ctermbg=000 ctermfg=white'
+:exe 'hi cssFontProp      ctermbg=000 ctermfg=white'
+:exe 'hi cssTextProp      ctermbg=000 ctermfg=white'
+:exe 'hi cssAnimationProp      ctermbg=000 ctermfg=white'
+:exe 'hi cssMediaProp      ctermbg=000 ctermfg=white'
+:exe 'hi cssBackgroundProp      ctermbg=000 ctermfg=white'
+:exe 'hi cssPositioningProp      ctermbg=000 ctermfg=white'
+:exe 'hi cssFlexibleBoxProp      ctermbg=000 ctermfg=white'
+:exe 'hi cssBorderProp      ctermbg=000 ctermfg=white'
+:exe 'hi cssTransformProp      ctermbg=000 ctermfg=white'
+:exe 'hi cssTransitionProp      ctermbg=000 ctermfg=white'
+
+:exe 'hi cssBoxAttr      ctermbg=000 ctermfg=magenta'
+:exe 'hi cssFontAttr      ctermbg=000 ctermfg=magenta'
+:exe 'hi cssTextAttr      ctermbg=000 ctermfg=magenta'
+:exe 'hi cssAnimationAttr      ctermbg=000 ctermfg=magenta'
+:exe 'hi cssMediaAttr      ctermbg=000 ctermfg=magenta'
+:exe 'hi cssBackgroundAttr      ctermbg=000 ctermfg=magenta'
+:exe 'hi cssPositioningAttr      ctermbg=000 ctermfg=magenta'
+:exe 'hi cssFlexibleBoxAttr      ctermbg=000 ctermfg=magenta'
+:exe 'hi cssBorderAttr      ctermbg=000 ctermfg=magenta'
+:exe 'hi cssTransformAttr      ctermbg=000 ctermfg=magenta'
+:exe 'hi cssTransitionAttr      ctermbg=000 ctermfg=magenta'
+:exe 'hi cssMultiColumnAttr      ctermbg=000 ctermfg=magenta'
+
+:exe 'hi cssFontAttr      ctermbg=000 ctermfg=magenta'
+:exe 'hi cssAuralAttr      ctermbg=000 ctermfg=magenta'
+:exe 'hi cssAttrComma      ctermbg=000 ctermfg=cyan'
+
+:exe 'hi cssColor      ctermbg=000 ctermfg=blue'
+:exe 'hi cssClassName      ctermbg=000 ctermfg=cyan'
+:exe 'hi cssClassNameDot      ctermbg=000 ctermfg=cyan'
+
+:exe 'hi cssValueNumber  ctermbg=000 ctermfg=green'
+:exe 'hi cssValueTime  ctermbg=000 ctermfg=green'
+:exe 'hi cssValueLength  ctermbg=000 ctermfg=green'
+
 :exe 'hi netrwDir       guibg=bg ctermbg=000 ctermfg=003'
 :exe 'hi NERDTreeDir    guibg=bg ctermbg=000 ctermfg='.c_light_v
+
+:exe 'hi Directory      guibg=bg cterm=bold ctermfg='.c_magenta.' ctermbg=000'
 :exe 'hi NonText        guibg=bg ctermbg=000 ctermfg=000'
 :exe 'hi Comment        cterm=italic gui=italic'
 :exe 'hi SpellBad       guifg=white guibg='.red.' ctermfg=255 ctermbg='.c_red
