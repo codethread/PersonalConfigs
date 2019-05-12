@@ -2,14 +2,21 @@
 #--- Exports
 #-----------------------------------------
 export ZSH=$HOME/.oh-my-zsh
+source $ZSH/oh-my-zsh.sh
+
 export EDITOR='vim'
+source "$HOME/.aliases.zsh"
 
 export PATH="$PATH:$HOME/.nodenv/shims"
 export PATH="$PATH:$HOME/.cargo/bin"
-export PATH="$PATH:$HOME/.cargo/bin"
+export PATH="$PATH:$HOME/.bin"
 
-# JQ_COLORS=1;30:0;39:0;39:0;39:0;32:1;39:1;39
-export JQ_COLORS="1;30:0;31:0;32:0;35:0;33:1;35:1;35"
+# source $HOME/.asdf/asdf.sh
+source $HOME/.cargo/env # TODO needed?
+
+# source zsh
+# fpath=(~/PersonalConfigs/zsh/bin "${fpath[@]}")
+# typeset -U PATH fpath # dedupe fpath
 
 #------------------------------------------
 #--- Settings
@@ -23,40 +30,16 @@ plugins=(git)
 
 if which nodenv > /dev/null; then eval "$(nodenv init -)"; fi
 
-#------------------------------------------
-#--- Sources
-#-----------------------------------------
-source $ZSH/oh-my-zsh.sh
-source $HOME/.asdf/asdf.sh
-source $HOME/.cargo/env
+export JQ_COLORS="1;30:0;31:0;32:0;35:0;33:1;35:1;35"
+
 source $HOME/enhancd/init.sh
 source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+autoload -U promptinit; promptinit
+prompt pure
 
-# source zsh
-# fpath=(~/PersonalConfigs/zsh/bin "${fpath[@]}")
-# typeset -U PATH fpath # dedupe fpath
-
-#------------------------------------------
-export CONFIGS="$HOME/PersonalConfigs"
-export PATH="$PATH:$CONFIGS/bin"
-export ALIASES="$CONFIGS/zsh/aliases.zsh"
-source $ALIASES
-source "$CONFIGS/zsh/shortcuts.zsh"
-
-for f in $CONFIGS/zsh/bin/*; do source $f; done
-for f in $CONFIGS/scripts/*; do source $f; done
-for f in $CONFIGS/tmuxinator/*; do ln -s -f $f ~/.tmuxinator; done
-#------------------------------------------
-
-#------------------------------------------
-#--- Extend Terminal
-#-----------------------------------------
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export FZF_DEFAULT_COMMAND='fd --type d --exclude "{Library,Music,Applications,Pictures,Unity,VirtualBox VMs,WebstormProjects,Tools,node_modules,.git}"'
 export FZF_CTRL_T_COMMAND='rg --files --no-messages --hidden --follow --glob "!.git/*" --glob "!**/*.lock"'
-
-autoload -U promptinit; promptinit
-prompt pure
 
 #------------------------------------------
 #--- Sky Stuff
@@ -69,6 +52,10 @@ if [[ $(whoami) =~ 'adh23' ]]; then
     [ -r $SKY_SERVICE_DEV_TOOLS/.sky.sh ] && source $SKY_SERVICE_DEV_TOOLS/.sky.sh
 fi
 
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+# export SDKMAN_DIR="/Users/adh23/.sdkman"
+# [[ -s "/Users/adh23/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/adh23/.sdkman/bin/sdkman-init.sh"
+
 #------------------------------------------
 #------------------------------------------
 #--- DEPRECATED
@@ -78,23 +65,3 @@ fi
 # ZSH_CUSTOM=$HOME/PersonalConfigs/zsh_custom
 # source $HOME/PersonalConfigs/spaceship-config.zsh
 
-#------------------------------------------
-#--- ALWAYS LAST
-#-----------------------------------------
-if [ -n "$PATH" ]; then
-    old_PATH=$PATH:; PATH=
-    while [ -n "$old_PATH" ]; do
-        x=${old_PATH%%:*}       # the first remaining entry
-        case $PATH: in
-            *:"$x":*) ;;          # already there
-            *) PATH=$PATH:$x;;    # not there yet
-        esac
-        old_PATH=${old_PATH#*:}
-    done
-    PATH=${PATH#:}
-    unset old_PATH x
-fi
-
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-# export SDKMAN_DIR="/Users/adh23/.sdkman"
-# [[ -s "/Users/adh23/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/adh23/.sdkman/bin/sdkman-init.sh"

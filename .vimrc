@@ -227,13 +227,14 @@ endif
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum" " something to do with vim in a terminal
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 color snazzy
+set notermguicolors
 
 "" GUI
 if has('gui_running')
     set guioptions=ec
     " set macligatures XXX SLOW
     set guifont=Fira\ Code:h12
-    " set termguicolors
+    set termguicolors
     " set guifont=Hack\ Regular:h11
     set lines=50 columns=108 linespace=3
     set shellcmdflag=-ic
@@ -821,13 +822,13 @@ let g:calendar_google_calendar = 1
 """"""""""""""""""""
 "  Source Settings "
 """"""""""""""""""""
-so ~/PersonalConfigs/vim/settings/colors.vim
-so ~/PersonalConfigs/vim/settings/vim_fold.vim
-so ~/PersonalConfigs/vim/settings/nerd_tree.vim
-so ~/PersonalConfigs/vim/settings/ale.vim
-so ~/PersonalConfigs/vim/settings/LanguageClient_neovim.vim
-so ~/PersonalConfigs/vim/settings/fzf.vim
-so ~/PersonalConfigs/vim/settings/goyo.vim
+so ~/.vim/settings/colors.vim
+so ~/.vim/settings/vim_fold.vim
+so ~/.vim/settings/nerd_tree.vim
+so ~/.vim/settings/ale.vim
+so ~/.vim/settings/LanguageClient_neovim.vim
+so ~/.vim/settings/fzf.vim
+so ~/.vim/settings/goyo.vim
 """"""""""""""""""""
 "  Debugging "
 """"""""""""""""""""
