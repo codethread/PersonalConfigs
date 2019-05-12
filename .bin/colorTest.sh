@@ -1,6 +1,5 @@
 #!/bin/bash
 
-colorTest() {
     # Test Italics
     echo `tput sitm`italics`tput ritm`
     # Test Colour (should be smooth gradient)
@@ -15,6 +14,5 @@ colorTest() {
             printf "\033[38;2;%d;%d;%dm", 255-r,255-g,255-b;
             printf "%s\033[0m", substr(s,colnum+1,1);
         }
-        printf "\n";
-    }'
-}
+    printf "\n";
+}'
