@@ -1,3 +1,18 @@
+
+#------------------------------------------
+#--- Settings
+#-----------------------------------------
+DISABLE_AUTO_TITLE="true"
+COMPLETION_WAITING_DOTS="true"
+HIST_IGNORE_SPACE=true
+DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+# zsh-syntax-highlighting must be last
+plugins=(git colored-man-pages zsh-syntax-highlighting)
+
+export ZSH=$HOME/.oh-my-zsh
+source $ZSH/oh-my-zsh.sh
+
 #------------------------------------------
 #--- Exports
 #-----------------------------------------
@@ -22,6 +37,11 @@ export FZF_CTRL_T_COMMAND='rg --files --no-messages --hidden --follow --glob "!.
 if which nodenv > /dev/null; then eval "$(nodenv init -)"; fi
 
 export JQ_COLORS="1;30:0;31:0;32:0;35:0;33:1;35:1;35"
+
+source $HOME/enhancd/init.sh
+autoload -U promptinit; promptinit
+
+prompt pure
 
 #------------------------------------------
 #--- Tmux
@@ -58,25 +78,6 @@ if [[ $(whoami) =~ 'adh23' ]]; then
     export SKY_SERVICE_DEV_TOOLS=$SKY_SERVICE_FOLDER/skymobile-service/dev-tools
     [ -r $SKY_SERVICE_DEV_TOOLS/.sky.sh ] && source $SKY_SERVICE_DEV_TOOLS/.sky.sh
 fi
-
-#------------------------------------------
-#--- Settings
-#-----------------------------------------
-DISABLE_AUTO_TITLE="true"
-COMPLETION_WAITING_DOTS="true"
-HIST_IGNORE_SPACE=true
-DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-source $HOME/enhancd/init.sh
-autoload -U promptinit; promptinit
-
-prompt pure
-
-# zsh-syntax-highlighting must be last
-plugins=(git colored-man-pages zsh-syntax-highlighting)
-
-export ZSH=$HOME/.oh-my-zsh
-source $ZSH/oh-my-zsh.sh
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 # export SDKMAN_DIR="/Users/adh23/.sdkman"
