@@ -64,12 +64,11 @@ Plug 'majutsushi/tagbar'
 "" Languages
 " Plug 'styled-components/vim-styled-components'
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
-Plug 'chrisbra/csv.vim'
+Plug 'sheerun/vim-polyglot', { 'tag': 'v3.7.0' } " https://github.com/sheerun/vim-polyglot/issues/387
 Plug 'moll/vim-node'
-Plug 'peitalin/vim-jsx-typescript' "| Plug 'Quramy/tsuquyomi'
-Plug 'sheerun/vim-polyglot'
+" Plug 'peitalin/vim-jsx-typescript' "| Plug 'Quramy/tsuquyomi' XX play around with this
+Plug 'HerringtonDarkholme/yats.vim' " typescript highlighter
 Plug 'shirk/vim-gas'
-Plug 'plasticboy/vim-markdown'
 
 "" Utilities
 Plug 'skywind3000/asyncrun.vim'
@@ -131,13 +130,8 @@ if !exists("autocommands_loaded")
     autocmd TextChangedI * call ncm2#auto_trigger()
 
     autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
-    autocmd BufNewFile,BufRead *.{ts,tsx,jsx} set filetype=javascript.jsx
 
     autocmd FileType * setlocal tabstop=4 shiftwidth=4 
-
-    autocmd FileType javascript,javascript.jsx 
-                \ setlocal foldmethod=syntax |
-                \ normal zR
 
     autocmd BufEnter * call LayerSet()   
 
@@ -226,8 +220,7 @@ endif
 "" Theme
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum" " something to do with vim in a terminal
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-color snazzy
-set notermguicolors
+color snazzier
 
 "" GUI
 if has('gui_running')
@@ -292,7 +285,7 @@ function! LightlineReload()
 endfunction
 
 let g:lightline = {
-            \ 'colorscheme': 'wombat',
+            \ 'colorscheme': 'snazzier',
             \ 'enable': {
             \   'statusline': 1,
             \   'tabline': 0
@@ -447,7 +440,7 @@ map <leader>gn :set nowrap!<CR>
 map <leader>gp :call pencil#init()<CR>
 map <leader>gr :set relativenumber!<CR>
 map <leader>gs :SourceVimrc<CR>
-command! SourceVimrc write | so ~/.vimrc | so ~/PersonalConfigs/vim/after/plugin/color_overrides.vim
+command! SourceVimrc write | so ~/.vimrc
 map <leader>gv :vsplit ~/.vimrc<CR>
 
 "" l - Langauge Layer
@@ -732,8 +725,12 @@ let g:codi#rightsplit = 0
 let g:codi#rightalign = 0
 let g:codi#width = 80
 
+"" Javascript
+let g:javascript_plugin_jsdoc = 1
+
 "" Javascript.jsx
 let g:jsx_ext_required = 0
+
 
 "" Hardtime
 let g:hardtime_default_on = 0
@@ -819,10 +816,12 @@ let test#strategy = 'vimVterminal'
 "" Calendar.vim
 let g:calendar_google_calendar = 1
 
+"" Polyglot
+let g:polyglot_disabled = ['typescript']
+
 """"""""""""""""""""
 "  Source Settings "
 """"""""""""""""""""
-so ~/.vim/settings/colors.vim
 so ~/.vim/settings/vim_fold.vim
 so ~/.vim/settings/nerd_tree.vim
 so ~/.vim/settings/ale.vim

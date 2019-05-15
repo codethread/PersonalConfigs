@@ -1,22 +1,22 @@
 #!/bin/bash
 
-mkdir $1
-cd $1
+mkdir "$1"
+cd "$1" || exit
 git init
 npm init -y
 echo "module.exports = {
-extends: ['airbnb', 'prettier'],
-rules: {
-'func-names': 'off',
-'prettier/prettier': 'error'
-},
-plugins: ['prettier'],
-env: {
-browser: true,
-node: true,
-jest: true
-},
-settings: {}
+    extends: ['airbnb', 'prettier'],
+    rules: {
+        'func-names': 'off',
+        'prettier/prettier': 'error'
+    },
+        plugins: ['prettier'],
+        env: {
+        browser: true,
+        node: true,
+        jest: true
+    },
+    settings: {}
 }" > .eslintrc.js
 echo "node_modules" > .gitignore
 echo "var a = chuff" > app.js

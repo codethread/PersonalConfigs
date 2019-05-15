@@ -8,56 +8,53 @@ configs=$1
 _self="${0##*/}"
 
 if [[ ! -d $configs ]]; then
-	echo "${red}missing required arg${normal}: config files directory"
-	echo "e.g: ${_self} ~/PersonalConfigs"
-	exit 1
+  echo "${red}missing required arg${normal}: config files directory"
+  echo "e.g: ${_self} ~/PersonalConfigs"
+  exit 1
 fi
 
 function mapFiles() {
-    array_of_dirFiles="$(ls -A $1)"
+  array_of_dirFiles="$(ls -A $1)"
 
-    IFS='
+  IFS='
 ' # prevent splitting on spaces
 
-	for fileOnly in ${array_of_dirFiles}
-	do
-        dirFile="$1/$fileOnly"
+  for fileOnly in ${array_of_dirFiles}
+  do
+    dirFile="$1/$fileOnly"
 
-		if	[[ ! $dirFile =~ (README.md|.DS_Store|./.gitignore$|.sw.?$|^./.git$|^./_.*) ]]
-		then
-			if [[ -d $dirFile ]]; then
-                    if [ -L "$HOME/$dirFile" ]; then
-					echo "dir: ${green}$dirFile is linked${normal}"
+    if	[[ ! $dirFile =~ (README.md|.DS_Store|./.gitignore$|.sw.?$|^./.git$|^./_.*) ]]
+    then
+      if [[ -d $dirFile ]]; then
+        if [ -L "$HOME/$dirFile" ]; then
+          echo "dir: ${green}$dirFile currently linked${normal}"
 
-				elif [ -d "$HOME/$dirFile" ]; then
-                    mapFiles "$dirFile"
-				else
-                    mkdir "$HOME/$dirFile" 
-                    mapFiles "$dirFile"
-				fi
+        elif [[ -f $dirFile ]]; then
+          echo "${red}dir to be linked: $dirFile is a already file${normal} you'll need to remove this manually"
+        elif [ -d "$HOME/$dirFile" ]; then
+          mapFiles "$dirFile"
+        else
+          mkdir "$HOME/$dirFile" 
+          mapFiles "$dirFile"
+        fi
 
-			elif [[ -f $dirFile ]]; then
-				if [ -L "$HOME/$dirFile" ]; then
-					echo "file: ${green}$dirFile is linked${normal}"
+      elif [[ -f $dirFile ]]; then
+        if [ -L "$HOME/$dirFile" ]; then
+          echo "file: ${green}$dirFile is linked${normal}"
 
-				elif [ -f "$HOME/$dirFile" ]; then
-					echo "${red}    and is regular${normal} you'll need to remove this manually"
-				else
-					ln -s "$configs/$dirFile" "$HOME/$dirFile"
+        elif [ -f "$HOME/$dirFile" ]; then
+          echo "${red}    and is regular${normal} you'll need to remove this manually"
 
-					[ -L "$HOME/$dirFile" ] && echo "${green}$dirFile is now linked${normal}"
-				fi
-			else
-				echo "$dirFile is not valid"
-				exit 1
-			fi
-		fi
-	done
+        else
+          ln -s "$configs/$dirFile" "$HOME/$dirFile" && echo "${green}$dirFile is now linked${normal}"
+
+        fi
+      else
+        echo "$dirFile is not valid"
+        exit 1
+      fi
+    fi
+  done
 }
 
 mapFiles "."
-
-echo ''
-echo ''
-echo '________'
-

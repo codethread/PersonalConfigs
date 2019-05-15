@@ -1,4 +1,7 @@
-" " Colors
+runtime colors/snazzy.vim
+
+set notermguicolors
+
 let  red       =  '#ff5c57'
 let  c_red     =  '001'
 let  green     =  '#5af78e'
@@ -162,4 +165,3 @@ hi ALEWarning           cterm=underline,italic
 :exe 'hi jsxCloseString  guifg='.blue.' ctermfg='.c_blue
 :exe 'hi jsSpecial  guifg='.magenta.' ctermfg='.c_blue
 :exe 'hi typescriptReserved  guifg='.blue.' ctermfg='c_blue
-
