@@ -77,6 +77,7 @@ alias gl="git --no-pager log -n 5"
 #---------------------------------------------#
 # TMUXINATOR
 # -------------------------------------------#
+alias mux="tmuxinator start"
 alias muxa="mux spages; mux exc;"
 alias kmux="kill_tmux_session"
 
