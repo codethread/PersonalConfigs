@@ -1,17 +1,24 @@
-
 #------------------------------------------
-#--- Settings
+#--- ZPlugin
 #-----------------------------------------
-DISABLE_AUTO_TITLE="true"
-COMPLETION_WAITING_DOTS="true"
-HIST_IGNORE_SPACE=true
-DISABLE_UNTRACKED_FILES_DIRTY="true"
 
-# zsh-syntax-highlighting must be last
-plugins=(git colored-man-pages zsh-syntax-highlighting)
+### Added by Zplugin's installer https://github.com/zdharma/zplugin/blob/master/doc/INSTALLATION.adoc
+source "$HOME/.zplugin/bin/zplugin.zsh"
+autoload -Uz _zplugin
+(( ${+_comps} )) && _comps[zplugin]=_zplugin
+### End of Zplugin's installer chunk
 
-export ZSH=$HOME/.oh-my-zsh
-source $ZSH/oh-my-zsh.sh
+# pure https://github.com/sindresorhus/pure#zplugin
+zplugin ice pick"async.zsh" src"pure.zsh"
+zplugin light sindresorhus/pure
+
+# prevent repeated work for direnv
+# https://github.com/zdharma/zplugin/wiki/Direnv-explanation
+zplugin ice as"program" make'!' atclone'./direnv hook zsh > zhook.zsh' atpull'%atclone' pick"direnv" src"zhook.zsh"
+zplugin light direnv/direnv
+
+# pretty colors
+zplugin load zsh-users/zsh-syntax-highlighting
 
 #------------------------------------------
 #--- Exports
@@ -26,47 +33,39 @@ export PATH="$PATH:$HOME/.bin"
 # source $HOME/.asdf/asdf.sh
 source $HOME/.cargo/env # TODO needed?
 
-# source zsh
-# fpath=(~/PersonalConfigs/zsh/bin "${fpath[@]}")
-# typeset -U PATH fpath # dedupe fpath
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-export FZF_DEFAULT_COMMAND='fd --type d --exclude "{Library,Music,Applications,Pictures,Unity,VirtualBox VMs,WebstormProjects,Tools,node_modules,.git}"'
-export FZF_CTRL_T_COMMAND='rg --files --no-messages --hidden --follow --glob "!.git/*" --glob "!**/*.lock"'
-
 if which nodenv > /dev/null; then eval "$(nodenv init -)"; fi
 
 export JQ_COLORS="1;30:0;31:0;32:0;35:0;33:1;35:1;35"
 
 source $HOME/enhancd/init.sh
-autoload -U promptinit; promptinit
 
-prompt pure
+# adds keybindings - fzf installed by vim-plug
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 #------------------------------------------
 #--- Tmux
 #-----------------------------------------
-_tmuxinator() {
-  local commands projects
-  commands=(${(f)"$(tmuxinator commands zsh)"})
-  projects=(${(f)"$(tmuxinator completions start)"})
-
-  if (( CURRENT == 2 )); then
-    _describe -t commands "tmuxinator subcommands" commands
-    _describe -t projects "tmuxinator projects" projects
-  elif (( CURRENT == 3)); then
-    case $words[2] in
-      copy|debug|delete|open|start)
-        _arguments '*:projects:($projects)'
-        ;;
-    esac
-  fi
-
-  return
-}
-
-compdef _tmuxinator tmuxinator mux
-alias mux="tmuxinator"
+# _tmuxinator() {
+#   local commands projects
+#   commands=(${(f)"$(tmuxinator commands zsh)"})
+#   projects=(${(f)"$(tmuxinator completions start)"})
+#
+#   if (( CURRENT == 2 )); then
+#     _describe -t commands "tmuxinator subcommands" commands
+#     _describe -t projects "tmuxinator projects" projects
+#   elif (( CURRENT == 3)); then
+#     case $words[2] in
+#       copy|debug|delete|open|start)
+#         _arguments '*:projects:($projects)'
+#         ;;
+#     esac
+#   fi
+#
+#   return
+# }
+#
+# compdef _tmuxinator tmuxinator mux
+# alias mux="tmuxinator"
 
 #------------------------------------------
 #--- Sky Stuff
@@ -82,13 +81,4 @@ fi
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 # export SDKMAN_DIR="/Users/adh23/.sdkman"
 # [[ -s "/Users/adh23/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/adh23/.sdkman/bin/sdkman-init.sh"
-
-#------------------------------------------
-#------------------------------------------
-#--- DEPRECATED
-#-----------------------------------------
-
-# ZSH_THEME="spaceship"
-# ZSH_CUSTOM=$HOME/PersonalConfigs/zsh_custom
-# source $HOME/PersonalConfigs/spaceship-config.zsh
 
