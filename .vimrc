@@ -511,6 +511,7 @@ command! FindWordUnderCursor :call fzf#vim#ag(expand("<cword>"))
 "" t - Terminal
 let g:lmap.t = { 'name': ' -- Terminal' }
 map <leader>tt :ter ++curwin<CR>
+map <leader>tT :vert term<CR>
 function! DefaultTerminalOptions(name) 
     let t_options = {
             \ 'term_name': a:name,
