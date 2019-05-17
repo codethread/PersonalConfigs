@@ -1,6 +1,7 @@
 #---------------------------------------------#
 # EDITOR-ish
 # -------------------------------------------#
+alias codij="vim -c \"Codi javascript | let ale_enabled = 0\" dmp.javascript"
 alias zz="vim ~/.zshrc" # open zsh
 alias vv="vim ~/.vimrc" # open vim config
 alias aa="vim ~/.aliases.zsh" # open aliases
@@ -30,7 +31,6 @@ alias pathis="echo $PATH | tr -s ':' '\n'"
 alias portsinuse="lsof -i -p | grep -i 'listen'"
 alias ports="echo lsof -i tcp:3000"
 
-alias ramda="~/PersonalConfigs/single_scripts/ramda"
 alias finder='open -a 'Finder' .'
 alias butter='echo "Lucy says stop coding and relax 🐼"'
 
