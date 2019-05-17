@@ -10,4 +10,6 @@ docker/cli path:contrib/completion/zsh kind:fpath
 
 # stay last
 sindresorhus/pure
-zsh-users/zsh-syntax-highlighting
+
+# adds 100ms
+# zsh-users/zsh-syntax-highlighting
