@@ -1,31 +1,26 @@
 #---------------------------------------------#
 # EDITOR-ish
 # -------------------------------------------#
-alias codij="vim -c \"Codi javascript | let ale_enabled = 0\" dmp.javascript"
 alias zz="vim ~/.zshrc" # open zsh
 alias vv="vim ~/.vimrc" # open vim config
 alias aa="vim ~/.aliases.zsh" # open aliases
-alias bi="brew install"
+alias codij="vim -c \"Codi javascript | let ale_enabled = 0\" dmp.javascript"
 
 alias zr="source ~/.zshrc"
 alias vo="vim \$(fzf)"
 alias mvim="/Applications/MacVim.app/Contents/bin/mvim"
 alias als="eval \$(cat ~/.aliases.zsh | grep \"^alias.\+=\\\"\" | fzf -i --header='[run:]' | sed -E \"s:alias.*\\\"(.*)\\\":\\1:\" )"
-alias nps="echo \$(cat package.json | jq -S '.scripts' | fzf -i --header='[run:]')"
-alias ctags="`brew --prefix`/bin/ctags"
 
 #---------------------------------------------#
 # HELPERS
 # -------------------------------------------#
-# sort -s -k1.1,1.1 sorts on first letter only and preserves order
-alias anti="antibody bundle < ~/.zsh_plugins.txt | sort -s -k1.1,1.1 | gsed \"0,/source/s//\nautoload -Uz compinit\nif [ \$(date +'%j') != \$(\/usr\/bin\/stat -f '%Sm' -t '%j' \$HOME\/.zcompdump) ]; then\ncompinit;\nelse\ncompinit -C;\nfi\nsource/\" > ~/.zsh_plugins.sh"
-
+alias ctags="`brew --prefix`/bin/ctags"
 alias grep='grep  --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}'
 
 alias ls='ls -pGF'
-# alias l="ls -lpAGFL" # list all column
 alias l='ls -lah'
 alias lc='colorls -A --sd --gs'
+
 alias pathis="echo $PATH | tr -s ':' '\n'"
 
 alias portsinuse="lsof -i -p | grep -i 'listen'"
@@ -49,6 +44,7 @@ alias 9='~9'
 #---------------------------------------------#
 # RUNNERS
 # -------------------------------------------#
+alias bi="brew install"
 alias brewup='brew update; brew doctor; brew upgrade; brew cleanup'
 alias alert="osascript -e 'display notification \"Task Finished\" with title \"CMD\"'; afplay /System/Library/Sounds/Glass.aiff"
 alias ser="python -m SimpleHTTPServer $1" # start server
@@ -62,6 +58,7 @@ alias pipes="pipes.sh -f 60 -s 8"
 #---------------------------------------------#
 # NODE
 # -------------------------------------------#
+alias nps="echo \$(cat package.json | jq -S '.scripts' | fzf -i --header='[run:]')"
 alias npc="rm -rf ./node_modules; npm cache clear; npm i"
 alias npg="node_g_installs"
 alias npl="npm -g ls --depth=0"

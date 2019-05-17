@@ -1,0 +1,36 @@
+#!/bin/bash
+normal=$(tput sgr0)
+red=$(tput setaf 1)
+green=$(tput setaf 2)
+yellow=$(tput setaf 3)
+
+[[ ! -f ~/.teardown_list.txt ]] && exit 1
+
+links="$(cat ~/.teardown_list.txt)"
+
+IFS='
+' # prevent splitting on spaces
+
+for link in ${links}
+do
+    if [[ -f "$link" ]]; then
+        rm "$link" || exit 1
+        echo "  ${green}✓${normal} removed: $link "
+
+    elif [[ -d "$link" ]]; then
+        if [ "$(find "$link" -mindepth 1 -print -quit 2>/dev/null)" ]; then
+            echo "  ${yellow}~${normal} $link: dir not empty"
+            echo "  ${green}✓${normal} removed: $link "
+
+        else
+            rm -r "$link" || exit 1
+            echo "  ${green}✓${normal} removed: $link "
+
+        fi
+    else
+        echo "  ${red}✘${normal} $link does not exist"
+
+    fi
+done
+
+rm ~/.teardown_list.txt
