@@ -1,7 +1,6 @@
 #---------------------------------------------#
 # EDITOR-ish
 # -------------------------------------------#
-alias anti="antibody bundle < ~/.zsh_plugins.txt | sort -s -k1.1,1.1 | gsed '0,/source/s//\nautoload -Uz compinit\ncompinit\n\nsource/' > ~/.zsh_plugins.sh"
 alias zz="vim ~/.zshrc" # open zsh
 alias vv="vim ~/.vimrc" # open vim config
 alias aa="vim ~/.aliases.zsh" # open aliases
@@ -17,7 +16,14 @@ alias ctags="`brew --prefix`/bin/ctags"
 #---------------------------------------------#
 # HELPERS
 # -------------------------------------------#
-alias ll="ls -1 -a -F -G" # list all column
+# sort -s -k1.1,1.1 sorts on first letter only and preserves order
+alias anti="antibody bundle < ~/.zsh_plugins.txt | sort -s -k1.1,1.1 | gsed \"0,/source/s//\nautoload -Uz compinit\nif [ \$(date +'%j') != \$(\/usr\/bin\/stat -f '%Sm' -t '%j' \$HOME\/.zcompdump) ]; then\ncompinit;\nelse\ncompinit -C;\nfi\nsource/\" > ~/.zsh_plugins.sh"
+
+alias grep='grep  --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}'
+
+alias ls='ls -pGF'
+# alias l="ls -lpAGFL" # list all column
+alias l='ls -lah'
 alias lc='colorls -A --sd --gs'
 alias pathis="echo $PATH | tr -s ':' '\n'"
 
@@ -27,6 +33,18 @@ alias ports="echo lsof -i tcp:3000"
 alias ramda="~/PersonalConfigs/single_scripts/ramda"
 alias finder='open -a 'Finder' .'
 alias butter='echo "Lucy says stop coding and relax 🐼"'
+
+setopt autocd autopushd
+alias d='dirs -v | head -10'
+alias 1='~'
+alias 2='~2'
+alias 3='~3'
+alias 4='~4'
+alias 5='~5'
+alias 6='~6'
+alias 7='~7'
+alias 8='~8'
+alias 9='~9'
 
 #---------------------------------------------#
 # RUNNERS
