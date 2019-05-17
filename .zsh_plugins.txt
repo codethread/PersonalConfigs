@@ -1,0 +1,13 @@
+# needed for pure
+mafredri/zsh-async
+
+robbyrussell/oh-my-zsh path:plugins/git
+robbyrussell/oh-my-zsh path:plugins/fzf
+robbyrussell/oh-my-zsh path:plugins/tmuxinator kind:fpath
+robbyrussell/oh-my-zsh path:plugins/colored-man-pages
+
+docker/cli path:contrib/completion/zsh kind:fpath
+
+# stay last
+sindresorhus/pure
+zsh-users/zsh-syntax-highlighting

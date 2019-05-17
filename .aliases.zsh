@@ -1,15 +1,16 @@
 #---------------------------------------------#
 # EDITOR-ish
 # -------------------------------------------#
+alias anti="antibody bundle < ~/.zsh_plugins.txt | sort -s -k1.1,1.1 | gsed '0,/source/s//\nautoload -Uz compinit\ncompinit\n\nsource/' > ~/.zsh_plugins.sh"
 alias zz="vim ~/.zshrc" # open zsh
 alias vv="vim ~/.vimrc" # open vim config
-alias aa="vim ${ALIASES}" # open aliases
+alias aa="vim ~/.aliases.zsh" # open aliases
 alias bi="brew install"
 
 alias zr="source ~/.zshrc"
 alias vo="vim \$(fzf)"
 alias mvim="/Applications/MacVim.app/Contents/bin/mvim"
-alias als="eval \$(cat ${ALIASES} | grep \"^alias.\+=\\\"\" | fzf -i --header='[run:]' | sed -E \"s:alias.*\\\"(.*)\\\":\\1:\" )"
+alias als="eval \$(cat ~/.aliases.zsh | grep \"^alias.\+=\\\"\" | fzf -i --header='[run:]' | sed -E \"s:alias.*\\\"(.*)\\\":\\1:\" )"
 alias nps="echo \$(cat package.json | jq -S '.scripts' | fzf -i --header='[run:]')"
 alias ctags="`brew --prefix`/bin/ctags"
 
