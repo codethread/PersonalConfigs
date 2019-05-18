@@ -1,0 +1,51 @@
+#!/bin/bash
+normal=$(tput sgr0)
+red=$(tput setaf 1)
+green=$(tput setaf 2)
+yellow=$(tput setaf 3)
+
+tFile="${HOME}/.teardown_list.txt"
+
+[[ ! -f "${tFile}" ]] && exit 1
+
+IFS='
+' # prevent splitting on spaces
+
+links="$(cat "${tFile}")"
+
+function updateTxt {
+    gsed -i "s:${1}::" "${tFile}"
+}
+
+for link in ${links}
+do
+    if [[  -L "$link" ]]; then
+        # remove links
+        rm "$link" || exit 1
+        echo "  ${green}✓${normal} removed: $link "
+        updateTxt "${link}"
+
+    elif [[ -f "$link" ]]; then
+        # don't remove files
+        echo "  ${red}✘${normal} $link is not a link"
+        updateTxt "${link}"
+
+    elif [[ -d "$link" ]]; then
+        # check dirs
+        if [ "$(find "$link" -mindepth 1 -print -quit 2>/dev/null)" ]; then
+            # don't delete dirs with other files
+            echo "  ${yellow}~${normal} $link: dir not empty"
+            updateTxt "${link}"
+        else
+            # delete empty dirs
+            rm -r "$link" || exit 1
+            echo "  ${green}✓${normal} removed: $link "
+            updateTxt "${link}"
+        fi
+    else
+        echo "  ${red}✘${normal} $link does not exist"
+        updateTxt "${link}"
+    fi
+done
+
+gsed -i "/^$/d" "${tFile}"

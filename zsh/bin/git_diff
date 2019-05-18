@@ -1,5 +1,0 @@
-#!/bin/zsh
-
-git_diff() {
-  git diff --no-ext-diff -w "$@" | vim -R –
-}

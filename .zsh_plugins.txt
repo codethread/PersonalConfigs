@@ -1,0 +1,26 @@
+# needed for pure
+mafredri/zsh-async
+
+robbyrussell/oh-my-zsh path:plugins/git
+robbyrussell/oh-my-zsh path:plugins/colored-man-pages
+robbyrussell/oh-my-zsh path:plugins/tmuxinator kind:fpath
+
+# rust
+robbyrussell/oh-my-zsh path:plugins/rust kind:fpath
+robbyrussell/oh-my-zsh path:plugins/cargo kind:fpath
+
+# utils
+robbyrussell/oh-my-zsh path:plugins/fzf
+robbyrussell/oh-my-zsh path:plugins/ripgrep kind:fpath
+robbyrussell/oh-my-zsh path:plugins/fd kind:fpath
+
+# docker
+docker/cli path:contrib/completion/zsh kind:fpath
+
+# LAST
+
+#  prompt
+sindresorhus/pure
+
+# adds 100ms
+# zsh-users/zsh-syntax-highlighting
