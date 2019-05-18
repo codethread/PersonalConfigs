@@ -1,4 +1,4 @@
-let g:fzf_layout = { 'window': '5split' }
+let g:fzf_layout = { 'window': '9split' }
 let g:fzf_action = {
             \ 'ctrl-t': 'tab split',
             \ 'ctrl-x': 'split',

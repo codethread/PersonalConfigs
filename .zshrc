@@ -9,6 +9,8 @@ zstyle ':completion:*' menu selecto
 source ~/.zsh_plugins.sh
 source "$HOME/.aliases.zsh"
 
+# quickest way to cd around
+FZF_ALT_C_COMMAND="fd --type d --exclude '{Library,Music,Applications,Pictures,Unity,VirtualBox VMs,WebstormProjects,Tools,node_modules,.git}' . ${HOME}"
 #------------------------------------------
 #--- History
 #-----------------------------------------
@@ -20,7 +22,7 @@ HISTFILE=$HOME/.zsh_history
 HISTSIZE=999999999
 SAVEHIST=$HISTSIZE
 
-source $HOME/.cargo/env # TODO needed?
+# source $HOME/.cargo/env # TODO needed?
 eval "$(fnm env --multi --use-on-cd)"
 
 #------------------------------------------
