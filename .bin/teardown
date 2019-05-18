@@ -4,27 +4,39 @@ red=$(tput setaf 1)
 green=$(tput setaf 2)
 yellow=$(tput setaf 3)
 
-[[ ! -f ~/.teardown_list.txt ]] && exit 1
+tFile="${HOME}/.teardown_list.txt"
 
-links="$(cat ~/.teardown_list.txt)"
+[[ ! -f "${tFile}" ]] && exit 1
 
 IFS='
 ' # prevent splitting on spaces
 
+links="$(cat "${tFile}")"
+
+function updateTxt {
+    gsed -i "s:${1}::" "${tFile}"
+}
+
 for link in ${links}
 do
     if [[ -f "$link" ]]; then
-        rm "$link" || exit 1
-        echo "  ${green}✓${normal} removed: $link "
+        if [[  -L "$link" ]]; then
+            rm "$link" || exit 1
+            echo "  ${green}✓${normal} removed: $link "
+            updateTxt "${link}"
+        else
+            echo "  ${red}✘${normal} $link is not a link"
+        fi
 
     elif [[ -d "$link" ]]; then
         if [ "$(find "$link" -mindepth 1 -print -quit 2>/dev/null)" ]; then
             echo "  ${yellow}~${normal} $link: dir not empty"
-            echo "  ${green}✓${normal} removed: $link "
+            updateTxt "${link}"
 
         else
             rm -r "$link" || exit 1
             echo "  ${green}✓${normal} removed: $link "
+            updateTxt "${link}"
 
         fi
     else
@@ -33,4 +45,4 @@ do
     fi
 done
 
-rm ~/.teardown_list.txt
+gsed -i "/^$/d" "${tFile}"
