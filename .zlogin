@@ -8,5 +8,5 @@
         zrecompile -pq "$zcompdump"
     fi
     # zcompile .zshrc
-    zrecompile -pq ${HOME}/.zshrc
+    # zrecompile -pq ${HOME}/.zshrc
 ) &!

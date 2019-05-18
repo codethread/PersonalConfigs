@@ -26,22 +26,21 @@ do
             updateTxt "${link}"
         else
             echo "  ${red}✘${normal} $link is not a link"
+            updateTxt "${link}"
         fi
 
     elif [[ -d "$link" ]]; then
         if [ "$(find "$link" -mindepth 1 -print -quit 2>/dev/null)" ]; then
             echo "  ${yellow}~${normal} $link: dir not empty"
             updateTxt "${link}"
-
         else
             rm -r "$link" || exit 1
             echo "  ${green}✓${normal} removed: $link "
             updateTxt "${link}"
-
         fi
     else
         echo "  ${red}✘${normal} $link does not exist"
-
+        updateTxt "${link}"
     fi
 done
 

@@ -3,7 +3,11 @@ if [[ "${terminfo[kcbt]}" != "" ]]; then
     bindkey "${terminfo[kcbt]}" reverse-menu-complete   # [Shift-Tab] - move through the completion menu backwards
 fi
 
+# highlight tab
+zstyle ':completion:*' menu selecto
+
 source ~/.zsh_plugins.sh
+source "$HOME/.aliases.zsh"
 
 #------------------------------------------
 #--- History
@@ -16,14 +20,8 @@ HISTFILE=$HOME/.zsh_history
 HISTSIZE=999999999
 SAVEHIST=$HISTSIZE
 
-# highlight tab
-zstyle ':completion:*' menu selecto
-
-source "$HOME/.aliases.zsh"
 source $HOME/.cargo/env # TODO needed?
-export JQ_COLORS="1;30:0;31:0;32:0;35:0;33:1;35:1;35"
-source $HOME/enhancd/init.sh
-eval "$(fnm env --multi)"
+eval "$(fnm env --multi --use-on-cd)"
 
 #------------------------------------------
 #--- Sky Stuff
