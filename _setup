@@ -5,22 +5,23 @@ red=$(tput setaf 1)
 green=$(tput setaf 2)
 yellow=$(tput setaf 3)
 
-configs=$1
-_self="${0##*/}"
+configs="${HOME}/PersonalConfigs"
+tFile="${HOME}/.teardown_list.txt"
 
-if [[ ! -d $configs ]]; then
-  echo "${red}missing required arg${normal}: config files directory"
-  echo "e.g: ${_self} ~/PersonalConfigs"
-  exit 1
+if [[ ! "$PWD" == "$configs" ]]; then
+    cd "${configs}" || exit 1
 fi
 
-touch ~/.teardown_list.txt
+
+[[ -f "$tFile" ]] && "${configs}/_teardown"
+
+touch "$tFile"
+
+IFS='
+' # prevent splitting on spaces
 
 function mapFiles() {
-  array_of_dirFiles="$(ls -A $1)"
-
-  IFS='
-' # prevent splitting on spaces
+  array_of_dirFiles="$(ls -A "$1")"
 
   for fileOnly in ${array_of_dirFiles}
   do
@@ -40,7 +41,7 @@ function mapFiles() {
 
         else
           mkdir "$HOME/$dirFile"  || exit 1
-          echo "$HOME/$dirFile" >> ~/.teardown_list.txt
+          echo "$HOME/$dirFile" >> "${tFile}"
           mapFiles "$dirFile"
 
         fi
@@ -55,7 +56,7 @@ function mapFiles() {
         else
           ln -s "$configs/$dirFile" "$HOME/$dirFile" || exit 1
           echo "  ${green}✓${normal} f: $dirFile "
-          echo "$HOME/$dirFile" >> ~/.teardown_list.txt
+          echo "$HOME/$dirFile" >> "${tFile}"
 
         fi
       else
@@ -68,4 +69,4 @@ function mapFiles() {
 
 mapFiles "."
 
-sort -ro ~/.teardown_list.txt ~/.teardown_list.txt
+sort -ro "${tFile}" "${tFile}"
