@@ -29,18 +29,6 @@ alias ports="echo lsof -i tcp:3000"
 alias finder='open -a 'Finder' .'
 alias butter='echo "Lucy says stop coding and relax 🐼"'
 
-setopt autocd autopushd
-alias d='dirs -v | head -10'
-alias 1='~'
-alias 2='~2'
-alias 3='~3'
-alias 4='~4'
-alias 5='~5'
-alias 6='~6'
-alias 7='~7'
-alias 8='~8'
-alias 9='~9'
-
 #---------------------------------------------#
 # RUNNERS
 # -------------------------------------------#
