@@ -1,23 +1,23 @@
 "
-"      ___       _______       ___      .___  ___.  __     _______.   
-"     /   \     |       \     /   \     |   \/   | (_ )   /       |   
-"    /  ^  \    |  .--.  |   /  ^  \    |  \  /  |  |/   |   (----`   
-"   /  /_\  \   |  |  |  |  /  /_\  \   |  |\/|  |        \   \       
-"  /  _____  \  |  '--'  | /  _____  \  |  |  |  |    .----)   |      
-" /__/     \__\ |_______/ /__/     \__\ |__|  |__|    |_______/       
-" ____    ____  __  .___  ___. .______        ______ 
+"      ___       _______       ___      .___  ___.  __     _______.
+"     /   \     |       \     /   \     |   \/   | (_ )   /       |
+"    /  ^  \    |  .--.  |   /  ^  \    |  \  /  |  |/   |   (----`
+"   /  /_\  \   |  |  |  |  /  /_\  \   |  |\/|  |        \   \
+"  /  _____  \  |  '--'  | /  _____  \  |  |  |  |    .----)   |
+" /__/     \__\ |_______/ /__/     \__\ |__|  |__|    |_______/
+" ____    ____  __  .___  ___. .______        ______
 " \   \  /   / |  | |   \/   | |   _  \      /      |
 "  \   \/   /  |  | |  \  /  | |  |_)  |    |  ,----'
-"   \      /   |  | |  |\/|  | |      /     |  |     
+"   \      /   |  | |  |\/|  | |      /     |  |
 "    \    /    |  | |  |  |  | |  |\  \----.|  `----.
 "     \__/     |__| |__|  |__| | _| `._____| \______|
-" 
+"
 " Plugins {{{
 " Plugin Setup {{{
 if empty(glob('~/.vim/autoload/plug.vim'))
-    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-                \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    autocmd VimEnter *PlugInstall --sync | source $MYVIMRC
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter *PlugInstall --sync | source $MYVIMRC
 endif
 " }}}
 filetype plugin indent on " Needs to go before autocmds
@@ -76,20 +76,20 @@ nnoremap <C-w>gk :<C-U>call window#join('aboveleft split', v:count) <BAR>normal!
 " vim-test  {{{
 Plug 'janko/vim-test'
 function! SkyportTransform(cmd) abort
-    let skyportTest = "NODE_ENV=test "
-    return skyportTest . a:cmd . ' --file test/setup.js'
+  let skyportTest = "NODE_ENV=test "
+  return skyportTest . a:cmd . ' --file test/setup.js'
 endfunction
 
 function! VimVterminal(cmd)
-    call term_start([&shell, &shellcmdflag, a:cmd], {
-            \ 'term_name': 't:test',
-            \ 'vertical': 1,
-            \})
+  call term_start([&shell, &shellcmdflag, a:cmd], {
+        \ 'term_name': 't:test',
+        \ 'vertical': 1,
+        \})
 
-    au BufLeave <buffer> wincmd p
-    nnoremap <buffer> <Enter> :q<CR>
-    redraw
-    echo "Press <Enter> to exit test runner terminal (<Ctrl-C> first if command is still running)"
+  au BufLeave <buffer> wincmd p
+  nnoremap <buffer> <Enter> :q<CR>
+  redraw
+  echo "Press <Enter> to exit test runner terminal (<Ctrl-C> first if command is still running)"
 endfunction
 
 
@@ -108,21 +108,21 @@ Plug 'w0rp/ale' " async linting
 " let g:ale_lint_on_text_changed = 'normal'
 let g:ale_lint_on_insert_leave = 1
 let g:ale_lint_delay = 100
-let g:ale_linters = { 
-            \ 'javascript': ['eslint', 'prettier'],
-            \ 'json': ['prettier'],
-            \ 'graphql': ['prettier'],
-            \}
-let g:ale_fixers = { 
-            \ 'bash': ['/usr/local/bin/shellcheck'],
-            \ 'javascript': ['eslint'],
-            \ 'json': ['prettier'],
-            \ 'graphql': ['prettier'],
-            \ 'yml': ['prettier'],
-            \ 'css': ['stylelint'],
-            \ 'scss': ['stylelint'],
-            \ 'markdown': ['prettier'],
-            \}
+let g:ale_linters = {
+      \ 'javascript': ['eslint', 'prettier'],
+      \ 'json': ['prettier'],
+      \ 'graphql': ['prettier'],
+      \}
+let g:ale_fixers = {
+      \ 'bash': ['/usr/local/bin/shellcheck'],
+      \ 'javascript': ['eslint'],
+      \ 'json': ['prettier'],
+      \ 'graphql': ['prettier'],
+      \ 'yml': ['prettier'],
+      \ 'css': ['stylelint'],
+      \ 'scss': ['stylelint'],
+      \ 'markdown': ['prettier'],
+      \}
 
 let g:ale_sign_error = '✘'
 let g:ale_sign_warning = '▹'
@@ -150,28 +150,28 @@ Plug 'itchyny/lightline.vim'
 
 let g:asyncrun_status =""
 function! AsyncJobStatus()
-    return g:asyncrun_status
+  return g:asyncrun_status
 endfunction
 
 function! LightlineFilename()
-    let root = fnamemodify(get(b:, 'gitbranch_path'), ':h:h')
-    let path = expand('%:p')
-    if path[:len(root)-1] ==# root
-        return path[len(root)+1:]
-    endif
-    return expand('%')
+  let root = fnamemodify(get(b:, 'gitbranch_path'), ':h:h')
+  let path = expand('%:p')
+  if path[:len(root)-1] ==# root
+    return path[len(root)+1:]
+  endif
+  return expand('%')
 endfunction
 
 function! LightlineFiletype()
-    return winwidth(0) > 89 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
+  return winwidth(0) > 89 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
 endfunction
 
 function! LightlineFugitive()
-    if exists('*fugitive#head')
-        let branch = fugitive#head()
-        return branch !=# '' ? ''.branch : ''
-    endif
-    return ''
+  if exists('*fugitive#head')
+    let branch = fugitive#head()
+    return branch !=# '' ? ''.branch : ''
+  endif
+  return ''
 endfunction
 
 function! LightlineTabMod(n)
@@ -187,92 +187,92 @@ endfunction
 command! LightlineReload call LightlineReload()
 
 function! LightlineReload()
-    call lightline#init()
-    call lightline#colorscheme()
-    call lightline#update()
+  call lightline#init()
+  call lightline#colorscheme()
+  call lightline#update()
 endfunction
 
 let g:lightline = { 'colorscheme': 'snazzier' }
-let g:lightline.active = { 
-            \ 'left': [
-            \   [ 
-            \     'mode', 
-            \     'paste', 
-            \     'spell' 
-            \   ], 
-            \   [ 
-            \     'filename', 
-            \     'readonlyS', 
-            \     'modifiedS', 
-            \   ]
-            \ ], 
-            \ 'right': [
-            \   [ 'lineinfo' ],
-            \   [ 'filetype' ], 
-            \   [ 'asyncJob' ],
-            \ ], 
-            \}
+let g:lightline.active = {
+      \ 'left': [
+      \   [
+      \     'mode',
+      \     'paste',
+      \     'spell'
+      \   ],
+      \   [
+      \     'filename',
+      \     'readonlyS',
+      \     'modifiedS',
+      \   ]
+      \ ],
+      \ 'right': [
+      \   [ 'lineinfo' ],
+      \   [ 'filetype' ],
+      \   [ 'asyncJob' ],
+      \ ],
+      \}
 
-let g:lightline.inactive = { 
-            \ 'left': [ 
-            \   [ 'relativepath'], 
-            \   [ 'modifiedS' ] 
-            \ ],
-            \ 'right': [
-            \   [ 'lineinfo' ],
-            \   [ 'filetype' ],
-            \ ],
-            \}
+let g:lightline.inactive = {
+      \ 'left': [
+      \   [ 'relativepath'],
+      \   [ 'modifiedS' ]
+      \ ],
+      \ 'right': [
+      \   [ 'lineinfo' ],
+      \   [ 'filetype' ],
+      \ ],
+      \}
 
 let g:lightline.component = { 'readonlyS': '%{&readonly?"":""}', 'modifiedS': '%{&modified?" ":""}', }
 
 let g:lightline.tab_component_function = { 'readonlyS': 'LightlineTabRead', 'modifiedS': 'LightlineTabMod', }
 
-let g:lightline.component_function = { 
-            \ 'asyncJob': 'AsyncJobStatus',
-            \ 'gitbranch': 'LightlineFugitive',
-            \ 'filepath': 'LightlineFilename',
-            \ 'filetype': 'LightlineFiletype',
-            \}
+let g:lightline.component_function = {
+      \ 'asyncJob': 'AsyncJobStatus',
+      \ 'gitbranch': 'LightlineFugitive',
+      \ 'filepath': 'LightlineFilename',
+      \ 'filetype': 'LightlineFiletype',
+      \}
 
-let g:lightline.tabline = { 
-            \ 'left': [
-            \   ['tabs']
-            \ ],
-            \ 'right': [ 
-            \   ['gitbranch'],
-            \   ['filepath'],
-            \ ] 
-            \}
+let g:lightline.tabline = {
+      \ 'left': [
+      \   ['tabs']
+      \ ],
+      \ 'right': [
+      \   ['gitbranch'],
+      \   ['filepath'],
+      \ ]
+      \}
 
-let g:lightline.tab = { 
-            \ 'active': [ 
-            \   'tabnum',
-            \   'filename',
-            \   'modifiedS',
-            \ ], 
-            \ 'inactive': [
-            \   'tabnum',
-            \   'filename',
-            \   'modifiedS',
-            \ ]
-            \}
+let g:lightline.tab = {
+      \ 'active': [
+      \   'tabnum',
+      \   'filename',
+      \   'modifiedS',
+      \ ],
+      \ 'inactive': [
+      \   'tabnum',
+      \   'filename',
+      \   'modifiedS',
+      \ ]
+      \}
 
 let g:lightline.separator = { 'left': ' ', 'right': ' ' }
 let g:lightline.subseparator = { 'left': '', 'right': '' }
 let g:lightline.mode_map = {
-            \ 'n' : '',
-            \ 'i' : '',
-            \ 'R' : '',
-            \ 'v' : '',
-            \ 'V' : '',
-            \ "\<C-v>": '',
-            \ 'c' : 'COMMAND',
-            \ 's' : 'SELECT',
-            \ 'S' : 'S-LINE',
-            \ "\<C-s>": 'S-BLOCK',
-            \ 't': ' ',
-            \ }
+      \ 'n' : '',
+      \ 'i' : '',
+      \ 'R' : '',
+      \ 'v' : '',
+      \ 'V' : '',
+      \ "\<C-v>": '',
+      \ 'c' : 'COMMAND',
+      \ 's' : 'SELECT',
+      \ 'S' : 'S-LINE',
+      \ "\<C-s>": 'S-BLOCK',
+      \ 't': ' ',
+      \ }
 
 " }}}
 " goyo.vim  {{{
@@ -282,21 +282,21 @@ let g:goyo_height = 95 "(default: 85%)
 let g:goyo_linenr = 1 " (default: 0)
 
 function! s:goyo_enter()
-    silent !tmux set status off
-    silent !tmux list-panes -F '\#F' | grep -q Z || tmux resize-pane -Z
-    set noshowmode
-    set noshowcmd
-    " set scrolloff=999
-    " Limelight
+  silent !tmux set status off
+  silent !tmux list-panes -F '\#F' | grep -q Z || tmux resize-pane -Z
+  set noshowmode
+  set noshowcmd
+  " set scrolloff=999
+  " Limelight
 endfunction
 
 function! s:goyo_leave()
-    silent !tmux set status on
-    silent !tmux resize-pane -Z
-    set showmode
-    set showcmd
-    " set scrolloff=5
-    " Limelight!
+  silent !tmux set status on
+  silent !tmux resize-pane -Z
+  set showmode
+  set showcmd
+  " set scrolloff=5
+  " Limelight!
 endfunction
 
 " these are slow
@@ -321,22 +321,22 @@ Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.s
 let g:LanguageClient_changeThrottle = 0.1 " pauses for x seconds after txt change before post to server
 let g:LanguageClient_diagnosticsEnable = 0
 let g:LanguageClient_serverCommands = {
-            \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
-            \ 'css': ['css-languageserver --stdio'],
-            \ 'javascript': ['javascript-typescript-stdio'],
-            \ 'javascript.jsx': ['javascript-typescript-stdio'],
-            \ 'html': ['html-languageserver --stdio'],
-            \ 'dockerfile': ['docker-langserver --stdio'],
-            \ }
+      \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+      \ 'css': ['css-languageserver --stdio'],
+      \ 'javascript': ['javascript-typescript-stdio'],
+      \ 'javascript.jsx': ['javascript-typescript-stdio'],
+      \ 'html': ['html-languageserver --stdio'],
+      \ 'dockerfile': ['docker-langserver --stdio'],
+      \ }
 
 function! LC_maps()
-    if has_key(g:LanguageClient_serverCommands, &filetype)
-        nnoremap <buffer> <silent> gh :call LanguageClient#textDocument_hover()<cr>
-        nnoremap <buffer> <silent> gd :call LanguageClient#textDocument_definition()<CR>
-        nnoremap <buffer> <silent> gD :call LanguageClient#textDocument_definition({'gotoCmd': 'vsplit'})<CR>
-        nnoremap <buffer> <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
-        nnoremap <buffer> <silent> <F5> :call LanguageClient_contextMenu()<cr>
-    endif
+  if has_key(g:LanguageClient_serverCommands, &filetype)
+    nnoremap <buffer> <silent> gh :call LanguageClient#textDocument_hover()<cr>
+    nnoremap <buffer> <silent> gd :call LanguageClient#textDocument_definition()<CR>
+    nnoremap <buffer> <silent> gD :call LanguageClient#textDocument_definition({'gotoCmd': 'vsplit'})<CR>
+    nnoremap <buffer> <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+    nnoremap <buffer> <silent> <F5> :call LanguageClient_contextMenu()<cr>
+  endif
 endfunction
 
 " Debugging
@@ -396,72 +396,72 @@ Plug 'rking/ag.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 let g:fzf_layout = { 'window': '9split' }
 let g:fzf_action = {
-            \ 'ctrl-t': 'tab split',
-            \ 'ctrl-x': 'split',
-            \ 'ctrl-l': 'vsplit' }
+      \ 'ctrl-t': 'tab split',
+      \ 'ctrl-x': 'split',
+      \ 'ctrl-l': 'vsplit' }
 
 let g:fzf_history_dir = '~/.local/share/fzf-history'
 let g:fzf_colors = {
-            \ 'fg':      ['fg', 'Normal'],
-            \ 'bg':      ['bg'],
-            \ 'hl':      ['fg', 'Comment'],
-            \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-            \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-            \ 'hl+':     ['fg', 'Statement'],
-            \ 'info':    ['fg', 'ALEError'],
-            \ 'border':  ['fg', 'Boolean'],
-            \ 'prompt':  ['fg', 'Boolean'],
-            \ 'pointer': ['fg', 'Exception'],
-            \ 'marker':  ['fg', 'Keyword'],
-            \ 'spinner': ['fg', 'Label'],
-            \ 'header':  ['fg', 'Comment'] }
+      \ 'fg':      ['fg', 'Normal'],
+      \ 'bg':      ['bg'],
+      \ 'hl':      ['fg', 'Comment'],
+      \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+      \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+      \ 'hl+':     ['fg', 'Statement'],
+      \ 'info':    ['fg', 'ALEError'],
+      \ 'border':  ['fg', 'Boolean'],
+      \ 'prompt':  ['fg', 'Boolean'],
+      \ 'pointer': ['fg', 'Exception'],
+      \ 'marker':  ['fg', 'Keyword'],
+      \ 'spinner': ['fg', 'Label'],
+      \ 'header':  ['fg', 'Comment'] }
 
 
 command! -bang -nargs=* Ag
-            \ call fzf#vim#ag(<q-args>,
-            \     <bang>0 ? fzf#vim#with_preview('up:60%')
-            \             : fzf#vim#with_preview('right:50%:hidden', '?'),
-            \     <bang>0)
+      \ call fzf#vim#ag(<q-args>,
+      \     <bang>0 ? fzf#vim#with_preview('up:60%')
+      \             : fzf#vim#with_preview('right:50%:hidden', '?'),
+      \     <bang>0)
 
 command! -bang -nargs=* Rg
-            \ call fzf#vim#grep('rg
-            \ --column
-            \ --line-number
-            \ --no-heading
-            \ --fixed-strings
-            \ --ignore-case
-            \ --hidden
-            \ --follow
-            \ --glob "!.git/*" '.shellescape(<q-args>), 1, <bang>0)
+      \ call fzf#vim#grep('rg
+      \ --column
+      \ --line-number
+      \ --no-heading
+      \ --fixed-strings
+      \ --ignore-case
+      \ --hidden
+      \ --follow
+      \ --glob "!.git/*" '.shellescape(<q-args>), 1, <bang>0)
 
-command! VimPlugins call fzf#run(fzf#wrap({ 
-            \ 'source': 'fd -t d --hidden --follow -E "{.git,fixtures}" .',
-            \ 'dir': '~/.vim',
-            \ 'options': '--prompt VimPlugins'
-            \ }))
+command! VimPlugins call fzf#run(fzf#wrap({
+      \ 'source': 'fd -t d --hidden --follow -E "{.git,fixtures}" .',
+      \ 'dir': '~/.vim',
+      \ 'options': '--prompt VimPlugins'
+      \ }))
 
-command! Files call fzf#run(fzf#wrap({ 
-            \ 'source': 'fd -t f --hidden --follow -E ".git/" .',
-            \ 'options': '--prompt '. getcwd() .'/'
-            \ }))
+command! Files call fzf#run(fzf#wrap({
+      \ 'source': 'fd -t f --hidden --follow -E ".git/" .',
+      \ 'options': '--prompt '. getcwd() .'/'
+      \ }))
 
 command! Projects call fzf#run(fzf#wrap({
-            \ 'source': 'fd --type d --exclude "{Library,Music,Applications,Pictures,Unity,VirtualBox VMs,WebstormProjects,Tools,node_modules,.git}" .',
-            \ 'dir': '~',
-            \ 'sink': 'ProjectFiles',
-            \ 'options': '--prompt Projects: '
-            \}))
+      \ 'source': 'fd --type d --exclude "{Library,Music,Applications,Pictures,Unity,VirtualBox VMs,WebstormProjects,Tools,node_modules,.git}" .',
+      \ 'dir': '~',
+      \ 'sink': 'ProjectFiles',
+      \ 'options': '--prompt Projects: '
+      \}))
 
 command! -nargs=1 ProjectFiles call fzf#run(fzf#wrap({
-            \ 'source': 'fd -t f --hidden -E ".git/" .',
-            \ 'dir': '~/'. <f-args> ,
-            \ 'options': '--prompt '. <f-args> .'/'
-            \}))
+      \ 'source': 'fd -t f --hidden -E ".git/" .',
+      \ 'dir': '~/'. <f-args> ,
+      \ 'options': '--prompt '. <f-args> .'/'
+      \}))
 " }}}
 Plug 'junegunn/fzf.vim'
 " editorconfig-vim  {{{
 Plug 'editorconfig/editorconfig-vim'
- 
+
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
 " }}}
@@ -471,7 +471,7 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 Plug 'ncm2/ncm2' |Plug 'roxma/nvim-yarp' |Plug 'roxma/vim-hug-neovim-rpc' |Plug 'ncm2/ncm2-path'
 " au User Ncm2Plugin call ncm2#register_source({
 "             \ 'name' : 'css',
-"             \ 'priority': 9, 
+"             \ 'priority': 9,
 "             \ 'subscope_enable': 1,
 "             \ 'scope': ['css','scss'],
 "             \ 'mark': 'css',
@@ -518,7 +518,7 @@ let g:codi#width = 80
 "Plug 'mbbill/undotree' " XXX barely used
 "Plug 'ternjs/tern_for_vim', { 'do': 'npm i'}
 "Plug 'vim-airline/vim-airline' | "Plug 'vim-airline/vim-airline-themes' " XXX slow!
-"Plug 'wikitopian/hardmode' " XXX hjkl are sometimes really uesful 
+"Plug 'wikitopian/hardmode' " XXX hjkl are sometimes really uesful
 "Plug 'xuyuanp/nerdtree-git-plugin' "XXX messy tree
 "
 " autocmd FileType js UltiSnipsAddFiletypes javascript-react
@@ -530,17 +530,17 @@ call plug#end()
 " }}}
 " Autocommands     {{{
 if !exists("autocommands_loaded")
-    let autocommands_loaded = 1
-    autocmd BufEnter * call LC_maps()
-          \ | call LayerSet()
-          \ | call ncm2#enable_for_buffer() " enable ncm2 for all buffer
-    autocmd TextChangedI * call ncm2#auto_trigger()
-    autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
-    autocmd CompleteDone * silent! pclose
-    autocmd User AsyncRunStop let g:asyncrun_status=""
-    autocmd User AsyncRunStart let g:asyncrun_status="❁ "
-    " autocmd FileType fzf set laststatus=0 noshowmode noruler
-    "             \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+  let autocommands_loaded = 1
+  autocmd BufEnter * call LC_maps()
+        \ | call LayerSet()
+        \ | call ncm2#enable_for_buffer() " enable ncm2 for all buffer
+  autocmd TextChangedI * call ncm2#auto_trigger()
+  autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+  autocmd CompleteDone * silent! pclose
+  autocmd User AsyncRunStop let g:asyncrun_status=""
+  autocmd User AsyncRunStart let g:asyncrun_status="❁ "
+  " autocmd FileType fzf set laststatus=0 noshowmode noruler
+  "             \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 endif
 " }}}
 " Settings  {{{
@@ -586,10 +586,10 @@ set wrapmargin=0
 
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 inoremap <expr> <C-Space> pumvisible() \|\| &omnifunc == '' ?
-            \ "\<lt>C-n>" :
-            \ "\<lt>C-x>\<lt>C-o><c-r>=pumvisible() ?" .
-            \ "\"\\<lt>c-n>\\<lt>c-p>\\<lt>c-n>\" :" .
-            \ "\" \\<lt>bs>\\<lt>C-n>\"\<CR>"
+      \ "\<lt>C-n>" :
+      \ "\<lt>C-x>\<lt>C-o><c-r>=pumvisible() ?" .
+      \ "\"\\<lt>c-n>\\<lt>c-p>\\<lt>c-n>\" :" .
+      \ "\" \\<lt>bs>\\<lt>C-n>\"\<CR>"
 
 " set undolevels=1000
 " set undoreload=10000
@@ -598,12 +598,12 @@ let &runtimepath.=','.vimDir
 
 " Keep undo history across sessions by storing it in a file
 if has('persistent_undo')
-    let myUndoDir = expand(vimDir . '/undodir')
-    " Create dirs
-    call system('mkdir ' . vimDir)
-    call system('mkdir ' . myUndoDir)
-    let &undodir = myUndoDir
-    set undofile
+  let myUndoDir = expand(vimDir . '/undodir')
+  " Create dirs
+  call system('mkdir ' . vimDir)
+  call system('mkdir ' . myUndoDir)
+  let &undodir = myUndoDir
+  set undofile
 endif
 
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum" " something to do with vim in a terminal
@@ -612,14 +612,14 @@ let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 color snazzier
 
 if has('gui_running')
-    set guioptions=ec
-    " set macligatures XXX SLOW
-    set guifont=Fira\ Code:h12
-    set termguicolors
-    " set guifont=Hack\ Regular:h11
-    set lines=50 columns=108 linespace=3
-    set shellcmdflag=-ic
-    let $BASH_ENV = "~/.bash_aliases"
+  set guioptions=ec
+  " set macligatures XXX SLOW
+  set guifont=Fira\ Code:h12
+  set termguicolors
+  " set guifont=Hack\ Regular:h11
+  set lines=50 columns=108 linespace=3
+  set shellcmdflag=-ic
+  let $BASH_ENV = "~/.bash_aliases"
 endif
 
 " }}}
@@ -633,9 +633,9 @@ nnoremap j gj
 nnoremap k gk
 nnoremap <C-N> <Plug>VinegarUp
 nnoremap <leader><leader> :
-" These two allow us to move around lines visually. So if 
+" These two allow us to move around lines visually. So if
 " there's a very long line that gets visually wrapped to
-" two lines, j won't skip over the 'fake' part of the visual 
+" two lines, j won't skip over the 'fake' part of the visual
 " line in favor of the next 'real' line.
 
 map <F4> :set spell!<CR><Bar>:echo "Spell Check: " . strpart("OffOn", 3 * &spell, 3)<CR>
@@ -673,7 +673,7 @@ nnoremap <silent> <leader>- :exe "vertical resize -10"<CR>
 " a - AsyncRun {{{
 let g:asyncrun_open = 8
 let g:lmap.a = { 'name': ' -- Async' }
-map <leader>aa :AsyncRun 
+map <leader>aa :AsyncRun
 map <leader>ac :ccl<CR>
 map <leader>ap :AsyncRun <C-r>0<CR>
 
@@ -694,7 +694,7 @@ map <leader>bk :Bkill!<CR>
 map <leader>bl :Buffers<CR>
 map <leader>bn :bnext<CR>
 map <leader>bp :bprevious<CR>
-map <leader>bq :DeleteFileAndBuff<CR> 
+map <leader>bq :DeleteFileAndBuff<CR>
 command! DeleteFileAndBuff :call delete(expand('%')) | bd
 map <leader>br :rename<space>
 map <leader>bt :b#<CR>
@@ -841,27 +841,27 @@ command! FindWordUnderCursor :call fzf#vim#ag(expand("<cword>"))
 let g:lmap.t = { 'name': ' -- Terminal' }
 map <leader>tt :ter ++curwin<CR>
 map <leader>tT :vert term<CR>
-function! DefaultTerminalOptions(name) 
-    let t_options = {
-            \ 'term_name': a:name,
-            \ 'hidden': 1,
-            \ 'term_finish': 'close',
-            \}
-    return t_options
+function! DefaultTerminalOptions(name)
+  let t_options = {
+        \ 'term_name': a:name,
+        \ 'hidden': 1,
+        \ 'term_finish': 'close',
+        \}
+  return t_options
 endfunction
 
 let g:lmap.t.s = { 'name': ' -- Script' }
 map <leader>tss :call term_start(
-            \ [&shell, &shellcmdflag, "cd $SKYPORT_GRAPHQL_DIR; start_skyport"],
-            \ DefaultTerminalOptions('t:skyport'))<CR>:echo 'skyport started'<CR>
+      \ [&shell, &shellcmdflag, "cd $SKYPORT_GRAPHQL_DIR; start_skyport"],
+      \ DefaultTerminalOptions('t:skyport'))<CR>:echo 'skyport started'<CR>
 
 map <leader>tsa :call term_start(
-            \ [&shell, &shellcmdflag, "cd ~/Service/pages-apps; yarn start:dev"],
-            \ DefaultTerminalOptions('t:papps'))<CR>:echo 'papps started'<CR>
+      \ [&shell, &shellcmdflag, "cd ~/Service/pages-apps; yarn start:dev"],
+      \ DefaultTerminalOptions('t:papps'))<CR>:echo 'papps started'<CR>
 
 map <leader>tsl :call term_start(
-            \ [&shell, &shellcmdflag, "cd ~/Service/pages-lib; yarn watch"],
-            \ DefaultTerminalOptions('t:papps'))<CR>:echo 'papps started'<CR>
+      \ [&shell, &shellcmdflag, "cd ~/Service/pages-lib; yarn watch"],
+      \ DefaultTerminalOptions('t:papps'))<CR>:echo 'papps started'<CR>
 
 " }}}
 " T - Tags {{{
@@ -900,8 +900,8 @@ map <leader>ww :vsplit<CR>
 " }}}
 " - - Leaderguide Setup {{{
 function! s:my_displayfunc()
-    let g:leaderGuide#displayname = substitute(g:leaderGuide#displayname, '\c<cr>$', '', '')
-    let g:leaderGuide#displayname = substitute(g:leaderGuide#displayname, '^<Plug>', '', '')
+  let g:leaderGuide#displayname = substitute(g:leaderGuide#displayname, '\c<cr>$', '', '')
+  let g:leaderGuide#displayname = substitute(g:leaderGuide#displayname, '^<Plug>', '', '')
 endfunction
 
 let g:leaderGuide_displayfunc = [function("s:my_displayfunc")]
@@ -914,115 +914,115 @@ vnoremap <silent> <leader> :<c-u>LeaderGuideVisual '<Space>'<CR>
 " Functions  {{{
 " ResiseTagBar {{{
 function! ResiseTagBar(size)
-    let g:tagbar_width = a:size
-    exe "TagbarToggle"
-    exe "TagbarOpen"
+  let g:tagbar_width = a:size
+  exe "TagbarToggle"
+  exe "TagbarOpen"
 endfunction
 " }}}
 " StripTrailingWhitespaces {{{
 " via: http://rails-bestpractices.com/posts/60-remove-trailing-whitespace
 " Strip trailing whitespace
 function! StripTrailingWhitespaces()
-    " Preparation: save last search, and cursor position.
-    let _s=@/
-    let l = line(".")
-    let c = col(".")
-    " Do the business:
-    %s/\s\+$//e
-    " Clean up: restore previous search history, and cursor position
-    let @/=_s
-    call cursor(l, c)
+  " Preparation: save last search, and cursor position.
+  let _s=@/
+  let l = line(".")
+  let c = col(".")
+  " Do the business:
+  %s/\s\+$//e
+  " Clean up: restore previous search history, and cursor position
+  let @/=_s
+  call cursor(l, c)
 endfunction
 " }}}
 " DiffWithSaved {{{
 function! DiffWithSaved()
-    let filetype=&ft
-    diffthis
-    vnew | r # | normal! 1Gdd
-    diffthis
-    exe "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . filetype
+  let filetype=&ft
+  diffthis
+  vnew | r # | normal! 1Gdd
+  diffthis
+  exe "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . filetype
 endfunction
 " }}}
 " Format {{{
 function! Format()
-    let _s=@/
-    let l = line(".")
-    let c = col(".")
-    " Do the business:
-    %s/\s\+$//e
-    " Clean up: restore previous search history, and cursor position
-    let @/=_s
-    normal gg=G
-    call cursor(l, c)
+  let _s=@/
+  let l = line(".")
+  let c = col(".")
+  " Do the business:
+  %s/\s\+$//e
+  " Clean up: restore previous search history, and cursor position
+  let @/=_s
+  normal gg=G
+  call cursor(l, c)
 endfunction
 " }}}
 " ChangeRootDir {{{
-function! ChangeRootDir() 
-    let root = FindRootDirectory()
-    exe ':cd '.root
+function! ChangeRootDir()
+  let root = FindRootDirectory()
+  exe ':cd '.root
 endfunction
 " }}}
 " VimFoldText {{{
 function! VimFoldText()
-    let s:info = '('.string(v:foldend-v:foldstart).' l)'
+  let s:info = '('.string(v:foldend-v:foldstart).' l)'
 
-    if v:foldlevel == 1
-        let s:symbol = ' ● '
-    elseif v:foldlevel == 2
-        let s:symbol = ' ◇ '
-    elseif v:foldlevel == 3
-        let s:symbol = ' ▪ '
-    endif
+  if v:foldlevel == 1
+    let s:symbol = ' ● '
+  elseif v:foldlevel == 2
+    let s:symbol = ' ◇ '
+  elseif v:foldlevel == 3
+    let s:symbol = ' ▪ '
+  endif
 
-    let s:line = getline(v:foldstart)[2:-4]
+  let s:line = getline(v:foldstart)[2:-4]
 
-    return s:symbol . s:line .repeat(' ', 80 - strwidth(s:line) - len(s:info)).s:info
+  return s:symbol . s:line .repeat(' ', 80 - strwidth(s:line) - len(s:info)).s:info
 endfunction
 " }}}
 " Layer_Functions {{{
 function! LayerSet()
-    let cleanFiletype = substitute(&ft, "\.jsx", "", "")
-    let filetype = substitute(cleanFiletype, ".", "\\U\\0", "")
-    if exists("*Layer".filetype)
-        call CleanMap('l')
-        exe "call Layer".filetype."()"
-    endif
+  let cleanFiletype = substitute(&ft, "\.jsx", "", "")
+  let filetype = substitute(cleanFiletype, ".", "\\U\\0", "")
+  if exists("*Layer".filetype)
+    call CleanMap('l')
+    exe "call Layer".filetype."()"
+  endif
 endfunction
 
 function! CleanMap(letter)
-    for key in ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
-        exe 'map <leader>'.a:letter.key.' <Nop>'
-        exe 'unmap <leader>'.a:letter.key
-    endfor
+  for key in ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
+    exe 'map <leader>'.a:letter.key.' <Nop>'
+    exe 'unmap <leader>'.a:letter.key
+  endfor
 endfunction
 
 function! LayerVim()
-    let g:lmap.l = { 'name': ' -- L:Vimscript' }
-    map <leader>ll yiwoecho '<C-r>0:'. <C-r>0<C-[>k
+  let g:lmap.l = { 'name': ' -- L:Vimscript' }
+  map <leader>ll yiwoecho '<C-r>0:'. <C-r>0<C-[>k
 endfunction
 
 function! LayerJavascript()
-    let g:lmap.l = { 'name': ' -- L:Javascript' }
-    map <leader>ll yiwoconsole.log('\n<C-r>0:', <C-r>0);<C-[>k
-    map <leader>ld :%s/.*console.log.*\n//g<CR>
+  let g:lmap.l = { 'name': ' -- L:Javascript' }
+  map <leader>ll yiwoconsole.log('\n<C-r>0:', <C-r>0);<C-[>k
+  map <leader>ld :%s/.*console.log.*\n//g<CR>
 endfunction
 
 function! LayerRust()
-    let g:lmap.l = { 'name': ' -- L:Rust' }
-    map <leader>lf :call TerminalVert("rustc ".expand('%:p')." && ".expand('%:p:r'), expand('%:t'))<CR>
+  let g:lmap.l = { 'name': ' -- L:Rust' }
+  map <leader>lf :call TerminalVert("rustc ".expand('%:p')." && ".expand('%:p:r'), expand('%:t'))<CR>
 endfunction
 
 function! TerminalVert(cmd, ...)
-    let name = get(a:, 1, 'quick')
-    call term_start([&shell, &shellcmdflag, a:cmd], {
-            \ 'term_name': 't:'.name,
-            \ 'vertical': 1,
-            \})
+  let name = get(a:, 1, 'quick')
+  call term_start([&shell, &shellcmdflag, a:cmd], {
+        \ 'term_name': 't:'.name,
+        \ 'vertical': 1,
+        \})
 
-    au BufLeave <buffer> wincmd p
-    nnoremap <buffer> <Enter> :q<CR>
-    redraw
-    echo "Press <Enter> to exit terminal (<Ctrl-C> first if command is still running)"
+  au BufLeave <buffer> wincmd p
+  nnoremap <buffer> <Enter> :q<CR>
+  redraw
+  echo "Press <Enter> to exit terminal (<Ctrl-C> first if command is still running)"
 endfunction
 " }}}
 " }}}
