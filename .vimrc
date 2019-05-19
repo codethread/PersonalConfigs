@@ -288,14 +288,13 @@ let g:lightline = {
             \ 'colorscheme': 'snazzier',
             \ 'enable': {
             \   'statusline': 1,
-            \   'tabline': 0
+            \   'tabline': 1
             \ },
             \ 'active': {
             \   'left': [ [ 'mode', 'paste' ],
-            \             [ 'readonly', 'filepath', 'modified' ] ],
+            \             [ 'readonly', 'filename', 'modified' ] ],
             \   'right': [ [ 'lineinfo' ],
             \            [ 'filetype' ],
-            \            [ 'gitbranch' ],
             \            [ 'asyncJob' ] ],
             \ },
             \ 'component_function': {
@@ -307,12 +306,41 @@ let g:lightline = {
             \ }
 
 let g:lightline.inactive = {
-            \ 'left': [ [ 'filepath', 'modified' ] ],
+            \ 'left': [ [ 'relativepath', 'modified' ] ],
+            \ 'right': [
+            \   [ 'lineinfo' ],
+            \   [ 'filetype' ],
+            \ ],
             \ }
-" let g:lightline.tabline = {
-"   \   'left': [ ['tabs'] ],
-"   \   'right': [ ['close'] ]
-"   \ }
+
+let g:lightline.tabline = {
+            \   'left': [ ['tabs'] ],
+            \   'right': [ 
+            \       ['gitbranch'],
+            \       ['filepath']
+            \   ]
+            \ }
+
+let g:lightline.tab = {
+            \ 'active': [ 'tabnum', 'filename', 'modified' ],
+            \ 'inactive': [ 'tabnum', 'filename', 'modified' ] }
+
+let g:lightline.separator = { 'left': ' ', 'right': ' ' }
+let g:lightline.subseparator = { 'left': '|', 'right': '|' }
+
+let g:lightline.mode_map = {
+            \ 'n' : '',
+            \ 'i' : '',
+            \ 'R' : '',
+            \ 'v' : '',
+            \ 'V' : '',
+            \ "\<C-v>": '',
+            \ 'c' : 'COMMAND',
+            \ 's' : 'SELECT',
+            \ 'S' : 'S-LINE',
+            \ "\<C-s>": 'S-BLOCK',
+            \ 't': '',
+            \ }
 
 """"""""""""""""""""
 "  Mappings"
