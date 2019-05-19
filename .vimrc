@@ -132,7 +132,7 @@ if !exists("autocommands_loaded")
     autocmd BufEnter * call LayerSet()   
 
     autocmd CompleteDone * silent! pclose
-    autocmd User AsyncRunStop let g:asyncrun_status="✓"
+    autocmd User AsyncRunStop let g:asyncrun_status=""
     autocmd User AsyncRunStart let g:asyncrun_status="❁ "
     " autocmd FileType fzf set laststatus=0 noshowmode noruler
     "             \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
@@ -272,6 +272,16 @@ function! LightlineFugitive()
     return ''
 endfunction
 
+function! LightlineTabMod(n)
+  let winnr = tabpagewinnr(a:n)
+  return gettabwinvar(a:n, winnr, '&modified') ? '' : gettabwinvar(a:n, winnr, '&modifiable') ? '' : ''
+endfunction
+
+function! LightlineTabRead(n)
+  let winnr = tabpagewinnr(a:n)
+  return gettabwinvar(a:n, winnr, '&readonly') ? '' : ''
+endfunction
+
 command! LightlineReload call LightlineReload()
 
 function! LightlineReload()
@@ -280,47 +290,74 @@ function! LightlineReload()
     call lightline#update()
 endfunction
 
-let g:lightline = {
-            \ 'colorscheme': 'snazzier',
-            \ 'enable': {
-            \   'statusline': 1,
-            \   'tabline': 1
-            \ },
-            \ 'active': {
-            \   'left': [ [ 'mode', 'paste', 'spell' ],
-            \             [ 'readonly', 'filename', 'modified' ] ],
-            \   'right': [ [ 'lineinfo' ],
-            \            [ 'filetype' ],
-            \            [ 'asyncJob' ] ],
-            \ },
-            \ 'component_function': {
-            \   'asyncJob': 'AsyncJobStatus',
-            \   'gitbranch': 'LightlineFugitive',
-            \   'filepath': 'LightlineFilename',
-            \   'filetype': 'LightlineFiletype',
-            \ },
-            \ 'inactive': {
-            \ 'left': [ [ 'relativepath', 'modified' ] ],
+let g:lightline = { 'colorscheme': 'snazzier' }
+let g:lightline.active = { 
+            \ 'left': [
+            \   [ 
+            \     'mode', 
+            \     'paste', 
+            \     'spell' 
+            \   ], 
+            \   [ 
+            \     'filename', 
+            \     'readonlyS', 
+            \     'modifiedS', 
+            \   ]
+            \ ], 
+            \ 'right': [
+            \   [ 'lineinfo' ],
+            \   [ 'filetype' ], 
+            \   [ 'asyncJob' ],
+            \ ], 
+            \}
+
+let g:lightline.inactive = { 
+            \ 'left': [ 
+            \   [ 'relativepath'], 
+            \   [ 'modifiedS' ] 
+            \ ],
             \ 'right': [
             \   [ 'lineinfo' ],
             \   [ 'filetype' ],
             \ ],
-            \ },
-            \ 'tabline': {
-            \   'left': [ ['tabs'] ],
-            \   'right': [ 
-            \       ['gitbranch'],
-            \       ['filepath']
-            \   ]
-            \ },
-            \ 'tab': {
-            \ 'active': [ 'tabnum', 'filename', 'modified' ],
-            \ 'inactive': [ 'tabnum', 'filename', 'modified' ] 
-            \ },
+            \}
+
+let g:lightline.component = { 'readonlyS': '%{&readonly?"":""}', 'modifiedS': '%{&modified?" ":""}', }
+
+let g:lightline.tab_component_function = { 'readonlyS': 'LightlineTabRead', 'modifiedS': 'LightlineTabMod', }
+
+let g:lightline.component_function = { 
+            \ 'asyncJob': 'AsyncJobStatus',
+            \ 'gitbranch': 'LightlineFugitive',
+            \ 'filepath': 'LightlineFilename',
+            \ 'filetype': 'LightlineFiletype',
+            \}
+
+let g:lightline.tabline = { 
+            \ 'left': [
+            \   ['tabs']
+            \ ],
+            \ 'right': [ 
+            \   ['gitbranch'],
+            \   ['filepath'],
+            \ ] 
+            \}
+
+let g:lightline.tab = { 
+            \ 'active': [ 
+            \   'tabnum',
+            \   'filename',
+            \   'modifiedS',
+            \ ], 
+            \ 'inactive': [
+            \   'tabnum',
+            \   'filename',
+            \   'modifiedS',
+            \ ]
             \}
 
 let g:lightline.separator = { 'left': ' ', 'right': ' ' }
-let g:lightline.subseparator = { 'left': '', 'right': '' }
+let g:lightline.subseparator = { 'left': '', 'right': '' }
 let g:lightline.mode_map = {
             \ 'n' : '',
             \ 'i' : '',
