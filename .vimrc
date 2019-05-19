@@ -48,13 +48,10 @@ Plug 'thoughtbot/vim-rspec'
 Plug 'w0rp/ale' " async linting
 
 "" GUI changes
-" Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] } | Plug 'ryanoasis/vim-devicons'
-" Plug 'Shougo/denite.nvim' " XXX what's using this?
 Plug 'Yggdroot/indentLine'
 Plug 'airblade/vim-gitgutter'
 Plug 'chrisbra/Colorizer'
 Plug 'connorholyday/vim-snazzy'
-Plug 'gcmt/taboo.vim' " utils for handling tabs
 Plug 'hecal3/vim-leader-guide'
 Plug 'itchyny/lightline.vim'
 Plug 'junegunn/goyo.vim'
@@ -125,7 +122,6 @@ if !exists("autocommands_loaded")
 
     autocmd BufEnter * call LC_maps()
                 \ | call ncm2#enable_for_buffer() " enable ncm2 for all buffer
-                \ | if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) q endif
 
     autocmd TextChangedI * call ncm2#auto_trigger()
 
@@ -291,7 +287,7 @@ let g:lightline = {
             \   'tabline': 1
             \ },
             \ 'active': {
-            \   'left': [ [ 'mode', 'paste' ],
+            \   'left': [ [ 'mode', 'paste', 'spell' ],
             \             [ 'readonly', 'filename', 'modified' ] ],
             \   'right': [ [ 'lineinfo' ],
             \            [ 'filetype' ],
@@ -303,34 +299,31 @@ let g:lightline = {
             \   'filepath': 'LightlineFilename',
             \   'filetype': 'LightlineFiletype',
             \ },
-            \ }
-
-let g:lightline.inactive = {
+            \ 'inactive': {
             \ 'left': [ [ 'relativepath', 'modified' ] ],
             \ 'right': [
             \   [ 'lineinfo' ],
             \   [ 'filetype' ],
             \ ],
-            \ }
-
-let g:lightline.tabline = {
+            \ },
+            \ 'tabline': {
             \   'left': [ ['tabs'] ],
             \   'right': [ 
             \       ['gitbranch'],
             \       ['filepath']
             \   ]
-            \ }
-
-let g:lightline.tab = {
+            \ },
+            \ 'tab': {
             \ 'active': [ 'tabnum', 'filename', 'modified' ],
-            \ 'inactive': [ 'tabnum', 'filename', 'modified' ] }
+            \ 'inactive': [ 'tabnum', 'filename', 'modified' ] 
+            \ },
+            \}
 
 let g:lightline.separator = { 'left': ' ', 'right': ' ' }
-let g:lightline.subseparator = { 'left': '|', 'right': '|' }
-
+let g:lightline.subseparator = { 'left': '', 'right': '' }
 let g:lightline.mode_map = {
-            \ 'n' : '',
-            \ 'i' : '',
+            \ 'n' : '',
+            \ 'i' : '',
             \ 'R' : '',
             \ 'v' : '',
             \ 'V' : '',
@@ -339,7 +332,7 @@ let g:lightline.mode_map = {
             \ 's' : 'SELECT',
             \ 'S' : 'S-LINE',
             \ "\<C-s>": 'S-BLOCK',
-            \ 't': '',
+            \ 't': ' ',
             \ }
 
 """"""""""""""""""""
