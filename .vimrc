@@ -539,6 +539,7 @@ if !exists("autocommands_loaded")
   autocmd CompleteDone * silent! pclose
   autocmd User AsyncRunStop let g:asyncrun_status=""
   autocmd User AsyncRunStart let g:asyncrun_status="❁ "
+  autocmd QuickFixCmdPost * call asyncrun#quickfix_toggle(8, 1)
   " autocmd FileType fzf set laststatus=0 noshowmode noruler
   "             \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 endif
@@ -673,9 +674,10 @@ nnoremap <silent> <leader>- :exe "vertical resize -10"<CR>
 " a - AsyncRun {{{
 let g:asyncrun_open = 8
 let g:lmap.a = { 'name': ' -- Async' }
-map <leader>aa :AsyncRun
+map <leader>ar :AsyncRun
 map <leader>ac :ccl<CR>
 map <leader>ap :AsyncRun <C-r>0<CR>
+map <leader>aa :call asyncrun#quickfix_toggle(8)<cr>
 
 " }}}
 " A - AsyncStop {{{
