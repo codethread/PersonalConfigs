@@ -358,8 +358,9 @@ let g:polyglot_disabled = ['typescript']
 let g:javascript_plugin_jsdoc = 1
 " }}}
 Plug 'moll/vim-node'
-Plug 'peitalin/vim-jsx-typescript' "|Plug 'Quramy/tsuquyomi' XX play around with this
-Plug 'HerringtonDarkholme/yats.vim' " typescript highlighter
+" XXX seem to be turning js to ts
+" Plug 'peitalin/vim-jsx-typescript' "|Plug 'Quramy/tsuquyomi' XX play around with this
+" Plug 'HerringtonDarkholme/yats.vim' " typescript highlighter
 Plug 'shirk/vim-gas'
 
 " }}}
@@ -391,7 +392,6 @@ let g:rooter_resolve_links = 1
 " exposes FindRootDirectory()
 " }}}
 Plug 'tpope/vim-projectionist'
-Plug 'rking/ag.vim'
 " fzf {{{
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 let g:fzf_layout = { 'window': '9split' }
@@ -564,7 +564,7 @@ set lazyredraw                              " redraw only when we need to.
 set mouse=a
 set noshowmode
 set nrformats-=octal
-" set number " XXX challenge
+set number " XXX challenge
 set omnifunc=LanguageClient#complete
 set path+=**
 set regexpengine=1                          " TODO really slow without this??
@@ -630,8 +630,8 @@ let mapleader = " "
 ino jk <esc>
 cno jk <C-c>
 " move vertically by visual line
-nnoremap j gj
-nnoremap k gk
+nnoremap j j
+nnoremap k k
 nnoremap <C-N> <Plug>VinegarUp
 nnoremap <leader><leader> :
 " These two allow us to move around lines visually. So if
@@ -797,9 +797,9 @@ map <leader>pn :TestNearest<CR>
 " P - Projects {{{
 let g:lmap.P = { 'name': ' -- Projects' }
 map <Plug>Find_Project :FZF ~<CR>
-map <leader>PP <Plug>Find_Project
-map <leader>PG :Projects<CR>
-map <leader>PS :mksession<CR>
+map <leader>PP :Projects<CR>
+map <leader>Pg <Plug>Find_Project
+map <leader>Ps :mksession<CR>
 
 " }}}
 " o - Quicktask {{{

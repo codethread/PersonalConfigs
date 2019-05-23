@@ -1,146 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>AMApplicationBuild</key>
-	<string>444.42</string>
-	<key>AMApplicationVersion</key>
-	<string>2.9</string>
-	<key>AMDocumentVersion</key>
-	<string>2</string>
-	<key>actions</key>
-	<array>
-		<dict>
-			<key>action</key>
-			<dict>
-				<key>AMAccepts</key>
-				<dict>
-					<key>Container</key>
-					<string>List</string>
-					<key>Optional</key>
-					<true/>
-					<key>Types</key>
-					<array>
-						<string>com.apple.applescript.object</string>
-					</array>
-				</dict>
-				<key>AMActionVersion</key>
-				<string>1.0.2</string>
-				<key>AMApplication</key>
-				<array>
-					<string>Automator</string>
-				</array>
-				<key>AMParameterProperties</key>
-				<dict>
-					<key>source</key>
-					<dict/>
-				</dict>
-				<key>AMProvides</key>
-				<dict>
-					<key>Container</key>
-					<string>List</string>
-					<key>Types</key>
-					<array>
-						<string>com.apple.applescript.object</string>
-					</array>
-				</dict>
-				<key>ActionBundlePath</key>
-				<string>/System/Library/Automator/Run AppleScript.action</string>
-				<key>ActionName</key>
-				<string>Run AppleScript</string>
-				<key>ActionParameters</key>
-				<dict>
-					<key>source</key>
-					<string>my closeNotif()on closeNotif()		tell application "System Events"		tell process "Notification Center"			set theWindows to every window			repeat with i from 1 to number of items in theWindows				set this_item to item i of theWindows				try					click button 1 of this_item				on error										my closeNotif()				end try			end repeat		end tell	end tell	end closeNotif</string>
-				</dict>
-				<key>BundleIdentifier</key>
-				<string>com.apple.Automator.RunScript</string>
-				<key>CFBundleVersion</key>
-				<string>1.0.2</string>
-				<key>CanShowSelectedItemsWhenRun</key>
-				<false/>
-				<key>CanShowWhenRun</key>
-				<true/>
-				<key>Category</key>
-				<array>
-					<string>AMCategoryUtilities</string>
-				</array>
-				<key>Class Name</key>
-				<string>RunScriptAction</string>
-				<key>InputUUID</key>
-				<string>9630703D-2772-42D1-8234-8D6E65793304</string>
-				<key>Keywords</key>
-				<array>
-					<string>Run</string>
-				</array>
-				<key>OutputUUID</key>
-				<string>48947B40-01E4-4398-91E9-21AD819F6B3C</string>
-				<key>UUID</key>
-				<string>554EF132-76C6-42B1-A0BE-4F59F8E4C558</string>
-				<key>UnlocalizedApplications</key>
-				<array>
-					<string>Automator</string>
-				</array>
-				<key>arguments</key>
-				<dict>
-					<key>0</key>
-					<dict>
-						<key>default value</key>
-						<string>on run {input, parameters}
-	
-	(* Your script goes here *)
-	
-	return input
-end run</string>
-						<key>name</key>
-						<string>source</string>
-						<key>required</key>
-						<string>0</string>
-						<key>type</key>
-						<string>0</string>
-						<key>uuid</key>
-						<string>0</string>
-					</dict>
-				</dict>
-				<key>isViewVisible</key>
-				<true/>
-				<key>location</key>
-				<string>642.000000:368.000000</string>
-				<key>nibPath</key>
-				<string>/System/Library/Automator/Run AppleScript.action/Contents/Resources/Base.lproj/main.nib</string>
-			</dict>
-			<key>isViewVisible</key>
-			<true/>
-		</dict>
-	</array>
-	<key>connectors</key>
-	<dict/>
-	<key>workflowMetaData</key>
-	<dict>
-		<key>applicationBundleIDsByPath</key>
-		<dict/>
-		<key>applicationPaths</key>
-		<array/>
-		<key>inputTypeIdentifier</key>
-		<string>com.apple.Automator.nothing</string>
-		<key>outputTypeIdentifier</key>
-		<string>com.apple.Automator.nothing</string>
-		<key>presentationMode</key>
-		<integer>11</integer>
-		<key>processesInput</key>
-		<integer>0</integer>
-		<key>serviceInputTypeIdentifier</key>
-		<string>com.apple.Automator.nothing</string>
-		<key>serviceOutputTypeIdentifier</key>
-		<string>com.apple.Automator.nothing</string>
-		<key>serviceProcessesInput</key>
-		<integer>0</integer>
-		<key>systemImageName</key>
-		<string>NSActionTemplate</string>
-		<key>useAutomaticInputType</key>
-		<integer>0</integer>
-		<key>workflowTypeIdentifier</key>
-		<string>com.apple.Automator.servicesMenu</string>
-	</dict>
-</dict>
-</plist>
