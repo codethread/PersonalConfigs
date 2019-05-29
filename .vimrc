@@ -15,17 +15,23 @@
 " Plugins {{{
 " Plugin Setup {{{
 if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   autocmd VimEnter *PlugInstall --sync | source $MYVIMRC
 endif
 " }}}
 filetype plugin indent on " Needs to go before autocmds
 syntax enable " Needs to go before autocmds
 call plug#begin('~/.vim/plugged')
-" Editing  {{{
 Plug 'christoomey/vim-sort-motion' " use gs
+Plug 'danro/rename.vim'
+Plug 'godlygeek/tabular'
+" vim-easy-align {{{
 Plug 'junegunn/vim-easy-align'
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+" }}}
 " undotree {{{
 Plug 'mbbill/undotree'
 " The following settings relate to undo, not undotree, but seems
@@ -46,7 +52,6 @@ if has('persistent_undo')
 endif
 " }}}
 Plug 'wellle/targets.vim' " adds extra dia delete in arg https://github.com/wellle/targets.vim/blob/master/cheatsheet.md
-
 " vim-sneak  {{{
 Plug 'justinmk/vim-sneak'
 let g:sneak#s_next = 1
@@ -90,8 +95,6 @@ nnoremap <C-w>gj :<C-U>call window#join('belowright split', v:count) <BAR>normal
 nnoremap <C-w>gk :<C-U>call window#join('aboveleft split', v:count) <BAR>normal! 100zh<CR>
 
 " }}}
-" }}}
-" Linting / testing  {{{
 " vim-test  {{{
 Plug 'janko/vim-test'
 function! SkyportTransform(cmd) abort
@@ -147,8 +150,6 @@ let g:ale_sign_error = '✘'
 let g:ale_sign_warning = '▹'
 " let g:ale_fix_on_save = 1
 " }}}
-" }}}
-" GUI changes  {{{
 " indentLine  {{{
 Plug 'Yggdroot/indentLine'
 let g:indentLine_char = get(g:, 'indentLine_char', '┊')
@@ -327,8 +328,6 @@ let g:tagbar_width = 30
 let g:tagbar_compact = 0
 let g:tagbar_autopreview = 0
 " }}}
-" }}}
-" Languages  {{{
 "Plug 'styled-components/vim-styled-components'
 " LanguageClient-neovim' {{{
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
@@ -371,21 +370,11 @@ augroup END
 " \ 'java': ['/usr/local/bin/jdtls'], life's too short to get this to work
 
 " }}}
-
-" " vim-polyglot' {{{
-" Plug 'sheerun/vim-polyglot', { 'tag': 'v3.7.0' } " https://github.com/sheerun/vim-polyglot/issues/387
-" let g:vim_markdown_conceal = 0
-" let g:jsx_ext_required = 0
-" let g:polyglot_disabled = ['typescript', 'rust']
-" let g:javascript_plugin_jsdoc = 1
-" " }}}
-
 " vim-javascript {{{
 Plug 'pangloss/vim-javascript'
 let g:javascript_plugin_jsdoc = 1
 " }}}
-
-" vim-javascript {{{
+" vim-jsx {{{
 Plug 'mxw/vim-jsx'
 let g:jsx_ext_required = 0
 " }}}
@@ -398,14 +387,10 @@ let g:vim_markdown_fenced_languages = ['js=javascript']
 " }}}
 Plug 'rust-lang/rust.vim'
 Plug 'moll/vim-node'
-" XXX seem to be turning js to ts
-" Plug 'peitalin/vim-jsx-typescript' "|Plug 'Quramy/tsuquyomi' XX play around with this
 Plug 'HerringtonDarkholme/yats.vim' " typescript highlighter
 Plug 'peitalin/vim-jsx-typescript'
+" Plug 'peitalin/vim-jsx-typescript' "|Plug 'Quramy/tsuquyomi' XXX play around with this
 Plug 'shirk/vim-gas'
-
-" }}}
-" Utilities  {{{
 " asyncrun  {{{
 Plug 'skywind3000/asyncrun.vim'
 augroup my_asyncrun
@@ -428,8 +413,6 @@ let g:hardtime_default_on = 0
 
 " }}}
 Plug 'vim-scripts/ParseJSON'
-" }}}
-" Project management  {{{
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-vinegar'
@@ -519,8 +502,6 @@ Plug 'junegunn/fzf.vim'
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 " }}}
-" }}}
-" Completion  {{{
 " ncm2 {{{
 " Plug 'ncm2/ncm2' |Plug 'roxma/nvim-yarp' |Plug 'roxma/vim-hug-neovim-rpc' |Plug 'ncm2/ncm2-path'
 " au User Ncm2Plugin call ncm2#register_source({
@@ -541,25 +522,15 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 "   autocmd CompleteDone * silent! pclose
 " augroup END
 " }}}
-" }}}
-" Apps  {{{
-" vim-quicktask  {{{
 Plug 'aaronbieber/vim-quicktask'
-" }}}
 " calendar.vim  {{{
 Plug 'itchyny/calendar.vim'
 let g:calendar_google_calendar = 1
 
 " }}}
-" vim-orgmode  {{{
 Plug 'jceb/vim-orgmode'
-" }}}
-" vim-startify  {{{
 Plug 'mhinz/vim-startify'
-" }}}
-" vim-rest-console  {{{
 Plug 'diepm/vim-rest-console'
-" }}}
 " codi.vim {{{
 Plug 'metakirby5/codi.vim', { 'on': 'Codi' }
 let g:codi#rightsplit = 0
@@ -567,10 +538,8 @@ let g:codi#rightalign = 0
 let g:codi#width = 80
 
 " }}}
-" }}}
 " Disabled  {{{
 " Plug 'craigemery/vim-autotag' " XXX maybe if i use other langs
-"
 " autocmd FileType js UltiSnipsAddFiletypes javascript-react
 " let g:UltiSnipsExpandTrigger="<tab>"
 " let g:UltiSnipsJumpForwardTrigger="<c-b>"
@@ -1115,4 +1084,4 @@ endfunction
 " set verbose=9
 " set verbosefile=~/vim_debug.txt
 " }}}
-" vim:foldmethod=marker:foldlevel=4 foldtext=VimFoldText()
+" vim:foldmethod=marker:foldlevel=1 foldtext=VimFoldText()
