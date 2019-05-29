@@ -23,11 +23,16 @@ endif
 filetype plugin indent on " Needs to go before autocmds
 syntax enable " Needs to go before autocmds
 call plug#begin('~/.vim/plugged')
-" Editing  {{{
 Plug 'christoomey/vim-sort-motion' " use gs
 Plug 'danro/rename.vim'
 Plug 'godlygeek/tabular'
+" vim-easy-align {{{
 Plug 'junegunn/vim-easy-align'
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+" }}}
 " vim-sneak  {{{
 Plug 'justinmk/vim-sneak'
 let g:sneak#s_next = 1
@@ -70,7 +75,6 @@ nnoremap <C-w>gh :<C-U>call window#join('leftabove vsplit', v:count) <BAR>normal
 nnoremap <C-w>gj :<C-U>call window#join('belowright split', v:count) <BAR>normal! 100zh<CR>
 nnoremap <C-w>gk :<C-U>call window#join('aboveleft split', v:count) <BAR>normal! 100zh<CR>
 
-" }}}
 " }}}
 " Linting / testing  {{{
 " vim-test  {{{
@@ -132,7 +136,6 @@ let g:ale_sign_warning = '▹'
 
 " }}}
 " }}}
-" GUI changes  {{{
 " indentLine  {{{
 Plug 'Yggdroot/indentLine'
 let g:indentLine_char = get(g:, 'indentLine_char', '┊')
@@ -313,8 +316,6 @@ let g:tagbar_autopreview = 0
 
 
 " }}}
-" }}}
-" Languages  {{{
 "Plug 'styled-components/vim-styled-components'
 " LanguageClient-neovim' {{{
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
@@ -362,9 +363,6 @@ Plug 'moll/vim-node'
 " Plug 'peitalin/vim-jsx-typescript' "|Plug 'Quramy/tsuquyomi' XX play around with this
 " Plug 'HerringtonDarkholme/yats.vim' " typescript highlighter
 Plug 'shirk/vim-gas'
-
-" }}}
-" Utilities  {{{
 Plug 'skywind3000/asyncrun.vim'
 Plug 'tpope/vim-scriptease'
 Plug 'wakatime/vim-wakatime'
@@ -379,8 +377,6 @@ let g:hardtime_default_on = 0
 
 " }}}
 Plug 'vim-scripts/ParseJSON'
-" }}}
-" Project management  {{{
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-vinegar'
@@ -465,8 +461,6 @@ Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
 " }}}
-" }}}
-" Completion  {{{
 " ncm2 {{{
 Plug 'ncm2/ncm2' |Plug 'roxma/nvim-yarp' |Plug 'roxma/vim-hug-neovim-rpc' |Plug 'ncm2/ncm2-path'
 " au User Ncm2Plugin call ncm2#register_source({
@@ -482,8 +476,6 @@ Plug 'ncm2/ncm2' |Plug 'roxma/nvim-yarp' |Plug 'roxma/vim-hug-neovim-rpc' |Plug 
 
 
 " }}}
-" }}}
-" Apps  {{{
 " vim-quicktask  {{{
 Plug 'aaronbieber/vim-quicktask'
 " }}}
@@ -508,8 +500,7 @@ let g:codi#rightalign = 0
 let g:codi#width = 80
 
 " }}}
-" }}}
-" Disabled  {{{
+" Deprecated {{{
 "Plug 'Raimondi/delimitMate' " XXX this annoys me too much
 "Plug 'Shougo/deoplete.nvim' " XXX using ncm2 instead
 "Plug 'Valloric/YouCompleteMe', { 'do': './install.py', 'on': [] } " XXX using ncm2 instead

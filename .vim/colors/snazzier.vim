@@ -2,53 +2,56 @@ runtime colors/snazzy.vim
 
 set notermguicolors
 
-let  red       =  '#ff5c57'
-let  c_red     =  '001'
-let  green     =  '#5af78e'
-let  c_green   =  '002'
-let  yellow    =  '#f3f99d'
-let  c_yellow  =  '003'
-let  blue      =  '#57c7ff'
-let  c_blue    =  '004'
-let  magenta   =  '#ff6ac1'
-let  c_magenta =  '005'
-let  cyan      =  '#9aedfe'
-let  c_cyan    =  '006'
-let  orange    =  '#fecc9a'
-let  c_orange    =  '222'
-let  turqoise  =  '#5af4ce'
-let  c_turqoise  =  '086'
-let  light_v   =  '#d69eff'
-let  c_light_v   =  '183'
-let  coral     =  '#FF776E'
-let  c_coral     =  '209'
-
-let  c_bg_bright     =  '008'
-let  ui_0     =  '#F9F9F9'
-let  ui_1     =  '#f9f9ff'
-let  ui_2     =  '#eff0eb'
-let  ui_3     =  '#e2e4e5'
-let  ui_4     =  '#a1a6a8'
-let  c_ui_4     =  '248'
-let  ui_5     =  '#848688'
-let  ui_6     =  '#5e6c70'
-let  ui_7     =  '#536991'
-let  ui_8     =  '#606580'
-let  c_ui_8     =  '60'
-let  ui_9     =  '#3a3d4d'
-let  c_ui_9     =  '236' " bit off
-let  ui_11    =  '#282a36'
+let  red         = '#ff5c57'
+let  c_red       = '001'
+let  green       = '#5af78e'
+let  c_green     = '002'
+let  yellow      = '#f3f99d'
+let  c_yellow    = '003'
+let  blue        = '#57c7ff'
+let  c_blue      = '004'
+let  magenta     = '#ff6ac1'
+let  c_magenta   = '005'
+let  cyan        = '#9aedfe'
+let  c_cyan      = '006'
+let  orange      = '#fecc9a'
+let  c_orange    = '222'
+let  turqoise    = '#5af4ce'
+let  c_turqoise  = '086'
+let  light_v     = '#d69eff'
+let  c_light_v   = '183'
+let  coral       = '#FF776E'
+let  c_coral     = '209'
+let  c_bg_bright = '008'
+let  ui_0        = '#F9F9F9'
+let  ui_1        = '#f9f9ff'
+let  ui_2        = '#eff0eb'
+let  ui_3        = '#e2e4e5'
+let  ui_4        = '#a1a6a8'
+let  c_ui_4      = '248'
+let  ui_5        = '#848688'
+let  ui_6        = '#5e6c70'
+let  ui_7        = '#536991'
+let  ui_8        = '#606580'
+let  c_ui_8      = '60'
+let  ui_9        = '#3a3d4d'
+let  c_ui_9      = '236' " bit off
+let  ui_11       = '#282a36'
 
 " Editor
 " highlight SignColumn ctermbg=
 let g:gitgutter_override_sign_column_highlight = 0
 
-hi SignColumn           guibg=bg ctermbg=000
-hi GitGutterAdd         ctermbg=000 ctermfg=002
-hi GitGutterChange      ctermbg=000 ctermfg=003
-hi GitGutterDelete      ctermbg=000 ctermfg=001
-hi GitGutterChangeDelete    ctermbg=000 ctermfg=001
+hi SignColumn            guibg=bg    ctermbg=000
+hi GitGutterAdd          ctermbg=000 ctermfg=002
+hi GitGutterChange       ctermbg=000 ctermfg=003
+hi GitGutterDelete       ctermbg=000 ctermfg=001
+hi GitGutterChangeDelete ctermbg=000 ctermfg=001
+hi StatusLineNC          ctermbg=008
+hi StatusLine            ctermbg=008
 
+
+" netrw
 :exe 'hi netrwDir       guibg=bg ctermbg=000 ctermfg=003'
 :exe 'hi NERDTreeDir    guibg=bg ctermbg=000 ctermfg='.c_light_v
 
@@ -60,9 +63,6 @@ hi GitGutterChangeDelete    ctermbg=000 ctermfg=001
 :exe 'hi Search         gui=underline guibg=bg guifg='.green.' cterm=underline ctermfg='.c_green.' ctermbg=0'
 :exe 'hi Boolean        guifg='.magenta.' ctermfg='.c_magenta
 :exe 'hi Number         guifg='.turqoise
-
-hi StatusLineNC     ctermbg=008
-hi StatusLine     ctermbg=008
 
 :exe 'hi Folded         guifg='.cyan.' guibg='.ui_9.' ctermfg='.c_cyan.' ctermbg='.c_bg_bright
 :exe 'hi VertSplit ctermfg=008 ctermbg=000'

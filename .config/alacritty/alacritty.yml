@@ -97,7 +97,7 @@ colors:
 # To completely disable the visual bell, set its duration to 0.
 visual_bell:
   animation: Ease
-  duration: 10
+  duration: 0
 
 # Background opacity
 background_opacity: 1.0
