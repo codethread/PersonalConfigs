@@ -15,8 +15,7 @@
 " Plugins {{{
 " Plugin Setup {{{
 if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   autocmd VimEnter *PlugInstall --sync | source $MYVIMRC
 endif
 " }}}
@@ -33,6 +32,26 @@ xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 " }}}
+" undotree {{{
+Plug 'mbbill/undotree'
+" The following settings relate to undo, not undotree, but seems
+" a logical coexistence
+" set undolevels=1000
+" set undoreload=10000
+let vimDir = '$HOME/.vim'
+let &runtimepath.=','.vimDir
+
+" Keep undo history across sessions by storing it in a file
+if has('persistent_undo')
+  let myUndoDir = expand(vimDir . '/undodir')
+  " Create dirs
+  call system('mkdir ' . vimDir)
+  call system('mkdir ' . myUndoDir)
+  let &undodir = myUndoDir
+  set undofile
+endif
+" }}}
+Plug 'wellle/targets.vim' " adds extra dia delete in arg https://github.com/wellle/targets.vim/blob/master/cheatsheet.md
 " vim-sneak  {{{
 Plug 'justinmk/vim-sneak'
 let g:sneak#s_next = 1
@@ -44,7 +63,7 @@ let g:pencil#textwidth = 44
 let g:pencil#wrapModeDefault = 'soft'
 " }}}
 Plug 'tmhedberg/matchit'
-Plug 'tomtom/tcomment_vim' " Commenting
+Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-abolish' " coerce words such as crs: coerce to snake_case
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
@@ -76,7 +95,6 @@ nnoremap <C-w>gj :<C-U>call window#join('belowright split', v:count) <BAR>normal
 nnoremap <C-w>gk :<C-U>call window#join('aboveleft split', v:count) <BAR>normal! 100zh<CR>
 
 " }}}
-" Linting / testing  {{{
 " vim-test  {{{
 Plug 'janko/vim-test'
 function! SkyportTransform(cmd) abort
@@ -131,18 +149,14 @@ let g:ale_fixers = {
 let g:ale_sign_error = '✘'
 let g:ale_sign_warning = '▹'
 " let g:ale_fix_on_save = 1
-
-" {buffer, lines -> filter(lines, 'v:val !=~ ''^\s*//''')}, " removes comments
-
-" }}}
 " }}}
 " indentLine  {{{
 Plug 'Yggdroot/indentLine'
 let g:indentLine_char = get(g:, 'indentLine_char', '┊')
+let g:indentLine_color_term = 237
 let g:indentLine_concealcursor = 'niv'
 let g:indentLine_conceallevel = 2
-let g:indentLine_fileTypeExclude = ['help', 'man', 'startify', 'NERDTree']
-
+let g:indentLine_fileTypeExclude = ['help', 'man', 'startify', 'NERDTree', 'netrw', 'gf']
 " }}}
 Plug 'airblade/vim-gitgutter'
 Plug 'chrisbra/Colorizer'
@@ -313,8 +327,6 @@ Plug 'majutsushi/tagbar'
 let g:tagbar_width = 30
 let g:tagbar_compact = 0
 let g:tagbar_autopreview = 0
-
-
 " }}}
 "Plug 'styled-components/vim-styled-components'
 " LanguageClient-neovim' {{{
@@ -326,6 +338,8 @@ let g:LanguageClient_serverCommands = {
       \ 'css': ['css-languageserver --stdio'],
       \ 'javascript': ['javascript-typescript-stdio'],
       \ 'javascript.jsx': ['javascript-typescript-stdio'],
+      \ 'typescript': ['javascript-typescript-stdio'],
+      \ 'typescript.tsx': ['javascript-typescript-stdio'],
       \ 'html': ['html-languageserver --stdio'],
       \ 'dockerfile': ['docker-langserver --stdio'],
       \ }
@@ -340,6 +354,11 @@ function! LC_maps()
   endif
 endfunction
 
+augroup my_lang
+  autocmd!
+  autocmd BufEnter * call LC_maps() | call LayerSet()
+augroup END
+
 " Debugging
 " let g:LanguageClient_loggingLevel = 'TRACE'
 " let g:LanguageClient_loggingFile =  glob('~/.local/share/nvim/LanguageClient.log')
@@ -351,19 +370,36 @@ endfunction
 " \ 'java': ['/usr/local/bin/jdtls'], life's too short to get this to work
 
 " }}}
-" vim-polyglot' {{{
-Plug 'sheerun/vim-polyglot', { 'tag': 'v3.7.0' } " https://github.com/sheerun/vim-polyglot/issues/387
-let g:vim_markdown_conceal = 0
-let g:jsx_ext_required = 0
-let g:polyglot_disabled = ['typescript']
+" vim-javascript {{{
+Plug 'pangloss/vim-javascript'
 let g:javascript_plugin_jsdoc = 1
 " }}}
+" vim-jsx {{{
+Plug 'mxw/vim-jsx'
+let g:jsx_ext_required = 0
+" }}}
+" vim-markdown {{{
+Plug 'godlygeek/tabular' | Plug 'plasticboy/vim-markdown' " tabular needed before markdown
+let g:vim_markdown_folding_disabled = 1
+let g:vim_markdown_conceal = 0 " unnerving when all the symbols disappear
+" ['csharp=cs']:  This will cause ```csharp ``` to be highlighted using cs filetype
+let g:vim_markdown_fenced_languages = ['js=javascript']
+" }}}
+Plug 'rust-lang/rust.vim'
 Plug 'moll/vim-node'
-" XXX seem to be turning js to ts
-" Plug 'peitalin/vim-jsx-typescript' "|Plug 'Quramy/tsuquyomi' XX play around with this
-" Plug 'HerringtonDarkholme/yats.vim' " typescript highlighter
+Plug 'HerringtonDarkholme/yats.vim' " typescript highlighter
+Plug 'peitalin/vim-jsx-typescript'
+" Plug 'peitalin/vim-jsx-typescript' "|Plug 'Quramy/tsuquyomi' XXX play around with this
 Plug 'shirk/vim-gas'
+" asyncrun  {{{
 Plug 'skywind3000/asyncrun.vim'
+augroup my_asyncrun
+  autocmd!
+  autocmd User AsyncRunStop let g:asyncrun_status="" | :copen
+  autocmd User AsyncRunStart let g:asyncrun_status="❁ "
+  " autocmd QuickFixCmdPost * call asyncrun#quickfix_toggle(8, 1)
+augroup END
+" }}}
 Plug 'tpope/vim-scriptease'
 Plug 'wakatime/vim-wakatime'
 " previm  {{{
@@ -380,6 +416,7 @@ Plug 'vim-scripts/ParseJSON'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-vinegar'
+Plug 'tpope/vim-eunuch'
 " vim-rooter  {{{
 Plug 'airblade/vim-rooter'
 let g:rooter_silent_chdir = 1
@@ -453,16 +490,20 @@ command! -nargs=1 ProjectFiles call fzf#run(fzf#wrap({
       \ 'dir': '~/'. <f-args> ,
       \ 'options': '--prompt '. <f-args> .'/'
       \}))
+
+augroup my_fzf
+  autocmd!
+  autocmd FileType fzf set laststatus=0 noshowmode noruler
+        \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+augroup END
 " }}}
 Plug 'junegunn/fzf.vim'
 " editorconfig-vim  {{{
 Plug 'editorconfig/editorconfig-vim'
-
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
-
 " }}}
 " ncm2 {{{
-Plug 'ncm2/ncm2' |Plug 'roxma/nvim-yarp' |Plug 'roxma/vim-hug-neovim-rpc' |Plug 'ncm2/ncm2-path'
+" Plug 'ncm2/ncm2' |Plug 'roxma/nvim-yarp' |Plug 'roxma/vim-hug-neovim-rpc' |Plug 'ncm2/ncm2-path'
 " au User Ncm2Plugin call ncm2#register_source({
 "             \ 'name' : 'css',
 "             \ 'priority': 9,
@@ -474,25 +515,22 @@ Plug 'ncm2/ncm2' |Plug 'roxma/nvim-yarp' |Plug 'roxma/vim-hug-neovim-rpc' |Plug 
 "             \ 'on_complete': ['ncm2#on_complete#omni', 'csscomplete#CompleteCSS'],
 "             \ })
 
-
+" augroup my_completion
+"   autocmd!
+"   autocmd BufEnter * call ncm2#enable_for_buffer() " enable ncm2 for all buffer
+"   autocmd TextChangedI * call ncm2#auto_trigger()
+"   autocmd CompleteDone * silent! pclose
+" augroup END
 " }}}
-" vim-quicktask  {{{
 Plug 'aaronbieber/vim-quicktask'
-" }}}
 " calendar.vim  {{{
 Plug 'itchyny/calendar.vim'
 let g:calendar_google_calendar = 1
 
 " }}}
-" vim-orgmode  {{{
 Plug 'jceb/vim-orgmode'
-" }}}
-" vim-startify  {{{
 Plug 'mhinz/vim-startify'
-" }}}
-" vim-rest-console  {{{
 Plug 'diepm/vim-rest-console'
-" }}}
 " codi.vim {{{
 Plug 'metakirby5/codi.vim', { 'on': 'Codi' }
 let g:codi#rightsplit = 0
@@ -500,18 +538,8 @@ let g:codi#rightalign = 0
 let g:codi#width = 80
 
 " }}}
-" Deprecated {{{
-"Plug 'Raimondi/delimitMate' " XXX this annoys me too much
-"Plug 'Shougo/deoplete.nvim' " XXX using ncm2 instead
-"Plug 'Valloric/YouCompleteMe', { 'do': './install.py', 'on': [] } " XXX using ncm2 instead
-"Plug 'craigemery/vim-autotag' " XXX maybe if i use other langs
-"Plug 'easymotion/vim-easymotion' " XXX too annoying
-"Plug 'mbbill/undotree' " XXX barely used
-"Plug 'ternjs/tern_for_vim', { 'do': 'npm i'}
-"Plug 'vim-airline/vim-airline' | "Plug 'vim-airline/vim-airline-themes' " XXX slow!
-"Plug 'wikitopian/hardmode' " XXX hjkl are sometimes really uesful
-"Plug 'xuyuanp/nerdtree-git-plugin' "XXX messy tree
-"
+" Disabled  {{{
+" Plug 'craigemery/vim-autotag' " XXX maybe if i use other langs
 " autocmd FileType js UltiSnipsAddFiletypes javascript-react
 " let g:UltiSnipsExpandTrigger="<tab>"
 " let g:UltiSnipsJumpForwardTrigger="<c-b>"
@@ -520,32 +548,30 @@ let g:codi#width = 80
 call plug#end()
 " }}}
 " Autocommands     {{{
-if !exists("autocommands_loaded")
-  let autocommands_loaded = 1
-  autocmd BufEnter * call LC_maps()
-        \ | call LayerSet()
-        \ | call ncm2#enable_for_buffer() " enable ncm2 for all buffer
-  autocmd TextChangedI * call ncm2#auto_trigger()
+augroup my_filetypes
+  autocmd!
   autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
-  autocmd CompleteDone * silent! pclose
-  autocmd User AsyncRunStop let g:asyncrun_status=""
-  autocmd User AsyncRunStart let g:asyncrun_status="❁ "
-  autocmd QuickFixCmdPost * call asyncrun#quickfix_toggle(8, 1)
-  " autocmd FileType fzf set laststatus=0 noshowmode noruler
-  "             \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
-endif
+augroup END
+
 " }}}
 " Settings  {{{
 set backspace=indent,eol,start              " Allow backspacing over everything in insert mode
 set clipboard=unnamed                       " just too annoying without this
 set completefunc=LanguageClient#complete
 set completeopt=noinsert,menuone,noselect   " note that must keep noinsert in completeopt, the others is optional
+
 " set cursorline                              " XXX slow
+augroup CursorLine
+  au!
+  au WinEnter,BufWinEnter * setlocal nocursorline
+  au WinLeave * setlocal cursorline
+augroup END
+
 set dictionary="/usr/dict/words"
 set expandtab                               " tabs are spaces
 set fillchars=vert:│,fold:·                 " char between panels
 set foldnestmax=3
-set grepprg=rg\ --vimgrep
+set grepprg=rg\ --hidden\ --glob\ '!.git'\ --vimgrep\ --with-filename
 set hidden                                  " allows hiding modified buffers
 set hlsearch                                " highlight searches
 set ignorecase
@@ -555,7 +581,7 @@ set lazyredraw                              " redraw only when we need to.
 set mouse=a
 set noshowmode
 set nrformats-=octal
-set number " XXX challenge
+" set number " XXX challenge
 set omnifunc=LanguageClient#complete
 set path+=**
 set regexpengine=1                          " TODO really slow without this??
@@ -574,7 +600,7 @@ set tabstop=2                               " number of visual spaces per TAB
 set wildignore=*.keep,*~,*.swp
 set wildmenu                                " visual autocomplete for command menu
 set wrapmargin=0
-" highlight PmenuSel ctermfg=black ctermbg=lightgray
+set autowrite                               " write if modified, such as when running :make
 
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 inoremap <expr> <C-Space> pumvisible() \|\| &omnifunc == '' ?
@@ -582,21 +608,6 @@ inoremap <expr> <C-Space> pumvisible() \|\| &omnifunc == '' ?
       \ "\<lt>C-x>\<lt>C-o><c-r>=pumvisible() ?" .
       \ "\"\\<lt>c-n>\\<lt>c-p>\\<lt>c-n>\" :" .
       \ "\" \\<lt>bs>\\<lt>C-n>\"\<CR>"
-
-" set undolevels=1000
-" set undoreload=10000
-let vimDir = '$HOME/.vim'
-let &runtimepath.=','.vimDir
-
-" Keep undo history across sessions by storing it in a file
-if has('persistent_undo')
-  let myUndoDir = expand(vimDir . '/undodir')
-  " Create dirs
-  call system('mkdir ' . vimDir)
-  call system('mkdir ' . myUndoDir)
-  let &undodir = myUndoDir
-  set undofile
-endif
 
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum" " something to do with vim in a terminal
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
@@ -621,14 +632,9 @@ let mapleader = " "
 ino jk <esc>
 cno jk <C-c>
 " move vertically by visual line
-nnoremap j j
-nnoremap k k
-nnoremap <C-N> <Plug>VinegarUp
-nnoremap <leader><leader> :
-" These two allow us to move around lines visually. So if
-" there's a very long line that gets visually wrapped to
-" two lines, j won't skip over the 'fake' part of the visual
-" line in favor of the next 'real' line.
+" nnoremap j gj
+" nnoremap k gk
+" nnoremap <C-N> <Plug>VinegarUp
 
 map <F4> :set spell!<CR><Bar>:echo "Spell Check: " . strpart("OffOn", 3 * &spell, 3)<CR>
 " MAPS ON COMMANDS I DONT LIKE
@@ -663,7 +669,6 @@ nnoremap <silent> <leader>- :exe "vertical resize -10"<CR>
 
 " }}}
 " a - AsyncRun {{{
-let g:asyncrun_open = 8
 let g:lmap.a = { 'name': ' -- Async' }
 map <leader>ar :AsyncRun
 map <leader>ac :ccl<CR>
@@ -689,7 +694,7 @@ map <leader>bn :bnext<CR>
 map <leader>bp :bprevious<CR>
 map <leader>bq :DeleteFileAndBuff<CR>
 command! DeleteFileAndBuff :call delete(expand('%')) | bd
-map <leader>br :rename<space>
+map <leader>br :Rename<space>
 map <leader>bt :b#<CR>
 map <leader>by :YankWoleBuffer<CR>
 command! YankWoleBuffer normal gg"*yG
@@ -828,7 +833,11 @@ map <leader>st :CursorInTags<CR>
 command! CursorInTags :call fzf#vim#tags(expand("<cword>"))<CR>
 map <leader>sw :FindWordUnderCursor<CR>
 command! FindWordUnderCursor :call fzf#vim#ag(expand("<cword>"))
-
+" }}}
+" S - SearchVim {{{
+" let g:lmap.s = { 'name': ' -- SearchVim' }
+" map <leader>S :call Searchword()<CR>
+map <leader>S :AsyncRun! -strip -program=grep <cword> .<CR>
 " }}}
 " t - Terminal {{{
 let g:lmap.t = { 'name': ' -- Terminal' }
@@ -854,7 +863,7 @@ map <leader>tsa :call term_start(
 
 map <leader>tsl :call term_start(
       \ [&shell, &shellcmdflag, "cd ~/Service/pages-lib; yarn watch"],
-      \ DefaultTerminalOptions('t:papps'))<CR>:echo 'papps started'<CR>
+      \ DefaultTerminalOptions('t:lib'))<CR>:echo 'papps started'<CR>
 
 " }}}
 " T - Tags {{{
@@ -879,6 +888,8 @@ map <leader>uu :UndotreeToggle<CR>
 " }}}
 " w - Windows / Panes {{{
 let g:lmap.w = { 'name': ' -- Windows' }
+" :redraw!
+map <leader>wr :redraw!<CR>
 map <leader>wN :tabnew<CR>
 map <leader>wl :tabs<CR>
 map <leader>wn :tabNext<CR>
@@ -972,6 +983,56 @@ function! VimFoldText()
   return s:symbol . s:line .repeat(' ', 80 - strwidth(s:line) - len(s:info)).s:info
 endfunction
 " }}}
+
+" Like windo but restore the current window.
+function! WinDo(command)
+  let currwin=winnr()
+  execute 'windo ' . a:command
+  execute currwin . 'wincmd w'
+endfunction
+com! -nargs=+ -complete=command Windo call WinDo(<q-args>)
+
+" Like bufdo but restore the current buffer.
+function! BufDo(command)
+  let currBuff=bufnr("%")
+  echo 'buffers'
+  execute 'bufdo ' . a:command
+  execute 'buffer ' . currBuff
+endfunction
+com! -nargs=+ -complete=command Bufdo call BufDo(<q-args>)
+
+" Like tabdo but restore the current tab.
+function! TabDo(command)
+  let currTab=tabpagenr()
+  execute 'tabdo ' . a:command
+  execute 'tabn ' . currTab
+endfunction
+com! -nargs=+ -complete=command Tabdo call TabDo(<q-args>)
+
+" Like tabdo windo but restore the current tab window.
+function! TabWinDo(command)
+  let currTab=tabpagenr()
+  let currwin=winnr()
+
+  execute 'tabdo windo ' . a:command
+
+  execute 'tabn ' . currTab
+  execute currwin . 'wincmd w'
+endfunction
+com! -nargs=+ -complete=command Tabwindo call TabWinDo(<q-args>)
+
+function! TabWinBufDo(command)
+  call BufDo(a:command)
+  let currTab=tabpagenr()
+  let currwin=winnr()
+
+  execute 'tabdo windo ' . a:command
+
+  execute 'tabn ' . currTab
+  execute currwin . 'wincmd w'
+endfunction
+com! -nargs=+ -complete=command Tabwinbufdo call TabWinBufDo(<q-args>)
+
 " Layer_Functions {{{
 function! LayerSet()
   let cleanFiletype = substitute(&ft, "\.jsx", "", "")
@@ -1023,4 +1084,4 @@ endfunction
 " set verbose=9
 " set verbosefile=~/vim_debug.txt
 " }}}
-" vim:foldmethod=marker:foldlevel=0 foldtext=VimFoldText()
+" vim:foldmethod=marker:foldlevel=1 foldtext=VimFoldText()

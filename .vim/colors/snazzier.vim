@@ -54,13 +54,14 @@ hi StatusLine            ctermbg=008
 " netrw
 :exe 'hi netrwDir       guibg=bg ctermbg=000 ctermfg=003'
 :exe 'hi NERDTreeDir    guibg=bg ctermbg=000 ctermfg='.c_light_v
-
+:exe 'hi CursorLine     ctermbg=NONE cterm=underline'
 :exe 'hi Directory      guibg=bg cterm=bold ctermfg='.c_magenta.' ctermbg=000'
 :exe 'hi NonText        guibg=bg ctermbg=000 ctermfg=000'
 :exe 'hi Comment        cterm=italic gui=italic'
 :exe 'hi SpellBad       guifg=white guibg='.red.' ctermfg=255 ctermbg='.c_red
 :exe 'hi MatchParen     guifg='.red.' ctermfg='.c_red
-:exe 'hi Search         gui=underline guibg=bg guifg='.green.' cterm=underline ctermfg='.c_green.' ctermbg=0'
+hi Search ctermfg=NONE ctermbg=008
+hi Visual ctermfg=NONE ctermbg=008
 :exe 'hi Boolean        guifg='.magenta.' ctermfg='.c_magenta
 :exe 'hi Number         guifg='.turqoise
 
