@@ -26,37 +26,38 @@ function mapFiles() {
   for fileOnly in ${array_of_dirFiles}
   do
     dirFile="$1/$fileOnly"
+    cleanFile=$(echo "$dirFile" | sed "s:^./::")
 
     if	[[ ! $dirFile =~ (README.md|.DS_Store|./.gitignore$|.sw.?$|^./.git$|^./_.*) ]]
     then
       if [[ -d $dirFile ]]; then
         if [[ -L "$HOME/$dirFile" ]]; then
-          echo "  ${yellow}~${normal} d: $dirFile "
+          echo "  ${yellow}~${normal} d: $cleanFile "
 
         elif [[ -f $dirFile ]]; then
-          echo "${red}dir to be linked: $dirFile is a already file${normal} you'll need to remove this manually"
+          echo "${red}dir to be linked: $cleanFile is a already file${normal} you'll need to remove this manually"
 
         elif [[  -d "$HOME/$dirFile" ]]; then
           mapFiles "$dirFile"
 
         else
-          mkdir "$HOME/$dirFile"  || exit 1
-          echo "$HOME/$dirFile" >> "${tFile}"
+          mkdir "$HOME/$cleanFile"  || exit 1
+          echo "$HOME/$cleanFile" >> "${tFile}"
           mapFiles "$dirFile"
 
         fi
 
       elif [[ -f $dirFile ]]; then
-        if [[  -L "$HOME/$dirFile" ]]; then
+        if [[  -L "$HOME/$cleanFile" ]]; then
           echo "  ${yellow}~${normal} f: $dirFile "
 
         elif [[  -f "$HOME/$dirFile" ]]; then
           echo "  ${red}✘${normal} f: $dirFile already exists, you'll need to remove this manually"
 
         else
-          ln -s "$configs/$dirFile" "$HOME/$dirFile" || exit 1
+          ln -s "$configs/$cleanFile" "$HOME/$cleanFile" || exit 1
           echo "  ${green}✓${normal} f: $dirFile "
-          echo "$HOME/$dirFile" >> "${tFile}"
+          echo "$HOME/$cleanFile" >> "${tFile}"
 
         fi
       else
