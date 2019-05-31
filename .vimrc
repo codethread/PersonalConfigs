@@ -390,6 +390,8 @@ let g:javascript_plugin_jsdoc = 1
 Plug 'mxw/vim-jsx'
 let g:jsx_ext_required = 0
 " }}}
+Plug 'jparise/vim-graphql'
+Plug 'ekalinin/Dockerfile.vim'
 " vim-markdown {{{
 Plug 'godlygeek/tabular' | Plug 'plasticboy/vim-markdown' " tabular needed before markdown
 let g:vim_markdown_folding_disabled = 1
