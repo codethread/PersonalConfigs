@@ -22,11 +22,11 @@ endif
 filetype plugin indent on " Needs to go before autocmds
 syntax enable " Needs to go before autocmds
 call plug#begin('~/.vim/plugged')
-Plug 'christoomey/vim-sort-motion' " use gs
+
+" EDITING
 Plug 'danro/rename.vim'
-Plug 'godlygeek/tabular'
 " vim-easy-align {{{
-Plug 'junegunn/vim-easy-align'
+Plug 'junegunn/vim-easy-align' | Plug 'godlygeek/tabular'
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
@@ -52,22 +52,23 @@ if has('persistent_undo')
 endif
 " }}}
 Plug 'wellle/targets.vim' " adds extra dia delete in arg https://github.com/wellle/targets.vim/blob/master/cheatsheet.md
-" vim-sneak  {{{
-Plug 'justinmk/vim-sneak'
-let g:sneak#s_next = 1
-let g:sneak#use_ic_scs = 1
-" }}}
 " vim-pencil  {{{
 Plug 'reedes/vim-pencil'
 let g:pencil#textwidth = 44
 let g:pencil#wrapModeDefault = 'soft'
 " }}}
-Plug 'tmhedberg/matchit'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-abolish' " coerce words such as crs: coerce to snake_case
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
-Plug 'tpope/vim-speeddating'
+
+" MOVEMENT
+" vim-sneak  {{{
+Plug 'justinmk/vim-sneak'
+let g:sneak#s_next = 1
+let g:sneak#use_ic_scs = 1
+" }}}
+Plug 'tmhedberg/matchit'
 Plug 'ddrscott/vim-window'
 " vim-unimpaired  {{{
 Plug 'tpope/vim-unimpaired'
@@ -95,6 +96,8 @@ nnoremap <C-w>gj :<C-U>call window#join('belowright split', v:count) <BAR>normal
 nnoremap <C-w>gk :<C-U>call window#join('aboveleft split', v:count) <BAR>normal! 100zh<CR>
 
 " }}}
+
+" LINT / TEST
 " vim-test  {{{
 Plug 'janko/vim-test'
 function! SkyportTransform(cmd) abort
@@ -103,6 +106,12 @@ function! SkyportTransform(cmd) abort
 endfunction
 
 function! VimVterminal(cmd)
+  try 
+    execute 'bdelete t:test' 
+  catch 
+    echo 'starting test'
+  endtry
+
   call term_start([&shell, &shellcmdflag, a:cmd], {
         \ 'term_name': 't:test',
         \ 'vertical': 1,
@@ -150,6 +159,8 @@ let g:ale_sign_error = '✘'
 let g:ale_sign_warning = '▹'
 " let g:ale_fix_on_save = 1
 " }}}
+
+" VISUAL CHANGES
 " indentLine  {{{
 Plug 'Yggdroot/indentLine'
 let g:indentLine_char = get(g:, 'indentLine_char', '┊')
@@ -161,7 +172,6 @@ let g:indentLine_fileTypeExclude = ['help', 'man', 'startify', 'NERDTree', 'netr
 Plug 'airblade/vim-gitgutter'
 Plug 'chrisbra/Colorizer'
 Plug 'connorholyday/vim-snazzy'
-Plug 'hecal3/vim-leader-guide'
 " lightline.vim  {{{
 Plug 'itchyny/lightline.vim'
 
@@ -328,6 +338,8 @@ let g:tagbar_width = 30
 let g:tagbar_compact = 0
 let g:tagbar_autopreview = 0
 " }}}
+
+" LANGUAGES
 "Plug 'styled-components/vim-styled-components'
 " LanguageClient-neovim' {{{
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
@@ -381,38 +393,26 @@ let g:jsx_ext_required = 0
 " vim-markdown {{{
 Plug 'godlygeek/tabular' | Plug 'plasticboy/vim-markdown' " tabular needed before markdown
 let g:vim_markdown_folding_disabled = 1
-let g:vim_markdown_conceal = 0 " unnerving when all the symbols disappear
+let g:vim_markdown_conceal = 1 " unnerving when all the symbols disappear
+
 " ['csharp=cs']:  This will cause ```csharp ``` to be highlighted using cs filetype
 let g:vim_markdown_fenced_languages = ['js=javascript']
+
+augroup my_filetypes
+  autocmd!
+  autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+augroup END
 " }}}
 Plug 'rust-lang/rust.vim'
 Plug 'moll/vim-node'
-Plug 'HerringtonDarkholme/yats.vim' " typescript highlighter
-Plug 'peitalin/vim-jsx-typescript'
-" Plug 'peitalin/vim-jsx-typescript' "|Plug 'Quramy/tsuquyomi' XXX play around with this
+Plug 'leafgarland/typescript-vim'
+Plug 'jparise/vim-graphql'
+" Plug 'HerringtonDarkholme/yats.vim' " typescript highlighter XXX too slow
+" Plug 'peitalin/vim-jsx-typescript' " XXX setting jsx ast tsx
+" Plug 'Quramy/tsuquyomi' XXX play around with this
 Plug 'shirk/vim-gas'
-" asyncrun  {{{
-Plug 'skywind3000/asyncrun.vim'
-augroup my_asyncrun
-  autocmd!
-  autocmd User AsyncRunStop let g:asyncrun_status="" | :copen
-  autocmd User AsyncRunStart let g:asyncrun_status="❁ "
-  " autocmd QuickFixCmdPost * call asyncrun#quickfix_toggle(8, 1)
-augroup END
-" }}}
-Plug 'tpope/vim-scriptease'
-Plug 'wakatime/vim-wakatime'
-" previm  {{{
-Plug 'kannokanno/previm'
-let g:previm_open_cmd = 'open -a "/Applications/Google Chrome.app"'
-"
-" }}}
-" vim-hardtime  {{{
-Plug 'takac/vim-hardtime'
-let g:hardtime_default_on = 0
 
-" }}}
-Plug 'vim-scripts/ParseJSON'
+" PROJECT MANAGEMENT
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-vinegar'
@@ -424,7 +424,18 @@ let g:rooter_resolve_links = 1
 " let g:rooter_manual_only = 1
 " exposes FindRootDirectory()
 " }}}
+" vim-projectionist {{{
 Plug 'tpope/vim-projectionist'
+let g:projectionist_heuristics = {
+      \   "*.jsx": {
+      \     "alternate": "{}.spec.js"
+      \   },
+      \   "*.spec.js": {
+      \     "alternate": "{}.jsx"
+      \   }
+      \ }
+" }}}
+Plug 'stefandtw/quickfix-reflector.vim'
 " fzf {{{
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 let g:fzf_layout = { 'window': '9split' }
@@ -502,6 +513,31 @@ Plug 'junegunn/fzf.vim'
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 " }}}
+
+" UTILITIES
+Plug 'hecal3/vim-leader-guide'
+" asyncrun  {{{
+Plug 'skywind3000/asyncrun.vim'
+augroup my_asyncrun
+  autocmd!
+  autocmd User AsyncRunStop let g:asyncrun_status="" | :copen
+  autocmd User AsyncRunStart let g:asyncrun_status="❁ "
+  " autocmd QuickFixCmdPost * call asyncrun#quickfix_toggle(8, 1)
+augroup END
+" }}}
+Plug 'tpope/vim-scriptease'
+Plug 'wakatime/vim-wakatime'
+" previm  {{{
+Plug 'kannokanno/previm'
+let g:previm_open_cmd = 'open -a "/Applications/Google Chrome.app"'
+"
+" }}}
+" vim-hardtime  {{{
+Plug 'takac/vim-hardtime'
+let g:hardtime_default_on = 0
+
+" }}}
+Plug 'vim-scripts/ParseJSON'
 " ncm2 {{{
 " Plug 'ncm2/ncm2' |Plug 'roxma/nvim-yarp' |Plug 'roxma/vim-hug-neovim-rpc' |Plug 'ncm2/ncm2-path'
 " au User Ncm2Plugin call ncm2#register_source({
@@ -528,7 +564,7 @@ Plug 'itchyny/calendar.vim'
 let g:calendar_google_calendar = 1
 
 " }}}
-Plug 'jceb/vim-orgmode'
+Plug 'jceb/vim-orgmode' | Plug 'tpope/vim-speeddating'
 Plug 'mhinz/vim-startify'
 Plug 'diepm/vim-rest-console'
 " codi.vim {{{
@@ -547,13 +583,6 @@ let g:codi#width = 80
 " }}}
 call plug#end()
 " }}}
-" Autocommands     {{{
-augroup my_filetypes
-  autocmd!
-  autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
-augroup END
-
-" }}}
 " Settings  {{{
 set backspace=indent,eol,start              " Allow backspacing over everything in insert mode
 set clipboard=unnamed                       " just too annoying without this
@@ -567,40 +596,47 @@ augroup CursorLine
   au WinLeave * setlocal cursorline
 augroup END
 
-set dictionary="/usr/dict/words"
+set autowrite                               " write if modified, such as when running :make
 set expandtab                               " tabs are spaces
 set fillchars=vert:│,fold:·                 " char between panels
-set foldnestmax=3
 set grepprg=rg\ --hidden\ --glob\ '!.git'\ --vimgrep\ --with-filename
 set hidden                                  " allows hiding modified buffers
 set hlsearch                                " highlight searches
-set ignorecase
 set incsearch                               " search as characters are entered
-set laststatus=2
 set lazyredraw                              " redraw only when we need to.
+set regexpengine=1                          " TODO really slow without this??
+set shiftwidth=2                            " number of spaces in tab when editing
+set showtabline=2                           " Show tabline
+set smartcase                               " search ignores case unless capitals present
+set sps=best,10                             " spell only shows top 10 results
+set tabstop=2                               " number of visual spaces per TAB
+set wildmenu                                " visual autocomplete for command menu
+
+set dictionary="/usr/dict/words"
+set foldnestmax=3
+set ignorecase
+set laststatus=2
 set mouse=a
 set noshowmode
 set nrformats-=octal
-" set number " XXX challenge
 set omnifunc=LanguageClient#complete
 set path+=**
-set regexpengine=1                          " TODO really slow without this??
-" set relativenumber                          " XXX slow
 set scrolloff=3
-set shiftwidth=2                            " number of spaces in tab when editing
 set shortmess+=c
-set showtabline=2                           " Show tabline
 set signcolumn=yes
-set smartcase                               " search ignores case unless capitals present
 set splitbelow
 set splitright
-set sps=best,10                             " spell only shows top 10 results
 set tags=.tags;
-set tabstop=2                               " number of visual spaces per TAB
 set wildignore=*.keep,*~,*.swp
-set wildmenu                                " visual autocomplete for command menu
 set wrapmargin=0
-set autowrite                               " write if modified, such as when running :make
+
+augroup my_qf
+  autocmd!
+  autocmd FileType qf wincmd J
+augroup END
+
+" set number " XXX challenge
+" set relativenumber                          " XXX slow
 
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 inoremap <expr> <C-Space> pumvisible() \|\| &omnifunc == '' ?
@@ -728,6 +764,17 @@ map <leader>ff <Plug>fold_toggle
 
 map <Plug>fold_out zo
 map <leader>fo <Plug>fold_out
+
+function! ToggleConceal()
+  if &conceallevel > 1
+    set conceallevel=0
+  else
+    set conceallevel=3
+  endif
+endfunction
+
+map <Plug>toggle_conceal :call ToggleConceal()<CR>
+map <leader>fc <Plug>toggle_conceal
 
 map <Plug>fold_in zc
 map <leader>fi <Plug>fold_in

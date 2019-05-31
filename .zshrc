@@ -23,7 +23,7 @@ HISTSIZE=999999999
 SAVEHIST=$HISTSIZE
 
 # source $HOME/.cargo/env # TODO needed?
-eval "$(fnm env --multi --use-on-cd)"
+# eval "$(fnm env --multi --use-on-cd)"
 
 #------------------------------------------
 #--- Sky Stuff
