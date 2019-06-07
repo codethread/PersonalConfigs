@@ -68,7 +68,7 @@ Plug 'justinmk/vim-sneak'
 let g:sneak#s_next = 1
 let g:sneak#use_ic_scs = 1
 " }}}
-Plug 'tmhedberg/matchit'
+" Plug 'tmhedberg/matchit'
 Plug 'ddrscott/vim-window'
 " vim-unimpaired  {{{
 Plug 'tpope/vim-unimpaired'
@@ -401,6 +401,7 @@ let g:vim_markdown_fenced_languages = ['js=javascript']
 augroup my_filetypes
   autocmd!
   autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+  autocmd BufRead .vimrc set foldmethod=marker | set foldlevel=1 | set foldtext=VimFoldText()
 augroup END
 " }}}
 Plug 'rust-lang/rust.vim'
@@ -611,6 +612,7 @@ set smartcase                               " search ignores case unless capital
 set sps=best,10                             " spell only shows top 10 results
 set tabstop=2                               " number of visual spaces per TAB
 set wildmenu                                " visual autocomplete for command menu
+set nomodeline                              " https://github.com/numirias/security/blob/master/doc/2019-06-04_ace-vim-neovim.md
 
 set dictionary="/usr/dict/words"
 set foldnestmax=3
@@ -835,6 +837,11 @@ map <leader>po :only<CR>
 map <leader>pt :TestFile<CR>
 map <leader>pw :TestFile '--watch'<CR>
 map <leader>pn :TestNearest<CR>
+map <leader>pc <Plug>file-as-cwd
+map <Plug>file-as-cwd :cd %:p:h<CR>
+
+map <leader>pC <Plug>root-as-cwd
+map <Plug>root-as-cwd :exe "cd ".FindRootDirectory()<CR>
 
 " }}}
 " P - Projects {{{
@@ -1131,4 +1138,3 @@ endfunction
 " set verbose=9
 " set verbosefile=~/vim_debug.txt
 " }}}
-" vim:foldmethod=marker:foldlevel=1 foldtext=VimFoldText()

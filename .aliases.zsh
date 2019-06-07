@@ -132,7 +132,7 @@ alias gqs="start_skyport"
 alias gqt="skyport_test_modified_files"
 alias gqc="ctags -R src/schema/"
 alias gqv="compare_skyport_vault_keys"
-function skyport() { cp "~/Service/skyport-graphql/.env.$1" "~/Service/skyport-graphql/.env.integration" }
+function skyport() { cp "$HOME/Service/skyport-graphql/.env.$1" "$HOME/Service/skyport-graphql/.env.integration" }
 
 #---------------------------------------------#
 # OTHER
