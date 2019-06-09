@@ -1,0 +1,4 @@
+#!/bin/bash
+
+ln -s "$HOME/Google Drive/org-me-notes" ./
+[ -r "$SKY_PRIVATE_CONFIGS" ] && ln -s "$HOME/$SKY_PRIVATE_CONFIGS/org-sky-notes" ./

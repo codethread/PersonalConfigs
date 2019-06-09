@@ -441,45 +441,33 @@ let g:projectionist_heuristics = {
 Plug 'stefandtw/quickfix-reflector.vim'
 " fzf {{{
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+
 let g:fzf_layout = { 'window': '9split' }
-let g:fzf_action = {
-      \ 'ctrl-t': 'tab split',
-      \ 'ctrl-x': 'split',
-      \ 'ctrl-l': 'vsplit' }
+
+
+function! s:build_quickfix_list(lines)
+  call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
+  copen
+  cc
+endfunction
+
+let g:fzf_action = { 'ctrl-s': function('s:build_quickfix_list'), 'ctrl-t': 'tab split', 'ctrl-x': 'split', 'ctrl-l': 'vsplit' }
 
 let g:fzf_history_dir = '~/.local/share/fzf-history'
-let g:fzf_colors = {
-      \ 'fg':      ['fg', 'Normal'],
-      \ 'bg':      ['bg'],
-      \ 'hl':      ['fg', 'Comment'],
-      \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-      \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-      \ 'hl+':     ['fg', 'Statement'],
-      \ 'info':    ['fg', 'ALEError'],
-      \ 'border':  ['fg', 'Boolean'],
-      \ 'prompt':  ['fg', 'Boolean'],
-      \ 'pointer': ['fg', 'Exception'],
-      \ 'marker':  ['fg', 'Keyword'],
-      \ 'spinner': ['fg', 'Label'],
-      \ 'header':  ['fg', 'Comment'] }
 
+let myRg = 'rg --column --line-number --no-heading --hidden --follow --smart-case '
 
-command! -bang -nargs=* Ag
-      \ call fzf#vim#ag(<q-args>,
-      \     <bang>0 ? fzf#vim#with_preview('up:60%')
-      \             : fzf#vim#with_preview('right:50%:hidden', '?'),
-      \     <bang>0)
+command! -nargs=* SearchOrgNotes
+      \ call fzf#vim#grep(myRg . shellescape(<q-args>), 1, { 'dir': '~/org-notes'} )
 
-command! -bang -nargs=* Rg
-      \ call fzf#vim#grep('rg
-      \ --column
-      \ --line-number
-      \ --no-heading
-      \ --fixed-strings
-      \ --ignore-case
-      \ --hidden
-      \ --follow
-      \ --glob "!.git/*" '.shellescape(<q-args>), 1, <bang>0)
+command! -nargs=* GrepFzf
+      \ call fzf#vim#grep(myRg . shellescape(<q-args>), 1)
+
+command! OpenOrgFile call fzf#run(fzf#wrap({
+      \ 'source': 'fd -t f --follow -E "{.git,fixtures,*.swp}" .',
+      \ 'dir': '~/org-notes',
+      \ 'options': '--prompt notes:'
+      \ }))
 
 command! VimPlugins call fzf#run(fzf#wrap({
       \ 'source': 'fd -t d --hidden --follow -E "{.git,fixtures}" .',
@@ -599,22 +587,22 @@ augroup CursorLine
   au WinLeave * setlocal cursorline
 augroup END
 
-set autowrite                               " write if modified, such as when running :make
-set expandtab                               " tabs are spaces
-set fillchars=vert:│,fold:·                 " char between panels
 set grepprg=rg\ --hidden\ --glob\ '!.git'\ --vimgrep\ --with-filename
-set hidden                                  " allows hiding modified buffers
-set hlsearch                                " highlight searches
-set incsearch                               " search as characters are entered
-set lazyredraw                              " redraw only when we need to.
-set regexpengine=1                          " TODO really slow without this??
-set shiftwidth=2                            " number of spaces in tab when editing
-set showtabline=2                           " Show tabline
-set smartcase                               " search ignores case unless capitals present
-set sps=best,10                             " spell only shows top 10 results
-set tabstop=2                               " number of visual spaces per TAB
-set wildmenu                                " visual autocomplete for command menu
-set nomodeline                              " https://github.com/numirias/security/blob/master/doc/2019-06-04_ace-vim-neovim.md
+set autowrite               " write if modified, such as when running :make
+set expandtab               " tabs are spaces
+set fillchars=vert:│,fold:· " char between panels
+set hidden                  " allows hiding modified buffers
+set hlsearch                " highlight searches
+set incsearch               " search as characters are entered
+set lazyredraw              " redraw only when we need to.
+set nomodeline              " https://github.com/numirias/security/blob/master/doc/2019-06-04_ace-vim-neovim.md
+set regexpengine=1          " TODO really slow without this??
+set shiftwidth=2            " number of spaces in tab when editing
+set showtabline=2           " Show tabline
+set smartcase               " search ignores case unless capitals present
+set sps=best,10             " spell only shows top 10 results
+set tabstop=2               " number of visual spaces per TAB
+set wildmenu                " visual autocomplete for command menu
 
 set dictionary="/usr/dict/words"
 set foldnestmax=3
@@ -634,13 +622,13 @@ set tags=.tags;
 set wildignore=*.keep,*~,*.swp
 set wrapmargin=0
 
+" set number         " XXX challenge
+" set relativenumber " XXX slow
+
 augroup my_qf
   autocmd!
   autocmd FileType qf wincmd J
 augroup END
-
-" set number " XXX challenge
-" set relativenumber                          " XXX slow
 
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 inoremap <expr> <C-Space> pumvisible() \|\| &omnifunc == '' ?
@@ -656,15 +644,11 @@ color snazzier
 
 if has('gui_running')
   set guioptions=ec
-  " set macligatures XXX SLOW
   set guifont=Fira\ Code:h12
   set termguicolors
-  " set guifont=Hack\ Regular:h11
-  set lines=50 columns=108 linespace=3
   set shellcmdflag=-ic
   let $BASH_ENV = "~/.bash_aliases"
 endif
-
 " }}}
 " Mappings {{{
 " ! - Overrides {{{
@@ -674,7 +658,8 @@ cno jk <C-c>
 " move vertically by visual line
 " nnoremap j gj
 " nnoremap k gk
-" nnoremap <C-N> <Plug>VinegarUp
+
+nmap <C-N> <Plug>VinegarUp
 
 map <F4> :set spell!<CR><Bar>:echo "Spell Check: " . strpart("OffOn", 3 * &spell, 3)<CR>
 " MAPS ON COMMANDS I DONT LIKE
@@ -688,8 +673,7 @@ nmap <silent> <C-J> :wincmd j<CR>
 nmap <silent> <C-K> :wincmd k<CR>
 nmap <silent> <C-L> :wincmd l<CR>
 map <C-P> :Files<CR>
-" map <C-\> :Ag<CR> XXX seems to keep dumping to qf
-map \ :Rg<CR>
+map \ :GrepFzf<CR>
 
 imap <C-@> <C-Space>
 " }}}
@@ -706,7 +690,6 @@ let @b='0v/^\n^My^Wwpi^M^[^WW' " send current block to next cycled pane
 let g:lmap = {}
 nnoremap <silent> <leader>+ :exe "vertical resize +10"<CR>
 nnoremap <silent> <leader>- :exe "vertical resize -10"<CR>
-
 " }}}
 " a - AsyncRun {{{
 let g:lmap.a = { 'name': ' -- Async' }
@@ -714,7 +697,6 @@ map <leader>ar :AsyncRun
 map <leader>ac :ccl<CR>
 map <leader>ap :AsyncRun <C-r>0<CR>
 map <leader>aa :call asyncrun#quickfix_toggle(8)<cr>
-
 " }}}
 " A - AsyncStop {{{
 map <leader>A :AsyncStop<CR>
@@ -812,93 +794,127 @@ command! SourceVimrc write | so ~/.vimrc
 map <leader>gv :vsplit ~/.vimrc<CR>
 
 " }}}
-" l - Langauge Layer {{{
-" see Layer_Functions
-
-" }}}
-" o - Help {{{
+" h - Help {{{
 let g:lmap.h = { 'name': ' -- Help' }
 map <leader>hl <Plug>leaderguide-buffer
 map <leader>hc :Commands<CR>
 map <leader>hi :vert help index<CR>
 map <leader>hw :execute 'vert help ' . expand("<cword>")<CR>
-
-
 " }}}
-" n - Nerdtree {{{
-" let g:lmap.n = { 'name': ' -- Project' }
-map <leader>n :NERDTreeFind<CR>
+" l - Langauge Layer {{{
+noremap <Plug>log-word yiwoecho '<C-r>0:'. <C-r>0<C-[>k
+vnoremap <Plug>join-escape-lines :join<CR>:s/\\ *//g<CR>
 
+function! LayerVim()
+  let g:lmap.l = { 'name': ' -- L:Vimscript' }
+  vmap <leader>lj <Plug>join-escape-lines
+  map <leader>ll <Plug>log-word
+endfunction
+
+function! LayerJavascript()
+  let g:lmap.l = { 'name': ' -- L:Javascript' }
+  map <leader>ll yiwoconsole.log('\n<C-r>0:', <C-r>0);<C-[>k
+  map <leader>ld :%s/.*console.log.*\n//g<CR>
+endfunction
+
+function! LayerRust()
+  let g:lmap.l = { 'name': ' -- L:Rust' }
+  map <leader>lf :call TerminalVert("rustc ".expand('%:p')." && ".expand('%:p:r'), expand('%:t'))<CR>
+endfunction
+" }}}
+" n - netrw {{{
+let g:lmap.n = { 'name': ' -- netrw' }
+map <leader>nj :Sex<CR>
+map <leader>nl :Vex<CR>
+map <leader>nn <Plug>VinegarUp
 " }}}
 " p - Project {{{
 let g:lmap.p = { 'name': ' -- Project' }
+map <leader>pC <Plug>root-as-cwd
+map <leader>pc <Plug>file-as-cwd
 map <leader>pg :GFiles?<CR>
 map <leader>pm :Marks<CR>
+map <leader>pn :TestNearest<CR>
 map <leader>pn <C-W>}
 map <leader>po :only<CR>
 map <leader>pt :TestFile<CR>
 map <leader>pw :TestFile '--watch'<CR>
-map <leader>pn :TestNearest<CR>
-map <leader>pc <Plug>file-as-cwd
+
 map <Plug>file-as-cwd :cd %:p:h<CR>
-
-map <leader>pC <Plug>root-as-cwd
 map <Plug>root-as-cwd :exe "cd ".FindRootDirectory()<CR>
-
 " }}}
 " P - Projects {{{
 let g:lmap.P = { 'name': ' -- Projects' }
-map <Plug>Find_Project :FZF ~<CR>
 map <leader>PP :Projects<CR>
 map <leader>Pg <Plug>Find_Project
 map <leader>Ps :mksession<CR>
+map <leader>Pv :VimPlugins<CR>
 
+map <Plug>Find_Project :FZF ~<CR>
 " }}}
-" o - Quicktask {{{
-let g:lmap.o = { 'name': ' -- Quicktask' }
-let g:quicktask_no_mappings = 1
-map <leader>oD  <Plug>TaskComplete
-map <leader>oO  <Plug>AddTaskAbove
-map <leader>oS  <Plug>AddSnipToTask
-map <leader>oa  <Plug>ShowActiveTasksOnly
-map <leader>oc  <Plug>AddChildTask
-map <leader>od  <Plug>MoveTaskDown
-map <leader>ofi <Plug>FindIncompleteTimestamps
-map <leader>on  <Plug>AddNoteToTask
-map <leader>oo  <Plug>AddTaskBelow
-map <leader>os  <Plug>AddNextTimeToTask
-map <leader>ou  <Plug>MoveTaskUp
-map <leader>ov  <Plug>SelectTask
-map <leader>ow  <Plug>ShowWatchedTasksOnly
-map <leader>oy  <Plug>ShowTodayTasksOnly
-
-" let g:lmap.z = { 'name': ' -- Folding' }
-
+" o - OrgMode {{{
+let g:lmap.o = { 'name': ' -- Orgmode' }
+map <leader>oo :OpenOrgFile<CR>
+map <leader>os :SearchOrgNotes<CR>
+map <leader>on :tabnew ~/org-notes/rough.org<CR>
+" }}}
+" q - Quicktask {{{
+" let g:quicktask_no_mappings = 1
+" map <leader>qD  <Plug>TaskComplete
+" map <leader>qO  <Plug>AddTaskAbove
+" map <leader>qS  <Plug>AddSnipToTask
+" map <leader>qa  <Plug>ShowActiveTasksOnly
+" map <leader>qc  <Plug>AddChildTask
+" map <leader>qd  <Plug>MoveTaskDown
+" map <leader>qfi <Plug>FindIncompleteTimestamps
+" map <leader>qn  <Plug>AddNoteToTask
+" map <leader>qo  <Plug>AddTaskBelow
+" map <leader>qs  <Plug>AddNextTimeToTask
+" map <leader>qu  <Plug>MoveTaskUp
+" map <leader>qv  <Plug>SelectTask
+" map <leader>qw  <Plug>ShowWatchedTasksOnly
+" map <leader>qy  <Plug>ShowTodayTasksOnly
 " }}}
 " r - Regex {{{
 let g:lmap.r = { 'name': 'global reg' }
 map <leader>rr "*
-
-
 " }}}
 " s - Search {{{
 let g:lmap.s = { 'name': ' -- Search' }
-map <leader>sd :call SearchForDefinition(expand("<cword>"), 1, {})<CR>
-map <leader>ss :call SearchForDefinition(expand("<cword>"), 1, {'split': 'vsplit'})<CR>
-map <leader>st :CursorInTags<CR>
-command! CursorInTags :call fzf#vim#tags(expand("<cword>"))<CR>
-map <leader>sw :FindWordUnderCursor<CR>
-command! FindWordUnderCursor :call fzf#vim#ag(expand("<cword>"))
-" }}}
-" S - SearchVim {{{
-" let g:lmap.s = { 'name': ' -- SearchVim' }
-" map <leader>S :call Searchword()<CR>
-map <leader>S :AsyncRun! -strip -program=grep <cword> .<CR>
+
+map <leader>sd <Plug>goto_word
+map <leader>ss <Plug>goto_word_split
+map <leader>st <Plug>word_in_tags
+map <leader>sl <Plug>word_grep
+map <leader>sw <Plug>fzf_word
+map <leader>sW <Plug>fzf_WORD
+
+map <Plug>word_in_tags    :call fzf#vim#tags(expand("<cword>"))<CR>
+map <Plug>word_grep       :AsyncRun! -strip -program=grep <cword> .<CR>
+
+map <Plug>fzf_word        :call fzf#vim#grep(myRg . '--color=always '.shellescape(expand("<cword>")), 1)<CR>
+map <Plug>fzf_WORD        :call fzf#vim#grep(myRg . '--color=always '.shellescape(expand("<cWORD>")), 1)<CR>
+
+map <Plug>goto_word       :call SearchForDefinition(expand("<cword>"), 1, {})<CR>
+map <Plug>goto_word_split :call SearchForDefinition(expand("<cword>"), 1, {'split': 'vsplit'})<CR>
 " }}}
 " t - Terminal {{{
 let g:lmap.t = { 'name': ' -- Terminal' }
 map <leader>tt :ter ++curwin<CR>
-map <leader>tT :vert term<CR>
+map <leader>tT <Plug>term-window-split
+map <leader>tl <Plug>term-list
+map <leader>tk <Plug>kill-empty-terms
+
+map <Plug>term-window :ter ++curwin<CR>
+map <Plug>term-window-split :vert term<CR>
+
+map <Plug>kill-empty-terms :bdelete! !/bin<c-a><CR>
+
+map <Plug>term-list :call fzf#run(fzf#wrap({
+      \ 'options': '--prompt terminals:',
+      \ 'source': filter(map(filter( range(1, bufnr('$')), 'buflisted(v:val)' ), 'bufname(v:val)'), 'v:val =~ ".*zsh.*"')
+      \}))<CR>
+
 function! DefaultTerminalOptions(name)
   let t_options = {
         \ 'term_name': a:name,
@@ -908,18 +924,21 @@ function! DefaultTerminalOptions(name)
   return t_options
 endfunction
 
-let g:lmap.t.s = { 'name': ' -- Script' }
-map <leader>tss :call term_start(
+let g:lmap.t.s = { 'name': ' -- Run' }
+map <Plug>skyport-start :call term_start(
       \ [&shell, &shellcmdflag, "cd $SKYPORT_GRAPHQL_DIR; start_skyport"],
       \ DefaultTerminalOptions('t:skyport'))<CR>:echo 'skyport started'<CR>
+map <leader>tss <Plug>skyport
 
-map <leader>tsa :call term_start(
+map <Plug>papps-start :call term_start(
       \ [&shell, &shellcmdflag, "cd ~/Service/pages-apps; yarn start:dev"],
       \ DefaultTerminalOptions('t:papps'))<CR>:echo 'papps started'<CR>
+map <leader>tsa <Plug>papps-start
 
-map <leader>tsl :call term_start(
+map <Plug>lib-start :call term_start(
       \ [&shell, &shellcmdflag, "cd ~/Service/pages-lib; yarn watch"],
-      \ DefaultTerminalOptions('t:lib'))<CR>:echo 'papps started'<CR>
+      \ DefaultTerminalOptions('t:lib'))<CR>:echo 'plibb started'<CR>
+map <leader>tsl <Plug>lib-start
 
 " }}}
 " T - Tags {{{
@@ -929,7 +948,6 @@ map <leader>Tl :ts<CR>
 map <leader>Tn :tn<CR>
 map <leader>Tp :tp<CR>
 map <leader>Tw :ts "<cword>"<CR>
-
 " }}}
 " u - Utils {{{
 let g:lmap.u = { 'name': ' -- Utils' }
@@ -940,22 +958,23 @@ map <leader>up :PrevimOpen<CR>
 map <leader>us :sort<CR>
 map <leader>ut :TableFormat<CR>
 map <leader>uu :UndotreeToggle<CR>
-
 " }}}
 " w - Windows / Panes {{{
 let g:lmap.w = { 'name': ' -- Windows' }
-" :redraw!
 map <leader>wr :redraw!<CR>
 map <leader>wN :tabnew<CR>
 map <leader>wl :tabs<CR>
 map <leader>wn :tabNext<CR>
-map <leader>wo :Goyo<CR>
-map <leader>wp :pclose<CR>
 map <leader>wp :tabprevious<CR>
+map <leader>wo :Goyo<CR>
+" map <leader>wp :pclose<CR>
 map <leader>wT :TagBResise
 command! -nargs=1 TagBResise call ResiseTagBar(<f-args>)
 map <leader>wt :TagbarToggle<CR>
 map <leader>ww :vsplit<CR>
+" }}}
+" z - foling {{{
+" let g:lmap.z = { 'name': ' -- Folding' }
 
 " }}}
 " - - Leaderguide Setup {{{
@@ -1039,7 +1058,7 @@ function! VimFoldText()
   return s:symbol . s:line .repeat(' ', 80 - strwidth(s:line) - len(s:info)).s:info
 endfunction
 " }}}
-
+" Tabwinbufdo {{{
 " Like windo but restore the current window.
 function! WinDo(command)
   let currwin=winnr()
@@ -1051,7 +1070,6 @@ com! -nargs=+ -complete=command Windo call WinDo(<q-args>)
 " Like bufdo but restore the current buffer.
 function! BufDo(command)
   let currBuff=bufnr("%")
-  echo 'buffers'
   execute 'bufdo ' . a:command
   execute 'buffer ' . currBuff
 endfunction
@@ -1088,7 +1106,21 @@ function! TabWinBufDo(command)
   execute currwin . 'wincmd w'
 endfunction
 com! -nargs=+ -complete=command Tabwinbufdo call TabWinBufDo(<q-args>)
+" }}}
+" TerminalVert {{{
+function! TerminalVert(cmd, ...)
+  let name = get(a:, 1, 'quick')
+  call term_start([&shell, &shellcmdflag, a:cmd], {
+        \ 'term_name': 't:'.name,
+        \ 'vertical': 1,
+        \})
 
+  au BufLeave <buffer> wincmd p
+  nnoremap <buffer> <Enter> :q<CR>
+  redraw
+  echo "Press <Enter> to exit terminal (<Ctrl-C> first if command is still running)"
+endfunction
+" }}}
 " Layer_Functions {{{
 function! LayerSet()
   let cleanFiletype = substitute(&ft, "\.jsx", "", "")
@@ -1104,35 +1136,6 @@ function! CleanMap(letter)
     exe 'map <leader>'.a:letter.key.' <Nop>'
     exe 'unmap <leader>'.a:letter.key
   endfor
-endfunction
-
-function! LayerVim()
-  let g:lmap.l = { 'name': ' -- L:Vimscript' }
-  map <leader>ll yiwoecho '<C-r>0:'. <C-r>0<C-[>k
-endfunction
-
-function! LayerJavascript()
-  let g:lmap.l = { 'name': ' -- L:Javascript' }
-  map <leader>ll yiwoconsole.log('\n<C-r>0:', <C-r>0);<C-[>k
-  map <leader>ld :%s/.*console.log.*\n//g<CR>
-endfunction
-
-function! LayerRust()
-  let g:lmap.l = { 'name': ' -- L:Rust' }
-  map <leader>lf :call TerminalVert("rustc ".expand('%:p')." && ".expand('%:p:r'), expand('%:t'))<CR>
-endfunction
-
-function! TerminalVert(cmd, ...)
-  let name = get(a:, 1, 'quick')
-  call term_start([&shell, &shellcmdflag, a:cmd], {
-        \ 'term_name': 't:'.name,
-        \ 'vertical': 1,
-        \})
-
-  au BufLeave <buffer> wincmd p
-  nnoremap <buffer> <Enter> :q<CR>
-  redraw
-  echo "Press <Enter> to exit terminal (<Ctrl-C> first if command is still running)"
 endfunction
 " }}}
 " }}}
