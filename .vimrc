@@ -443,7 +443,7 @@ Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
 let g:fzf_layout = { 'window': '9split' }
-
+let g:fzf_colors = {'fg':['fg','Normal'],'bg':['bg'],'hl':['fg','Comment'],'fg+':['fg','CursorLine','CursorColumn','Normal'],'bg+':['bg','CursorLine','CursorColumn'],'hl+':['fg','Statement'],'info':['fg','ALEError'],'border':['fg','Boolean'],'prompt':['fg','Boolean'],'pointer':['fg','Exception'],'marker':['fg','Keyword'],'spinner':['fg','Label'],'header':['fg','Comment']}
 
 function! s:build_quickfix_list(lines)
   call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
@@ -555,7 +555,19 @@ Plug 'itchyny/calendar.vim'
 let g:calendar_google_calendar = 1
 
 " }}}
-Plug 'jceb/vim-orgmode' | Plug 'tpope/vim-speeddating'
+" vim-orgmode {{{
+Plug 'jceb/vim-orgmode' | Plug 'tpope/vim-speeddating' | Plug 'inkarkat/vim-SyntaxRange'
+augroup my_orgmode
+  au!
+  au Syntax org call SetupOrgHighlights(['javascript', 'vim'])
+augroup END
+
+function! SetupOrgHighlights(langList)
+  for lang in a:langList
+    call SyntaxRange#Include('#+BEGIN_SRC '.lang, '#+END_SRC', lang, 'vimLineComment')
+  endfor
+endfunction
+" }}}
 Plug 'mhinz/vim-startify'
 Plug 'diepm/vim-rest-console'
 " codi.vim {{{
@@ -653,6 +665,7 @@ endif
 " Mappings {{{
 " ! - Overrides {{{
 let mapleader = " "
+let maplocalleader = ","
 ino jk <esc>
 cno jk <C-c>
 " move vertically by visual line
@@ -723,8 +736,8 @@ command! YankWoleBuffer normal gg"*yG
 
 " }}}
 " c - Ctags {{{
-" let g:lmap.c = { 'name': ' -- Ctags' }
-map <leader>c :call GenerateCtags()<CR>
+let g:lmap.c = { 'name': ' -- Ctags' }
+map <leader>cc :call GenerateCtags()<CR>
 
 " }}}
 " d - Deletions {{{
@@ -857,6 +870,10 @@ let g:lmap.o = { 'name': ' -- Orgmode' }
 map <leader>oo :OpenOrgFile<CR>
 map <leader>os :SearchOrgNotes<CR>
 map <leader>on :tabnew ~/org-notes/rough.org<CR>
+map <leader>oc :OrgCodeSnippet 
+map <leader>op :OrgCodePaste
+
+command! -nargs=1 -complete=syntax OrgCodeSnippet :normal! o#+BEGIN_SRC <args><CR><CR>#+END_SRC<ESC>ki
 " }}}
 " q - Quicktask {{{
 " let g:quicktask_no_mappings = 1
@@ -988,6 +1005,9 @@ let g:leaderGuide_displayfunc = [function("s:my_displayfunc")]
 call leaderGuide#register_prefix_descriptions("<Space>", "g:lmap")
 nnoremap <silent> <leader> :<c-u>LeaderGuide '<Space>'<CR>
 vnoremap <silent> <leader> :<c-u>LeaderGuideVisual '<Space>'<CR>
+
+nnoremap <silent> <localleader> :<c-u>LeaderGuide  ','<CR>
+vnoremap <silent> <localleader> :<c-u>LeaderGuideVisual  ','<CR>
 " }}}
 " }}}
 " Functions  {{{
