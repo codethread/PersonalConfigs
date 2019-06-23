@@ -211,6 +211,10 @@ function! LightlineTabRead(n)
   return gettabwinvar(a:n, winnr, '&readonly') ? '' : ''
 endfunction
 
+function! LightlinePWD(n)
+  return fnamemodify(getcwd(tabpagewinnr(a:n), a:n), ':t')
+endfunction
+
 command! LightlineReload call LightlineReload()
 
 function! LightlineReload()
@@ -253,13 +257,17 @@ let g:lightline.inactive = {
 
 let g:lightline.component = { 'readonlyS': '%{&readonly?"":""}', 'modifiedS': '%{&modified?" ":""}', }
 
-let g:lightline.tab_component_function = { 'readonlyS': 'LightlineTabRead', 'modifiedS': 'LightlineTabMod', }
+let g:lightline.tab_component_function = { 
+      \ 'readonlyS': 'LightlineTabRead',
+      \ 'modifiedS': 'LightlineTabMod',
+      \ 'pwd': 'LightlinePWD'
+      \}
 
 let g:lightline.component_function = {
       \ 'asyncJob': 'AsyncJobStatus',
       \ 'gitbranch': 'LightlineFugitive',
       \ 'filepath': 'LightlineFilename',
-      \ 'filetype': 'LightlineFiletype',
+      \ 'filetype': 'LightlineFiletype'
       \}
 
 let g:lightline.tabline = {
@@ -267,8 +275,7 @@ let g:lightline.tabline = {
       \   ['tabs']
       \ ],
       \ 'right': [
-      \   ['gitbranch'],
-      \   ['filepath'],
+      \   ['gitbranch']
       \ ]
       \}
 
@@ -280,7 +287,7 @@ let g:lightline.tab = {
       \ ],
       \ 'inactive': [
       \   'tabnum',
-      \   'filename',
+      \   'pwd',
       \   'modifiedS',
       \ ]
       \}
@@ -411,7 +418,7 @@ Plug 'moll/vim-node'
 Plug 'leafgarland/typescript-vim'
 Plug 'jparise/vim-graphql'
 " Plug 'HerringtonDarkholme/yats.vim' " typescript highlighter XXX too slow
-" Plug 'peitalin/vim-jsx-typescript' " XXX setting jsx ast tsx
+Plug 'peitalin/vim-jsx-typescript' " XXX setting jsx ast tsx
 " Plug 'Quramy/tsuquyomi' XXX play around with this
 Plug 'shirk/vim-gas'
 
@@ -442,7 +449,7 @@ Plug 'stefandtw/quickfix-reflector.vim'
 " fzf {{{
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
-let g:fzf_layout = { 'window': '9split' }
+let g:fzf_layout = { 'window': 'botright 9split' }
 let g:fzf_colors = {'fg':['fg','Normal'],'bg':['bg'],'hl':['fg','Comment'],'fg+':['fg','CursorLine','CursorColumn','Normal'],'bg+':['bg','CursorLine','CursorColumn'],'hl+':['fg','Statement'],'info':['fg','ALEError'],'border':['fg','Boolean'],'prompt':['fg','Boolean'],'pointer':['fg','Exception'],'marker':['fg','Keyword'],'spinner':['fg','Label'],'header':['fg','Comment']}
 
 function! s:build_quickfix_list(lines)
@@ -495,8 +502,8 @@ command! -nargs=1 ProjectFiles call fzf#run(fzf#wrap({
 
 augroup my_fzf
   autocmd!
-  autocmd FileType fzf set laststatus=0 noshowmode noruler
-        \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+  autocmd FileType fzf set laststatus=0 noruler
+        \| autocmd BufLeave <buffer> set laststatus=2 ruler
 augroup END
 " }}}
 Plug 'junegunn/fzf.vim'
@@ -551,15 +558,21 @@ Plug 'vim-scripts/ParseJSON'
 " }}}
 Plug 'aaronbieber/vim-quicktask'
 " calendar.vim  {{{
-Plug 'itchyny/calendar.vim'
-let g:calendar_google_calendar = 1
-
+" Plug 'itchyny/calendar.vim'
+" let g:calendar_google_calendar = 1
 " }}}
 " vim-orgmode {{{
-Plug 'jceb/vim-orgmode' | Plug 'tpope/vim-speeddating' | Plug 'inkarkat/vim-SyntaxRange'
+Plug 'jceb/vim-orgmode' 
+      \| Plug 'tpope/vim-speeddating' 
+      \| Plug 'inkarkat/vim-SyntaxRange' 
+      " \| Plug 'chrisbra/NrrwRgn'
+
+let g:org_indent=1
+let g:org_heading_shade_leading_stars=0
+let g:org_agenda_files=['~/org-notes/*.org']
 augroup my_orgmode
   au!
-  au Syntax org call SetupOrgHighlights(['javascript', 'vim'])
+  au Syntax org call SetupOrgHighlights(['javascript', 'vim', 'sh'])
 augroup END
 
 function! SetupOrgHighlights(langList)
@@ -803,6 +816,8 @@ map <leader>gn :set nowrap!<CR>
 map <leader>gp :call pencil#init()<CR>
 map <leader>gr :set relativenumber!<CR>
 map <leader>gs :SourceVimrc<CR>
+map <leader>gS :set spell!<CR>
+map <leader>gP :set paste!<CR>
 command! SourceVimrc write | so ~/.vimrc
 map <leader>gv :vsplit ~/.vimrc<CR>
 
@@ -869,8 +884,10 @@ map <Plug>Find_Project :FZF ~<CR>
 let g:lmap.o = { 'name': ' -- Orgmode' }
 map <leader>oo :OpenOrgFile<CR>
 map <leader>os :SearchOrgNotes<CR>
-map <leader>on :tabnew ~/org-notes/rough.org<CR>
-map <leader>oc :OrgCodeSnippet 
+map <leader>oc :MyOrgCapture<CR>
+map <leader>on :vertical botright 80vsplit ~/org-notes/org-me-notes/rough.org<CR>
+map <leader>oN :vertical botright 80vsplit ~/org-notes/org-sky-notes/rough.org<CR>
+map <leader>oi :OrgCodeSnippet 
 map <leader>op :OrgCodePaste
 
 command! -nargs=1 -complete=syntax OrgCodeSnippet :normal! o#+BEGIN_SRC <args><CR><CR>#+END_SRC<ESC>ki
@@ -905,7 +922,9 @@ map <leader>st <Plug>word_in_tags
 map <leader>sl <Plug>word_grep
 map <leader>sw <Plug>fzf_word
 map <leader>sW <Plug>fzf_WORD
+map <leader>S <Plug>grep_start
 
+map <Plug>grep_start       :AsyncRun! -strip -program=grep 
 map <Plug>word_in_tags    :call fzf#vim#tags(expand("<cword>"))<CR>
 map <Plug>word_grep       :AsyncRun! -strip -program=grep <cword> .<CR>
 
@@ -929,7 +948,7 @@ map <Plug>kill-empty-terms :bdelete! !/bin<c-a><CR>
 
 map <Plug>term-list :call fzf#run(fzf#wrap({
       \ 'options': '--prompt terminals:',
-      \ 'source': filter(map(filter( range(1, bufnr('$')), 'buflisted(v:val)' ), 'bufname(v:val)'), 'v:val =~ ".*zsh.*"')
+      \ 'source': filter(map(filter( range(1, bufnr('$')), 'buflisted(v:val)' ), 'bufname(v:val)'), 'v:val =~ "t:.*"')
       \}))<CR>
 
 function! DefaultTerminalOptions(name)
@@ -943,9 +962,9 @@ endfunction
 
 let g:lmap.t.s = { 'name': ' -- Run' }
 map <Plug>skyport-start :call term_start(
-      \ [&shell, &shellcmdflag, "cd $SKYPORT_GRAPHQL_DIR; start_skyport"],
+      \ [&shell, &shellcmdflag, "cd $SKYPORT_GRAPHQL_DIR; NODE_ENV=integration npm start \| skyportJq"],
       \ DefaultTerminalOptions('t:skyport'))<CR>:echo 'skyport started'<CR>
-map <leader>tss <Plug>skyport
+map <leader>tss <Plug>skyport-start
 
 map <Plug>papps-start :call term_start(
       \ [&shell, &shellcmdflag, "cd ~/Service/pages-apps; yarn start:dev"],
@@ -996,8 +1015,9 @@ map <leader>ww :vsplit<CR>
 " }}}
 " - - Leaderguide Setup {{{
 function! s:my_displayfunc()
-  let g:leaderGuide#displayname = substitute(g:leaderGuide#displayname, '\c<cr>$', '', '')
+  let g:leaderGuide#displayname = substitute(g:leaderGuide#displayname, '\c<[cC][rR]>$', '', '')
   let g:leaderGuide#displayname = substitute(g:leaderGuide#displayname, '^<Plug>', '', '')
+  let g:leaderGuide#displayname = substitute(g:leaderGuide#displayname, '^:', '', '')
 endfunction
 
 let g:leaderGuide_displayfunc = [function("s:my_displayfunc")]
@@ -1075,7 +1095,9 @@ function! VimFoldText()
 
   let s:line = getline(v:foldstart)[2:-4]
 
-  return s:symbol . s:line .repeat(' ', 80 - strwidth(s:line) - len(s:info)).s:info
+  let s:whitespace = repeat(' ', 40 - strwidth(s:line) - len(s:info))
+  let s:message = s:symbol . s:line . s:whitespace .s:info
+  return s:message . repeat(' ', winwidth(winnr('$')) - len(s:message))
 endfunction
 " }}}
 " Tabwinbufdo {{{
@@ -1156,6 +1178,17 @@ function! CleanMap(letter)
     exe 'map <leader>'.a:letter.key.' <Nop>'
     exe 'unmap <leader>'.a:letter.key
   endfor
+endfunction
+" }}}
+" MyOrgCapture {{{
+function! MyOrgCapture()
+  " WIP
+  let [bufnum, lnum, col, off, curswant] = getcurpos()
+  echo 'curswant:'. curswant
+  echo 'off:'. off
+  echo 'col:'. col
+  echo 'lnum:'. lnum
+  echo 'bufnum:'. bufnum
 endfunction
 " }}}
 " }}}

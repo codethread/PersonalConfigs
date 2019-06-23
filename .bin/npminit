@@ -19,8 +19,8 @@ echo "module.exports = {
     settings: {}
 }" > .eslintrc.js
 echo "node_modules" > .gitignore
-echo "10.15.3" > .node-version
+echo "10.15.0" > .node-version
 echo "var a = chuff" > app.js
 
 npx install-peerdeps --dev eslint-config-airbnb
-yarn add --dev prettier eslint-plugin-prettier eslint-config-prettier
+npm i --save-dev prettier eslint-plugin-prettier eslint-config-prettier

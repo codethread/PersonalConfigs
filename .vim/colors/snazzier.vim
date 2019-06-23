@@ -54,7 +54,7 @@ hi StatusLine            ctermbg=008
 " netrw
 :exe 'hi netrwDir       guibg=bg ctermbg=000 ctermfg=003'
 :exe 'hi NERDTreeDir    guibg=bg ctermbg=000 ctermfg='.c_light_v
-:exe 'hi CursorLine     ctermbg=NONE cterm=underline'
+:exe 'hi CursorLine     ctermbg=008'
 :exe 'hi Directory      guibg=bg cterm=bold ctermfg='.c_magenta.' ctermbg=000'
 :exe 'hi NonText        guibg=bg ctermbg=000 ctermfg=000'
 :exe 'hi Comment        cterm=italic gui=italic'
@@ -129,7 +129,6 @@ hi ALEWarning           cterm=underline,italic
 :exe 'hi xmlEndTag   guifg='.turqoise.' ctermfg='.c_turqoise
 :exe 'hi jsxCloseString  guifg='.blue.' ctermfg='.c_blue
 :exe 'hi jsSpecial  guifg='.magenta.' ctermfg='.c_blue
-:exe 'hi typescriptReserved  guifg='.blue.' ctermfg='c_blue
 
 " CSS only for non gui
 :exe 'hi cssBoxProp      ctermbg=000 ctermfg=white'
@@ -169,3 +168,25 @@ hi ALEWarning           cterm=underline,italic
 :exe 'hi cssValueTime  ctermbg=000 ctermfg=green'
 :exe 'hi cssValueLength  ctermbg=000 ctermfg=green'
 
+" typescript
+:exe 'hi typescriptEndColons ctermfg=fg'
+:exe 'hi typescriptStorageClass cterm=bold ctermfg='.c_cyan
+:exe 'hi typescriptReserved cterm=italic ctermfg='.c_blue
+:exe 'hi typescriptLabel cterm=bold ctermfg='.c_magenta
+:exe 'hi typescriptBranch cterm=bold ctermfg='.c_red
+
+" yats XXX too slow
+:exe 'hi typescriptExport ctermfg='.c_magenta
+:exe 'hi typescriptImport ctermfg='.c_blue
+:exe 'hi typescriptVariable  cterm=bold ctermfg='c_blue
+:exe 'hi typescriptObjectLabel ctermfg='.c_cyan
+:exe 'hi typescriptArrowFunc ctermfg='.c_turqoise
+:exe 'hi typescriptBraces ctermfg='.c_turqoise
+:exe 'hi typescriptExceptions cterm=bold ctermfg='.c_red
+:exe 'hi typescriptTry cterm=bold ctermfg='.c_red
+:exe 'hi typescriptTemplateSB ctermfg='.c_magenta
+:exe 'hi typescriptGlobalMethod ctermfg='.c_light_v
+:exe 'hi typescriptTypeReference ctermfg='.c_turqoise
+
+" startify just highlights the panda white
+highlight StartifyHeader  ctermfg=white
