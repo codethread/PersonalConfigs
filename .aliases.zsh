@@ -11,6 +11,11 @@ alias vo="vim \$(fzf)"
 alias mvim="/Applications/MacVim.app/Contents/bin/mvim"
 alias als="eval \$(cat ~/.aliases.zsh | grep \"^alias.\+=\\\"\" | fzf -i --header='[run:]' | sed -E \"s:alias.*\\\"(.*)\\\":\\1:\" )"
 
+alias emacs-doom="rm ~/.emacs.d && ln -s ~/doom-emacs ~/.emacs.d"
+alias emacs-adam="rm ~/.emacs.d && ln -s ~/adam-emacs ~/.emacs.d"
+alias ed="emacs --daemon"
+alias ec="emacsclient -a "" -c -t"
+
 #---------------------------------------------#
 # HELPERS
 # -------------------------------------------#

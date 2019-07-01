@@ -1,20 +1,18 @@
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ansi-color-names-vector
-   ["#1e1f29" "#ff5c57" "#5af78e" "#f3f99d" "#57c7ff" "#ff6ac1" "#57c7ff" "#eff0eb"])
- '(ansi-term-color-vector
-   [unspecified "#1e1f29" "#ff5c57" "#5af78e" "#f3f99d" "#57c7ff" "#ff6ac1" "#57c7ff" "#eff0eb"])
- '(custom-safe-themes
-   (quote
-    ("0e8bac1e87493f6954faf5a62e1356ec9365bd5c33398af3e83cfdf662ad955f" default)))
- '(package-selected-packages
-   (quote
-    (org-evil exec-path-from-shell json-mode js2-mode web-mode flycheck projectile all-the-icons powerline zenburn-theme which-key use-package snazzy-theme ido-vertical-mode helm guide-key evil-leader))))
+;;; init.el --- Initialization file for Emacs
+;;; Commentary: Emacs Startup File --- initialization for Emacs
+;; TODO understand folds
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file)
 
-;; set up initial package-managers
+;;; set up gui
+;; =====================================================================================
+
+(add-to-list 'default-frame-alist '(tool-bar-lines . 0))
+(add-to-list 'default-frame-alist '(menu-bar-lines . 0))
+(add-to-list 'default-frame-alist '(vertical-scroll-bars))
+
+;;; set up initial package-managers
+;; =====================================================================================
 (require 'package)
 
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
@@ -36,8 +34,9 @@
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
 
-;; You should enable global-evil-leader-mode before you enable evil-mode
-;; https://github.com/cofi/evil-leader
+;;; functions
+;; =====================================================================================
+
 (defun reload-init-file ()
   "Reload init.el without restart."
   (interactive)
@@ -48,6 +47,48 @@
   (interactive)
   (find-file "~/.emacs.d/init.el"))
 
+(defun open-notes-file ()
+  "open init.el"
+  (interactive)
+  (find-file "~/org-notes/org-me-notes/rough.org"))
+
+;;; settings
+;; =====================================================================================
+;; y or n instead of yes etc
+(defalias 'yes-or-no-p 'y-or-n-p)
+;; always split vertically
+(setq split-width-threshold 170)
+
+;;; packages
+;; =====================================================================================
+
+(use-package org
+  :config
+  (defvar org-directory "~/org-notes/"))
+
+(use-package projectile
+  :config
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  (projectile-mode +1))
+
+(use-package helm
+  :config
+  (helm-mode t)
+  ;; (setq helm-M-x-fuzzy-match t)
+  :bind ("M-x" . helm-M-x))
+
+(use-package helm-projectile
+  :config
+  (helm-projectile-on)
+  :bind ("C-\\" . helm-projectile-rg))
+
+(use-package helm-rg
+  :config
+  (helm-projectile-on)
+  (setq helm-rg-default-extra-args "--hidden"))
+
+(require 'init-evil "~/.emacs.d/init-evil")
+
 (use-package ido
   :init
   (ido-mode t)
@@ -56,78 +97,28 @@
   :config
   (setq ido-enable-flex-matching t))
 
-(use-package evil-leader
-  :config
-  (global-evil-leader-mode)
-  (evil-leader/set-leader "<SPC>")
-  (evil-leader/set-key
-    "<SPC>" 'helm-M-x
-    "pp" 'find-file
-    "pf" 'helm-find
-    "e" 'find-file
-    "gs" 'reload-init-file
-    "gv" 'open-init-file
-    "ww" "\C-x3"
-    "bl" 'switch-to-buffer
-    "bk" 'kill-buffer))
-;; will likely need this for org mode:
-;; (evil-leader/set-key-for-mode 'emacs-lisp-mode "b" 'byte-compile-file)
-
-(use-package evil
-  :config
-  (evil-mode t))
-
-(use-package evil-org
-  :ensure t
-  :after org
-  :config
-  (add-hook 'org-mode-hook 'evil-org-mode)
-  (add-hook 'evil-org-mode-hook
-            (lambda ()
-              (evil-org-set-key-theme)))
-  (require 'evil-org-agenda)
-  (evil-org-agenda-set-keys))
-
-(use-package helm
-  :config
-  (helm-mode t)
-  (setq helm-M-x-fuzzy-match t))
-  ;; :bind (("M-x" . helm-M-x)
-	 ;; ("M-<f5>" . helm-find-files)
-	 ;; ([f10] . helm-buffers-list)
-	 ;; ([S-f10] . helm-recentf)))
 
 ;; prompts for key bindings - https://github.com/justbur/emacs-which-key
 ;; does suuport evil bindings but can deal with that if needs be
 (use-package which-key
   :config
-  (which-key-mode t))
-
+  (which-key-mode t)
 (which-key-add-key-based-replacements
   "<SPC> b" "Buffers"
+  "<SPC> f" "Files"
+  "<SPC> g" "Global"
+  "<SPC> n" "Notes"
   "<SPC> p" "Projects"
   "<SPC> w" "Window"
-  "<SPC> g" "Global")
+  ))
+
 ;; https://github.com/syl20bnr/spacemacs/blob/c7a103a772d808101d7635ec10f292ab9202d9ee/layers/%2Bdistributions/spacemacs-base/keybindings.el#L16 could probably be stolen here
 
 ;; (define-key some-map "f" '("foo" . long-name-for-command-foo))
-
-;; GUI
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:stipple nil :background "#272935" :foreground "white" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 130 :width normal :family "Fira Code")))))
-
 ;; deal with this to be done after
-(use-package snazzy-theme)
-(load-theme 'snazzy t)
-
-(menu-bar-mode -1)
-(toggle-scroll-bar -1)
-(tool-bar-mode -1)  
-
+(use-package dracula-theme
+  :config
+  (load-theme 'dracula t))
 
 (use-package powerline
   :config
@@ -135,13 +126,10 @@
 
 (use-package all-the-icons)
 
-(use-package projectile
-  :config
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-  (projectile-mode +1))
 
 
-;; sort out all this
+;;; sort out all this
+;; =====================================================================================
 
 ;; (use-package flycheck)
 ;; (use-package web-mode)
@@ -150,8 +138,8 @@
 
 
 ;; http://www.flycheck.org/manual/latest/index.html
-(require 'flycheck)
-(require 'js2-mode)
+(use-package flycheck)
+(use-package js2-mode)
 
 ;; use web-mode for .jsx files
 (add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
