@@ -43,12 +43,12 @@
   (load-file "~/.emacs.d/init.el"))
 
 (defun open-init-file ()
-  "open init.el"
+  "Open init.el."
   (interactive)
   (find-file "~/.emacs.d/init.el"))
 
 (defun open-notes-file ()
-  "open init.el"
+  "Open rough notes."
   (interactive)
   (find-file "~/org-notes/org-me-notes/rough.org"))
 
@@ -56,15 +56,28 @@
 ;; =====================================================================================
 ;; y or n instead of yes etc
 (defalias 'yes-or-no-p 'y-or-n-p)
-;; always split vertically
-(setq split-width-threshold 170)
+(setq split-width-threshold 170 ;; always split vertically if there's room
+      help-window-select t
+      show-paren-mode t ;; highlight parens
+      )
 
 ;;; packages
 ;; =====================================================================================
 
+(use-package paradox
+  :init
+  (paradox-enable))
+
 (use-package org
-  :config
-  (defvar org-directory "~/org-notes/"))
+  :init
+  (defvar org-directory "~/org-notes/")
+  (defvar org-default-notes-file (concat org-directory "/rough.org"))
+  :bind
+  ("C-c c" . org-capture)
+  ("C-c l" . org-store-link)
+  ("C-c a" . org-agenda)
+  ("C-c c" . org-capture)
+  ("C-c b" . org-switchb))
 
 (use-package projectile
   :config
@@ -75,27 +88,68 @@
   :config
   (helm-mode t)
   ;; (setq helm-M-x-fuzzy-match t)
-  :bind ("M-x" . helm-M-x))
+  :bind
+  ("M-x" . helm-M-x)
+  )
 
 (use-package helm-projectile
-  :config
+  :init
   (helm-projectile-on)
-  :bind ("C-\\" . helm-projectile-rg))
+  :bind
+  ("C-\\" . helm-projectile-rg)
+  )
+
+(use-package helm-lsp :commands helm-lsp-workspace-symbol)
 
 (use-package helm-rg
   :config
-  (helm-projectile-on)
   (setq helm-rg-default-extra-args "--hidden"))
+  ;; (setq helm-rg-default-extra-args "--hidden --follow"))
+
+(use-package lsp-mode
+  :hook (js2-mode . lsp)
+  :commands lsp
+  :config
+  (setq lsp-enable-snippet nil)
+  (setq lsp-auto-guess-root t)
+  )
+;; (use-package lsp-ui :commands lsp-ui-mode) ;; XXX aweful but maybe use peak.
+
+(use-package company
+  :init
+  (setq company-tooltip-align-annotations t
+        company-global-modes
+        '(not erc-mode message-mode help-mode gud-mode eshell-mode)
+        company-backends '(company-capf)
+        company-frontends
+        '(company-pseudo-tooltip-frontend
+          company-echo-metadata-frontend)
+	)
+  :config
+  (global-company-mode +1)
+  )
+
+(use-package company-lsp
+  :commands company-lsp
+  )
+
+
+;; (use-package company-lsp
+;;   :commands company-lsp
+;;   :config
+;;   ;; (set-company-backend! 'lsp-mode 'company-lsp)
+;;   (company-lsp-enable-snippet nil)
+;;   )
 
 (require 'init-evil "~/.emacs.d/init-evil")
 
-(use-package ido
-  :init
-  (ido-mode t)
-  (use-package ido-vertical-mode
-    :init (ido-vertical-mode 1))
-  :config
-  (setq ido-enable-flex-matching t))
+;; (use-package ido
+;;   :init
+;;   (ido-mode t)
+;;   (use-package ido-vertical-mode
+;;     :init (ido-vertical-mode 1))
+;;   :config
+;;   (setq ido-enable-flex-matching t))
 
 
 ;; prompts for key bindings - https://github.com/justbur/emacs-which-key
@@ -109,6 +163,7 @@
   "<SPC> g" "Global"
   "<SPC> n" "Notes"
   "<SPC> p" "Projects"
+  "<SPC> s" "Search"
   "<SPC> w" "Window"
   ))
 
@@ -130,39 +185,30 @@
 
 ;;; sort out all this
 ;; =====================================================================================
-
-;; (use-package flycheck)
-;; (use-package web-mode)
-;; (use-package js2-mode)
-;; (use-package json-mode)
-
-
-;; http://www.flycheck.org/manual/latest/index.html
-(use-package flycheck)
+(use-package json-mode)
 (use-package js2-mode)
+(use-package rjsx-mode)
+(use-package graphql-mode)
 
-;; use web-mode for .jsx files
-(add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 
-;; turn on flychecking globally
-(add-hook 'after-init-hook #'global-flycheck-mode)
+(use-package flycheck
+  :ensure t
+  :init (global-flycheck-mode)
+  :config
+  ;; disable jshint since we prefer eslint checking
+  ;; (setq-default flycheck-disabled-checkers
+  ;; 		(append flycheck-disabled-checkers
+  ;; 			'(javascript-jshint)))
+  ;; customize flycheck temp file prefix
+  (setq-default flycheck-temp-prefix ".flycheck")
+  ;; disable json-jsonlist checking for json files
+  ;; (setq-default flycheck-disabled-checkers
+  ;;   (append flycheck-disabled-checkers
+  ;;     '(json-jsonlist)))
+  )
 
-;; disable jshint since we prefer eslint checking
-(setq-default flycheck-disabled-checkers
-  (append flycheck-disabled-checkers
-    '(javascript-jshint)))
 
-;; use eslint with web-mode for jsx files
-(flycheck-add-mode 'javascript-eslint 'web-mode)
-
-;; customize flycheck temp file prefix
-(setq-default flycheck-temp-prefix ".flycheck")
-
-;; disable json-jsonlist checking for json files
-(setq-default flycheck-disabled-checkers
-  (append flycheck-disabled-checkers
-    '(json-jsonlist)))
 
 ;; https://github.com/purcell/exec-path-from-shell
 ;; only need exec-path-from-shell on OSX
@@ -182,23 +228,6 @@
     (when (and eslint (file-executable-p eslint))
       (setq-local flycheck-javascript-eslint-executable eslint))))
 (add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules)
-
-;; adjust indents for web-mode to 2 spaces
-(defun my-web-mode-hook ()
-  "Hooks for Web mode. Adjust indents"
-  ;;; http://web-mode.org/
-  (setq web-mode-markup-indent-offset 2)
-  (setq web-mode-css-indent-offset 2)
-  (setq web-mode-code-indent-offset 2))
-(add-hook 'web-mode-hook  'my-web-mode-hook)
-
-;; for better jsx syntax-highlighting in web-mode
-;; - courtesy of Patrick @halbtuerke
-(defadvice web-mode-highlight-part (around tweak-jsx activate)
-  (if (equal web-mode-content-type "jsx")
-    (let ((web-mode-enable-part-face nil))
-      ad-do-it)
-    ad-do-it))
 
 ;; focus window after split
 (global-set-key "\C-x2" (lambda () (interactive)(split-window-vertically) (other-window 1)))
