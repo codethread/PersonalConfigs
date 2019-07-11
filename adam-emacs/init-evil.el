@@ -113,6 +113,7 @@
   (define-key evil-normal-state-map "gf" 'helm-projectile-find-file-dwim)
   (define-key evil-normal-state-map "gD" 'helm-lsp-workspace-symbol)
   (define-key evil-normal-state-map "gh" 'lsp-describe-thing-at-point)
+  (define-key evil-normal-state-map "-" 'dired-jump)
   (define-key evil-insert-state-map (kbd "C-@") 'company-complete)
   )
 

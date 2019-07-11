@@ -100,7 +100,7 @@ alias uni="unicorn_build"
 # SPAGES
 # -------------------------------------------#
 alias spg="cd /users/adh23/service/sky-pages"
-alias sps="pages start dev --apps mobile,bill,myaccount,mobile-bill | lolcat"
+alias sps="pages start dev --apps mobile,mysky | lolcat"
 alias spu="pages start dev --apps mobile-service | lolcat"
 alias spt="mv .env .nenv; pages test unit -q; mv .nenv .env; alert"
 alias spc="ctags -R apps/ && ctags -R -a src/"

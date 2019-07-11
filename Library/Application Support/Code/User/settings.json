@@ -121,7 +121,6 @@
     "titleBar"
   ],
   "workbench.panel.defaultLocation": "right",
-<<<<<<< HEAD
   "peacock.favoriteColors": [
     {
       "name": "Angular Red",
@@ -168,5 +167,12 @@
       "value": "#42b883"
     }
   ],
-  "editor.codeLens": false
+  "editor.codeLens": false,
+  "todohighlight.keywords": [
+    "HACK:",
+    "XXX:"
+  ],
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  }
 }

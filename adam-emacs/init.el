@@ -52,6 +52,11 @@
   (interactive)
   (find-file "~/org-notes/org-me-notes/rough.org"))
 
+(defun what-face (pos)
+  (interactive "d")
+  (let ((face (or (get-char-property (pos) 'read-face-name)
+                  (get-char-property (pos) 'face))))
+    (if face (message "Face: %s" face) (message "No face at %d" pos))))
 ;;; settings
 ;; =====================================================================================
 ;; y or n instead of yes etc
@@ -61,6 +66,9 @@
       show-paren-mode t ;; highlight parens
       )
 
+(setq-default indent-tabs-mode nil)
+(setq-default font-lock-maximum-decoration 3)
+              
 ;;; packages
 ;; =====================================================================================
 
@@ -77,7 +85,28 @@
   ("C-c l" . org-store-link)
   ("C-c a" . org-agenda)
   ("C-c c" . org-capture)
-  ("C-c b" . org-switchb))
+  ("C-c b" . org-switchb)
+  :hook
+  org-bullets-mode           ; "prettier" bullets
+  org-indent-mode            ; margin-based indentation
+  visual-line-mode           ; line wrapping
+  )
+
+(use-package org-bullets
+  :commands org-bullets-mode)
+
+(font-lock-add-keywords
+ 'org-mode
+ `(("^[ \t]*\\(?:[-+*]\\|[0-9]+[).]\\)[ \t]+\\(\\(?:\\[@\\(?:start:\\)?[0-9]+\\][ \t]*\\)?\\[\\(?:X\\|\\([0-9]+\\)/\\2\\)\\][^\n]*\n\\)" 1 'org-headline-done prepend))
+ 'append)
+
+(setq-default
+ org-fontify-done-headline t
+ org-fontify-whole-heading-line t
+ org-hide-leading-stars t
+ org-startup-folded t
+ org-startup-indented t
+ )
 
 (use-package projectile
   :config
@@ -162,7 +191,7 @@
   "<SPC> f" "Files"
   "<SPC> g" "Global"
   "<SPC> n" "Notes"
-  "<SPC> p" "Projects"
+  ;; "<SPC> p" "Projects"
   "<SPC> s" "Search"
   "<SPC> w" "Window"
   ))
