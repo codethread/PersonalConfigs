@@ -163,7 +163,7 @@ let g:ale_sign_warning = '▹'
 " VISUAL CHANGES
 " indentLine  {{{
 Plug 'Yggdroot/indentLine'
-let g:indentLine_char = get(g:, 'indentLine_char', '.')
+let g:indentLine_char = get(g:, 'indentLine_char', '┊')
 let g:indentLine_color_term = 237
 " let g:indentLine_color_term = 254
 " let g:indentLine_concealcursor = 'niv'

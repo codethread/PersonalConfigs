@@ -10,6 +10,10 @@
 (add-to-list 'default-frame-alist '(tool-bar-lines . 0))
 (add-to-list 'default-frame-alist '(menu-bar-lines . 0))
 (add-to-list 'default-frame-alist '(vertical-scroll-bars))
+(add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+(add-to-list 'default-frame-alist '(ns-appearance . dark)) ;; assuming you are using a dark theme
+(setq ns-use-proxy-icon nil)
+(setq frame-title-format nil)
 
 ;;; set up initial package-managers
 ;; =====================================================================================
@@ -57,6 +61,13 @@
   (let ((face (or (get-char-property (pos) 'read-face-name)
                   (get-char-property (pos) 'face))))
     (if face (message "Face: %s" face) (message "No face at %d" pos))))
+
+(defun shell-other-window ()
+  "Open a `shell' in a new window."
+  (interactive)
+  (let ((buf (shell)))
+    (switch-to-buffer (other-buffer buf))
+    (switch-to-buffer-other-window buf)))
 ;;; settings
 ;; =====================================================================================
 ;; y or n instead of yes etc
@@ -64,17 +75,35 @@
 (setq split-width-threshold 170 ;; always split vertically if there's room
       help-window-select t
       show-paren-mode t ;; highlight parens
+      ;; no bells
+      ring-bell-function #'ignore
+      visible-bell t
+      ;; don't resize emacs in steps, it looks weird
+      window-resize-pixelwise t
+      frame-resize-pixelwise t
       )
 
 (setq-default indent-tabs-mode nil)
 (setq-default font-lock-maximum-decoration 3)
-              
+
+(add-hook 'dired-mode-hook
+      (lambda ()
+        (dired-hide-details-mode)
+        (dired-sort-toggle-or-edit)))
+
 ;;; packages
 ;; =====================================================================================
 
 (use-package paradox
   :init
   (paradox-enable))
+
+;; shared clipbaord
+(use-package xclip
+  :config
+  (xclip-mode 1))
+
+(use-package org-bullets)
 
 (use-package org
   :init
@@ -86,14 +115,14 @@
   ("C-c a" . org-agenda)
   ("C-c c" . org-capture)
   ("C-c b" . org-switchb)
-  :hook
-  org-bullets-mode           ; "prettier" bullets
-  org-indent-mode            ; margin-based indentation
-  visual-line-mode           ; line wrapping
+  ; ; :hook
+  ; (org-bullets-mode 1)           ; "prettier" bullets
+  ; (org-indent-mode 1)          ; margin-based indentation
+  ; (visual-line-mode 1)         ; line wrapping
   )
-
-(use-package org-bullets
-  :commands org-bullets-mode)
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+; (add-hook 'org-mode-hook (lambda () (org-indent-mode 1)))
+; (add-hook 'org-mode-hook (lambda () (org-visual-mode 1)))
 
 (font-lock-add-keywords
  'org-mode
@@ -107,6 +136,17 @@
  org-startup-folded t
  org-startup-indented t
  )
+
+(use-package magit)
+
+(use-package ace-window
+  :config
+  (global-set-key (kbd "C-x o") 'ace-window)
+  (setq aw-ignore-current t)
+  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+  ;; (setq aw-background nil)
+  (custom-set-faces '(aw-leading-char-face ((t (:height 3.0)))))
+  )
 
 (use-package projectile
   :config
@@ -142,7 +182,8 @@
   (setq lsp-enable-snippet nil)
   (setq lsp-auto-guess-root t)
   )
-;; (use-package lsp-ui :commands lsp-ui-mode) ;; XXX aweful but maybe use peak.
+
+(use-package lsp-ui :commands lsp-ui-mode) ;; XXX aweful but maybe use peak.
 
 (use-package company
   :init
@@ -193,6 +234,7 @@
   "<SPC> n" "Notes"
   ;; "<SPC> p" "Projects"
   "<SPC> s" "Search"
+  "<SPC> t" "Term"
   "<SPC> w" "Window"
   ))
 
@@ -211,6 +253,13 @@
 (use-package all-the-icons)
 
 
+(use-package multi-term
+  :config
+  (setq multi-term-program "/bin/zsh")
+  )
+
+(require 'dotenv-mode) ; unless installed from a package
+(add-to-list 'auto-mode-alist '("\\.env\\..*\\'" . dotenv-mode)) ;; for optionally supporting additional file extensions such as `.env.test' with this major mode
 
 ;;; sort out all this
 ;; =====================================================================================
@@ -218,6 +267,23 @@
 (use-package js2-mode)
 (use-package rjsx-mode)
 (use-package graphql-mode)
+
+;; enable typescript-tslint checker
+(flycheck-add-mode 'typescript-tslint 'web-mode)
+(use-package tide
+  :ensure t
+  :after (typescript-mode company flycheck)
+  :hook ((typescript-mode . tide-setup)
+         (typescript-mode . tide-hl-identifier-mode)
+         (before-save . tide-format-before-save)))
+
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
+(add-hook 'web-mode-hook
+          (lambda ()
+            (when (string-equal "tsx" (file-name-extension buffer-file-name))
+              (setup-tide-mode))))
+
 
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 
@@ -242,6 +308,8 @@
 ;; https://github.com/purcell/exec-path-from-shell
 ;; only need exec-path-from-shell on OSX
 ;; this hopefully sets up path and other vars better
+(exec-path-from-shell-initialize)
+
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize))
 

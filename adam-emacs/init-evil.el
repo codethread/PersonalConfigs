@@ -18,12 +18,14 @@
     "<SPC>" 'projectile-find-file
     ";" 'helm-M-x
     ;; b --- buffers
-    "bb" 'helm-buffers-list
+    "bc" 'delete-window
+    "bl" 'helm-buffers-list
     "bk" 'kill-buffer
     "bp" 'evil-prev-buffer
     "bP" 'evil-split-prev-buffer
     "bn" 'evil-next-buffer
     "bN" 'evil-split-next-buffer
+    "br" 'rename-buffer
 
     ;; f --- file
     "ff" 'helm-find-files
@@ -32,8 +34,15 @@
     "F" 'org-cycle ;; TODO deal with this
     "fv" 'open-init-file
 
+    ;; g -- global
     "gs" 'reload-init-file ;; TODO make more glorious
+
+    ;; w -- window
     "ww" "\C-x3"
+    "wt" 'elscreen-toggle-display-tab
+    "wr" 'elscreen-screen-nickname
+    "wN" 'elscreen-create
+    "wl" 'elscreen-toggle
 
     ;; s -- search
     "sf" 'helm-occur
@@ -41,18 +50,6 @@
     ;; n --- notes
     "nn" 'open-notes-file
     "nb" 'org-switchb
-
-    ;; p --- project
-    ;; "." '+default/browse-project               ;;  "Browse project"
-    ;; ">" 'doom/browse-in-other-project          ;;  "Browse other project"
-    ;; "?" 'doom/find-file-in-other-project       ;;  "Find file in other project"
-    ;; "pb" 'projectile-switch-to-buffer           ;;  "Switch to project buffer"
-    ;; "pf" 'projectile-find-file                  ;;  "Find file in project"
-    ;; "pp" 'projectile-switch-project             ;;  "Switch project"
-    ;; "pr" 'projectile-recentf                    ;;  "Find recent project files"
-    ;; "x" 'doom/open-project-scratch-buffer      ;;  "Pop up scratch buffer"
-    ;; "X" 'doom/switch-to-project-scratch-buffer ;;  "Switch to scratch buffer"
-    ;; "t" '+default/project-tasks)               ;;  "List project tasks"
 
     ;; p --- project
     "p!" 'projectile-run-shell-command-in-root  ;;  "Run cmd in project root"
@@ -70,6 +67,9 @@
     "pp" 'projectile-switch-project             ;;  "Switch project"
     "pr" 'projectile-recentf                    ;;  "Find recent project files"
     "ps" 'projectile-rg ;; also ag or grep
+
+    ;; t --- terminal
+    "tt" 'multi-term
     ))
 ;; will likely need this for org mode:
 ;; (evil-leader/set-key-for-mode 'emacs-lisp-mode "b" 'byte-compile-file)
@@ -115,9 +115,9 @@
   (define-key evil-normal-state-map "gh" 'lsp-describe-thing-at-point)
   (define-key evil-normal-state-map "-" 'dired-jump)
   (define-key evil-insert-state-map (kbd "C-@") 'company-complete)
+  ;; gui mode
+  (define-key evil-insert-state-map (kbd "C-SPC") 'company-complete)
   )
-
-
 
 (use-package evil-collection
   :config
@@ -155,5 +155,12 @@
 (use-package evil-surround
   :config
   (global-evil-surround-mode 1))
+
+(use-package evil-tabs
+  :config
+  (global-evil-tabs-mode t))
+
+;; evil-tabs :q closes whole tab so this should fix it and come last
+(evil-ex-define-cmd "q[uit]" 'evil-quit)
 
 (provide 'init-evil)

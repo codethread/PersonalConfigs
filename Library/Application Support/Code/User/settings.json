@@ -117,10 +117,10 @@
   "vsicons.dontShowNewVersionMessage": true,
   "workbench.colorTheme": "Panda Syntax",
   "problems.decorations.enabled": false,
-  "peacock.affectedElements": [
-    "titleBar"
-  ],
   "workbench.panel.defaultLocation": "right",
+  "peacock.affectActivityBar": false,
+  "peacock.affectStatusBar": false,
+  "peacock.affectTitleBar": true,
   "peacock.favoriteColors": [
     {
       "name": "Angular Red",
@@ -174,5 +174,14 @@
   ],
   "[json]": {
     "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
   }
 }
