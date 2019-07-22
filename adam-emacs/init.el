@@ -125,10 +125,35 @@ new windows will each be 180 columns wide, and sit just below the threshold.
         (dired-hide-details-mode)
         (dired-sort-toggle-or-edit)))
 (setq vc-follow-symlinks t)
+;; close buffers without confirm
+(setq kill-buffer-query-functions
+      (delq 'process-kill-buffer-query-function kill-buffer-query-functions))
 
+(defadvice delete-window (after restore-balance activate)
+  "Balance deleted windows."
+  (balance-windows))
 
 ;;; functions
 ;; =====================================================================================
+
+;; stolen from crux https://github.com/bbatsov/crux/blob/master/crux.el#L347
+(defun my|delete-file-and-buffer ()
+  "Kill the current buffer and deletes the file it is visiting."
+  (interactive)
+  (let ((filename (buffer-file-name)))
+    (when filename
+      (if (vc-backend filename)
+          (vc-delete-file filename)
+        (progn
+          (delete-file filename)
+          (message "Deleted file %s" filename)
+          (kill-buffer))))))
+
+;; https://www.reddit.com/r/emacs/comments/64xb3q/killthisbuffer_sometimes_just_stops_working/
+(defun my|kill-this-buffer ()
+  "Kill the current buffer."
+  (interactive)
+  (kill-buffer (current-buffer)))
 
 (defun reload-init-file ()
   "Reload init.el without restart."
@@ -173,8 +198,8 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   (switch-to-next-buffer))
 (global-set-key (kbd "C-x 3") 'frontmacs/hsplit-last-buffer)
 
-(defun projectile-term ()
-  "Create an ansi-term at the project root"
+(defun my|projectile-term ()
+  "Create an ansi-term at the project root."
   (interactive)
   (let ((root (projectile-project-root))
 	(buff-name (concat " [term] " (projectile-project-root))))
@@ -271,9 +296,11 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   :bind
   ("C-c <SPC>" . ace-jump-mode))
  
+
 (use-package ace-window
   :config
-  (global-set-key (kbd "C-x o") 'ace-window)
+  (global-set-key (kbd "M-o") 'ace-window)
+  (global-set-key (kbd "M-d") (lambda () (interactive) (ace-window 16)))
   (setq aw-ignore-current t)
   (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
   ;; (setq aw-background nil)
@@ -283,7 +310,17 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 (use-package projectile
   :config
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-  (projectile-mode +1))
+  (projectile-mode +1)
+  (projectile-register-project-type 'yarn '("yarn.lock")
+                                    :compile "yarn"
+                                    :test "yarn test"
+                                    :run "yarn start"
+                                    :test-suffix ".spec")
+  (projectile-register-project-type 'npm '("package-lock.json")
+                                    :compile "npm i"
+                                    :test "npm test"
+                                    :run "npm start"
+                                    :test-suffix ".spec"))
 
 
 (use-package helm
@@ -394,9 +431,9 @@ new windows will each be 180 columns wide, and sit just below the threshold.
     "<SPC>" 'projectile-find-file
     ";" 'helm-M-x
     ;; b --- buffers
-    "bc" 'delete-window
     "bl" 'helm-buffers-list
-    "bk" 'kill-buffer
+    "bk" 'my|kill-this-buffer
+    "bK" 'kill-buffer
     "bj" 'evil-show-jumps
     "bp" 'evil-prev-buffer
     "bP" 'evil-split-prev-buffer
@@ -406,20 +443,28 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 
     ;; e -- error
     "ef" 'my|eslint-fix-file-and-revert
+    "en" 'flycheck-next-error
+    "ep" 'flycheck-previous-error
+    "el" 'flycheck-list-errors
+    "ee" 'flycheck-display-error-at-point ;; not sure?
+    "eh" 'flycheck-explain-error-at-point ;; not sure?
 
     ;; f --- file
     "ff" 'helm-find-files
     "fr" 'helm-recentf
     "fR" 'projectile-recentf
-    "F" 'org-cycle ;; TODO deal with this
+    "F"  'org-cycle ;; TODO deal with this
     "fv" 'open-init-file
+    "fk" 'my|delete-file-and-buffer
 
     ;; g -- global
     "gs" 'reload-init-file ;; TODO make more glorious
 
     ;; w -- window
-    "ww" "\C-x3"
+    "ww" 'evil-window-vsplit
     "wt" 'elscreen-toggle-display-tab
+    "wk" 'delete-window
+    "wK" 'elscreen-kill
     "wr" 'elscreen-screen-nickname
     "wN" 'elscreen-create
     "wl" 'elscreen-toggle
@@ -450,11 +495,14 @@ new windows will each be 180 columns wide, and sit just below the threshold.
     "po" 'projectile-find-other-file            ;;  "Find other file"
     "pp" 'projectile-switch-project             ;;  "Switch project"
     "pr" 'projectile-recentf                    ;;  "Find recent project files"
+    "pR" 'projectile-regenerate-tags                    ;;  "Find recent project files"
     "ps" 'helm-projectile-rg ;; also ag or grep
+    "po" 'projectile-toggle-between-implementation-and-test
+    "pt" 'my|test-file ;; test file in project
 
     ;; t --- terminal
     "to" 'multi-term
-    "tt" 'projectile-term
+    "tt" 'my|projectile-term
     ))
 ;; will likely need this for org mode:
 ;; (evil-leader/set-key-for-mode 'emacs-lisp-mode "b" 'byte-compile-file)
@@ -510,6 +558,7 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 
   ;; get scroll up back and replace with C-m as it's just return
   (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
+  (define-key evil-normal-state-map (kbd "C-y") 'universal-argument)
   ;; (define-key evil-normal-state-map (kbd "C-m") 'universal-argument)
   ;; remap to sexp
   (define-key evil-normal-state-map (kbd "C-M-l") 'forward-sexp)
@@ -519,6 +568,9 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 
   ;; bring line into focus and attempt to show context.
   (define-key evil-normal-state-map (kbd "L") 'reposition-window)
+
+  ;; blacklist
+  (evil-set-initial-state 'shell-mode 'emacs)
   )
 
 ;; (use-package evil-collection
@@ -532,23 +584,23 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   (evil-commentary-mode t))
 
 ;; https://github.com/Somelauw/evil-org-mode
-;; (use-package evil-org
-;;   :ensure t
-;;   :after org
-;;   :config
-;;   (add-hook 'org-mode-hook 'evil-org-mode)
-;;   (add-hook 'evil-org-mode-hook
-;; 	    (lambda ()
-;; 	      (evil-org-set-key-theme '(textobjects insert navigation additional shift todo heading))))
-;;   (require 'evil-org-agenda)
-;;   (evil-declare-key 'normal org-mode-map ;; (evil-define-key in https://github.com/noctuid/evil-guide#binding-keys-to-keys-keyboard-macros ?
-;;     ",c" 'org-toggle-checkbox
-;;     ",g" 'org-open-at-point
-;;     ",hn" 'org-insert-heading-respect-content ;; there is an evil for this?
-;;      ">" 'org-shiftmetaright
-;;      "<" 'org-shiftmetaleft
-;;     (kbd "TAB") 'org-cycle)
-;;   (evil-org-agenda-set-keys))
+(use-package evil-org
+  :ensure t
+  :after org
+  :config
+  (add-hook 'org-mode-hook 'evil-org-mode)
+  (add-hook 'evil-org-mode-hook
+	    (lambda ()
+	      (evil-org-set-key-theme '(textobjects insert navigation additional shift todo heading))))
+  (require 'evil-org-agenda)
+  (evil-declare-key 'normal org-mode-map ;; (evil-define-key in https://github.com/noctuid/evil-guide#binding-keys-to-keys-keyboard-macros ?
+    ",c" 'org-toggle-checkbox
+    ",g" 'org-open-at-point
+    ",hn" 'org-insert-heading-respect-content ;; there is an evil for this?
+     ">" 'org-shiftmetaright
+     "<" 'org-shiftmetaleft
+    (kbd "TAB") 'org-cycle)
+  (evil-org-agenda-set-keys))
 
 (use-package evil-escape
   :config
@@ -612,6 +664,10 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 ;;   :config
 ;;   (setq ido-enable-flex-matching t))
 
+(use-package undo-tree
+  :config
+  (setq undo-tree-auto-save-history t)
+  (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo"))))
 
 ;; prompts for key bindings - https://github.com/justbur/emacs-which-key
 ;; does suuport evil bindings but can deal with that if needs be
@@ -624,7 +680,7 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   "<SPC> f" "Files"
   "<SPC> g" "Global"
   "<SPC> n" "Notes"
-  ;; "<SPC> p" "Projects"
+  "<SPC> p" "Projects"
   "<SPC> s" "Search"
   "<SPC> t" "Term"
   "<SPC> w" "Window"
@@ -660,7 +716,9 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 ;;   (powerline-center-evil-theme))
 (use-package doom-modeline
       :ensure t
-      :hook (after-init . doom-modeline-mode))
+      :hook (after-init . doom-modeline-mode)
+      :config
+      (setq doom-modeline-vcs-max-length 24))
 
 (use-package hide-mode-line
   :hook ((term-mode occur) . hide-mode-line-mode))
@@ -694,10 +752,23 @@ new windows will each be 180 columns wide, and sit just below the threshold.
       '(json-jsonlist)))
   )
 
+(defun my|test-file ()
+  "Run eslint --fix on current file."
+  (interactive)
+  (message (concat "testing " (buffer-file-name)))
+  (save-buffer)
+  (async-shell-command
+   (concat "cd " (projectile-project-root) " && node_modules/.bin/jest " (buffer-file-name) " --collectCoverageOnlyFrom " (replace-in-string ".spec.js" ".jsx" buffer-file-name))))
+
+(defun replace-in-string (WHAT WITH in)
+  "`WHAT' to be replaced with `WITH' `IN' string."
+  (replace-regexp-in-string (regexp-quote WHAT) WITH in nil 'literal))
+
 (defun my|eslint-fix-file ()
   "Run eslint --fix on current file."
   (interactive)
   (message (concat "eslint --fixing" (buffer-file-name) "using"))
+  (save-buffer)
   (shell-command
    (concat "cd " (projectile-project-root) " && node_modules/eslint/bin/eslint.js --config ./.eslintrc.js --fix " (buffer-file-name))))
 
@@ -712,7 +783,12 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 
 
 (use-package json-mode)
-(use-package js2-mode)
+
+(use-package js2-mode
+  :config
+  (setq js2-mode-show-parse-errors nil)
+  (setq js2-mode-show-strict-warnings nil))
+
 (use-package rjsx-mode)
 (use-package graphql-mode)
 
@@ -733,7 +809,7 @@ new windows will each be 180 columns wide, and sit just below the threshold.
               (setup-tide-mode))))
 
 
-(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+(add-to-list 'auto-mode-alist '("\\.js\\'" . rjsx-mode))
 
 
 
