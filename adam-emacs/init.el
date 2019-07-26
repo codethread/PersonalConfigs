@@ -198,18 +198,23 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   (switch-to-next-buffer))
 (global-set-key (kbd "C-x 3") 'frontmacs/hsplit-last-buffer)
 
+(defun eshell-new()
+  "Open a new instance of eshell."
+  (interactive)
+  (eshell 'N))
+
 (defun my|projectile-term ()
   "Create an ansi-term at the project root."
   (interactive)
   (let ((root (projectile-project-root))
-	(buff-name (concat " [term] " (projectile-project-root))))
+	(buff-name (concat " [eshell] " (projectile-project-root))))
     (if (get-buffer buff-name)
       (switch-to-buffer-other-window buff-name)
       (progn
 	(split-window-sensibly (selected-window))
 	(other-window 1)
 	(setq default-directory root)
-	(ansi-term (getenv "SHELL"))
+	(eshell (getenv "SHELL"))
 	(rename-buffer buff-name t)))))
 
 (global-set-key (kbd "C-x M-t") 'projectile-term)
@@ -240,6 +245,33 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 (global-set-key (kbd "C-M-<right>") 'frame-half-size-right)
 (global-set-key (kbd "C-M-<return>") 'toggle-frame-maximized)
 
+(defun switch-to-buffer--hack (orig-fun &rest args)
+  (if-let ((win (get-buffer-window (car args))))
+      (select-window win)
+    (apply orig-fun args)))
+
+;; (defun elscreen-find-and-goto-by-buffer (&optional buffer create noselect)
+;;   "Go to the screen that has the window with buffer BUFFER,
+;; creating one if none already exists."
+;;   (interactive)
+;;   (let* ((prompt "Go to the screen with specified buffer: ")
+;;          (create (or create (called-interactively-p 'any)))
+;;          (buffer-name (or (and (bufferp buffer) (buffer-name buffer))
+;;                           (and (stringp buffer) buffer)
+;;                           (and (featurep 'iswitchb)
+;;                                (iswitchb-read-buffer prompt))
+;;                           (read-buffer prompt)))
+;;          (target-screen (elscreen-find-screen-by-buffer
+;;                          (get-buffer-create buffer-name) create)))
+;;     (when target-screen
+;;       (elscreen-goto target-screen)
+;;       (unless noselect
+;;         (select-window (get-buffer-window buffer-name))))
+;;     target-screen))
+
+
+(advice-add 'switch-to-buffer :around #'switch-to-buffer--hack)
+
 ;;; packages
 ;; =====================================================================================
 
@@ -266,9 +298,9 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   (defvar org-directory "~/org-notes/")
   (defvar org-default-notes-file (concat org-directory "/rough.org"))
   :bind
-  ;; ("C-c c" . org-capture)
-  ;; ("C-c l" . org-store-link)
-  ;; ("C-c a" . org-agenda)
+  ("C-c c" . org-capture)
+  ("C-c l" . org-store-link)
+  ("C-c a" . org-agenda)
   ;; ("C-c c" . org-capture)
   ;; ("C-c b" . org-switchb)
   :hook
@@ -338,20 +370,24 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   ("C-\\" . helm-projectile-rg)
   )
 
-;; (use-package helm-lsp :commands helm-lsp-workspace-symbol)
+(use-package helm-lsp :commands helm-lsp-workspace-symbol)
 
 (use-package helm-rg
   :config
   (setq helm-rg-default-extra-args "--hidden"))
   ;; (setq helm-rg-default-extra-args "--hidden --follow"))
 
-;; (use-package lsp-mode
-;;   :hook (js2-mode . lsp)
-;;   :commands lsp
-;;   :config
-;;   (setq lsp-enable-snippet nil)
-;;   (setq lsp-auto-guess-root t)
-;;   )
+(use-package lsp-mode
+  :hook (web-mode . lsp)
+  :config
+  (setq lsp-enable-snippet 'nil
+        lsp-auto-guess-root t
+        ;; Auto-execute single action.
+        lsp-auto-execute-action t
+        lsp-eldoc-render-all t
+        ;; might need to configure this per lang
+        lsp-enable-indentation 'nil)
+  )
 
 ;; (use-package lsp-ui
 ;;   :config
@@ -400,9 +436,11 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   (global-company-mode +1)
   )
 
-(use-package company-lsp
-  :commands company-lsp
-  )
+;; (use-package company-lsp
+;;   :commands company-lsp
+;;   :config
+;;   (setq company-lsp-cache-candidates 'nil)
+;;   )
 
 
 ;; (use-package company-lsp
@@ -545,6 +583,7 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   ;;   (kbd "C-S-u") 'evil-scroll-up-other-window)
 
   (define-key evil-normal-state-map "s" 'ace-jump-mode)
+  (define-key evil-normal-state-map "S" 'ace-jump-char-mode)
 
   (define-key evil-normal-state-map "gf" 'helm-projectile-find-file-dwim)
   (define-key evil-normal-state-map "gD" 'helm-lsp-workspace-symbol)
@@ -651,9 +690,8 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 
 
 (use-package highlight-parentheses
-  :diminish
-  ;; :hook (emacs-lisp-mode . highlight-parentheses-mode)
-  )
+  :config
+  (global-highlight-parentheses-mode t))
 ;; (add-hook 'emacs-lisp-mode-hook (lambda() highlight-parentheses-mode t)
 
 ;; (use-package ido
@@ -740,17 +778,11 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   :ensure t
   :init (global-flycheck-mode)
   :config
-  ;; disable jshint since we prefer eslint checking
-  (setq-default flycheck-disabled-checkers
-  		(append flycheck-disabled-checkers
-  			'(javascript-jshint)))
   ;; customize flycheck temp file prefix
   (setq-default flycheck-temp-prefix ".flycheck")
-  ;; disable json-jsonlist checking for json files
   (setq-default flycheck-disabled-checkers
-    (append flycheck-disabled-checkers
-      '(json-jsonlist)))
-  )
+  		(append flycheck-disabled-checkers
+  			'(javascript-jshint json-jsonlint scss-lint))))
 
 (defun my|test-file ()
   "Run eslint --fix on current file."
@@ -772,43 +804,55 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   (shell-command
    (concat "cd " (projectile-project-root) " && node_modules/eslint/bin/eslint.js --config ./.eslintrc.js --fix " (buffer-file-name))))
 
+(defun my|stylelint-fix-file ()
+  "Run eslint --fix on current file."
+  (interactive)
+  (save-buffer)
+  (shell-command
+   (concat "cd " (projectile-project-root) " && node_modules/stylelint/bin/stylelint.js --syntax scss --custom-formatter='./scripts/lint/stylelint-formatter' --fix " (buffer-file-name))))
+
 (defun my|eslint-fix-file-and-revert ()
   (interactive)
   (my|eslint-fix-file)
   (revert-buffer t t))
 
-;; (add-hook 'js2-mode-hook
-;;           (lambda ()
-;;             (add-hook 'after-save-hook #'eslint-fix-file-and-revert)))
-
+;; (add-hook 'scss-mode-hook
+;;           (lambda () (add-hook 'after-save-hook #'my|stylelint-fix-file)))
 
 (use-package json-mode)
 
 (use-package js2-mode
   :config
-  (setq js2-mode-show-parse-errors nil)
-  (setq js2-mode-show-strict-warnings nil))
+  (setq js2-mode-show-parse-errors 'nil
+        js2-mode-show-strict-warnings 'nil
+        js-chain-indent t
+        js2-highlight-level 3
+        js2-highlight-external-variables t
+        ))
 
 (use-package rjsx-mode)
 (use-package graphql-mode)
 
 ;; enable typescript-tslint checker
-(flycheck-add-mode 'typescript-tslint 'web-mode)
-(use-package tide
-  :ensure t
-  :after (typescript-mode company flycheck)
-  :hook ((typescript-mode . tide-setup)
-         (typescript-mode . tide-hl-identifier-mode)
-         (before-save . tide-format-before-save)))
+;; (flycheck-add-mode 'typescript-tslint 'web-mode)
+;; (use-package tide
+;;   :ensure t
+;;   :after (typescript-mode company flycheck)
+;;   :hook ((typescript-mode . tide-setup)
+;;          (typescript-mode . tide-hl-identifier-mode)
+;;          (before-save . tide-format-before-save)))
 
-(require 'web-mode)
+(use-package web-mode)
+  ;; :hook (lsp-mode))
+
+;; (require 'web-mode)
+;; (add-hook 'web-mode-hook
+;;           (lambda ()
+;;             (when (string-equal "tsx" (file-name-extension buffer-file-name))
+;;               (setup-tide-mode))))
+
+
 (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
-(add-hook 'web-mode-hook
-          (lambda ()
-            (when (string-equal "tsx" (file-name-extension buffer-file-name))
-              (setup-tide-mode))))
-
-
 (add-to-list 'auto-mode-alist '("\\.js\\'" . rjsx-mode))
 
 
@@ -816,7 +860,7 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 
 ;; use local eslint from node_modules before global
 ;; http://emacs.stackexchange.com/questions/21205/flycheck-with-file-relative-eslint-executable
-(defun my/use-eslint-from-node-modules ()
+(defun my|use-eslint-from-node-modules ()
   (let* ((root (locate-dominating-file
                 (or (buffer-file-name) default-directory)
                 "node_modules"))
@@ -826,8 +870,18 @@ new windows will each be 180 columns wide, and sit just below the threshold.
     (when (and eslint (file-executable-p eslint))
       (setq-local flycheck-javascript-eslint-executable eslint))))
 
-(add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules)
+(defun my|use-stylelint-from-node-modules ()
+  (let* ((root (locate-dominating-file
+                (or (buffer-file-name) default-directory)
+                "node_modules"))
+         (stylelint (and root
+                      (expand-file-name "node_modules/stylelint/bin/stylelint.js"
+                                        root))))
+    (when (and stylelint (file-executable-p stylelint))
+      (setq-local flycheck-scss-stylelint-executable stylelint))))
 
+(add-hook 'flycheck-mode-hook #'my|use-eslint-from-node-modules)
+(add-hook 'flycheck-mode-hook #'my|use-stylelint-from-node-modules)
 
 ;; https://github.com/chiply/spot4e
 (require 'spot4e "~/.emacs.d/spot4e")

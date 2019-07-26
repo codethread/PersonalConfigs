@@ -120,7 +120,8 @@ function! VimVterminal(cmd)
   au BufLeave <buffer> wincmd p
   nnoremap <buffer> <Enter> :q<CR>
   redraw
-  echo "Press <Enter> to exit test runner terminal (<Ctrl-C> first if command is still running)"
+  " echo "Press <Enter> to exit test runner terminal (<Ctrl-C> first if command is still running)"
+    echo a:cmd
 endfunction
 
 
