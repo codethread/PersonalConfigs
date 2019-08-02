@@ -165,10 +165,15 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   (interactive)
   (find-file "~/.emacs.d/init.el"))
 
-(defun open-notes-file ()
+(defun open-my-notes-file ()
   "Open rough notes."
   (interactive)
   (find-file "~/org-notes/org-me-notes/rough.org"))
+
+(defun open-work-notes-file ()
+  "Open rough notes."
+  (interactive)
+  (find-file "~/org-notes/org-sky-notes/rough.org"))
 
 (defun what-face (pos)
   (interactive "d")
@@ -297,6 +302,7 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   :init
   (defvar org-directory "~/org-notes/")
   (defvar org-default-notes-file (concat org-directory "/rough.org"))
+  (defvar org-agenda-files org-directory)
   :bind
   ("C-c c" . org-capture)
   ("C-c l" . org-store-link)
@@ -506,6 +512,7 @@ new windows will each be 180 columns wide, and sit just below the threshold.
     "wr" 'elscreen-screen-nickname
     "wN" 'elscreen-create
     "wl" 'elscreen-toggle
+    "ws" (lambda () (interactive) (ace-window 4))
 
     ;; s -- search
     "sf" 'helm-occur ;; great when you know what you need
@@ -515,7 +522,8 @@ new windows will each be 180 columns wide, and sit just below the threshold.
     "sl" 'xref-find-references ;; also ag or grep
 
     ;; n --- notes
-    "nn" 'open-notes-file
+    "nn" 'open-sky-notes-file
+    "nN" 'open-my-notes-file
     "nb" 'org-switchb
 
     ;; p --- project
@@ -664,9 +672,10 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 ;; 	     ("g T" . centaur-tabs-backward))
 ;;   )
 
-(use-package evil-extra-operator
-  :config
-  (global-evil-extra-operator-mode 1))
+;; XXX: removing use of gh hover
+;; (use-package evil-extra-operator
+;;   :config
+;;   (global-evil-extra-operator-mode 1))
 
 (use-package evil-matchit
   :config
@@ -752,6 +761,7 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 ;;   :config
 ;;   ;; (powerline-default-theme))
 ;;   (powerline-center-evil-theme))
+
 (use-package doom-modeline
       :ensure t
       :hook (after-init . doom-modeline-mode)
@@ -802,7 +812,14 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   (message (concat "eslint --fixing" (buffer-file-name) "using"))
   (save-buffer)
   (shell-command
-   (concat "cd " (projectile-project-root) " && node_modules/eslint/bin/eslint.js --config ./.eslintrc.js --fix " (buffer-file-name))))
+   (concat "cd " (projectile-project-root) " && node_modules/eslint/bin/eslint.js"
+           (cond ((file-exists-p "./.eslintrc.js") " --config ./.eslintrc.js")
+                 ((file-exists-p "./.eslintrc.yml") " --config ./.eslintrc.yml"))
+           " --fix " (buffer-file-name))))
+
+(message (concat "hi tehre "
+ (cond ((file-exists-p "evil.el") "hi")
+       ((file-exists-p "winit.el") "no"))))
 
 (defun my|stylelint-fix-file ()
   "Run eslint --fix on current file."
@@ -861,6 +878,8 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 ;; use local eslint from node_modules before global
 ;; http://emacs.stackexchange.com/questions/21205/flycheck-with-file-relative-eslint-executable
 (defun my|use-eslint-from-node-modules ()
+  "Use eslint from nodemodules."
+  (interactive)
   (let* ((root (locate-dominating-file
                 (or (buffer-file-name) default-directory)
                 "node_modules"))
@@ -881,7 +900,7 @@ new windows will each be 180 columns wide, and sit just below the threshold.
       (setq-local flycheck-scss-stylelint-executable stylelint))))
 
 (add-hook 'flycheck-mode-hook #'my|use-eslint-from-node-modules)
-(add-hook 'flycheck-mode-hook #'my|use-stylelint-from-node-modules)
+;; (add-hook 'flycheck-mode-hook #'my|use-stylelint-from-node-modules)
 
 ;; https://github.com/chiply/spot4e
 (require 'spot4e "~/.emacs.d/spot4e")

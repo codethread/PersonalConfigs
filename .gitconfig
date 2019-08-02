@@ -3,11 +3,7 @@
 	name = Adam Hall
 [core]
 	excludesfile = ~/.gitignore_global
-	editor = vim
-[diff]
-    external = git_diff_wrapper
-[pager]
-    diff =
+	editor = emacs -nw
 [pull]
 	rebase = true
 [push]

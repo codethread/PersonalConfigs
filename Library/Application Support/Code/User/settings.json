@@ -192,5 +192,4 @@
   "[typescriptreact]": {
     "editor.defaultFormatter": "vscode.typescript-language-features"
   },
-  "mocha.files.glob": "test/**/*_test.js"
 }
