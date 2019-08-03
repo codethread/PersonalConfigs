@@ -208,13 +208,13 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   (interactive)
   (eshell 'N))
 
-(defun my|projectile-term ()
-  "Create an ansi-term at the project root."
+(defun my|projectile-shell-toggle ()
+  "Goto `eshell' at root, or create one."
   (interactive)
   (let ((root (projectile-project-root))
-	(buff-name (concat " [eshell] " (projectile-project-root))))
+	(buff-name (concat "t:" (projectile-project-name))))
     (if (get-buffer buff-name)
-      (switch-to-buffer-other-window buff-name)
+        (switch-to-buffer-other-window buff-name)
       (progn
 	(split-window-sensibly (selected-window))
 	(other-window 1)
@@ -222,7 +222,14 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 	(eshell (getenv "SHELL"))
 	(rename-buffer buff-name t)))))
 
-(global-set-key (kbd "C-x M-t") 'projectile-term)
+(defun my|projectile-shell-new ()
+  "Create an `eshell' at the project root."
+  (interactive)
+  (progn
+    (split-window-sensibly (selected-window))
+    (other-window 1)
+    (setq default-directory (projectile-project-root))
+    (eshell (getenv "SHELL"))))
 
 ;; focus window after split
 ;; (global-set-key "\C-x2" (lambda () (interactive)(split-window-vertically) (other-window 1)))
@@ -328,6 +335,10 @@ new windows will each be 180 columns wide, and sit just below the threshold.
  `(("^[ \t]*\\(?:[-+*]\\|[0-9]+[).]\\)[ \t]+\\(\\(?:\\[@\\(?:start:\\)?[0-9]+\\][ \t]*\\)?\\[\\(?:X\\|\\([0-9]+\\)/\\2\\)\\][^\n]*\n\\)" 1 'org-headline-done prepend))
  'append)
 
+;; C-c C-x C-l (markdown-toggle-url-hiding)
+;; C-c C-x C-m (markdown-toggle-markup-hiding
+(use-package markdown-mode)
+
 (use-package magit)
 
 (use-package ace-jump-mode
@@ -428,19 +439,121 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 ;;   (defadvice lsp-ui-imenu (after hide-lsp-ui-imenu-mode-line activate)
 ;;     (setq mode-line-format nil)))
 
+;; (use-package company
+;;   :init
+;;   (setq company-tooltip-align-annotations t
+;;         company-global-modes
+;;         '(not erc-mode message-mode help-mode gud-mode eshell-mode)
+;;         company-backends '(company-capf)
+;;         company-frontends
+;;         '(company-pseudo-tooltip-frontend
+;;           company-echo-metadata-frontend)
+;; 	)
+;;   :config
+;;   (global-company-mode +1)
+;;   )
+
 (use-package company
+  :diminish company-mode
+  :defines (company-dabbrev-ignore-case company-dabbrev-downcase)
+  :commands company-abort
+  :bind (("M-/" . company-complete)
+         ("<backtab>" . company-yasnippet)
+         :map company-active-map
+         ("C-p" . company-select-previous)
+         ("C-n" . company-select-next)
+         ("<tab>" . company-complete-common-or-cycle)
+         ("<backtab>" . my-company-yasnippet)
+         ;; ("C-c C-y" . my-company-yasnippet)
+         :map company-search-map
+         ("C-p" . company-select-previous)
+         ("C-n" . company-select-next))
+  :hook (after-init . global-company-mode)
   :init
-  (setq company-tooltip-align-annotations t
-        company-global-modes
-        '(not erc-mode message-mode help-mode gud-mode eshell-mode)
-        company-backends '(company-capf)
-        company-frontends
-        '(company-pseudo-tooltip-frontend
-          company-echo-metadata-frontend)
-	)
+  (defun my-company-yasnippet ()
+    (interactive)
+    (company-abort)
+    (call-interactively 'company-yasnippet))
   :config
-  (global-company-mode +1)
-  )
+  (setq company-tooltip-align-annotations t
+        company-tooltip-limit 12
+        company-idle-delay 0
+        company-echo-delay (if (display-graphic-p) nil 0)
+        company-minimum-prefix-length 2
+        company-require-match nil
+        company-dabbrev-ignore-case nil
+        company-dabbrev-downcase nil))
+
+;; Better sorting and filtering
+(use-package company-prescient
+  :init (company-prescient-mode 1))
+
+;; stolen from https://github.com/seagle0128/.emacs.d/blob/master/lisp/init-company.el#L76
+;; Icons and quickhelp
+(use-package company-box
+  :diminish
+  :functions (my-company-box-icons--elisp)
+  :commands (company-box--get-color
+             company-box--resolve-colors
+             company-box--add-icon
+             company-box--apply-color
+             company-box-icons--elisp)
+  :hook (company-mode . company-box-mode)
+  :init (setq company-box-backends-colors nil
+              company-box-show-single-candidate t
+              company-box-max-candidates 50
+              company-box-doc-delay 0.5)
+  :config
+
+  ;; Prettify icons
+  (defun my-company-box-icons--elisp (candidate)
+    (when (derived-mode-p 'emacs-lisp-mode)
+      (let ((sym (intern candidate)))
+        (cond ((fboundp sym) 'Function)
+              ((featurep sym) 'Module)
+              ((facep sym) 'Color)
+              ((boundp sym) 'Variable)
+              ((symbolp sym) 'Text)
+              (t . nil)))))
+  (advice-add #'company-box-icons--elisp :override #'my-company-box-icons--elisp)
+
+  (when (and (display-graphic-p)
+             (require 'all-the-icons nil t))
+    (declare-function all-the-icons-faicon 'all-the-icons)
+    (declare-function all-the-icons-material 'all-the-icons)
+    (setq company-box-icons-all-the-icons
+          `((Unknown . ,(all-the-icons-material "find_in_page" :height 0.9 :v-adjust -0.2))
+            (Text . ,(all-the-icons-faicon "text-width" :height 0.85 :v-adjust -0.05))
+            (Method . ,(all-the-icons-faicon "cube" :height 0.85 :v-adjust -0.05 :face 'all-the-icons-purple))
+            (Function . ,(all-the-icons-faicon "cube" :height 0.85 :v-adjust -0.05 :face 'all-the-icons-purple))
+            (Constructor . ,(all-the-icons-faicon "cube" :height 0.85 :v-adjust -0.05 :face 'all-the-icons-purple))
+            (Field . ,(all-the-icons-faicon "tag" :height 0.85 :v-adjust -0.05 :face 'all-the-icons-lblue))
+            (Variable . ,(all-the-icons-faicon "tag" :height 0.85 :v-adjust -0.05 :face 'all-the-icons-lblue))
+            (Class . ,(all-the-icons-material "settings_input_component" :height 0.9 :v-adjust -0.2 :face 'all-the-icons-orange))
+            (Interface . ,(all-the-icons-material "share" :height 0.9 :v-adjust -0.2 :face 'all-the-icons-lblue))
+            (Module . ,(all-the-icons-material "view_module" :height 0.9 :v-adjust -0.2 :face 'all-the-icons-lblue))
+            (Property . ,(all-the-icons-faicon "wrench" :height 0.85 :v-adjust -0.05))
+            (Unit . ,(all-the-icons-material "settings_system_daydream" :height 0.9 :v-adjust -0.2))
+            (Value . ,(all-the-icons-material "format_align_right" :height 0.9 :v-adjust -0.2 :face 'all-the-icons-lblue))
+            (Enum . ,(all-the-icons-material "storage" :height 0.9 :v-adjust -0.2 :face 'all-the-icons-orange))
+            (Keyword . ,(all-the-icons-material "filter_center_focus" :height 0.9 :v-adjust -0.2))
+            (Snippet . ,(all-the-icons-material "format_align_center" :height 0.9 :v-adjust -0.2))
+            (Color . ,(all-the-icons-material "palette" :height 0.9 :v-adjust -0.2))
+            (File . ,(all-the-icons-faicon "file-o" :height 0.9 :v-adjust -0.05))
+            (Reference . ,(all-the-icons-material "collections_bookmark" :height 0.9 :v-adjust -0.2))
+            (Folder . ,(all-the-icons-faicon "folder-open" :height 0.9 :v-adjust -0.05))
+            (EnumMember . ,(all-the-icons-material "format_align_right" :height 0.9 :v-adjust -0.2 :face 'all-the-icons-lblue))
+            (Constant . ,(all-the-icons-faicon "square-o" :height 0.9 :v-adjust -0.05))
+            (Struct . ,(all-the-icons-material "settings_input_component" :height 0.9 :v-adjust -0.2 :face 'all-the-icons-orange))
+            (Event . ,(all-the-icons-faicon "bolt" :height 0.85 :v-adjust -0.05 :face 'all-the-icons-orange))
+            (Operator . ,(all-the-icons-material "control_point" :height 0.9 :v-adjust -0.2))
+            (TypeParameter . ,(all-the-icons-faicon "arrows" :height 0.85 :v-adjust -0.05))
+            (Template . ,(all-the-icons-material "format_align_center" :height 0.9 :v-adjust -0.2)))
+          company-box-icons-alist 'company-box-icons-all-the-icons)))
+
+
+;; (use-package company-box
+;;   :hook (company-mode . company-box-mode))
 
 ;; (use-package company-lsp
 ;;   :commands company-lsp
@@ -547,8 +660,9 @@ new windows will each be 180 columns wide, and sit just below the threshold.
     "pt" 'my|test-file ;; test file in project
 
     ;; t --- terminal
-    "to" 'multi-term
-    "tt" 'my|projectile-term
+    "tn" 'my|projectile-shell-new
+    "tt" 'my|projectile-shell-toggle
+    "to" 'ansi-term
     ))
 ;; will likely need this for org mode:
 ;; (evil-leader/set-key-for-mode 'emacs-lisp-mode "b" 'byte-compile-file)
@@ -571,7 +685,8 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   :init
   (setq evil-vsplit-window-right t
 	evil-want-C-i-jump nil
-	evil-split-window-below t)
+	evil-split-window-below t
+        evil-want-keybinding nil)
   :config
   (evil-mode t)
   ;; (setq evil-mode-line-format 'before)
@@ -620,11 +735,11 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   (evil-set-initial-state 'shell-mode 'emacs)
   )
 
-;; (use-package evil-collection
-;;   :after evil
-;;   :config
-;;   (evil-collection-init 'calendar)
-;;   (setq evil-collection-mode-list 'nil))
+(use-package evil-collection
+  :after evil
+  :config
+  (evil-collection-init))
+  ;; (setq evil-collection-mode-list 'nil))
 
 (use-package evil-commentary
   :config
@@ -746,6 +861,7 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   (load-theme 'doom-one t)
   ;; (load-theme 'doom-city-lights t)
   ;; (load-theme 'doom-dracula t)
+  ;; (load-theme 'doom-one-light t) ;; good for sun
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t))
 
