@@ -11,6 +11,20 @@
               lsp-prefer-flymake nil      ; Use lsp-ui and flycheck
               lsp-auto-execute-action t
               flymake-fringe-indicator-position 'right-fringe))
+
+;; mine
+;; (use-package lsp-mode
+;;   :hook (web-mode . lsp)
+;;   :config
+;;   (setq lsp-enable-snippet 'nil
+;;         lsp-auto-guess-root t
+;;         ;; Auto-execute single action.
+;;         lsp-auto-execute-action t
+;;         lsp-eldoc-render-all t
+;;         ;; might need to configure this per lang
+;;         lsp-enable-indentation 'nil)
+;;   )
+
 ;; :config
 ;; ;; Configure LSP clients
 ;; (use-package lsp-clients
@@ -25,11 +39,11 @@
               ([remap xref-find-references] . lsp-ui-peek-find-references)
               ("C-c u" . lsp-ui-imenu))
   :init (setq lsp-ui-doc-enable 'nil ;; nil seems to be ignored?
-              lsp-ui-doc-use-webkit nil
-              lsp-ui-doc-delay 5.0
-              lsp-ui-doc-include-signature t
-              lsp-ui-doc-position 'at-point
-              lsp-ui-doc-border (face-foreground 'default)
+              ;; lsp-ui-doc-use-webkit nil
+              ;; lsp-ui-doc-delay 1.0
+              ;; lsp-ui-doc-include-signature t
+              ;; lsp-ui-doc-position 'at-point
+              ;; lsp-ui-doc-border (face-foreground 'default)
 
               lsp-ui-sideline-enable nil
               lsp-ui-sideline-ignore-duplicate t)
@@ -170,7 +184,7 @@
             (Reference . ,(all-the-icons-material "collections_bookmark" :height 0.9 :v-adjust -0.2))
             (Folder . ,(all-the-icons-faicon "folder-open" :height 0.9 :v-adjust -0.05))
             (EnumMember . ,(all-the-icons-material "format_align_right" :height 0.9 :v-adjust -0.2 :face 'all-the-icons-lblue))
-            (Constant . ,(all-the-icons-faicon "square-o" :height 0.9 :v-adjust -0.05)) ;; TODO; something wrong here?
+            (Constant . ,(all-the-icons-faicon "bolt" :height 0.9 :v-adjust -0.05)) ;; TODO; something wrong here?
             (Struct . ,(all-the-icons-material "settings_input_component" :height 0.9 :v-adjust -0.2 :face 'all-the-icons-orange))
             (Event . ,(all-the-icons-faicon "bolt" :height 0.85 :v-adjust -0.05 :face 'all-the-icons-orange))
             (Operator . ,(all-the-icons-material "control_point" :height 0.9 :v-adjust -0.2))
