@@ -1,18 +1,10 @@
 ;;; init.el --- Initialization file for Emacs
 ;;; Commentary: Emacs Startup File --- initialization for Emacs
-;; TODO understand folds
+(defconst my|emacs-dir "~/.emacs.d/"
+  "Location of emacs directory. Must end with /.")
+
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file)
-
-;;; set up gui
-;; =====================================================================================
-(add-to-list 'default-frame-alist '(tool-bar-lines . 0))
-(add-to-list 'default-frame-alist '(menu-bar-lines . 0))
-(add-to-list 'default-frame-alist '(vertical-scroll-bars))
-(add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
-(add-to-list 'default-frame-alist '(ns-appearance . dark)) ;; assuming you are using a dark theme
-(setq ns-use-proxy-icon nil)
-(setq frame-title-format nil)
 
 ;;; set up initial package-managers
 ;; =====================================================================================
@@ -25,8 +17,7 @@
 (setq package-enable-at-startup nil)
 (package-initialize)
 
-;; install use-package first if not install
-;; this then handles packages from here
+;; install use-package first if not installed, this then handles packages from here
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
@@ -40,8 +31,7 @@
 ;;; system
 ;; =====================================================================================
 
-;; forward function declarations eliminate warnings about whether a
-;; function is defined.
+;; forward function declarations eliminate warnings about whether a function is defined.
 (declare-function exec-path-from-shell-initialize "exec-path-from-shell.el")
 
 ;; reduce the frequency of garbage collection by making it happen on
@@ -71,48 +61,13 @@
   ;; Enable emoji, and stop the UI from freezing when trying to display them.
   (if (fboundp 'set-fontset-font)
       (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend)))
-;; ;; https://github.com/purcell/exec-path-from-shell
-;; ;; only need exec-path-from-shell on OSX
-;; ;; this hopefully sets up path and other vars better
-;; (exec-path-from-shell-initialize)
-
-;; (when (memq window-system '(mac ns))
-;;   (exec-path-from-shell-initialize))
-
-;;; window
-;; =====================================================================================
-
-;; Split horizontally when opening a new window from a command
-;; whenever possible.
-(setq split-height-threshold nil)
-
-(defun frontside-windowing-adjust-split-width-threshold ()
-  "Change the value of `split-width-threshold' so that it will cause the screen
-split once and only once.
-
-For example, if the frame is 360 columns wide, then we want the
-split-width-threshold to be 181. That way, when you split horizontally, the two
-new windows will each be 180 columns wide, and sit just below the threshold.
-"
-  (setq split-width-threshold (+ 1 (/ (frame-width) 2))))
-
-;; recaculate split-width-threshold with every change
-(add-hook 'window-configuration-change-hook
-          'frontside-windowing-adjust-split-width-threshold)
 
 ;;; settings
 ;; =====================================================================================
 ;; y or n instead of yes etc
 (defalias 'yes-or-no-p 'y-or-n-p)
-(setq help-window-select t
- ;; split-width-threshold 170 ;; always split vertically if there's room
-      show-paren-mode t ;; highlight parens
-      ;; no bells
-      ring-bell-function #'ignore
-      visible-bell t
-      ;; don't resize emacs in steps, it looks weird
-      window-resize-pixelwise t
-      frame-resize-pixelwise t
+
+(setq show-paren-mode t ;; highlight parens
       )
 
 (setq-default indent-tabs-mode nil)
@@ -122,14 +77,12 @@ new windows will each be 180 columns wide, and sit just below the threshold.
       (lambda ()
         (dired-hide-details-mode)
         (dired-sort-toggle-or-edit)))
+
 (setq vc-follow-symlinks t)
+
 ;; close buffers without confirm
 (setq kill-buffer-query-functions
       (delq 'process-kill-buffer-query-function kill-buffer-query-functions))
-
-(defadvice delete-window (after restore-balance activate)
-  "Balance deleted windows."
-  (balance-windows))
 
 ;;; functions
 ;; =====================================================================================
@@ -153,7 +106,7 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   (interactive)
   (kill-buffer (current-buffer)))
 
-(defun reload-init-file ()
+(defun my|reload-init-file ()
   "Reload init.el without restart."
   (interactive)
   (load-file "~/.emacs.d/init.el"))
@@ -186,21 +139,6 @@ new windows will each be 180 columns wide, and sit just below the threshold.
     (switch-to-buffer (other-buffer buf))
     (switch-to-buffer-other-window buf)))
 
-(defun frontmacs/vsplit-last-buffer ()
-  (interactive)
-  (split-window-vertically)
-  (other-window 1 nil)
-  (switch-to-next-buffer))
-(global-set-key (kbd "C-x 2") 'frontmacs/vsplit-last-buffer)
-
-;; horizontal split, switch window, and open next buffer
-(defun frontmacs/hsplit-last-buffer ()
-  (interactive)
-  (split-window-horizontally)
-  (other-window 1 nil)
-  (switch-to-next-buffer))
-(global-set-key (kbd "C-x 3") 'frontmacs/hsplit-last-buffer)
-
 (defun eshell-new()
   "Open a new instance of eshell."
   (interactive)
@@ -229,39 +167,6 @@ new windows will each be 180 columns wide, and sit just below the threshold.
     (setq default-directory (projectile-project-root))
     (eshell (getenv "SHELL"))))
 
-;; focus window after split
-;; (global-set-key "\C-x2" (lambda () (interactive)(split-window-vertically) (other-window 1)))
-;; (global-set-key "\C-x3" (lambda () (interactive)(split-window-horizontally) (other-window 1)))
-
-(defun frame-half-size-left ()
-  "Set the current frame to half the screen width."
-  (interactive)
-  (let ((frame (selected-frame))
-        (one-half-display-pixel-width (/ (display-pixel-width) 2)))
-    (set-frame-width frame one-half-display-pixel-width nil 'pixelwise)
-    (set-frame-position frame 0 0))
-  )
-
-(defun frame-half-size-right ()
-  "Set the current frame to half the screen width."
-  (interactive)
-  (let ((frame (selected-frame))
-        (one-half-display-pixel-width (/ (display-pixel-width) 2)))
-    (set-frame-width frame one-half-display-pixel-width nil 'pixelwise)
-    (set-frame-position frame one-half-display-pixel-width 0))
-  )
-
-(global-set-key (kbd "C-M-<left>") 'frame-half-size-left)
-(global-set-key (kbd "C-M-<right>") 'frame-half-size-right)
-(global-set-key (kbd "C-M-<return>") 'toggle-frame-maximized)
-
-;; (defun switch-to-buffer--hack (orig-fun &rest args)
-;;   (if-let ((win (get-buffer-window (car args))))
-;;       (select-window win)
-;;     (apply orig-fun args)))
-
-;; (advice-add 'switch-to-buffer :around #'switch-to-buffer--hack)
-
 ;; (defun elscreen-find-and-goto-by-buffer (&optional buffer create noselect)
 ;;   "Go to the screen that has the window with buffer BUFFER,
 ;; creating one if none already exists."
@@ -280,8 +185,6 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 ;;       (unless noselect
 ;;         (select-window (get-buffer-window buffer-name))))
 ;;     target-screen))
-
-
 
 ;;; packages
 ;; =====================================================================================
@@ -343,7 +246,6 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 (use-package ace-jump-mode
   :bind
   ("C-c <SPC>" . ace-jump-mode))
- 
 
 (use-package ace-window
   :config
@@ -398,12 +300,6 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   :hook (after-init . yas-global-mode)
   :config (use-package yasnippet-snippets))
 
-(defconst my|emacs-dir "~/.emacs.d/"
-  "Location of emacs directory. Must end with /.")
-
-(require 'init-company-lsp (concat my|emacs-dir "init-company-lsp.el"))
-(require 'init-evil (concat my|emacs-dir "init-evil.el"))
-
 
 (use-package highlight-parentheses
   :config
@@ -442,12 +338,6 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 
 ;; https://github.com/syl20bnr/spacemacs/blob/c7a103a772d808101d7635ec10f292ab9202d9ee/layers/%2Bdistributions/spacemacs-base/keybindings.el#L16 could probably be stolen here
 
-;; (define-key some-map "f" '("foo" . long-name-for-command-foo))
-;; deal with this to be done after
-;; (use-package dracula-theme
-;;   :config
-;;   (load-theme 'dracula t))
-
 (use-package doom-themes
   :config
   (load-theme 'doom-one t)
@@ -465,11 +355,6 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   (solaire-global-mode +1)
   (solaire-mode-swap-bg))
 
-;; (use-package powerline
-;;   :config
-;;   ;; (powerline-default-theme))
-;;   (powerline-center-evil-theme))
-
 (use-package doom-modeline
       :ensure t
       :hook (after-init . doom-modeline-mode)
@@ -481,7 +366,6 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 
 (use-package all-the-icons)
 
-
 (use-package multi-term
   :config
   (setq multi-term-program "/bin/zsh")
@@ -489,6 +373,10 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 
 (require 'dotenv-mode) ; unless installed from a package
 (add-to-list 'auto-mode-alist '("\\.env\\..*\\'" . dotenv-mode)) ;; for optionally supporting additional file extensions such as `.env.test' with this major mode
+
+(require 'init-window (concat my|emacs-dir "init-window.el"))
+(require 'init-company-lsp (concat my|emacs-dir "init-company-lsp.el"))
+(require 'init-evil (concat my|emacs-dir "init-evil.el"))
 
 ;;; sort out all this
 ;; =====================================================================================
@@ -573,12 +461,8 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 ;;             (when (string-equal "tsx" (file-name-extension buffer-file-name))
 ;;               (setup-tide-mode))))
 
-
 (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.js\\'" . rjsx-mode))
-
-
-
 
 ;; use local eslint from node_modules before global
 ;; http://emacs.stackexchange.com/questions/21205/flycheck-with-file-relative-eslint-executable
