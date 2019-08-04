@@ -6,7 +6,6 @@
 
 ;;; set up gui
 ;; =====================================================================================
-
 (add-to-list 'default-frame-alist '(tool-bar-lines . 0))
 (add-to-list 'default-frame-alist '(menu-bar-lines . 0))
 (add-to-list 'default-frame-alist '(vertical-scroll-bars))
@@ -37,7 +36,6 @@
 
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
-
 
 ;;; system
 ;; =====================================================================================
@@ -257,10 +255,12 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 (global-set-key (kbd "C-M-<right>") 'frame-half-size-right)
 (global-set-key (kbd "C-M-<return>") 'toggle-frame-maximized)
 
-(defun switch-to-buffer--hack (orig-fun &rest args)
-  (if-let ((win (get-buffer-window (car args))))
-      (select-window win)
-    (apply orig-fun args)))
+;; (defun switch-to-buffer--hack (orig-fun &rest args)
+;;   (if-let ((win (get-buffer-window (car args))))
+;;       (select-window win)
+;;     (apply orig-fun args)))
+
+;; (advice-add 'switch-to-buffer :around #'switch-to-buffer--hack)
 
 ;; (defun elscreen-find-and-goto-by-buffer (&optional buffer create noselect)
 ;;   "Go to the screen that has the window with buffer BUFFER,
@@ -282,7 +282,6 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 ;;     target-screen))
 
 
-(advice-add 'switch-to-buffer :around #'switch-to-buffer--hack)
 
 ;;; packages
 ;; =====================================================================================
@@ -394,17 +393,23 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   (setq helm-rg-default-extra-args "--hidden"))
   ;; (setq helm-rg-default-extra-args "--hidden --follow"))
 
-(use-package lsp-mode
-  :hook (web-mode . lsp)
-  :config
-  (setq lsp-enable-snippet 'nil
-        lsp-auto-guess-root t
-        ;; Auto-execute single action.
-        lsp-auto-execute-action t
-        lsp-eldoc-render-all t
-        ;; might need to configure this per lang
-        lsp-enable-indentation 'nil)
-  )
+;; mine
+;; (use-package lsp-mode
+;;   :hook (web-mode . lsp)
+;;   :config
+;;   (setq lsp-enable-snippet 'nil
+;;         lsp-auto-guess-root t
+;;         ;; Auto-execute single action.
+;;         lsp-auto-execute-action t
+;;         lsp-eldoc-render-all t
+;;         ;; might need to configure this per lang
+;;         lsp-enable-indentation 'nil)
+;;   )
+
+(use-package yasnippet
+  :diminish yas-minor-mode
+  :hook (after-init . yas-global-mode)
+  :config (use-package yasnippet-snippets))
 
 ;; (use-package lsp-ui
 ;;   :config
@@ -453,103 +458,6 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 ;;   (global-company-mode +1)
 ;;   )
 
-(use-package company
-  :diminish company-mode
-  :defines (company-dabbrev-ignore-case company-dabbrev-downcase)
-  :commands company-abort
-  :bind (("M-/" . company-complete)
-         ("<backtab>" . company-yasnippet)
-         :map company-active-map
-         ("C-p" . company-select-previous)
-         ("C-n" . company-select-next)
-         ("<tab>" . company-complete-common-or-cycle)
-         ("<backtab>" . my-company-yasnippet)
-         ;; ("C-c C-y" . my-company-yasnippet)
-         :map company-search-map
-         ("C-p" . company-select-previous)
-         ("C-n" . company-select-next))
-  :hook (after-init . global-company-mode)
-  :init
-  (defun my-company-yasnippet ()
-    (interactive)
-    (company-abort)
-    (call-interactively 'company-yasnippet))
-  :config
-  (setq company-tooltip-align-annotations t
-        company-tooltip-limit 12
-        company-idle-delay 0
-        company-echo-delay (if (display-graphic-p) nil 0)
-        company-minimum-prefix-length 2
-        company-require-match nil
-        company-dabbrev-ignore-case nil
-        company-dabbrev-downcase nil))
-
-;; Better sorting and filtering
-(use-package company-prescient
-  :init (company-prescient-mode 1))
-
-;; stolen from https://github.com/seagle0128/.emacs.d/blob/master/lisp/init-company.el#L76
-;; Icons and quickhelp
-(use-package company-box
-  :diminish
-  :functions (my-company-box-icons--elisp)
-  :commands (company-box--get-color
-             company-box--resolve-colors
-             company-box--add-icon
-             company-box--apply-color
-             company-box-icons--elisp)
-  :hook (company-mode . company-box-mode)
-  :init (setq company-box-backends-colors nil
-              company-box-show-single-candidate t
-              company-box-max-candidates 50
-              company-box-doc-delay 0.5)
-  :config
-
-  ;; Prettify icons
-  (defun my-company-box-icons--elisp (candidate)
-    (when (derived-mode-p 'emacs-lisp-mode)
-      (let ((sym (intern candidate)))
-        (cond ((fboundp sym) 'Function)
-              ((featurep sym) 'Module)
-              ((facep sym) 'Color)
-              ((boundp sym) 'Variable)
-              ((symbolp sym) 'Text)
-              (t . nil)))))
-  (advice-add #'company-box-icons--elisp :override #'my-company-box-icons--elisp)
-
-  (when (and (display-graphic-p)
-             (require 'all-the-icons nil t))
-    (declare-function all-the-icons-faicon 'all-the-icons)
-    (declare-function all-the-icons-material 'all-the-icons)
-    (setq company-box-icons-all-the-icons
-          `((Unknown . ,(all-the-icons-material "find_in_page" :height 0.9 :v-adjust -0.2))
-            (Text . ,(all-the-icons-faicon "text-width" :height 0.85 :v-adjust -0.05))
-            (Method . ,(all-the-icons-faicon "cube" :height 0.85 :v-adjust -0.05 :face 'all-the-icons-purple))
-            (Function . ,(all-the-icons-faicon "cube" :height 0.85 :v-adjust -0.05 :face 'all-the-icons-purple))
-            (Constructor . ,(all-the-icons-faicon "cube" :height 0.85 :v-adjust -0.05 :face 'all-the-icons-purple))
-            (Field . ,(all-the-icons-faicon "tag" :height 0.85 :v-adjust -0.05 :face 'all-the-icons-lblue))
-            (Variable . ,(all-the-icons-faicon "tag" :height 0.85 :v-adjust -0.05 :face 'all-the-icons-lblue))
-            (Class . ,(all-the-icons-material "settings_input_component" :height 0.9 :v-adjust -0.2 :face 'all-the-icons-orange))
-            (Interface . ,(all-the-icons-material "share" :height 0.9 :v-adjust -0.2 :face 'all-the-icons-lblue))
-            (Module . ,(all-the-icons-material "view_module" :height 0.9 :v-adjust -0.2 :face 'all-the-icons-lblue))
-            (Property . ,(all-the-icons-faicon "wrench" :height 0.85 :v-adjust -0.05))
-            (Unit . ,(all-the-icons-material "settings_system_daydream" :height 0.9 :v-adjust -0.2))
-            (Value . ,(all-the-icons-material "format_align_right" :height 0.9 :v-adjust -0.2 :face 'all-the-icons-lblue))
-            (Enum . ,(all-the-icons-material "storage" :height 0.9 :v-adjust -0.2 :face 'all-the-icons-orange))
-            (Keyword . ,(all-the-icons-material "filter_center_focus" :height 0.9 :v-adjust -0.2))
-            (Snippet . ,(all-the-icons-material "format_align_center" :height 0.9 :v-adjust -0.2))
-            (Color . ,(all-the-icons-material "palette" :height 0.9 :v-adjust -0.2))
-            (File . ,(all-the-icons-faicon "file-o" :height 0.9 :v-adjust -0.05))
-            (Reference . ,(all-the-icons-material "collections_bookmark" :height 0.9 :v-adjust -0.2))
-            (Folder . ,(all-the-icons-faicon "folder-open" :height 0.9 :v-adjust -0.05))
-            (EnumMember . ,(all-the-icons-material "format_align_right" :height 0.9 :v-adjust -0.2 :face 'all-the-icons-lblue))
-            (Constant . ,(all-the-icons-faicon "square-o" :height 0.9 :v-adjust -0.05))
-            (Struct . ,(all-the-icons-material "settings_input_component" :height 0.9 :v-adjust -0.2 :face 'all-the-icons-orange))
-            (Event . ,(all-the-icons-faicon "bolt" :height 0.85 :v-adjust -0.05 :face 'all-the-icons-orange))
-            (Operator . ,(all-the-icons-material "control_point" :height 0.9 :v-adjust -0.2))
-            (TypeParameter . ,(all-the-icons-faicon "arrows" :height 0.85 :v-adjust -0.05))
-            (Template . ,(all-the-icons-material "format_align_center" :height 0.9 :v-adjust -0.2)))
-          company-box-icons-alist 'company-box-icons-all-the-icons)))
 
 
 ;; (use-package company-box
@@ -568,6 +476,11 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 ;;   ;; (set-company-backend! 'lsp-mode 'company-lsp)
 ;;   (company-lsp-enable-snippet nil)
 ;;   )
+
+(defconst my|emacs-dir "~/.emacs.d/"
+  "Location of emacs directory. Must end with /.")
+
+(require 'init-company-lsp (concat my|emacs-dir "init-company-lsp.el"))
 
 ;;; EVIL
 ;; =====================================================================================
@@ -710,7 +623,7 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 
   (define-key evil-normal-state-map "gf" 'helm-projectile-find-file-dwim)
   (define-key evil-normal-state-map "gD" 'helm-lsp-workspace-symbol)
-  (define-key evil-normal-state-map "gh" 'lsp-describe-thing-at-point)
+  ;; (define-key evil-normal-state-map "gh" 'lsp-describe-thing-at-point)
   ;; (define-key evil-normal-state-map "-" 'dired-jump)
   (define-key evil-insert-state-map (kbd "C-@") 'company-complete)
   ;; gui mode
@@ -797,11 +710,23 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   (global-evil-matchit-mode 1))
 
 (use-package elscreen
+  :init
+  (setq elscreen-display-tab nil)
   :config
   (setq elscreen-display-screen-number nil
-        elscreen-tab-display-kill-screen 'nil
-        elscreen-tab-display-control 'nil)
-  )
+        elscreen-default-buffer-initial-message nil
+        elscreen-display-tab nil
+        elscreen-tab-display-kill-screen nil
+        elscreen-tab-display-control nil))
+
+;; for some very annoying reason elscreen apears on company-box
+;; and this removes it, but I can't follow the 20 billion functions
+;; in this plugin to work out how
+;; (use-package elscreen-tab
+;;   :config
+;;   (elscreen-tab-mode)
+;;   (elscreen-tab-mode -1))
+
 
 (use-package evil-tabs
   :after elscreen
@@ -908,7 +833,7 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   (setq-default flycheck-temp-prefix ".flycheck")
   (setq-default flycheck-disabled-checkers
   		(append flycheck-disabled-checkers
-  			'(javascript-jshint json-jsonlint scss-lint))))
+  			'(javascript-jshint json-jsonlint scss-lint emacs-lisp-checkdoc))))
 
 (defun my|test-file ()
   "Run eslint --fix on current file."
@@ -932,10 +857,6 @@ new windows will each be 180 columns wide, and sit just below the threshold.
            (cond ((file-exists-p "./.eslintrc.js") " --config ./.eslintrc.js")
                  ((file-exists-p "./.eslintrc.yml") " --config ./.eslintrc.yml"))
            " --fix " (buffer-file-name))))
-
-(message (concat "hi tehre "
- (cond ((file-exists-p "evil.el") "hi")
-       ((file-exists-p "winit.el") "no"))))
 
 (defun my|stylelint-fix-file ()
   "Run eslint --fix on current file."
@@ -976,6 +897,7 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 ;;          (before-save . tide-format-before-save)))
 
 (use-package web-mode)
+;; (flycheck-add-mode 'typescript-tslint 'web-mode)
   ;; :hook (lsp-mode))
 
 ;; (require 'web-mode)
@@ -1014,6 +936,18 @@ new windows will each be 180 columns wide, and sit just below the threshold.
                                         root))))
     (when (and stylelint (file-executable-p stylelint))
       (setq-local flycheck-scss-stylelint-executable stylelint))))
+
+;; (defun my|use-tslint-from-node-modules ()
+;;   "Use tslint from nodemodules."
+;;   (interactive)
+;;   (let* ((root (locate-dominating-file
+;;                 (or (buffer-file-name) default-directory)
+;;                 "node_modules"))
+;;          (eslint (and root
+;;                       (expand-file-name "node_modules/tslint/bin/tslint.js"
+;;                                         root))))
+;;     (when (and eslint (file-executable-p eslint))
+;;       (setq-local flycheck-typescript-tslint-config eslint))))
 
 (add-hook 'flycheck-mode-hook #'my|use-eslint-from-node-modules)
 ;; (add-hook 'flycheck-mode-hook #'my|use-stylelint-from-node-modules)
