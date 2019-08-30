@@ -1,5 +1,9 @@
 ;;; set up gui
 ;; =====================================================================================
+;; disable the toolbar at the top of the window
+(when (fboundp 'tool-bar-mode)
+  (tool-bar-mode -1))
+
 (add-to-list 'default-frame-alist '(tool-bar-lines . 0))
 (add-to-list 'default-frame-alist '(menu-bar-lines . 0))
 (add-to-list 'default-frame-alist '(vertical-scroll-bars))
@@ -18,6 +22,10 @@
       window-resize-pixelwise t
       frame-resize-pixelwise t
       )
+
+;; TODO investigate adding pomodoro and notifications
+;; (set-frame-parameter
+;;         nil 'title (format-mode-line mode-line-format))
 
 ;; Split horizontally when opening a new window from a command
 ;; whenever possible.
@@ -41,15 +49,8 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   "Balance deleted windows."
   (balance-windows))
 
-(defun frontmacs/vsplit-last-buffer ()
-  (interactive)
-  (split-window-vertically)
-  (other-window 1 nil)
-  (switch-to-next-buffer))
-(global-set-key (kbd "C-x 2") 'frontmacs/vsplit-last-buffer)
-
 ;; horizontal split, switch window, and open next buffer
-(defun frontmacs/hsplit-last-buffer ()
+(defun my|split-last-buffer ()
   (interactive)
   (split-window-horizontally)
   (other-window 1 nil)
@@ -80,7 +81,6 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 (global-set-key (kbd "C-M-<left>") 'frame-half-size-left)
 (global-set-key (kbd "C-M-<right>") 'frame-half-size-right)
 (global-set-key (kbd "C-M-<return>") 'toggle-frame-maximized)
-(global-set-key (kbd "C-x 3") 'frontmacs/hsplit-last-buffer)
 
 ;; (defun switch-to-buffer--hack (orig-fun &rest args)
 ;;   (if-let ((win (get-buffer-window (car args))))
@@ -88,5 +88,28 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 ;;     (apply orig-fun args)))
 
 ;; (advice-add 'switch-to-buffer :around #'switch-to-buffer--hack)
+
+(use-package ace-jump-mode)
+
+(use-package ace-window
+  :bind ("M-o" . ace-window)
+  :commands
+  (ace-win-swap ace-win-delete)
+  :config
+  (setq aw-ignore-current t)
+  (setq aw-minibuffer-flag t)
+  (setq aw-keys '(?a ?s ?d ?f ?j ?k ?l))
+
+  (defun ace-win-delete ()
+    (interactive)
+    (ace-window 16))
+
+  (defun ace-win-swap ()
+    (interactive)
+    (ace-window 4))
+
+  ;; turn off grey background
+  ;; (setq aw-background nil)
+  (custom-set-faces '(aw-leading-char-face ((t (:inherit warning :weight bold :height 2.0))))))
 
 (provide 'init-window)

@@ -16,7 +16,6 @@
   "editor.rulers": [100],
   "editor.wordWrap": "on",
   "eslint.run": "onType",
-  "eslint.autoFixOnSave": true,
   "files.insertFinalNewline": true,
   "files.exclude": {
     ".history/": true,
@@ -177,19 +176,53 @@
   ],
   "editor.codeLens": false,
   "todohighlight.keywords": [
-    "HACK:",
-    "XXX:"
+    "XXX:",
+    "DEBUG:",
+    "REVIEW:",
+    "NOTE:",
+    {
+      "text": "TODO:",
+      "color": "#ffab00",
+      "backgroundColor": "#2a2c2d",
+    },
+    {
+      "text": "HACK:",
+      "color": "#ff0000",
+    },
   ],
+  "todohighlight.defaultStyle": {
+    "color": "#ffab00",
+    "backgroundColor": "#2a2c2d",
+    "cursor": "pointer",
+    "isWholeLine": false,
+  },
   "[json]": {
     "editor.defaultFormatter": "vscode.json-language-features"
   },
-  "[javascript]": {
-    "editor.defaultFormatter": "vscode.typescript-language-features"
-  },
-  "[typescript]": {
-    "editor.defaultFormatter": "vscode.typescript-language-features"
-  },
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "vscode.typescript-language-features"
-  },
+  // "[javascript]": {
+  //   "editor.defaultFormatter": "vscode.typescript-language-features"
+  // },
+  // "[typescript]": {
+  //   "editor.defaultFormatter": "vscode.typescript-language-features"
+  // },
+  // "[typescriptreact]": {
+  //   "editor.defaultFormatter": "vscode.typescript-language-features"
+  // },
+  // "[javascriptreact]": {
+  //   "editor.defaultFormatter": "esbenp.prettier-vscode"
+  // },
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "eslint.autoFixOnSave": true,
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    {
+      "language": "typescript",
+      "autoFix": true
+    },
+    {
+      "language": "typescriptreact",
+      "autoFix": true
+    }
+  ],
 }

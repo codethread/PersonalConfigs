@@ -31,41 +31,48 @@
 ;;   :ensure nil
 ;;   :init (setq lsp-clients-python-library-directories '("/usr/local/" "/usr/"))))
 
-(use-package lsp-ui
-  :commands lsp-ui-doc-hide
-  ;; :custom-face (lsp-ui-doc-background ((t (:background ,(face-background 'tooltip)))))
-  :bind (:map lsp-ui-mode-map
-              ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
-              ([remap xref-find-references] . lsp-ui-peek-find-references)
-              ("C-c u" . lsp-ui-imenu))
-  :init (setq lsp-ui-doc-enable 'nil ;; nil seems to be ignored?
-              ;; lsp-ui-doc-use-webkit nil
-              ;; lsp-ui-doc-delay 1.0
-              ;; lsp-ui-doc-include-signature t
-              ;; lsp-ui-doc-position 'at-point
-              ;; lsp-ui-doc-border (face-foreground 'default)
+;; TODO: this seems to turn off flycheck
+;; (use-package lsp-ui
+;;   :commands lsp-ui-doc-hide
+;;   ;; :custom-face (lsp-ui-doc-background ((t (:background ,(face-background 'tooltip)))))
+;;   :bind (:map lsp-ui-mode-map
+;;               ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
+;;               ([remap xref-find-references] . lsp-ui-peek-find-references)
+;;               ("C-c u" . lsp-ui-imenu))
+;;   :init (setq lsp-ui-doc-enable 'nil ;; nil seems to be ignored?
+;;               ;; lsp-ui-doc-use-webkit nil
+;;               ;; lsp-ui-doc-delay 1.0
+;;               ;; lsp-ui-doc-include-signature t
+;;               ;; lsp-ui-doc-position 'at-point
+;;               ;; lsp-ui-doc-border (face-foreground 'default)
 
-              lsp-ui-sideline-enable nil
-              lsp-ui-sideline-ignore-duplicate t)
-  :config
-  (add-to-list 'lsp-ui-doc-frame-parameters '(right-fringe . 8))
+;;               lsp-ui-sideline-enable nil
+;;               lsp-ui-sideline-ignore-duplicate t)
+;;   :config
+;;   (add-to-list 'lsp-ui-doc-frame-parameters '(right-fringe . 8))
 
-  ;; `C-g'to close doc
-  (advice-add #'keyboard-quit :before #'lsp-ui-doc-hide)
+;;   ;; `C-g'to close doc
+;;   (advice-add #'keyboard-quit :before #'lsp-ui-doc-hide)
 
-  ;; Reset `lsp-ui-doc-background' after loading theme
-  (add-hook 'after-load-theme-hook
-            (lambda ()
-              (setq lsp-ui-doc-border (face-foreground 'default))
-              (set-face-background 'lsp-ui-doc-background
-                                   (face-background 'tooltip))))
+;;   ;; Reset `lsp-ui-doc-background' after loading theme
+;;   (add-hook 'after-load-theme-hook
+;;             (lambda ()
+;;               (setq lsp-ui-doc-border (face-foreground 'default))
+;;               (set-face-background 'lsp-ui-doc-background
+;;                                    (face-background 'tooltip))))
 
-  ;; WORKAROUND Hide mode-line of the lsp-ui-imenu buffer
-  ;; @see https://github.com/emacs-lsp/lsp-ui/issues/243
-  (defadvice lsp-ui-imenu (after hide-lsp-ui-imenu-mode-line activate)
-    (setq mode-line-format nil)))
+;;   ;; WORKAROUND Hide mode-line of the lsp-ui-imenu buffer
+;;   ;; @see https://github.com/emacs-lsp/lsp-ui/issues/243
+;;   (defadvice lsp-ui-imenu (after hide-lsp-ui-imenu-mode-line activate)
+;;     (setq mode-line-format nil)))
+
+(use-package yasnippet
+  :diminish yas-minor-mode
+  :hook (after-init . yas-global-mode)
+  :config (use-package yasnippet-snippets))
 
 (use-package company-lsp
+  :after lsp-mode
   :init (setq company-lsp-cache-candidates 'auto))
 
 (use-package company

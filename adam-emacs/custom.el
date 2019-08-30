@@ -11,21 +11,24 @@
  '(elscreen-display-tab nil)
  '(elscreen-tab-display-control nil)
  '(elscreen-tab-display-kill-screen nil)
+ '(js2-mode-show-parse-errors nil)
+ '(js2-mode-show-strict-warnings nil)
  '(markdown-header-scaling t)
  '(markdown-hide-markup t)
  '(onda-files nil t)
  '(package-selected-packages
    (quote
-    (lsp-ui elscreen-tabs elscreen-tab yasnippet-snippets yasnippet company-prescient company-box markdown js2-refactor scss-mode editorconfig evil-matchit hide-mode-line solaire-mode doom-themes evil-extra-operator doom-modeline ace-jump-mode centaur-tabs highlight-parentheses web-mode tide ace-window magit xclip dotenv-mode evil-tabs multi-term typescript-mode exec-path-from-shell org-bullets paradox helm-lsp evil-surround graphql-mode json-mode rjsx-mode company-lsp lsp-mode company evil-escape hydra helm-rg helm-projectile better-jumper evil-collection evil-commentary js2-mode flycheck projectile all-the-icons powerline dracula which-key helm evil-org evil-leader ido-vertical-mode use-package))))
+    (ansi-term wakatime-mode helm-flyspell prettify-symbols prettify-symbols-mode fic-mode hl-todo spot4e dashboard elscreen-tabs elscreen-tab yasnippet-snippets yasnippet company-prescient company-box markdown js2-refactor scss-mode editorconfig evil-matchit hide-mode-line solaire-mode doom-themes evil-extra-operator doom-modeline ace-jump-mode centaur-tabs highlight-parentheses web-mode tide ace-window magit xclip dotenv-mode evil-tabs multi-term typescript-mode exec-path-from-shell org-bullets paradox helm-lsp evil-surround graphql-mode json-mode rjsx-mode company-lsp lsp-mode company evil-escape hydra helm-rg helm-projectile better-jumper evil-collection evil-commentary js2-mode flycheck projectile all-the-icons powerline dracula which-key helm evil-org evil-leader ido-vertical-mode use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(aw-leading-char-face ((t (:height 3.0))))
+ '(aw-leading-char-face ((t (:inherit warning :weight bold :height 2.0))))
  '(elscreen-tab-background-face ((t nil)))
  '(elscreen-tab-current-screen-face ((t (:inherit \ default))))
  '(elscreen-tab-other-screen-face ((t (:background "#3a3d4d" :foreground "HotPink2" :height 1.2))))
+ '(fic-face ((t (:inherit warning :weight bold))))
  '(font-lock-negation-char-face ((t (:foreground "#FF6666"))))
  '(font-lock-variable-name-face ((t (:foreground "#C6CAFF" :weight bold))))
  '(js2-function-call ((t (:foreground "#FF8AA3" :slant italic :weight bold))))

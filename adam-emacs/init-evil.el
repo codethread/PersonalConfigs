@@ -16,7 +16,9 @@
   (evil-leader/set-key
     "<SPC>" 'projectile-find-file
     ";" 'helm-M-x
+    "." 'ace-window
     ;; b --- buffers
+    "bb" 'my|split-last-buffer
     "bl" 'helm-buffers-list
     "bk" 'my|kill-this-buffer
     "bK" 'kill-buffer
@@ -35,18 +37,22 @@
     "ee" 'flycheck-display-error-at-point ;; not sure?
     "eh" 'flycheck-explain-error-at-point ;; not sure?
 
+    ;; E - flyspell
+    "E" 'helm-flyspell-correct
+
     ;; f --- file
     "ff" 'helm-find-files
     "fr" 'helm-recentf
     "fR" 'projectile-recentf
     "F"  'org-cycle ;; TODO deal with this
-    "fv" 'open-init-file
+    "fv" 'my|open-init-file
     "fk" 'my|delete-file-and-buffer
 
     ;; g -- global
-    "gs" 'reload-init-file ;; TODO make more glorious
+    "gs" 'my|reload-init-file ;; TODO make more glorious
 
     ;; w -- window
+    "wd" 'ace-win-delete
     "ww" 'evil-window-vsplit
     "wt" 'elscreen-toggle-display-tab
     "wk" 'delete-window
@@ -54,7 +60,7 @@
     "wr" 'elscreen-screen-nickname
     "wN" 'elscreen-create
     "wl" 'elscreen-toggle
-    "ws" (lambda () (interactive) (ace-window 4))
+    "ws" 'ace-win-swap
 
     ;; s -- search
     "sf" 'helm-occur ;; great when you know what you need
@@ -64,8 +70,8 @@
     "sl" 'xref-find-references ;; also ag or grep
 
     ;; n --- notes
-    "nn" 'open-sky-notes-file
-    "nN" 'open-my-notes-file
+    "nn" 'my|open-my-notes-file
+    "nN" 'my|open-work-notes-file
     "nb" 'org-switchb
 
     ;; p --- project
@@ -90,9 +96,9 @@
 
     ;; t --- terminal
     "tn" 'my|projectile-shell-new
-    "tt" 'my|projectile-shell-toggle
-    "to" 'ansi-term
-    ))
+    "te" 'my|projectile-shell-toggle
+    "tt" 'my|projectile-term-toggle)
+  )
 ;; will likely need this for org mode:
 ;; (evil-leader/set-key-for-mode 'emacs-lisp-mode "b" 'byte-compile-file)
 
@@ -139,7 +145,7 @@
 
   (define-key evil-normal-state-map "gf" 'helm-projectile-find-file-dwim)
   (define-key evil-normal-state-map "gD" 'helm-lsp-workspace-symbol)
-  ;; (define-key evil-normal-state-map "gh" 'lsp-describe-thing-at-point)
+  (define-key evil-normal-state-map "gh" 'lsp-describe-thing-at-point)
   ;; (define-key evil-normal-state-map "-" 'dired-jump)
   (define-key evil-insert-state-map (kbd "C-@") 'company-complete)
   ;; gui mode
@@ -150,6 +156,12 @@
   ;; get scroll up back and replace with C-m as it's just return
   (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
   (define-key evil-normal-state-map (kbd "C-y") 'universal-argument)
+
+  ;; TODO; might want these one day
+  ;; (define-key global-map (kbd "M-u") 'universal-argument)
+  ;; (define-key universal-argument-map (kbd "C-u") nil)
+  ;; (define-key universal-argument-map (kbd "M-u") 'universal-argument-more)
+
   ;; (define-key evil-normal-state-map (kbd "C-m") 'universal-argument)
   ;; remap to sexp
   (define-key evil-normal-state-map (kbd "C-M-l") 'forward-sexp)
@@ -162,12 +174,35 @@
 
   ;; blacklist
   (evil-set-initial-state 'shell-mode 'emacs)
-  )
+
+  ;; org mode
+  (evil-define-key 'normal org-mode-map ",c" 'org-toggle-checkbox)
+  ;; - thing => - [ ] thing => - thing
+  (evil-define-key 'normal org-mode-map ",l" 'org-toggle-list-checkbox)
+  (evil-define-key 'normal org-mode-map ",g" 'org-open-at-point)
+  (evil-define-key 'normal org-mode-map ",hh" 'org-toggle-heading)
+  (evil-define-key 'normal org-mode-map ",ho" 'evil-org-insert-heading-below)
+  (evil-define-key 'normal org-mode-map ",hn" 'org-insert-heading-respect-content)
+  (evil-define-key 'normal org-mode-map ",s" 'org-insert-subheading)
+  (evil-define-key 'normal org-mode-map ",dr" 'org-table-kill-row)
+  (evil-define-key 'normal org-mode-map ",dc" 'org-table-delete-column)
+  (evil-define-key 'normal org-mode-map ",ic" 'org-table-insert-column)
+  (evil-define-key 'normal org-mode-map ",i-" 'org-table-insert-hline)
+  (evil-define-key 'normal org-mode-map ">" 'org-shiftmetaright)
+  (evil-define-key 'normal org-mode-map "<" 'org-shiftmetaleft)
+  (evil-define-key 'normal org-mode-map "j" 'evil-next-visual-line)
+  (evil-define-key 'normal org-mode-map "k" 'evil-previous-visual-line))
+
+  (evil-define-key 'normal markdown-mode-map ",c" 'markdown-toggle-markup-hiding)
+
+  (evil-define-key 'normal markdown-mode-map "j" 'evil-next-visual-line)
+  (evil-define-key 'normal markdown-mode-map "k" 'evil-previous-visual-line))
 
 (use-package evil-collection
   :after evil
   :config
-  (evil-collection-init))
+  ;; https://github.com/emacs-evil/evil-collection/blob/master/evil-collection-dired.el
+  (evil-collection-init '(dired term ansi-term)))
   ;; (setq evil-collection-mode-list 'nil))
 
 (use-package evil-commentary
@@ -184,13 +219,6 @@
 	    (lambda ()
 	      (evil-org-set-key-theme '(textobjects insert navigation additional shift todo heading))))
   (require 'evil-org-agenda)
-  (evil-declare-key 'normal org-mode-map ;; (evil-define-key in https://github.com/noctuid/evil-guide#binding-keys-to-keys-keyboard-macros ?
-    ",c" 'org-toggle-checkbox
-    ",g" 'org-open-at-point
-    ",hn" 'org-insert-heading-respect-content ;; there is an evil for this?
-     ">" 'org-shiftmetaright
-     "<" 'org-shiftmetaleft
-    (kbd "TAB") 'org-cycle)
   (evil-org-agenda-set-keys))
 
 (use-package evil-escape
@@ -202,19 +230,6 @@
 (use-package evil-surround
   :config
   (global-evil-surround-mode 1))
-
-;; (use-package centaur-tabs
-;;   :demand
-;;   :config
-;;   (centaur-tabs-mode t)
-;;   (setq centaur-tabs-set-close-button nil)
-;;   (setq centaur-tabs-set-modified-marker t)
-;;   (setq centaur-tabs--buffer-show-groups t)
-;;   :bind
-;;   (:map evil-normal-state-map
-;; 	     ("g t" . centaur-tabs-forward)
-;; 	     ("g T" . centaur-tabs-backward))
-;;   )
 
 ;; XXX: removing use of gh hover
 ;; (use-package evil-extra-operator
@@ -235,20 +250,10 @@
         elscreen-tab-display-kill-screen nil
         elscreen-tab-display-control nil))
 
-;; for some very annoying reason elscreen apears on company-box
-;; and this removes it, but I can't follow the 20 billion functions
-;; in this plugin to work out how
-;; (use-package elscreen-tab
-;;   :config
-;;   (elscreen-tab-mode)
-;;   (elscreen-tab-mode -1))
-
-
 (use-package evil-tabs
   :after elscreen
   :config
-  (global-evil-tabs-mode t)
-  )
+  (global-evil-tabs-mode t))
 
 ;; evil-tabs :q closes whole tab so thisgg should fix it and come last
 (evil-ex-define-cmd "q[uit]" 'evil-quit)
