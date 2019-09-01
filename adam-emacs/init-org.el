@@ -1,8 +1,15 @@
 (use-package org
   :init
   (defvar org-directory "~/org-notes/")
-  (defvar org-default-notes-file (concat org-directory "/rough.org"))
-  (defvar org-agenda-files org-directory)
+  (defvar org-work-directory (concat org-directory "org-sky-notes/"))
+  (defvar org-me-directory (concat org-directory "org-me-notes/"))
+  (defvar org-default-notes-file (concat org-directory "/capture.org"))
+  (defvar org-work-file (concat org-work-directory "/work.org"))
+  (defvar org-personal-file (concat org-me-directory "/notes.org"))
+  ;; (defvar org-agenda-files (org-personal-file org-default-notes-file org-work-file))
+  (defvar org-agenda-files '("~/org-notes/capture.org"
+			     "~/org-notes/org-me-notes/notes.org"
+			     "~/org-notes/org-sky-notes/work.org"))
   :commands
   (my|open-work-notes-file
    my|open-my-notes-file)
@@ -28,19 +35,19 @@
       '((sequence "TODO(t)" "PROGRESS(p)" "|" "DONE(d)")))
 
   ;; seems broken
-  (defun org-toggle-list-checkbox ()
+  (defun my|org-toggle-list-checkbox ()
     (interactive)
     (org-toggle-checkbox 4))
 
   (defun my|open-my-notes-file ()
     "Open rough notes."
     (interactive)
-    (find-file "~/org-notes/org-me-notes/rough.org"))
+    (find-file org-personal-file))
 
   (defun my|open-work-notes-file ()
     "Open work notes."
     (interactive)
-    (find-file "~/org-notes/org-sky-notes/rough.org"))
+    (find-file org-work-file))
 
   ;; Highlight done todos with different colors.
   (font-lock-add-keywords
@@ -53,9 +60,6 @@
   :commands org-bullets-mode
   :hook (org-mode . org-bullets-mode))
 
-
-;; C-c C-x C-l (markdown-toggle-url-hiding)
-;; C-c C-x C-m (markdown-toggle-markup-hiding
 (use-package markdown-mode
   :hook
   (markdown-mode . visual-line-mode))

@@ -1,3 +1,16 @@
+;; disable the toolbar at the top of the window
+(when (fboundp 'tool-bar-mode)
+  (tool-bar-mode -1))
+
+(add-to-list 'default-frame-alist '(tool-bar-lines . 0))
+(add-to-list 'default-frame-alist '(menu-bar-lines . 0))
+(add-to-list 'default-frame-alist '(vertical-scroll-bars))
+(add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+(add-to-list 'default-frame-alist '(ns-appearance . dark))
+;; (setq ns-use-proxy-icon nil) ;; not sure why undefined
+
+(setq frame-title-format nil)
+
 (use-package doom-themes
   :config
   (load-theme 'doom-one t)

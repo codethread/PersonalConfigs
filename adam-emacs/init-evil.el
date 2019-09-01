@@ -1,12 +1,22 @@
 ;;; EVIL
 ;; =====================================================================================
-;; You should enable global-evil-leader-mode before you enable evil-mode
-;; https://github.com/cofi/evil-leader
-	 ;; ("M-<f5>" . helm-find-files)
-	 ;; ([f10] . helm-buffers-list)
-	 ;; ([S-f10] . helm-recentf)))
+;; prompts for key bindings - https://github.com/justbur/emacs-which-key
+;; not strictly evil, but keybiding specific
+(use-package which-key
+  :config
+  (which-key-mode t)
+  (which-key-add-key-based-replacements
+    "<SPC> b" "Buffers"
+    "<SPC> e" "Errors"
+    "<SPC> f" "Files"
+    "<SPC> g" "Global"
+    "<SPC> n" "Notes"
+    "<SPC> p" "Projects"
+    "<SPC> s" "Search"
+    "<SPC> t" "Term"
+    "<SPC> w" "Window"))
 
-;; /Users/adh23/doom-emacs/modules/config/default/+evil-bindings.el
+;; You should enable global-evil-leader-mode before you enable evil-mode
 (use-package evil-leader
   :init
   (setq evil-want-keybinding 'nil)
@@ -115,6 +125,11 @@
   (scroll-other-window '-))
 
 
+;; Put this somewhere better
+(global-set-key (kbd "C-M-<left>") 'frame-half-size-left)
+(global-set-key (kbd "C-M-<right>") 'frame-half-size-right)
+(global-set-key (kbd "C-M-<return>") 'toggle-frame-maximized)
+
 (use-package evil
   :after evil-leader
   :init
@@ -150,6 +165,7 @@
   (define-key evil-insert-state-map (kbd "C-@") 'company-complete)
   ;; gui mode
   (define-key evil-insert-state-map (kbd "C-SPC") 'company-complete)
+
   ;; reset
   (define-key evil-normal-state-map (kbd "C-e") 'move-end-of-line)
 
@@ -178,7 +194,9 @@
   ;; org mode
   (evil-define-key 'normal org-mode-map ",c" 'org-toggle-checkbox)
   ;; - thing => - [ ] thing => - thing
-  (evil-define-key 'normal org-mode-map ",l" 'org-toggle-list-checkbox)
+  (evil-define-key 'normal org-mode-map ",lt" 'my|org-toggle-list-checkbox)
+  (evil-define-key 'normal org-mode-map ",ls" 'org-sort-list)
+
   (evil-define-key 'normal org-mode-map ",g" 'org-open-at-point)
   (evil-define-key 'normal org-mode-map ",hh" 'org-toggle-heading)
   (evil-define-key 'normal org-mode-map ",ho" 'evil-org-insert-heading-below)
@@ -190,11 +208,13 @@
   (evil-define-key 'normal org-mode-map ",i-" 'org-table-insert-hline)
   (evil-define-key 'normal org-mode-map ">" 'org-shiftmetaright)
   (evil-define-key 'normal org-mode-map "<" 'org-shiftmetaleft)
+  ;; move over wrapped lines
   (evil-define-key 'normal org-mode-map "j" 'evil-next-visual-line)
-  (evil-define-key 'normal org-mode-map "k" 'evil-previous-visual-line))
+  (evil-define-key 'normal org-mode-map "k" 'evil-previous-visual-line)
 
   (evil-define-key 'normal markdown-mode-map ",c" 'markdown-toggle-markup-hiding)
 
+  ;; move over wrapped lines
   (evil-define-key 'normal markdown-mode-map "j" 'evil-next-visual-line)
   (evil-define-key 'normal markdown-mode-map "k" 'evil-previous-visual-line))
 

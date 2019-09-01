@@ -1,3 +1,8 @@
+(add-hook 'dired-mode-hook
+      (lambda ()
+        (dired-hide-details-mode)
+        (dired-sort-toggle-or-edit)))
+
 ;; annotations to install package
 (use-package paradox
   :init
@@ -11,6 +16,8 @@
 (use-package xref
   :config
   (setq xref-prompt-for-identifier 'nil))
+
+(use-package fold-this)
 
 ;; shared clipbaord
 (use-package xclip
@@ -44,23 +51,30 @@
   (setq undo-tree-auto-save-history t)
   (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo"))))
 
-;; prompts for key bindings - https://github.com/justbur/emacs-which-key
-(use-package which-key
-  :config
-  (which-key-mode t)
-  (which-key-add-key-based-replacements
-    "<SPC> b" "Buffers"
-    "<SPC> e" "Errors"
-    "<SPC> f" "Files"
-    "<SPC> g" "Global"
-    "<SPC> n" "Notes"
-    "<SPC> p" "Projects"
-    "<SPC> s" "Search"
-    "<SPC> t" "Term"
-    "<SPC> w" "Window"
-    ))
-
 (use-package magit)
+
+(use-package ace-jump-mode)
+
+(use-package ace-window
+  :bind ("M-o" . ace-window)
+  :commands
+  (ace-win-swap ace-win-delete)
+  :config
+  (setq aw-ignore-current t)
+  (setq aw-minibuffer-flag t)
+  (setq aw-keys '(?a ?s ?d ?f ?j ?k ?l))
+
+  (defun ace-win-delete ()
+    (interactive)
+    (ace-window 16))
+
+  (defun ace-win-swap ()
+    (interactive)
+    (ace-window 4))
+
+  ;; turn off grey background
+  ;; (setq aw-background nil)
+  (custom-set-faces '(aw-leading-char-face ((t (:inherit warning :weight bold :height 2.0))))))
 
 (use-package projectile
   :config
@@ -75,7 +89,46 @@
                                     :compile "npm i"
                                     :test "npm test"
                                     :run "npm start"
-                                    :test-suffix ".spec"))
+				    :test-suffix "_test")
+
+  (defun my|test-file ()
+    "Run tests on current file."
+    (interactive)
+    (message (concat "testing " (buffer-file-name)))
+    (save-buffer)
+    (async-shell-command
+     (concat "cd " (projectile-project-root) " && node_modules/.bin/jest " (buffer-file-name) " --collectCoverageOnlyFrom " (my|replace-in-string ".spec.js" ".jsx" buffer-file-name))))
+
+  (defun my|eslint-fix-file ()
+    "Run eslint --fix on current file."
+    (interactive)
+    (message (concat "eslint --fixing" (buffer-file-name) "using"))
+    (save-buffer)
+    (shell-command
+     (concat "cd " (projectile-project-root) " && node_modules/eslint/bin/eslint.js"
+	     (cond ((file-exists-p "./.eslintrc.js") " --config ./.eslintrc.js")
+		   ((file-exists-p "./.eslintrc.yml") " --config ./.eslintrc.yml"))
+	     " --fix " (buffer-file-name))))
+
+  ;; (defun my|stylelint-fix-file ()
+  ;;   "Run eslint --fix on current file."
+  ;;   (interactive)
+  ;;   (save-buffer)
+  ;;   (shell-command
+  ;;    (concat "cd " (projectile-project-root) " && node_modules/stylelint/bin/stylelint.js --syntax scss --custom-formatter='./scripts/lint/stylelint-formatter' --fix " (buffer-file-name))))
+
+
+  (defun my|stylelint-fix-file ()
+    "Run eslint --fix on current file."
+    (interactive)
+    (save-buffer)
+    (shell-command
+     (concat "cd " (projectile-project-root) " && node_modules/stylelint/bin/stylelint.js --syntax scss --fix " (buffer-file-name))))
+
+  (defun my|eslint-fix-file-and-revert ()
+    (interactive)
+    (my|eslint-fix-file)
+    (revert-buffer t t)))
 
 (use-package helm
   :bind
@@ -94,7 +147,7 @@
 (use-package helm-rg
   :config
   (setq helm-rg-default-extra-args "--hidden"))
-  ;; (setq helm-rg-default-extra-args "--hidden --follow"))
+;; (setq helm-rg-default-extra-args "--hidden --follow"))
 
 (use-package helm-flyspell)
 

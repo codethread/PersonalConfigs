@@ -1,5 +1,5 @@
 ;; https://github.com/chiply/spot4e
-(require 'spot4e "~/.emacs.d/spot4e")
+(require 'spot4e (concat user-emacs-directory "spot4e.el"))
 (setq spot4e-refresh-token (getenv "SPOTIFY_TOKEN"))
 (run-with-timer 0 (* 60 59) 'spot4e-refresh)
 
