@@ -62,6 +62,7 @@
 
 (use-package markdown-mode
   :hook
+  (markdown-mode . flyspell-mode)
   (markdown-mode . visual-line-mode))
 
 (provide 'init-org)

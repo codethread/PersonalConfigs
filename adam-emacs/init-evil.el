@@ -60,6 +60,7 @@
 
     ;; g -- global
     "gs" 'my|reload-init-file ;; TODO make more glorious
+    "gg" 'magit-status
 
     ;; w -- window
     "wd" 'ace-win-delete

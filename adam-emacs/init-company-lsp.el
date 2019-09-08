@@ -13,17 +13,11 @@
               flymake-fringe-indicator-position 'right-fringe))
 
 ;; mine
-;; (use-package lsp-mode
-;;   :hook (web-mode . lsp)
-;;   :config
-;;   (setq lsp-enable-snippet 'nil
-;;         lsp-auto-guess-root t
-;;         ;; Auto-execute single action.
-;;         lsp-auto-execute-action t
-;;         lsp-eldoc-render-all t
-;;         ;; might need to configure this per lang
-;;         lsp-enable-indentation 'nil)
-;;   )
+(use-package lsp-ui
+  :commands lsp-ui-mode
+  :config
+  (flycheck-add-next-checker 'javascript-eslint 'lsp-ui)
+  (add-hook 'lsp-mode-hook 'lsp-ui-mode))
 
 ;; :config
 ;; ;; Configure LSP clients

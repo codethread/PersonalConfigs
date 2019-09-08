@@ -23,6 +23,7 @@
     ".tags": true,
     ".vscode/": false,
     "**/*.swp": true,
+    "**/*~": true,
     "node_modules/": true
   },
   "git.confirmSync": false,
