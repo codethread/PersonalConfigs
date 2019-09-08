@@ -23,11 +23,11 @@
 (require 'init-terminal (concat user-emacs-directory "init-terminal.el"))
 (require 'init-appearance (concat user-emacs-directory "init-appearance.el"))
 ;; general packages
+(require 'init-misc (concat user-emacs-directory "init-misc.el"))
 (require 'init-core (concat user-emacs-directory "init-core.el"))
-(require 'init-langs (concat user-emacs-directory "init-langs.el"))
 ;; some packages have a lot of config, so broken into own files
 (require 'init-company-lsp (concat user-emacs-directory "init-company-lsp.el"))
-(require 'init-evil (concat user-emacs-directory "init-evil.el"))
 (require 'init-org (concat user-emacs-directory "init-org.el"))
+(require 'init-langs (concat user-emacs-directory "init-langs.el"))
+(require 'init-evil (concat user-emacs-directory "init-evil.el"))
 ;; shrug
-(require 'init-misc (concat user-emacs-directory "init-misc.el"))

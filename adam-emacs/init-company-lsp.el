@@ -1,7 +1,5 @@
 ;;; init-company-lsp.el --- lsp and comapny completion -*- lexical-binding: t; -*-
 
-;; (require 'lsp-mode)
-
 (use-package lsp-mode
   :diminish lsp-mode
   :hook (prog-mode . lsp-deferred)
@@ -16,7 +14,9 @@
 (use-package lsp-ui
   :commands lsp-ui-mode
   :config
-  (flycheck-add-next-checker 'javascript-eslint 'lsp-ui)
+  (setq lsp-ui-sideline-enable nil)
+  (flycheck-add-next-checker 'lsp-ui 'javascript-eslint)
+  ;; (flycheck-add-next-checker 'javascript-eslint 'lsp-ui)
   (add-hook 'lsp-mode-hook 'lsp-ui-mode))
 
 ;; :config
