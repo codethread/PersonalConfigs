@@ -120,7 +120,8 @@ function! VimVterminal(cmd)
   au BufLeave <buffer> wincmd p
   nnoremap <buffer> <Enter> :q<CR>
   redraw
-  echo "Press <Enter> to exit test runner terminal (<Ctrl-C> first if command is still running)"
+  " echo "Press <Enter> to exit test runner terminal (<Ctrl-C> first if command is still running)"
+    echo a:cmd
 endfunction
 
 
@@ -165,13 +166,16 @@ let g:ale_sign_warning = '▹'
 Plug 'Yggdroot/indentLine'
 let g:indentLine_char = get(g:, 'indentLine_char', '┊')
 let g:indentLine_color_term = 237
-let g:indentLine_concealcursor = 'niv'
-let g:indentLine_conceallevel = 2
+" let g:indentLine_color_term = 254
+" let g:indentLine_concealcursor = 'niv'
+" let g:indentLine_conceallevel = 2
 let g:indentLine_fileTypeExclude = ['help', 'man', 'startify', 'NERDTree', 'netrw', 'gf']
 " }}}
 Plug 'airblade/vim-gitgutter'
 Plug 'chrisbra/Colorizer'
 Plug 'connorholyday/vim-snazzy'
+Plug 'rakr/vim-one'
+Plug 'morhetz/gruvbox'
 " lightline.vim  {{{
 Plug 'itchyny/lightline.vim'
 
@@ -223,6 +227,7 @@ function! LightlineReload()
   call lightline#update()
 endfunction
 
+" let g:lightline = { 'colorscheme': 'one' }
 let g:lightline = { 'colorscheme': 'snazzier' }
 let g:lightline.active = {
       \ 'left': [
@@ -613,6 +618,7 @@ augroup CursorLine
 augroup END
 
 set grepprg=rg\ --hidden\ --glob\ '!.git'\ --vimgrep\ --with-filename
+
 set autowrite               " write if modified, such as when running :make
 set expandtab               " tabs are spaces
 set fillchars=vert:│,fold:· " char between panels
@@ -628,6 +634,7 @@ set smartcase               " search ignores case unless capitals present
 set sps=best,10             " spell only shows top 10 results
 set tabstop=2               " number of visual spaces per TAB
 set wildmenu                " visual autocomplete for command menu
+set equalalways             " window size changes automatically
 
 set dictionary="/usr/dict/words"
 set foldnestmax=3
@@ -666,6 +673,10 @@ let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum" " something to do with vim in a terminal
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 
 color snazzier
+
+" set background=light " for the light version or dark for dark
+" let g:one_allow_italics = 1 " I love italic for comments
+" colorscheme one
 
 if has('gui_running')
   set guioptions=ec

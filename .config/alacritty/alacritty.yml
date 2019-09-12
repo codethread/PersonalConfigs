@@ -68,11 +68,13 @@ render_timer: false
 colors:
   # Default colors
   primary:
-    background: '0x282a36'
+    # background: '0x282a36' # snazzy
+    background: '0x272935' # doom
     foreground: '0xeff0eb'
   # Normal colors
   normal:
-    black:   '0x282a36'
+    # black:   '0x282a36' # snazzy
+    black:   '0x272935' # doom
     red:     '0xff5c57'
     green:   '0x5af78e'
     yellow:  '0xf3f99d'
@@ -82,7 +84,8 @@ colors:
     white:   '0xf1f1f0'
   # Bright colors
   bright:
-    black:   '0x3a3d4d'
+    # black:   '0x3a3d4d'
+    black:   '0x3a3d4d' # doom
     red:     '0xff5c57'
     green:   '0x5af78e'
     yellow:  '0xf3f99d'

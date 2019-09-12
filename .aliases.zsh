@@ -11,6 +11,15 @@ alias vo="vim \$(fzf)"
 alias mvim="/Applications/MacVim.app/Contents/bin/mvim"
 alias als="eval \$(cat ~/.aliases.zsh | grep \"^alias.\+=\\\"\" | fzf -i --header='[run:]' | sed -E \"s:alias.*\\\"(.*)\\\":\\1:\" )"
 
+alias emacs-doom="rm ~/.emacs.d && ln -s ~/doom-emacs ~/.emacs.d"
+alias emacs-adam="rm ~/.emacs.d && ln -s ~/adam-emacs ~/.emacs.d"
+alias emacs-light="rm ~/.emacs.d && ln -s ~/doom-light ~/.emacs.d"
+alias emacs-front="rm ~/.emacs.d && ln -s ~/frontmacs ~/.emacs.d"
+alias emacs-space="rm ~/.emacs.d && ln -s ~/spacemacs-master ~/.emacs.d"
+alias ed="emacs --daemon"
+alias ec="emacsclient -a "" -c -t"
+alias eg="/Applications/Emacs.app/Contents/MacOS/Emacs"
+
 #---------------------------------------------#
 # HELPERS
 # -------------------------------------------#
@@ -94,7 +103,7 @@ alias uni="unicorn_build"
 # SPAGES
 # -------------------------------------------#
 alias spg="cd /users/adh23/service/sky-pages"
-alias sps="pages start dev --apps mobile,bill,myaccount,mobile-bill | lolcat"
+alias sps="pages start dev --apps mobile,mysky | lolcat"
 alias spu="pages start dev --apps mobile-service | lolcat"
 alias spt="mv .env .nenv; pages test unit -q; mv .nenv .env; alert"
 alias spc="ctags -R apps/ && ctags -R -a src/"
@@ -139,6 +148,90 @@ function skyport() { cp "$HOME/Service/skyport-graphql/.env.$1" "$HOME/Service/s
 # -------------------------------------------#
 alias ppp="start_ppp"
 alias cs="slack chat send -tx '@Waldorf akamai delete cache https://static.skyassets.com/content-api/v1/mobile-service-hub/app' -ch 'C7Y53DL90'"
+
+# graphql C0HHHVA0K
+# graphql-release C3YTG8KM4
+# reg-testers GDGJAL55X
+
+# function release_skyport() {
+#   slack chat send -tx "$1" -ch 'C0HHHVA0K'
+#   slack chat send -tx "$1" -ch 'C3YTG8KM4'
+#   slack chat send -tx "$1" -ch 'GDGJAL55X'
+# }
+
+# 1: pr number
+# 2: change request
+# 3: release candidate number
+function msg_self() {
+  slack chat send -tx "@here releasing https://github.com/sky-uk/skyport-graphql/pull/$1 under $2" -ch 'C0HHHVA0K'
+  slack chat send -tx "@here releasing https://github.com/sky-uk/skyport-graphql/pull/$1 under $2" -ch 'C3YTG8KM4'
+  slack chat send -tx "@here releasing https://github.com/sky-uk/skyport-graphql/pull/$1 under $2" -ch 'GDGJAL55X'
+
+  # got to skyport
+  cd ~/Service/skyport-graphql
+
+  # checkout previous branch so `gco -` works
+  originalBranch="$(git rev-parse --abbrev-ref HEAD)"
+  git stash --include-untracked
+
+  # update master
+  git checkout master
+  git pull
+
+  # update develop
+  git checkout develop
+  git pull
+
+
+  #update the RC
+  git checkout release/"$3"
+  git pull
+
+  export GIT_MERGE_AUTOEDIT=no
+
+  git flow release finish -m "https://github.com/sky-uk/skyport-graphql/pull/$1" $3
+
+  unset GIT_MERGE_AUTOEDIT
+
+  # update master
+  git checkout master
+  git push
+
+  # update develop
+  git checkout develop
+  git push
+ 
+  git checkout "$originalBranch"
+
+  # cutover script
+  /usr/bin/open -a "/Applications/Google Chrome.app" "https://rundeck.ose-prod.bskyb.com/project/SkyMobile/job/show/6106dd1d-c33f-46a0-8f98-24cf91db0239"
+  
+  # release master to nimbus
+  /usr/bin/open -a "/Applications/Google Chrome.app" "https://rundeck.ose-prod.bskyb.com/project/SkyMobile/job/show/5cf88b0d-037f-4e9e-9cf3-513d6aca9bf3"
+
+  echo "now run:"
+  echo ">  release_done $2 $3"
+}
+
+function release_done() {
+  slack chat send -tx "$1 released succesfully" -ch 'C0HHHVA0K'
+  slack chat send -tx "$1 released succesfully" -ch 'C3YTG8KM4'
+  slack chat send -tx "$1 released succesfully" -ch 'GDGJAL55X'
+
+  # open docs
+  /usr/bin/open -a "/Applications/Google Chrome.app" "https://skyport-docs.cf.dev-paas.bskyb.com/release-process#completing-the-chg"
+
+  # tag release
+  /usr/bin/open -a "/Applications/Google Chrome.app" "https://github.com/sky-uk/skyport-graphql/releases/new"
+
+  echo "- tag version: $2"
+  echo "- @: master"
+  echo "- Release title: Release $2"
+  echo "click: Publish release"
+
+}
+
+# alias release="slack chat send -tx 'PCOO?' -ch 'D35J9H880'"
 
 alias poco="watch -n0.2 slack chat send -tx 'PCOO?' -ch 'D35J9H880'"
 # alias sam="slack chat send -tx ${SLACK_MESSAGE} -ch 'D3VFV16U8'"

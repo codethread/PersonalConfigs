@@ -3,13 +3,17 @@
 name: sky
 root: ~/
 windows:
+  - vim:
+      root: ~/
+      panes:
+        - vim
   - pApps:
       root: ~/Service/pages-apps
       layout: main-vertical
       panes:
         - vim_pane:
             - clear
-            - vim
+            - ec
         - info_pane:
           - sleep 1
           - pas
@@ -18,28 +22,28 @@ windows:
       layout: main-vertical
       panes:
         - vim_pane:
-          - vim
+          - ec
         - info_pane:
           - sleep 1
-          - gqs -d
+          - gqs -s
   - skyPages:
       root: ~/Service/sky-pages
       layout: main-vertical
       panes:
         - vim_pane:
-          - vim
+          - ec
         - info_pane:
           - sleep 10
           - sps
-  - pLib:
-      root: ~/Service/pages-lib
-      layout: main-vertical
-      panes:
-        - vim
-        - 
+  # - pLib:
+  #     root: ~/Service/pages-lib
+  #     layout: main-vertical
+  #     panes:
+  #       - vim
+  #       - 
   - service-scripts:
       root: ~/Service/skymobile-service
       layout: main-vertical
       panes:
-        - vim
+        - ec
         -

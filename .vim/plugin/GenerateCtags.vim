@@ -4,6 +4,7 @@ function! GenerateCtags()
     let mapping = {
                 \ 'sky-pages': ctag.' apps/{mobile,unicorn}/**/*[^test].{js,jsx} && '.ctag.' src/',
                 \ 'skyport-graphql': ctag.' src/schema/',
+                \ 'review-skyport': ctag.' src/schema/',
                 \ 'pages-lib': ctag.' packages/*/src/**/*[^spec].{js,jsx}',
                 \ }
 

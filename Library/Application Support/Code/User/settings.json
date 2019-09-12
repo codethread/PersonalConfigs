@@ -16,7 +16,6 @@
   "editor.rulers": [100],
   "editor.wordWrap": "on",
   "eslint.run": "onType",
-  "eslint.autoFixOnSave": true,
   "files.insertFinalNewline": true,
   "files.exclude": {
     ".history/": true,
@@ -24,6 +23,7 @@
     ".tags": true,
     ".vscode/": false,
     "**/*.swp": true,
+    "**/*~": true,
     "node_modules/": true
   },
   "git.confirmSync": false,
@@ -117,11 +117,10 @@
   "vsicons.dontShowNewVersionMessage": true,
   "workbench.colorTheme": "Panda Syntax",
   "problems.decorations.enabled": false,
-  "peacock.affectedElements": [
-    "titleBar"
-  ],
   "workbench.panel.defaultLocation": "right",
-<<<<<<< HEAD
+  "peacock.affectActivityBar": false,
+  "peacock.affectStatusBar": false,
+  "peacock.affectTitleBar": true,
   "peacock.favoriteColors": [
     {
       "name": "Angular Red",
@@ -142,6 +141,14 @@
     {
       "name": "Gatsby Purple",
       "value": "#639"
+    },
+    {
+      "name": "Go Cyan",
+      "value": "#5dc9e2"
+    },
+    {
+      "name": "Java Blue-Gray",
+      "value": "#557c9b"
     },
     {
       "name": "JavaScript Yellow",
@@ -168,5 +175,55 @@
       "value": "#42b883"
     }
   ],
-  "editor.codeLens": false
+  "editor.codeLens": false,
+  "todohighlight.keywords": [
+    "XXX:",
+    "DEBUG:",
+    "REVIEW:",
+    "NOTE:",
+    {
+      "text": "TODO:",
+      "color": "#ffab00",
+      "backgroundColor": "#2a2c2d",
+    },
+    {
+      "text": "HACK:",
+      "color": "#ff0000",
+    },
+  ],
+  "todohighlight.defaultStyle": {
+    "color": "#ffab00",
+    "backgroundColor": "#2a2c2d",
+    "cursor": "pointer",
+    "isWholeLine": false,
+  },
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  // "[javascript]": {
+  //   "editor.defaultFormatter": "vscode.typescript-language-features"
+  // },
+  // "[typescript]": {
+  //   "editor.defaultFormatter": "vscode.typescript-language-features"
+  // },
+  // "[typescriptreact]": {
+  //   "editor.defaultFormatter": "vscode.typescript-language-features"
+  // },
+  // "[javascriptreact]": {
+  //   "editor.defaultFormatter": "esbenp.prettier-vscode"
+  // },
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "eslint.autoFixOnSave": true,
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    {
+      "language": "typescript",
+      "autoFix": true
+    },
+    {
+      "language": "typescriptreact",
+      "autoFix": true
+    }
+  ],
 }

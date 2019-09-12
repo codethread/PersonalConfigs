@@ -8,6 +8,7 @@ zstyle ':completion:*' menu selecto
 
 source ~/.zsh_plugins.sh
 source "$HOME/.aliases.zsh"
+export TERM=xterm-256color
 
 # quickest way to cd around
 FZF_ALT_C_COMMAND="fd --type d --exclude '{Library,Music,Applications,Pictures,Unity,VirtualBox VMs,WebstormProjects,Tools,node_modules,.git}' . ${HOME}"
