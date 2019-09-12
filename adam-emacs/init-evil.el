@@ -14,7 +14,25 @@
     "<SPC> p" "Projects"
     "<SPC> s" "Search"
     "<SPC> t" "Term"
-    "<SPC> w" "Window"))
+    "<SPC> w" "Window"
+    "<SPC> b" "Buffers"
+    "<SPC> e" "Errors"
+    "<SPC> f" "Files"
+    "<SPC> g" "Global"
+    "<SPC> n" "Notes"
+    "<SPC> p" "Projects"
+    "<SPC> s" "Search"
+    "<SPC> t" "Term"
+    "<SPC> w" "Window"
+    )
+  (which-key-add-major-mode-key-based-replacements 'org-mode
+  ", d" "Delete"
+  ", h" "Heading"
+  ", i" "Insert"
+  ", l" "List"
+  )
+
+  )
 
 ;; You should enable global-evil-leader-mode before you enable evil-mode
 (use-package evil-leader
@@ -54,9 +72,11 @@
     "ff" 'helm-find-files
     "fr" 'helm-recentf
     "fR" 'projectile-recentf
-    "F"  'org-cycle ;; TODO deal with this
     "fv" 'my|open-init-file
     "fk" 'my|delete-file-and-buffer
+
+    ;; F --- file
+    "F"  'org-cycle ;; TODO deal with this
 
     ;; g -- global
     "gs" 'my|reload-init-file ;; TODO make more glorious
@@ -81,9 +101,12 @@
     "sl" 'xref-find-references ;; also ag or grep
 
     ;; n --- notes
+    "na" 'org-agenda
+    "nb" 'org-switchb
+    "nc" 'org-capture
+    "nl" 'org-store-link
     "nn" 'my|open-my-notes-file
     "nN" 'my|open-work-notes-file
-    "nb" 'org-switchb
 
     ;; p --- project
     "p!" 'projectile-run-shell-command-in-root  ;;  "Run cmd in project root"
@@ -130,6 +153,9 @@
 (global-set-key (kbd "C-M-<left>") 'frame-half-size-left)
 (global-set-key (kbd "C-M-<right>") 'frame-half-size-right)
 (global-set-key (kbd "C-M-<return>") 'toggle-frame-maximized)
+
+;; this exists to match shortcut on mac
+(global-set-key (kbd "C-s-<f8>") 'my|close-notifications-mac)
 
 (use-package evil
   :after evil-leader
@@ -186,6 +212,8 @@
   (define-key evil-normal-state-map (kbd "C-M-k") 'backward-up-list) ;; kill-sexp
   (define-key evil-normal-state-map (kbd "C-M-j") 'down-list)
 
+
+
   ;; bring line into focus and attempt to show context.
   (define-key evil-normal-state-map (kbd "L") 'reposition-window)
 
@@ -202,13 +230,14 @@
   (evil-define-key 'normal org-mode-map ",hh" 'org-toggle-heading)
   (evil-define-key 'normal org-mode-map ",ho" 'evil-org-insert-heading-below)
   (evil-define-key 'normal org-mode-map ",hn" 'org-insert-heading-respect-content)
-  (evil-define-key 'normal org-mode-map ",s" 'org-insert-subheading)
+  (evil-define-key 'normal org-mode-map ",hs" 'org-insert-subheading)
   (evil-define-key 'normal org-mode-map ",dr" 'org-table-kill-row)
   (evil-define-key 'normal org-mode-map ",dc" 'org-table-delete-column)
   (evil-define-key 'normal org-mode-map ",ic" 'org-table-insert-column)
   (evil-define-key 'normal org-mode-map ",i-" 'org-table-insert-hline)
   (evil-define-key 'normal org-mode-map ">" 'org-shiftmetaright)
   (evil-define-key 'normal org-mode-map "<" 'org-shiftmetaleft)
+  (evil-define-key 'normal org-mode-map ",s" 'org-sort)
   ;; move over wrapped lines
   (evil-define-key 'normal org-mode-map "j" 'evil-next-visual-line)
   (evil-define-key 'normal org-mode-map "k" 'evil-previous-visual-line)

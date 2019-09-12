@@ -99,6 +99,18 @@
     (async-shell-command
      (concat "cd " (projectile-project-root) " && node_modules/.bin/jest " (buffer-file-name) " --collectCoverageOnlyFrom " (my|replace-in-string ".spec.js" ".jsx" buffer-file-name))))
 
+  (defun my|test-file-mocha ()
+    "Run tests on current file."
+    (interactive)
+    (message (concat "testing " (buffer-file-name)))
+    (save-buffer)
+    (async-shell-command
+     (concat "cd "
+	     (projectile-project-root)
+	     " && NODE_ENV=test node_modules/.bin/mocha "
+	     (buffer-file-name)
+	     " --file ./test/setup.js")))
+
   (defun my|eslint-fix-file ()
     "Run eslint --fix on current file."
     (interactive)

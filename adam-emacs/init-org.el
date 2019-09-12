@@ -13,10 +13,10 @@
   :commands
   (my|open-work-notes-file
    my|open-my-notes-file)
-  :bind
-  (("C-c c" . org-capture)
-   ("C-c l" . org-store-link)
-   ("C-c a" . org-agenda))
+  ;; :bind
+  ;; (("C-c c" . org-capture)
+  ;;  ("C-c l" . org-store-link)
+  ;;  ("C-c a" . org-agenda))
   :hook
   (org-mode . visual-line-mode)
   (org-mode . flyspell-mode)

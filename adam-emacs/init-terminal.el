@@ -3,8 +3,21 @@
 (setq explicit-shell-file-name "/bin/zsh")
 
 (use-package multi-term
+  :commands my|projectile-term-toggle
   :config
-  (setq multi-term-program "/bin/zsh"))
+  (setq multi-term-program "/bin/zsh")
+
+  (defun my|projectile-term-toggle ()
+    "Goto `ansi-term' at root, or create one."
+    (interactive)
+    (let ((root (projectile-project-root))
+	  (buff-name (concat "t:" (projectile-project-name))))
+      (if (get-buffer buff-name)
+	  (switch-to-buffer buff-name)
+	(progn
+	  (setq default-directory root)
+	  (multi-term)
+	  (rename-buffer buff-name t))))))
 
 (defun my|shell-other-window ()
   "Open a `shell' in a new window."
@@ -24,7 +37,7 @@
   (let ((root (projectile-project-root))
 	(buff-name (concat "t:" (projectile-project-name))))
     (if (get-buffer buff-name)
-        (switch-to-buffer buff-name)
+	(switch-to-buffer buff-name)
       (progn
 	(setq default-directory root)
 	(eshell (getenv "SHELL"))
@@ -39,17 +52,14 @@
     (setq default-directory (projectile-project-root))
     (eshell (getenv "SHELL"))))
 
-(defun my|projectile-term-toggle ()
-  "Goto `ansi-term' at root, or create one."
+
+(defun my|close-notifications-mac ()
+  "Close Mac notifications."
   (interactive)
-  (let ((root (projectile-project-root))
-	(buff-name (concat "t:" (projectile-project-name))))
-    (if (get-buffer buff-name)
-        (switch-to-buffer buff-name)
-      (progn
-	(setq default-directory root)
-	(multi-term)
-	(rename-buffer buff-name t)))))
+  (message "closing notifications")
+  (save-window-excursion
+    (async-shell-command
+     (concat "automator ~/Library/Services/Close\\ all\\ notifications.workflow"))))
 
 ;; (defun elscreen-find-and-goto-by-buffer (&optional buffer create noselect)
 ;;   "Go to the screen that has the window with buffer BUFFER,
