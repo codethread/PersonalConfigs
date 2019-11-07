@@ -47,6 +47,11 @@
       window-resize-pixelwise t
       frame-resize-pixelwise t)
 
+
+;; fontsize 14pt
+(set-face-attribute 'default nil :height 140)
+
+
 ;;; functions
 ;; =====================================================================================
 

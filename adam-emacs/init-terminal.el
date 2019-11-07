@@ -2,6 +2,10 @@
 
 (setq explicit-shell-file-name "/bin/zsh")
 
+(add-hook 'term-mode-hook
+      (defun my-term-mode-hook ()
+	(setq bidi-paragraph-direction 'left-to-right)))
+
 (use-package multi-term
   :commands my|projectile-term-toggle
   :config
@@ -59,7 +63,7 @@
   (message "closing notifications")
   (save-window-excursion
     (async-shell-command
-     (concat "automator ~/Library/Services/Close\\ all\\ notifications.workflow"))))
+     (concat "automator ~/Library/services/Close\\ all\\ notifications.workflow"))))
 
 ;; (defun elscreen-find-and-goto-by-buffer (&optional buffer create noselect)
 ;;   "Go to the screen that has the window with buffer BUFFER,

@@ -81,7 +81,7 @@ alias gcp="git cherry-pick"
 alias gkill="git branch | grep -v "master" | xargs git branch -D"
 alias gfuck="git fetch origin; git reset --hard origin ${gBranch}"
 alias gnah="git reset --hard; git clean -df"
-alias gh="open \`git remote -v | grep git@github.com | grep fetch | head -1 | cut -f2 | cut -d' ' -f1 | sed -e's/:/\//' -e 's/git@/http:\/\//'\`"
+alias gh="open -a '/Applications/Google Chrome.app' \`git remote -v | grep git@github.com | grep fetch | head -1 | cut -f2 | cut -d' ' -f1 | sed -e's/:/\//' -e 's/git@/http:\/\//'\`"
 alias gr="git rebase -i HEAD~$1"
 alias gclean="git clean -dfX"
 alias gwip="git add . && git commit -nm 'wip'"
@@ -141,7 +141,7 @@ alias gqs="start_skyport"
 alias gqt="skyport_test_modified_files"
 alias gqc="ctags -R src/schema/"
 alias gqv="compare_skyport_vault_keys"
-function skyport() { cp "$HOME/Service/skyport-graphql/.env.$1" "$HOME/Service/skyport-graphql/.env.integration" }
+function skyport() { cp "$HOME/service/skyport-graphql/.env.$1" "$HOME/service/skyport-graphql/.env.integration" }
 
 #---------------------------------------------#
 # OTHER

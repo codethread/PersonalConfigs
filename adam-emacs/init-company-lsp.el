@@ -8,13 +8,42 @@
   :init (setq lsp-auto-guess-root t       ; Detect project root
               lsp-prefer-flymake nil      ; Use lsp-ui and flycheck
               lsp-auto-execute-action t
-              flymake-fringe-indicator-position 'right-fringe))
+              flymake-fringe-indicator-position 'right-fringe)
+  :config
+  (defun my|lsp-describe-thing-at-point ()
+  "Display the full documentation of the thing at point."
+  (interactive)
+  (let ((contents (-some->> (lsp--text-document-position-params)
+                            (lsp--make-request "textDocument/hover")
+                            (lsp--send-request)
+                            (gethash "contents")))
+        (buffer (get-buffer-create "*lsp-help*"))
+	(oldBuffer (current-buffer))
+	)
+    (if (and contents (not (equal contents "")) )
+        (progn
+          (pop-to-buffer buffer)
+          (with-current-buffer buffer
+            (let ((inhibit-read-only t))
+              (erase-buffer)
+              (insert (lsp--render-on-hover-content contents t))
+              (goto-char (point-min))
+              (view-mode t)
+	      ))
+	  (pop-to-buffer oldBuffer))
+      (lsp--info "No content at point."))))
+  )
 
 ;; mine
 (use-package lsp-ui
   :commands lsp-ui-mode
   :config
-  (setq lsp-ui-sideline-enable nil)
+  (setq lsp-ui-doc-enable nil
+      lsp-ui-peek-enable nil
+      lsp-ui-sideline-enable nil
+      lsp-ui-imenu-enable nil
+      lsp-ui-flycheck-enable t
+      lsp-ui-flycheck-live-reporting nil)
   (flycheck-add-next-checker 'lsp-ui 'javascript-eslint)
   ;; (flycheck-add-next-checker 'javascript-eslint 'lsp-ui)
   (add-hook 'lsp-mode-hook 'lsp-ui-mode))
@@ -95,16 +124,19 @@
   :config
   (setq company-tooltip-align-annotations t
         company-tooltip-limit 12
-        company-idle-delay 0
+        company-idle-delay 1
         company-echo-delay (if (display-graphic-p) nil 0)
         company-minimum-prefix-length 2
         company-require-match nil
         company-dabbrev-ignore-case nil
-        company-dabbrev-downcase nil))
+        company-dabbrev-downcase nil
+	company-sort-by-backend-importance t
+	))
 
 ;; Better sorting and filtering
-(use-package company-prescient
-  :init (company-prescient-mode 1))
+;; seems to just sort by length, which is shit
+;; (use-package company-prescient
+;;   :init (company-prescient-mode 1))
 
 (use-package company-box
   :diminish

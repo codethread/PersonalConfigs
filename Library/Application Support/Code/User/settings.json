@@ -62,7 +62,7 @@
   //////// VIM
   "vim.showmodename": true,
   "vim.easymotion": true,
-  "vim.sneak": true,
+  "vim.sneak": false,
   "vim.useSystemClipboard": true,
   "vim.hlsearch": true,
   "vim.leader": "<space>",
@@ -86,8 +86,20 @@
     //   ]
     // },
     {
+      "before": ["s"],
+      "commands": ["extension.aceJump"]
+    },
+    {
+      "before": ["<leader>", ";"],
+      "commands": ["workbench.action.showCommands"]
+    },
+    {
       "before": ["<leader>", "b", "l"],
       "commands": ["open-buffers.openBuffer"]
+    },
+    {
+      "before": ["<leader>", "b", "k"],
+      "commands": ["workbench.action.closeActiveEditor"]
     },
     {
       "before": ["<leader>", "n"],
@@ -106,6 +118,18 @@
     {
       "before": ["<leader>", "u", "f"],
       "commands": ["editor.action.formatDocument"]
+    },
+    {
+      "before": ["<leader>", "w", "k"],
+      "commands": ["workbench.action.closeEditorsInGroup"]
+    },
+    {
+      "before": ["<leader>", "w", "o"],
+      "commands": ["workbench.action.closeOtherEditors"]
+    },
+    {
+      "before": ["<leader>", "w", "w"],
+      "commands": ["workbench.action.splitEditor"]
     }
   ],
   // "workbench.colorCustomizations": {
@@ -226,4 +250,11 @@
       "autoFix": true
     }
   ],
+  "[javascript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "todo-tree.highlights.enabled": true,
 }

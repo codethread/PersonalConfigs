@@ -13,10 +13,10 @@
   :commands
   (my|open-work-notes-file
    my|open-my-notes-file)
-  ;; :bind
-  ;; (("C-c c" . org-capture)
-  ;;  ("C-c l" . org-store-link)
-  ;;  ("C-c a" . org-agenda))
+  :bind
+  (("C-c c" . org-capture)
+   ("C-c l" . org-store-link)
+   ("C-c a" . org-agenda))
   :hook
   (org-mode . visual-line-mode)
   (org-mode . flyspell-mode)
@@ -29,7 +29,8 @@
         org-hide-leading-stars t
         org-hide-block-startup t
         org-startup-folded t
-        org-startup-indented t)
+        org-startup-indented t
+	org-log-done 'time)
 
   (setq org-todo-keywords
       '((sequence "TODO(t)" "PROGRESS(p)" "|" "DONE(d)")))
@@ -49,6 +50,26 @@
     (interactive)
     (find-file org-work-file))
 
+  (defun my|list-to-checkbox (arg)
+    (interactive "P")
+    (let ((n (or arg 1)))
+      (when (region-active-p)
+	(setq n (count-lines (region-beginning)
+			     (region-end)))
+	(goto-char (region-beginning)))
+      (dotimes (i n)
+	(beginning-of-line)
+	(re-search-forward "- " nil t)
+	(replace-match "- [ ] ")
+	(forward-line))
+      (beginning-of-line)))
+  ;; babel stuff
+  ;; allow bash
+  (org-babel-do-load-languages 'org-babel-load-languages '(
+							   (shell . t)
+							   (js . t)
+							   ))
+
   ;; Highlight done todos with different colors.
   (font-lock-add-keywords
    'org-mode
@@ -64,5 +85,7 @@
   :hook
   (markdown-mode . flyspell-mode)
   (markdown-mode . visual-line-mode))
+
+(use-package markdown-toc)
 
 (provide 'init-org)

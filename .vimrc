@@ -978,12 +978,12 @@ map <Plug>skyport-start :call term_start(
 map <leader>tss <Plug>skyport-start
 
 map <Plug>papps-start :call term_start(
-      \ [&shell, &shellcmdflag, "cd ~/Service/pages-apps; yarn start:dev"],
+      \ [&shell, &shellcmdflag, "cd ~/service/pages-apps; yarn start:dev"],
       \ DefaultTerminalOptions('t:papps'))<CR>:echo 'papps started'<CR>
 map <leader>tsa <Plug>papps-start
 
 map <Plug>lib-start :call term_start(
-      \ [&shell, &shellcmdflag, "cd ~/Service/pages-lib; yarn watch"],
+      \ [&shell, &shellcmdflag, "cd ~/service/pages-lib; yarn watch"],
       \ DefaultTerminalOptions('t:lib'))<CR>:echo 'plibb started'<CR>
 map <leader>tsl <Plug>lib-start
 

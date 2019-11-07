@@ -12,8 +12,15 @@
   :config
   ;; customize flycheck temp file prefix
   (setq-default flycheck-temp-prefix ".flycheck")
+  (setq flycheck-check-syntax-automatically 'nil)
+  (setq flycheck-check-syntax-automatically '(save
+					      idle-change
+					      new-line
+					      mode-enabled))
+  (setq flycheck-idle-change-delay 1)
+
   (setq-default flycheck-disabled-checkers
-  		(append flycheck-disabled-checkers
+		(append flycheck-disabled-checkers
   			'(javascript-jshint json-jsonlint scss-lint emacs-lisp-checkdoc)))
   (flycheck-add-mode 'javascript-eslint 'web-mode))
 
@@ -30,6 +37,15 @@
 	js2-mode-show-parse-errors nil
 	js2-mode-show-strict-warnings nil))
 
+(use-package indium)
+
+(use-package js2-refactor
+  :config
+  (js2r-add-keybindings-with-prefix "C-c C-m")
+  :hook
+  ;; (web-mode . js2-refactor-mode)
+  (rjsx-mode . js2-refactor-mode))
+
 (use-package rjsx-mode
   :config
   (add-to-list 'auto-mode-alist '("\\.js\\'" . rjsx-mode))
@@ -43,7 +59,11 @@
   :config
   (add-hook 'web-mode-hook 'flycheck-mode)
   (add-to-list 'auto-mode-alist '("\\.ts\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode)))
+  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
+  (setq-default web-mode-comment-formats
+              '(("javascript" . "//")
+                ("typescript" . "//")))
+  )
 
 ;; (use-package typescript)
 

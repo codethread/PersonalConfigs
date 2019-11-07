@@ -10,7 +10,7 @@
 
 ;; adds highlights to TODO and FIXME.
 (use-package fic-mode
-  :config (fic-mode 1))
+  :hook (prog-mode))
 
 ;; jump to def without lsp
 (use-package xref
@@ -46,6 +46,11 @@
   :config
   (global-highlight-parentheses-mode t))
 
+(use-package drag-stuff
+  :config
+  (drag-stuff-mode t)
+  (drag-stuff-keys-define))
+
 (use-package undo-tree
   :config
   (setq undo-tree-auto-save-history t)
@@ -53,7 +58,13 @@
 
 (use-package magit)
 
-(use-package ace-jump-mode)
+(use-package ace-jump-mode
+  :config
+  (autoload
+  'ace-jump-mode-pop-mark
+  "Ace jump back:-)"
+  t)
+  )
 
 (use-package ace-window
   :bind ("M-o" . ace-window)
@@ -90,6 +101,14 @@
                                     :test "npm test"
                                     :run "npm start"
 				    :test-suffix "_test")
+
+  (defun my|test-file-ts ()
+    "Run tests on current typescript file."
+    (interactive)
+    (message (concat "testing " (buffer-file-name)))
+    (save-buffer)
+    (async-shell-command
+     (concat "cd " (projectile-project-root) " && node_modules/.bin/jest --config='./.jest/jest.all.config.js' " (buffer-file-name))))
 
   (defun my|test-file ()
     "Run tests on current file."
@@ -144,8 +163,18 @@
 
 (use-package helm
   :bind
-  ("M-x" . helm-M-x)
+  (("M-x" . helm-M-x)
+   :map helm-map
+   ("C-u" . helm-find-files-up-one-level)
+   ("C-k" . helm-previous-line)
+   ("C-j" . helm-next-line)
+   ("C-n" . helm-execute-persistent-action))
   :config
+  ;; (setq helm-find-files-sort-directories t)
+  (setq helm-display-function #'helm-display-buffer-in-own-frame)
+  (loop for ext in '("~$" "#$" "\\.elc$")
+      do (add-to-list 'helm-boring-file-regexp-list ext))
+  (setq helm-ff-skip-boring-files t)
   (helm-mode t))
 
 (use-package helm-projectile

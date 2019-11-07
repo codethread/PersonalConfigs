@@ -30,8 +30,8 @@ SAVEHIST=$HISTSIZE
 #--- Sky Stuff
 #-----------------------------------------
 if [[ $(whoami) =~ 'adh23' ]]; then
-    export TOOLKIT_PATH="$HOME/Sky/toolkit"
-    export SKY_SERVICE_FOLDER="$HOME/Service"
+    export TOOLKIT_PATH="$HOME/sky/toolkit"
+    export SKY_SERVICE_FOLDER="$HOME/service"
     export SKYPORT_GRAPHQL_DIR="$SKY_SERVICE_FOLDER/skyport-graphql"
     export SKY_SERVICE_DEV_TOOLS=$SKY_SERVICE_FOLDER/skymobile-service/dev-tools
     [ -r $SKY_SERVICE_DEV_TOOLS/.sky.sh ] && source $SKY_SERVICE_DEV_TOOLS/.sky.sh

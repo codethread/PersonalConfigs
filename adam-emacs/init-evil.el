@@ -9,15 +9,7 @@
     "<SPC> b" "Buffers"
     "<SPC> e" "Errors"
     "<SPC> f" "Files"
-    "<SPC> g" "Global"
-    "<SPC> n" "Notes"
-    "<SPC> p" "Projects"
-    "<SPC> s" "Search"
-    "<SPC> t" "Term"
-    "<SPC> w" "Window"
-    "<SPC> b" "Buffers"
-    "<SPC> e" "Errors"
-    "<SPC> f" "Files"
+    "<SPC> F" "Fold"
     "<SPC> g" "Global"
     "<SPC> n" "Notes"
     "<SPC> p" "Projects"
@@ -47,7 +39,8 @@
     "." 'ace-window
     ;; b --- buffers
     "bb" 'my|split-last-buffer
-    "bl" 'helm-buffers-list
+    "bl" 'helm-projectile-switch-to-buffer
+    "bL" 'helm-buffers-list
     "bk" 'my|kill-this-buffer
     "bK" 'kill-buffer
     "bj" 'evil-show-jumps
@@ -56,13 +49,15 @@
     "bn" 'evil-next-buffer
     "bN" 'evil-split-next-buffer
     "br" 'rename-buffer
+    "bx" 'font-lock-fontify-buffer ;; repaint the buffer
 
     ;; e -- error
     "ef" 'my|eslint-fix-file-and-revert
     "en" 'flycheck-next-error
     "ep" 'flycheck-previous-error
     "el" 'flycheck-list-errors
-    "ee" 'flycheck-display-error-at-point ;; not sure?
+    "ee" 'flycheck-buffer
+    ;; "ee" 'flycheck-display-error-at-point ;; not sure?
     "eh" 'flycheck-explain-error-at-point ;; not sure?
 
     ;; E - flyspell
@@ -75,23 +70,26 @@
     "fv" 'my|open-init-file
     "fk" 'my|delete-file-and-buffer
 
-    ;; F --- file
-    "F"  'org-cycle ;; TODO deal with this
+    ;; F --- fold
+    "FF"  'hs-toggle-hiding
+    "FI"  'hs-hide-all
+    "FO"  'hs-show-all
 
     ;; g -- global
     "gs" 'my|reload-init-file ;; TODO make more glorious
     "gg" 'magit-status
 
     ;; w -- window
-    "wd" 'ace-win-delete
-    "ww" 'evil-window-vsplit
-    "wt" 'elscreen-toggle-display-tab
-    "wk" 'delete-window
     "wK" 'elscreen-kill
-    "wr" 'elscreen-screen-nickname
     "wN" 'elscreen-create
+    "wd" 'ace-win-delete
+    "wk" 'delete-window
     "wl" 'elscreen-toggle
+    "wo" 'delete-other-windows
+    "wr" 'elscreen-screen-nickname
     "ws" 'ace-win-swap
+    "wt" 'elscreen-toggle-display-tab
+    "ww" 'evil-window-vsplit
 
     ;; s -- search
     "sf" 'helm-occur ;; great when you know what you need
@@ -104,6 +102,7 @@
     "na" 'org-agenda
     "nb" 'org-switchb
     "nc" 'org-capture
+    "nh" 'helm-org-agenda-files-headings ;; search through headings
     "nl" 'org-store-link
     "nn" 'my|open-my-notes-file
     "nN" 'my|open-work-notes-file
@@ -157,6 +156,12 @@
 ;; this exists to match shortcut on mac
 (global-set-key (kbd "C-s-<f8>") 'my|close-notifications-mac)
 
+;; TODO: investigate, https://www.reddit.com/r/emacs/comments/4ud5h4/how_do_i_use_helmcommandprefix_while_creating/
+;; (define-prefix-command 'my-helm-commands)
+;; (define-key my-helm-commands "b" 'helm-buffers-list)
+;; (define-key my-helm-commands "f" 'helm-find-files)
+;; (define-key global-map "C-c h" my-helm-commands)
+
 (use-package evil
   :after evil-leader
   :init
@@ -164,6 +169,28 @@
 	evil-want-C-i-jump nil
 	evil-split-window-below t
         evil-want-keybinding nil)
+  :bind
+  (:map evil-insert-state-map
+	("C-@" . company-complete)
+	;; gui mode
+	("C-SPC" . company-complete)
+	)
+  (:map evil-normal-state-map
+	("s" . ace-jump-mode)
+	("S" . ace-jump-char-mode)
+	("gf" . helm-projectile-find-file-dwim)
+	("gD" . helm-lsp-workspace-symbol)
+	("gh" . my|lsp-describe-thing-at-point)
+	;; (define-key evil-normal-state-map "-" 'dired-jump)
+	("C-@" . company-complete)
+	;; gui mode
+	("C-SPC" . company-complete)
+	;; reset
+	("C-e" . move-end-of-line)
+	;; get scroll up back and replace with C-m as it's just return
+	("C-u" . evil-scroll-up)
+	("C-y" . universal-argument)
+	("L" . reposition-window))
   :config
   (evil-mode t)
   ;; (setq evil-mode-line-format 'before)
@@ -173,53 +200,21 @@
   ;; (setq evil-insert-state-cursor '("gray" bar))
   ;; (setq evil-motion-state-cursor '("HotPink2" box))
 
-  ;; better ffap
-  ;; (evil-define-key 'normal 'global
-  ;;   ("gf" . helm-projectile-find-file-dwim))
-  ;; (define-key evil-normal-state-map
-  ;;   (kbd "C-S-d") 'evil-scroll-down-other-window)
-
   ;; (define-key evil-normal-state-map
   ;;   (kbd "C-S-u") 'evil-scroll-up-other-window)
+  (define-key universal-argument-map (kbd "C-y") 'universal-argument-more)
 
-  (define-key evil-normal-state-map "s" 'ace-jump-mode)
-  (define-key evil-normal-state-map "S" 'ace-jump-char-mode)
-
-  (define-key evil-normal-state-map "gf" 'helm-projectile-find-file-dwim)
-  (define-key evil-normal-state-map "gD" 'helm-lsp-workspace-symbol)
-  (define-key evil-normal-state-map "gh" 'lsp-describe-thing-at-point)
-  ;; (define-key evil-normal-state-map "-" 'dired-jump)
-  (define-key evil-insert-state-map (kbd "C-@") 'company-complete)
-  ;; gui mode
-  (define-key evil-insert-state-map (kbd "C-SPC") 'company-complete)
-
-  ;; reset
-  (define-key evil-normal-state-map (kbd "C-e") 'move-end-of-line)
-
-  ;; get scroll up back and replace with C-m as it's just return
-  (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
-  (define-key evil-normal-state-map (kbd "C-y") 'universal-argument)
-
-  ;; TODO; might want these one day
-  ;; (define-key global-map (kbd "M-u") 'universal-argument)
-  ;; (define-key universal-argument-map (kbd "C-u") nil)
-  ;; (define-key universal-argument-map (kbd "M-u") 'universal-argument-more)
-
-  ;; (define-key evil-normal-state-map (kbd "C-m") 'universal-argument)
   ;; remap to sexp
   (define-key evil-normal-state-map (kbd "C-M-l") 'forward-sexp)
   (define-key evil-normal-state-map (kbd "C-M-h") 'backward-sexp) ;; mark-defun
   (define-key evil-normal-state-map (kbd "C-M-k") 'backward-up-list) ;; kill-sexp
   (define-key evil-normal-state-map (kbd "C-M-j") 'down-list)
-
-
-
   ;; bring line into focus and attempt to show context.
-  (define-key evil-normal-state-map (kbd "L") 'reposition-window)
-
   ;; blacklist
   (evil-set-initial-state 'shell-mode 'emacs)
-
+  ;; web-mode
+  ;; (define-key js2-refactor-mode-map (kbd "C-c C-e C-f") 'js2r-extract-function)
+  ;; (evil-define-key 'normal js2-refactor-mode-map ",c" 'org-toggle-checkbox)
   ;; org mode
   (evil-define-key 'normal org-mode-map ",c" 'org-toggle-checkbox)
   ;; - thing => - [ ] thing => - thing

@@ -32,24 +32,24 @@ dist" > .gitignore
 # editor config for indentation
 echo "12.4.0" > .node-version
 
-echo '{
-  "name": "new-app",
-  "version": "1.0.0",
-  "description": "some name",
-  "main": "dist/app.js",
-  "scripts": {
-    "dev": "concurrently -k -c cyan.bold,green.bold -p [{name}] -n TypeScript,Node npm:watch-ts npm:watch-node ",
-    "predev": "tsc",
-    "lint": "eslint --ext .js,ts --config ./.eslintrc.js ./src",
-    "nuke": "git clean -dfX",
-    "start": "node src/app.js",
-    "test": "jest --watch",
-    "watch-node": "nodemon --watch dist dist/app.js",
-    "watch-ts": "tsc -w --preserveWatchOutput"
+echo "{
+  \"name\": \"$1\",
+  \"version\": \"1.0.0\",
+  \"description\": \"some name\",
+  \"main\": \"dist/app.js\",
+  \"scripts\": {
+    \"dev\": \"concurrently -k -c cyan.bold,green.bold -p [{name}] -n TypeScript,Node npm:watch-ts npm:watch-node \",
+    \"predev\": \"tsc\",
+    \"lint\": \"eslint --ext .js,ts --config ./.eslintrc.js ./src\",
+    \"nuke\": \"git clean -dfX\",
+    \"start\": \"node src/app.js\",
+    \"test\": \"jest --watch\",
+    \"watch-node\": \"nodemon --watch dist dist/app.js\",
+    \"watch-ts\": \"tsc -w --preserveWatchOutput\"
   },
-  "author": "AHDesigns",
-  "license": "MIT"
-}' > package.json
+  \"author\": \"AHDesigns\",
+  \"license\": \"MIT\"
+}" > package.json
 
 
 echo '{
@@ -112,6 +112,7 @@ echo '{
     "target": "esnext",
     "module": "commonjs",
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "noEmitOnError": false
   },
   "include": [

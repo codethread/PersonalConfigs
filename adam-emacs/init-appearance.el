@@ -45,9 +45,11 @@
 
 (use-package all-the-icons)
 
-;; (use-package dashboard
-;;   :config
-;;   (dashboard-setup-startup-hook))
+(defun my|face-under-cursor (pos)
+  (interactive "d")
+  (let ((face (or (get-char-property (pos) 'read-face-name)
+                  (get-char-property (pos) 'face))))
+    (if face (message "Face: %s" face) (message "No face at %d" pos))))
 
 ;; (use-package prettify-symbols
 ;;   :config
@@ -60,5 +62,9 @@
 ;; (add-hook 'emacs-lisp-mode-hook 'prettify-symbols-mode)
 ;; (add-hook 'web-mode-hook 'prettify-symbols-mode)
 
+;; (use-package dashboard
+;;   :ensure t
+;;   :config
+;;   (dashboard-setup-startup-hook))
 
 (provide 'init-appearance)

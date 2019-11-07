@@ -2,7 +2,6 @@
 .nenv
 .DS_Store
 .idea/
-.vscode/
 .history/
 .scratchpads/
 
@@ -38,7 +37,6 @@ tramp
 
 # cask packages
 .cask/
-dist/
 
 # Flycheck
 flycheck_*.el
