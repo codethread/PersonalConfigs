@@ -75,6 +75,40 @@
    'org-mode
    `(("^[ \t]*\\(?:[-+*]\\|[0-9]+[).]\\)[ \t]+\\(\\(?:\\[@\\(?:start:\\)?[0-9]+\\][ \t]*\\)?\\[\\(?:X\\|\\([0-9]+\\)/\\2\\)\\][^\n]*\n\\)" 1 'org-headline-done prepend))
    'append)
+
+  ;; capture templates
+  ;; (setq org-capture-templates
+  ;;   '(("t" "Todo" entry (file "~/org-notes/capture.org")
+  ;;      "* TODO %?\n%U" :empty-lines 1)
+  ;;     ("T" "Todo with Clipboard" entry (file "~/org-notes/capture.org")
+  ;;      "* TODO %?\n%U\n   %c" :empty-lines 1)
+  ;;     ("n" "Note" entry (file "~/org-notes/capture.org")
+  ;;      "* NOTE %?\n%U" :empty-lines 1)
+  ;;     ("N" "Note with Clipboard" entry (file "~/org-notes/capture.org")
+  ;;      "* NOTE %?\n%U\n   %c" :empty-lines 1)
+  ;;     ("e" "Event" entry (file+headline "~/org-notes/capture.org" "Transient")
+  ;;      "* EVENT %?\n%U" :empty-lines 1)
+  ;;     ("E" "Event With Clipboard" entry (file+headline "~/org-notes/capture.org" "Transient")
+  ;;      "* EVENT %?\n%U\n   %c" :empty-lines 1))
+  ;;   )
+
+  (setq org-capture-templates
+	'(("t" "TODO" entry (file+headline org-default-notes-file "Collect")
+	   "* TODO %? %^G \n  %U" :empty-lines 1)
+	  ("s" "Scheduled TODO" entry (file+headline org-default-notes-file "Collect")
+	   "* TODO %? %^G \nSCHEDULED: %^t\n  %U" :empty-lines 1)
+	  ("d" "Deadline" entry (file+headline org-default-notes-file "Collect")
+	   "* TODO %? %^G \n  DEADLINE: %^t" :empty-lines 1)
+	  ("p" "Priority" entry (file+headline org-default-notes-file "Collect")
+	   "* TODO [#A] %? %^G \n  SCHEDULED: %^t")
+	  ("a" "Appointment" entry (file+headline org-default-notes-file "Collect")
+	   "* %? %^G \n  %^t")
+	  ("l" "Link" entry (file+headline org-default-notes-file "Tasks")
+	   "* TODO LINK %?\n  %u\n  %a")
+	  ("n" "Note" entry (file+headline org-default-notes-file "Notes")
+	   "* %? %^G\n%U" :empty-lines 1)
+	  ("j" "Journal" entry (file+datetree org-default-notes-file)
+	   "* %? %^G\nEntered on %U\n")))
   )
 
 (use-package org-bullets

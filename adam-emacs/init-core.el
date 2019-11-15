@@ -49,7 +49,7 @@
 (use-package drag-stuff
   :config
   (drag-stuff-mode t)
-  (drag-stuff-keys-define))
+  (drag-stuff-define-keys))
 
 (use-package undo-tree
   :config
@@ -171,7 +171,7 @@
    ("C-n" . helm-execute-persistent-action))
   :config
   ;; (setq helm-find-files-sort-directories t)
-  (setq helm-display-function #'helm-display-buffer-in-own-frame)
+  ;; (setq helm-display-function #'helm-display-buffer-in-own-frame)
   (loop for ext in '("~$" "#$" "\\.elc$")
       do (add-to-list 'helm-boring-file-regexp-list ext))
   (setq helm-ff-skip-boring-files t)

@@ -181,6 +181,7 @@
 	("gf" . helm-projectile-find-file-dwim)
 	("gD" . helm-lsp-workspace-symbol)
 	("gh" . my|lsp-describe-thing-at-point)
+	("C-o" . xref-pop-marker-stack)
 	;; (define-key evil-normal-state-map "-" 'dired-jump)
 	("C-@" . company-complete)
 	;; gui mode

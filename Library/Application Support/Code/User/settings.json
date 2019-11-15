@@ -139,7 +139,7 @@
   // },
   "editor.lineNumbers": "relative",
   "vsicons.dontShowNewVersionMessage": true,
-  "workbench.colorTheme": "Panda Syntax",
+  "workbench.colorTheme": "Atom One Dark",
   "problems.decorations.enabled": false,
   "workbench.panel.defaultLocation": "right",
   "peacock.affectActivityBar": false,
