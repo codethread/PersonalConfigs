@@ -40,7 +40,7 @@
 	  ("slideshare.net" . browse-url-generic)
 	  ("." . eww-browse-url)))
   (setq shr-external-browser 'browse-url-generic)
-  (setq browse-url-generic-program (executable-find "firefox"))
+  (setq browse-url-browser-function 'browse-url-chromium)
   (add-hook 'eww-mode-hook #'toggle-word-wrap)
   (add-hook 'eww-mode-hook #'visual-line-mode)
   :config

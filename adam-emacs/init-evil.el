@@ -96,6 +96,7 @@
     "si" 'helm-imenu ;; jump to def or explore
     "sI" 'helm-imenu-in-all-buffers ;; ideal when don't know
     "sp" 'helm-projectile-rg ;; also ag or grep
+    "ss" 'helm-rg ;; M-d to change dir
     "sl" 'xref-find-references ;; also ag or grep
 
     ;; n --- notes
@@ -181,7 +182,7 @@
 	("gf" . helm-projectile-find-file-dwim)
 	("gD" . helm-lsp-workspace-symbol)
 	("gh" . my|lsp-describe-thing-at-point)
-	("C-o" . xref-pop-marker-stack)
+	;; ("C-o" . xref-pop-marker-stack)
 	;; (define-key evil-normal-state-map "-" 'dired-jump)
 	("C-@" . company-complete)
 	;; gui mode
@@ -217,6 +218,7 @@
   ;; (define-key js2-refactor-mode-map (kbd "C-c C-e C-f") 'js2r-extract-function)
   ;; (evil-define-key 'normal js2-refactor-mode-map ",c" 'org-toggle-checkbox)
   ;; org mode
+  (evil-define-key 'normal org-mode-map (kbd "TAB") 'org-cycle)
   (evil-define-key 'normal org-mode-map ",c" 'org-toggle-checkbox)
   ;; - thing => - [ ] thing => - thing
   (evil-define-key 'normal org-mode-map ",lt" 'my|org-toggle-list-checkbox)

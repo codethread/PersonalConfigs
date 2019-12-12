@@ -44,6 +44,7 @@
       split-height-threshold nil
       ring-bell-function #'ignore
       visible-bell t
+      show-paren-mode 1
       window-resize-pixelwise t
       frame-resize-pixelwise t)
 

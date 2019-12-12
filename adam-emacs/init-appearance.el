@@ -13,9 +13,9 @@
 
 (use-package doom-themes
   :config
-  (load-theme 'doom-one t)
+  ;; (load-theme 'doom-one t) ;; good in gui
+  (load-theme 'doom-nord t)
   ;; (load-theme 'doom-city-lights t)
-  ;; (load-theme 'doom-dracula t)
   ;; (load-theme 'doom-one-light t) ;; good for sun
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t))
@@ -50,6 +50,14 @@
   (let ((face (or (get-char-property (pos) 'read-face-name)
                   (get-char-property (pos) 'face))))
     (if face (message "Face: %s" face) (message "No face at %d" pos))))
+
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
+
+;; off in favour off rainbow-delimiters and show-paren-mode
+;; (use-package highlight-parentheses
+;;   :config
+;;   (global-highlight-parentheses-mode t))
 
 ;; (use-package prettify-symbols
 ;;   :config

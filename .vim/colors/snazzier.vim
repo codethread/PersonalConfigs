@@ -123,7 +123,7 @@ hi ALEWarning           cterm=underline,italic
 :exe 'hi jsArrayBraces      guifg='.turqoise.' ctermfg='.c_turqoise
 
 " jsx
-:exe 'hi Type cterm=italic guifg='.cyan.' ctermfg='.c_cyan
+:exe 'hi Type ctermfg='.c_cyan
 :exe 'hi xmlTagName  cterm=bold guifg='.blue.' ctermfg='.c_blue
 :exe 'hi xmlTag      cterm=bold guifg='.turqoise.' ctermfg='.c_turqoise
 :exe 'hi xmlEndTag   guifg='.turqoise.' ctermfg='.c_turqoise

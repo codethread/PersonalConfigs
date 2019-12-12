@@ -42,10 +42,6 @@
   ;; for optionally supporting additional file extensions such as `.env.test' with this major mode
   (add-to-list 'auto-mode-alist '("\\.env\\..*\\'" . dotenv-mode)))
 
-(use-package highlight-parentheses
-  :config
-  (global-highlight-parentheses-mode t))
-
 (use-package drag-stuff
   :config
   (drag-stuff-mode t)
