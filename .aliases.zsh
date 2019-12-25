@@ -46,6 +46,11 @@ alias butter='echo "Lucy says stop coding and relax 🐼"'
 
 alias screen='export TERM=screen-256color && screen'
 
+alias treee='tree src -I "*~"'
+
+alias mcfuckoff='sudo /usr/local/McAfee/AntiMalware/VSControl stopoas'
+alias yi='sudo /usr/local/McAfee/AntiMalware/VSControl stopoas && yarn install && sudo /usr/local/McAfee/AntiMalware/VSControl startoas'
+
 #---------------------------------------------#
 # RUNNERS
 # -------------------------------------------#
@@ -158,6 +163,7 @@ function skyport() { cp "$HOME/service/skyport-graphql/.env.$1" "$HOME/service/s
 alias ppp="start_ppp"
 alias cs="slack chat send -tx '@Waldorf akamai delete cache https://static.skyassets.com/content-api/v1/mobile-service-hub/app' -ch 'C7Y53DL90'"
 
+alias rux="watch -n0.2 slack chat send -tx 'PCOO?' -ch 'DDRFWGHDH'"
 alias poco="watch -n0.2 slack chat send -tx 'PCOO?' -ch 'D35J9H880'"
 # alias sam="slack chat send -tx ${SLACK_MESSAGE} -ch 'D3VFV16U8'"
 alias graeme="slack chat send -tx 'built' -ch 'D3U9RFCE8'"

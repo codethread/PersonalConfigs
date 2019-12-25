@@ -257,4 +257,7 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "todo-tree.highlights.enabled": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
 }

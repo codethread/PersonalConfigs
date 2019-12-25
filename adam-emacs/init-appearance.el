@@ -9,6 +9,11 @@
 (add-to-list 'default-frame-alist '(ns-appearance . dark))
 ;; (setq ns-use-proxy-icon nil) ;; not sure why undefined
 
+;; Set symbol for the border
+(set-display-table-slot standard-display-table
+                        'vertical-border 
+                        (make-glyph-code ?┃))
+
 (setq frame-title-format nil)
 
 (use-package doom-themes
@@ -74,5 +79,16 @@
 ;;   :ensure t
 ;;   :config
 ;;   (dashboard-setup-startup-hook))
+
+;; face overrides
+(defface bday-face
+  '((t (:inherit web-mode-constant-face :weight bold)))
+  "Face to use for key words in web mode"
+  :group 'web-mode)
+
+(font-lock-add-keywords 'web-mode `(
+				    ("return" 0 'bday-face t)
+				    ("export" 0 'bday-face t)
+				    ) 'append)
 
 (provide 'init-appearance)
