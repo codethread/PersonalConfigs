@@ -111,9 +111,11 @@
 	   "* %? %^G\nEntered on %U\n")))
   )
 
-(use-package org-bullets
-  :commands org-bullets-mode
-  :hook (org-mode . org-bullets-mode))
+;; only show bullets in gui
+(if window-system
+    (use-package org-bullets
+      :commands org-bullets-mode
+      :hook (org-mode . org-bullets-mode)))
 
 (use-package markdown-mode
   :hook
