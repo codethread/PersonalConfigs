@@ -74,5 +74,6 @@
 (add-to-list 'compilation-error-regexp-alist-alist
              '(node "^[[:blank:]]*at \\(.*(\\|\\)\\(.+?\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)" 2 3 4))
 
+(use-package haskell-mode)
 
 (provide 'init-langs)

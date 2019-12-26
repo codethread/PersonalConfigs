@@ -1,5 +1,6 @@
 export EDITOR='vim'
 export PATH="$PATH:$HOME/.bin"
+export PATH="$PATH:$HOME/.local/.bin"
 export PATH="$PATH:$HOME/.cargo/bin"
 export PATH="$PATH:$HOME/.nodenv/bin"
 export PATH="$PATH:$HOME/.emacs.d/bin"

@@ -12,6 +12,9 @@ export EDITOR='ec'
 export TERM=xterm-256color-italic
 export LS_COLORS="$(vivid generate snazzy)"
 
+# haskell
+source ~/.ghcup/env
+
 # quickest way to cd around
 FZF_ALT_C_COMMAND="fd --type d --exclude '{Library,Music,Applications,Pictures,Unity,VirtualBox VMs,WebstormProjects,Tools,node_modules,.git}' . ${HOME}"
 #------------------------------------------

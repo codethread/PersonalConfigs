@@ -68,6 +68,7 @@
   (org-babel-do-load-languages 'org-babel-load-languages '(
 							   (shell . t)
 							   (js . t)
+							   (haskell . t)
 							   ))
 
   ;; Highlight done todos with different colors.
