@@ -11,19 +11,26 @@ alias vo="vim \$(fzf)"
 alias mvim="/Applications/MacVim.app/Contents/bin/mvim"
 alias als="eval \$(cat ~/.aliases.zsh | grep \"^alias.\+=\\\"\" | fzf -i --header='[run:]' | sed -E \"s:alias.*\\\"(.*)\\\":\\1:\" )"
 
+#---------------------------------------------#
+# EMACS
+# -------------------------------------------#
 alias emacs-doom="rm ~/.emacs.d && ln -s ~/doom-emacs ~/.emacs.d"
 alias emacs-adam="rm ~/.emacs.d && ln -s ~/adam-emacs ~/.emacs.d"
 alias emacs-light="rm ~/.emacs.d && ln -s ~/doom-light ~/.emacs.d"
 alias emacs-front="rm ~/.emacs.d && ln -s ~/frontmacs ~/.emacs.d"
 alias emacs-space="rm ~/.emacs.d && ln -s ~/spacemacs-master ~/.emacs.d"
 
-alias emacs-plus="/usr/local/Cellar/emacs-plus/HEAD-8400766/bin/emacs"
-alias emacs-plus-client="/usr/local/Cellar/emacs-plus/HEAD-8400766/bin/emacsclient"
+function emacsplus() { 
+  if [[ $1 =~ "client" ]]
+  then
+    "/usr/local/Cellar/emacs-plus/$(ls /usr/local/Cellar/emacs-plus)bin/emacsclient" -a "" -c -t
+  else
+    "/usr/local/Cellar/emacs-plus/$(ls /usr/local/Cellar/emacs-plus)bin/emacs" --daemon
+  fi
+}
 
-alias ed="emacs-plus --daemon"
-alias ec="emacs-plus-client -a "" -c -t"
-# alias ed="emacs-plus --daemon"
-# alias ec="emacsclient -a "" -c -t"
+alias ec="emacsplus 'client'"
+alias ed="emacsplus"
 alias eg="/Applications/Emacs.app/Contents/MacOS/Emacs"
 
 #---------------------------------------------#
