@@ -131,7 +131,10 @@
     ;; t --- terminal
     "tn" 'my|projectile-shell-new
     "te" 'my|projectile-shell-toggle
-    "tt" 'my|projectile-term-toggle)
+    "tt" 'my|projectile-term-toggle
+    ;; r --- run
+    "r" 'my|run-ruby
+    )
   )
 ;; will likely need this for org mode:
 ;; (evil-leader/set-key-for-mode 'emacs-lisp-mode "b" 'byte-compile-file)

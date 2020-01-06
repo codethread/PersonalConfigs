@@ -8,6 +8,7 @@
   :init (setq lsp-auto-guess-root t       ; Detect project root
               lsp-prefer-flymake nil      ; Use lsp-ui and flycheck
               lsp-auto-execute-action t
+	      ;; lsp-log-io t
               flymake-fringe-indicator-position 'right-fringe)
   :config
   (defun my|lsp-describe-thing-at-point ()

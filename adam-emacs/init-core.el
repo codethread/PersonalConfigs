@@ -152,6 +152,11 @@
     (shell-command
      (concat "cd " (projectile-project-root) " && node_modules/stylelint/bin/stylelint.js --syntax scss --fix " (buffer-file-name))))
 
+  (defun my|run-ruby ()
+    (interactive)
+    (save-buffer)
+    (async-shell-command (concat "ruby " (buffer-file-name))))
+
   (defun my|eslint-fix-file-and-revert ()
     (interactive)
     (my|eslint-fix-file)

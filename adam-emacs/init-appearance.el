@@ -18,9 +18,9 @@
 
 (use-package doom-themes
   :config
-  ;; (load-theme 'doom-one t) ;; good in gui
-  (load-theme 'doom-nord t)
-  ;; (load-theme 'doom-city-lights t)
+  (if window-system
+      (load-theme 'doom-one t)
+      (load-theme 'doom-nord t))
   ;; (load-theme 'doom-one-light t) ;; good for sun
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t))

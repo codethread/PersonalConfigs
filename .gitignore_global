@@ -64,3 +64,8 @@ TAGS
 
 # terminals
 t:*
+
+# emacs + scala metals
+.metals/
+.bloop/
+project/metals.sbt

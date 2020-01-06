@@ -69,6 +69,7 @@
 							   (shell . t)
 							   (js . t)
 							   (haskell . t)
+							   (ruby . t)
 							   ))
 
   ;; Highlight done todos with different colors.

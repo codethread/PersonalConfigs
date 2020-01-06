@@ -5,6 +5,7 @@
 ;;; set up initial package-managers
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
 ;; install use-package first if not installed, this then handles packages from here
@@ -31,4 +32,3 @@
 (require 'init-langs (concat user-emacs-directory "init-langs.el"))
 (require 'init-evil (concat user-emacs-directory "init-evil.el"))
 ;; shrug
-

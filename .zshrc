@@ -8,7 +8,7 @@ zstyle ':completion:*' menu selecto
 
 source ~/.zsh_plugins.sh
 source "$HOME/.aliases.zsh"
-export EDITOR='ec'
+
 export TERM=xterm-256color-italic
 export LS_COLORS="$(vivid generate snazzy)"
 
@@ -29,7 +29,6 @@ HISTSIZE=999999999
 SAVEHIST=$HISTSIZE
 
 # source $HOME/.cargo/env # TODO needed?
-# eval "$(fnm env --multi --use-on-cd)"
 
 #------------------------------------------
 #--- Sky Stuff

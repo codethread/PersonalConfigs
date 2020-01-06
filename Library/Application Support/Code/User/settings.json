@@ -139,7 +139,7 @@
   // },
   "editor.lineNumbers": "relative",
   "vsicons.dontShowNewVersionMessage": true,
-  "workbench.colorTheme": "Atom One Dark",
+  "workbench.colorTheme": "One Dark Pro",
   "problems.decorations.enabled": false,
   "workbench.panel.defaultLocation": "right",
   "peacock.affectActivityBar": false,
@@ -224,40 +224,17 @@
   "[json]": {
     "editor.defaultFormatter": "vscode.json-language-features"
   },
-  // "[javascript]": {
-  //   "editor.defaultFormatter": "vscode.typescript-language-features"
-  // },
-  // "[typescript]": {
-  //   "editor.defaultFormatter": "vscode.typescript-language-features"
-  // },
-  // "[typescriptreact]": {
-  //   "editor.defaultFormatter": "vscode.typescript-language-features"
-  // },
-  // "[javascriptreact]": {
-  //   "editor.defaultFormatter": "esbenp.prettier-vscode"
-  // },
   "typescript.updateImportsOnFileMove.enabled": "always",
-  "eslint.autoFixOnSave": true,
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    {
-      "language": "typescript",
-      "autoFix": true
-    },
-    {
-      "language": "typescriptreact",
-      "autoFix": true
-    }
-  ],
   "[javascript]": {
     "editor.defaultFormatter": "vscode.typescript-language-features"
   },
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "todo-tree.highlights.enabled": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
 }
