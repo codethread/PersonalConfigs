@@ -70,6 +70,7 @@
 							   (js . t)
 							   (haskell . t)
 							   (ruby . t)
+							   (io . t)
 							   ))
 
   ;; Highlight done todos with different colors.

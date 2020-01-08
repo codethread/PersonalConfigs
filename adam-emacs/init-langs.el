@@ -93,4 +93,6 @@
    (setq sbt:program-options '("-Dsbt.supershell=false"))
 )
 
+(use-package io-mode)
+
 (provide 'init-langs)
