@@ -46,12 +46,8 @@
       visible-bell t
       show-paren-mode 1
       window-resize-pixelwise t
+      save-abbrevs 'silently
       frame-resize-pixelwise t)
-
-
-;; fontsize 14pt
-(set-face-attribute 'default nil :height 140)
-
 
 ;;; functions
 ;; =====================================================================================

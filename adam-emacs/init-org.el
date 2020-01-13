@@ -20,16 +20,18 @@
   :hook
   (org-mode . visual-line-mode)
   (org-mode . flyspell-mode)
+  (org-mode . abbrev-mode)
   :config
   ;; set scratch buffer to org mode
   (setq initial-major-mode 'org-mode)
 
-  (setq org-fontify-done-headline t
-        org-fontify-whole-heading-line t
+  (setq org-startup-indented t
+	org-fontify-done-headline t
+	org-fontify-whole-heading-line t
         org-hide-leading-stars t
         org-hide-block-startup t
-        org-startup-folded t
-        org-startup-indented t
+	org-hide-emphasis-markers t
+	org-startup-folded t
 	org-log-done 'time)
 
   (setq org-todo-keywords

@@ -22,13 +22,17 @@
 ;; load emacs settings and some custom functions
 (require 'init-settings (concat user-emacs-directory "init-settings.el"))
 (require 'init-terminal (concat user-emacs-directory "init-terminal.el"))
-(require 'init-appearance (concat user-emacs-directory "init-appearance.el"))
 ;; general packages
 (require 'init-misc (concat user-emacs-directory "init-misc.el"))
 (require 'init-core (concat user-emacs-directory "init-core.el"))
 ;; some packages have a lot of config, so broken into own files
 (require 'init-company-lsp (concat user-emacs-directory "init-company-lsp.el"))
 (require 'init-org (concat user-emacs-directory "init-org.el"))
+(require 'init-appearance (concat user-emacs-directory "init-appearance.el"))
+
+;; (require 'init-doom-themes (concat user-emacs-directory "init-doom-themes.el"))
+(require 'init-writing (concat user-emacs-directory "init-writing.el"))
+
 (require 'init-langs (concat user-emacs-directory "init-langs.el"))
 (require 'init-evil (concat user-emacs-directory "init-evil.el"))
 ;; shrug

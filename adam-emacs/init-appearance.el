@@ -15,15 +15,7 @@
                         (make-glyph-code ?┃))
 
 (setq frame-title-format nil)
-
-(use-package doom-themes
-  :config
-  (if window-system
-      (load-theme 'doom-one t)
-      (load-theme 'doom-nord t))
-  ;; (load-theme 'doom-one-light t) ;; good for sun
-  (setq doom-themes-enable-bold t
-        doom-themes-enable-italic t))
+(set-face-attribute 'default nil :height 140)
 
 (use-package solaire-mode
   :hook
@@ -32,18 +24,6 @@
   :config
   (solaire-global-mode +1)
   (solaire-mode-swap-bg))
-
-(use-package doom-modeline
-      :ensure t
-      :hook (after-init . doom-modeline-mode)
-      :config
-      (setq doom-modeline-vcs-max-length 24)
-      (setq doom-modeline-buffer-file-name-style 'truncate-except-project)
-
-      ;; Whether display buffer encoding.
-      (setq doom-modeline-buffer-encoding nil)
-
-      )
 
 (use-package hide-mode-line
   :hook ((term-mode occur) . hide-mode-line-mode))
