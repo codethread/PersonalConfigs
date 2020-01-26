@@ -217,6 +217,7 @@
   ;; bring line into focus and attempt to show context.
   ;; blacklist
   (evil-set-initial-state 'shell-mode 'emacs)
+  (evil-set-initial-state 'help-mode 'emacs)
   ;; web-mode
   ;; (define-key js2-refactor-mode-map (kbd "C-c C-e C-f") 'js2r-extract-function)
   ;; (evil-define-key 'normal js2-refactor-mode-map ",c" 'org-toggle-checkbox)

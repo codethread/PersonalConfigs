@@ -1,5 +1,6 @@
 # needed for pure
-mafredri/zsh-async
+# removed as was messing with emacs shell
+# mafredri/zsh-async
 
 robbyrussell/oh-my-zsh path:plugins/git
 robbyrussell/oh-my-zsh path:plugins/colored-man-pages
@@ -20,7 +21,8 @@ docker/cli path:contrib/completion/zsh kind:fpath
 # LAST
 
 #  prompt
-sindresorhus/pure
+# removed as was messing with emacs shell
+# sindresorhus/pure
 
 # adds 100ms
 # zsh-users/zsh-syntax-highlighting

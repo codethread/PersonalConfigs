@@ -30,8 +30,8 @@
 (require 'init-org (concat user-emacs-directory "init-org.el"))
 (require 'init-appearance (concat user-emacs-directory "init-appearance.el"))
 
-;; (require 'init-doom-themes (concat user-emacs-directory "init-doom-themes.el"))
-(require 'init-writing (concat user-emacs-directory "init-writing.el"))
+(require 'init-doom-themes (concat user-emacs-directory "init-doom-themes.el"))
+;; (require 'init-writing (concat user-emacs-directory "init-writing.el"))
 
 (require 'init-langs (concat user-emacs-directory "init-langs.el"))
 (require 'init-evil (concat user-emacs-directory "init-evil.el"))
