@@ -10,7 +10,9 @@
 
 ;; adds highlights to TODO and FIXME.
 (use-package fic-mode
-  :hook (prog-mode))
+  :hook
+  (prog-mode)
+  (web-mode))
 
 ;; jump to def without lsp
 (use-package xref

@@ -67,8 +67,9 @@
   :group 'web-mode)
 
 (font-lock-add-keywords 'web-mode `(
-				    ("return" 0 'bday-face t)
-				    ("export" 0 'bday-face t)
+				    ("return " 0 'bday-face t)
+				    ("export " 0 'bday-face t)
+				    ("type " 0 'web-mode-type-face t)
 				    ) 'append)
 
 (provide 'init-appearance)
