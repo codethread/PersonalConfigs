@@ -6,7 +6,7 @@
   ;; On OS X Emacs doesn't use the shell PATH if it's not started from
   ;; the shell. Let's fix that:
   (require 'exec-path-from-shell)
-  (setq exec-path-from-shell-arguments 'nil)
+  ;; (setq exec-path-from-shell-arguments 'nil)
   (exec-path-from-shell-initialize)
 
   (setq ns-function-modifier 'hyper) ;; fix alt as meta key

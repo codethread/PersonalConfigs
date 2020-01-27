@@ -3,7 +3,7 @@
 # sort -s -k1.1,1.1 sorts on first letter only and preserves order
 antibody bundle < ~/.zsh_plugins.txt \
     | sort -s -k1.1,1.1 \
-    | gsed "0,/source/s//\nautoload -Uz compinit\nif [ \$(date +'%j') != \$(\/usr\/bin\/stat -f '%Sm' -t '%j' \$HOME\/.zcompdump) ]; then compinit; else compinit -C; fi\n\nsource/" \
+    | sed "0,/source/s//\nautoload -Uz compinit\nif [ \$(date +'%j') != \$(\/usr\/bin\/stat -f '%Sm' -t '%j' \$HOME\/.zcompdump) ]; then compinit; else compinit -C; fi\n\nsource/" \
         > ~/.zsh_plugins.sh || exit 1
 
 echo "make sure to run compinit"

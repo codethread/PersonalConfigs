@@ -43,7 +43,7 @@ alias ls='ls -pGF'
 alias l='ls -lah'
 alias lc='colorls -A --sd --gs'
 
-alias pathis="echo $PATH | tr -s ':' '\n'"
+alias pathis='echo $PATH | tr -s ":" "\n"'
 
 alias portsinuse="lsof -i -p | grep -i 'listen'"
 alias ports="echo lsof -i tcp:3000"
@@ -64,7 +64,7 @@ alias yi='sudo /usr/local/McAfee/AntiMalware/VSControl stopoas && yarn install &
 alias bi="brew install"
 alias brewup='brew update; brew doctor; brew upgrade; brew cleanup'
 alias alert="osascript -e 'display notification \"Task Finished\" with title \"CMD\"'; afplay /System/Library/Sounds/Glass.aiff"
-alias ser="python -m SimpleHTTPServer $1" # start server
+alias ser='python -m SimpleHTTPServer $1' # start server
 
 #---------------------------------------------#
 # RARE USE
@@ -95,15 +95,15 @@ alias dick="docker ps | grep '[a-z0-9]' | awk '{ print $1 }' | xargs docker kill
 #---------------------------------------------#
 # GIT
 # -------------------------------------------#
-alias gBranch="git rev-parse --abbrev-ref HEAD"
+alias gBranch='git rev-parse --abbrev-ref HEAD'
 alias gignore="git rm -r --cached .; git add .; git commit -m '.gitignore is now working'"
 alias gmm="git checkout master && git pull && git checkout - && git rebase master"
 alias gcp="git cherry-pick"
-alias gkill="git branch | grep -v "master" | xargs git branch -D"
-alias gfuck="git fetch origin; git reset --hard origin ${gBranch}"
+alias gkill="git branch | grep -v \"master\" | xargs git branch -D"
+alias gfuck='git fetch origin; git reset --hard origin ${gBranch}'
 alias gnah="git reset --hard; git clean -df"
 alias gh="open -a '/Applications/Google Chrome.app' \`git remote -v | grep git@github.com | grep fetch | head -1 | cut -f2 | cut -d' ' -f1 | sed -e's/:/\//' -e 's/git@/http:\/\//'\`"
-alias gr="git rebase -i HEAD~$1"
+alias gr='git rebase -i HEAD~$1'
 alias gclean="git clean -dfX"
 alias gwip="git add . && git commit -nm 'wip'"
 alias gl="git --no-pager log -n 5"

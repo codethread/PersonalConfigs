@@ -14,7 +14,7 @@ IFS='
 links="$(cat "${tFile}")"
 
 function updateTxt {
-    gsed -i "s:${1}::" "${tFile}"
+    sed -i "s:${1}::" "${tFile}"
 }
 
 for link in ${links}
@@ -48,4 +48,4 @@ do
     fi
 done
 
-gsed -i "/^$/d" "${tFile}"
+sed -i "/^$/d" "${tFile}"
