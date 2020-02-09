@@ -8,6 +8,7 @@
   "editor.dragAndDrop": true,
   "explorer.confirmDragAndDrop": true,
   "editor.fontSize": 12,
+  "editor.fontWeight": "500",
   "editor.formatOnType": true,
   "editor.minimap.enabled": false,
   // "editor.smoothScrolling": true,
