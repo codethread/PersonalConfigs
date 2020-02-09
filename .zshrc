@@ -31,10 +31,10 @@ SAVEHIST=$HISTSIZE
 NEWLINE=$'\n' # couldn't get the newline to behave without this
 PROMPT="${NEWLINE}%F{blue}%~${NEWLINE}%(?.%F{magenta}❯.%F{red}❯) %F{white}"
 # time
-RPROMPT='%F{yellow}%*'
+# RPROMPT='%F{yellow}%*'
 
-ssource "$HOME/.aliases.zsh" # TODO: move?
 ssource ~/.zsh_plugins.sh
+ssource "$HOME/.aliases.zsh" # TODO: move?
 
 # set up colors for ls, fd, tree etc https://github.com/sharkdp/vivid
 ssource ~/.config/vivid/built/snazzy.sh

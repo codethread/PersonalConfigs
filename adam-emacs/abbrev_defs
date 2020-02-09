@@ -3,6 +3,9 @@
   '(
     ("bc" "because" nil :count 1)
     ("sk" "Skyport" nil :count 2)
+    ("ts" "TypeScript" nil :count 0)
+    ("node" "Node" nil :count 0)
+    ("js" "JavaScript" nil :count 0)
     ("U" "Unity" nil :count 0)
    ))
 

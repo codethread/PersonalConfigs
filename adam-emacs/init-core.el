@@ -124,9 +124,9 @@
     (async-shell-command
      (concat "cd "
 	     (projectile-project-root)
-	     " && NODE_ENV=test node_modules/.bin/mocha "
-	     (buffer-file-name)
-	     " --file ./test/setup.js")))
+	     ;; " && NODE_ENV=test node_modules/.bin/mocha --config=test/unit/.mocharc.js --chuftey "
+	     " && NODE_ENV=test node_modules/.bin/mocha --config ./test/unit/.mocharc.js"
+	     )))
 
   (defun my|eslint-fix-file ()
     "Run eslint --fix on current file."

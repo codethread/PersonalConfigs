@@ -157,6 +157,12 @@
 (global-set-key (kbd "C-M-<right>") 'frame-half-size-right)
 (global-set-key (kbd "C-M-<return>") 'toggle-frame-maximized)
 
+;; window adjustments
+(global-set-key (kbd "S-C-<left>") 'shrink-window-horizontally)
+(global-set-key (kbd "S-C-<right>") 'enlarge-window-horizontally)
+(global-set-key (kbd "S-C-<down>") 'shrink-window)
+(global-set-key (kbd "S-C-<up>") 'enlarge-window)
+
 ;; this exists to match shortcut on mac
 (global-set-key (kbd "C-s-<f8>") 'my|close-notifications-mac)
 
