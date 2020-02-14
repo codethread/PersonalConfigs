@@ -148,7 +148,7 @@
 
 
   (defun my|stylelint-fix-file ()
-    "Run eslint --fix on current file."
+    "Run stylelint --fix on current file."
     (interactive)
     (save-buffer)
     (shell-command
@@ -185,8 +185,6 @@
   (helm-projectile-on)
   :bind
   ("C-\\" . helm-projectile-rg))
-
-(use-package helm-lsp :commands helm-lsp-workspace-symbol)
 
 (use-package helm-rg
   :config

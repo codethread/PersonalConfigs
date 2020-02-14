@@ -7,7 +7,9 @@
   ;; the shell. Let's fix that:
   (require 'exec-path-from-shell)
   ;; (setq exec-path-from-shell-arguments 'nil)
+  (setq exec-path-from-shell-variables '("PATH" "MANPATH" "SPOTIFY_TOKEN" "SLACK_SKY_EMACS_TOKEN"))
   (exec-path-from-shell-initialize)
+
 
   (setq ns-function-modifier 'hyper) ;; fix alt as meta key
 

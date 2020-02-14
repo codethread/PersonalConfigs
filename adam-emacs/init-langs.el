@@ -1,5 +1,5 @@
 (use-package add-node-modules-path
-  :config
+  :init
   (add-hook 'prog-mode-hook #'add-node-modules-path))
   ;; :hook
   ;; (typescript-mode)
@@ -12,7 +12,6 @@
   :config
   ;; customize flycheck temp file prefix
   (setq-default flycheck-temp-prefix ".flycheck")
-  (setq flycheck-check-syntax-automatically 'nil)
   (setq flycheck-check-syntax-automatically '(save
 					      idle-change
 					      new-line
@@ -37,7 +36,7 @@
 	js2-mode-show-parse-errors nil
 	js2-mode-show-strict-warnings nil))
 
-(use-package indium)
+;; (use-package indium)
 
 (use-package js2-refactor
   :config
@@ -56,16 +55,31 @@
   (add-to-list 'auto-mode-alist '("\\.gql\\'" . graphql-mode)))
 
 (use-package web-mode
-  :config
-  (add-hook 'web-mode-hook 'flycheck-mode)
+  :init
   (add-to-list 'auto-mode-alist '("\\.ts\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
+  :config
+  (add-hook 'web-mode-hook 'my|web-checkers)
+
+  (defun my|web-checkers ()
+    "add lsp and stylelint"
+    (interactive)
+    (setq-local flycheck-checker 'javascript-eslint))
+
   (setq-default web-mode-comment-formats
               '(("javascript" . "//")
-                ("typescript" . "//")))
-  )
+                ("typescript" . "//"))))
 
-;; (use-package typescript)
+(use-package scss-mode
+  :config
+  (add-hook 'scss-mode-hook 'my|scss-checkers)
+
+  (defun my|scss-checkers ()
+    "add lsp and stylelint"
+    (interactive)
+    (setq-local flycheck-checker 'scss-stylelint))
+    ;; (flycheck-add-next-checker 'lsp 'scss-stylelint)))
+  )
 
 
 ;;; parse node.js stack traces in compilation buffer.s

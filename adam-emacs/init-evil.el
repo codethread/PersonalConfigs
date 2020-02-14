@@ -39,16 +39,18 @@
     "." 'ace-window
     ;; b --- buffers
     "bb" 'my|split-last-buffer
-    "bl" 'helm-projectile-switch-to-buffer
-    "bL" 'helm-buffers-list
+    "bj" 'evil-show-jumps
     "bk" 'my|kill-this-buffer
     "bK" 'kill-buffer
-    "bj" 'evil-show-jumps
-    "bp" 'evil-prev-buffer
-    "bP" 'evil-split-prev-buffer
+    "bl" 'helm-projectile-switch-to-buffer
+    "bL" 'helm-buffers-list
     "bn" 'evil-next-buffer
     "bN" 'evil-split-next-buffer
+    "bp" 'evil-prev-buffer
+    "bP" 'evil-split-prev-buffer
     "br" 'rename-buffer
+    "bs" 'helm-slack-unreads
+    "bS" 'helm-slack ;; quite slow to load all groups
     "bx" 'font-lock-fontify-buffer ;; repaint the buffer
 
     ;; e -- error
@@ -189,9 +191,9 @@
 	("s" . ace-jump-mode)
 	("S" . ace-jump-char-mode)
 	("gf" . helm-projectile-find-file-dwim)
-	("gD" . lsp-find-type-definition)
-	("gd" . evil-goto-definition)
-	("gh" . my|lsp-describe-thing-at-point)
+	("gD" . evil-goto-definition)
+	("gd" . lsp-goto-implementation)
+	("gh" . lsp-describe-thing-at-point)
 	;; ("C-o" . xref-pop-marker-stack)
 	;; (define-key evil-normal-state-map "-" 'dired-jump)
 	("C-@" . company-complete)
