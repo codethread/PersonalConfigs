@@ -29,7 +29,7 @@ SAVEHIST=$HISTSIZE
 #-----------------------------------------
 # Prompt https://scriptingosx.com/2019/07/moving-to-zsh-06-customizing-the-zsh-prompt/
 NEWLINE=$'\n' # couldn't get the newline to behave without this
-PROMPT="${NEWLINE}%F{blue}%~${NEWLINE}%(?.%F{magenta}❯.%F{red}❯) %F{white}"
+PROMPT="${NEWLINE}%F{blue}%~${NEWLINE}%(?.%F{magenta}ᕕ(ᐛ)ᕗ.%F{red}(╯°□°%)╯︵ ┻━┻) %F{normal}"
 # time
 # RPROMPT='%F{yellow}%*'
 
