@@ -4,6 +4,39 @@
 
 Life and soul
 
+## git
+go and change `.gitconfig` and other git files
+
+### generate key
+
+[instructions here](https://help.github.com/en/enterprise/2.19/user/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
+```sh
+ssh-keygen -t rsa -b 4096 -C "adamhalldesigns@gmail.com"
+```
+
+```sh
+eval "$(ssh-agent -s)"
+```
+
+```sh
+ssh-add ~/.ssh/id_rsa
+```
+
+### upload key
+
+[instructions here](https://help.github.com/en/enterprise/2.19/user/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account)
+
+```sh
+sudo apt-get install xclip
+# Downloads and installs xclip. If you don't have `apt-get`, you might need to use another installer (like `yum`)
+
+xclip -sel clip < ~/.ssh/id_rsa.pub
+# Copies the contents of the id_rsa.pub file to your clipboard
+```
+
+upload to github
+
+
 ## mac
 
 https://www.maketecheasier.com/install-macos-virtualbox/
@@ -60,9 +93,6 @@ vim --noplugin
 ```
 
 then run `:PlugInstall`
-
-### git
-go and change `.gitconfig` and other git files
 
 ### nodenv
 
