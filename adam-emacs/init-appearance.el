@@ -17,6 +17,12 @@
 (setq frame-title-format nil)
 (set-face-attribute 'default nil :height 140)
 
+;; (setq ns-auto-hide-menu-bar)
+
+;; set transparency
+;; (set-frame-parameter (selected-frame) 'alpha '(95 95))
+;; (add-to-list 'default-frame-alist '(alpha 98 98))
+
 (use-package solaire-mode
   :hook
   ((change-major-mode after-revert ediff-prepare-buffer) . turn-on-solaire-mode)

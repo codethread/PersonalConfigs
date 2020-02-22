@@ -11,64 +11,82 @@ tap "ouchxp/nodenv"
 tap "rockymadden/rockymadden"
 tap "schniz/tap"
 tap "universal-ctags/universal-ctags"
-brew "ack"
+# brew "ack"
 brew "aspell"
-brew "bats-core"
-brew "sqlite"
-brew "emacs"
+# brew "bats-core"
+# brew "sqlite"
+# brew "emacs"
 brew "cask"
 brew "cmake"
 brew "colordiff"
 brew "coreutils"
-brew "ctags", link: false
-brew "docker-machine", link: false
+# brew "ctags", link: false
+# brew "docker-machine", link: false
 brew "editorconfig"
 brew "exercism"
 brew "fd"
 brew "fontforge"
-brew "fortune"
+# brew "fortune"
 brew "gawk"
-brew "git"
-brew "git-flow"
+# brew "git"
+# brew "git-flow"
 brew "gnu-sed"
 brew "gnu-tar"
-brew "gradle"
+# brew "gradle"
 brew "htop"
-brew "httpie"
+# brew "httpie"
 brew "jq"
-brew "kafka"
-brew "nasm"
-brew "node-build"
+# brew "kafka"
+
+# mac only
+# cask "amethyst"
+# cask "iterm2"
+
+# assembly stuff
+# brew "nasm"
+# brew "yasm"
+
+# brew "node-build"
 brew "nodenv"
-brew "pipes-sh"
+# brew "pipes-sh"
 brew "ranger"
 brew "rdfind"
-brew "reattach-to-user-namespace"
-brew "redis"
+# brew "reattach-to-user-namespace"
+# brew "redis"
 brew "ripgrep"
-brew "rlwrap"
-brew "sbt"
-brew "scala"
-brew "screen"
+# brew "rlwrap"
+
+# scala stuff
+# brew "sbt"
+# brew "scala"
+
+# brew "screen"
 brew "shellcheck"
-brew "the_silver_searcher"
+
+# brew "the_silver_searcher"
+
 brew "tmux"
-brew "trash"
+# brew "trash"
 brew "tree"
 brew "vim"
 brew "watch"
 brew "watchman"
-brew "wget"
-brew "yasm"
+
+# brew "wget"
+
 brew "d12frosted/emacs-plus/emacs-plus", args: ["HEAD", "with-jansson", "without-spacemacs-icon"], link: false
-brew "elastic/tap/filebeat-full"
+
+# work thing
+# brew "elastic/tap/filebeat-full"
+
 brew "getantibody/tap/antibody"
-brew "heroku/brew/heroku"
-brew "rockymadden/rockymadden/slack-cli"
+
+# work pestering
+# brew "rockymadden/rockymadden/slack-cli"
+
 brew "universal-ctags/universal-ctags/universal-ctags", args: ["HEAD"]
+
 cask "alacritty"
-cask "amethyst"
+
 cask "font-firacode-nerd-font"
 cask "font-hack-nerd-font"
-cask "iterm2"
-cask "java"

@@ -14,6 +14,7 @@
     "<SPC> n" "Notes"
     "<SPC> p" "Projects"
     "<SPC> s" "Search"
+    "<SPC> S" "Slack"
     "<SPC> t" "Term"
     "<SPC> w" "Window"
     )
@@ -49,8 +50,6 @@
     "bp" 'evil-prev-buffer
     "bP" 'evil-split-prev-buffer
     "br" 'rename-buffer
-    "bs" 'helm-slack-unreads
-    "bS" 'helm-slack ;; quite slow to load all groups
     "bx" 'font-lock-fontify-buffer ;; repaint the buffer
 
     ;; e -- error
@@ -129,6 +128,11 @@
     "ps" 'helm-projectile-rg ;; also ag or grep
     "po" 'projectile-toggle-between-implementation-and-test
     "pt" 'my|test-file ;; test file in project
+
+    ;; S -- slack
+    "SS" 'slack-im-select
+    "Su" 'helm-slack-unreads
+    "Sk" 'helm-slack ;; quite slow to load all groups
 
     ;; t --- terminal
     "tn" 'my|projectile-shell-new

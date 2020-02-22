@@ -22,7 +22,7 @@ let  light_v     = '#d69eff'
 let  c_light_v   = '183'
 let  coral       = '#FF776E'
 let  c_coral     = '209'
-let  c_bg_bright = '008'
+let  c_bg_bright = '000'
 let  ui_0        = '#F9F9F9'
 let  ui_1        = '#f9f9ff'
 let  ui_2        = '#eff0eb'
@@ -42,35 +42,36 @@ let  ui_11       = '#282a36'
 " highlight SignColumn ctermbg=
 let g:gitgutter_override_sign_column_highlight = 0
 
-hi SignColumn            guibg=bg    ctermbg=000
-hi GitGutterAdd          ctermbg=000 ctermfg=002
-hi GitGutterChange       ctermbg=000 ctermfg=003
-hi GitGutterDelete       ctermbg=000 ctermfg=001
-hi GitGutterChangeDelete ctermbg=000 ctermfg=001
-hi StatusLineNC          ctermbg=008
-hi StatusLine            ctermbg=008
+hi Normal                guibg=NONE  ctermbg=NONE
+hi SignColumn            guibg=bg    ctermbg=NONE
+hi GitGutterAdd          ctermbg=NONE ctermfg=002
+hi GitGutterChange       ctermbg=NONE ctermfg=003
+hi GitGutterDelete       ctermbg=NONE ctermfg=001
+hi GitGutterChangeDelete ctermbg=NONE ctermfg=001
+hi StatusLineNC          ctermbg=000
+hi StatusLine            ctermbg=000
 
 
 " netrw
-:exe 'hi netrwDir       guibg=bg ctermbg=000 ctermfg=003'
-:exe 'hi NERDTreeDir    guibg=bg ctermbg=000 ctermfg='.c_light_v
-:exe 'hi CursorLine     ctermbg=008'
-:exe 'hi Directory      guibg=bg cterm=bold ctermfg='.c_magenta.' ctermbg=000'
-:exe 'hi NonText        guibg=bg ctermbg=000 ctermfg=000'
+:exe 'hi netrwDir       guibg=bg ctermbg=NONE ctermfg=003'
+:exe 'hi NERDTreeDir    guibg=bg ctermbg=NONE ctermfg='.c_light_v
+:exe 'hi CursorLine     ctermbg=000'
+:exe 'hi Directory      guibg=bg cterm=bold ctermfg='.c_magenta.' ctermbg=NONE'
+:exe 'hi NonText        guibg=bg ctermbg=NONE ctermfg=NONE'
 :exe 'hi Comment        cterm=italic gui=italic'
 :exe 'hi SpellBad       guifg=white guibg='.red.' ctermfg=255 ctermbg='.c_red
 :exe 'hi MatchParen     guifg='.red.' ctermfg='.c_red
-hi Search ctermfg=NONE ctermbg=008
-hi Visual ctermfg=NONE ctermbg=008
+hi Search ctermfg=NONE ctermbg=000
+hi Visual ctermfg=NONE ctermbg=000
 :exe 'hi Boolean        guifg='.magenta.' ctermfg='.c_magenta
 :exe 'hi Number         guifg='.turqoise
 
 :exe 'hi Folded         guifg='.cyan.' guibg='.ui_9.' ctermfg='.c_cyan.' ctermbg='.c_bg_bright
-:exe 'hi VertSplit ctermfg=008 ctermbg=000'
+:exe 'hi VertSplit ctermfg=000 ctermbg=NONE'
 
-" :exe 'hi TabLineFill    guibg='.ui_9.' ctermbg=000'
-" :exe 'hi TabLineSel     guifg='.cyan.' guibg='.ui_9. ' ctermfg='.c_magenta.' ctermbg=000 cterm=underline'
-" :exe 'hi TabLine        guifg='.ui_4.' guibg='.ui_9.' ctermfg='.c_ui_4.' ctermbg=000 cterm=underline'
+" :exe 'hi TabLineFill    guibg='.ui_9.' ctermbg=NONE'
+" :exe 'hi TabLineSel     guifg='.cyan.' guibg='.ui_9. ' ctermfg='.c_magenta.' ctermbg=NONE cterm=underline'
+" :exe 'hi TabLine        guifg='.ui_4.' guibg='.ui_9.' ctermfg='.c_ui_4.' ctermbg=NONE cterm=underline'
 
 " ALE
 :exe 'hi ALEError       cterm=underline,italic,bold guifg='.coral.' ctermfg='.c_coral
@@ -131,42 +132,42 @@ hi ALEWarning           cterm=underline,italic
 :exe 'hi jsSpecial  guifg='.magenta.' ctermfg='.c_blue
 
 " CSS only for non gui
-:exe 'hi cssBoxProp      ctermbg=000 ctermfg=white'
-:exe 'hi cssFontProp      ctermbg=000 ctermfg=white'
-:exe 'hi cssTextProp      ctermbg=000 ctermfg=white'
-:exe 'hi cssAnimationProp      ctermbg=000 ctermfg=white'
-:exe 'hi cssMediaProp      ctermbg=000 ctermfg=white'
-:exe 'hi cssBackgroundProp      ctermbg=000 ctermfg=white'
-:exe 'hi cssPositioningProp      ctermbg=000 ctermfg=white'
-:exe 'hi cssFlexibleBoxProp      ctermbg=000 ctermfg=white'
-:exe 'hi cssBorderProp      ctermbg=000 ctermfg=white'
-:exe 'hi cssTransformProp      ctermbg=000 ctermfg=white'
-:exe 'hi cssTransitionProp      ctermbg=000 ctermfg=white'
+:exe 'hi cssBoxProp      ctermbg=NONE ctermfg=white'
+:exe 'hi cssFontProp      ctermbg=NONE ctermfg=white'
+:exe 'hi cssTextProp      ctermbg=NONE ctermfg=white'
+:exe 'hi cssAnimationProp      ctermbg=NONE ctermfg=white'
+:exe 'hi cssMediaProp      ctermbg=NONE ctermfg=white'
+:exe 'hi cssBackgroundProp      ctermbg=NONE ctermfg=white'
+:exe 'hi cssPositioningProp      ctermbg=NONE ctermfg=white'
+:exe 'hi cssFlexibleBoxProp      ctermbg=NONE ctermfg=white'
+:exe 'hi cssBorderProp      ctermbg=NONE ctermfg=white'
+:exe 'hi cssTransformProp      ctermbg=NONE ctermfg=white'
+:exe 'hi cssTransitionProp      ctermbg=NONE ctermfg=white'
 
-:exe 'hi cssBoxAttr      ctermbg=000 ctermfg=magenta'
-:exe 'hi cssFontAttr      ctermbg=000 ctermfg=magenta'
-:exe 'hi cssTextAttr      ctermbg=000 ctermfg=magenta'
-:exe 'hi cssAnimationAttr      ctermbg=000 ctermfg=magenta'
-:exe 'hi cssMediaAttr      ctermbg=000 ctermfg=magenta'
-:exe 'hi cssBackgroundAttr      ctermbg=000 ctermfg=magenta'
-:exe 'hi cssPositioningAttr      ctermbg=000 ctermfg=magenta'
-:exe 'hi cssFlexibleBoxAttr      ctermbg=000 ctermfg=magenta'
-:exe 'hi cssBorderAttr      ctermbg=000 ctermfg=magenta'
-:exe 'hi cssTransformAttr      ctermbg=000 ctermfg=magenta'
-:exe 'hi cssTransitionAttr      ctermbg=000 ctermfg=magenta'
-:exe 'hi cssMultiColumnAttr      ctermbg=000 ctermfg=magenta'
+:exe 'hi cssBoxAttr      ctermbg=NONE ctermfg=magenta'
+:exe 'hi cssFontAttr      ctermbg=NONE ctermfg=magenta'
+:exe 'hi cssTextAttr      ctermbg=NONE ctermfg=magenta'
+:exe 'hi cssAnimationAttr      ctermbg=NONE ctermfg=magenta'
+:exe 'hi cssMediaAttr      ctermbg=NONE ctermfg=magenta'
+:exe 'hi cssBackgroundAttr      ctermbg=NONE ctermfg=magenta'
+:exe 'hi cssPositioningAttr      ctermbg=NONE ctermfg=magenta'
+:exe 'hi cssFlexibleBoxAttr      ctermbg=NONE ctermfg=magenta'
+:exe 'hi cssBorderAttr      ctermbg=NONE ctermfg=magenta'
+:exe 'hi cssTransformAttr      ctermbg=NONE ctermfg=magenta'
+:exe 'hi cssTransitionAttr      ctermbg=NONE ctermfg=magenta'
+:exe 'hi cssMultiColumnAttr      ctermbg=NONE ctermfg=magenta'
 
-:exe 'hi cssFontAttr      ctermbg=000 ctermfg=magenta'
-:exe 'hi cssAuralAttr      ctermbg=000 ctermfg=magenta'
-:exe 'hi cssAttrComma      ctermbg=000 ctermfg=cyan'
+:exe 'hi cssFontAttr      ctermbg=NONE ctermfg=magenta'
+:exe 'hi cssAuralAttr      ctermbg=NONE ctermfg=magenta'
+:exe 'hi cssAttrComma      ctermbg=NONE ctermfg=cyan'
 
-:exe 'hi cssColor      ctermbg=000 ctermfg=blue'
-:exe 'hi cssClassName      ctermbg=000 ctermfg=cyan'
-:exe 'hi cssClassNameDot      ctermbg=000 ctermfg=cyan'
+:exe 'hi cssColor      ctermbg=NONE ctermfg=blue'
+:exe 'hi cssClassName      ctermbg=NONE ctermfg=cyan'
+:exe 'hi cssClassNameDot      ctermbg=NONE ctermfg=cyan'
 
-:exe 'hi cssValueNumber  ctermbg=000 ctermfg=green'
-:exe 'hi cssValueTime  ctermbg=000 ctermfg=green'
-:exe 'hi cssValueLength  ctermbg=000 ctermfg=green'
+:exe 'hi cssValueNumber  ctermbg=NONE ctermfg=green'
+:exe 'hi cssValueTime  ctermbg=NONE ctermfg=green'
+:exe 'hi cssValueLength  ctermbg=NONE ctermfg=green'
 
 " typescript
 :exe 'hi typescriptEndColons ctermfg=fg'

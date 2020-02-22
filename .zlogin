@@ -18,6 +18,13 @@ pathappend /opt/X12/bin PATH
 pathappend /Library/Frameworks/Mono.framework/Versions/Current/Commands PATH
 pathappend /opt/local/bin PATH
 
+#------------------------------------------
+#--- Sky Stuff
+#-----------------------------------------
+if [[ $(whoami) =~ 'adh23' ]]; then
+    pathappend $HOME/confluent/bin PATH
+fi
+
 # The current directory should never be in $PATH
 pathremove . PATH
 pathremove "" PATH

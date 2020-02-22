@@ -1,5 +1,24 @@
 ;;; init.el --- Initialization file for Emacs
 ;;; Commentary: Emacs Startup File --- initialization for Emacs
+
+;;                %%%%(         /%%%%               
+;;            %%#                     (%%           
+;;         %%                             %%        
+;;       %%                                 %%      
+;;     .%           %            %%%%         %     
+;;    (%           %%%           %%%%          %/   
+;;    %           %%%%           %%%%           %   
+;;   %%          %%%%       %%%%%%%%%           %%  
+;;   %%         %%%%         %%%%%%%%           %%  
+;;   %%        %%%%%%%%%%%       %%%%           %%  
+;;    %       %%%%%%%%%%%%%      %%%%           %   
+;;    %%     %%%%*               %%%%          %%   
+;;     %%   %%%%(                %%%%         %#    
+;;       %%                                 %%      
+;;         %%                             %%        
+;;           *%%                       %%,          
+;;               (%%%/           /%%%/  
+
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file)
 ;;; set up initial package-managers
@@ -24,7 +43,7 @@
 ;;  (with-temp-buffer
 ;;    (url-insert-file-contents "https://github.com/quelpa/quelpa/raw/master/bootstrap.el")
 ;;    (eval-buffer)))
-;; =====================================================================================
+;; ===================================================================================
 
 ;; load emacs settings and some custom functions
 (require 'init-settings (concat user-emacs-directory "init-settings.el"))

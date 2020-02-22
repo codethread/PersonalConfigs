@@ -1,0 +1,139 @@
+* Configs
+
+Life and soul
+
+** Mac
+
+https://www.maketecheasier.com/install-macos-virtualbox/
+experimenting with virtual box
+https://blog.petehouston.com/download-and-convert-macos-mojave-installer-into-iso-file/
+
+*** xcode tools
+This is required by most command line tools, so we'll need this first
+#+BEGIN_SRC bash
+xcode-select --install
+#+END_SRC
+
+*** github
+*** brew
+Download [[https://brew.sh/][homebrew]]
+*command as of Feb 2020*
+
+#+BEGIN_SRC bash
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+#+END_SRC
+
+This is a package manager for mac, and stores executables in `/usr/local`
+
+
+** Linux 
+*** github
+**** generate key
+
+[[https://help.github.com/en/enterprise/2.19/user/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent][instructions here]]
+#+BEGIN_SRC bash
+ssh-keygen -t rsa -b 4096 -C "adamhalldesigns@gmail.com"
+#+END_SRC
+
+#+BEGIN_SRC bash
+eval "$(ssh-agent -s)"
+#+END_SRC
+
+#+BEGIN_SRC bash
+ssh-add ~/.ssh/id_rsa
+#+END_SRC
+
+
+**** upload key
+
+[[https://help.github.com/en/enterprise/2.19/user/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account][instructions here]]
+
+#+BEGIN_SRC bash
+sudo apt-get install xclip
+# Downloads and installs xclip. If you don't have `apt-get`, you might need to use another installer (like `yum`)
+
+xclip -sel clip < ~/.ssh/id_rsa.pub
+# Copies the contents of the id_rsa.pub file to your clipboard
+#+END_SRC
+
+upload to github
+
+
+*** brew
+Download [[https://docs.brew.sh/Homebrew-on-Linux][homebrew]]
+*command as of Feb 2020*
+
+#+BEGIN_SRC bash
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
+#+END_SRC
+
+follow install instructions per distro
+
+
+** packages
+
+#+BEGIN_SRC bash
+cd ~/PersonalConfigs && brew bundle
+#+END_SRC
+
+
+** zsh
+
+*not needed on mac anymore* [[https://gist.github.com/derhuerst/12a1558a4b408b3b2b6e][installing zsh]]
+
+
+** Anitbody (zsh plugin manager)
+
+run setup command to copy files
+
+#+BEGIN_SRC bash
+# link directories
+~/PersonalConfigs/_setup
+
+# run antiup to set up plugins
+~/PersonalConfigs/.bin/antiup
+#+END_SRC
+
+
+** Vim
+
+#+END_SRC
+vim --noplugin
+#+END_SRC
+
+then run `:PlugInstall`
+
+
+** Nodenv
+
+note the version of the latest LTS from [[https://nodejs.org/en/][Node]]
+
+#+BEGIN_SRC bash
+# install a LTS version
+nodenv install <latest version>
+#+END_SRC
+
+#+BEGIN_SRC bash
+# set this up globally
+nodenv global <latest version>
+#+END_SRC
+
+#+BEGIN_SRC bash
+# install global npm modules
+~/PersonalConfigs/.bin/npmg
+#+END_SRC
+
+#+BEGIN_SRC bash
+# rehash to pick up the executables now known to nodenv
+nodenv rehash
+#+END_SRC
+
+
+** Iterm
+
+follow instructions in 
+
+#+BEGIN_SRC bash
+cd ~/PersonalConfigs/_colors+fonts
+cat xterm-256color-italic.terminfo
+#+END_SRC

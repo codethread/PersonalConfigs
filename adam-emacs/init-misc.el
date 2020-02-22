@@ -84,10 +84,13 @@
   (slack-register-team
    :name "sky.slack.com"
    :token (getenv "SLACK_SKY_EMACS_TOKEN")
+   :check-ping-timeout-sec 99 ;; default 20
+   :reconnect-auto nil
    :default t
    :mark-as-read-immediately t
    :animate-image t
-   :subscribed-channels '(graphql graphql-releases))
+   )
+   ;; :subscribed-channels '(graphql graphql-releases))
 
   (evil-define-key 'normal slack-info-mode-map
     ",u" 'slack-room-update-messages)
@@ -106,41 +109,52 @@
     ",2" 'slack-message-embed-mention
     ",3" 'slack-message-embed-channel
     "\C-n" 'slack-buffer-goto-next-message
-    "\C-p" 'slack-buffer-goto-prev-message)
+    "\C-p" 'slack-buffer-goto-prev-message
+    )
+  (evil-define-key 'insert slack-message-buffer-mode
+    "<return>" (defun me|slack-new-line ()
+		 (interactive)
+		 (insert "
+")))
+
    (evil-define-key 'normal slack-edit-message-mode-map
     ",k" 'slack-message-cancel-edit
     ",s" 'slack-message-send-from-buffer
     ",2" 'slack-message-embed-mention
     ",3" 'slack-message-embed-channel))
 
-(use-package alert
-  :commands (alert)
-  :init
-  (setq alert-default-style 'notifier))
-
-;; https://endlessparentheses.com/keep-your-slack-distractions-under-control-with-emacs.html
 ;; (use-package alert
 ;;   :commands (alert)
 ;;   :init
-;;   (setq alert-default-style 'notifier)
-;;   :config
-;;   (add-to-list 'alert-user-configuration
-;; 	       '(((:category . "slack")) ignore nil))
-;;   (add-to-list
-;;    'alert-user-configuration
-;;    '(((:title . "\\(graphql\\|fun-sponge\\|dick-heads\\)") 
-;;       (:category . "slack"))
-;;      libnotify nil))
+;;   (setq alert-default-style 'notifier))
 
-;;   (add-to-list
-;;    'alert-user-configuration
-;;    '(((:message . "@adam.hall\\|Adam Hall")
-;;       (:title . "\\(graphql-releases\\|pages-apps\\|pages-lib\\)")
-;;       (:category . "slack"))
-;;      libnotify nil))
-;;   )
+;; https://endlessparentheses.com/keep-your-slack-distractions-under-control-with-emacs.html
+(use-package alert
+  :commands (alert)
+  :init
+  (setq alert-default-style 'notifier)
+  :config
+  (add-to-list 'alert-user-configuration
+             '(((:category . "slack")) libnotify nil))
+
+  ;; (add-to-list 'alert-user-configuration
+  ;; 	       '(((:category . "slack")) ignore nil))
+  ;; (add-to-list
+  ;;  'alert-user-configuration
+  ;;  '(((:title . "\\(graphql\\|fun-sponge\\|dick-heads\\)") 
+  ;;     (:category . "slack"))
+  ;;    libnotify nil))
+
+  ;; (add-to-list
+  ;;  'alert-user-configuration
+  ;;  '(((:message . "@adam.hall\\|Adam Hall")
+  ;;     (:title . "\\(graphql-releases\\|pages-apps\\|pages-lib\\)")
+  ;;     (:category . "slack"))
+  ;;    libnotify nil))
+  )
 
 (use-package org-jira
+  :disabled
   :config
   ;; https://cbsjira.bskyb.com/secure/RapidBoard.jspa?rapidView=9630&selectedIssue=DCP-506
   (setq jiralib-url "https://cbsjira.bskyb.com")
