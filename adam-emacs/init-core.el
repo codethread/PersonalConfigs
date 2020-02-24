@@ -22,11 +22,13 @@
 (use-package fold-this)
 
 ;; shared clipbaord
+;; TODO does this need ensure-system-package?
 (use-package xclip
   :config
   (xclip-mode 1))
 
 (use-package flyspell
+  :ensure-system-package aspell
   :config
   (setq ispell-program-name "/usr/local/bin/aspell"))
 

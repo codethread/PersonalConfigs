@@ -1,92 +1,56 @@
-tap "d12frosted/emacs-plus"
-tap "elastic/tap"
-tap "getantibody/tap"
-tap "heroku/brew"
-tap "homebrew/bundle"
-tap "homebrew/cask"
-tap "homebrew/cask-fonts"
-tap "homebrew/core"
-tap "nodenv/nodenv"
-tap "ouchxp/nodenv"
-tap "rockymadden/rockymadden"
-tap "schniz/tap"
-tap "universal-ctags/universal-ctags"
-# brew "ack"
-brew "aspell"
-# brew "bats-core"
-# brew "sqlite"
-# brew "emacs"
-brew "cask"
-brew "cmake"
-brew "colordiff"
-brew "coreutils"
-# brew "ctags", link: false
-# brew "docker-machine", link: false
-brew "editorconfig"
-brew "exercism"
-brew "fd"
-brew "fontforge"
-# brew "fortune"
-brew "gawk"
-# brew "git"
-# brew "git-flow"
-brew "gnu-sed"
-brew "gnu-tar"
-# brew "gradle"
+# tap "universal-ctags/universal-ctags"
+
+# shrug
+# brew "cask"
+# brew "cmake"
+# brew "fontforge"
+
+# emacs
+# brew "d12frosted/emacs-plus/emacs-plus", args: ["HEAD", "with-jansson", "without-spacemacs-icon"], link: false
+brew "emacs"
+- brew "aspell"
+- brew "editorconfig"
+- brew "fd" ?
+- brew "ripgrep"
+
+## system
+brew "getantibody/tap/antibody"
 brew "htop"
-# brew "httpie"
 brew "jq"
-# brew "kafka"
+brew "shellcheck"
+brew "tmux"
+brew "tree"
+brew "watch"
 
-# mac only
-# cask "amethyst"
-# cask "iterm2"
+brew "exercism"
 
-# assembly stuff
-# brew "nasm"
-# brew "yasm"
-
-# brew "node-build"
+## LANGS
 brew "nodenv"
-# brew "pipes-sh"
-brew "ranger"
-brew "rdfind"
-# brew "reattach-to-user-namespace"
-# brew "redis"
-brew "ripgrep"
-# brew "rlwrap"
+brew "watchman"
 
 # scala stuff
 # brew "sbt"
 # brew "scala"
 
-# brew "screen"
-brew "shellcheck"
 
-# brew "the_silver_searcher"
-
-brew "tmux"
-# brew "trash"
-brew "tree"
+# vim
 brew "vim"
-brew "watch"
-brew "watchman"
+brew "universal-ctags/universal-ctags/universal-ctags", args: ["HEAD"]
 
-# brew "wget"
-
-brew "d12frosted/emacs-plus/emacs-plus", args: ["HEAD", "with-jansson", "without-spacemacs-icon"], link: false
+# fonts
+cask "font-firacode-nerd-font"
+cask "font-hack-nerd-font"
 
 # work thing
 # brew "elastic/tap/filebeat-full"
-
-brew "getantibody/tap/antibody"
-
-# work pestering
 # brew "rockymadden/rockymadden/slack-cli"
 
-brew "universal-ctags/universal-ctags/universal-ctags", args: ["HEAD"]
-
-cask "alacritty"
-
-cask "font-firacode-nerd-font"
-cask "font-hack-nerd-font"
+# mac only
+# cask "amethyst"
+# cask "iterm2"
+# brew "reattach-to-user-namespace"
+# cask "alacritty"
+# brew "gawk"
+# brew "gnu-sed"
+# brew "gnu-tar"
+# brew "coreutils"

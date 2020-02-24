@@ -48,6 +48,7 @@
 ;; load emacs settings and some custom functions
 (require 'init-settings (concat user-emacs-directory "init-settings.el"))
 (require 'init-terminal (concat user-emacs-directory "init-terminal.el"))
+(require 'init-system-packages (concat user-emacs-directory "init-system-packages.el"))
 (require 'init-core (concat user-emacs-directory "init-core.el"))
 ;; some packages have a lot of config, so broken into own files
 (require 'init-lsp (concat user-emacs-directory "init-lsp.el"))
