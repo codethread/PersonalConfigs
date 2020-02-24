@@ -29,6 +29,25 @@ This is a package manager for mac, and stores executables in `/usr/local`
 cd ~/PersonalConfigs && brew bundle
 #+END_SRC
 
+*** Anitbody (zsh plugin manager)
+
+#+BEGIN_SRC bash
+# link directories
+~/PersonalConfigs/_setup
+
+# run antiup to set up plugins
+~/PersonalConfigs/.bin/antiup
+#+END_SRC
+
+
+*** Iterm
+
+follow instructions in 
+
+#+BEGIN_SRC bash
+cd ~/PersonalConfigs/_colors+fonts
+cat xterm-256color-italic.terminfo
+#+END_SRC
 
 ** Linux (Ubuntu flavour, but change =apt install= to whatever)
 *** github
@@ -63,11 +82,26 @@ xclip -sel clip < ~/.ssh/id_rsa.pub
 upload to github
 
 
+*** zsh
+
+[[https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH#install-and-set-up-zsh-as-default][install info]]
+
+*** link scripts
+#+BEGIN_SRC 
+~/PersonalConfigs/_setup
+#+END_SRC
+
 *** brew (if using)
 Download [[https://docs.brew.sh/Homebrew-on-Linux][homebrew]]
+follow install instructions per distro
+
 *command as of Feb 2020*
 
-follow install instructions per distro
+#+BEGIN_SRC bash
+sudo apt-get install build-essential curl file git
+#+END_SRC
+
+*Don't sudo*
 #+BEGIN_SRC bash
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
 #+END_SRC
@@ -78,11 +112,6 @@ cd ~/PersonalConfigs && brew bundle
 #+END_SRC
 
 
-*** zsh
-
-[[https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH#install-and-set-up-zsh-as-default][install info]]
-
-
 *** get [[https://getantibody.github.io/install/][antibody]]
 
 #+BEGIN_SRC bash
@@ -91,18 +120,6 @@ curl -sfL git.io/antibody | sudo sh -s - -b /usr/local/bin
 
 
 *** get fira-code
-
-
-** Anitbody (zsh plugin manager)
-*** run setup command to copy files
-
-#+BEGIN_SRC bash
-# link directories
-~/PersonalConfigs/_setup
-
-# run antiup to set up plugins
-~/PersonalConfigs/.bin/antiup
-#+END_SRC
 
 
 ** Vim
@@ -139,11 +156,3 @@ nodenv rehash
 #+END_SRC
 
 
-** Iterm
-
-follow instructions in 
-
-#+BEGIN_SRC bash
-cd ~/PersonalConfigs/_colors+fonts
-cat xterm-256color-italic.terminfo
-#+END_SRC

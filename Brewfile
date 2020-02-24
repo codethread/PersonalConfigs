@@ -4,6 +4,9 @@
 # brew "cmake"
 # brew "fontforge"
 
+## linux
+brew "gcc"
+
 # emacs
 # brew "d12frosted/emacs-plus/emacs-plus", args: ["HEAD", "with-jansson", "without-spacemacs-icon"], link: false
 brew "emacs"

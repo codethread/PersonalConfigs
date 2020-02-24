@@ -2,7 +2,6 @@
 # this information is then loaded into that shell, meaning non-login scripts can still use these envs without rerunning the file
 # PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$HOME.rbenv/shims:$HOME/.nodenv/shims:/usr/local/share/dotnet:/opt/X12/bin:$HOME/.dotnet/tools:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/opt/local/bin:$HOME/.bin:$HOME/.local/.bin:$HOME/.cargo/bin:$HOME/.emacs.d/bin:$PATH"
 
-pathprepend /usr/local/opt/gnu-sed/libexec/gnubin PATH
 
 pathappend $HOME.rbenv/shims PATH
 pathappend $HOME/.nodenv/shims PATH
@@ -15,8 +14,18 @@ pathappend $HOME/.emacs.d/bin PATH
 pathappend $HOME/.dotnet/tools PATH
 pathappend /usr/local/share/dotnet PATH
 pathappend /opt/X12/bin PATH
-pathappend /Library/Frameworks/Mono.framework/Versions/Current/Commands PATH
 pathappend /opt/local/bin PATH
+
+# maconly
+if [ "$(uname 2> /dev/null)" != "Linux" ]; then
+    pathprepend /usr/local/opt/gnu-sed/libexec/gnubin PATH
+    pathappend /Library/Frameworks/Mono.framework/Versions/Current/Commands PATH
+fi
+
+# linux
+if [ "$(uname 2> /dev/null)" == "Linux" ]; then
+    eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+fi
 
 #------------------------------------------
 #--- Sky Stuff
