@@ -25,8 +25,12 @@ Download [[https://brew.sh/][homebrew]]
 
 This is a package manager for mac, and stores executables in `/usr/local`
 
+#+BEGIN_SRC bash
+cd ~/PersonalConfigs && brew bundle
+#+END_SRC
 
-** Linux 
+
+** Linux (Ubuntu flavour, but change =apt install= to whatever)
 *** github
 **** generate key
 
@@ -59,32 +63,38 @@ xclip -sel clip < ~/.ssh/id_rsa.pub
 upload to github
 
 
-*** brew
+*** brew (if using)
 Download [[https://docs.brew.sh/Homebrew-on-Linux][homebrew]]
 *command as of Feb 2020*
 
+follow install instructions per distro
 #+BEGIN_SRC bash
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
 #+END_SRC
 
-follow install instructions per distro
-
-
-** packages
-
+install from bundle file
 #+BEGIN_SRC bash
 cd ~/PersonalConfigs && brew bundle
 #+END_SRC
 
 
-** zsh
+*** zsh
 
-*not needed on mac anymore* [[https://gist.github.com/derhuerst/12a1558a4b408b3b2b6e][installing zsh]]
+[[https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH#install-and-set-up-zsh-as-default][install info]]
+
+
+*** get [[https://getantibody.github.io/install/][antibody]]
+
+#+BEGIN_SRC bash
+curl -sfL git.io/antibody | sudo sh -s - -b /usr/local/bin
+#+END_SRC
+
+
+*** get fira-code
 
 
 ** Anitbody (zsh plugin manager)
-
-run setup command to copy files
+*** run setup command to copy files
 
 #+BEGIN_SRC bash
 # link directories

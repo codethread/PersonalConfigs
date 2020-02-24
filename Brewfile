@@ -1,4 +1,3 @@
-# tap "universal-ctags/universal-ctags"
 
 # shrug
 # brew "cask"
@@ -8,10 +7,10 @@
 # emacs
 # brew "d12frosted/emacs-plus/emacs-plus", args: ["HEAD", "with-jansson", "without-spacemacs-icon"], link: false
 brew "emacs"
-- brew "aspell"
-- brew "editorconfig"
-- brew "fd" ?
-- brew "ripgrep"
+brew "aspell"
+# brew "editorconfig"
+brew "fd"
+brew "ripgrep"
 
 ## system
 brew "getantibody/tap/antibody"
@@ -34,7 +33,8 @@ brew "watchman"
 
 
 # vim
-brew "vim"
+# brew "vim"
+tap "universal-ctags/universal-ctags"
 brew "universal-ctags/universal-ctags/universal-ctags", args: ["HEAD"]
 
 # fonts
