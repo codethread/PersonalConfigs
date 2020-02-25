@@ -16,8 +16,8 @@ brew "htop"
 brew "jq"
 brew "kafka"
 brew "ripgrep"
-brew "sbt"
-brew "scala"
+# brew "sbt"
+# brew "scala"
 brew "shellcheck"
 brew "sqlite"
 brew "tmux"
@@ -43,7 +43,6 @@ brew "universal-ctags/universal-ctags/universal-ctags", args: ["HEAD"]
 brew "coreutils"
 brew "findutils"
 brew "gawk"
-brew "git"
 brew "git-flow"
 brew "gnu-getopt"
 brew "gnu-indent"
@@ -53,21 +52,22 @@ brew "gnutls"
 brew "grep"
 
 if OS.mac?
-  # mac only
-  brew "reattach-to-user-namespace"
-  brew "vim"
-  brew "watchman"
+   # mac only
+   brew "git"
+   brew "reattach-to-user-namespace"
+   brew "vim"
+   brew "watchman"
 
-  tap "d12frosted/emacs-plus"
-  brew "d12frosted/emacs-plus/emacs-plus", args: ["HEAD", "with-jansson", "without-spacemacs-icon"], link: false
+   tap "d12frosted/emacs-plus"
+   brew "d12frosted/emacs-plus/emacs-plus", args: ["HEAD", "with-jansson", "without-spacemacs-icon"], link: false
 
-  brew "docker-machine", link: false
-  cask "alacritty"
-  cask "amethyst"
+   brew "docker-machine", link: false
+   cask "alacritty"
+   cask "amethyst"
 
-  tap "homebrew/cask-fonts"
-  cask "font-firacode-nerd-font"
-  cask "font-hack-nerd-font"
+   tap "homebrew/cask-fonts"
+   cask "font-firacode-nerd-font"
+   cask "font-hack-nerd-font"
 
-  cask "iterm2"
+   cask "iterm2"
 end
