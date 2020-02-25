@@ -2,6 +2,9 @@
 # i.e only put in stuff that helps with typing commands etc
 # https://blog.flowblok.id.au/2013-02/shell-startup-scripts.html
 
+# this has some tips on speeding up zsh
+# https://htr3n.github.io/2018/07/faster-zsh/
+
 #------------------------------------------
 #--- ZSH settings
 #-----------------------------------------

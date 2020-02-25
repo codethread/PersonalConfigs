@@ -1,9 +1,27 @@
 #!/bin/zsh
 
+# embeds a check for compinit taken from
+# https://gist.github.com/ctechols/ca1035271ad134841284
+compinit_check=$(echo "autoload -Uz compinit
+re_initialize=0
+for match in $zcompdump*(.Nmh+24); do
+  re_initialize=1
+  break
+done
+
+if [ \"$re_initialized\" -eq \"1\" ]; then
+  compinit
+  # update the timestamp on compdump file
+  compdump
+else
+  # omit the check for new functions since we updated today
+  compinit -C
+fi" | sed ':a $!{N; ba}; s/\n/\\n/g')
+
 # sort -s -k1.1,1.1 sorts on first letter only and preserves order
 antibody bundle < ~/.zsh_plugins.txt \
     | sort -s -k1.1,1.1 \
-    | sed "0,/source/s//\nautoload -Uz compinit\nif [ \$(date +'%j') != \$(\/usr\/bin\/stat -f '%Sm' -t '%j' \$HOME\/.zcompdump) ]; then compinit; else compinit -C; fi\n\nsource/" \
+    | sed "0,/source/s//\n$compinit_check\n\nsource/" \
         > ~/.zsh_plugins.sh || exit 1
 
 echo "make sure to run compinit"

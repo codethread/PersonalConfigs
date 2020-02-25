@@ -15,6 +15,8 @@ brew "aspell"
 brew "fd"
 brew "ripgrep"
 
+tap "getantibody/tap"
+
 ## system
 brew "getantibody/tap/antibody"
 brew "htop"
