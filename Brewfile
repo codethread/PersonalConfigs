@@ -1,61 +1,72 @@
+tap "homebrew/bundle"
+tap "homebrew/cask"
+tap "homebrew/core"
 
-# shrug
-# brew "cask"
-# brew "cmake"
-# brew "fontforge"
-
-## linux
+brew "cask"
 brew "gcc"
 
-# emacs
-# brew "d12frosted/emacs-plus/emacs-plus", args: ["HEAD", "with-jansson", "without-spacemacs-icon"], link: false
-brew "emacs"
-brew "aspell"
-# brew "editorconfig"
-brew "fd"
-brew "ripgrep"
-
 tap "getantibody/tap"
-
-## system
 brew "getantibody/tap/antibody"
+
+brew "colordiff"
+brew "exercism"
+brew "fd"
 brew "htop"
 brew "jq"
+brew "kafka"
+brew "reattach-to-user-namespace"
+brew "ripgrep"
+brew "sbt"
+brew "scala"
 brew "shellcheck"
+brew "sqlite"
 brew "tmux"
 brew "tree"
+brew "vim"
 brew "watch"
-
-brew "exercism"
-
-## LANGS
-brew "nodenv"
 brew "watchman"
 
-# scala stuff
-# brew "sbt"
-# brew "scala"
+tap "nodenv/nodenv"
+tap "ouchxp/nodenv"
+brew "node-build"
+brew "nodenv"
 
+tap "elastic/tap"
+brew "elastic/tap/filebeat-full"
 
-# vim
-# brew "vim"
+tap "rockymadden/rockymadden"
+brew "rockymadden/rockymadden/slack-cli"
+
+# ctag replacement for vim
 tap "universal-ctags/universal-ctags"
 brew "universal-ctags/universal-ctags/universal-ctags", args: ["HEAD"]
 
-# fonts
-cask "font-firacode-nerd-font"
-cask "font-hack-nerd-font"
+# gnu standards
+brew "coreutils"
+brew "findutils"
+brew "gawk"
+brew "git"
+brew "git-flow"
+brew "gnu-getopt"
+brew "gnu-indent"
+brew "gnu-sed"
+brew "gnu-tar"
+brew "gnutls"
+brew "grep"
 
-# work thing
-# brew "elastic/tap/filebeat-full"
-# brew "rockymadden/rockymadden/slack-cli"
+if OS.mac?
+  # mac only
+  tap "d12frosted/emacs-plus"
+  brew "d12frosted/emacs-plus/emacs-plus", args: ["HEAD", "with-jansson", "without-spacemacs-icon"], link: false
 
-# mac only
-# cask "amethyst"
-# cask "iterm2"
-# brew "reattach-to-user-namespace"
-# cask "alacritty"
-# brew "gawk"
-# brew "gnu-sed"
-# brew "gnu-tar"
-# brew "coreutils"
+  brew "aspell"
+  brew "docker-machine", link: false
+  cask "alacritty"
+  cask "amethyst"
+
+  tap "homebrew/cask-fonts"
+  cask "font-firacode-nerd-font"
+  cask "font-hack-nerd-font"
+
+  cask "iterm2"
+end

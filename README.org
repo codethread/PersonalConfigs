@@ -14,7 +14,36 @@ This is required by most command line tools, so we'll need this first
 xcode-select --install
 #+END_SRC
 
+
 *** github
+**** generate key
+
+[[https://help.github.com/en/enterprise/2.19/user/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent][instructions here]]
+#+BEGIN_SRC bash
+ssh-keygen -t rsa -b 4096 -C "adamhalldesigns@gmail.com"
+#+END_SRC
+
+#+BEGIN_SRC bash
+eval "$(ssh-agent -s)"
+#+END_SRC
+
+#+BEGIN_SRC bash
+ssh-add -K ~/.ssh/id_rsa
+#+END_SRC
+
+
+**** upload key
+
+[[https://help.github.com/en/enterprise/2.19/user/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account][instructions here]]
+
+#+BEGIN_SRC bash
+pbcopy < ~/.ssh/id_rsa.pub
+#+END_SRC
+
+upload to github
+
+
+
 *** brew
 Download [[https://brew.sh/][homebrew]]
 *command as of Feb 2020*
@@ -28,6 +57,7 @@ This is a package manager for mac, and stores executables in `/usr/local`
 #+BEGIN_SRC bash
 cd ~/PersonalConfigs && brew bundle
 #+END_SRC
+
 
 *** Anitbody (zsh plugin manager)
 
@@ -48,6 +78,7 @@ follow instructions in
 cd ~/PersonalConfigs/_colors+fonts
 cat xterm-256color-italic.terminfo
 #+END_SRC
+
 
 ** Linux (Ubuntu flavour, but change =apt install= to whatever)
 *** github
@@ -86,10 +117,12 @@ upload to github
 
 [[https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH#install-and-set-up-zsh-as-default][install info]]
 
+
 *** link scripts
 #+BEGIN_SRC 
 ~/PersonalConfigs/_setup
 #+END_SRC
+
 
 *** brew (if using)
 Download [[https://docs.brew.sh/Homebrew-on-Linux][homebrew]]
@@ -122,13 +155,17 @@ curl -sfL git.io/antibody | sudo sh -s - -b /usr/local/bin
 *** get fira-code
 
 
+*** [[http://ubuntuhandbook.org/index.php/2019/02/install-gnu-emacs-26-1-ubuntu-18-04-16-04-18-10/][emacs on linux]]
+Use apt, not brew
+
+
 ** Vim
 
-#+END_SRC
+#+BEGIN_SRC bash
 vim --noplugin
 #+END_SRC
 
-then run `:PlugInstall`
+then run =:PlugInstall=
 
 
 ** Nodenv
