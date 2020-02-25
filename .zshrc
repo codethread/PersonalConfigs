@@ -37,6 +37,7 @@ PROMPT="${NEWLINE}%F{blue}%~${NEWLINE}%(?.%F{magenta}ᕕ(ᐛ)ᕗ.%F{red}(╯°�
 # RPROMPT='%F{yellow}%*'
 
 ssource ~/.zsh_plugins.sh
+ssource ~/.fzf.zsh
 ssource "$HOME/.aliases.zsh" # TODO: move?
 
 # set up colors for ls, fd, tree etc https://github.com/sharkdp/vivid
