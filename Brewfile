@@ -8,13 +8,13 @@ brew "gcc"
 tap "getantibody/tap"
 brew "getantibody/tap/antibody"
 
+brew "aspell"
 brew "colordiff"
 brew "exercism"
 brew "fd"
 brew "htop"
 brew "jq"
 brew "kafka"
-brew "reattach-to-user-namespace"
 brew "ripgrep"
 brew "sbt"
 brew "scala"
@@ -22,9 +22,7 @@ brew "shellcheck"
 brew "sqlite"
 brew "tmux"
 brew "tree"
-brew "vim"
 brew "watch"
-brew "watchman"
 
 tap "nodenv/nodenv"
 tap "ouchxp/nodenv"
@@ -56,10 +54,13 @@ brew "grep"
 
 if OS.mac?
   # mac only
+  brew "reattach-to-user-namespace"
+  brew "vim"
+  brew "watchman"
+
   tap "d12frosted/emacs-plus"
   brew "d12frosted/emacs-plus/emacs-plus", args: ["HEAD", "with-jansson", "without-spacemacs-icon"], link: false
 
-  brew "aspell"
   brew "docker-machine", link: false
   cask "alacritty"
   cask "amethyst"
