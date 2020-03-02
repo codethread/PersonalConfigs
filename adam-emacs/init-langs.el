@@ -108,4 +108,15 @@
 
 (use-package io-mode)
 
+(use-package rust-mode
+  :config
+  (defun my|rust-cargo-open-docs ()
+    "Use cargo to build and open rust docs for current project"
+    (interactive)
+    (async-shell-command
+     (concat "cd " (projectile-project-root " && cargo doc --open")))))
+
+(use-package cargo
+  :hook (rust-mode . cargo-minor-mode))
+
 (provide 'init-langs)

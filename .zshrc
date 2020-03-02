@@ -52,7 +52,6 @@ FZF_ALT_C_COMMAND="fd --type d --exclude '{Library,Music,Applications,Pictures,U
 #-----------------------------------------
 # haskell
 # source ~/.ghcup/env
-# source $HOME/.cargo/env # TODO needed?
 
 #------------------------------------------
 #--- Sky Stuff
