@@ -15,7 +15,10 @@
                         (make-glyph-code ?┃))
 
 (setq frame-title-format nil)
-(set-face-attribute 'default nil :height 140)
+
+(if (eq system-type 'darwin)
+  (set-face-attribute 'default nil :height 140)
+  (set-face-attribute 'default nil :height 160)) ;; larger font on linux setup
 
 ;; (setq ns-auto-hide-menu-bar)
 
