@@ -7,8 +7,9 @@
   (prog-mode . lsp)
   (lsp-mode . lsp-enable-which-key-integration)
   :commands lsp
-  :config
-  (flycheck-add-next-checker 'javascript-eslint 'lsp))
+  )
+  ;; :config
+  ;; (flycheck-add-next-checker 'javascript-eslint 'lsp))
 
 (use-package helm-lsp
   :after (helm-mode)

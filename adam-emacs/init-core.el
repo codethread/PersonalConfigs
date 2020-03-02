@@ -129,10 +129,21 @@
 	     " && NODE_ENV=test node_modules/.bin/mocha --config ./test/unit/.mocharc.js"
 	     )))
 
+  (defun my|eslint-file ()
+    "Run tests on current file."
+    (interactive)
+    (message (concat "linting " (buffer-file-name)))
+    (save-buffer)
+    (async-shell-command
+     (concat "cd " (projectile-project-root) " && node_modules/eslint/bin/eslint.js"
+	     (cond ((file-exists-p "./.eslintrc.js") " --config ./.eslintrc.js")
+		   ((file-exists-p "./.eslintrc.yml") " --config ./.eslintrc.yml"))
+	     " " (buffer-file-name))))
+
   (defun my|eslint-fix-file ()
     "Run eslint --fix on current file."
     (interactive)
-    (message (concat "eslint --fixing" (buffer-file-name) "using"))
+    (message (concat "eslint --fixing " (buffer-file-name) " using"))
     (save-buffer)
     (shell-command
      (concat "cd " (projectile-project-root) " && node_modules/eslint/bin/eslint.js"

@@ -12,11 +12,10 @@
   :config
   ;; customize flycheck temp file prefix
   (setq-default flycheck-temp-prefix ".flycheck")
-  (setq flycheck-check-syntax-automatically '(save
-					      idle-change
-					      new-line
-					      mode-enabled))
-  (setq flycheck-idle-change-delay 1)
+  (setq-default flycheck-check-syntax-automatically '(save mode-enabled))
+
+  (setq-default flycheck-idle-change-delay 1)
+  (setq-default flycheck-buffer-switch-check-intermediate-buffers 'nil)
 
   (setq-default flycheck-disabled-checkers
 		(append flycheck-disabled-checkers
