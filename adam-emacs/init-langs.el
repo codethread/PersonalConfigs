@@ -13,7 +13,6 @@
   ;; customize flycheck temp file prefix
   (setq-default flycheck-temp-prefix ".flycheck")
   (setq flycheck-check-syntax-automatically '(save
-					      idle-change
 					      new-line
 					      mode-enabled))
   (setq flycheck-idle-change-delay 1)
