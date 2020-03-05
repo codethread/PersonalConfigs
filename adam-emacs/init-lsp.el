@@ -11,6 +11,10 @@
   ;; :config
   ;; (flycheck-add-next-checker 'javascript-eslint 'lsp))
 
+(use-package lsp-ui
+  :config
+  (setq lsp-ui-doc-enable 'nil))
+
 (use-package helm-lsp
   :after (helm-mode)
   :commands helm-lsp-workspace-symbol)
