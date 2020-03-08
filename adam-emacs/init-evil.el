@@ -196,7 +196,8 @@
 	("S" . ace-jump-char-mode)
 	("gf" . helm-projectile-find-file-dwim)
 	("gD" . evil-goto-definition)
-	("gd" . lsp-goto-implementation)
+	;; ("gd" . lsp-goto-implementation)
+	("gd" . lsp-find-definition)
 	("gh" . lsp-describe-thing-at-point)
 	;; ("C-o" . xref-pop-marker-stack)
 	;; (define-key evil-normal-state-map "-" 'dired-jump)
@@ -210,6 +211,12 @@
 	("C-y" . universal-argument)
 	("L" . reposition-window))
   :config
+  ;; https://emacs.stackexchange.com/questions/9583/how-to-treat-underscore-as-part-of-the-word
+  (defadvice evil-inner-word (around underscore-as-word activate)
+    (let ((table (copy-syntax-table (syntax-table))))
+      (modify-syntax-entry ?_ "w" table)
+      (with-syntax-table table
+	ad-do-it)))
   (evil-mode t)
   ;; (setq evil-mode-line-format 'before)
   ;; (setq evil-emacs-state-cursor  '("red" box))
