@@ -110,6 +110,7 @@
 
 (use-package rust-mode
   :config
+  (setq rust-format-on-save t)
   (defun my|rust-cargo-open-docs ()
     "Use cargo to build and open rust docs for current project"
     (interactive)
