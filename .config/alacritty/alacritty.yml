@@ -1,61 +1,51 @@
 # Configuration for Alacritty, the GPU enhanced terminal emulator
 
-# env:
-#   TERM: xterm-256color-italic
+env:
+  TERM: xterm-256color-italic
 
 window:
   dimensions:
     columns: 200
     lines: 80
   padding:
-    x: 0
+    x: 6
     y: 0
   dynamic_padding: false
-  # - full: Borders and title bar
-  # - none: Neither borders nor title bar
-  # - transparent: Title bar, transparent background and title bar buttons
-  # - buttonless: Title bar, transparent background, but no title bar buttons
   decorations: none
 
 scrolling:
-  # Maximum number of lines in the scrollback buffer.
-  # Specifying '0' will disable scrolling.
   history: 10000
   # Number of lines the viewport will move for every line scrolled when
   # scrollback is enabled (history > 0).
   multiplier: 3
-  # Specifying `0` will disable faux scrolling.
-  # faux_multiplier: 3
   # Scroll to the bottom when new text is written to the terminal.
   auto_scroll: false
 
-# Display tabs using this many cells (changes require restart)
-tabspaces: 8
+tabspaces: 4
 # When true, bold text is drawn using the bright variant of colors.
 draw_bold_text_with_bright_colors: true
 
 font:
   normal:
-    family: FiraCode
+    family: Hack Nerd Font
     style: Regular
   bold:
-    family: FiraCode
+    family: Hack Nerd Font
     style: Bold
-  italic:
-    family: Source Code Pro
-    style: Italic
+    # family: FuraCode Nerd Font
+
   size: 13.0
   # Offset is the extra space around each character. offset.y can be thought of
   # as modifying the linespacing, and offset.x as modifying the letter spacing.
   offset:
-    x: 0
-    y: 3
+    x: 1
+    y: 4
   # Glyph offset determines the locations of the glyphs within their cells with
   # the default being at the bottom. Increase the x offset to move the glyph to
   # the right, increase the y offset to move the glyph upward.
   glyph_offset:
     x: 0
-    y: 1
+    y: 0
   # OS X only: use thin stroke font rendering. Thin strokes are suitable
   # for retina displays, but for non-retina you probably want this set to
   # false.

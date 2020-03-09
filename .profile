@@ -1,5 +1,44 @@
 # ~/.profile: executed by the command interpreter for login shells.
-echo "source .profile"
+
+# maconly
+if [ "$(uname 2> /dev/null)" != "Linux" ]; then
+  # if [ -d "/usr/bin" ] ; then
+  #   PATH="/usr/bin:$PATH"
+  # fi
+
+  # if [ -d "/usr/sbin" ] ; then
+  #   PATH="/usr/sbin:$PATH"
+  # fi
+
+  # if [ -d "/bin" ] ; then
+  #   PATH="/bin:$PATH"
+  # fi
+
+  # if [ -d "/sbin" ] ; then
+  #   PATH="/sbin:$PATH"
+  # fi
+
+  if [ -d "/usr/local/bin" ] ; then
+    PATH="/usr/local/bin:$PATH"
+  fi
+
+  if [ -d "/usr/local/opt/gnu-sed/libexec/gnubin" ] ; then
+    PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
+  fi
+
+  if [ -d "/Library/Frameworks/Mono.framework/Versions/Current/Commands" ] ; then
+    PATH="/Library/Frameworks/Mono.framework/Versions/Current/Commands:$PATH"
+  fi
+
+fi
+
+# linux
+if [ "$(uname 2> /dev/null)" = "Linux" ]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+  # remap capslock to ctrl
+  gsettings set org.gnome.desktop.input-sources xkb-options "['ctrl:nocaps']"
+fi
 
 # if running bash
 if [ -n "$BASH_VERSION" ]; then
@@ -49,26 +88,6 @@ fi
 
 if [ -d "/opt/local/bin" ] ; then
   PATH="/opt/local/bin:$PATH"
-fi
-
-# maconly
-if [ "$(uname 2> /dev/null)" != "Linux" ]; then
-  if [ -d "/usr/local/opt/gnu-sed/libexec/gnubin" ] ; then
-    PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
-  fi
-
-  if [ -d "/Library/Frameworks/Mono.framework/Versions/Current/Commands" ] ; then
-    PATH="/Library/Frameworks/Mono.framework/Versions/Current/Commands:$PATH"
-  fi
-
-fi
-
-# linux
-if [ "$(uname 2> /dev/null)" = "Linux" ]; then
-  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-
-  # remap capslock to ctrl
-  gsettings set org.gnome.desktop.input-sources xkb-options "['ctrl:nocaps']"
 fi
 
 export EDITOR='vim'

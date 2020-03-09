@@ -34,5 +34,4 @@
  '(font-lock-negation-char-face ((t (:foreground "#FF6666"))))
  '(font-lock-variable-name-face ((t (:foreground "#C6CAFF" :weight bold))))
  '(lsp-ui-doc-background ((t (:background nil))))
- '(lsp-ui-doc-header ((t (:inherit (font-lock-string-face italic)))))
- '(vertical-border ((t (:background "black" :foreground "controlColor")))))
+ '(lsp-ui-doc-header ((t (:inherit (font-lock-string-face italic))))))
