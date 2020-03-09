@@ -1,9 +1,13 @@
 ;; enable the doom theme if working
 (use-package doom-themes
   :config
+  (when window-system (set-frame-font "Hack Nerd Font:size=14"))
+  ;; (when window-system (set-frame-font "FuraCode Nerd Font:size=14"))
+
   (if window-system
       (load-theme 'doom-one t)
     (load-theme 'doom-nord t))
+
   ;; (load-theme 'doom-one-light t) ;; good for sun
   (setq doom-themes-enable-bold t
 	doom-themes-enable-italic t))
