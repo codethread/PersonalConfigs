@@ -20,10 +20,10 @@
 ;; (define-key spotify-mode-map (kbd "C-c .") 'spotify-command-map)
 
 ;; TODO: fix python
-;; (use-package wakatime-mode
-;;   :config
-;;   (setq wakatime-cli-path "/usr/local/bin/wakatime")
-;;   (global-wakatime-mode))
+(use-package wakatime-mode
+  :config
+  (setq wakatime-cli-path "/usr/local/bin/wakatime")
+  (global-wakatime-mode))
 
 (use-package org-pomodoro
   :commands (org-pomodoro)
