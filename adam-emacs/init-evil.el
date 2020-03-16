@@ -70,6 +70,7 @@
     "fR" 'projectile-recentf
     "fv" 'my|open-init-file
     "fk" 'my|delete-file-and-buffer
+    "fs" 'save-buffer
 
     ;; F --- fold
     "FF"  'hs-toggle-hiding
