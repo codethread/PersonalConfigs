@@ -80,7 +80,7 @@
 
 ;; Set symbol for the border
 (set-display-table-slot standard-display-table
-                        'vertical-border 
+                        'vertical-border
                         (make-glyph-code ?┃))
 
 (setq frame-title-format nil)
@@ -89,16 +89,6 @@
   (set-face-attribute 'default nil :height 140)
   (set-face-attribute 'default nil :height 160)) ;; larger font on linux setup
 
-(defface bday-face
-  '((t (:inherit web-mode-constant-face :weight bold)))
-  "Face to use for key words in web mode"
-  :group 'web-mode)
-
-(font-lock-add-keywords 'web-mode `(
-				    ("return " 0 'bday-face t)
-				    ("export " 0 'bday-face t)
-				    ("type " 0 'web-mode-type-face t)
-				    ) 'append)
 ;;; functions
 ;; ==================================================================================
 
@@ -180,11 +170,15 @@ new windows will each be 180 columns wide, and sit just below the threshold.
         (dired-hide-details-mode)
         (dired-sort-toggle-or-edit)))
 
+(use-package delight)
+
 ;; adds highlights to TODO and FIXME.
 (use-package fic-mode
   :hook
   (prog-mode)
-  (web-mode))
+  (web-mode)
+  :config
+  (set-face-attribute 'fic-face nil :inherit 'warning :weight 'bold))
 
 ;; jump to def without lsp
 (use-package xref
@@ -199,7 +193,11 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   :config
   (setq ispell-program-name "/usr/local/bin/aspell"))
 
+(use-package autorevert
+  :delight auto-revert-mode)
+
 (use-package editorconfig
+  :delight
   :config
   (editorconfig-mode 1))
 
@@ -213,6 +211,7 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   (add-to-list 'auto-mode-alist '("\\.env\\..*\\'" . dotenv-mode)))
 
 (use-package undo-tree
+  :delight
   :config
   (setq undo-tree-auto-save-history t)
   (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo"))))
@@ -245,6 +244,8 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   (custom-set-faces '(aw-leading-char-face ((t (:inherit warning :weight bold :height 2.0))))))
 
 (use-package projectile
+  ;; Remove the mode name for projectile-mode, but show the project name.
+  :delight '(:eval (concat " " (projectile-project-name)))
   :config
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (projectile-mode +1)
@@ -334,10 +335,20 @@ new windows will each be 180 columns wide, and sit just below the threshold.
     (revert-buffer t t)))
 
 (use-package ivy :demand
+  :delight
   :config
   (ivy-mode 1)
   (setq ivy-use-virtual-buffers t
 	ivy-count-format "%d/%d "))
+
+(use-package swiper
+  :bind ("C-s". swiper))
+
+(use-package counsel
+  :bind (
+	 ("C-x C-f" . counsel-find-file)
+	 ("C-c g" . counsel-git)
+	 ("C-c j" . counsel-git-grep)))
 
 (use-package org
   :init
@@ -452,12 +463,12 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 (use-package markdown-toc)
 
 (use-package wakatime-mode
+  :delight
   :config
   (setq wakatime-cli-path "/usr/local/bin/wakatime")
   (global-wakatime-mode))
 
 (use-package rainbow-delimiters
-  :disabled
   :hook (prog-mode . rainbow-delimiters-mode))
 
 (use-package rjsx-mode
@@ -472,7 +483,11 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 (use-package web-mode
   :init
   (add-to-list 'auto-mode-alist '("\\.ts\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode)))
+  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
+  :config
+  (setq-default web-mode-comment-formats
+              '(("javascript" . "//")
+                ("typescript" . "//"))))
   ;; :config
   ;; (add-hook 'web-mode-hook 'my|web-checkers)
 
@@ -485,12 +500,32 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   ;;             '(("javascript" . "//")
   ;;               ("typescript" . "//"))))
 
+(use-package add-node-modules-path
+  :init
+  :hook (web-mode))
+
 (use-package rust-mode
   :config
   (setq rust-format-on-save t))
 
 (use-package cargo
   :hook (rust-mode . cargo-minor-mode))
+
+(setq read-process-output-max (* 1024 1024)) ;; 1mb
+(use-package lsp-mode
+  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+  :init (setq lsp-keymap-prefix "s-l")
+  :hook
+  (prog-mode . lsp)
+  (lsp-mode . lsp-enable-which-key-integration)
+  :commands lsp)
+
+(use-package flycheck
+  :after lsp
+  :init (global-flycheck-mode)
+  :config
+  (flycheck-add-mode 'javascript-eslint 'web-mode)
+  (flycheck-add-next-checker 'javascript-eslint 'lsp))
 
 ;; EVIL
 ;; --------------------------------------------------------
@@ -643,9 +678,9 @@ new windows will each be 180 columns wide, and sit just below the threshold.
         evil-want-keybinding nil)
   :bind
   (:map evil-insert-state-map
-	("C-@" . company-complete)
+	("C-@" . completion-at-point)
 	;; gui mode
-	("C-SPC" . company-complete)
+	("C-SPC" . completion-at-point)
 	)
   (:map evil-normal-state-map
 	("s" . ace-jump-mode)
@@ -657,9 +692,9 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 	("gh" . lsp-describe-thing-at-point)
 	;; ("C-o" . xref-pop-marker-stack)
 	;; (define-key evil-normal-state-map "-" 'dired-jump)
-	("C-@" . company-complete)
+	("C-@" . completion-at-point)
 	;; gui mode
-	("C-SPC" . company-complete)
+	("C-SPC" . completion-at-point)
 	;; reset
 	("C-e" . move-end-of-line)
 	;; get scroll up back and replace with C-m as it's just return
@@ -753,5 +788,26 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   :config
   (global-evil-surround-mode 1))
 
-(use-package dracula-theme
-  :config (load-theme 'dracula t))
+(use-package doom-themes
+  :config
+  (when window-system (set-frame-font "Hack Nerd Font:size=14"))
+  ;; (when window-system (set-frame-font "FuraCode Nerd Font:size=14"))
+
+  (if window-system
+      (load-theme 'doom-one t)
+    (load-theme 'doom-nord t))
+
+  ;; (load-theme 'doom-one-light t) ;; good for sun
+  (setq doom-themes-enable-bold t
+	doom-themes-enable-italic t))
+
+(defface bday-face
+  '((t (:inherit web-mode-constant-face :weight bold)))
+  "Face to use for key words in web mode"
+  :group 'web-mode)
+
+(font-lock-add-keywords 'web-mode `(
+				    ("return " 0 'bday-face t)
+				    ("export " 0 'bday-face t)
+				    ("type " 0 'web-mode-type-face t)
+				    ) 'append)
