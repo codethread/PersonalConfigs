@@ -6,8 +6,7 @@
   :hook
   (prog-mode . lsp)
   (lsp-mode . lsp-enable-which-key-integration)
-  :commands lsp
-  )
+  :commands lsp)
   ;; :config
   ;; (flycheck-add-next-checker 'javascript-eslint 'lsp))
 

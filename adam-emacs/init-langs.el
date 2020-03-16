@@ -20,6 +20,7 @@
   (setq-default flycheck-disabled-checkers
 		(append flycheck-disabled-checkers
   			'(javascript-jshint json-jsonlint scss-lint emacs-lisp-checkdoc)))
+  (flycheck-add-next-checker 'javascript-eslint 'lsp)
   (flycheck-add-mode 'javascript-eslint 'web-mode))
 
 (use-package json-mode)
@@ -35,7 +36,7 @@
 	js2-mode-show-parse-errors nil
 	js2-mode-show-strict-warnings nil))
 
-;; (use-package indium)
+(use-package indium)
 
 (use-package js2-refactor
   :config
@@ -108,6 +109,7 @@
 
 (use-package io-mode)
 
+;; (use-package rustic)
 (use-package rust-mode
   :config
   (setq rust-format-on-save t)
