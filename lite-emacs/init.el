@@ -196,6 +196,9 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 (use-package autorevert
   :delight auto-revert-mode)
 
+(use-package eldoc
+  :delight)
+
 (use-package editorconfig
   :delight
   :config
@@ -347,8 +350,9 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 (use-package counsel
   :bind (
 	 ("C-x C-f" . counsel-find-file)
-	 ("C-c g" . counsel-git)
-	 ("C-c j" . counsel-git-grep)))
+	 ("C-\\" . counsel-rg)))
+
+(use-package counsel-projectile)
 
 (use-package org
   :init
@@ -471,10 +475,10 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
-(use-package rjsx-mode
-  :config
-  (add-to-list 'auto-mode-alist '("\\.js\\'" . rjsx-mode))
-  (add-to-list 'interpreter-mode-alist '("node" . rjsx-mode)))
+;; (use-package rjsx-mode
+;;   :config
+;;   (add-to-list 'auto-mode-alist '("\\.js\\'" . rjsx-mode))
+;;   (add-to-list 'interpreter-mode-alist '("node" . rjsx-mode)))
 
 (use-package graphql-mode
   :config
@@ -482,27 +486,19 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 
 (use-package web-mode
   :init
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.ts\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
   :config
   (setq-default web-mode-comment-formats
               '(("javascript" . "//")
                 ("typescript" . "//"))))
-  ;; :config
-  ;; (add-hook 'web-mode-hook 'my|web-checkers)
-
-  ;; (defun my|web-checkers ()
-  ;;   "add lsp and stylelint"
-  ;;   (interactive)
-  ;;   (setq-local flycheck-checker 'javascript-eslint))
-
-  ;; (setq-default web-mode-comment-formats
-  ;;             '(("javascript" . "//")
-  ;;               ("typescript" . "//"))))
 
 (use-package add-node-modules-path
   :init
-  :hook (web-mode))
+  :hook
+  (web-mode)
+  (rjsx-mode))
 
 (use-package rust-mode
   :config
@@ -525,6 +521,7 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   :init (global-flycheck-mode)
   :config
   (flycheck-add-mode 'javascript-eslint 'web-mode)
+  (flycheck-add-mode 'javascript-eslint 'rjsx-mode)
   (flycheck-add-next-checker 'javascript-eslint 'lsp))
 
 ;; EVIL
@@ -559,16 +556,16 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   (global-evil-leader-mode)
   (evil-leader/set-leader "<SPC>")
   (evil-leader/set-key
-    "<SPC>" 'projectile-find-file
-    ";" 'helm-M-x
+    "<SPC>" 'counsel-git
+    ";" 'counsel-M-x
     "." 'ace-window
     ;; b --- buffers
     "bb" 'my|split-last-buffer
     "bj" 'evil-show-jumps
     "bk" 'my|kill-this-buffer
     "bK" 'kill-buffer
-    "bl" 'helm-projectile-switch-to-buffer
-    "bL" 'helm-buffers-list
+    "bl" 'counsel-projectile-switch-to-buffer
+    "bL" 'counsel-ibuffer
     "bn" 'evil-next-buffer
     "bN" 'evil-split-next-buffer
     "bp" 'evil-prev-buffer
@@ -588,10 +585,9 @@ new windows will each be 180 columns wide, and sit just below the threshold.
     ;; E - flyspell
     "E" 'helm-flyspell-correct
 
-    ;; f --- file
-    "ff" 'helm-find-files
-    "fr" 'helm-recentf
-    "fR" 'projectile-recentf
+    ;; f --- File
+    "ff" 'counsel-find-file
+    "fr" 'counsel-recentf
     "fv" 'my|open-init-file
     "fk" 'my|delete-file-and-buffer
     "fs" 'save-buffer
@@ -618,7 +614,7 @@ new windows will each be 180 columns wide, and sit just below the threshold.
     "ww" 'evil-window-vsplit
 
     ;; s -- search
-    "sf" 'helm-occur ;; great when you know what you need
+    "sf" 'swiper ;; great when you know what you need
     "si" 'helm-imenu ;; jump to def or explore
     "sI" 'helm-imenu-in-all-buffers ;; ideal when don't know
     "sp" 'helm-projectile-rg ;; also ag or grep
@@ -647,10 +643,10 @@ new windows will each be 180 columns wide, and sit just below the threshold.
     "pi" 'projectile-invalidate-cache           ;;  "Invalidate project cache"
     "pk" 'projectile-kill-buffers               ;;  "Kill project buffers"
     "po" 'projectile-find-other-file            ;;  "Find other file"
-    "pp" 'projectile-switch-project             ;;  "Switch project"
+    "pp" 'counsel-projectile-switch-project             ;;  "Switch project"
     "pr" 'projectile-recentf                    ;;  "Find recent project files"
     "pR" 'projectile-regenerate-tags                    ;;  "Find recent project files"
-    "ps" 'helm-projectile-rg ;; also ag or grep
+    "ps" 'counsel-git-grep ;; also ag or grep
     "po" 'projectile-toggle-between-implementation-and-test
     "pt" 'my|test-file ;; test file in project
 
@@ -685,7 +681,7 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   (:map evil-normal-state-map
 	("s" . ace-jump-mode)
 	("S" . ace-jump-char-mode)
-	("gf" . helm-projectile-find-file-dwim)
+	("gf" . projectile-find-file-dwim)
 	("gD" . evil-goto-definition)
 	;; ("gd" . lsp-goto-implementation)
 	("gd" . lsp-find-definition)
@@ -788,6 +784,11 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   :config
   (global-evil-surround-mode 1))
 
+(use-package evil-escape
+  :config
+  (evil-escape-mode t)
+  (setq evil-escape-key-sequence "jk"))
+
 (use-package doom-themes
   :config
   (when window-system (set-frame-font "Hack Nerd Font:size=14"))
@@ -811,3 +812,42 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 				    ("export " 0 'bday-face t)
 				    ("type " 0 'web-mode-type-face t)
 				    ) 'append)
+;; TODO remove as it slows things
+(use-package doom-modeline
+  :hook (after-init . doom-modeline-mode)
+  :config
+  (setq doom-modeline-height 20
+	doom-modeline-env-version t
+	doom-modeline-modal-icon t
+	doom-modeline-vcs-max-length 24
+	doom-modeline-buffer-file-name-style 'truncate-except-project
+	;; Whether display buffer encoding.
+	doom-modeline-buffer-encoding nil))
+
+;; (setq-default mode-line-buffer-identification
+;;               (let ((orig  (car mode-line-buffer-identification)))
+;;                 `(:eval (cons (concat ,orig (abbreviate-file-name default-directory))
+;;                               (cdr mode-line-buffer-identification)))))
+
+;; https://gitlab.com/mark.feller/emacs.d/blob/master/modules/module-solarized.el
+;; https://www.reddit.com/r/emacs/comments/6ftm3x/share_your_modeline_customization/
+;; https://gitlab.com/mark.feller/emacs.d/blob/master/modules/module-solarized.el
+;; (setq mode-line-format
+;;       (list
+;;        ;; value of current buffer name
+;;        (propertize
+;; 	(when (projectile-project-name) (concat "" (projectile-project-name) "/"))
+;; 	'face '(:foreground "blue"))
+;;        "%b"
+;;        (when (buffer-modified-p)
+;; 	(propertize "*"
+;; 		    'face '(:foreground "green")
+;; 		    'help-echo "buffer modified."))
+;;        "  "
+;;        ;; value of current line number
+;;        "%l  "
+;;        ;; value of `mode-name'
+;;        "%m "
+;;        minor-mode-list))
+
+;;; init.el ends here

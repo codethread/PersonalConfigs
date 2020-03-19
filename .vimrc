@@ -532,7 +532,7 @@ augroup my_asyncrun
   " autocmd QuickFixCmdPost * call asyncrun#quickfix_toggle(8, 1)
 augroup END
 " }}}
-Plug 'tpope/vim-scriptease'
+" Plug 'tpope/vim-scriptease'
 Plug 'wakatime/vim-wakatime'
 " previm  {{{
 Plug 'kannokanno/previm'
@@ -565,7 +565,7 @@ Plug 'vim-scripts/ParseJSON'
 "   autocmd CompleteDone * silent! pclose
 " augroup END
 " }}}
-Plug 'aaronbieber/vim-quicktask'
+" Plug 'aaronbieber/vim-quicktask'
 " calendar.vim  {{{
 " Plug 'itchyny/calendar.vim'
 " let g:calendar_google_calendar = 1
@@ -590,7 +590,7 @@ function! SetupOrgHighlights(langList)
   endfor
 endfunction
 " }}}
-Plug 'mhinz/vim-startify'
+" Plug 'mhinz/vim-startify'
 Plug 'diepm/vim-rest-console'
 " codi.vim {{{
 Plug 'metakirby5/codi.vim', { 'on': 'Codi' }
