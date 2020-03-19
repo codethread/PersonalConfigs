@@ -58,8 +58,8 @@ FZF_ALT_C_COMMAND="fd --type d --exclude '{Library,Music,Applications,Pictures,U
 #-----------------------------------------
 if [[ $(whoami) =~ 'adh23' ]]; then
     export TOOLKIT_PATH="$HOME/sky/toolkit"
-    export SKY_SERVICE_FOLDER="$HOME/service"
-    export SKYPORT_GRAPHQL_DIR="$SKY_SERVICE_FOLDER/skyport-graphql"
+    export SKYPORT_GRAPHQL_DIR="$HOME/skyport/graphql"
+    export SKY_SERVICE_FOLDER="$HOME/sky"
     export SKY_SERVICE_DEV_TOOLS="$SKY_SERVICE_FOLDER/skymobile-service/dev-tools"
     ssource $SKY_SERVICE_DEV_TOOLS/.sky.sh
 fi
