@@ -20,17 +20,8 @@ alias emacs-light="rm ~/.emacs.d && ln -s ~/lite-emacs ~/.emacs.d"
 alias emacs-front="rm ~/.emacs.d && ln -s ~/frontmacs ~/.emacs.d"
 alias emacs-space="rm ~/.emacs.d && ln -s ~/spacemacs-master ~/.emacs.d"
 
-function emacsplus() { 
-  if [[ $1 =~ "client" ]]
-  then
-    "/usr/local/Cellar/emacs-plus/$(ls /usr/local/Cellar/emacs-plus)bin/emacsclient" -a "" -c -t
-  else
-    "/usr/local/Cellar/emacs-plus/$(ls /usr/local/Cellar/emacs-plus)bin/emacs" --daemon
-  fi
-}
-
-alias ec="emacsplus 'client'"
-alias ed="emacsplus"
+alias ec="emacsclient -a \"\" -c -t"
+alias ed="emacs --daemon"
 alias eg="/Applications/Emacs.app/Contents/MacOS/Emacs"
 
 #---------------------------------------------#
