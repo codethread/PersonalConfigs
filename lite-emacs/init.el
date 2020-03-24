@@ -480,6 +480,8 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 ;;   (add-to-list 'auto-mode-alist '("\\.js\\'" . rjsx-mode))
 ;;   (add-to-list 'interpreter-mode-alist '("node" . rjsx-mode)))
 
+(use-package json-mode)
+
 (use-package graphql-mode
   :config
   (add-to-list 'auto-mode-alist '("\\.gql\\'" . graphql-mode)))
@@ -487,12 +489,19 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 (use-package web-mode
   :init
   (add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.ts\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
   :config
   (setq-default web-mode-comment-formats
               '(("javascript" . "//")
-                ("typescript" . "//"))))
+                ("typescript" . "//")))
+  (add-hook 'web-mode-hook 'my|web-checkers)
+
+  (defun my|web-checkers ()
+    "Use eslint despite lsp's enthusiasm"
+    (interactive)
+    (setq-local flycheck-checker 'javascript-eslint)))
 
 (use-package add-node-modules-path
   :init
@@ -517,12 +526,16 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   :commands lsp)
 
 (use-package flycheck
-  :after lsp
+  :after lsp-mode
   :init (global-flycheck-mode)
   :config
   (flycheck-add-mode 'javascript-eslint 'web-mode)
-  (flycheck-add-mode 'javascript-eslint 'rjsx-mode)
   (flycheck-add-next-checker 'javascript-eslint 'lsp))
+  ;; (add-hook 'web-mode-hook
+  ;; 	    (lambda () (flycheck-add-next-checker 'lsp 'javascript-eslint))))
+  ;; (add-hook 'web-mode-hook
+  ;; 	    (lambda () (flycheck-select-checker 'javascript-eslint))))
+
 
 ;; EVIL
 ;; --------------------------------------------------------
@@ -581,6 +594,7 @@ new windows will each be 180 columns wide, and sit just below the threshold.
     "ee" 'flycheck-buffer
     ;; "ee" 'flycheck-display-error-at-point ;; not sure?
     "eh" 'flycheck-explain-error-at-point ;; not sure?
+    "ei" 'flycheck-verify-setup
 
     ;; E - flyspell
     "E" 'helm-flyspell-correct
@@ -791,8 +805,8 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 
 (use-package doom-themes
   :config
-  (when window-system (set-frame-font "Hack Nerd Font:size=14"))
-  ;; (when window-system (set-frame-font "FuraCode Nerd Font:size=14"))
+  ;; (when window-system (set-frame-font "Hack Nerd Font:size=14"))
+  (when window-system (set-frame-font "FiraCode Nerd Font:size=14"))
 
   (if window-system
       (load-theme 'doom-one t)
