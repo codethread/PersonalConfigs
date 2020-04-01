@@ -1,9 +1,10 @@
 #---------------------------------------------#
 # EDITOR-ish
 # -------------------------------------------#
-alias zz="vim ~/.zshrc" # open zsh
-alias vv="vim ~/.vimrc" # open vim config
-alias aa="vim ~/.aliases.zsh" # open aliases
+alias vi="vim --noplugin" # vi is vim on mac anyway so this is a 'light' version
+alias zz="vi ~/.zshrc" # open zsh
+alias vv="vi ~/.vimrc" # open vim config
+alias aa="vi ~/.aliases.zsh" # open aliases
 alias codij="vim -c \"Codi javascript | let ale_enabled = 0\" dmp.javascript"
 
 alias zr="source ~/.zshrc"
