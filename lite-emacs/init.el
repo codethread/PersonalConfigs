@@ -66,7 +66,16 @@
       show-paren-mode 1
       window-resize-pixelwise t
       save-abbrevs 'silently
-      frame-resize-pixelwise t)
+      frame-resize-pixelwise t
+      backup-directory-alist `((".*" . "~/.emacs-file-saves")) ; store all backup files in home directory
+      auto-save-file-name-transforms `((".*" . "~/.emacs-file-saves")) ; store all backup files in home directory
+      backup-by-copying t ; slow but sure way of saving
+      ;; If that's too slow for some reason you might also
+      ;; have a look at backup-by-copying-when-linked
+      ;; https://stackoverflow.com/questions/151945/how-do-i-control-how-emacs-makes-backup-files
+      version-control t                 ; version numbers for backup files
+      delete-old-versions t ; delete excess backup files silently
+      )
 
 (when (fboundp 'tool-bar-mode)
   (tool-bar-mode -1))
@@ -806,7 +815,7 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 (use-package doom-themes
   :config
   ;; (when window-system (set-frame-font "Hack Nerd Font:size=14"))
-  (when window-system (set-frame-font "FiraCode Nerd Font:size=14"))
+  (when window-system (set-frame-font "FuraCode Nerd Font:size=14"))
 
   (if window-system
       (load-theme 'doom-one t)
