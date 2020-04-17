@@ -1,9 +1,0 @@
-#!/bin/bash
-
-jq -R -r '
-# grab the original json, some lines are just text though so these are caught and returned
-def process: . as $line 
-    | try fromjson catch $line; 
-
-
-process'
