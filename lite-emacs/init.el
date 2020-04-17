@@ -68,7 +68,7 @@
       save-abbrevs 'silently
       frame-resize-pixelwise t
       backup-directory-alist `((".*" . "~/.emacs-file-saves")) ; store all backup files in home directory
-      auto-save-file-name-transforms `((".*" . "~/.emacs-file-saves")) ; store all backup files in home directory
+      ; auto-save-file-name-transforms `((".*" . "~/.emacs-file-saves")) ; store all backup files in home directory
       backup-by-copying t ; slow but sure way of saving
       ;; If that's too slow for some reason you might also
       ;; have a look at backup-by-copying-when-linked
@@ -174,10 +174,38 @@ new windows will each be 180 columns wide, and sit just below the threshold.
     (async-shell-command
      (concat "automator ~/Library/services/Close\\ all\\ notifications.workflow"))))
 
+(defun my|pomo ()
+  "Start a pomodoro timer in the background."
+  (interactive)
+  (message "starting 25min timer")
+  (save-window-excursion
+    (async-shell-command
+     (concat "pomo") "pomo-timer")))
+
+(defun my|pomo-stop ()
+  "Finish existing pomo timer."
+  (interactive)
+  (message "stopping pomo timer")
+  (when (get-buffer "pomo-timer")
+    (kill-buffer "pomo-timer"))
+  (save-window-excursion
+    (async-shell-command
+     (concat "pomo --complete"))))
+
+(defun my|my-save-word ()
+  (interactive)
+  (let ((current-location (point))
+        (word (flyspell-get-word)))
+    (when (consp word)    
+      (flyspell-do-correct 'save nil (car word) current-location (cadr word) (caddr word) current-location))))
+
 (add-hook 'dired-mode-hook
       (lambda ()
         (dired-hide-details-mode)
         (dired-sort-toggle-or-edit)))
+
+;;; packages
+;; ==================================================================================
 
 (use-package delight)
 
@@ -201,6 +229,9 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 (use-package flyspell
   :config
   (setq ispell-program-name "/usr/local/bin/aspell"))
+
+(use-package flyspell-correct-ivy
+  :after ('flyspell . 'ivy))
 
 (use-package autorevert
   :delight auto-revert-mode)
@@ -297,7 +328,8 @@ new windows will each be 180 columns wide, and sit just below the threshold.
      (concat "cd "
 	     (projectile-project-root)
 	     ;; " && NODE_ENV=test node_modules/.bin/mocha --config=test/unit/.mocharc.js --chuftey "
-	     " && NODE_ENV=test node_modules/.bin/mocha --config ./test/unit/.mocharc.js"
+	     " && NODE_ENV=test node_modules/.bin/mocha --config ./test/unit/.mocharc.js -w "
+	     (buffer-file-name)
 	     )))
 
   (defun my|eslint-fix-file ()
@@ -373,7 +405,7 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   (defvar org-personal-file (concat org-me-directory "/notes.org"))
   ;; (defvar org-agenda-files (org-personal-file org-default-notes-file org-work-file))
   (defvar org-agenda-files '("~/org-notes/capture.org"
-			     "~/org-notes/org-me-notes/notes.org"
+			     ;; "~/org-notes/org-me-notes/notes.org"
 			     "~/org-notes/org-sky-notes/work.org"))
   :commands
   (my|open-work-notes-file
@@ -393,7 +425,8 @@ new windows will each be 180 columns wide, and sit just below the threshold.
         org-hide-block-startup t
 	org-hide-emphasis-markers t
 	org-startup-folded t
-	org-log-done 'time)
+	org-log-done 'time
+	org-agenda-span 8)
 
   (setq org-todo-keywords
       '((sequence "TODO(t)" "PROGRESS(p)" "|" "DONE(d)")))
@@ -426,16 +459,13 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 	(replace-match "- [ ] ")
 	(forward-line))
       (beginning-of-line)))
-  ;; babel stuff
-  ;; allow bash
+
   (org-babel-do-load-languages
-   'org-babel-load-languages '(
-			       (shell . t)
+   'org-babel-load-languages '((shell . t) ; allow bash
 			       (js . t)
 			       (haskell . t)
 			       (ruby . t)
-			       (io . t)
-			       ))
+			       (io . t)))
 
   ;; Highlight done todos with different colors.
   (font-lock-add-keywords
@@ -460,6 +490,21 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 	   "* %? %^G\n%U" :empty-lines 1)
 	  ("j" "Journal" entry (file+datetree org-default-notes-file)
 	   "* %? %^G\nEntered on %U\n")))
+  (setq org-agenda-custom-commands
+	'(("p" todo "PROGRESS")
+	  ("w" . "SKYPORT+Name tags searches") ; description for "w" prefix
+	  ("ws" tags "+skyport+graphql")
+	  ("u" "Unscheduled TODO"
+	   ((todo ""
+		  ((org-agenda-overriding-header "\nUnscheduled TODO")
+		   (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'timestamp)))))
+	   nil
+	   nil)
+	  ("a" "adenda and things"
+	   ((agenda)
+	    (todo "PROGRESS")
+	    (tags-todo "work")
+	    (tags-todo "skyport")))))
   )
 
 ;; only show bullets in gui
@@ -488,6 +533,16 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 ;;   :config
 ;;   (add-to-list 'auto-mode-alist '("\\.js\\'" . rjsx-mode))
 ;;   (add-to-list 'interpreter-mode-alist '("node" . rjsx-mode)))
+
+(use-package yaml-mode)
+
+;; (use-package docker)
+
+;; (use-package docker-compose)
+
+(use-package go-mode)
+
+(use-package protobuf-mode)
 
 (use-package json-mode)
 
@@ -554,6 +609,7 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   (which-key-add-key-based-replacements
     "<SPC> b" "Buffers"
     "<SPC> e" "Errors"
+    "<SPC> E" "Spelling"
     "<SPC> f" "Files"
     "<SPC> F" "Fold"
     "<SPC> g" "Global"
@@ -606,7 +662,9 @@ new windows will each be 180 columns wide, and sit just below the threshold.
     "ei" 'flycheck-verify-setup
 
     ;; E - flyspell
-    "E" 'helm-flyspell-correct
+    "EE" 'flyspell-correct-wrapper
+    "ES" 'my|my-save-word
+    "EB" 'flyspell-buffer
 
     ;; f --- File
     "ff" 'counsel-find-file
@@ -623,6 +681,8 @@ new windows will each be 180 columns wide, and sit just below the threshold.
     ;; g -- global
     "gs" 'my|reload-init-file ;; TODO make more glorious
     "gg" 'magit-status
+    "gp" 'my|pomo
+    "gP" 'my|pomo-stop
 
     ;; w -- window
     "wK" 'elscreen-kill
@@ -662,16 +722,16 @@ new windows will each be 180 columns wide, and sit just below the threshold.
     "pe" 'projectile-edit-dir-locals            ;;  "Edit project .dir-locals"
     "pf" 'projectile-find-file                  ;;  "Find file in project"
     "pF" 'projectile-find-file-in-known-projects ;;  "Find file in project"
-    "pg" 'projectile-find-file-dwim ;;  "Find file in project at point better ffap"
+    "pg" 'projectile-find-file-dwim             ;;  "Find file in project at point better ffap"
     "pi" 'projectile-invalidate-cache           ;;  "Invalidate project cache"
     "pk" 'projectile-kill-buffers               ;;  "Kill project buffers"
     "po" 'projectile-find-other-file            ;;  "Find other file"
-    "pp" 'counsel-projectile-switch-project             ;;  "Switch project"
+    "pp" 'counsel-projectile-switch-project     ;;  "Switch project"
     "pr" 'projectile-recentf                    ;;  "Find recent project files"
-    "pR" 'projectile-regenerate-tags                    ;;  "Find recent project files"
-    "ps" 'counsel-git-grep ;; also ag or grep
+    "pR" 'projectile-regenerate-tags            ;;  "Find recent project files"
+    "ps" 'counsel-git-grep                      ;; also ag or grep
     "po" 'projectile-toggle-between-implementation-and-test
-    "pt" 'my|test-file ;; test file in project
+    "pt" 'my|test-file                          ;; test file in project
 
     ;; S -- slack
     "SS" 'slack-im-select
