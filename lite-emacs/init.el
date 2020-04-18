@@ -550,6 +550,8 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   :config
   (add-to-list 'auto-mode-alist '("\\.gql\\'" . graphql-mode)))
 
+(use-package go-mode)
+
 (use-package web-mode
   :init
   (add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
