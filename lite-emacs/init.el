@@ -232,6 +232,9 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   :config
   (xclip-mode 1))
 
+(use-package vterm
+    :ensure t)
+
 (use-package flyspell
   :config
   (setq ispell-program-name "/usr/local/bin/aspell"))
