@@ -32,4 +32,7 @@ export GO111MODULE=on
 [ -d "/usr/local/share/dotnet" ] && PATH="/usr/local/share/dotnet:$PATH"
 [ -d "/opt/X12/bin" ] && PATH="/opt/X12/bin:$PATH"
 [ -d "/opt/local/bin" ] && PATH="/opt/local/bin:$PATH"
+[ -d "$HOME/istio-1.5.1/bin" ] && PATH="$HOME/istio-1.5.1/bin:$PATH"
+# The next line updates PATH for the Google Cloud SDK.
+ssource "$HOME/google-cloud-sdk/path.zsh.inc"
 

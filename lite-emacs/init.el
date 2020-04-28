@@ -42,6 +42,13 @@
 (setq kill-buffer-query-functions
        (delq 'process-kill-buffer-query-function kill-buffer-query-functions))
 
+;; Backup and Autosave Directories
+(setq temporary-file-directory "~/tmp/")
+(setq backup-directory-alist
+      `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms
+      `((".*" ,temporary-file-directory t)))
+
 (setq indent-tabs-mode nil
       font-lock-maximum-decoration 3
 
@@ -67,7 +74,6 @@
       window-resize-pixelwise t
       save-abbrevs 'silently
       frame-resize-pixelwise t
-      backup-directory-alist `((".*" . "~/.emacs-file-saves")) ; store all backup files in home directory
       ; auto-save-file-name-transforms `((".*" . "~/.emacs-file-saves")) ; store all backup files in home directory
       backup-by-copying t ; slow but sure way of saving
       ;; If that's too slow for some reason you might also
@@ -415,6 +421,7 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   (org-mode . flyspell-mode)
   (org-mode . abbrev-mode)
   :config
+  (require 'org-tempo) ;; needed to add this to get template expansion to work again
   ;; set scratch buffer to org mode
   (setq initial-major-mode 'org-mode)
 
@@ -536,9 +543,9 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 
 (use-package yaml-mode)
 
-;; (use-package docker)
+(use-package dockerfile-mode)
 
-;; (use-package docker-compose)
+(use-package docker-compose-mode)
 
 (use-package go-mode)
 
@@ -550,7 +557,15 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   :config
   (add-to-list 'auto-mode-alist '("\\.gql\\'" . graphql-mode)))
 
-(use-package go-mode)
+(use-package go-mode
+  :config
+  (add-hook 'before-save-hook 'gofmt-before-save)
+  (add-hook 'go-mode-hook 'my|go-checkers)
+
+  (defun my|go-checkers ()
+    "Use gofmt despite lsp's enthusiasm"
+    (interactive)
+    (setq-local flycheck-checker 'go-gofmt)))
 
 (use-package web-mode
   :init
@@ -589,7 +604,9 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   :hook
   (prog-mode . lsp)
   (lsp-mode . lsp-enable-which-key-integration)
-  :commands lsp)
+  :commands lsp
+  :config
+  (setq lsp-enable-snippet 'nil))
 
 (use-package flycheck
   :after lsp-mode
@@ -597,11 +614,31 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   :config
   (flycheck-add-mode 'javascript-eslint 'web-mode)
   (flycheck-add-next-checker 'javascript-eslint 'lsp))
+  ;; go-build is last in the checkers, so then finish with lsp
+  ;; (flycheck-add-next-checker 'go-build 'lsp))
+  ;; (add-hook 'go-mode-hook
+  ;; 	    (lambda () (flycheck-add-next-checker 'lsp 'go-vet))))
   ;; (add-hook 'web-mode-hook
   ;; 	    (lambda () (flycheck-add-next-checker 'lsp 'javascript-eslint))))
   ;; (add-hook 'web-mode-hook
   ;; 	    (lambda () (flycheck-select-checker 'javascript-eslint))))
 
+(use-package elscreen
+  :init
+  (setq elscreen-display-tab nil)
+  :config
+  (elscreen-start)
+
+  ;; from doom-light-one
+  (set-face-attribute 'elscreen-tab-background-face nil :background "#dfdfdf" :height 1.3) ;; base1
+  (set-face-attribute 'elscreen-tab-current-screen-face nil :foreground "#a190a7") ;; bg
+  (set-face-attribute 'elscreen-tab-other-screen-face nil :foreground "#a190a7")
+
+  (setq elscreen-display-screen-number nil
+        elscreen-default-buffer-initial-message nil
+        elscreen-display-tab nil
+        elscreen-tab-display-kill-screen nil
+        elscreen-tab-display-control nil))
 
 ;; EVIL
 ;; --------------------------------------------------------
@@ -768,6 +805,8 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 	("S" . ace-jump-char-mode)
 	("gf" . projectile-find-file-dwim)
 	("gD" . evil-goto-definition)
+	("gt" . elscreen-next)
+	("gT" . elscreen-previous)
 	;; ("gd" . lsp-goto-implementation)
 	("gd" . lsp-find-definition)
 	("gh" . lsp-describe-thing-at-point)
@@ -876,14 +915,14 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 
 (use-package doom-themes
   :config
-  ;; (when window-system (set-frame-font "Hack Nerd Font:size=14"))
-  (when window-system (set-frame-font "FuraCode Nerd Font:size=14"))
+  (when window-system (set-frame-font "Hack Nerd Font:size=14"))
+  ;; (when window-system (set-frame-font "FiraCode Nerd Font:size=14"))
 
   (if window-system
       (load-theme 'doom-one t)
     (load-theme 'doom-nord t))
 
-  ;; (load-theme 'doom-one-light t) ;; good for sun
+  (load-theme 'doom-one-light t) ;; good for sun
   (setq doom-themes-enable-bold t
 	doom-themes-enable-italic t))
 

@@ -200,4 +200,6 @@
   "[rust]": {
     "editor.formatOnSave": true
   },
+  "go.formatTool": "goimports",
+  "go.useLanguageServer": true,
 }

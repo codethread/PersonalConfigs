@@ -53,6 +53,15 @@ FZF_ALT_C_COMMAND="fd --type d --exclude '{Library,Music,Applications,Pictures,U
 # haskell
 # source ~/.ghcup/env
 
+# kubernetes
+ssource ~/completions/zsh/kubectl.zsh
+# if i alias to k, can do this
+# echo 'alias k=kubectl' >>~/.zshrc
+# echo 'complete -F __start_kubectl k' >>~/.zshrc
+
+# gcloud
+ssource '$HOME/google-cloud-sdk/completion.zsh.inc'
+
 #------------------------------------------
 #--- Sky Stuff
 #-----------------------------------------
