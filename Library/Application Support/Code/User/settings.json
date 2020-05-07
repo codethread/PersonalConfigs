@@ -202,4 +202,7 @@
   },
   "go.formatTool": "goimports",
   "go.useLanguageServer": true,
+  "[html]": {
+    "editor.defaultFormatter": "vscode.html-language-features"
+  },
 }

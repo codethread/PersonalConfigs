@@ -41,14 +41,14 @@ ssource ~/.fzf.zsh
 ssource "$HOME/.aliases.zsh" # TODO: move?
 
 # set up colors for ls, fd, tree etc https://github.com/sharkdp/vivid
-ssource ~/.config/vivid/built/snazzy.sh
+# ssource ~/.config/vivid/built/snazzy.sh
 export JQ_COLORS="1;30:0;31:0;32:0;35:0;33:1;35:1;35"
 
 # quickest way to cd around
 FZF_ALT_C_COMMAND="fd --type d --exclude '{Library,Music,Applications,Pictures,Unity,VirtualBox VMs,WebstormProjects,Tools,node_modules,.git}' . ${HOME}"
 
 #------------------------------------------
-#--- Language specifi
+#--- Language specific
 #-----------------------------------------
 # haskell
 # source ~/.ghcup/env

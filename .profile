@@ -2,9 +2,12 @@
 
 # maconly
 if [ "$(uname 2> /dev/null)" != "Linux" ]; then
-  [ -d "/usr/local/bin" ] && PATH="/usr/local/bin:$PATH"
-  [ -d "/usr/local/opt/gnu-sed/libexec/gnubin" ] && PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
-  [ -d "/Library/Frameworks/Mono.framework/Versions/Current/Commands" ] && PATH="/Library/Frameworks/Mono.framework/Versions/Current/Commands:$PATH"
+  [ -d "/usr/local/bin" ] && \
+    pathprepend "/usr/local/bin" PATH
+  [ -d "/usr/local/opt/gnu-sed/libexec/gnubin" ] && \
+    pathprepend "/usr/local/opt/gnu-sed/libexec/gnubin" PATH
+  [ -d "/Library/Frameworks/Mono.framework/Versions/Current/Commands" ] && \
+    pathprepend "/Library/Frameworks/Mono.framework/Versions/Current/Commands" PATH
 fi
 
 # linux
@@ -21,18 +24,19 @@ export EDITOR='vim'
 export SOURCED_PROFILE=true
 export GO111MODULE=on
 
-[ -d "$GOBIN" ] && PATH="$GOBIN:$PATH"
-[ -d "$HOME/.bin" ] && PATH="$HOME/.bin:$PATH"
-[ -d "$HOME/.local/bin" ] && PATH="$HOME/.local/bin:$PATH"
-[ -d "$HOME.rbenv/shims" ] && PATH="$HOME.rbenv/shims:$PATH"
-[ -d "$HOME/.nodenv/shims" ] && PATH="$HOME/.nodenv/shims:$PATH"
-[ -d "$HOME/.cargo/bin" ] && PATH="$HOME/.cargo/bin:$PATH"
-[ -d "$HOME/.emacs.d/bin" ] && PATH="$HOME/.emacs.d/bin:$PATH"
-[ -d "$HOME/.dotnet/tools" ] && PATH="$HOME/.dotnet/tools:$PATH"
-[ -d "/usr/local/share/dotnet" ] && PATH="/usr/local/share/dotnet:$PATH"
-[ -d "/opt/X12/bin" ] && PATH="/opt/X12/bin:$PATH"
-[ -d "/opt/local/bin" ] && PATH="/opt/local/bin:$PATH"
-[ -d "$HOME/istio-1.5.1/bin" ] && PATH="$HOME/istio-1.5.1/bin:$PATH"
+[ -d "$GOBIN" ] && pathprepend "$GOBIN" PATH
+[ -d "$HOME/.bin" ] && pathprepend "$HOME/.bin" PATH
+[ -d "$HOME/.local/bin" ] && pathprepend "$HOME/.local/bin" PATH
+[ -d "$HOME.rbenv/shims" ] && pathprepend "$HOME.rbenv/shims" PATH
+[ -d "$HOME/.nodenv/shims" ] && pathprepend "$HOME/.nodenv/shims" PATH
+[ -d "$HOME/.cargo/bin" ] && pathprepend "$HOME/.cargo/bin" PATH
+[ -d "$HOME/.emacs.d/bin" ] && pathprepend "$HOME/.emacs.d/bin" PATH
+[ -d "$HOME/.dotnet/tools" ] && pathprepend "$HOME/.dotnet/tools" PATH
+[ -d "/usr/local/share/dotnet" ] && pathprepend "/usr/local/share/dotnet" PATH
+[ -d "/opt/X12/bin" ] && pathprepend "/opt/X12/bin" PATH
+[ -d "/opt/local/bin" ] && pathprepend "/opt/local/bin" PATH
+[ -d "$HOME/istio-1.5.1/bin" ] && pathprepend "$HOME/istio-1.5.1/bin" PATH
+
 # The next line updates PATH for the Google Cloud SDK.
 ssource "$HOME/google-cloud-sdk/path.zsh.inc"
 

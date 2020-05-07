@@ -22,7 +22,7 @@
   ;; On OS X Emacs doesn't use the shell PATH if it's not started from
   ;; the shell. Let's fix that:
   (require 'exec-path-from-shell)
-  ;; (setq exec-path-from-shell-arguments 'nil)
+  (setq exec-path-from-shell-arguments '("-l"))
   (setq exec-path-from-shell-variables '("PATH" "MANPATH" "SPOTIFY_TOKEN" "SLACK_SKY_EMACS_TOKEN"))
   (exec-path-from-shell-initialize)
 
@@ -221,7 +221,8 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   (prog-mode)
   (web-mode)
   :config
-  (set-face-attribute 'fic-face nil :inherit 'warning :weight 'bold))
+  (custom-set-faces
+   '(fic-face ((t (:inherit warning :weight bold))))))
 
 ;; jump to def without lsp
 (use-package xref
@@ -232,8 +233,18 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   :config
   (xclip-mode 1))
 
-(use-package vterm
-    :ensure t)
+(use-package vterm)
+
+(use-package multi-vterm
+  :after ('vterm . 'evil)
+  :config
+  (add-hook 'vterm-mode-hook
+	    (lambda ()
+	      (setq-local evil-insert-state-cursor 'box)
+	      (evil-insert-state)))
+  (define-key vterm-mode-map [return]                      #'vterm-send-return)
+
+  (setq vterm-keymap-exceptions nil))
 
 (use-package flyspell
   :config
@@ -404,6 +415,8 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 
 (use-package counsel-projectile)
 
+(use-package ob-typescript)
+
 (use-package org
   :init
   (defvar org-directory "~/org-notes/")
@@ -424,7 +437,7 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   (org-mode . flyspell-mode)
   (org-mode . abbrev-mode)
   :config
-  (require 'org-tempo) ;; needed to add this to get template expansion to work again
+  ;; (require 'org-tempo) ;; needed to add this to get template expansion to work again
   ;; set scratch buffer to org mode
   (setq initial-major-mode 'org-mode)
 
@@ -470,9 +483,14 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 	(forward-line))
       (beginning-of-line)))
 
+  ;; (defun org-babel-execute:typescript (body params)
+  ;;   (let ((org-babel-js-cmd "npx ts-node < "))
+  ;;     (org-babel-execute:js body params)))
+
   (org-babel-do-load-languages
    'org-babel-load-languages '((shell . t) ; allow bash
 			       (js . t)
+			       (typescript . t)
 			       (haskell . t)
 			       (ruby . t)
 			       (io . t)))
@@ -549,8 +567,6 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 (use-package dockerfile-mode)
 
 (use-package docker-compose-mode)
-
-(use-package go-mode)
 
 (use-package protobuf-mode)
 
@@ -633,9 +649,10 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   (elscreen-start)
 
   ;; from doom-light-one
-  (set-face-attribute 'elscreen-tab-background-face nil :background "#dfdfdf" :height 1.3) ;; base1
-  (set-face-attribute 'elscreen-tab-current-screen-face nil :foreground "#a190a7") ;; bg
-  (set-face-attribute 'elscreen-tab-other-screen-face nil :foreground "#a190a7")
+  (custom-set-faces
+   '(elscreen-tab-background-face ((t (:background "#dfdfdf" :height 1.3)))) ;; base1
+   '(elscreen-tab-current-screen-face ((t (:background "#fafafa" :foreground "#a626a4")))) ;; bg
+   '(elscreen-tab-other-screen-face ((t (:background "#dfdfdf" :foreground "#a190a7")))))
 
   (setq elscreen-display-screen-number nil
         elscreen-default-buffer-initial-message nil
@@ -781,9 +798,8 @@ new windows will each be 180 columns wide, and sit just below the threshold.
     "Sk" 'helm-slack ;; quite slow to load all groups
 
     ;; t --- terminal
-    "tn" 'my|projectile-shell-new
-    "te" 'my|projectile-shell-toggle
-    "tt" 'my|projectile-term-toggle
+    "tn" 'multi-vterm
+    "tt" 'multi-vterm-projectile
     ;; r --- run
     "r" 'my|run-ruby
     ))
@@ -855,6 +871,32 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   ;; web-mode
   ;; (define-key js2-refactor-mode-map (kbd "C-c C-e C-f") 'js2r-extract-function)
   ;; (evil-define-key 'normal js2-refactor-mode-map ",c" 'org-toggle-checkbox)
+  ;; vterm mode
+  (evil-define-key 'insert vterm-mode-map (kbd "C-e")      #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-f")      #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-a")      #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-v")      #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-b")      #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-w")      #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-u")      #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-d")      #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-n")      #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-m")      #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-p")      #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-j")      #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-k")      #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-r")      #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-t")      #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-g")      #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-c")      #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-SPC")    #'vterm--self-insert)
+  (evil-define-key 'normal vterm-mode-map (kbd "C-d")      #'vterm--self-insert)
+  (evil-define-key 'normal vterm-mode-map (kbd ",c")       #'multi-vterm)
+  (evil-define-key 'normal vterm-mode-map (kbd ",n")       #'multi-vterm-next)
+  (evil-define-key 'normal vterm-mode-map (kbd ",p")       #'multi-vterm-prev)
+  (evil-define-key 'normal vterm-mode-map (kbd "i")        #'evil-insert-resume)
+  (evil-define-key 'normal vterm-mode-map (kbd "o")        #'evil-insert-resume)
+  (evil-define-key 'normal vterm-mode-map (kbd "<return>") #'evil-insert-resume)
   ;; org mode
   (evil-define-key 'normal org-mode-map (kbd "TAB") 'org-cycle)
   (evil-define-key 'normal org-mode-map ",c" 'org-toggle-checkbox)
@@ -925,7 +967,7 @@ new windows will each be 180 columns wide, and sit just below the threshold.
       (load-theme 'doom-one t)
     (load-theme 'doom-nord t))
 
-  (load-theme 'doom-one-light t) ;; good for sun
+  ;; (load-theme 'doom-one-light t) ;; good for sun
   (setq doom-themes-enable-bold t
 	doom-themes-enable-italic t))
 

@@ -69,6 +69,15 @@ cd ~/PersonalConfigs && brew bundle
 ~/PersonalConfigs/.bin/antiup
 #+END_SRC
 
+change /etc/zprofile to be:
+#+BEGIN_SRC zsh
+# system-wide environment settings for zsh(1)
+if [ -x /usr/libexec/path_helper ]; then
+  if [ -z "$TMUX" ]; then
+    eval `/usr/libexec/path_helper -s`
+  fi
+fi
+#+END_SRC
 
 *** Iterm
 
