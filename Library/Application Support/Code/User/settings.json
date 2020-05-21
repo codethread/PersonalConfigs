@@ -158,7 +158,6 @@
   "vsicons.dontShowNewVersionMessage": true,
   "workbench.colorTheme": "One Dark Pro",
   "problems.decorations.enabled": false,
-  "workbench.panel.defaultLocation": "right",
   "editor.codeLens": false,
   "todohighlight.keywords": [
     "XXX:",
@@ -205,4 +204,5 @@
   "[html]": {
     "editor.defaultFormatter": "vscode.html-language-features"
   },
+  "javascript.implicitProjectConfig.checkJs": true,
 }

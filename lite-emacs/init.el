@@ -212,6 +212,12 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 
 ;;; packages
 ;; ==================================================================================
+(use-package hydra)
+
+(defhydra hydra-zoom (global-map "<f2>")
+  "zoom"
+  ("g" text-scale-increase "in")
+  ("l" text-scale-decrease "out"))
 
 (use-package delight)
 
@@ -306,10 +312,24 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   ;; (setq aw-background nil)
   (custom-set-faces '(aw-leading-char-face ((t (:inherit warning :weight bold :height 2.0))))))
 
+;; TODO: hydra window
+;;
+;;      ^
+;;      |
+;; <- expand ->
+;;      |
+;;      v
+;;
+;; zoom - / + 
+;;
+;; scroll linewise
+;; 
+
 (use-package projectile
   ;; Remove the mode name for projectile-mode, but show the project name.
   :delight '(:eval (concat " " (projectile-project-name)))
   :config
+  (setq projectile-completion-system 'ivy)
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (projectile-mode +1)
   (projectile-register-project-type 'yarn '("yarn.lock")
@@ -410,11 +430,18 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 
 (use-package counsel
   :bind (
-	 ("C-x C-f" . counsel-find-file)
-	 ("C-\\" . counsel-rg)))
+	 ("C-x C-f" . counsel-find-file)))
 
-(use-package counsel-projectile)
+(use-package counsel-projectile
+  :bind (("C-\\" . counsel-projectile-rg)))
 
+;; good for project wide search, has nice buffer and toggles
+(use-package deadgrep)
+
+;; simple search which starts in current dir and can be expanded out
+(use-package ripgrep)
+
+;; added this to get typescript to work in org-babel
 (use-package ob-typescript)
 
 (use-package org
@@ -596,6 +623,9 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   (setq-default web-mode-comment-formats
               '(("javascript" . "//")
                 ("typescript" . "//")))
+
+  (setq web-mode-content-types-alist
+	'(("jsx"  . ".*\\.js[x]?\\'")))
   (add-hook 'web-mode-hook 'my|web-checkers)
 
   (defun my|web-checkers ()
@@ -616,7 +646,24 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 (use-package cargo
   :hook (rust-mode . cargo-minor-mode))
 
+(use-package scala-mode
+  :mode "\\.s\\(cala\\|bt\\)$")
+
+(use-package sbt-mode
+  :commands sbt-start sbt-command
+  :config
+  ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
+  ;; allows using SPACE when in the minibuffer
+  (substitute-key-definition
+   'minibuffer-complete-word
+   'self-insert-command
+   minibuffer-local-completion-map)
+   ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
+   (setq sbt:program-options '("-Dsbt.supershell=false"))
+)
+
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
+
 (use-package lsp-mode
   ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
   :init (setq lsp-keymap-prefix "s-l")
@@ -625,6 +672,12 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   (lsp-mode . lsp-enable-which-key-integration)
   :commands lsp
   :config
+  ;; still a bit shakey on this
+  (setq lsp-enable-file-watchers 'nil)
+  ;; (setq lsp-eslint-server-command 
+  ;;  '("node" 
+  ;;    "/Users/adh23/.vscode/extensions/dbaeumer.vscode-eslint-2.1.5/server/out/eslintServer.js" 
+  ;;    "--stdio"))
   (setq lsp-enable-snippet 'nil))
 
 (use-package flycheck
@@ -642,23 +695,41 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   ;; (add-hook 'web-mode-hook
   ;; 	    (lambda () (flycheck-select-checker 'javascript-eslint))))
 
+;; (use-package dired+
+;;   :config
+;;   (toggle-diredp-find-file-reuse-dir 1))
+
+
 (use-package elscreen
+  :after (evil)
+  :demand t
   :init
-  (setq elscreen-display-tab nil)
+  (defhydra hydra-tabs
+    (:color red :hint nil
+	    :pre (setq elscreen-display-tab t)
+	    :post (setq elscreen-display-tab nil))
+    "tabs"
+    ("l" elscreen-next "next")
+    ("h" elscreen-previous "previous"))
   :config
   (elscreen-start)
 
-  ;; from doom-light-one
-  (custom-set-faces
-   '(elscreen-tab-background-face ((t (:background "#dfdfdf" :height 1.3)))) ;; base1
-   '(elscreen-tab-current-screen-face ((t (:background "#fafafa" :foreground "#a626a4")))) ;; bg
-   '(elscreen-tab-other-screen-face ((t (:background "#dfdfdf" :foreground "#a190a7")))))
-
   (setq elscreen-display-screen-number nil
-        elscreen-default-buffer-initial-message nil
-        elscreen-display-tab nil
-        elscreen-tab-display-kill-screen nil
-        elscreen-tab-display-control nil))
+	elscreen-default-buffer-initial-message nil
+	elscreen-display-tab nil
+	elscreen-tab-display-kill-screen nil
+	elscreen-tab-display-control nil)
+
+  ;; light theme
+  ;; :custom-face
+  ;; (elscreen-tab-background-face ((t (:background "#dfdfdf" :height 1.3))))
+  ;; (elscreen-tab-current-screen-face ((t (:background "#fafafa" :foreground "#a626a4"))))
+  ;; (elscreen-tab-other-screen-face ((t (:background "#dfdfdf" :foreground "#a190a7"))))
+
+  :custom-face
+  (elscreen-tab-background-face ((t (:background "#1c1f24" :height 1.3))))
+  (elscreen-tab-current-screen-face ((t (:background "#282c34" :foreground "#c678dd"))))
+  (elscreen-tab-other-screen-face ((t (:background "#1c1f24" :foreground "#a190a7")))))
 
 ;; EVIL
 ;; --------------------------------------------------------
@@ -678,6 +749,7 @@ new windows will each be 180 columns wide, and sit just below the threshold.
     "<SPC> S" "Slack"
     "<SPC> t" "Term"
     "<SPC> w" "Window"
+    "<SPC> W" "Layouts"
     )
   (which-key-add-major-mode-key-based-replacements 'org-mode
   ", d" "Delete"
@@ -693,9 +765,11 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   (global-evil-leader-mode)
   (evil-leader/set-leader "<SPC>")
   (evil-leader/set-key
-    "<SPC>" 'counsel-git
+    "<SPC>" 'counsel-projectile-find-file
     ";" 'counsel-M-x
+    ":" 'counsel-command-history
     "." 'ace-window
+
     ;; b --- buffers
     "bb" 'my|split-last-buffer
     "bj" 'evil-show-jumps
@@ -733,18 +807,19 @@ new windows will each be 180 columns wide, and sit just below the threshold.
     "fs" 'save-buffer
 
     ;; F --- fold
-    "FF"  'hs-toggle-hiding
-    "FI"  'hs-hide-all
-    "FO"  'hs-show-all
+    "FF"  'hydra-hs/body
+    "FO"  'hydra-folding/body
 
     ;; g -- global
     "gs" 'my|reload-init-file ;; TODO make more glorious
     "gg" 'magit-status
     "gp" 'my|pomo
     "gP" 'my|pomo-stop
+    "gl" 'counsel-find-library
 
     ;; w -- window
     "wK" 'elscreen-kill
+    "we" 'hydra-tabs/body
     "wN" 'elscreen-create
     "wd" 'ace-win-delete
     "wk" 'delete-window
@@ -755,13 +830,18 @@ new windows will each be 180 columns wide, and sit just below the threshold.
     "wt" 'elscreen-toggle-display-tab
     "ww" 'evil-window-vsplit
 
+    ;; W -- window configurations
+    "WW" 'ivy-push-view
+    "WD" 'ivy-pop-view
+    "Wl" 'ivy-switch-view
+
     ;; s -- search
-    "sf" 'swiper ;; great when you know what you need
-    "si" 'helm-imenu ;; jump to def or explore
-    "sI" 'helm-imenu-in-all-buffers ;; ideal when don't know
-    "sp" 'helm-projectile-rg ;; also ag or grep
-    "ss" 'helm-rg ;; M-d to change dir
-    "sl" 'xref-find-references ;; also ag or grep
+    "sf" 'swiper			;; great when you know what you need
+    "si" 'counsel-imenu			;; jump to def or explore
+    "sI" 'helm-imenu-in-all-buffers	;; ideal when don't know
+    "sp" 'deadgrep			;; also ag or grep
+    "ss" 'ripgrep-regexp		;; search from current dir out
+    "sl" 'xref-find-references		;; also ag or grep
 
     ;; n --- notes
     "na" 'org-agenda
@@ -773,24 +853,24 @@ new windows will each be 180 columns wide, and sit just below the threshold.
     "nN" 'my|open-work-notes-file
 
     ;; p --- project
-    "p!" 'projectile-run-shell-command-in-root  ;;  "Run cmd in project root"
-    "pa" 'projectile-add-known-project          ;;  "Add new project"
-    "pb" 'projectile-switch-to-buffer           ;;  "Switch to project buffer"
-    "pc" 'projectile-compile-project            ;;  "Compile in project"
-    "pd" 'projectile-remove-known-project       ;;  "Remove known project"
-    "pe" 'projectile-edit-dir-locals            ;;  "Edit project .dir-locals"
-    "pf" 'projectile-find-file                  ;;  "Find file in project"
-    "pF" 'projectile-find-file-in-known-projects ;;  "Find file in project"
-    "pg" 'projectile-find-file-dwim             ;;  "Find file in project at point better ffap"
-    "pi" 'projectile-invalidate-cache           ;;  "Invalidate project cache"
-    "pk" 'projectile-kill-buffers               ;;  "Kill project buffers"
-    "po" 'projectile-find-other-file            ;;  "Find other file"
-    "pp" 'counsel-projectile-switch-project     ;;  "Switch project"
-    "pr" 'projectile-recentf                    ;;  "Find recent project files"
-    "pR" 'projectile-regenerate-tags            ;;  "Find recent project files"
-    "ps" 'counsel-git-grep                      ;; also ag or grep
+    "p!" 'projectile-run-shell-command-in-root		;;  "Run cmd in project root"
+    "pa" 'projectile-add-known-project			;;  "Add new project"
+    "pb" 'projectile-switch-to-buffer			;;  "Switch to project buffer"
+    "pc" 'projectile-compile-project			;;  "Compile in project"
+    "pd" 'projectile-find-dir				;;  "Remove known project"
+    "pe" 'projectile-edit-dir-locals			;;  "Edit project .dir-locals"
+    "pf" 'counsel-projectile-find-file			;;  "Find file in project"
+    "pF" 'projectile-find-file-in-known-projects	;;  "Find file in project"
+    "pg" 'projectile-find-file-dwim			;;  "Find file in project at point better ffap"
+    "pi" 'projectile-invalidate-cache			;;  "Invalidate project cache"
+    "pk" 'projectile-kill-buffers			;;  "Kill project buffers"
     "po" 'projectile-toggle-between-implementation-and-test
-    "pt" 'my|test-file                          ;; test file in project
+    "pO" 'projectile-find-other-file			;;  "Find other file"
+    "pp" 'counsel-projectile-switch-project		;;  "Switch project"
+    "pr" 'projectile-recentf				;;  "Find recent project files"
+    "pR" 'projectile-regenerate-tags			;;  "Find recent project files"
+    "ps" 'deadgrep					;;  "Search with rg"
+    "pt" 'my|test-file					;; test file in project
 
     ;; S -- slack
     "SS" 'slack-im-select
@@ -800,8 +880,10 @@ new windows will each be 180 columns wide, and sit just below the threshold.
     ;; t --- terminal
     "tn" 'multi-vterm
     "tt" 'multi-vterm-projectile
+
     ;; r --- run
     "r" 'my|run-ruby
+
     ))
 
 (global-set-key (kbd "C-s-<f8>") 'my|close-notifications-mac)
@@ -820,26 +902,20 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 	("C-SPC" . completion-at-point)
 	)
   (:map evil-normal-state-map
-	("s" . ace-jump-mode)
-	("S" . ace-jump-char-mode)
-	("gf" . projectile-find-file-dwim)
-	("gD" . evil-goto-definition)
-	("gt" . elscreen-next)
-	("gT" . elscreen-previous)
-	;; ("gd" . lsp-goto-implementation)
-	("gd" . lsp-find-definition)
-	("gh" . lsp-describe-thing-at-point)
-	;; ("C-o" . xref-pop-marker-stack)
-	;; (define-key evil-normal-state-map "-" 'dired-jump)
-	("C-@" . completion-at-point)
-	;; gui mode
-	("C-SPC" . completion-at-point)
-	;; reset
-	("C-e" . move-end-of-line)
-	;; get scroll up back and replace with C-m as it's just return
-	("C-u" . evil-scroll-up)
-	("C-y" . universal-argument)
-	("L" . reposition-window))
+	("-"		. (lambda () (interactive) (dired ".")))
+	;; ("-"		. (lambda () (interactive) (fild-alternate-file "..")))
+	("s"		. ace-jump-mode)
+	("S"		. ace-jump-char-mode)
+	("gf"		. projectile-find-file-dwim)
+	("gD"		. evil-goto-definition)
+	("gd"		. lsp-find-definition)
+	("gh"		. lsp-describe-thing-at-point)
+	("C-@"		. completion-at-point)
+	("C-SPC"	. completion-at-point) ; gui mode
+	("C-e"		. move-end-of-line) ; reset
+	("C-u"		. evil-scroll-up) ; get scroll up back and replace with C-m as it's just return
+	("C-y"		. universal-argument)
+	("L"		. reposition-window))
   :config
   ;; https://emacs.stackexchange.com/questions/9583/how-to-treat-underscore-as-part-of-the-word
   (defadvice evil-inner-word (around underscore-as-word activate)
@@ -860,10 +936,10 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   (define-key universal-argument-map (kbd "C-y") 'universal-argument-more)
 
   ;; remap to sexp
-  (define-key evil-normal-state-map (kbd "C-M-l") 'forward-sexp)
-  (define-key evil-normal-state-map (kbd "C-M-h") 'backward-sexp) ;; mark-defun
-  (define-key evil-normal-state-map (kbd "C-M-k") 'backward-up-list) ;; kill-sexp
-  (define-key evil-normal-state-map (kbd "C-M-j") 'down-list)
+  ;; (define-key evil-normal-state-map (kbd "C-M-l") 'forward-sexp)
+  ;; (define-key evil-normal-state-map (kbd "C-M-h") 'backward-sexp) ;; mark-defun
+  ;; (define-key evil-normal-state-map (kbd "C-M-k") 'backward-up-list) ;; kill-sexp
+  ;; (define-key evil-normal-state-map (kbd "C-M-j") 'down-list)
   ;; bring line into focus and attempt to show context.
   ;; blacklist
   (evil-set-initial-state 'shell-mode 'emacs)
@@ -926,12 +1002,29 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   (evil-define-key 'normal markdown-mode-map "j" 'evil-next-visual-line)
   (evil-define-key 'normal markdown-mode-map "k" 'evil-previous-visual-line))
 
-(use-package evil-collection
-  :after evil
+(use-package evil-mc
+  :demand t
+  :bind ("M-d" . hydra-mc/body)
+  :init
+  (defhydra hydra-mc (:color red :hint nil)
+    "
+Add:		 Jump:
+------------------------------
+_a_ll		 _N_ext
+_n_ext		 _P_revious  
+_p_reivous	 
+_s_kip
+"
+    ("a" evil-mc-make-all-cursors)
+    ("q" evil-mc-undo-all-cursors "quit" :color blue)
+    ("N" evil-mc-make-and-goto-next-cursor)
+    ("P" evil-mc-make-and-goto-prev-cursor)
+    ("s" evil-mc-skip-and-goto-next-match)
+    ("n" evil-mc-make-and-goto-next-match)
+    ("p" evil-mc-make-and-goto-prev-match))
   :config
-  ;; https://github.com/emacs-evil/evil-collection/blob/master/evil-collection-dired.el
-  (evil-collection-init '(dired term ansi-term)))
-  ;; (setq evil-collection-mode-list 'nil))
+  (global-evil-mc-mode  1))
+
 
 (use-package evil-commentary
   :config
@@ -953,11 +1046,21 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   :config
   (global-evil-surround-mode 1))
 
+(use-package evil-collection
+  :after evil
+  :config
+  ;; https://github.com/emacs-evil/evil-collection/blob/master/evil-collection-dired.el
+  (evil-collection-init))
+  ;; (evil-collection-init '(dired term ansi-term)))
+  ;; (setq evil-collection-mode-list 'nil))
+
 (use-package evil-escape
   :config
   (evil-escape-mode t)
   (setq evil-escape-key-sequence "jk"))
 
+;; THEMES + FACES
+;; --------------------------------------------------------
 (use-package doom-themes
   :config
   (when window-system (set-frame-font "Hack Nerd Font:size=14"))
@@ -968,6 +1071,7 @@ new windows will each be 180 columns wide, and sit just below the threshold.
     (load-theme 'doom-nord t))
 
   ;; (load-theme 'doom-one-light t) ;; good for sun
+
   (setq doom-themes-enable-bold t
 	doom-themes-enable-italic t))
 
