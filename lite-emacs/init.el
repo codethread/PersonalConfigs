@@ -80,6 +80,7 @@
       ;; have a look at backup-by-copying-when-linked
       ;; https://stackoverflow.com/questions/151945/how-do-i-control-how-emacs-makes-backup-files
       version-control t                 ; version numbers for backup files
+      dired-listing-switches "-lt" ; alphabetical
       delete-old-versions t ; delete excess backup files silently
       )
 
@@ -120,6 +121,15 @@
           (message "Deleted file %s" filename)
           (kill-buffer))))))
 
+;; (defun my|md-link-to-org ()
+;;   ;; Can also be adapted to use the region, but one would need to add
+;;   ;; a marker and region-end.  Remember to remove marker at end.
+;;   (let ((markdown-regex-link-inline
+;;          ;; from http://jblevins.org/git/markdown-mode.git/tree/markdown-mode.el
+;;           "\\(!\\)?\\(\\[\\)\\([^]^][^]]*\\|\\)\\(\\]\\)\\((\\)\\([^)]*?\\)\\(?:\\s-+\\(\"[^\"]*\"\\)\\)?\\()\\)"))
+;;     (while (search-forward-regexp markdown-regex-link-inline (point-max) t)
+;;       (replace-match "[[\\6][\\3]]"))))
+
 ;; https://www.reddit.com/r/emacs/comments/64xb3q/killthisbuffer_sometimes_just_stops_working/
 (defun my|kill-this-buffer ()
   "Kill the current buffer."
@@ -130,6 +140,10 @@
   "Open init.el."
   (interactive)
   (find-file "~/.emacs.d/init.el"))
+
+(defun my|replace-in-string (WHAT WITH in)
+  "`WHAT' to be replaced with `WITH' `IN' string."
+  (replace-regexp-in-string (regexp-quote WHAT) WITH in nil 'literal))
 
 (defun frontside-windowing-adjust-split-width-threshold ()
   "Change the value of `split-width-threshold' so that it will cause the screen
@@ -218,6 +232,38 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   "zoom"
   ("g" text-scale-increase "in")
   ("l" text-scale-decrease "out"))
+
+(defhydra hydra-window (:color red
+                        :hint nil)
+  "
+Delete: _o_nly  _da_ce  _dw_indow  _db_uffer  _df_rame
+  Move: _s_wap
+Frames: _f_rame new  _df_ delete
+  Misc: _m_ark _a_ce  _u_ndo  _r_edo"
+  ("h" shrink-window-horizontally)
+  ("j" shrink-window)
+  ("k" enlarge-window)
+  ("l" enlarge-window-horizontally)
+  ("H" hydra-move-splitter-left)
+  ("J" hydra-move-splitter-down)
+  ("K" hydra-move-splitter-up)
+  ("L" hydra-move-splitter-right)
+  ;("t" transpose-frame "'")
+  ;; winner-mode must be enabled
+  ("u" winner-undo)
+  ("r" winner-redo) ;;Fixme, not working?
+  ("o" delete-other-windows :exit t)
+  ("a" ace-window :exit t)
+  ("f" new-frame :exit t)
+  ("s" ace-swap-window)
+  ("da" ace-delete-window)
+  ("dw" delete-window)
+  ("db" kill-this-buffer)
+  ("df" delete-frame :exit t)
+  ("q" nil)
+  ;("i" ace-maximize-window "ace-one" :color blue)
+  ;("b" ido-switch-buffer "buf")
+  ("m" headlong-bookmark-jump))
 
 (use-package delight)
 
@@ -312,19 +358,6 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   ;; (setq aw-background nil)
   (custom-set-faces '(aw-leading-char-face ((t (:inherit warning :weight bold :height 2.0))))))
 
-;; TODO: hydra window
-;;
-;;      ^
-;;      |
-;; <- expand ->
-;;      |
-;;      v
-;;
-;; zoom - / + 
-;;
-;; scroll linewise
-;; 
-
 (use-package projectile
   ;; Remove the mode name for projectile-mode, but show the project name.
   :delight '(:eval (concat " " (projectile-project-name)))
@@ -357,7 +390,7 @@ new windows will each be 180 columns wide, and sit just below the threshold.
     (message (concat "testing " (buffer-file-name)))
     (save-buffer)
     (async-shell-command
-     (concat "cd " (projectile-project-root) " && node_modules/.bin/jest " (buffer-file-name) " --collectCoverageOnlyFrom " (my|replace-in-string ".spec.js" ".jsx" buffer-file-name))))
+     (concat "cd " (projectile-project-root) " && node_modules/.bin/jest " (buffer-file-name) " --watch --collectCoverageOnlyFrom " (my|replace-in-string ".spec.js" ".jsx" buffer-file-name))))
 
   (defun my|test-file-mocha ()
     "Run tests on current file."
@@ -375,13 +408,23 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   (defun my|eslint-fix-file ()
     "Run eslint --fix on current file."
     (interactive)
-    (message (concat "eslint --fixing" (buffer-file-name) "using"))
+    (message (concat "eslint --fixing " (buffer-file-name) " using"))
     (save-buffer)
     (shell-command
      (concat "cd " (projectile-project-root) " && node_modules/eslint/bin/eslint.js"
 	     (cond ((file-exists-p "./.eslintrc.js") " --config ./.eslintrc.js")
 		   ((file-exists-p "./.eslintrc.yml") " --config ./.eslintrc.yml"))
 	     " --fix " (buffer-file-name))))
+
+  (defun my|prettier-fix-file ()
+    "Run prettier on current file."
+    (interactive)
+    (message (concat "prettier --writing " (buffer-file-name) " using"))
+    (save-buffer)
+    (shell-command
+     (concat
+      "cd " (projectile-project-root) " && node_modules/.bin/prettier --write " (buffer-file-name)))
+    (revert-buffer t t))
 
   ;; (defun my|stylelint-fix-file ()
   ;;   "Run eslint --fix on current file."
@@ -476,6 +519,7 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 	org-hide-emphasis-markers t
 	org-startup-folded t
 	org-log-done 'time
+        org-image-actual-width nil ; allows images to be resized with #+ATTR_ORG: :width 100
 	org-agenda-span 8)
 
   (setq org-todo-keywords
@@ -603,6 +647,8 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   :config
   (add-to-list 'auto-mode-alist '("\\.gql\\'" . graphql-mode)))
 
+(use-package ob-graphql)
+
 (use-package go-mode
   :config
   (add-hook 'before-save-hook 'gofmt-before-save)
@@ -710,7 +756,9 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 	    :post (setq elscreen-display-tab nil))
     "tabs"
     ("l" elscreen-next "next")
-    ("h" elscreen-previous "previous"))
+    ("h" elscreen-previous "previous")
+    ("j" nil "quit" :color blue)
+    ("n" elscreen-create "new" :color blue))
   :config
   (elscreen-start)
 
@@ -798,6 +846,8 @@ new windows will each be 180 columns wide, and sit just below the threshold.
     "EE" 'flyspell-correct-wrapper
     "ES" 'my|my-save-word
     "EB" 'flyspell-buffer
+    "EP" 'evil-prev-flyspell-error
+    "EN" 'evil-next-flyspell-error
 
     ;; f --- File
     "ff" 'counsel-find-file
@@ -882,7 +932,8 @@ new windows will each be 180 columns wide, and sit just below the threshold.
     "tt" 'multi-vterm-projectile
 
     ;; r --- run
-    "r" 'my|run-ruby
+    "r" 'hydra-window/body
+    ;; "r" 'my|run-ruby
 
     ))
 
@@ -992,6 +1043,7 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   (evil-define-key 'normal org-mode-map ">" 'org-shiftmetaright)
   (evil-define-key 'normal org-mode-map "<" 'org-shiftmetaleft)
   (evil-define-key 'normal org-mode-map ",s" 'org-sort)
+  (evil-define-key 'normal org-mode-map ",I" 'org-toggle-inline-images)
   ;; move over wrapped lines
   (evil-define-key 'normal org-mode-map "j" 'evil-next-visual-line)
   (evil-define-key 'normal org-mode-map "k" 'evil-previous-visual-line)
