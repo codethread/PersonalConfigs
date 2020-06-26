@@ -36,6 +36,7 @@ export GO111MODULE=on
 [ -d "/opt/X12/bin" ] && pathprepend "/opt/X12/bin" PATH
 [ -d "/opt/local/bin" ] && pathprepend "/opt/local/bin" PATH
 [ -d "$HOME/istio-1.5.1/bin" ] && pathprepend "$HOME/istio-1.5.1/bin" PATH
+[ -d "$HOME/.jenv/bin:$PATH" ] && pathappend "$HOME/.jenv/bin:$PATH" PATH
 
 # The next line updates PATH for the Google Cloud SDK.
 ssource "$HOME/google-cloud-sdk/path.zsh.inc"

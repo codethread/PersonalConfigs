@@ -203,4 +203,9 @@
   "[javascriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "cloudcode.gke": {
+    "projectIds": [
+      "my-blog-275207"
+    ]
+  },
 }

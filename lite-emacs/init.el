@@ -82,6 +82,7 @@
       version-control t                 ; version numbers for backup files
       dired-listing-switches "-lt" ; alphabetical
       delete-old-versions t ; delete excess backup files silently
+      compilation-scroll-output t
       )
 
 (when (fboundp 'tool-bar-mode)
