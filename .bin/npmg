@@ -2,10 +2,12 @@
 
 # npm i -g babel-cli
 npm i -g create-react-app 
-npm i -g create-react-native-app 
+# npm i -g create-react-native-app 
 npm i -g dockerfile-language-server-nodejs
 # npm i -g eslint 
 # npm i -g javascript-typescript-langserver
+npm i -g @ahdesigns/js-gen
+npm i -g typescript
 npm i -g typescript-language-server
 npm i -g typescript
 npm i -g npm-merge-driver 

@@ -50,30 +50,39 @@ FZF_ALT_C_COMMAND="fd --type d --exclude '{Library,Music,Applications,Pictures,U
 #------------------------------------------
 #--- Language specific
 #-----------------------------------------
+
 # haskell
+#-----------------------------------------
 # source ~/.ghcup/env
 
 # kubernetes
-ssource ~/completions/zsh/kubectl.zsh
+#-----------------------------------------
+# this is huge so better to get when doing k8 stuff
+# ssource ~/completions/zsh/kubectl.zsh
+
 # if i alias to k, can do this
 # echo 'alias k=kubectl' >>~/.zshrc
 # echo 'complete -F __start_kubectl k' >>~/.zshrc
 
 # gcloud
+#-----------------------------------------
 ssource '$HOME/google-cloud-sdk/completion.zsh.inc'
+
+# java
+#-----------------------------------------
+# ssource '/usr/local/Cellar/jenv/0.5.3/libexec/libexec/../completions/jenv.zsh'
+# eval "$(jenv init -)"
 
 #------------------------------------------
 #--- Sky Stuff
 #-----------------------------------------
 if [[ $(whoami) =~ 'adh23' ]]; then
-    export TOOLKIT_PATH="$HOME/sky/toolkit"
-    export SKYPORT_GRAPHQL_DIR="$HOME/skyport/graphql"
-    export SKY_SERVICE_FOLDER="$HOME/sky"
-    export SKY_SERVICE_DEV_TOOLS="$SKY_SERVICE_FOLDER/skymobile-service/dev-tools"
     ssource $SKY_SERVICE_DEV_TOOLS/.sky.sh
 fi
 
 eval "$(jenv init -)"
+# enable this and ~/.zshenv for profiling
+# zprof
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
     # export SDKMAN_DIR="/Users/adh23/.sdkman"

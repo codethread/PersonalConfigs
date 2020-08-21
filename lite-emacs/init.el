@@ -80,7 +80,7 @@
       ;; have a look at backup-by-copying-when-linked
       ;; https://stackoverflow.com/questions/151945/how-do-i-control-how-emacs-makes-backup-files
       version-control t                 ; version numbers for backup files
-      dired-listing-switches "-lt" ; alphabetical
+      dired-listing-switches "-lat" ; list, all, alphabetical
       delete-old-versions t ; delete excess backup files silently
       compilation-scroll-output t
       )
@@ -229,6 +229,15 @@ new windows will each be 180 columns wide, and sit just below the threshold.
 ;; ==================================================================================
 (use-package hydra)
 
+;; too slow
+;; (use-package dashboard
+;;   :ensure t
+;;   :config
+;;   (dashboard-setup-startup-hook)
+;;   (setq dashboard-startup-banner 'logo)
+;;   (setq dashboard-set-file-icons t)
+;;   (setq dashboard-set-navigator t))
+
 (defhydra hydra-zoom (global-map "<f2>")
   "zoom"
   ("g" text-scale-increase "in")
@@ -371,11 +380,18 @@ Frames: _f_rame new  _df_ delete
                                     :test "yarn test"
                                     :run "yarn start"
                                     :test-suffix ".spec")
+
   (projectile-register-project-type 'npm '("package-lock.json")
                                     :compile "npm i"
                                     :test "npm test"
                                     :run "npm start"
 				    :test-suffix "_test")
+
+  (projectile-register-project-type 'gradle '("build.gradle")
+                                    :compile "npm i"
+                                    :test "npm test"
+                                    :run "npm start"
+				    :test-suffix "Test")
 
   (defun my|test-file-ts ()
     "Run tests on current typescript file."
@@ -411,7 +427,7 @@ Frames: _f_rame new  _df_ delete
     (interactive)
     (message (concat "eslint --fixing " (buffer-file-name) " using"))
     (save-buffer)
-    (shell-command
+    (async-shell-command
      (concat "cd " (projectile-project-root) " && node_modules/eslint/bin/eslint.js"
 	     (cond ((file-exists-p "./.eslintrc.js") " --config ./.eslintrc.js")
 		   ((file-exists-p "./.eslintrc.yml") " --config ./.eslintrc.yml"))
@@ -422,7 +438,7 @@ Frames: _f_rame new  _df_ delete
     (interactive)
     (message (concat "prettier --writing " (buffer-file-name) " using"))
     (save-buffer)
-    (shell-command
+    (async-shell-command
      (concat
       "cd " (projectile-project-root) " && node_modules/.bin/prettier --write " (buffer-file-name)))
     (revert-buffer t t))
@@ -485,6 +501,12 @@ Frames: _f_rame new  _df_ delete
 ;; simple search which starts in current dir and can be expanded out
 (use-package ripgrep)
 
+(use-package yasnippet
+  :config (yas-global-mode))
+  ;; :config
+  ;; (yas-reload-all)
+  ;; (add-hook 'scala-mode-hook #'yas-minor-mode))
+
 ;; added this to get typescript to work in org-babel
 (use-package ob-typescript)
 
@@ -508,9 +530,9 @@ Frames: _f_rame new  _df_ delete
   (org-mode . flyspell-mode)
   (org-mode . abbrev-mode)
   :config
-  ;; (require 'org-tempo) ;; needed to add this to get template expansion to work again
+  (require 'org-tempo) ;; needed to add this to get template expansion to work again
   ;; set scratch buffer to org mode
-  (setq initial-major-mode 'org-mode)
+  ;; (setq initial-major-mode 'org-mode)
 
   (setq org-startup-indented t
 	org-fontify-done-headline t
@@ -653,7 +675,7 @@ Frames: _f_rame new  _df_ delete
 (use-package go-mode
   :config
   (add-hook 'before-save-hook 'gofmt-before-save)
-  (add-hook 'go-mode-hook 'my|go-checkers)
+  ;; (add-hook 'go-mode-hook 'my|go-checkers)
 
   (defun my|go-checkers ()
     "Use gofmt despite lsp's enthusiasm"
@@ -673,7 +695,7 @@ Frames: _f_rame new  _df_ delete
 
   (setq web-mode-content-types-alist
 	'(("jsx"  . ".*\\.js[x]?\\'")))
-  (add-hook 'web-mode-hook 'my|web-checkers)
+  ;; (add-hook 'web-mode-hook 'my|web-checkers)
 
   (defun my|web-checkers ()
     "Use eslint despite lsp's enthusiasm"
@@ -715,24 +737,42 @@ Frames: _f_rame new  _df_ delete
   ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
   :init (setq lsp-keymap-prefix "s-l")
   :hook
-  (prog-mode . lsp)
+  (prog-mode . lsp-deferred)
   (lsp-mode . lsp-enable-which-key-integration)
-  :commands lsp
+  :commands lsp-deferred
   :config
   ;; still a bit shakey on this
   (setq lsp-enable-file-watchers 'nil)
+  (setq lsp-diagnostics-provider :flymake)
   ;; (setq lsp-eslint-server-command 
   ;;  '("node" 
   ;;    "/Users/adh23/.vscode/extensions/dbaeumer.vscode-eslint-2.1.5/server/out/eslintServer.js" 
   ;;    "--stdio"))
   (setq lsp-enable-snippet 'nil))
 
-(use-package flycheck
+(use-package dap-mode
   :after lsp-mode
-  :init (global-flycheck-mode)
-  :config
-  (flycheck-add-mode 'javascript-eslint 'web-mode)
-  (flycheck-add-next-checker 'javascript-eslint 'lsp))
+  :config (dap-auto-configure-mode))
+
+(use-package lsp-java
+  :after lsp-mode
+  :hook (java-mode . lsp))
+
+(use-package dap-java
+  :ensure nil)
+
+(use-package gradle-mode)
+
+(use-package lsp-metals
+  :after lsp-mode)
+
+;; (use-package flycheck
+;;   :after lsp-mode
+;;   :init (global-flycheck-mode)
+;;   :config
+;;   (flycheck-add-mode 'javascript-eslint 'web-mode)
+;;   (flycheck-add-next-checker 'javascript-eslint 'lsp))
+
   ;; go-build is last in the checkers, so then finish with lsp
   ;; (flycheck-add-next-checker 'go-build 'lsp))
   ;; (add-hook 'go-mode-hook

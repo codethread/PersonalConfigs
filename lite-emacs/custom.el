@@ -6,7 +6,7 @@
  '(custom-safe-themes
    '("e1ecb0536abec692b5a5e845067d75273fe36f24d01210bf0aa5842f2a7e029f" default))
  '(package-selected-packages
-   '(ob-graphql sbt-mode scala-mode hydra use-package-hydra evil-mc evil-multiedit ripgrep deadgrep multi-libvterm org-tempo docker-compose-mode dockerfile-mode go-mode docker-compose docker yaml-mode org-bullets json-mode doom-modeline evil-escape counsel-projectile doom-themes lsp-mode counsel swiper dracula dracula-theme evil-surround evil-org evil-commentary evil-collection evil-leader which-key cargo rust-mode web-mode graphql-mode rjsx-mode wakatime-mode markdown-toc markdown-mode ivy projectile ace-window ace-jump-mode magit undo-tree dotenv-mode editorconfig xclip fic-mode exec-path-from-shell use-package))
+   '(dashboard lsp-metals yasnippet ob-graphql sbt-mode scala-mode hydra use-package-hydra evil-mc evil-multiedit ripgrep deadgrep multi-libvterm org-tempo docker-compose-mode dockerfile-mode go-mode docker-compose docker yaml-mode org-bullets json-mode doom-modeline evil-escape counsel-projectile doom-themes lsp-mode counsel swiper dracula dracula-theme evil-surround evil-org evil-commentary evil-collection evil-leader which-key cargo rust-mode web-mode graphql-mode rjsx-mode wakatime-mode markdown-toc markdown-mode ivy projectile ace-window ace-jump-mode magit undo-tree dotenv-mode editorconfig xclip fic-mode exec-path-from-shell use-package))
  '(safe-local-variable-values
    '((eval add-hook 'before-save-hook #'lsp-eslint-apply-all-fixes nil t)
      (flycheck-checker . lsp)

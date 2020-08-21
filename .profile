@@ -18,10 +18,12 @@ if [ "$(uname 2> /dev/null)" = "Linux" ]; then
   gsettings set org.gnome.desktop.input-sources xkb-options "['ctrl:nocaps']"
 fi
 
-export GOPATH=$HOME/go
-export GOBIN=$GOPATH/bin
 export EDITOR='vim'
 export SOURCED_PROFILE=true
+
+# Golang
+export GOPATH=$HOME/go
+export GOBIN=$GOPATH/bin
 export GO111MODULE=on
 
 [ -d "$GOBIN" ] && pathprepend "$GOBIN" PATH
@@ -29,6 +31,8 @@ export GO111MODULE=on
 [ -d "$HOME/.local/bin" ] && pathprepend "$HOME/.local/bin" PATH
 [ -d "$HOME.rbenv/shims" ] && pathprepend "$HOME.rbenv/shims" PATH
 [ -d "$HOME/.nodenv/shims" ] && pathprepend "$HOME/.nodenv/shims" PATH
+[ -d "$HOME/.jenv/bin" ] && pathprepend "$HOME/.jenv/bin" PATH
+[ -d "$HOME/.jenv/shims" ] && pathprepend "$HOME/.jenv/shims" PATH
 [ -d "$HOME/.cargo/bin" ] && pathprepend "$HOME/.cargo/bin" PATH
 [ -d "$HOME/.emacs.d/bin" ] && pathprepend "$HOME/.emacs.d/bin" PATH
 [ -d "$HOME/.dotnet/tools" ] && pathprepend "$HOME/.dotnet/tools" PATH
@@ -41,3 +45,39 @@ export GO111MODULE=on
 # The next line updates PATH for the Google Cloud SDK.
 ssource "$HOME/google-cloud-sdk/path.zsh.inc"
 
+
+# java after jenv
+# export JENV_SHELL=zsh
+# export JENV_LOADED=1
+# unset JAVA_HOME
+
+# jenv() {
+#   typeset command
+#   command="$1"
+#   if [ "$#" -gt 0 ]; then
+#     shift
+#   fi
+
+#   case "$command" in
+#   enable-plugin|rehash|shell|shell-options)
+#     eval `jenv "sh-$command" "$@"`;;
+#   *)
+#     command jenv "$command" "$@";;
+#   esac
+# }
+
+
+###############################
+# WORK
+###############################
+if [[ $(whoami) =~ 'adh23' ]]; then
+    export TOOLKIT_PATH="$HOME/sky/toolkit"
+    export SKYPORT_GRAPHQL_DIR="$HOME/skyport/graphql"
+    export SKY_SERVICE_FOLDER="$HOME/sky"
+    export SKY_SERVICE_DEV_TOOLS="$SKY_SERVICE_FOLDER/skymobile-service/dev-tools"
+    export PATH="$PATH:$SKY_SERVICE_DEV_TOOLS/bin"
+
+    # give sbt enough memory
+    export SBT_OPTS="-Xmx4G -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled -Xss2M -Duser.timezone=GMT -Xmx6144m"
+    ssource ~/.sky_private
+fi

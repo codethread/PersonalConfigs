@@ -231,9 +231,9 @@ function! LightlineReload()
   call lightline#update()
 endfunction
 
-let g:lightline = { 'colorscheme': 'one' }
+" let g:lightline = { 'colorscheme': 'one' }
 " let g:lightline = {  }
-" let g:lightline = { 'colorscheme': 'snazzier' }
+let g:lightline = { 'colorscheme': 'snazzier' }
 let g:lightline.active = {
       \ 'left': [
       \   [
@@ -676,12 +676,11 @@ inoremap <expr> <C-Space> pumvisible() \|\| &omnifunc == '' ?
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum" " something to do with vim in a terminal
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 
-" color snazzier
+color snazzier
 
 " set background=light " for the light version or dark for dark
-" let g:one_allow_italics = 1 " I love italic for comments
-colorscheme one
-hi Normal                guibg=NONE  ctermbg=NONE
+let g:one_allow_italics = 1 " I love italic for comments
+" color oner
 
 if has('gui_running')
   set guioptions=ec
