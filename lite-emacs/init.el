@@ -225,8 +225,45 @@ new windows will each be 180 columns wide, and sit just below the threshold.
         (dired-hide-details-mode)
         (dired-sort-toggle-or-edit)))
 
+;; TODO still getting there
+(defun my|replace-word-under-cursor ()
+  "Replace word under cursor."
+  (interactive)
+  (print (thing-at-point 'word)))
+
+(global-set-key (kbd "C-q") 'my|replace-word-under-cursor)
+
+(defun exercism-submit ()
+  "Submit current file."
+  (interactive)
+  (async-shell-command (concat "exercism submit " (buffer-file-name))))
+
+(define-minor-mode exercism-mode
+  "Toggle exercism mode.
+     Interactively with no argument, this command toggles the mode.
+     A positive prefix argument enables the mode, any other prefix
+     argument disables it.  From Lisp, argument omitted or nil enables
+     the mode, `toggle' toggles the state.
+     
+     When Exercism mode is enabled, A few things are bound to C-c.
+     See the command \\[exercism-submit]."
+  ;; The initial value.
+  nil
+  ;; The indicator for the mode line.
+  " exercism"
+  ;; The minor mode bindings.
+  '(([C-c C-e s] . exercism-submit))
+  :group 'exercism)
+
 ;;; packages
 ;; ==================================================================================
+(use-package restart-emacs)
+
+(use-package dired-k
+  :hook (dired-mode . dired-k)
+  :config
+  (setq dired-k-padding 5))
+
 (use-package hydra)
 
 ;; too slow
@@ -376,23 +413,27 @@ Frames: _f_rame new  _df_ delete
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (projectile-mode +1)
   (projectile-register-project-type 'yarn '("yarn.lock")
-                                    :compile "yarn"
-                                    :test "yarn test"
-                                    :run "yarn start"
-                                    :test-suffix ".spec")
+				    :compile "yarn"
+				    :test "yarn test"
+				    :run "yarn start"
+				    :test-suffix ".spec")
 
   (projectile-register-project-type 'npm '("package-lock.json")
-                                    :compile "npm i"
-                                    :test "npm test"
-                                    :run "npm start"
+				    :compile "npm i"
+				    :test "npm test"
+				    :run "npm start"
 				    :test-suffix "_test")
 
   (projectile-register-project-type 'gradle '("build.gradle")
-                                    :compile "npm i"
-                                    :test "npm test"
-                                    :run "npm start"
+				    :compile "npm i"
+				    :test "npm test"
+				    :run "npm start"
 				    :test-suffix "Test")
 
+  (projectile-register-project-type 'sbt '("build.sbt")
+				    :compile "sbt compile"
+				    :test "sbt test"
+				    :test-suffix "Test")
   (defun my|test-file-ts ()
     "Run tests on current typescript file."
     (interactive)
@@ -696,6 +737,13 @@ Frames: _f_rame new  _df_ delete
   (setq web-mode-content-types-alist
 	'(("jsx"  . ".*\\.js[x]?\\'")))
   ;; (add-hook 'web-mode-hook 'my|web-checkers)
+  (add-hook 'web-mode-hook 'my|web-mode-settings)
+
+  (defun my|web-mode-settings ()
+    "Hooks for Web mode."
+    (setq web-mode-enable-auto-closing t)
+    (setq web-mode-enable-auto-quoting nil)
+    (setq web-mode-markup-indent-offset 2))
 
   (defun my|web-checkers ()
     "Use eslint despite lsp's enthusiasm"
@@ -720,6 +768,9 @@ Frames: _f_rame new  _df_ delete
 
 (use-package sbt-mode
   :commands sbt-start sbt-command
+  :bind
+  (:map scala-mode-map
+	("C-c C-x" . sbt-run-previous-command))
   :config
   ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
   ;; allows using SPACE when in the minibuffer
@@ -728,8 +779,7 @@ Frames: _f_rame new  _df_ delete
    'self-insert-command
    minibuffer-local-completion-map)
    ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
-   (setq sbt:program-options '("-Dsbt.supershell=false"))
-)
+   (setq sbt:program-options '("-Dsbt.supershell=false")))
 
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
 
