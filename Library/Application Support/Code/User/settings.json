@@ -150,7 +150,7 @@
     }
   ],
   "vsicons.dontShowNewVersionMessage": true,
-  "workbench.colorTheme": "One Dark Pro",
+  "workbench.colorTheme": "Nord",
   "problems.decorations.enabled": false,
   "editor.codeLens": false,
   "todohighlight.keywords": [

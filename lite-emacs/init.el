@@ -828,6 +828,8 @@ Frames: _f_rame new  _df_ delete
   :disabled
   :after lsp-mode)
 
+(use-package glsl-mode)
+
 ;; (use-package flycheck
 ;;   :after lsp-mode
 ;;   :init (global-flycheck-mode)
