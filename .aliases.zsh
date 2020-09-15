@@ -49,6 +49,7 @@ alias treee='tree src -I "*~"'
 
 alias mcfuckoff='sudo /usr/local/McAfee/AntiMalware/VSControl stopoas'
 alias yi='sudo /usr/local/McAfee/AntiMalware/VSControl stopoas && yarn install && sudo /usr/local/McAfee/AntiMalware/VSControl startoas'
+alias watch_del="watchman watch-del-all"
 
 #---------------------------------------------#
 # RUNNERS
@@ -155,6 +156,7 @@ alias gqt="skyport_test_modified_files"
 alias gqc="ctags -R src/schema/"
 alias gqv="compare_skyport_vault_keys"
 function skyport() { cp "$HOME/service/skyport-graphql/.env.$1" "$HOME/service/skyport-graphql/.env.integration" }
+alias gnuke="git clean -dfX"
 
 #---------------------------------------------#
 # OTHER

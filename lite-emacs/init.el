@@ -318,7 +318,7 @@ Frames: _f_rame new  _df_ delete
 (use-package fic-mode
   :hook
   (prog-mode)
-  (web-mode)
+  ;; (web-mode)
   :config
   (custom-set-faces
    '(fic-face ((t (:inherit warning :weight bold))))))
@@ -725,8 +725,8 @@ Frames: _f_rame new  _df_ delete
 
 (use-package web-mode
   :init
-  (add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
+  ;; (add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
+  ;; (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.ts\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
   :config
@@ -734,8 +734,8 @@ Frames: _f_rame new  _df_ delete
               '(("javascript" . "//")
                 ("typescript" . "//")))
 
-  (setq web-mode-content-types-alist
-	'(("jsx"  . ".*\\.js[x]?\\'")))
+  ;; (setq web-mode-content-types-alist
+  ;; 	'(("jsx"  . ".*\\.js[x]?\\'")))
   ;; (add-hook 'web-mode-hook 'my|web-checkers)
   (add-hook 'web-mode-hook 'my|web-mode-settings)
 
@@ -754,6 +754,7 @@ Frames: _f_rame new  _df_ delete
   :init
   :hook
   (web-mode)
+  (js-mode)
   (rjsx-mode))
 
 (use-package rust-mode
@@ -820,17 +821,20 @@ Frames: _f_rame new  _df_ delete
 ;;   :after lsp-mode
 ;;   :init (global-flycheck-mode)
 ;;   :config
-;;   (flycheck-add-mode 'javascript-eslint 'web-mode)
-;;   (flycheck-add-next-checker 'javascript-eslint 'lsp))
+;;   ;; (flycheck-add-mode 'javascript-eslint 'web-mode)
+;;   ;; (flycheck-add-next-checker 'javascript-eslint 'lsp))
 
-  ;; go-build is last in the checkers, so then finish with lsp
-  ;; (flycheck-add-next-checker 'go-build 'lsp))
-  ;; (add-hook 'go-mode-hook
-  ;; 	    (lambda () (flycheck-add-next-checker 'lsp 'go-vet))))
-  ;; (add-hook 'web-mode-hook
-  ;; 	    (lambda () (flycheck-add-next-checker 'lsp 'javascript-eslint))))
-  ;; (add-hook 'web-mode-hook
-  ;; 	    (lambda () (flycheck-select-checker 'javascript-eslint))))
+;;   ;; go-build is last in the checkers, so then finish with lsp
+;;   ;; (flycheck-add-next-checker 'go-build 'lsp))
+;;   ;; (add-hook 'go-mode-hook
+;;   ;; 	    (lambda () (flycheck-add-next-checker 'lsp 'go-vet))))
+;;   ;; (add-hook 'web-mode-hook
+;;   ;; 	    (lambda () (flycheck-add-next-checker 'lsp 'javascript-eslint))))
+;;   ;; (add-hook 'web-mode-hook
+;;   ;; 	    (lambda () (flycheck-select-checker 'javascript-eslint)))
+;;   (add-hook 'js-mode-hook
+;; 	    (lambda () (flycheck-select-checker 'javascript-eslint)))
+;;   )
 
 ;; (use-package dired+
 ;;   :config
@@ -1090,31 +1094,31 @@ Frames: _f_rame new  _df_ delete
   ;; (define-key js2-refactor-mode-map (kbd "C-c C-e C-f") 'js2r-extract-function)
   ;; (evil-define-key 'normal js2-refactor-mode-map ",c" 'org-toggle-checkbox)
   ;; vterm mode
-  (evil-define-key 'insert vterm-mode-map (kbd "C-e")      #'vterm--self-insert)
-  (evil-define-key 'insert vterm-mode-map (kbd "C-f")      #'vterm--self-insert)
-  (evil-define-key 'insert vterm-mode-map (kbd "C-a")      #'vterm--self-insert)
-  (evil-define-key 'insert vterm-mode-map (kbd "C-v")      #'vterm--self-insert)
-  (evil-define-key 'insert vterm-mode-map (kbd "C-b")      #'vterm--self-insert)
-  (evil-define-key 'insert vterm-mode-map (kbd "C-w")      #'vterm--self-insert)
-  (evil-define-key 'insert vterm-mode-map (kbd "C-u")      #'vterm--self-insert)
-  (evil-define-key 'insert vterm-mode-map (kbd "C-d")      #'vterm--self-insert)
-  (evil-define-key 'insert vterm-mode-map (kbd "C-n")      #'vterm--self-insert)
-  (evil-define-key 'insert vterm-mode-map (kbd "C-m")      #'vterm--self-insert)
-  (evil-define-key 'insert vterm-mode-map (kbd "C-p")      #'vterm--self-insert)
-  (evil-define-key 'insert vterm-mode-map (kbd "C-j")      #'vterm--self-insert)
-  (evil-define-key 'insert vterm-mode-map (kbd "C-k")      #'vterm--self-insert)
-  (evil-define-key 'insert vterm-mode-map (kbd "C-r")      #'vterm--self-insert)
-  (evil-define-key 'insert vterm-mode-map (kbd "C-t")      #'vterm--self-insert)
-  (evil-define-key 'insert vterm-mode-map (kbd "C-g")      #'vterm--self-insert)
-  (evil-define-key 'insert vterm-mode-map (kbd "C-c")      #'vterm--self-insert)
-  (evil-define-key 'insert vterm-mode-map (kbd "C-SPC")    #'vterm--self-insert)
-  (evil-define-key 'normal vterm-mode-map (kbd "C-d")      #'vterm--self-insert)
-  (evil-define-key 'normal vterm-mode-map (kbd ",c")       #'multi-vterm)
-  (evil-define-key 'normal vterm-mode-map (kbd ",n")       #'multi-vterm-next)
-  (evil-define-key 'normal vterm-mode-map (kbd ",p")       #'multi-vterm-prev)
-  (evil-define-key 'normal vterm-mode-map (kbd "i")        #'evil-insert-resume)
-  (evil-define-key 'normal vterm-mode-map (kbd "o")        #'evil-insert-resume)
-  (evil-define-key 'normal vterm-mode-map (kbd "<return>") #'evil-insert-resume)
+  ;; (evil-define-key 'insert vterm-mode-map (kbd "C-e")      #'vterm--self-insert)
+  ;; (evil-define-key 'insert vterm-mode-map (kbd "C-f")      #'vterm--self-insert)
+  ;; (evil-define-key 'insert vterm-mode-map (kbd "C-a")      #'vterm--self-insert)
+  ;; (evil-define-key 'insert vterm-mode-map (kbd "C-v")      #'vterm--self-insert)
+  ;; (evil-define-key 'insert vterm-mode-map (kbd "C-b")      #'vterm--self-insert)
+  ;; (evil-define-key 'insert vterm-mode-map (kbd "C-w")      #'vterm--self-insert)
+  ;; (evil-define-key 'insert vterm-mode-map (kbd "C-u")      #'vterm--self-insert)
+  ;; (evil-define-key 'insert vterm-mode-map (kbd "C-d")      #'vterm--self-insert)
+  ;; (evil-define-key 'insert vterm-mode-map (kbd "C-n")      #'vterm--self-insert)
+  ;; (evil-define-key 'insert vterm-mode-map (kbd "C-m")      #'vterm--self-insert)
+  ;; (evil-define-key 'insert vterm-mode-map (kbd "C-p")      #'vterm--self-insert)
+  ;; (evil-define-key 'insert vterm-mode-map (kbd "C-j")      #'vterm--self-insert)
+  ;; (evil-define-key 'insert vterm-mode-map (kbd "C-k")      #'vterm--self-insert)
+  ;; (evil-define-key 'insert vterm-mode-map (kbd "C-r")      #'vterm--self-insert)
+  ;; (evil-define-key 'insert vterm-mode-map (kbd "C-t")      #'vterm--self-insert)
+  ;; (evil-define-key 'insert vterm-mode-map (kbd "C-g")      #'vterm--self-insert)
+  ;; (evil-define-key 'insert vterm-mode-map (kbd "C-c")      #'vterm--self-insert)
+  ;; (evil-define-key 'insert vterm-mode-map (kbd "C-SPC")    #'vterm--self-insert)
+  ;; (evil-define-key 'normal vterm-mode-map (kbd "C-d")      #'vterm--self-insert)
+  ;; (evil-define-key 'normal vterm-mode-map (kbd ",c")       #'multi-vterm)
+  ;; (evil-define-key 'normal vterm-mode-map (kbd ",n")       #'multi-vterm-next)
+  ;; (evil-define-key 'normal vterm-mode-map (kbd ",p")       #'multi-vterm-prev)
+  ;; (evil-define-key 'normal vterm-mode-map (kbd "i")        #'evil-insert-resume)
+  ;; (evil-define-key 'normal vterm-mode-map (kbd "o")        #'evil-insert-resume)
+  ;; (evil-define-key 'normal vterm-mode-map (kbd "<return>") #'evil-insert-resume)
   ;; org mode
   (evil-define-key 'normal org-mode-map (kbd "TAB") 'org-cycle)
   (evil-define-key 'normal org-mode-map ",c" 'org-toggle-checkbox)

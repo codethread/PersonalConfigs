@@ -32,7 +32,7 @@ SAVEHIST=$HISTSIZE
 #-----------------------------------------
 # Prompt https://scriptingosx.com/2019/07/moving-to-zsh-06-customizing-the-zsh-prompt/
 NEWLINE=$'\n' # couldn't get the newline to behave without this
-PROMPT="${NEWLINE}%F{blue}%~${NEWLINE}%(?.%F{magenta}ᕕ(ᐛ)ᕗ.%F{red}(╯°□°%)╯︵ ┻━┻) %F{normal}"
+PROMPT="${NEWLINE}%F{cyan}%~${NEWLINE}%(?.%F{magenta}ᕕ(ᐛ)ᕗ.%F{red}(╯°□°%)╯︵ ┻━┻) %F{normal}"
 # time
 # RPROMPT='%F{yellow}%*'
 
@@ -66,12 +66,27 @@ FZF_ALT_C_COMMAND="fd --type d --exclude '{Library,Music,Applications,Pictures,U
 
 # gcloud
 #-----------------------------------------
-ssource '$HOME/google-cloud-sdk/completion.zsh.inc'
+gcloud() {
+  ssource "$HOME/google-cloud-sdk/completion.zsh.inc"
+  # The next line updates PATH for the Google Cloud SDK.
+  ssource "$HOME/google-cloud-sdk/path.zsh.inc"
+}
 
 # java
 #-----------------------------------------
 # ssource '/usr/local/Cellar/jenv/0.5.3/libexec/libexec/../completions/jenv.zsh'
-# eval "$(jenv init -)"
+# https://github.com/jenv/jenv/issues/148 speed up ideas
+jenvy() {
+  # brew install rlwrap if this fails
+  eval "$(jenv init -)"
+}
+
+## ruby
+##-----------------------------------------
+rbenv() {
+  eval "$(command rbenv init -)"
+  rbenv "$@"
+}
 
 #------------------------------------------
 #--- Sky Stuff
@@ -80,7 +95,6 @@ if [[ $(whoami) =~ 'adh23' ]]; then
     ssource $SKY_SERVICE_DEV_TOOLS/.sky.sh
 fi
 
-eval "$(jenv init -)"
 # enable this and ~/.zshenv for profiling
 # zprof
 

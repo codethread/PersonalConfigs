@@ -40,4 +40,7 @@ map <Leader>r :action RenameElement<CR>
 map <Leader>pc :action ChooseRunConfiguration<CR>
 
 " window
-map <Leader>ww :action ChooseRunConfiguration<CR>
+map <Leader>ww :vsplit<CR>
+map <Leader>W :action HideAllWindows<CR>
+
+" terminal
