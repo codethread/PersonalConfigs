@@ -134,6 +134,8 @@ endif
 
 " colorscheme onedark
 colorscheme nord
+" highlight Normal ctermbg=none
+" highlight NonText ctermbg=none
 nnoremap Q :echo "Q (Ex mode) has been disabled in vimrc because it's a little shit"<CR>
 
 let mapleader = " "

@@ -676,6 +676,8 @@ Frames: _f_rame new  _df_ delete
       :commands org-bullets-mode
       :hook (org-mode . org-bullets-mode)))
 
+(use-package org-download)
+
 (use-package markdown-mode
   :hook
   (markdown-mode . flyspell-mode)
@@ -815,6 +817,7 @@ Frames: _f_rame new  _df_ delete
 (use-package gradle-mode)
 
 (use-package lsp-metals
+  :disabled
   :after lsp-mode)
 
 ;; (use-package flycheck
@@ -1208,14 +1211,21 @@ _s_kip
 
 ;; THEMES + FACES
 ;; --------------------------------------------------------
+(use-package nord-theme)
+
 (use-package doom-themes
+  ;; :unless window-system
   :config
   (when window-system (set-frame-font "Hack Nerd Font:size=14"))
   ;; (when window-system (set-frame-font "FiraCode Nerd Font:size=14"))
 
-  (if window-system
-      (load-theme 'doom-one t)
-    (load-theme 'doom-nord t))
+  ;; (if window-system
+  ;;     (load-theme 'doom-one t)
+  ;;   (load-theme 'doom-nord t))
+
+  (load-theme 'doom-nord t)
+
+  ;; (load-theme 'nord t))
 
   ;; (load-theme 'doom-one-light t) ;; good for sun
 
@@ -1234,6 +1244,7 @@ _s_kip
 				    ) 'append)
 ;; TODO remove as it slows things
 (use-package doom-modeline
+  ;; :unless window-system
   :hook (after-init . doom-modeline-mode)
   :config
   (setq doom-modeline-height 20
@@ -1243,6 +1254,25 @@ _s_kip
 	doom-modeline-buffer-file-name-style 'truncate-except-project
 	;; Whether display buffer encoding.
 	doom-modeline-buffer-encoding nil))
+
+(use-package olivetti
+  :disabled
+  :if window-system
+  :hook (org-mode . olivetti-mode))
+
+(use-package poet-theme
+  :disabled
+  :if window-system
+  :config
+  (blink-cursor-mode 0)
+  (load-theme 'poet t)
+  (custom-set-faces
+   '(vertical-border ((t (:background "black" :foreground "controlColor")))))
+  ;; non monospace font
+  (set-frame-font "Avenir Next:size=14"))
+
+(use-package hide-mode-line
+  :hook (org-mode . hide-mode-line-mode))
 
 ;; (setq-default mode-line-buffer-identification
 ;;               (let ((orig  (car mode-line-buffer-identification)))

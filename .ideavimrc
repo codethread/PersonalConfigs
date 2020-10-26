@@ -6,6 +6,8 @@ set multiple-cursors
 set commentary
 " change arguments as object
 set argtextobj
+" global clipboard
+set clipboard+=unnamed
 map s :action AceAction<CR>
 
 " TODO not yet working
@@ -14,6 +16,7 @@ map <Leader>; :action FindAction<CR>
 " buffer
 map <Leader>br :action RenameFile<CR>
 map <Leader>bp :action JumpToLastWindow<CR>
+map <Leader>bl :action RecentFiles<CR>
 
 " errors
 map <Leader>eh :action ShowErrorDescription<CR>
