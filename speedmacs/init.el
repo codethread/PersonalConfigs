@@ -1,0 +1,209 @@
+;;; Startup Performance
+;; -----------------------------------------------------
+
+;; reduce the frequency of garbage collection by making it happen on
+;; each 50MB of allocated data (the default is on every 0.76MB)
+(setq gc-cons-threshold (* 50 1000 1000))
+
+;; Profile emacs startup
+(add-hook 'emacs-startup-hook
+	  (lambda ()
+	    (message "*** Emacs loaded in %s with %d garbage collections."
+		     (format "%.2f seconds"
+			     (float-time
+			      (time-subtract after-init-time before-init-time)))
+		     gcs-done)))
+
+(setq user-emacs-directory "~/.emacs.d"
+      backup-directory-alist `(("." . ,(expand-file-name "backups" user-emacs-directory)))
+      url-history-file (expand-file-name "url/history" user-emacs-directory)
+      auto-save-list-file-prefix (expand-file-name "auto-save-list/.saves-" user-emacs-directory)
+      projectile-known-projects-file (expand-file-name "projectile-bookmarks.eld" user-emacs-directory))
+
+;; Keep customization settings in a temporary file (thanks Ambrevar!)
+(setq custom-file
+      (if (boundp 'server-socket-dir)
+	  (expand-file-name "custom.el" server-socket-dir)
+	(expand-file-name (format "emacs-custom-%s.el" (user-uid)) temporary-file-directory)))
+(load custom-file t)
+
+;;; Per System Settings
+;; -----------------------------------------------------
+
+;; not sure if needed but can take inspiration from https://github.com/daviwil/dotfiles/blob/master/Emacs.org#system-settings
+
+;; -----------------------------------------------------
+;; Package Manager
+;; -----------------------------------------------------
+
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+(add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
+
+(setq package-enable-at-startup nil)
+(package-initialize)
+
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+(eval-when-compile (require 'use-package))
+(require 'use-package-ensure)
+(setq use-package-always-ensure t)
+
+;; -----------------------------------------------------
+;; Load Paths
+;; -----------------------------------------------------
+
+;; Add custom elisp files to load-path - used by require
+(push "~/.emacs.d/elisp" load-path)
+
+;; -----------------------------------------------------
+;; OSX specific code
+;; -----------------------------------------------------
+
+(declare-function exec-path-from-shell-initialize "exec-path-from-shell.el")
+
+(when (eq system-type 'darwin)
+  ;; On OS X Emacs doesn't use the shell PATH if it's not started from
+  ;; the shell. Let's fix that:
+  (use-package exec-path-from-shell
+    :custom
+    (exec-path-from-shell-arguments '("-l"))
+    (exec-path-from-shell-variables '("PATH" "MANPATH" "SPOTIFY_TOKEN" "SLACK_SKY_EMACS_TOKEN"))
+    :config
+    (exec-path-from-shell-initialize))
+
+  ;; fix alt as meta key
+  (setq ns-function-modifier 'hyper) 
+
+  ;; Enable emoji, and stop the UI from freezing when trying to display them.
+  (if (fboundp 'set-fontset-font)
+      (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend)))
+
+;; -----------------------------------------------------
+;; Emacs Settings
+;; -----------------------------------------------------
+
+(setq inhibit-startup-message t)	; straight to scratch
+
+;; Backup and Autosave Directories
+(setq temporary-file-directory "~/tmp/")
+(setq backup-directory-alist
+      `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms
+      `((".*" ,temporary-file-directory t)))
+
+(setq vc-follow-symlinks t
+      compilation-scroll-output t
+      indent-tabs-mode nil
+      show-paren-mode t ; highlight parens
+
+      large-file-warning-threshold 100000000 ; warn when opening files bigger than 100MB
+
+      help-window-select t
+      ;; split-width-threshold 170 ; always split vertically if there's room
+      ;; split-height-threshold nil ; Split horizontally when opening a new window from a command
+      ring-bell-function #'ignore
+      visible-bell t
+      window-resize-pixelwise t
+      save-abbrevs 'silently
+      frame-resize-pixelwise t
+      ;; dired-listing-switches "-lat" ; list, all, alphabetical
+      )
+
+;; control amount of fontification, can be done per mode if slow
+(setq font-lock-maximum-decoration 3)
+
+;; backup file config
+(setq backup-by-copying t ; slow but sure way of saving
+      ;; auto-save-file-name-transforms `((".*" . "~/.emacs-file-saves")) ; store all backup files in home directory
+
+      ;; If that's too slow for some reason you might also
+      ;; have a look at backup-by-copying-when-linked
+      ;; https://stackoverflow.com/questions/151945/how-do-i-control-how-emacs-makes-backup-files
+      version-control t                 ; version numbers for backup files
+
+      delete-old-versions t ; delete excess backup files silently
+      )
+
+(when (fboundp 'tool-bar-mode)
+  (tool-bar-mode -1))
+
+(add-to-list 'default-frame-alist '(tool-bar-lines . 0))
+(add-to-list 'default-frame-alist '(menu-bar-lines . 0))
+(add-to-list 'default-frame-alist '(vertical-scroll-bars))
+(add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+(add-to-list 'default-frame-alist '(ns-appearance . dark))
+;; (setq ns-use-proxy-icon nil) ;; not sure why undefined
+
+;; Set symbol for the border
+(set-display-table-slot standard-display-table
+			'vertical-border
+			(make-glyph-code ?┃))
+
+(setq frame-title-format nil)
+
+(load-theme 'wombat)
+
+(set-face-attribute 'default nil :font "Hack Nerd Font" :height 140)
+
+;; -----------------------------------------------------
+;; Packages
+;; -----------------------------------------------------
+
+(use-package delight)
+
+(use-package which-key
+  :delight
+  :config
+  (which-key-mode t)
+  (setq which-key-idle-delay 0.3))
+
+(use-package eldoc
+  :delight)
+
+;; -----------------------------------------------------
+;; Evil
+;; -----------------------------------------------------
+
+(use-package evil
+  :init
+  (setq evil-want-integration t)
+  (setq evil-want-keybinding nil)
+  (setq evil-want-C-u-scroll t)
+  (setq evil-want-C-i-jump nil)
+  (setq evil-respect-visual-line-mode t)
+  :bind
+  (:map evil-normal-state-map
+	("C-e"		. move-end-of-line) ; reset
+	)
+  :config
+  (evil-mode t))
+
+(use-package evil-commentary
+  :delight
+  :config
+  (evil-commentary-mode t))
+
+(use-package evil-surround
+  :config
+  (global-evil-surround-mode 1))
+
+(use-package evil-collection
+  :config
+  (evil-collection-init))
+
+;; -----------------------------------------------------
+;; Projects
+;; -----------------------------------------------------
+
+(use-package projectile
+  :delight '(:eval (concat " " (projectile-project-name)))
+  :config (projectile-mode)
+  :bind-keymap
+  ("C-c p" . projectile-command-map)
+  :init
+  (setq projectile-switch-project-action #'projectile-dired))
+

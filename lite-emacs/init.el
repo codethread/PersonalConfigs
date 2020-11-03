@@ -3,7 +3,6 @@
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
 
@@ -583,6 +582,7 @@ Frames: _f_rame new  _df_ delete
 	org-hide-emphasis-markers t
 	org-startup-folded t
 	org-log-done 'time
+	org-ellipsis " ▾"
         org-image-actual-width nil ; allows images to be resized with #+ATTR_ORG: :width 100
 	org-agenda-span 8)
 
@@ -674,9 +674,17 @@ Frames: _f_rame new  _df_ delete
 (if window-system
     (use-package org-bullets
       :commands org-bullets-mode
-      :hook (org-mode . org-bullets-mode)))
+      :hook (org-mode . org-bullets-mode)
+      :custom
+      (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●"))))
 
 (use-package org-download)
+
+(use-package org-alert
+  :custom (alert-default-style 'osx-notifier)
+  :config
+  (setq org-alert-interval 300)
+  (org-alert-enable))
 
 (use-package markdown-mode
   :hook
@@ -1272,6 +1280,7 @@ _s_kip
   (set-frame-font "Avenir Next:size=14"))
 
 (use-package hide-mode-line
+  :disabled
   :hook (org-mode . hide-mode-line-mode))
 
 ;; (setq-default mode-line-buffer-identification
@@ -1299,5 +1308,9 @@ _s_kip
 ;;        ;; value of `mode-name'
 ;;        "%m "
 ;;        minor-mode-list))
+
+;;; WIP
+;; ==================================================================================
+
 
 ;;; init.el ends here
