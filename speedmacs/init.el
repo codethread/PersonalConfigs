@@ -6,13 +6,13 @@
 (setq gc-cons-threshold (* 50 1000 1000))
 
 ;; Profile emacs startup
-(add-hook 'emacs-startup-hook
-	  (lambda ()
-	    (message "*** Emacs loaded in %s with %d garbage collections."
-		     (format "%.2f seconds"
-			     (float-time
-			      (time-subtract after-init-time before-init-time)))
-		     gcs-done)))
+;; (add-hook 'emacs-startup-hook
+;; 	  (lambda ()
+;; 	    (message "*** Emacs loaded in %s with %d garbage collections."
+;; 		     (format "%.2f seconds"
+;; 			     (float-time
+;; 			      (time-subtract after-init-time before-init-time)))
+;; 		     gcs-done)))
 
 (setq user-emacs-directory "~/.emacs.d"
       backup-directory-alist `(("." . ,(expand-file-name "backups" user-emacs-directory)))
@@ -114,7 +114,7 @@
       )
 
 ;; control amount of fontification, can be done per mode if slow
-(setq font-lock-maximum-decoration 3)
+(setq font-lock-maximum-decoration t)
 
 ;; backup file config
 (setq backup-by-copying t ; slow but sure way of saving
@@ -196,14 +196,145 @@
   (evil-collection-init))
 
 ;; -----------------------------------------------------
-;; Projects
+;; Projects / Navigation
 ;; -----------------------------------------------------
+
+;; quickly navigate to init.el
+(global-set-key (kbd "C-x C-v")
+		(lambda ()
+		  (interactive)
+		  (find-file "~/.emacs.d/init.el")))
 
 (use-package projectile
   :delight '(:eval (concat " " (projectile-project-name)))
+  :custom
+  ((projectile-completion-system 'ivy))
   :config (projectile-mode)
   :bind-keymap
   ("C-c p" . projectile-command-map)
   :init
   (setq projectile-switch-project-action #'projectile-dired))
 
+;; -----------------------------------------------------
+;; Narrowing / Searching / Lists
+;; -----------------------------------------------------
+
+;; (use-package ido
+;;   :config
+;;   (ido-mode 1)
+;;   (setq ido-enable-flex-matching t)
+;;   (setq ido-everywhere t)
+;;   (setq ido-ignore-extensions t)
+
+;;   ;; show choices vertically
+;;   (progn
+;;     (make-local-variable 'ido-decorations)
+;;     (setf (nth 2 ido-decorations) "\n")))
+
+;; (use-package flx-ido
+;;   :config
+;;   (flx-ido-mode 1)
+;;   ;; disable ido faces to see flx highlights.
+;;   (setq ido-use-faces nil)
+;;   (setq flx-ido-use-faces nil))
+
+(use-package ivy
+  :delight
+  :bind (("C-s" . swiper)
+         :map ivy-minibuffer-map
+         ("TAB" . ivy-alt-done)
+         ("C-l" . ivy-alt-done)
+         ("C-j" . ivy-next-line)
+         ("C-k" . ivy-previous-line)
+         :map ivy-switch-buffer-map
+         ("C-k" . ivy-previous-line)
+         ("C-l" . ivy-done)
+         ("C-d" . ivy-switch-buffer-kill)
+         :map ivy-reverse-i-search-map
+         ("C-k" . ivy-previous-line)
+         ("C-d" . ivy-reverse-i-search-kill))
+  :init
+  (ivy-mode 1)
+  :config
+  (setq ivy-use-virtual-buffers t)
+  (setq ivy-wrap t)
+  (setq ivy-count-format "(%d/%d) ")
+  (setq enable-recursive-minibuffers t))
+
+(use-package counsel
+  :bind (("M-x" . counsel-M-x)
+         ("C-x b" . counsel-ibuffer)
+         ("C-x C-f" . counsel-find-file)
+         :map minibuffer-local-map
+         ("C-r" . 'counsel-minibuffer-history))
+  :config
+  (setq ivy-initial-inputs-alist nil)) ;; Don't start searches with ^
+
+(use-package flx  ;; Improves sorting for fuzzy-matched results
+  :defer t
+  :init
+  (setq ivy-flx-limit 10000))
+
+;; (use-package smex ;; Adds M-x recent command sorting for counsel-M-x
+;;   :defer 1
+;;   :after counsel)
+
+;; -----------------------------------------------------
+;; Languages
+;; -----------------------------------------------------
+
+(use-package lsp-mode
+  :commands lsp
+  :hook ((typescript-mode js2-mode web-mode) . lsp)
+  :bind (:map lsp-mode-map
+         ("TAB" . completion-at-point)))
+
+(use-package add-node-modules-path
+  :init
+  :hook
+  (web-mode)
+  (js-mode)
+  (js2-mode)
+  (rjsx-mode))
+
+(use-package typescript-mode
+  :mode "\\.ts\\'"
+  :config
+  (setq typescript-indent-level 2))
+
+(defun dw/set-js-indentation ()
+  (setq js-indent-level 2)
+  (setq evil-shift-width js-indent-level)
+  (setq-default tab-width 2))
+
+(use-package js2-mode
+  :mode "\\.jsx?\\'"
+	:hook
+	('my|web-checkers)
+  :config
+	(defun my|web-mode-checkers ()
+		"Use eslint despite lsp's enthusiasm"
+		(interactive)
+		(setq-local flycheck-checker 'javascript-eslint))
+
+	(add-hook 'js2-mode-hook 'my|web-mode-checkers)
+
+	;; Use js2-mode for Node scripts
+  (add-to-list 'magic-mode-alist '("#!/usr/bin/env node" . js2-mode))
+
+  ;; Don't use built-in syntax checking
+  (setq js2-mode-show-strict-warnings nil)
+
+  ;; Set up proper indentation in JavaScript and JSON files
+  (add-hook 'js2-mode-hook #'dw/set-js-indentation)
+  (add-hook 'json-mode-hook #'dw/set-js-indentation))
+
+(use-package prettier-js
+  :hook ((js2-mode . prettier-js-mode)
+         (typescript-mode . prettier-js-mode))
+  :config
+  (setq prettier-js-show-errors nil))
+
+(use-package flycheck
+  :defer t
+  :hook (prog-mode . flycheck-mode))
