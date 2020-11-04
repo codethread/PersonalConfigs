@@ -304,6 +304,8 @@ map <leader>gv :e $MYVIMRC<CR>
 map <leader>pp :Projects<CR>
 " }}}
 
+imap jk <Esc>
+nnoremap <silent> <C-\> :<C-u>CocList -I grep<cr>
 " map <leader><SPACE> :Files<CR>
 map <leader><SPACE> :<C-u>CocList files<cr>
 
