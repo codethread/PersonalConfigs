@@ -208,7 +208,7 @@
 (use-package projectile
   :delight '(:eval (concat " " (projectile-project-name)))
   :custom
-  ((projectile-completion-system 'ivy))
+  ((projectile-completion-system 'default))
   :config (projectile-mode)
   :bind-keymap
   ("C-c p" . projectile-command-map)
@@ -219,24 +219,18 @@
 ;; Narrowing / Searching / Lists
 ;; -----------------------------------------------------
 
-;; (use-package ido
-;;   :config
-;;   (ido-mode 1)
-;;   (setq ido-enable-flex-matching t)
-;;   (setq ido-everywhere t)
-;;   (setq ido-ignore-extensions t)
+;; Tried helm/ivy/ido/selectrum, went with ivy default sorting/filtering
+;;
+;; ivy seems most performant. Ido can be faster if fzy matching is turned off but then it's matching must be exact.
+;; ido + flx was most precise but lag was considerable in a large work project, in a smaller project its benifits
+;; probably wouldn't be noticable. Helm was just slow out of the box, maybe it can be tweaked to be faster but
+;; that would probably turn it into Ivy
+;; ivy + flx
 
-;;   ;; show choices vertically
-;;   (progn
-;;     (make-local-variable 'ido-decorations)
-;;     (setf (nth 2 ido-decorations) "\n")))
-
-;; (use-package flx-ido
-;;   :config
-;;   (flx-ido-mode 1)
-;;   ;; disable ido faces to see flx highlights.
-;;   (setq ido-use-faces nil)
-;;   (setq flx-ido-use-faces nil))
+;; Improves sorting for fuzzy-matched results
+(use-package flx 
+  :init
+  (setq ivy-flx-limit 10000))
 
 (use-package ivy
   :delight
@@ -256,24 +250,21 @@
   :init
   (ivy-mode 1)
   :config
+  (setq ivy-re-builders-alist
+	'((projectile-find-file . ivy--regex-plus) ; turn off fzy for these larger lists as its slow
+	  (t . ivy--regex-fuzzy))) ; use fzy for everything else
   (setq ivy-use-virtual-buffers t)
   (setq ivy-wrap t)
   (setq ivy-count-format "(%d/%d) ")
-  (setq enable-recursive-minibuffers t))
+  (setq ivy-initial-inputs-alist nil)
+  (setq enable-recursive-minibuffers t)) ;; Don't start searches with ^
 
 (use-package counsel
   :bind (("M-x" . counsel-M-x)
          ("C-x b" . counsel-ibuffer)
          ("C-x C-f" . counsel-find-file)
          :map minibuffer-local-map
-         ("C-r" . 'counsel-minibuffer-history))
-  :config
-  (setq ivy-initial-inputs-alist nil)) ;; Don't start searches with ^
-
-(use-package flx  ;; Improves sorting for fuzzy-matched results
-  :defer t
-  :init
-  (setq ivy-flx-limit 10000))
+         ("C-r" . 'counsel-minibuffer-history)))
 
 ;; (use-package smex ;; Adds M-x recent command sorting for counsel-M-x
 ;;   :defer 1
