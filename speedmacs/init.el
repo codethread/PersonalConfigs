@@ -234,7 +234,7 @@
     "<SPC> n" "Notes"
     "<SPC> p" "Projects"
     "<SPC> s" "Search"
-    "<SPC> S" "Slack"
+    "<SPC> S" "Web"
     "<SPC> t" "Term"
     "<SPC> w" "Window"
     "<SPC> W" "Layouts"
@@ -309,6 +309,29 @@
   ;; (setq aw-background nil)
   (custom-set-faces '(aw-leading-char-face ((t (:inherit warning :weight bold :height 2.0))))))
 
+(use-package yasnippet
+  :config
+  (yas-global-mode 1))
+
+;; http://andreacrotti.github.io/yasnippet-snippets/snippets.html
+(use-package yasnippet-snippets)
+
+;; this is really slow, and gets pissed on by ranger
+;;preview files in dired
+(use-package peep-dired
+  :ensure t
+  :defer t ; don't access `dired-mode-map' until `peep-dired' is loaded
+  :bind (:map dired-mode-map
+              ("P" . peep-dired))
+  :init
+  (defhydra hydra-peep-dired (:color red :hint nil)
+    "Peepshow"
+    ("j" peep-dired-next-file "next")
+    ("k" peep-dired-prev-file "previous")
+    ("K" peep-dired-scroll-page-up "scroll up")
+    ("J" peep-dired-scroll-page-down "scroll down")
+    ("q" peep-dired-kill-buffers-without-window "close" :color blue)))
+
 ;; -----------------------------------------------------
 ;; Themes
 ;; -----------------------------------------------------
@@ -358,6 +381,13 @@
 ;; -----------------------------------------------------
 ;; Evil
 ;; -----------------------------------------------------
+(setq browse-url-browser-function 'xwidget-webkit-browse-url)
+(defun my|browse-at-point ()
+  "Browse sentence under cursor."
+  (interactive)
+  (xwidget-webkit-new-session
+   (concat "https://google.com/?q=" (thing-at-point 'sentence 'no-properties))))
+
 (use-package evil-leader
   :delight
   :init
@@ -446,6 +476,12 @@
     "ss" 'ripgrep-regexp		;; search from current dir out
     "sl" 'xref-find-references		;; also ag or grep
 
+    ;;
+    "Sn" 'xwidget-webkit-browse-url
+    "SS" '(lambda () (interactive) (xwidget-webkit-new-session "https://google.com"))
+    "Sg" 'my|browse-at-point
+    ;; "SS" 'xwidget-webkit-cx3
+
     ;; n --- notes
     "na" 'org-agenda
     "nb" 'org-switchb
@@ -474,11 +510,6 @@
     "pR" 'projectile-regenerate-tags			;;  "Find recent project files"
     "ps" 'deadgrep					;;  "Search with rg"
     "pt" 'my|test-file					;; test file in project
-
-    ;; S -- slack
-    "SS" 'slack-im-select
-    "Su" 'helm-slack-unreads
-    "Sk" 'helm-slack ;; quite slow to load all groups
 
     ;; t --- terminal
     "tn" 'multi-vterm
