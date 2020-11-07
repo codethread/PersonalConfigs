@@ -122,10 +122,14 @@
 ;;    ;; instead they should end up in temporary-file-directory
 ;;    ()))
 
+(when window-system
+  (setq browse-url-browser-function 'xwidget-webkit-browse-url))
+
 (setq indent-tabs-mode nil
       inhibit-startup-screen t
 
       large-file-warning-threshold 100000000 ; warn when opening files bigger than 100MB
+
 
       help-window-select t
       ;; split-width-threshold 170 ; always split vertically if there's room
@@ -137,8 +141,6 @@
       frame-resize-pixelwise t
       ;; dired-listing-switches "-lat" ; list, all, alphabetical
       )
-
-
 
 ;; control amount of fontification, can be done per mode if slow
 (setq font-lock-maximum-decoration t)
@@ -284,9 +286,8 @@
   (custom-set-faces
    '(fic-face ((t (:inherit warning :weight bold))))))
 
-(use-package ace-jump-mode
-  :config
-  (autoload 'ace-jump-mode-pop-mark "Ace jump back:-)" t))
+;; jump to char/word/line
+(use-package avy)
 
 (use-package ace-window
   :bind ("M-o" . ace-window)
@@ -317,7 +318,7 @@
 (use-package yasnippet-snippets)
 
 ;; this is really slow, and gets pissed on by ranger
-;;preview files in dired
+;; preview files in dired
 (use-package peep-dired
   :ensure t
   :defer t ; don't access `dired-mode-map' until `peep-dired' is loaded
@@ -335,6 +336,7 @@
 ;; -----------------------------------------------------
 ;; Themes
 ;; -----------------------------------------------------
+
 (use-package nord-theme
   :disabled
   :config
@@ -378,10 +380,23 @@
   (setq sml/theme 'atom-one-dark)
   (sml/setup))
 
+;; change mode-line color by evil state
+(lexical-let ((default-color (cons (face-background 'mode-line)
+				   (face-foreground 'mode-line))))
+  (add-hook 'post-command-hook
+	    (lambda ()
+	      (let ((color (cond ((minibufferp) default-color)
+				 ((evil-insert-state-p) '("#e80000" . "#ffffff"))
+				 ((evil-emacs-state-p)  '("#444488" . "#ffffff"))
+				 ((buffer-modified-p)   '("#006fa0" . "#ffffff"))
+				 (t default-color))))
+		(set-face-background 'mode-line (car color))
+		(set-face-foreground 'mode-line (cdr color))))))
+
 ;; -----------------------------------------------------
 ;; Evil
 ;; -----------------------------------------------------
-(setq browse-url-browser-function 'xwidget-webkit-browse-url)
+
 (defun my|browse-at-point ()
   "Browse sentence under cursor."
   (interactive)
@@ -522,7 +537,7 @@
     ))
 
 (use-package evil
-  :after evil-leader
+  :after (evil-leader avy)
   :init
   (setq evil-want-integration t)
   (setq evil-want-keybinding nil)
@@ -537,8 +552,8 @@
 	("C-e"	. move-end-of-line) ; replace scroll up
 	("C-u"	. evil-scroll-up) ; get scroll up back and replace with C-m as it's just return
 	("C-y"	. universal-argument)
-	("s"	. ace-jump-mode)
-	("S"	. ace-jump-char-mode)
+	("s"	. avy-goto-word-1)
+	("S"	. avy-goto-char)
 	("gf"	. projectile-find-file-dwim)
 	("gh"	. lsp-describe-thing-at-point))
   :config
@@ -580,6 +595,28 @@
   (evil-define-key 'normal markdown-mode-map "j" 'evil-next-visual-line)
   (evil-define-key 'normal markdown-mode-map "k" 'evil-previous-visual-line))
 
+
+(use-package evil-collection
+  :after evil
+  :config
+  (evil-collection-init))
+
+;; https://github.com/Somelauw/evil-org-mode
+(use-package evil-org
+  :delight
+  :ensure t
+  :after org
+  :config
+  (add-hook 'org-mode-hook 'evil-org-mode)
+  (add-hook 'evil-org-mode-hook
+	    (lambda ()
+	      (evil-org-set-key-theme '(textobjects insert navigation additional shift todo heading))))
+  (require 'evil-org-agenda)
+  (evil-org-agenda-set-keys))
+
+(use-package evil-magit
+  :after magit)
+
 (use-package evil-mc
   :delight
   :demand t
@@ -590,8 +627,8 @@
 Add:		 Jump:
 ------------------------------
 _a_ll		 _N_ext
-_n_ext		 _P_revious  
-_p_reivous	 
+_n_ext		 _P_revious
+_p_reivous
 _s_kip
 "
     ("a" evil-mc-make-all-cursors)
@@ -613,30 +650,54 @@ _s_kip
   :config
   (global-evil-surround-mode 1))
 
-(use-package evil-collection
-  :after evil
-  :config
-  (evil-collection-init))
-
-;; https://github.com/Somelauw/evil-org-mode
-(use-package evil-org
-  :delight
-  :ensure t
-  :after org
-  :config
-  (add-hook 'org-mode-hook 'evil-org-mode)
-  (add-hook 'evil-org-mode-hook
-	    (lambda ()
-	      (evil-org-set-key-theme '(textobjects insert navigation additional shift todo heading))))
-  (require 'evil-org-agenda)
-  (evil-org-agenda-set-keys))
-
 (use-package evil-escape
   :delight
   :custom
   ((evil-escape-key-sequence "jk"))
   :config
   (evil-escape-mode t))
+
+(use-package evil-matchit
+    :config
+  (global-evil-matchit-mode t))
+
+(use-package evil-args
+  :config
+  ;; bind evil-args text objects
+  (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
+  (define-key evil-outer-text-objects-map "a" 'evil-outer-arg))
+
+(use-package elscreen
+  :after (evil)
+  :demand t
+  :custom
+  ((elscreen-display-screen-number nil)
+   (elscreen-default-buffer-initial-message nil)
+   (elscreen-display-tab nil)
+   (elscreen-tab-display-kill-screen nil)
+   (elscreen-tab-display-control nil))
+  :config
+  (defhydra hydra-tabs
+    (:color red :hint nil
+	    :pre (setq elscreen-display-tab t)
+	    :post (setq elscreen-display-tab nil))
+    "tabs"
+    ("l" elscreen-next "next")
+    ("h" elscreen-previous "previous")
+    ("j" nil "quit" :color blue)
+    ("n" elscreen-create "new" :color blue))
+  (elscreen-start)
+
+  ;; light theme
+  ;; :custom-face
+  ;; (elscreen-tab-background-face ((t (:background "#dfdfdf" :height 1.3))))
+  ;; (elscreen-tab-current-screen-face ((t (:background "#fafafa" :foreground "#a626a4"))))
+  ;; (elscreen-tab-other-screen-face ((t (:background "#dfdfdf" :foreground "#a190a7"))))
+
+  :custom-face
+  (elscreen-tab-background-face ((t (:background "#1c1f24" :height 1.3))))
+  (elscreen-tab-current-screen-face ((t (:background "#282c34" :foreground "#c678dd"))))
+  (elscreen-tab-other-screen-face ((t (:background "#1c1f24" :foreground "#a190a7")))))
 
 ;; -----------------------------------------------------
 ;; Projects / Navigation
@@ -724,12 +785,23 @@ _s_kip
   :init
   (ivy-rich-mode 1))
 
+(use-package some rubbish
+  :init
+  (poop ode))
+
 (use-package counsel
   :bind (("M-x" . counsel-M-x)
 	 ("C-x b" . counsel-ibuffer)
 	 ("C-x C-f" . counsel-find-file)
 	 :map minibuffer-local-map
-	 ("C-r" . 'counsel-minibuffer-history)))
+	 ("C-r" . 'counsel-minibuffer-history))
+  :config
+  (defun my|yank-pop-replace-selection (&optional arg)
+          "Delete the region before inserting poped string."
+          (when (and evil-mode (eq 'visual evil-state))
+            (kill-region (region-beginning) (region-end))))
+
+  (advice-add 'counsel-yank-pop :before #'moon-override-yank-pop))
 
 ;; Adds M-x recent command sorting for counsel-M-x
 (use-package smex

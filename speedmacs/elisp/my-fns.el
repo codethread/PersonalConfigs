@@ -36,7 +36,8 @@
    "Kill the current buffer without saving."
    (interactive "P")
    ())
-
+;; https://github.com/Dewdrops/evil-extra-operator/blob/f2e9cd12bf9888c440b73628199dcfe7f8efbf4a/evil-extra-operator.el#L151
+;; help with googling
 (provide 'my-fns)
 
 ;;; my-fns.el ends here
