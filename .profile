@@ -6,6 +6,7 @@ if [ "$(uname 2> /dev/null)" != "Linux" ]; then
   [ -d "/usr/local/opt/gnu-sed/libexec/gnubin" ] && pathprepend "/usr/local/opt/gnu-sed/libexec/gnubin" PATH
   [ -d "/Library/Frameworks/Mono.framework/Versions/Current/Commands" ] && pathprepend "/Library/Frameworks/Mono.framework/Versions/Current/Commands" PATH
   [ -d "/usr/local/opt/python/libexec/bin" ] && pathprepend "/usr/local/opt/python/libexec/bin" PATH
+  [ -d "/usr/local/opt/coreutils/libexec/gnubin" ] && pathprepend "/usr/local/opt/coreutils/libexec/gnubin" PATH
 fi
 
 # linux
@@ -23,7 +24,6 @@ export SOURCED_PROFILE=true
 export GOPATH=$HOME/go
 export GOBIN=$GOPATH/bin
 export GO111MODULE=on
-
 [ -d "$GOBIN" ] && pathprepend "$GOBIN" PATH
 [ -d "$HOME/.bin" ] && pathprepend "$HOME/.bin" PATH
 [ -d "$HOME/.local/bin" ] && pathprepend "$HOME/.local/bin" PATH

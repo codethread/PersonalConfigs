@@ -1,4 +1,4 @@
-;;; init.el --- emacs config focusing on a lagless experience
+;;; init.el --- emacs config focusing on a lagless experience -*- no-byte-compile: t -*-
 
 ;;; Commentary:
 
@@ -42,6 +42,21 @@
 
 (load custom-file t)
 
+(server-start)
+
+;; -----------------------------------------------------
+;;; Keep everything smooth and up-to-date
+;; -----------------------------------------------------
+
+;; (byte-recompile-directory (expand-file-name "~/.emacs.d/elpa") 0)
+(unless (package-installed-p 'auto-compile)
+  (package-refresh-contents)
+  (package-install 'auto-compile))
+
+(require 'auto-compile)
+(auto-compile-on-load-mode)
+(auto-compile-on-save-mode)
+
 ;; -----------------------------------------------------
 ;;; Per System Settings
 ;; -----------------------------------------------------
@@ -74,7 +89,6 @@
 ;; controls minor mode descriptions in modeline
 (use-package delight)
 
-(server-start)
 ;; -----------------------------------------------------
 ;; Load Paths
 ;; -----------------------------------------------------
@@ -130,7 +144,6 @@
 
       large-file-warning-threshold 100000000 ; warn when opening files bigger than 100MB
 
-
       help-window-select t
       ;; split-width-threshold 170 ; always split vertically if there's room
       ;; split-height-threshold nil ; Split horizontally when opening a new window from a command
@@ -162,15 +175,13 @@
 (tooltip-mode -1)
 (menu-bar-mode -1)
 
+(setq frame-title-format nil)
+
 ;; Set symbol for the border
 (unless window-system
  (set-display-table-slot standard-display-table
 			'vertical-border
 			(make-glyph-code ?┃)))
-
-
-(setq frame-title-format nil)
-
 
 (use-package vc-hooks
   :ensure nil
@@ -185,7 +196,6 @@
   ((show-paren-when-point-inside-paren t)
    (show-paren-when-point-in-periphery t))
   :hook (prog-mode . show-paren-mode))
-
 
 ;; -----------------------------------------------------
 ;; Vanila Improvements
@@ -204,6 +214,24 @@
 (use-package eldoc
   :delight)
 
+(use-package dired-single)
+
+;; (use-package all-the-icons-dired
+;;   :hook (dired-mode . all-the-icons-dired-mode))
+
+(use-package dired
+  :after (evil evil-collection)
+  :ensure nil
+  :commands (dired dired-jump)
+  :bind
+  (:map evil-normal-state-map
+	("-" . dired-jump))
+  :custom ((dired-listing-switches "-Algho --group-directories-first"))
+  :config
+  (evil-collection-define-key 'normal 'dired-mode-map
+    "h" 'dired-single-up-directory
+    "l" 'dired-single-buffer))
+
 ;; -----------------------------------------------------
 ;; Hydras
 ;; -----------------------------------------------------
@@ -221,6 +249,7 @@
 ;; -----------------------------------------------------
 ;; Lore friendly improvements
 ;; -----------------------------------------------------
+(use-package restart-emacs)
 
 (use-package which-key
   :delight
@@ -311,27 +340,29 @@
   (custom-set-faces '(aw-leading-char-face ((t (:inherit warning :weight bold :height 2.0))))))
 
 (use-package yasnippet
+  :bind
+  ("C-c y s" . yas-insert-snippet)
+  ("C-c y v" . yas-visit-snippet-file)
   :config
+  ;; http://andreacrotti.github.io/yasnippet-snippets/snippets.html
+  (use-package yasnippet-snippets)
   (yas-global-mode 1))
 
-;; http://andreacrotti.github.io/yasnippet-snippets/snippets.html
-(use-package yasnippet-snippets)
+;; -----------------------------------------------------
+;; Terminal
+;; -----------------------------------------------------
 
-;; this is really slow, and gets pissed on by ranger
-;; preview files in dired
-(use-package peep-dired
-  :ensure t
-  :defer t ; don't access `dired-mode-map' until `peep-dired' is loaded
-  :bind (:map dired-mode-map
-              ("P" . peep-dired))
-  :init
-  (defhydra hydra-peep-dired (:color red :hint nil)
-    "Peepshow"
-    ("j" peep-dired-next-file "next")
-    ("k" peep-dired-prev-file "previous")
-    ("K" peep-dired-scroll-page-up "scroll up")
-    ("J" peep-dired-scroll-page-down "scroll down")
-    ("q" peep-dired-kill-buffers-without-window "close" :color blue)))
+(use-package vterm)
+
+(use-package multi-vterm
+  :after (vterm evil)
+  :config
+  (add-hook 'vterm-mode-hook
+	    (lambda ()
+	      (setq-local evil-insert-state-cursor 'box)
+	      (evil-insert-state)))
+  (define-key vterm-mode-map [return] #'vterm-send-return)
+  (setq vterm-keymap-exceptions nil))
 
 ;; -----------------------------------------------------
 ;; Themes
@@ -381,17 +412,17 @@
   (sml/setup))
 
 ;; change mode-line color by evil state
-(lexical-let ((default-color (cons (face-background 'mode-line)
-				   (face-foreground 'mode-line))))
-  (add-hook 'post-command-hook
-	    (lambda ()
-	      (let ((color (cond ((minibufferp) default-color)
-				 ((evil-insert-state-p) '("#e80000" . "#ffffff"))
-				 ((evil-emacs-state-p)  '("#444488" . "#ffffff"))
-				 ((buffer-modified-p)   '("#006fa0" . "#ffffff"))
-				 (t default-color))))
-		(set-face-background 'mode-line (car color))
-		(set-face-foreground 'mode-line (cdr color))))))
+;;(lexical-let ((default-color (cons (face-background 'mode-line)
+;;				   (face-foreground 'mode-line))))
+;;  (add-hook 'post-command-hook
+;;	    (lambda ()
+;;	      (let ((color (cond ((minibufferp) default-color)
+;;				 ((evil-insert-state-p) '("#e80000" . "#ffffff"))
+;;				 ((evil-emacs-state-p)  '("#444488" . "#ffffff"))
+;;				 ((buffer-modified-p)   '("#006fa0" . "#ffffff"))
+;;				 (t default-color))))
+;;		(set-face-background 'mode-line (car color))
+;;		(set-face-foreground 'mode-line (cdr color))))))
 
 ;; -----------------------------------------------------
 ;; Evil
@@ -595,7 +626,6 @@
   (evil-define-key 'normal markdown-mode-map "j" 'evil-next-visual-line)
   (evil-define-key 'normal markdown-mode-map "k" 'evil-previous-visual-line))
 
-
 (use-package evil-collection
   :after evil
   :config
@@ -726,7 +756,8 @@ _s_kip
   :after (projectile counsel)
   :config (counsel-projectile-mode))
 
-(use-package magit)
+(use-package magit
+  :bind ("C-x g" . magit-status))
 
 (use-package wakatime-mode
   :delight
@@ -772,7 +803,8 @@ _s_kip
   ((ivy-use-virtual-buffers t)
    (ivy-wrap t)
    (ivy-count-format "(%d/%d) ")
-   (ivy-initial-inputs-alist nil)) ; Don't start searches with ^
+   (ivy-initial-inputs-alist nil) ; Don't start searches with ^
+   (ivy-extra-directories ())) ; hide . and .. from file lists
   :config
   (setq ivy-re-builders-alist
 	'((projectile-find-file . ivy--regex-plus) ; too slow otherwise with so many files
@@ -785,16 +817,14 @@ _s_kip
   :init
   (ivy-rich-mode 1))
 
-(use-package some rubbish
-  :init
-  (poop ode))
-
 (use-package counsel
   :bind (("M-x" . counsel-M-x)
 	 ("C-x b" . counsel-ibuffer)
 	 ("C-x C-f" . counsel-find-file)
 	 :map minibuffer-local-map
 	 ("C-r" . 'counsel-minibuffer-history))
+  :custom
+  ((counsel-find-file-ignore-regexp "(.|..)"))
   :config
   (defun my|yank-pop-replace-selection (&optional arg)
           "Delete the region before inserting poped string."
@@ -807,6 +837,12 @@ _s_kip
 (use-package smex
   :defer 1
   :after counsel)
+
+;; might want deadgrep-kill-all-buffers in a function
+(use-package deadgrep
+  :config
+  (evil-define-key 'normal deadgrep-mode-map (kbd "C-j") 'deadgrep-forward-filename)
+  (evil-define-key 'normal deadgrep-mode-map (kbd "C-k") 'deadgrep-backward-filename))
 
 ;; -----------------------------------------------------
 ;; Languages / General
@@ -868,7 +904,6 @@ _s_kip
   (add-to-list 'auto-mode-alist '("\\.js\\'" . rjsx-mode))
   (add-to-list 'interpreter-mode-alist '("node" . rjsx-mode)))
 
-
 ;; (use-package prettier-js
 ;;   :hook ((js2-mode . prettier-js-mode)
 ;; 	 (typescript-mode . prettier-js-mode))
@@ -921,7 +956,7 @@ _s_kip
   (setq ispell-program-name "/usr/local/bin/aspell"))
 
 (use-package flyspell-correct-ivy
-  :after ('flyspell . 'ivy))
+  :after (flyspell ivy))
 
 (use-package ob-typescript)
 
@@ -929,15 +964,15 @@ _s_kip
   :delight
   :init
   (defvar org-directory "~/org-notes/")
+
   (defvar org-work-directory (concat org-directory "org-sky-notes/"))
-  (defvar org-me-directory (concat org-directory "org-me-notes/"))
-  (defvar org-default-notes-file (concat org-directory "/capture.org"))
   (defvar org-work-file (concat org-work-directory "/work.org"))
-  (defvar org-personal-file (concat org-me-directory "/notes.org"))
-  ;; (defvar org-agenda-files (org-personal-file org-default-notes-file org-work-file))
-  (defvar org-agenda-files '("~/org-notes/capture.org"
-			     ;; "~/org-notes/org-me-notes/notes.org"
-			     "~/org-notes/org-sky-notes/work.org"))
+
+  (defvar org-personal-directory (concat org-directory "org-me-notes/"))
+  (defvar org-personal-file (concat org-personal-directory "/notes.org"))
+
+  (defvar org-default-notes-file (if (file-directory-p "~/sky") 'org-work-file 'org-personal-file))
+  (defvar org-agenda-files '(org-work-file org-personal-file))
   :commands
   (my|open-work-notes-file
    my|open-my-notes-file)
@@ -1047,14 +1082,17 @@ _s_kip
   )
 
 ;; only show bullets in gui
-(if window-system
-    (use-package org-bullets
-      :commands org-bullets-mode
-      :hook (org-mode . org-bullets-mode)
-      :custom
-      (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●"))))
+(use-package org-bullets
+  :if window-system
+  :commands org-bullets-mode
+  :hook (org-mode . org-bullets-mode)
+  :custom
+  (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
 
-(use-package org-download)
+(use-package org-download
+  :config
+  ;; Drag-and-drop to `dired`
+  (add-hook 'dired-mode-hook 'org-download-enable))
 
 (use-package org-alert
   :custom (alert-default-style 'osx-notifier)
