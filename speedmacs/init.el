@@ -25,6 +25,47 @@
 			     (float-time
 			      (time-subtract after-init-time before-init-time)))
 		     gcs-done)))
+(defmacro my/with-advice (adlist &rest body)
+  "Execute BODY with temporary advice in ADLIST.
+
+Each element of ADLIST should be a list of the form
+  (SYMBOL WHERE FUNCTION [PROPS])
+suitable for passing to `advice-add'.  The BODY is wrapped in an
+`unwind-protect' form, so the advice will be removed even in the
+event of an error or nonlocal exit."
+  (declare (debug ((&rest (&rest form)) body))
+           (indent 1))
+  `(progn
+     ,@(mapcar (lambda (adform)
+                 (cons 'advice-add adform))
+               adlist)
+     (unwind-protect (progn ,@body)
+       ,@(mapcar (lambda (adform)
+                   `(advice-remove ,(car adform) ,(nth 2 adform)))
+                 adlist))))
+
+(defun my/call-logging-hooks (command &optional verbose)
+  "Call COMMAND, reporting every hook run in the process.
+Interactively, prompt for a command to execute.
+
+Return a list of the hooks run, in the order they were run.
+Interactively, or with optional argument VERBOSE, also print a
+message listing the hooks."
+  (interactive "CCommand to log hooks: \np")
+  (let* ((log     nil)
+         (logger (lambda (&rest hooks) 
+                   (setq log (append log hooks nil)))))
+    (my/with-advice
+        ((#'run-hooks :before logger))
+      (call-interactively command))
+    (when verbose
+      (message
+       (if log "Hooks run during execution of %s:"
+         "No hooks run during execution of %s.")
+       command)
+      (dolist (hook log)
+        (message "> %s" hook)))
+    log))
 
 ;; (setq package-enable-at-startup nil)
 ;; (package-initialize)
@@ -114,10 +155,10 @@
 
   ;; fix alt as meta key
   (setq ns-function-modifier 'hyper)
-
+)
   ;; Enable emoji, and stop the UI from freezing when trying to display them.
-  (if (fboundp 'set-fontset-font)
-      (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend)))
+  ;; (if (fboundp 'set-fontset-font)
+  ;;     (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend)))
 
 ;; -----------------------------------------------------
 ;; Emacs Settings
@@ -183,6 +224,12 @@
 			'vertical-border
 			(make-glyph-code ?┃)))
 
+(setq kill-buffer-query-functions nil)
+
+;; -----------------------------------------------------
+;; Vanila Improvements
+;; -----------------------------------------------------
+
 (use-package vc-hooks
   :ensure nil
   :custom
@@ -197,9 +244,6 @@
    (show-paren-when-point-in-periphery t))
   :hook (prog-mode . show-paren-mode))
 
-;; -----------------------------------------------------
-;; Vanila Improvements
-;; -----------------------------------------------------
 
 (use-package url-history
   :ensure nil
@@ -230,7 +274,8 @@
   :config
   (evil-collection-define-key 'normal 'dired-mode-map
     "h" 'dired-single-up-directory
-    "l" 'dired-single-buffer))
+    "l" 'dired-single-buffer
+    "L" 'dired-display-file))
 
 ;; -----------------------------------------------------
 ;; Hydras
@@ -388,7 +433,7 @@
   (load-theme 'kaolin-dark t))
 
 ;; set these after theme load
-(set-face-attribute 'default nil :font "Hack Nerd Font" :height 140)
+(set-face-attribute 'default nil :font "Hack Nerd Font")
 
 (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
 
@@ -399,7 +444,7 @@
 ;; (set-face-attribute 'fixed-pitch nil :font "Fira Code Retina")
 
 ;; Set the variable pitch face
-(set-face-attribute 'variable-pitch nil :font "Avenir Next" :weight 'regular)
+;; (set-face-attribute 'variable-pitch nil :font "Avenir Next" :weight 'regular)
 
 (use-package all-the-icons)
 
@@ -759,6 +804,16 @@ _s_kip
 (use-package magit
   :bind ("C-x g" . magit-status))
 
+;; NOTE: Make sure to configure a GitHub token before using this package!
+;; - https://magit.vc/manual/forge/Token-Creation.html#Token-Creation
+;; - https://magit.vc/manual/ghub/Getting-Started.html#Getting-Started
+;; most of the time we just need forge-pull
+(use-package forge
+  :after magit
+  :config
+  (setq auth-sources '("~/.authinfo")))
+
+
 (use-package wakatime-mode
   :delight
   :config
@@ -824,7 +879,8 @@ _s_kip
 	 :map minibuffer-local-map
 	 ("C-r" . 'counsel-minibuffer-history))
   :custom
-  ((counsel-find-file-ignore-regexp "(.|..)"))
+  ;; ((counsel-find-file-ignore-regexp "(.|..)"))
+  ((counsel-find-file-ignore-regexp ".."))
   :config
   (defun my|yank-pop-replace-selection (&optional arg)
           "Delete the region before inserting poped string."
@@ -965,14 +1021,12 @@ _s_kip
   :init
   (defvar org-directory "~/org-notes/")
 
-  (defvar org-work-directory (concat org-directory "org-sky-notes/"))
-  (defvar org-work-file (concat org-work-directory "/work.org"))
+  (defvar org-work-file "~/org-notes/org-sky-notes/work.org")
+  (defvar org-personal-file "~/org-notes/org-me-notes/notes.org")
 
-  (defvar org-personal-directory (concat org-directory "org-me-notes/"))
-  (defvar org-personal-file (concat org-personal-directory "/notes.org"))
-
-  (defvar org-default-notes-file (if (file-directory-p "~/sky") 'org-work-file 'org-personal-file))
-  (defvar org-agenda-files '(org-work-file org-personal-file))
+  (defvar org-default-notes-file (if (file-directory-p "~/sky")
+				     (expand-file-name org-work-file)
+				   (expand-file-name org-personal-file)))
   :commands
   (my|open-work-notes-file
    my|open-my-notes-file)
@@ -980,6 +1034,9 @@ _s_kip
   (org-mode . visual-line-mode)
   (org-mode . flyspell-mode)
   (org-mode . abbrev-mode)
+  :custom
+  ((org-agenda-files '("~/org-notes/org-sky-notes/work.org"
+		       "~/org-notes/org-me-notes/notes.org")))
   :config
   (require 'org-tempo) ;; needed to add this to get template expansion to work again
   ;; set scratch buffer to org mode
@@ -995,6 +1052,10 @@ _s_kip
 	org-log-done 'time
 	org-ellipsis " ▾"
         org-image-actual-width nil ; allows images to be resized with #+ATTR_ORG: :width 100
+        org-indirect-buffer-display 'current-window
+        org-eldoc-breadcrumb-separator " → "
+        org-enforce-todo-dependencies t
+        org-list-demote-modify-bullet '(("+" . "-") ("-" . "+") ("*" . "+") ("1." . "a."))
 	org-agenda-span 8)
 
   (setq org-todo-keywords
