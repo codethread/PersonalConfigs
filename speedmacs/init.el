@@ -85,6 +85,25 @@ message listing the hooks."
 
 (server-start)
 
+
+;; -----------------------------------------------------
+;;; Per System Settings
+;; -----------------------------------------------------
+
+;; not sure if needed but can take inspiration from
+;; https://github.com/daviwil/dotfiles/blob/master/Emacs.org#system-settings
+
+
+;; -----------------------------------------------------
+;;; Set up package archives
+;; -----------------------------------------------------
+(require 'package)
+
+(setq package-archives
+      '(("melpa" . "https://melpa.org/packages/")
+	("org" . "https://orgmode.org/elpa/")
+	("elpa" . "https://elpa.gnu.org/packages/")))
+
 ;; -----------------------------------------------------
 ;;; Keep everything smooth and up-to-date
 ;; -----------------------------------------------------
@@ -99,22 +118,8 @@ message listing the hooks."
 (auto-compile-on-save-mode)
 
 ;; -----------------------------------------------------
-;;; Per System Settings
-;; -----------------------------------------------------
-
-;; not sure if needed but can take inspiration from
-;; https://github.com/daviwil/dotfiles/blob/master/Emacs.org#system-settings
-
-;; -----------------------------------------------------
 ;; Package Manager
 ;; -----------------------------------------------------
-
-(require 'package)
-
-(setq package-archives
-      '(("melpa" . "https://melpa.org/packages/")
-	("org" . "https://orgmode.org/elpa/")
-	("elpa" . "https://elpa.gnu.org/packages/")))
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -184,7 +189,9 @@ message listing the hooks."
       inhibit-startup-screen t
 
       large-file-warning-threshold 100000000 ; warn when opening files bigger than 100MB
+      line-number-display-limit 1 ; no line numbers in modeline
 
+      delete-by-moving-to-trash t
       help-window-select t
       ;; split-width-threshold 170 ; always split vertically if there's room
       ;; split-height-threshold nil ; Split horizontally when opening a new window from a command
@@ -270,7 +277,8 @@ message listing the hooks."
   :bind
   (:map evil-normal-state-map
 	("-" . dired-jump))
-  :custom ((dired-listing-switches "-Algho --group-directories-first"))
+  :custom
+  ((dired-listing-switches "-Algho --group-directories-first"))
   :config
   (evil-collection-define-key 'normal 'dired-mode-map
     "h" 'dired-single-up-directory
@@ -397,7 +405,15 @@ message listing the hooks."
 ;; Terminal
 ;; -----------------------------------------------------
 
-(use-package vterm)
+(use-package vterm
+  :config
+  (defun terminal ()
+    "Switch to terminal. Launch if nonexistent."
+    (interactive)
+    (if (get-buffer "terminal")
+        (switch-to-buffer "terminal")
+      (vterm "terminal"))
+    (get-buffer-process "terminal")))
 
 (use-package multi-vterm
   :after (vterm evil)
@@ -407,18 +423,21 @@ message listing the hooks."
 	      (setq-local evil-insert-state-cursor 'box)
 	      (evil-insert-state)))
   (define-key vterm-mode-map [return] #'vterm-send-return)
+
   (setq vterm-keymap-exceptions nil))
 
 ;; -----------------------------------------------------
 ;; Themes
 ;; -----------------------------------------------------
 
-(use-package nord-theme
-  :disabled
+;; A simple config:
+(use-package solaire-mode
   :config
-  (load-theme 'nord))
+  (setq solaire-mode-remap-modeline nil))
 
 (use-package doom-themes
+  :init
+  (solaire-global-mode +1)
   :custom
   ((doom-themes-enable-bold t)
    (doom-themes-enable-italic t))
@@ -426,6 +445,11 @@ message listing the hooks."
   (load-theme 'doom-one t)
    ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
+
+(use-package nord-theme
+  :disabled
+  :config
+  (load-theme 'nord))
 
 (use-package kaolin-themes
   :disabled
@@ -912,11 +936,15 @@ _s_kip
   :bind (:map lsp-mode-map
 	      ("TAB" . completion-at-point))
   :custom
-  ((lsp-eslint-server-command
-    '("node"
+  ((lsp-disabled-clients '((json-mode . eslint))))
+  :config
+  (setq lsp-eslint-server-command (if (file-directory-p "~/sky")
+         '("node"
       "/Users/adh23/.vscode/extensions/dbaeumer.vscode-eslint-2.1.8/server/out/eslintServer.js"
-      "--stdio")))
-  :config)
+      "--stdio")
+       '("node"
+      "/Users/adam/.vscode/extensions/dbaeumer.vscode-eslint-2.1.8/server/out/eslintServer.js"
+        "--stdio"))))
   ;; (setq lsp-diagnostic-package :none))
 
 (use-package flycheck
@@ -959,6 +987,21 @@ _s_kip
   (setq js2-mode-show-strict-warnings nil)
   (add-to-list 'auto-mode-alist '("\\.js\\'" . rjsx-mode))
   (add-to-list 'interpreter-mode-alist '("node" . rjsx-mode)))
+
+(use-package web-mode
+  :mode "\\.tsx\\'"
+  :config
+  (setq-default web-mode-comment-formats
+              '(("javascript" . "//")
+                ("typescript" . "//")))
+
+  (add-hook 'web-mode-hook 'my|web-mode-settings)
+
+  (defun my|web-mode-settings ()
+    "Hooks for Web mode."
+    (setq web-mode-enable-auto-closing t)
+    (setq web-mode-enable-auto-quoting nil)
+    (setq web-mode-markup-indent-offset 2)))
 
 ;; (use-package prettier-js
 ;;   :hook ((js2-mode . prettier-js-mode)
