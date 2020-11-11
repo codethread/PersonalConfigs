@@ -430,14 +430,14 @@ message listing the hooks."
 ;; Themes
 ;; -----------------------------------------------------
 
-;; A simple config:
-(use-package solaire-mode
-  :config
-  (setq solaire-mode-remap-modeline nil))
+;; pretty sure this keeps causing flickering
+;; (use-package solaire-mode
+;;   :config
+;;   (setq solaire-mode-remap-modeline nil))
 
 (use-package doom-themes
-  :init
-  (solaire-global-mode +1)
+  ;; :init
+  ;; (solaire-global-mode +1)
   :custom
   ((doom-themes-enable-bold t)
    (doom-themes-enable-italic t))
@@ -628,7 +628,7 @@ message listing the hooks."
 
     ;; t --- terminal
     "tn" 'multi-vterm
-    "tt" 'multi-vterm-projectile
+    "tt" 'multi-vterm-project
 
     ;; r --- run
     "r" 'hydra-window/body
@@ -1210,6 +1210,8 @@ _s_kip
   (markdown-mode . visual-line-mode))
 
 (use-package markdown-toc)
+
+(require 'my-fns)
 
 ;; -----------------------------------------------------
 ;;; init.el ends here
