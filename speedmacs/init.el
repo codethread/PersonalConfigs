@@ -76,12 +76,12 @@ message listing the hooks."
       auto-save-list-file-prefix (expand-file-name "auto-save-list/.saves-" user-emacs-directory))
 
 ;; Keep customization settings in a temporary file (thanks Ambrevar!)
-(setq custom-file
-      (if (boundp 'server-socket-dir)
-	  (expand-file-name "custom.el" server-socket-dir)
-	(expand-file-name (format "emacs-custom-%s.el" (user-uid)) temporary-file-directory)))
+;; (setq custom-file
+;;       (if (boundp 'server-socket-dir)
+;; 	  (expand-file-name "custom.el" server-socket-dir)
+;; 	(expand-file-name (format "emacs-custom-%s.el" (user-uid)) temporary-file-directory)))
 
-(load custom-file t)
+;; (load custom-file t)
 
 (server-start)
 
@@ -134,6 +134,12 @@ message listing the hooks."
 
 ;; controls minor mode descriptions in modeline
 (use-package delight)
+
+(use-package cus-edit
+  :ensure nil
+  :defer t
+  :custom
+  (custom-file null-device "Don't store customizations"))
 
 ;; -----------------------------------------------------
 ;; Load Paths
@@ -320,6 +326,7 @@ message listing the hooks."
     "<SPC> s" "Search"
     "<SPC> S" "Web"
     "<SPC> t" "Term"
+    "<SPC> T" "Toggle"
     "<SPC> w" "Window"
     "<SPC> W" "Layouts"
     )
@@ -356,7 +363,7 @@ message listing the hooks."
   :delight
   :custom
   ((undo-tree-auto-save-history t)
-   (undo-tree-history-directory-alist '(("." . "~/emacs.d/undo"))))
+   (undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo"))))
   :config
   (global-undo-tree-mode))
 
@@ -431,13 +438,13 @@ message listing the hooks."
 ;; -----------------------------------------------------
 
 ;; pretty sure this keeps causing flickering
-;; (use-package solaire-mode
-;;   :config
-;;   (setq solaire-mode-remap-modeline nil))
+(use-package solaire-mode
+  :config
+  (setq solaire-mode-remap-modeline nil))
 
 (use-package doom-themes
-  ;; :init
-  ;; (solaire-global-mode +1)
+  :init
+  (solaire-global-mode +1)
   :custom
   ((doom-themes-enable-bold t)
    (doom-themes-enable-italic t))
@@ -630,6 +637,12 @@ message listing the hooks."
     "tn" 'multi-vterm
     "tt" 'multi-vterm-project
 
+    ;; T --- Toggle
+    "v" 'visual-line-mode
+    "w" 'toggle-word-wrap
+    "T" 'toggle-truncate-lines
+    "u" 'undo-tree-visualize
+
     ;; r --- run
     "r" 'hydra-window/body
     ;; "r" 'my|run-ruby
@@ -649,6 +662,7 @@ message listing the hooks."
 	;; gui mode
 	("C-SPC" . completion-at-point))
   (:map evil-normal-state-map
+	("C-r"  . undo-tree-redo)
 	("C-e"	. move-end-of-line) ; replace scroll up
 	("C-u"	. evil-scroll-up) ; get scroll up back and replace with C-m as it's just return
 	("C-y"	. universal-argument)
@@ -783,6 +797,7 @@ _s_kip
     "tabs"
     ("l" elscreen-next "next")
     ("h" elscreen-previous "previous")
+    ("x" elscreen-kill)
     ("j" nil "quit" :color blue)
     ("n" elscreen-create "new" :color blue))
   (elscreen-start)
@@ -936,7 +951,8 @@ _s_kip
   :bind (:map lsp-mode-map
 	      ("TAB" . completion-at-point))
   :custom
-  ((lsp-disabled-clients '((json-mode . eslint))))
+  ((lsp-disabled-clients '((json-mode . eslint)))
+   (lsp-enable-file-watchers 'nil))
   :config
   (setq lsp-eslint-server-command (if (file-directory-p "~/sky")
          '("node"
@@ -969,6 +985,7 @@ _s_kip
   (js-mode)
   (js2-mode)
   (typescript-mode)
+  (css-mode)
   (rjsx-mode))
 
 (use-package typescript-mode
@@ -1003,11 +1020,10 @@ _s_kip
     (setq web-mode-enable-auto-quoting nil)
     (setq web-mode-markup-indent-offset 2)))
 
-;; (use-package prettier-js
-;;   :hook ((js2-mode . prettier-js-mode)
-;; 	 (typescript-mode . prettier-js-mode))
-;;   :config
-;;   (setq prettier-js-show-errors nil))
+(use-package jest)
+  ;; :after (js2-mode)
+  ;; :hook
+  ;; (js2-mode . jest-minor-mode))
 
 ;; -----------------------------------------------------
 ;; Scala
@@ -1152,19 +1168,19 @@ _s_kip
    'append)
 
   (setq org-capture-templates
-	'(("t" "TODO" entry (file+headline org-default-notes-file "Collect")
+	'(("t" "TODO" entry (file+headline org-default-notes-file "Capture:Collect")
 	   "* TODO %? %^G \n  %U" :empty-lines 1)
-	  ("s" "Scheduled TODO" entry (file+headline org-default-notes-file "Collect")
+	  ("s" "Scheduled TODO" entry (file+headline org-default-notes-file "Capture:Collect")
 	   "* TODO %? %^G \nSCHEDULED: %^t\n  %U" :empty-lines 1)
-	  ("d" "Deadline" entry (file+headline org-default-notes-file "Collect")
+	  ("d" "Deadline" entry (file+headline org-default-notes-file "Capture:Collect")
 	   "* TODO %? %^G \n  DEADLINE: %^t" :empty-lines 1)
-	  ("p" "Priority" entry (file+headline org-default-notes-file "Collect")
+	  ("p" "Priority" entry (file+headline org-default-notes-file "Capture:Collect")
 	   "* TODO [#A] %? %^G \n  SCHEDULED: %^t")
-	  ("a" "Appointment" entry (file+headline org-default-notes-file "Collect")
+	  ("a" "Appointment" entry (file+headline org-default-notes-file "Capture:Collect")
 	   "* %? %^G \n  %^t")
-	  ("l" "Link" entry (file+headline org-default-notes-file "Tasks")
+	  ("l" "Link" entry (file+headline org-default-notes-file "Capture:Tasks")
 	   "* TODO LINK %?\n  %u\n  %a")
-	  ("n" "Note" entry (file+headline org-default-notes-file "Notes")
+	  ("n" "Note" entry (file+headline org-default-notes-file "Capture:Notes")
 	   "* %? %^G\n%U" :empty-lines 1)
 	  ("j" "Journal" entry (file+datetree org-default-notes-file)
 	   "* %? %^G\nEntered on %U\n")))
@@ -1212,6 +1228,8 @@ _s_kip
 (use-package markdown-toc)
 
 (require 'my-fns)
+
+(global-set-key (kbd "C-s-<f8>") 'my|close-notifications-mac)
 
 ;; -----------------------------------------------------
 ;;; init.el ends here
