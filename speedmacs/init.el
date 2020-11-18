@@ -224,7 +224,6 @@ message listing the hooks."
 
 (when (fboundp 'tool-bar-mode)
   (tool-bar-mode -1))
-
 (scroll-bar-mode -1)
 (tooltip-mode -1)
 (menu-bar-mode -1)
@@ -415,6 +414,22 @@ message listing the hooks."
   ;; http://andreacrotti.github.io/yasnippet-snippets/snippets.html
   (use-package yasnippet-snippets)
   (yas-global-mode 1))
+
+(use-package company
+  :disabled
+  :after lsp-mode
+  :hook (lsp-mode . company-mode)
+  :bind (:map company-active-map
+         ("<tab>" . company-complete-selection))
+        (:map lsp-mode-map
+         ("<tab>" . company-indent-or-complete-common))
+  :custom
+  (company-minimum-prefix-length 2)
+  (company-idle-delay 0.0))
+
+(use-package company-box
+  :disabled
+  :hook (company-mode . company-box-mode))
 
 ;; -----------------------------------------------------
 ;; Terminal
@@ -913,9 +928,7 @@ _s_kip
    (ivy-extra-directories ())) ; hide . and .. from file lists
   :config
   (setq ivy-re-builders-alist
-	'((projectile-find-file . ivy--regex-plus) ; too slow otherwise with so many files
-	  (counsel-projectile-find-file . ivy--regex-plus) ; ditto
-	  (swiper . ivy--regex-plus) ; fzy search in file is clumsy
+	'((swiper . ivy--regex-plus) ; fzy search in file is clumsy
 	  (t . ivy--regex-fuzzy))) ; use fzy for everything else
   (setq enable-recursive-minibuffers t))
 
@@ -975,6 +988,12 @@ _s_kip
       "/Users/adam/.vscode/extensions/dbaeumer.vscode-eslint-2.1.8/server/out/eslintServer.js"
         "--stdio"))))
   ;; (setq lsp-diagnostic-package :none))
+
+(use-package lsp-ui
+  :hook (lsp-mode . lsp-ui-mode)
+  :custom
+  (lsp-ui-doc-position 'bottom)
+  (lsp-ui-sideline-enable 'nil))
 
 (use-package flycheck
   :defer t
@@ -1107,8 +1126,10 @@ _s_kip
   (org-mode . flyspell-mode)
   (org-mode . abbrev-mode)
   :custom
-  ((org-agenda-files '("~/org-notes/org-sky-notes/work.org"
-		       "~/org-notes/org-me-notes/notes.org")))
+  ((org-agenda-files (if (file-directory-p "~/sky")
+			 '("~/org-notes/org-sky-notes/work.org"
+			   "~/org-notes/org-me-notes/notes.org")
+			 '("~/org-notes/org-me-notes/notes.org"))))
   :config
   (require 'org-tempo) ;; needed to add this to get template expansion to work again
   ;; set scratch buffer to org mode
