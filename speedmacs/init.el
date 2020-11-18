@@ -238,6 +238,7 @@ message listing the hooks."
 			(make-glyph-code ?┃)))
 
 (setq kill-buffer-query-functions nil)
+(electric-pair-mode)
 
 ;; -----------------------------------------------------
 ;; Vanila Improvements
@@ -290,6 +291,11 @@ message listing the hooks."
     "h" 'dired-single-up-directory
     "l" 'dired-single-buffer
     "L" 'dired-display-file))
+
+;; (use-package elec-pair
+;;   :ensure nil
+;;   :hook
+;;   (prog-mode . electric-pair-local-mode))
 
 ;; -----------------------------------------------------
 ;; Hydras
@@ -376,7 +382,9 @@ message listing the hooks."
    '(fic-face ((t (:inherit warning :weight bold))))))
 
 ;; jump to char/word/line
-(use-package avy)
+(use-package avy
+  :custom
+  ((avy-background t)))
 
 (use-package ace-window
   :bind ("M-o" . ace-window)
@@ -450,13 +458,14 @@ message listing the hooks."
    (doom-themes-enable-italic t))
   :config
   (load-theme 'doom-one t)
+  ;; (load-theme 'doom-nord t)
    ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
 
 (use-package nord-theme
   :disabled
   :config
-  (load-theme 'nord))
+  (load-theme 'nord t))
 
 (use-package kaolin-themes
   :disabled
@@ -483,6 +492,8 @@ message listing the hooks."
 
 ;; smart-mode-line
 (use-package smart-mode-line
+  :custom
+  (sml/no-confirm-load-theme t)
   :config
   (setq sml/theme 'atom-one-dark)
   (sml/setup))
@@ -501,14 +512,8 @@ message listing the hooks."
 ;;		(set-face-foreground 'mode-line (cdr color))))))
 
 ;; -----------------------------------------------------
-;; Evil
+;; Evil -- start
 ;; -----------------------------------------------------
-
-(defun my|browse-at-point ()
-  "Browse sentence under cursor."
-  (interactive)
-  (xwidget-webkit-new-session
-   (concat "https://google.com/?q=" (thing-at-point 'sentence 'no-properties))))
 
 (use-package evil-leader
   :delight
@@ -524,16 +529,18 @@ message listing the hooks."
     "." 'ace-window
 
     ;; b --- buffers
+    "bK" 'kill-buffer
+    "bL" 'counsel-ibuffer
+    "bN" 'evil-split-next-buffer
+    "bP" 'evil-split-prev-buffer
+
     "bb" 'my|split-last-buffer
+    "be" 'projectile-ibuffer
     "bj" 'evil-show-jumps
     "bk" 'my|kill-this-buffer
-    "bK" 'kill-buffer
     "bl" 'counsel-projectile-switch-to-buffer
-    "bL" 'counsel-ibuffer
     "bn" 'evil-next-buffer
-    "bN" 'evil-split-next-buffer
     "bp" 'evil-prev-buffer
-    "bP" 'evil-split-prev-buffer
     "br" 'rename-buffer
     "bx" 'font-lock-fontify-buffer ;; repaint the buffer
 
@@ -560,6 +567,7 @@ message listing the hooks."
     "fv" 'my|open-init-file
     "fk" 'my|delete-file-and-buffer
     "fs" 'save-buffer
+    "fS" 'projectile-save-project-buffers
 
     ;; F --- fold
     "FF"  'hydra-hs/body
@@ -638,10 +646,11 @@ message listing the hooks."
     "tt" 'multi-vterm-project
 
     ;; T --- Toggle
-    "v" 'visual-line-mode
-    "w" 'toggle-word-wrap
-    "T" 'toggle-truncate-lines
-    "u" 'undo-tree-visualize
+    "Tv" 'visual-line-mode
+    "Tw" 'toggle-word-wrap
+    "TT" 'toggle-truncate-lines
+    "Tu" 'undo-tree-visualize
+    "Tp" 'electric-pair-local-mode
 
     ;; r --- run
     "r" 'hydra-window/body
@@ -662,6 +671,7 @@ message listing the hooks."
 	;; gui mode
 	("C-SPC" . completion-at-point))
   (:map evil-normal-state-map
+	("u"    . undo-tree-undo)
 	("C-r"  . undo-tree-redo)
 	("C-e"	. move-end-of-line) ; replace scroll up
 	("C-u"	. evil-scroll-up) ; get scroll up back and replace with C-m as it's just return
@@ -797,7 +807,7 @@ _s_kip
     "tabs"
     ("l" elscreen-next "next")
     ("h" elscreen-previous "previous")
-    ("x" elscreen-kill)
+    ("x" elscreen-kill "close window")
     ("j" nil "quit" :color blue)
     ("n" elscreen-create "new" :color blue))
   (elscreen-start)
@@ -813,6 +823,8 @@ _s_kip
   (elscreen-tab-current-screen-face ((t (:background "#282c34" :foreground "#c678dd"))))
   (elscreen-tab-other-screen-face ((t (:background "#1c1f24" :foreground "#a190a7")))))
 
+;; -----------------------------------------------------
+;; Evil -- end - do not remove this line
 ;; -----------------------------------------------------
 ;; Projects / Navigation
 ;; -----------------------------------------------------
@@ -952,7 +964,8 @@ _s_kip
 	      ("TAB" . completion-at-point))
   :custom
   ((lsp-disabled-clients '((json-mode . eslint)))
-   (lsp-enable-file-watchers 'nil))
+   (lsp-enable-file-watchers 'nil)
+   (lsp-eslint-run "onType"))
   :config
   (setq lsp-eslint-server-command (if (file-directory-p "~/sky")
          '("node"

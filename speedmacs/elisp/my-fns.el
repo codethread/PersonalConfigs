@@ -92,7 +92,7 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   (interactive)
   (split-window-horizontally)
   (other-window 1 nil)
-  (switch-to-next-buffer))
+  (projectile-previous-project-buffer))
 
 (defun frame-half-size-left ()
   "Set the current frame to half the screen width."
@@ -201,6 +201,11 @@ new windows will each be 180 columns wide, and sit just below the threshold.
     (propertize "pass " 'face 'font-lock-string-face)
     "the currently failing "
     (propertize "unit test\n" 'face 'font-lock-constant-face))))
+
+(defun my|reload-init-file ()
+  "Reload init.el without restart."
+  (interactive)
+  (load-file "~/.emacs.d/init.el"))
 
 (provide 'my-fns)
 
