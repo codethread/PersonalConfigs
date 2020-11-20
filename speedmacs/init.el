@@ -272,6 +272,7 @@ message listing the hooks."
   ((compilation-scroll-output t)))
 
 (use-package eldoc
+  :ensure nil
   :delight)
 
 (use-package dired-single)
@@ -1168,7 +1169,8 @@ _s_kip
 (use-package flyspell-correct-ivy
   :after (flyspell ivy))
 
-(use-package ob-typescript)
+(use-package ob-typescript
+  :after org)
 
 (use-package org
   :delight
@@ -1300,6 +1302,7 @@ _s_kip
 
 ;; only show bullets in gui
 (use-package org-bullets
+  :after org
   :if window-system
   :commands org-bullets-mode
   :hook (org-mode . org-bullets-mode)
@@ -1307,11 +1310,13 @@ _s_kip
   (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
 
 (use-package org-download
+  :after org
   :config
   ;; Drag-and-drop to `dired`
   (add-hook 'dired-mode-hook 'org-download-enable))
 
 (use-package org-alert
+  :after org
   :custom (alert-default-style 'osx-notifier)
   :config
   (setq org-alert-interval 300)
