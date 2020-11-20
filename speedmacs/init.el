@@ -14,8 +14,8 @@
 ;; -----------------------------------------------------
 
 ;; reduce the frequency of garbage collection by making it happen on
-;; each 50MB of allocated data (the default is on every 0.76MB)
-(setq gc-cons-threshold (* 50 1000 1000))
+;; each 100MB of allocated data (the default is on every 0.76MB)
+(setq gc-cons-threshold (* 100 1000 1000))
 
 ;; Profile emacs startup
 (add-hook 'emacs-startup-hook
@@ -190,6 +190,9 @@ message listing the hooks."
 
 (when window-system
   (setq browse-url-browser-function 'xwidget-webkit-browse-url))
+
+;; recomended to increase performance from https://emacs-lsp.github.io/lsp-mode/page/performance/
+(setq read-process-output-max (* 1024 1024)) ;; 1mb
 
 (setq indent-tabs-mode nil
       inhibit-startup-screen t
@@ -415,20 +418,25 @@ message listing the hooks."
   (use-package yasnippet-snippets)
   (yas-global-mode 1))
 
+
+;; Completion will start automatically after you type a few letters.
+;; Use M-n and M-p to select, <return> to complete or <tab> to complete the common part.
+;; Search through the completions with C-s, C-r and C-o. Press M-(digit) to quickly
+;; complete with one of the first 10 candidates.
 (use-package company
-  :disabled
-  :after lsp-mode
-  :hook (lsp-mode . company-mode)
+  ;; :hook (lsp-mode . company-mode)
+  :config
+  (global-company-mode)
   :bind (:map company-active-map
-         ("<tab>" . company-complete-selection))
+         ("C-l" . company-complete-selection))
         (:map lsp-mode-map
          ("<tab>" . company-indent-or-complete-common))
   :custom
-  (company-minimum-prefix-length 2)
+  (company-tooltip-align-annotations t)
+  (company-minimum-prefix-length 100)
   (company-idle-delay 0.0))
 
 (use-package company-box
-  :disabled
   :hook (company-mode . company-box-mode))
 
 ;; -----------------------------------------------------
@@ -503,10 +511,24 @@ message listing the hooks."
 
 (use-package all-the-icons)
 
-(use-package smart-mode-line-atom-one-dark-theme)
+(use-package doom-modeline
+  ;; :unless window-system
+  :hook (after-init . doom-modeline-mode)
+  :config
+  (setq doom-modeline-height 20
+	doom-modeline-env-version t
+	doom-modeline-modal-icon t
+	doom-modeline-vcs-max-length 24
+	doom-modeline-buffer-file-name-style 'truncate-except-project
+	;; Whether display buffer encoding.
+	doom-modeline-buffer-encoding nil))
+
+(use-package smart-mode-line-atom-one-dark-theme
+  :disabled)
 
 ;; smart-mode-line
 (use-package smart-mode-line
+  :disabled
   :custom
   (sml/no-confirm-load-theme t)
   :config
@@ -661,11 +683,12 @@ message listing the hooks."
     "tt" 'multi-vterm-project
 
     ;; T --- Toggle
+    "TT" 'toggle-truncate-lines
+    "Ti" 'lsp-ui-imenu
+    "Tp" 'electric-pair-local-mode
+    "Tu" 'undo-tree-visualize
     "Tv" 'visual-line-mode
     "Tw" 'toggle-word-wrap
-    "TT" 'toggle-truncate-lines
-    "Tu" 'undo-tree-visualize
-    "Tp" 'electric-pair-local-mode
 
     ;; r --- run
     "r" 'hydra-window/body
@@ -682,10 +705,16 @@ message listing the hooks."
   (setq evil-respect-visual-line-mode t)
   :bind
   (:map evil-insert-state-map
-	("C-@" . completion-at-point)
-	;; gui mode
-	("C-SPC" . completion-at-point))
+	;; ("C-@"   . completion-at-point)
+	;; ("C-SPC" . completion-at-point))
+	("C-@"   . company-complete)
+	("C-SPC" . company-complete)
+	("C-l"   . (lambda ()
+		     (interactive)
+		     (right-char 1))))
+	;; ("C-h"   . char-left))
   (:map evil-normal-state-map
+	("C-\\" . counsel-projectile-rg)
 	("u"    . undo-tree-undo)
 	("C-r"  . undo-tree-redo)
 	("C-e"	. move-end-of-line) ; replace scroll up
@@ -907,6 +936,7 @@ _s_kip
   :delight
   :bind (("C-s" . swiper)
 	 :map ivy-minibuffer-map
+	 ("C-c C-c" . ivy-immediate-done)
 	 ("TAB" . ivy-alt-done)
 	 ("C-l" . ivy-alt-done)
 	 ("C-j" . ivy-next-line)
@@ -928,13 +958,27 @@ _s_kip
    (ivy-extra-directories ())) ; hide . and .. from file lists
   :config
   (setq ivy-re-builders-alist
-	'((swiper . ivy--regex-plus) ; fzy search in file is clumsy
+	'((counsel-projectile-rg . ivy--regex-plus)
+	  (swiper . ivy--regex-plus) ; fzy search in file is clumsy
 	  (t . ivy--regex-fuzzy))) ; use fzy for everything else
   (setq enable-recursive-minibuffers t))
 
 (use-package ivy-rich
   :init
   (ivy-rich-mode 1))
+
+(use-package ivy-posframe
+  :custom
+  (ivy-posframe-width      115)
+  (ivy-posframe-min-width  115)
+  (ivy-posframe-height     10)
+  (ivy-posframe-min-height 10)
+  :config
+  (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
+  (setq ivy-posframe-parameters '((parent-frame . nil)
+                                  (left-fringe . 8)
+                                  (right-fringe . 8)))
+  (ivy-posframe-mode 1))
 
 (use-package counsel
   :bind (("M-x" . counsel-M-x)
@@ -976,9 +1020,10 @@ _s_kip
   :bind (:map lsp-mode-map
 	      ("TAB" . completion-at-point))
   :custom
-  ((lsp-disabled-clients '((json-mode . eslint)))
-   (lsp-enable-file-watchers 'nil)
-   (lsp-eslint-run "onType"))
+  (lsp-disabled-clients '((json-mode . eslint)))
+  (lsp-enable-file-watchers 'nil)
+  (lsp-eslint-run "onType")
+  (lsp-auto-execute-action 'nil)
   :config
   (setq lsp-eslint-server-command (if (file-directory-p "~/sky")
          '("node"
@@ -991,9 +1036,27 @@ _s_kip
 
 (use-package lsp-ui
   :hook (lsp-mode . lsp-ui-mode)
+  :bind ("C-c C-k" . my|lsp-ui-doc-glance) ; just a test binding
+  :config
+  (defun my|lsp-ui-doc--glance-hide-frame ()
+    "Hook to hide hover information popup for lsp-ui-doc-glance."
+    (lsp-ui-doc-hide)
+    (remove-hook 'pre-command-hook 'lsp-ui-doc--glance-hide-frame))
+
+  (defun my|lsp-ui-doc-glance ()
+    "Trigger display hover information popup and hide it on next typing."
+    (interactive)
+    (lsp-ui-doc-show)
+    (add-hook 'pre-command-hook 'lsp-ui-doc--glance-hide-frame))
   :custom
-  (lsp-ui-doc-position 'bottom)
-  (lsp-ui-sideline-enable 'nil))
+  (lsp-ui-doc-header 'nil) ; looks shit
+  (lsp-ui-sideline-enable 'nil) ; bloody overwhelming
+  (lsp-ui-doc-use-webkit 'nil) ; don't be tempted by this, unless you really want to configure it
+  (lsp-ui-doc-include-signature 'nil) ; eldoc does a better job of this
+  (lsp-ui-doc-show-with-cursor 'nil) ; use keybinding instead or mouse
+  (lsp-ui-imenu--custom-mode-line-format "lsp-ui-menu")
+  (lsp-ui-doc-border "brightblack")
+  (lsp-ui-doc-position 'at-point)) 
 
 (use-package flycheck
   :defer t
@@ -1264,6 +1327,10 @@ _s_kip
 (require 'my-fns)
 
 (global-set-key (kbd "C-s-<f8>") 'my|close-notifications-mac)
+;; Put this somewhere better
+(global-set-key (kbd "C-M-<left>") 'frame-half-size-left)
+(global-set-key (kbd "C-M-<right>") 'frame-half-size-right)
+(global-set-key (kbd "C-M-<return>") 'toggle-frame-maximized)
 
 ;; -----------------------------------------------------
 ;;; init.el ends here
