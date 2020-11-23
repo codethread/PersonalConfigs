@@ -207,6 +207,11 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   (interactive)
   (load-file "~/.emacs.d/init.el"))
 
+;; (defun my|teardown
+;;     "Remove all files from teardown file."
+;;   (interactive)
+;;  ())
+
 (provide 'my-fns)
 
 ;;; my-fns.el ends here

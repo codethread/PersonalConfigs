@@ -16,13 +16,7 @@ alias als="eval \$(cat ~/.aliases.zsh | grep \"^alias.\+=\\\"\" | fzf -i --heade
 # EMACS
 # -------------------------------------------#
 alias emacs-doom="rm ~/.emacs.d && ln -s ~/doom-emacs ~/.emacs.d"
-alias emacs-adam="rm ~/.emacs.d && ln -s ~/adam-emacs ~/.emacs.d"
-alias emacs-light="rm ~/.emacs.d && ln -s ~/lite-emacs ~/.emacs.d"
-alias emacs-scratch="rm ~/.emacs.d && ln -s ~/emacs-scratch ~/.emacs.d"
-alias emacs-front="rm ~/.emacs.d && ln -s ~/frontmacs ~/.emacs.d"
-alias emacs-space="rm ~/.emacs.d && ln -s ~/spacemacs-master ~/.emacs.d"
-alias emacs-cent="rm ~/.emacs.d && ln -s ~/centaur ~/.emacs.d"
-alias emacs-speed="rm ~/.emacs.d && ln -s ~/speedmacs ~/.emacs.d"
+alias emacs-adam="rm ~/.emacs.d && ln -s ~/emacs ~/.emacs.d"
 
 alias ec="emacsclient -a \"\" -c -t"
 alias ed="emacs --daemon"

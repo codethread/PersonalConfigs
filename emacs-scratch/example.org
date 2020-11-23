@@ -1,4 +1,0 @@
-* Hi
-here is some stuff
-** next heading
-- [ ] hi

@@ -466,7 +466,7 @@ message listing the hooks."
   (setq vterm-keymap-exceptions nil))
 
 ;; -----------------------------------------------------
-;; Themes
+;; Themes and Fonts
 ;; -----------------------------------------------------
 
 ;; pretty sure this keeps causing flickering
@@ -497,7 +497,8 @@ message listing the hooks."
   (load-theme 'kaolin-dark t))
 
 ;; set these after theme load
-(set-face-attribute 'default nil :font "Hack Nerd Font")
+;; (set-face-attribute 'default nil :font "Hack Nerd Font")
+(set-face-attribute 'default nil :font "FiraCode Nerd Font")
 
 (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
 
@@ -548,6 +549,34 @@ message listing the hooks."
 ;;				 (t default-color))))
 ;;		(set-face-background 'mode-line (car color))
 ;;		(set-face-foreground 'mode-line (cdr color))))))
+
+;; https://github.com/mickeynp/ligature.el
+(use-package ligature
+  :ensure nil
+  :load-path "elpa/ligature.el"
+  :config
+  ;; Enable the "www" ligature in every possible major mode
+  (ligature-set-ligatures 't '("www"))
+  ;; Enable traditional ligature support in eww-mode, if the
+  ;; `variable-pitch' face supports it
+  (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
+  ;; Enable all Cascadia Code ligatures in programming modes
+  (ligature-set-ligatures 'prog-mode '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
+                                       ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
+                                       "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
+                                       "<~~" "<~>" "<*>" "<||" "<|>" "<$>" "<==" "<=>" "<=<" "<->"
+                                       "<--" "<-<" "<<=" "<<-" "<<<" "<+>" "</>" "###" "#_(" "..<"
+                                       "..." "+++" "/==" "///" "_|_" "www" "&&" "^=" "~~" "~@" "~="
+                                       "~>" "~-" "**" "*>" "*/" "||" "|}" "|]" "|=" "|>" "|-" "{|"
+                                       "[|" "]#" "::" ":=" ":>" ":<" "$>" "==" "=>" "!=" "!!" ">:"
+                                       ">=" ">>" ">-" "-~" "-|" "->" "--" "-<" "<~" "<*" "<|" "<:"
+                                       "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
+                                       "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
+                                       "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
+                                       "\\" "://"))
+  ;; Enables ligature checks globally in all buffers. You can also do it
+  ;; per mode with `ligature-mode'.
+  (global-ligature-mode t))
 
 ;; -----------------------------------------------------
 ;; Evil -- start
@@ -690,11 +719,7 @@ message listing the hooks."
     "Tu" 'undo-tree-visualize
     "Tv" 'visual-line-mode
     "Tw" 'toggle-word-wrap
-
-    ;; r --- run
-    "r" 'hydra-window/body
-    ;; "r" 'my|run-ruby
-
+    "Tl" 'global-ligature-mode
     ))
 
 (use-package evil
@@ -1016,10 +1041,10 @@ _s_kip
 (use-package lsp-mode
   :commands lsp
   :hook
-  ((typescript-mode js-mode js2-mode web-mode scala-mode) . lsp)
+  ((typescript-mode js-mode js2-mode web-mode scala-mode java-mode) . lsp)
   (lsp-mode . lsp-enable-which-key-integration)
   :bind (:map lsp-mode-map
-	      ("TAB" . completion-at-point))
+	      ("C-SPC" . completion-at-point))
   :custom
   (lsp-disabled-clients '((json-mode . eslint)))
   (lsp-enable-file-watchers 'nil)
@@ -1058,6 +1083,11 @@ _s_kip
   (lsp-ui-imenu--custom-mode-line-format "lsp-ui-menu")
   (lsp-ui-doc-border "brightblack")
   (lsp-ui-doc-position 'at-point)) 
+
+(use-package dap-mode
+  :disabled
+  :after lsp-mode
+  :config (dap-auto-configure-mode))
 
 (use-package flycheck
   :defer t
@@ -1132,6 +1162,16 @@ _s_kip
   :disabled
   :config (setq lsp-metals-treeview-show-when-views-received t))
 
+;; -----------------------------------------------------
+;; Java
+;; -----------------------------------------------------
+(use-package lsp-java
+  :disabled
+  :config (add-hook 'java-mode-hook 'lsp))
+
+(use-package dap-java
+  :disabled
+  :ensure nil)
 ;; -----------------------------------------------------
 ;; Others
 ;; -----------------------------------------------------

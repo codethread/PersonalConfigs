@@ -1,9 +1,8 @@
 {
   "editor.scrollBeyondLastLine": false,
   "editor.cursorStyle": "block",
+  "editor.fontFamily": "'FiraCode Nerd Font','Roboto Mono', Menlo, Monaco, 'Courier New', monospace",
   "editor.fontLigatures": true,
-  "editor.fontFamily": "'Fira Code', 'Roboto Mono', Menlo, Monaco, 'Courier New', monospace",
-  "editor.autoIndent": true,
   "editor.cursorBlinking": "blink",
   "editor.dragAndDrop": true,
   "explorer.confirmDragAndDrop": true,
@@ -132,6 +131,10 @@
       "before": ["<leader>", "e", "l"],
       "commands": ["workbench.action.showErrorsWarnings"]
     },
+    {
+      "before": ["<leader>", "f", "r"],
+      "commands": ["fileutils.renameFile"]
+    }
     {
       "before": ["<leader>", "u", "f"],
       "commands": ["editor.action.formatDocument"]
