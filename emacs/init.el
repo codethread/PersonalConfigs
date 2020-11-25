@@ -75,24 +75,7 @@ message listing the hooks."
       backup-directory-alist `(("." . ,(expand-file-name "backups" user-emacs-directory)))
       auto-save-list-file-prefix (expand-file-name "auto-save-list/.saves-" user-emacs-directory))
 
-;; Keep customization settings in a temporary file (thanks Ambrevar!)
-;; (setq custom-file
-;;       (if (boundp 'server-socket-dir)
-;; 	  (expand-file-name "custom.el" server-socket-dir)
-;; 	(expand-file-name (format "emacs-custom-%s.el" (user-uid)) temporary-file-directory)))
-
-;; (load custom-file t)
-
 (server-start)
-
-
-;; -----------------------------------------------------
-;;; Per System Settings
-;; -----------------------------------------------------
-
-;; not sure if needed but can take inspiration from
-;; https://github.com/daviwil/dotfiles/blob/master/Emacs.org#system-settings
-
 
 ;; -----------------------------------------------------
 ;;; Set up package archives
@@ -131,6 +114,12 @@ message listing the hooks."
 ;; all packages will be installed if not already present
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
+
+(use-package auto-package-update
+  :custom
+  (auto-package-update-delete-old-versions t)
+  :config
+  (auto-package-update-maybe))
 
 ;; controls minor mode descriptions in modeline
 (use-package delight)
@@ -481,15 +470,10 @@ message listing the hooks."
   ((doom-themes-enable-bold t)
    (doom-themes-enable-italic t))
   :config
-  (load-theme 'doom-one t)
-  ;; (load-theme 'doom-nord t)
+  ;; (load-theme 'doom-one t)
+  (load-theme 'doom-nord t)
    ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
-
-(use-package nord-theme
-  :disabled
-  :config
-  (load-theme 'nord t))
 
 (use-package kaolin-themes
   :disabled
@@ -498,7 +482,7 @@ message listing the hooks."
 
 ;; set these after theme load
 ;; (set-face-attribute 'default nil :font "Hack Nerd Font")
-(set-face-attribute 'default nil :font "FiraCode Nerd Font")
+(set-face-attribute 'default nil :font "Fira Code Retina")
 
 (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
 
@@ -719,7 +703,8 @@ message listing the hooks."
     "Tu" 'undo-tree-visualize
     "Tv" 'visual-line-mode
     "Tw" 'toggle-word-wrap
-    "Tl" 'global-ligature-mode
+    "Tz" 'global-ligature-mode
+    "Tl" 'global-display-line-numbers-mode
     ))
 
 (use-package evil
@@ -1123,8 +1108,12 @@ _s_kip
 
 (use-package rjsx-mode
   :custom-face
-  (rjsx-tag ((t (:slant italic :foreground "#c678dd"))))
-  (rjsx-attr ((t (:foreground "#ECBE7B"))))
+  ;; doom-one
+  ;; (rjsx-tag ((t (:slant italic :foreground "#c678dd"))))
+  ;; (rjsx-attr ((t (:foreground "#ECBE7B"))))
+
+  ;; doom-nord
+  (js2-object-property ((t (:foreground "#ECEFF4"))))
   :config
   ;; Don't use built-in syntax checking
   (setq js2-mode-show-strict-warnings nil)

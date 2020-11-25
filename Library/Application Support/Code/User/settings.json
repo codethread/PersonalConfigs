@@ -1,7 +1,7 @@
 {
   "editor.scrollBeyondLastLine": false,
   "editor.cursorStyle": "block",
-  "editor.fontFamily": "'FiraCode Nerd Font','Roboto Mono', Menlo, Monaco, 'Courier New', monospace",
+  "editor.fontFamily": "'Fira Code Retina','Roboto Mono', Menlo, Monaco, 'Courier New', monospace",
   "editor.fontLigatures": true,
   "editor.cursorBlinking": "blink",
   "editor.dragAndDrop": true,
