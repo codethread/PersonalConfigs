@@ -419,8 +419,6 @@ message listing the hooks."
   (global-company-mode)
   :bind (:map company-active-map
          ("C-l" . company-complete-selection))
-        (:map lsp-mode-map
-         ("<tab>" . company-indent-or-complete-common))
   :custom
   (company-tooltip-align-annotations t)
   (company-minimum-prefix-length 100)
@@ -792,9 +790,6 @@ message listing the hooks."
   (require 'evil-org-agenda)
   (evil-org-agenda-set-keys))
 
-(use-package evil-magit
-  :after magit)
-
 (use-package evil-mc
   :delight
   :demand t
@@ -891,9 +886,10 @@ _s_kip
 (use-package projectile
   :delight '(:eval (concat " [" (projectile-project-name) "]"))
   :custom
-  ((projectile-completion-system 'default)
-   (projectile-known-projects-file
-    (expand-file-name "projectile-bookmarks.eld" user-emacs-directory)))
+  (projectile-completion-system 'default)
+  (projectile-indexing-method 'hybrid) ; use git whilst honoring .projectile ignores
+  (projectile-known-projects-file
+   (expand-file-name "projectile-bookmarks.eld" user-emacs-directory))
   :config
   (projectile-mode)
   :bind-keymap
@@ -990,6 +986,8 @@ _s_kip
                                   (left-fringe . 8)
                                   (right-fringe . 8)))
   (ivy-posframe-mode 1))
+
+(use-package ivy-xref)
 
 (use-package counsel
   :bind (("M-x" . counsel-M-x)
@@ -1135,7 +1133,9 @@ _s_kip
     (setq web-mode-enable-auto-quoting nil)
     (setq web-mode-markup-indent-offset 2)))
 
-(use-package jest)
+(use-package jest
+  :custom (jest-executable "yarn test")
+  :after (js2-mode))
   ;; :after (js2-mode)
   ;; :hook
   ;; (js2-mode . jest-minor-mode))

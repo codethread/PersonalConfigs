@@ -3,7 +3,7 @@
 	name = Adam Hall
 [core]
 	excludesfile = ~/.gitignore_global
-	editor = emacsclient -a vim -c
+	editor = vim --noplugin
 [pull]
 	rebase = true
 [push]
