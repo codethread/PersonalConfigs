@@ -118,8 +118,10 @@ message listing the hooks."
 (use-package auto-package-update
   :custom
   (auto-package-update-delete-old-versions t)
+  (auto-package-update-interval 1)
+  (auto-package-update-prompt-before-update t)
   :config
-  (auto-package-update-maybe))
+  (auto-package-update-at-time "09:18"))
 
 ;; controls minor mode descriptions in modeline
 (use-package delight)
@@ -1246,7 +1248,7 @@ _s_kip
 	org-agenda-span 8)
 
   (setq org-todo-keywords
-      '((sequence "TODO(t)" "PROGRESS(p)" "|" "DONE(d)")))
+      '((sequence "TODO(t)" "PROGRESS(p)" "|" "DONE(d)" "ARCHIVED(a)")))
 
   ;; seems broken
   (defun my|org-toggle-list-checkbox ()
