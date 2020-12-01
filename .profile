@@ -26,6 +26,7 @@ export GOBIN=$GOPATH/bin
 export GO111MODULE=on
 [ -d "$GOBIN" ] && pathprepend "$GOBIN" PATH
 [ -d "$HOME/.bin" ] && pathprepend "$HOME/.bin" PATH
+[ -d "$HOME/bin" ] && pathprepend "$HOME/bin" PATH
 [ -d "$HOME/.local/bin" ] && pathprepend "$HOME/.local/bin" PATH
 [ -d "$HOME/.rbenv/shims" ] && pathprepend "$HOME/.rbenv/shims" PATH
 [ -d "$HOME/.nodenv/shims" ] && pathprepend "$HOME/.nodenv/shims" PATH
