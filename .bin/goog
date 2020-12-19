@@ -5,7 +5,7 @@ cols=$(( COLUMNS / 3 ))
 sep='{::}'
 
 if [ "$(uname)" = "Darwin" ]; then
-    google_history="$HOME/Library/Application Support/Google/Chrome/Profile 1/History"
+    google_history="$HOME/Library/Application Support/Google/Chrome/Default/History"
     open=open
 else
     google_history="$HOME/.config/google-chrome/Default/History"

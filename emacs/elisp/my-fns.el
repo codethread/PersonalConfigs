@@ -65,34 +65,22 @@
   (interactive)
   (find-file "~/.emacs.d/init.el"))
 
-(defun my|replace-in-string (WHAT WITH in)
-  "`WHAT' to be replaced with `WITH' `IN' string."
-  (replace-regexp-in-string (regexp-quote WHAT) WITH in nil 'literal))
-
 (defun frontside-windowing-adjust-split-width-threshold ()
-  "Change the value of `split-width-threshold' so that it will cause the screen
-split once and only once.
+  "Change the value of `split-width-threshold' to split once.
 
 For example, if the frame is 360 columns wide, then we want the
-split-width-threshold to be 181. That way, when you split horizontally, the two
-new windows will each be 180 columns wide, and sit just below the threshold.
-"
+`split-width-threshold' to be 181. That way, when you split horizontally,
+the two new windows will each be 180 columns wide, and sit just below the threshold."
   (setq split-width-threshold (+ 1 (/ (frame-width) 2))))
 
 ;; recaculate split-width-threshold with every change
-(add-hook 'window-configuration-change-hook
-          'frontside-windowing-adjust-split-width-threshold)
+;; (add-hook 'window-configuration-change-hook
+;;           'frontside-windowing-adjust-split-width-threshold)
 
 (defadvice delete-window (after restore-balance activate)
   "Balance deleted windows."
   (balance-windows))
 
-;; horizontal split, switch window, and open next buffer
-(defun my|split-last-buffer ()
-  (interactive)
-  (split-window-horizontally)
-  (other-window 1 nil)
-  (projectile-previous-project-buffer))
 
 (defun frame-half-size-left ()
   "Set the current frame to half the screen width."
@@ -135,18 +123,6 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   (save-window-excursion
     (async-shell-command
      (concat "pomo --complete"))))
-
-(defun my|my-save-word ()
-  (interactive)
-  (let ((current-location (point))
-        (word (flyspell-get-word)))
-    (when (consp word)    
-      (flyspell-do-correct 'save nil (car word) current-location (cadr word) (caddr word) current-location))))
-
-(add-hook 'dired-mode-hook
-      (lambda ()
-        (dired-hide-details-mode)
-        (dired-sort-toggle-or-edit)))
 
 ;; TODO still getting there
 (defun my|replace-word-under-cursor ()
@@ -207,10 +183,41 @@ new windows will each be 180 columns wide, and sit just below the threshold.
   (interactive)
   (load-file "~/.emacs.d/init.el"))
 
+
+(defun endless/sharp ()
+  "Insert #' unless in a string or comment."
+  (interactive)
+  (call-interactively #'self-insert-command)
+  (let ((ppss (syntax-ppss)))
+    (unless (or (elt ppss 3)
+                (elt ppss 4)
+                (eq (char-after) ?'))
+      (insert "'"))))
+
+(define-key emacs-lisp-mode-map "#" #'endless/sharp)
+
 ;; (defun my|teardown
 ;;     "Remove all files from teardown file."
 ;;   (interactive)
 ;;  ())
+
+;; (setq my-name "Adam")
+;; ()
+;; (defun hi () (insert "my name is " my-name))
+;; (defun hello (name) (insert "hello " name))
+;; (hello "you")
+
+;; (progn
+;;   (switch-to-buffer-other-window "*test*")
+;;   (erase-buffer)
+;;   (hello "you")
+;;   (other-window 2))
+
+;; (setq list-of-names '("Dave" "Barry" "Dean"))
+;; (car list-of-names)
+;; (cdr list-of-names)
+;; (push "Steph" list-of-names)
+;; (mapcar 'hello list-of-names)
 
 (provide 'my-fns)
 

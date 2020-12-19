@@ -1,6 +1,6 @@
 {
   // not sure if I like this codeLens
-  "codeLens.enable": true,
+  "codeLens.enable": false,
   "coc.preferences.formatOnType": true,
   "coc.preferences.formatOnSaveFiletypes": [
     "javascript",
@@ -10,6 +10,6 @@
     "scala"
   ],
   "eslint.autoFixOnSave": true,
-  "eslint.filetypes": ["javascript", "javascriptreact", "typescript", "typescriptreact"]
-  // "list.source.files.args": ["--hidden", "--files"]
+  "eslint.filetypes": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+  "list.source.files.args": ["--hidden", "--files"]
 }

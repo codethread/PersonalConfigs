@@ -75,8 +75,6 @@ message listing the hooks."
       backup-directory-alist `(("." . ,(expand-file-name "backups" user-emacs-directory)))
       auto-save-list-file-prefix (expand-file-name "auto-save-list/.saves-" user-emacs-directory))
 
-(server-start)
-
 ;; -----------------------------------------------------
 ;;; Set up package archives
 ;; -----------------------------------------------------
@@ -114,6 +112,9 @@ message listing the hooks."
 ;; all packages will be installed if not already present
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
+
+(use-package use-package-ensure-system-package
+  :ensure t)
 
 (use-package auto-package-update
   :custom
@@ -187,6 +188,7 @@ message listing the hooks."
 
 (setq indent-tabs-mode nil
       inhibit-startup-screen t
+      create-lockfiles nil
 
       large-file-warning-threshold 100000000 ; warn when opening files bigger than 100MB
       line-number-display-limit 1 ; no line numbers in modeline
@@ -231,11 +233,14 @@ message listing the hooks."
 			(make-glyph-code ?┃)))
 
 (setq kill-buffer-query-functions nil)
-(electric-pair-mode)
+
 
 ;; -----------------------------------------------------
 ;; Vanila Improvements
 ;; -----------------------------------------------------
+
+;; (electric-pair-mode) TODO turn off in lisp
+(winner-mode 1)
 
 (use-package vc-hooks
   :ensure nil
@@ -268,8 +273,13 @@ message listing the hooks."
 
 (use-package dired-single)
 
-;; (use-package all-the-icons-dired
-;;   :hook (dired-mode . all-the-icons-dired-mode))
+(use-package all-the-icons-dired
+  :hook (dired-mode . all-the-icons-dired-mode))
+
+;; (add-hook 'dired-mode-hook
+;;       (lambda ()
+;;         (dired-hide-details-mode)
+;;         (dired-sort-toggle-or-edit)))
 
 (use-package dired
   :after (evil evil-collection)
@@ -482,7 +492,7 @@ message listing the hooks."
 
 ;; set these after theme load
 ;; (set-face-attribute 'default nil :font "Hack Nerd Font")
-(set-face-attribute 'default nil :font "Fira Code Retina")
+(set-face-attribute 'default nil :font "FiraCode Nerd Font")
 
 (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
 
@@ -541,9 +551,6 @@ message listing the hooks."
   :config
   ;; Enable the "www" ligature in every possible major mode
   (ligature-set-ligatures 't '("www"))
-  ;; Enable traditional ligature support in eww-mode, if the
-  ;; `variable-pitch' face supports it
-  (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
   ;; Enable all Cascadia Code ligatures in programming modes
   (ligature-set-ligatures 'prog-mode '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
                                        ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
@@ -557,7 +564,7 @@ message listing the hooks."
                                        "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
                                        "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
                                        "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
-                                       "\\" "://"))
+                                       "\\\\" "://"))
   ;; Enables ligature checks globally in all buffers. You can also do it
   ;; per mode with `ligature-mode'.
   (global-ligature-mode t))
@@ -569,7 +576,8 @@ message listing the hooks."
 (use-package evil-leader
   :delight
   :init
-  (setq evil-want-keybinding 'nil)
+  (setq evil-want-integration t)
+  (setq evil-want-keybinding nil) ; evil-colleciton expects this
   :config
   (global-evil-leader-mode)
   (evil-leader/set-leader "<SPC>")
@@ -594,6 +602,9 @@ message listing the hooks."
     "bp" 'evil-prev-buffer
     "br" 'rename-buffer
     "bx" 'font-lock-fontify-buffer ;; repaint the buffer
+
+    ;; d -- docker
+    ;; "dd" 'docker
 
     ;; e -- error
     "ef" 'my|eslint-fix-file-and-revert
@@ -711,7 +722,7 @@ message listing the hooks."
   :after (evil-leader avy)
   :init
   (setq evil-want-integration t)
-  (setq evil-want-keybinding nil)
+  (setq evil-want-keybinding nil) ; evil-colleciton expects this
   (setq evil-want-C-i-jump nil)
   (setq evil-respect-visual-line-mode t)
   :bind
@@ -777,6 +788,9 @@ message listing the hooks."
 (use-package evil-collection
   :after evil
   :config
+  (require 'seq)
+  (setq evil-collection--supported-modes
+	(seq-difference evil-collection--supported-modes '(lispy)))
   (evil-collection-init))
 
 ;; https://github.com/Somelauw/evil-org-mode
@@ -893,12 +907,30 @@ _s_kip
   (projectile-known-projects-file
    (expand-file-name "projectile-bookmarks.eld" user-emacs-directory))
   :config
+  (projectile-register-project-type 'yarn '("yarn.lock")
+				    :compile "yarn"
+				    :test "yarn test"
+				    :run "yarn start"
+				    :test-suffix ".test")
+
+  (projectile-register-project-type 'npm '("package-lock.json")
+				    :compile "npm i"
+				    :test "npm test"
+				    :run "npm start"
+				    :test-suffix "_test")
+
+  (projectile-register-project-type 'gradle '("build.gradle")
+				    :compile "npm i"
+				    :test "npm test"
+				    :run "npm start"
+				    :test-suffix "Test")
+  (require 'my-projectile-fns)
   (projectile-mode)
   :bind-keymap
   ("C-c p" . projectile-command-map)
   :init
   (if (file-directory-p "~/sky")
-    (setq projectile-project-search-path '("~/dev" "~/sky" "~/identity"))
+    (setq projectile-project-search-path '("~/dev" "~/sky"))
     (setq projectile-project-search-path '("~/dev"))))
 
 (use-package counsel-projectile
@@ -941,7 +973,7 @@ _s_kip
 (use-package flx
   :defer 1)
 
-(use-package ivy
+(use-package ivy ;; TODO do i need these bindings and evil collection?
   :delight
   :bind (("C-s" . swiper)
 	 :map ivy-minibuffer-map
@@ -977,6 +1009,7 @@ _s_kip
   (ivy-rich-mode 1))
 
 (use-package ivy-posframe
+  :disabled ;; this is pretty sexy, but clashes with frame resizing, macos full screen and elscreen
   :custom
   (ivy-posframe-width      115)
   (ivy-posframe-min-width  115)
@@ -1145,17 +1178,18 @@ _s_kip
 ;; -----------------------------------------------------
 ;; Scala
 ;; -----------------------------------------------------
+
 (use-package scala-mode
   :interpreter
   ("scala" . scala-mode))
 
 (use-package lsp-metals
-  :disabled
   :config (setq lsp-metals-treeview-show-when-views-received t))
 
 ;; -----------------------------------------------------
 ;; Java
 ;; -----------------------------------------------------
+
 (use-package lsp-java
   :disabled
   :config (add-hook 'java-mode-hook 'lsp))
@@ -1163,6 +1197,30 @@ _s_kip
 (use-package dap-java
   :disabled
   :ensure nil)
+
+;; -----------------------------------------------------
+;; Python
+;; -----------------------------------------------------
+
+(use-package lsp-python-ms
+  :init (setq lsp-python-ms-auto-install-server t)
+  :hook (python-mode . (lambda ()
+                          (require 'lsp-python-ms)
+                          (lsp))))
+
+
+;; -----------------------------------------------------
+;; Docker
+;; -----------------------------------------------------
+
+(use-package dockerfile-mode)
+
+(use-package docker-compose-mode)
+
+(use-package docker
+  :ensure t
+  :bind ("C-c d" . docker))
+
 ;; -----------------------------------------------------
 ;; Others
 ;; -----------------------------------------------------
@@ -1170,10 +1228,6 @@ _s_kip
 (use-package json-mode)
 
 (use-package yaml-mode)
-
-(use-package dockerfile-mode)
-
-(use-package docker-compose-mode)
 
 (use-package graphql-mode
   :config
@@ -1189,13 +1243,44 @@ _s_kip
   (add-to-list 'auto-mode-alist '("\\.env\\..*\\'" . dotenv-mode)))
 
 ;; -----------------------------------------------------
+;; lisp
+;; -----------------------------------------------------
+
+(use-package lispy
+  :config
+  (add-hook 'emacs-lisp-mode-hook (lambda () (lispy-mode 1))))
+
+(use-package lispyville
+  :config
+  (add-hook 'lispy-mode-hook #'lispyville-mode)
+  (lispyville-set-key-theme
+   '(commentary	; comments on gc
+     c-w	; C-w deletes backword word, so I should get used that
+     ;; mark		 ; look into this another day
+     prettify	 ; make == and the like work
+     atom-motions ; make w and e respect atoms (e.g foo-bar is an atom)
+     slurp/barf-cp
+     additional	; binds a bunch of things to alt https://github.com/noctuid/lispyville#additional-key-theme
+     additional-motions	; I mainly like this for so [ ] can act like 'd'
+     additional-insert	; make M-[oO] M-[iI] smarter
+     operators)))
+
+;; -----------------------------------------------------
 ;; Writing
 ;; -----------------------------------------------------
 
 (use-package flyspell
   :ensure nil
+  :ensure-system-package aspell
   :config
-  (setq ispell-program-name "/usr/local/bin/aspell"))
+  (setq ispell-program-name "/usr/local/bin/aspell")
+
+  (defun my|my-save-word ()
+    (interactive)
+    (let ((current-location (point))
+	  (word (flyspell-get-word)))
+      (when (consp word)    
+	(flyspell-do-correct 'save nil (car word) current-location (cadr word) (caddr word) current-location)))))
 
 (use-package flyspell-correct-ivy
   :after (flyspell ivy))

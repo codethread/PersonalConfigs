@@ -24,13 +24,15 @@ export SOURCED_PROFILE=true
 export GOPATH=$HOME/go
 export GOBIN=$GOPATH/bin
 export GO111MODULE=on
+export VOLTA_HOME="$HOME/.volta"
+
 [ -d "$GOBIN" ] && pathprepend "$GOBIN" PATH
 [ -d "$HOME/.bin" ] && pathprepend "$HOME/.bin" PATH
 [ -d "$HOME/bin" ] && pathprepend "$HOME/bin" PATH
 [ -d "$HOME/.local/bin" ] && pathprepend "$HOME/.local/bin" PATH
 [ -d "$HOME/.rbenv/shims" ] && pathprepend "$HOME/.rbenv/shims" PATH
-[ -d "$HOME/.nodenv/shims" ] && pathprepend "$HOME/.nodenv/shims" PATH
 [ -d "$HOME/.jenv/bin" ] && pathprepend "$HOME/.jenv/bin" PATH
+[ -d "$HOME/.jenv/shims" ] && pathprepend "$HOME/.jenv/shims" PATH
 [ -d "$HOME/.cargo/bin" ] && pathprepend "$HOME/.cargo/bin" PATH
 [ -d "$HOME/.emacs.d/bin" ] && pathprepend "$HOME/.emacs.d/bin" PATH
 [ -d "$HOME/.dotnet/tools" ] && pathprepend "$HOME/.dotnet/tools" PATH
@@ -38,6 +40,10 @@ export GO111MODULE=on
 [ -d "/opt/X12/bin" ] && pathprepend "/opt/X12/bin" PATH
 [ -d "/opt/local/bin" ] && pathprepend "/opt/local/bin" PATH
 [ -d "$HOME/istio-1.5.1/bin" ] && pathprepend "$HOME/istio-1.5.1/bin" PATH
+
+# Node
+[ -d "$VOLTA_HOME/bin" ] && pathprepend "$VOLTA_HOME/bin" PATH
+# [ -d "$HOME/.nodenv/shims" ] && pathprepend "$HOME/.nodenv/shims" PATH
 
 ###############################
 # WORK
@@ -55,3 +61,5 @@ if [[ $(whoami) =~ 'adh23' ]]; then
     export SBT_OPTS="-Xmx4G -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled -Xss2M -Duser.timezone=GMT -Xmx6144m"
     ssource ~/.sky_private
 fi
+export VOLTA_HOME="$HOME/.volta"
+export PATH="$VOLTA_HOME/bin:$PATH"
