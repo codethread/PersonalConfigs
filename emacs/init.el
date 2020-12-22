@@ -21,54 +21,9 @@
 (add-hook 'emacs-startup-hook
 	  (lambda ()
 	    (message "*** Emacs loaded in %s with %d garbage collections."
-		     (format "%.2f seconds"
-			     (float-time
-			      (time-subtract after-init-time before-init-time)))
+		     (format "%.2f seconds" (float-time
+					     (time-subtract after-init-time before-init-time)))
 		     gcs-done)))
-(defmacro my/with-advice (adlist &rest body)
-  "Execute BODY with temporary advice in ADLIST.
-
-Each element of ADLIST should be a list of the form
-  (SYMBOL WHERE FUNCTION [PROPS])
-suitable for passing to `advice-add'.  The BODY is wrapped in an
-`unwind-protect' form, so the advice will be removed even in the
-event of an error or nonlocal exit."
-  (declare (debug ((&rest (&rest form)) body))
-           (indent 1))
-  `(progn
-     ,@(mapcar (lambda (adform)
-                 (cons 'advice-add adform))
-               adlist)
-     (unwind-protect (progn ,@body)
-       ,@(mapcar (lambda (adform)
-                   `(advice-remove ,(car adform) ,(nth 2 adform)))
-                 adlist))))
-
-(defun my/call-logging-hooks (command &optional verbose)
-  "Call COMMAND, reporting every hook run in the process.
-Interactively, prompt for a command to execute.
-
-Return a list of the hooks run, in the order they were run.
-Interactively, or with optional argument VERBOSE, also print a
-message listing the hooks."
-  (interactive "CCommand to log hooks: \np")
-  (let* ((log     nil)
-         (logger (lambda (&rest hooks) 
-                   (setq log (append log hooks nil)))))
-    (my/with-advice
-        ((#'run-hooks :before logger))
-      (call-interactively command))
-    (when verbose
-      (message
-       (if log "Hooks run during execution of %s:"
-         "No hooks run during execution of %s.")
-       command)
-      (dolist (hook log)
-        (message "> %s" hook)))
-    log))
-
-;; (setq package-enable-at-startup nil)
-;; (package-initialize)
 
 ;; control some file locations, which could be shared across configs, rather in .emacs.d
 (setq user-emacs-directory "~/.emacs.d"
@@ -84,6 +39,10 @@ message listing the hooks."
       '(("melpa" . "https://melpa.org/packages/")
 	("org" . "https://orgmode.org/elpa/")
 	("elpa" . "https://elpa.gnu.org/packages/")))
+
+;; org is a special child that needs to be installed
+(unless (file-expand-wildcards (concat package-user-dir "/org-[0-9]*"))
+ (package-install (elt (cdr (assoc 'org package-archive-contents)) 0)))
 
 ;; -----------------------------------------------------
 ;;; Keep everything smooth and up-to-date
@@ -358,7 +317,8 @@ message listing the hooks."
   ([remap describe-key] . helpful-key))
 
 (use-package rainbow-delimiters
-  :hook (prog-mode . rainbow-delimiters-mode))
+  :hook
+  ((web-mode typescript-mode css-mode rjsx-mode scala-mode java-mode json-mode) . rainbow-delimiters-mode))
 
 (use-package expand-region
   :demand
@@ -412,6 +372,7 @@ message listing the hooks."
   (custom-set-faces '(aw-leading-char-face ((t (:inherit warning :weight bold :height 2.0))))))
 
 (use-package yasnippet
+  :disabled 				; TODO practice with this first
   :bind
   ("C-c y s" . yas-insert-snippet)
   ("C-c y v" . yas-visit-snippet-file)
@@ -484,11 +445,6 @@ message listing the hooks."
   (load-theme 'doom-nord t)
    ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
-
-(use-package kaolin-themes
-  :disabled
-  :config
-  (load-theme 'kaolin-dark t))
 
 ;; set these after theme load
 ;; (set-face-attribute 'default nil :font "Hack Nerd Font")
@@ -788,15 +744,13 @@ message listing the hooks."
 (use-package evil-collection
   :after evil
   :config
-  (require 'seq)
-  (setq evil-collection--supported-modes
-	(seq-difference evil-collection--supported-modes '(lispy)))
-  (evil-collection-init))
+  (setq my/evil-collection-disabled-modes '(lispy))
+  (evil-collection-init
+   (seq-difference evil-collection--supported-modes my/evil-collection-disabled-modes)))
 
 ;; https://github.com/Somelauw/evil-org-mode
 (use-package evil-org
   :delight
-  :ensure t
   :after org
   :config
   (add-hook 'org-mode-hook 'evil-org-mode)
@@ -847,7 +801,7 @@ _s_kip
   (evil-escape-mode t))
 
 (use-package evil-matchit
-    :config
+  :config
   (global-evil-matchit-mode t))
 
 (use-package evil-args
@@ -858,7 +812,6 @@ _s_kip
 
 (use-package elscreen
   :after (evil)
-  :demand t
   :custom
   ((elscreen-display-screen-number nil)
    (elscreen-default-buffer-initial-message nil)
@@ -971,7 +924,7 @@ _s_kip
 
 ;; Improves sorting for fuzzy-matched results
 (use-package flx
-  :defer 1)
+  :after ivy)
 
 (use-package ivy ;; TODO do i need these bindings and evil collection?
   :delight
@@ -1059,7 +1012,7 @@ _s_kip
 (use-package lsp-mode
   :commands lsp
   :hook
-  ((typescript-mode js-mode js2-mode web-mode scala-mode java-mode) . lsp)
+  ((typescript-mode rjsx-mode web-mode scala-mode java-mode) . lsp)
   (lsp-mode . lsp-enable-which-key-integration)
   :bind (:map lsp-mode-map
 	      ("C-SPC" . completion-at-point))
@@ -1067,15 +1020,7 @@ _s_kip
   (lsp-disabled-clients '((json-mode . eslint)))
   (lsp-enable-file-watchers 'nil)
   (lsp-eslint-run "onType")
-  (lsp-auto-execute-action 'nil)
-  :config
-  (setq lsp-eslint-server-command (if (file-directory-p "~/sky")
-         '("node"
-      "/Users/adh23/.vscode/extensions/dbaeumer.vscode-eslint-2.1.8/server/out/eslintServer.js"
-      "--stdio")
-       '("node"
-      "/Users/adam/.vscode/extensions/dbaeumer.vscode-eslint-2.1.8/server/out/eslintServer.js"
-        "--stdio"))))
+  (lsp-auto-execute-action 'nil))
   ;; (setq lsp-diagnostic-package :none))
 
 (use-package lsp-ui
@@ -1100,7 +1045,7 @@ _s_kip
   (lsp-ui-doc-show-with-cursor 'nil) ; use keybinding instead or mouse
   (lsp-ui-imenu--custom-mode-line-format "lsp-ui-menu")
   (lsp-ui-doc-border "brightblack")
-  (lsp-ui-doc-position 'at-point)) 
+  (lsp-ui-doc-position 'at-point))
 
 (use-package dap-mode
   :disabled
@@ -1108,7 +1053,6 @@ _s_kip
   :config (dap-auto-configure-mode))
 
 (use-package flycheck
-  :defer t
   ;; :custom
   ;; ((flycheck-check-syntax-automatically '(idle-buffer-switch save mode-enabled)))
   :hook (prog-mode . flycheck-mode))
@@ -1135,11 +1079,13 @@ _s_kip
 (use-package typescript-mode
   :mode "\\.ts\\'"
   :custom
-  ((js-indent-level 2))
+  (js-indent-level 2)
   :config
   (setq typescript-indent-level 2))
 
 (use-package rjsx-mode
+  :mode "\\.jsx?\\'"
+  :interpreter "node"
   :custom-face
   ;; doom-one
   ;; (rjsx-tag ((t (:slant italic :foreground "#c678dd"))))
@@ -1148,19 +1094,24 @@ _s_kip
   ;; doom-nord
   (js2-object-property ((t (:foreground "#ECEFF4"))))
   :config
+  (add-hook 'rjsx-mode-hook #'js2-minor-mode)
+
   ;; Don't use built-in syntax checking
-  (setq js2-mode-show-strict-warnings nil)
-  (add-to-list 'auto-mode-alist '("\\.js\\'" . rjsx-mode))
-  (add-to-list 'interpreter-mode-alist '("node" . rjsx-mode)))
+  (setq js2-mode-show-strict-warnings nil))
+
+(use-package js2-refactor
+  :defer
+  :config
+  (add-hook 'js2-minor-mode-hook #'js2-refactor-mode))
 
 (use-package web-mode
   :mode "\\.tsx\\'"
   :config
   (setq-default web-mode-comment-formats
-              '(("javascript" . "//")
-                ("typescript" . "//")))
+		'(("javascript" . "//")
+                  ("typescript" . "//")))
 
-  (add-hook 'web-mode-hook 'my|web-mode-settings)
+  (add-hook 'web-mode-hook #'my|web-mode-settings)
 
   (defun my|web-mode-settings ()
     "Hooks for Web mode."
@@ -1169,11 +1120,8 @@ _s_kip
     (setq web-mode-markup-indent-offset 2)))
 
 (use-package jest
-  :custom (jest-executable "yarn test")
-  :after (js2-mode))
-  ;; :after (js2-mode)
-  ;; :hook
-  ;; (js2-mode . jest-minor-mode))
+  :hook ((rjsx-mode web-mode typescript-mode) . jest-minor-mode)
+  :custom (jest-executable "yarn test"))
 
 ;; -----------------------------------------------------
 ;; Scala
@@ -1208,51 +1156,49 @@ _s_kip
                           (require 'lsp-python-ms)
                           (lsp))))
 
-
 ;; -----------------------------------------------------
 ;; Docker
 ;; -----------------------------------------------------
 
-(use-package dockerfile-mode)
+(use-package dockerfile-mode
+  :defer t)
 
-(use-package docker-compose-mode)
+(use-package docker-compose-mode
+  :defer t)
 
 (use-package docker
-  :ensure t
   :bind ("C-c d" . docker))
 
 ;; -----------------------------------------------------
 ;; Others
 ;; -----------------------------------------------------
 
-(use-package json-mode)
+(use-package json-mode
+  :mode "\\.json\\'")
 
-(use-package yaml-mode)
+(use-package yaml-mode
+  :defer t)
 
 (use-package graphql-mode
-  :config
-  (add-to-list 'auto-mode-alist '("\\.gql\\'" . graphql-mode)))
+  :defer t)
 
 (use-package dotenv-mode
-  :config
-  (add-hook 'dotenv-mode-hook
-            (lambda ()
+  :mode "\\.env\\..*\\'" 
+  :hook (dotenv-mode . (lambda ()
               (set (make-local-variable 'comment-start) "# ")
-              (set (make-local-variable 'comment-end) "")))
-  ;; for optionally supporting additional file extensions such as `.env.test' with this major mode
-  (add-to-list 'auto-mode-alist '("\\.env\\..*\\'" . dotenv-mode)))
+              (set (make-local-variable 'comment-end) ""))))
+
+;; (use-package rustic)
 
 ;; -----------------------------------------------------
 ;; lisp
 ;; -----------------------------------------------------
-
 (use-package lispy
-  :config
-  (add-hook 'emacs-lisp-mode-hook (lambda () (lispy-mode 1))))
+  :hook (emacs-lisp-mode . (lambda () (lispy-mode 1))))
 
 (use-package lispyville
+  :hook (lispy-mode . lispyville-mode)
   :config
-  (add-hook 'lispy-mode-hook #'lispyville-mode)
   (lispyville-set-key-theme
    '(commentary	; comments on gc
      c-w	; C-w deletes backword word, so I should get used that
@@ -1265,6 +1211,9 @@ _s_kip
      additional-insert	; make M-[oO] M-[iI] smarter
      operators)))
 
+(use-package paren-face
+  :hook (lispy-mode . paren-face-mode))
+
 ;; -----------------------------------------------------
 ;; Writing
 ;; -----------------------------------------------------
@@ -1272,6 +1221,7 @@ _s_kip
 (use-package flyspell
   :ensure nil
   :ensure-system-package aspell
+  :hook ((markdown-mode org-mode) . flyspell-mode)
   :config
   (setq ispell-program-name "/usr/local/bin/aspell")
 
@@ -1307,14 +1257,19 @@ _s_kip
   (org-mode . flyspell-mode)
   (org-mode . abbrev-mode)
   :custom
-  ((org-agenda-files (if (file-directory-p "~/sky")
-			 '("~/org-notes/org-sky-notes/work.org"
-			   "~/org-notes/org-me-notes/notes.org")
-			 '("~/org-notes/org-me-notes/notes.org"))))
+  (org-src-lang-modes '(("C" . c)
+			("cpp" . c++)
+			("bash" . sh)
+			("sh" . sh)
+			("elisp" . emacs-lisp)
+			("javascript" . rjsx)
+			("js" . rjsx)))
+  (org-agenda-files (if (file-directory-p "~/sky")
+			'("~/org-notes/org-sky-notes/work.org"
+			  "~/org-notes/org-me-notes/notes.org")
+		      '("~/org-notes/org-me-notes/notes.org")))
   :config
   (require 'org-tempo) ;; needed to add this to get template expansion to work again
-  ;; set scratch buffer to org mode
-  ;; (setq initial-major-mode 'org-mode)
 
   (setq org-startup-indented t
 	org-fontify-done-headline t
@@ -1333,7 +1288,7 @@ _s_kip
 	org-agenda-span 8)
 
   (setq org-todo-keywords
-      '((sequence "TODO(t)" "PROGRESS(p)" "|" "DONE(d)" "ARCHIVED(a)")))
+	'((sequence "TODO(t)" "PROGRESS(p)" "|" "DONE(d)" "ARCHIVED(a)")))
 
   ;; seems broken
   (defun my|org-toggle-list-checkbox ()
@@ -1364,17 +1319,19 @@ _s_kip
 	(forward-line))
       (beginning-of-line)))
 
-  ;; (defun org-babel-execute:typescript (body params)
-  ;;   (let ((org-babel-js-cmd "npx ts-node < "))
-  ;;     (org-babel-execute:js body params)))
-
   (org-babel-do-load-languages
    'org-babel-load-languages '((shell . t) ; allow bash
-			       (js . t)
 			       (typescript . t)
 			       (haskell . t)
 			       (ruby . t)
 			       (io . t)))
+
+  (require 'ob-js)
+  ;; overwrite default wrapper function which doesn't work
+  (setq org-babel-js-function-wrapper "(function() {
+  const res = require('util').inspect((function(){\n%s\n})())
+  process.stdout.write(res !== 'undefined' ? res : 'no value returned from block');
+  })()")
 
   ;; Highlight done todos with different colors.
   (font-lock-add-keywords
@@ -1414,7 +1371,12 @@ _s_kip
 	    (todo "PROGRESS")
 	    (tags-todo "work")
 	    (tags-todo "skyport")))))
-  )
+
+  (defun my/disable-org-checkdoc ()
+    "Turn off elisp's flycheck checkdoc in src blocks."
+    (setq-local flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
+
+  (add-hook 'org-src-mode-hook 'my/disable-org-checkdoc))
 
 ;; only show bullets in gui
 (use-package org-bullets
@@ -1439,11 +1401,11 @@ _s_kip
   (org-alert-enable))
 
 (use-package markdown-mode
-  :hook
-  (markdown-mode . flyspell-mode)
-  (markdown-mode . visual-line-mode))
+  :defer t
+  :hook (markdown-mode . visual-line-mode))
 
-(use-package markdown-toc)
+(use-package markdown-toc
+  :after markdown)
 
 (require 'my-fns)
 
