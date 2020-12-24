@@ -18,12 +18,7 @@
 (setq gc-cons-threshold (* 100 1000 1000))
 
 ;; Profile emacs startup
-(add-hook 'emacs-startup-hook
-	  (lambda ()
-	    (message "*** Emacs loaded in %s with %d garbage collections."
-		     (format "%.2f seconds" (float-time
-					     (time-subtract after-init-time before-init-time)))
-		     gcs-done)))
+(add-hook 'emacs-startup-hook #'my/print-init-time)
 
 ;; control some file locations, which could be shared across configs, rather in .emacs.d
 (setq user-emacs-directory "~/.emacs.d"
@@ -45,19 +40,6 @@
  (package-install (elt (cdr (assoc 'org package-archive-contents)) 0)))
 
 ;; -----------------------------------------------------
-;;; Keep everything smooth and up-to-date
-;; -----------------------------------------------------
-
-;; (byte-recompile-directory (expand-file-name "~/.emacs.d/elpa") 0)
-(unless (package-installed-p 'auto-compile)
-  (package-refresh-contents)
-  (package-install 'auto-compile))
-
-(require 'auto-compile)
-(auto-compile-on-load-mode)
-(auto-compile-on-save-mode)
-
-;; -----------------------------------------------------
 ;; Package Manager
 ;; -----------------------------------------------------
 
@@ -65,8 +47,8 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
-(eval-when-compile
-  (require 'use-package))
+(require 'use-package)
+(setq use-package-verbose t)
 
 ;; all packages will be installed if not already present
 (require 'use-package-ensure)
@@ -88,9 +70,13 @@
 
 (use-package cus-edit
   :ensure nil
-  :defer t
   :custom
-  (custom-file null-device "Don't store customizations"))
+  (custom-file "~/.emacs.d/custom.el")
+  ;; (custom-file null-device "Don't store customizations")
+  :config
+  (unless (file-exists-p custom-file)
+    (with-temp-buffer (write-file custom-file)))
+  (load-file custom-file))
 
 ;; -----------------------------------------------------
 ;; Load Paths
@@ -145,8 +131,13 @@
 ;; recomended to increase performance from https://emacs-lsp.github.io/lsp-mode/page/performance/
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
 
+
 (setq indent-tabs-mode nil
+      ;; prevent startup and scratch buffer loading lispy
       inhibit-startup-screen t
+      initial-buffer-choice (lambda () (switch-to-buffer "*Messages*"))
+      initial-major-mode #'fundamental-mode
+
       create-lockfiles nil
 
       large-file-warning-threshold 100000000 ; warn when opening files bigger than 100MB
@@ -194,12 +185,250 @@
 (setq kill-buffer-query-functions nil)
 
 
+(use-package which-key
+  :delight
+  :config
+  (which-key-mode t)
+  ;; (which-key-add-key-based-replacements
+  ;;   "<SPC> b" "Buffers"
+  ;;   "<SPC> e" "Errors"
+  ;;   "<SPC> E" "Spelling"
+  ;;   "<SPC> f" "Files"
+  ;;   "<SPC> F" "Fold"
+  ;;   "<SPC> g" "Global"
+  ;;   "<SPC> n" "Notes"
+  ;;   "<SPC> p" "Projects"
+  ;;   "<SPC> s" "Search"
+  ;;   "<SPC> S" "Web"
+  ;;   "<SPC> t" "Term"
+  ;;   "<SPC> T" "Toggle"
+  ;;   "<SPC> w" "Window"
+  ;;   "<SPC> W" "Layouts")
+  ;; (which-key-add-major-mode-key-based-replacements 'org-mode
+  ;; ", d" "Delete"
+  ;; ", h" "Heading"
+  ;; ", i" "Insert"
+  ;; ", l" "List")
+  )
+
+;; -----------------------------------------------------
+;; General
+;; -----------------------------------------------------
+
+(use-package general
+  :demand
+  :disabled
+  :config
+  (general-evil-setup t)
+  (general-create-definer my-leader-def :prefix "SPC" :states '(normal visual))
+  (general-create-definer my-local-leader-def :prefix "SPC l" :states '(normal visual))
+
+  (my-leader-def
+    :keymaps 'override
+    "SPC" #'counsel-projectile-find-file
+    ";" #'counsel-M-x
+    ":" #'counsel-command-history))
+
+(require 'general)
+(general-evil-setup t)
+(general-create-definer my-leader-def :prefix "SPC" :states '(normal visual))
+(general-create-definer my-local-leader-def :prefix "SPC l" :states '(normal visual))
+(my-leader-def
+  :keymaps 'override
+  "SPC" #'counsel-projectile-find-file
+  ";" #'counsel-M-x
+  ":" #'counsel-command-history)
+
+;; -----------------------------------------------------
+;; Hydras
+;; -----------------------------------------------------
+
+(use-package hydra
+  :demand
+  :commands
+  ;; remove flycheck/byte-compiler warnings about missing commands
+  hydra-default-pre
+  hydra-keyboard-quit
+  hydra--call-interactively-remap-maybe
+  hydra-show-hint
+  hydra-set-transient-map)
+
+(use-package evil
+  :demand
+  :init
+  (setq evil-want-integration t)
+  (setq evil-want-keybinding nil)	; evil-colleciton expects this
+  (setq evil-want-C-i-jump nil)
+  (setq evil-respect-visual-line-mode t)
+  :bind
+  (:map evil-insert-state-map
+	;; ("C-@"   . completion-at-point)
+	;; ("C-SPC" . completion-at-point))
+	("C-@"   . company-complete)
+	("C-SPC" . company-complete)
+	("C-l"   . (lambda ()
+		     (interactive)
+		     (right-char 1))))
+  ;; ("C-h"   . char-left))
+  (:map evil-normal-state-map
+	("C-\\" . counsel-projectile-rg)
+	("u"    . undo-tree-undo)
+	("C-r"  . undo-tree-redo)
+	("C-e"	. move-end-of-line)	; replace scroll up
+	("C-u"	. evil-scroll-up) ; get scroll up back and replace with C-m as it's just return
+	("C-y"	. universal-argument)
+	("gf"	. projectile-find-file-dwim)
+	("gh"	. lsp-describe-thing-at-point))
+  :config
+  ;; https://emacs.stackexchange.com/questions/9583/how-to-treat-underscore-as-part-of-the-word
+  (defadvice evil-inner-word (around underscore-as-word activate)
+    (let ((table (copy-syntax-table (syntax-table))))
+      (modify-syntax-entry ?_ "w" table)
+      (with-syntax-table table
+	ad-do-it)))
+
+  (evil-mode t)
+  (define-key universal-argument-map (kbd "C-y") 'universal-argument-more)
+
+  (evil-define-key 'normal org-mode-map (kbd "TAB") 'org-cycle)
+  (evil-define-key 'normal org-mode-map ",c" 'org-toggle-checkbox)
+  ;; - thing => - [ ] thing => - thing
+  (evil-define-key 'normal org-mode-map ",lt" 'my|org-toggle-list-checkbox)
+  (evil-define-key 'normal org-mode-map ",ls" 'org-sort-list)
+
+  (evil-define-key 'normal org-mode-map ",g" 'org-open-at-point)
+  (evil-define-key 'normal org-mode-map ",hh" 'org-toggle-heading)
+  (evil-define-key 'normal org-mode-map ",ho" 'evil-org-insert-heading-below)
+  (evil-define-key 'normal org-mode-map ",hn" 'org-insert-heading-respect-content)
+  (evil-define-key 'normal org-mode-map ",hs" 'org-insert-subheading)
+  (evil-define-key 'normal org-mode-map ",dr" 'org-table-kill-row)
+  (evil-define-key 'normal org-mode-map ",dc" 'org-table-delete-column)
+  (evil-define-key 'normal org-mode-map ",ic" 'org-table-insert-column)
+  (evil-define-key 'normal org-mode-map ",i-" 'org-table-insert-hline)
+  (evil-define-key 'normal org-mode-map ">" 'org-shiftmetaright)
+  (evil-define-key 'normal org-mode-map "<" 'org-shiftmetaleft)
+  (evil-define-key 'normal org-mode-map ",s" 'org-sort)
+  (evil-define-key 'normal org-mode-map ",I" 'org-toggle-inline-images)
+  ;; move over wrapped lines
+  (evil-define-key 'normal org-mode-map "j" 'evil-next-visual-line)
+  (evil-define-key 'normal org-mode-map "k" 'evil-previous-visual-line)
+
+  ;; (evil-define-key 'normal markdown-mode-map ",c" 'markdown-toggle-markup-hiding)
+
+  ;; move over wrapped lines
+  (evil-define-key 'normal markdown-mode-map "j" 'evil-next-visual-line)
+  (evil-define-key 'normal markdown-mode-map "k" 'evil-previous-visual-line)
+  
+
+  (use-package evil-collection
+    :after evil
+    :config
+    (setq my/evil-collection-disabled-modes '(lispy))
+    (evil-collection-init
+     (seq-difference evil-collection--supported-modes my/evil-collection-disabled-modes)))
+
+  ;; https://github.com/Somelauw/evil-org-mode
+  (use-package evil-org
+    :delight
+    :after org
+    :config
+    (add-hook 'org-mode-hook 'evil-org-mode)
+    (add-hook 'evil-org-mode-hook
+	      (lambda ()
+		(evil-org-set-key-theme '(textobjects insert navigation additional shift todo heading))))
+    (require 'evil-org-agenda)
+    (evil-org-agenda-set-keys))
+
+  (use-package evil-mc
+    :delight
+    :bind ("C-M-d" . hydra-mc/body)
+    :config
+    (global-evil-mc-mode  1)
+
+    (defhydra hydra-mc (:color red :hint nil)
+      "
+Add:		 Jump:
+------------------------------
+_a_ll		 _N_ext
+_n_ext		 _P_revious
+_p_reivous
+_s_kip
+"
+      ("a" evil-mc-make-all-cursors)
+      ("q" evil-mc-undo-all-cursors "quit" :color blue)
+      ("N" evil-mc-make-and-goto-next-cursor)
+      ("P" evil-mc-make-and-goto-prev-cursor)
+      ("s" evil-mc-skip-and-goto-next-match)
+      ("n" evil-mc-make-and-goto-next-match)
+      ("p" evil-mc-make-and-goto-prev-match)))
+
+  (use-package evil-commentary
+    :delight
+    :bind (:map evil-normal-state-map ("gc" . evil-commentary))
+    :config
+    (evil-commentary-mode t))
+
+  (use-package evil-surround
+    ;; :bind (:map evil-normal-state-map ("ys" . evil-surround))
+    :config
+    (global-evil-surround-mode 1))
+
+  (use-package evil-escape
+    :delight
+    :custom
+    ((evil-escape-key-sequence "jk"))
+    :config
+    (evil-escape-mode t))
+
+  (use-package evil-matchit
+    :config
+    (global-evil-matchit-mode t))
+
+  (use-package evil-args
+    :config
+    ;; bind evil-args text objects
+    (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
+    (define-key evil-outer-text-objects-map "a" 'evil-outer-arg))
+
+  (use-package elscreen
+    :commands (hydra-tabs/body elscreen-create)
+    :custom
+    ((elscreen-display-screen-number nil)
+     (elscreen-default-buffer-initial-message nil)
+     (elscreen-display-tab nil)
+     (elscreen-tab-display-kill-screen nil)
+     (elscreen-tab-display-control nil))
+    :config
+    (defhydra hydra-tabs
+      (:color red :hint nil
+	      :pre (setq elscreen-display-tab t)
+	      :post (setq elscreen-display-tab nil))
+      "tabs"
+      ("l" elscreen-next "next")
+      ("h" elscreen-previous "previous")
+      ("x" elscreen-kill "close window")
+      ("j" nil "quit" :color blue)
+      ("n" elscreen-create "new" :color blue))
+    (elscreen-start)
+
+    ;; light theme
+    ;; :custom-face
+    ;; (elscreen-tab-background-face ((t (:background "#dfdfdf" :height 1.3))))
+    ;; (elscreen-tab-current-screen-face ((t (:background "#fafafa" :foreground "#a626a4"))))
+    ;; (elscreen-tab-other-screen-face ((t (:background "#dfdfdf" :foreground "#a190a7"))))
+
+    :custom-face
+    (elscreen-tab-background-face ((t (:background "#1c1f24" :height 1.3))))
+    (elscreen-tab-current-screen-face ((t (:background "#282c34" :foreground "#c678dd"))))
+    (elscreen-tab-other-screen-face ((t (:background "#1c1f24" :foreground "#a190a7"))))))
+
 ;; -----------------------------------------------------
 ;; Vanila Improvements
 ;; -----------------------------------------------------
 
 ;; (electric-pair-mode) TODO turn off in lisp
 (winner-mode 1)
+
 
 (use-package vc-hooks
   :ensure nil
@@ -230,81 +459,35 @@
   :ensure nil
   :delight)
 
-(use-package dired-single)
-
-(use-package all-the-icons-dired
-  :hook (dired-mode . all-the-icons-dired-mode))
-
-;; (add-hook 'dired-mode-hook
-;;       (lambda ()
-;;         (dired-hide-details-mode)
-;;         (dired-sort-toggle-or-edit)))
-
 (use-package dired
-  :after (evil evil-collection)
   :ensure nil
-  :commands (dired dired-jump)
-  :bind
-  (:map evil-normal-state-map
-	("-" . dired-jump))
-  :custom
-  ((dired-listing-switches "-Algho --group-directories-first"))
-  :config
-  (evil-collection-define-key 'normal 'dired-mode-map
+  :after (evil-collection)
+  :custom (dired-listing-switches "-Algho --group-directories-first")
+
+  :general
+  (nmap "-" 'dired-jump)
+  (nmap
+    :keymaps 'dired-mode-map
     "h" 'dired-single-up-directory
     "l" 'dired-single-buffer
-    "L" 'dired-display-file))
+    "L" 'dired-display-file)
+
+  :config
+  (use-package dired-single)
+  (use-package all-the-icons-dired))
 
 ;; (use-package elec-pair
 ;;   :ensure nil
 ;;   :hook
 ;;   (prog-mode . electric-pair-local-mode))
 
-;; -----------------------------------------------------
-;; Hydras
-;; -----------------------------------------------------
-
-(use-package hydra
-  :demand
-  :commands
-  ;; remove flycheck/byte-compiler warnings about missing commands
-  hydra-default-pre
-  hydra-keyboard-quit
-  hydra--call-interactively-remap-maybe
-  hydra-show-hint
-  hydra-set-transient-map)
 
 ;; -----------------------------------------------------
 ;; Lore friendly improvements
 ;; -----------------------------------------------------
-(use-package restart-emacs)
+(use-package restart-emacs
+  :commands restart-emacs)
 
-(use-package which-key
-  :delight
-  :config
-  (which-key-mode t)
-  (which-key-add-key-based-replacements
-    "<SPC> b" "Buffers"
-    "<SPC> e" "Errors"
-    "<SPC> E" "Spelling"
-    "<SPC> f" "Files"
-    "<SPC> F" "Fold"
-    "<SPC> g" "Global"
-    "<SPC> n" "Notes"
-    "<SPC> p" "Projects"
-    "<SPC> s" "Search"
-    "<SPC> S" "Web"
-    "<SPC> t" "Term"
-    "<SPC> T" "Toggle"
-    "<SPC> w" "Window"
-    "<SPC> W" "Layouts"
-    )
-  (which-key-add-major-mode-key-based-replacements 'org-mode
-  ", d" "Delete"
-  ", h" "Heading"
-  ", i" "Insert"
-  ", l" "List"
-  ))
 
 (use-package helpful
   :custom
@@ -347,17 +530,23 @@
 
 ;; jump to char/word/line
 (use-package avy
+  :general
+  (general-def
+    :states '(normal visual)
+    "s" 'avy-goto-word-1
+    "S" 'avy-goto-char)
   :custom
   ((avy-background t)))
 
 (use-package ace-window
-  :bind ("M-o" . ace-window)
+  :general
+  (general-def :states '(normal visual) "C-w C-w" 'ace-window)
   :commands
   (ace-win-swap ace-win-delete)
   :config
   (setq aw-ignore-current t)
   (setq aw-minibuffer-flag t)
-  (setq aw-keys '(?a ?s ?d ?f ?j ?k ?l))
+  (setq aw-keys '(?w ?e ?f ?j ?k ?l))
 
   (defun ace-win-delete ()
     (interactive)
@@ -405,14 +594,16 @@
 ;; -----------------------------------------------------
 
 (use-package vterm
+  :commands (vterm)
   :config
-  (defun terminal ()
-    "Switch to terminal. Launch if nonexistent."
-    (interactive)
-    (if (get-buffer "terminal")
-        (switch-to-buffer "terminal")
-      (vterm "terminal"))
-    (get-buffer-process "terminal")))
+  ;; (defun terminal ()
+  ;;   "Switch to terminal. Launch if nonexistent."
+  ;;   (interactive)
+  ;;   (if (get-buffer "terminal")
+  ;;       (switch-to-buffer "terminal")
+  ;;     (vterm "terminal"))
+  ;;   (get-buffer-process "terminal"))
+  )
 
 (use-package multi-vterm
   :after (vterm evil)
@@ -504,343 +695,176 @@
 (use-package ligature
   :ensure nil
   :load-path "elpa/ligature.el"
+  :hook (prog-mode . global-ligature-mode)
   :config
   ;; Enable the "www" ligature in every possible major mode
   (ligature-set-ligatures 't '("www"))
   ;; Enable all Cascadia Code ligatures in programming modes
-  (ligature-set-ligatures 'prog-mode '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
-                                       ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
-                                       "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
-                                       "<~~" "<~>" "<*>" "<||" "<|>" "<$>" "<==" "<=>" "<=<" "<->"
-                                       "<--" "<-<" "<<=" "<<-" "<<<" "<+>" "</>" "###" "#_(" "..<"
-                                       "..." "+++" "/==" "///" "_|_" "www" "&&" "^=" "~~" "~@" "~="
-                                       "~>" "~-" "**" "*>" "*/" "||" "|}" "|]" "|=" "|>" "|-" "{|"
-                                       "[|" "]#" "::" ":=" ":>" ":<" "$>" "==" "=>" "!=" "!!" ">:"
-                                       ">=" ">>" ">-" "-~" "-|" "->" "--" "-<" "<~" "<*" "<|" "<:"
-                                       "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
-                                       "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
-                                       "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
-                                       "\\\\" "://"))
-  ;; Enables ligature checks globally in all buffers. You can also do it
-  ;; per mode with `ligature-mode'.
-  (global-ligature-mode t))
+  (ligature-set-ligatures 'prog-mode
+			  '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
+                            ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
+                            "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
+                            "<~~" "<~>" "<*>" "<||" "<|>" "<$>" "<==" "<=>" "<=<" "<->"
+                            "<--" "<-<" "<<=" "<<-" "<<<" "<+>" "</>" "###" "#_(" "..<"
+                            "..." "+++" "/==" "///" "_|_" "www" "&&" "^=" "~~" "~@" "~="
+                            "~>" "~-" "**" "*>" "*/" "||" "|}" "|]" "|=" "|>" "|-" "{|"
+                            "[|" "]#" "::" ":=" ":>" ":<" "$>" "==" "=>" "!=" "!!" ">:"
+                            ">=" ">>" ">-" "-~" "-|" "->" "--" "-<" "<~" "<*" "<|" "<:"
+                            "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
+                            "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
+                            "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
+                            "\\\\" "://")))
 
 ;; -----------------------------------------------------
 ;; Evil -- start
 ;; -----------------------------------------------------
 
-(use-package evil-leader
-  :delight
-  :init
-  (setq evil-want-integration t)
-  (setq evil-want-keybinding nil) ; evil-colleciton expects this
-  :config
-  (global-evil-leader-mode)
-  (evil-leader/set-leader "<SPC>")
-  (evil-leader/set-key
-    "<SPC>" 'counsel-projectile-find-file
-    ";" 'counsel-M-x
-    ":" 'counsel-command-history
-    "." 'ace-window
+;; (use-package evil-leader
+;;   :delight
+;;   :init
+;;   (setq evil-want-integration t)
+;;   (setq evil-want-keybinding nil) ; evil-colleciton expects this
+;;   :config
+;;   (global-evil-leader-mode)
+;;   (evil-leader/set-leader "<SPC>")
+;;   (evil-leader/set-key
+;;     "<SPC>" 'counsel-projectile-find-file
+;;     ";" 'counsel-M-x
+;;     ":" 'counsel-command-history
+;;     "." 'ace-window
 
-    ;; b --- buffers
-    "bK" 'kill-buffer
-    "bL" 'counsel-ibuffer
-    "bN" 'evil-split-next-buffer
-    "bP" 'evil-split-prev-buffer
+;;     ;; b --- buffers
+;;     "bK" 'kill-buffer
+;;     "bL" 'counsel-ibuffer
+;;     "bN" 'evil-split-next-buffer
+;;     "bP" 'evil-split-prev-buffer
 
-    "bb" 'my|split-last-buffer
-    "be" 'projectile-ibuffer
-    "bj" 'evil-show-jumps
-    "bk" 'my|kill-this-buffer
-    "bl" 'counsel-projectile-switch-to-buffer
-    "bn" 'evil-next-buffer
-    "bp" 'evil-prev-buffer
-    "br" 'rename-buffer
-    "bx" 'font-lock-fontify-buffer ;; repaint the buffer
+;;     "bb" 'my|split-last-buffer
+;;     "be" 'projectile-ibuffer
+;;     "bj" 'evil-show-jumps
+;;     "bk" 'my|kill-this-buffer
+;;     "bl" 'counsel-projectile-switch-to-buffer
+;;     "bn" 'evil-next-buffer
+;;     "bp" 'evil-prev-buffer
+;;     "br" 'rename-buffer
+;;     "bx" 'font-lock-fontify-buffer ;; repaint the buffer
 
-    ;; d -- docker
-    ;; "dd" 'docker
+;;     ;; d -- docker
+;;     ;; "dd" 'docker
 
-    ;; e -- error
-    "ef" 'my|eslint-fix-file-and-revert
-    "en" 'flycheck-next-error
-    "ep" 'flycheck-previous-error
-    "el" 'flycheck-list-errors
-    "ee" 'flycheck-buffer
-    ;; "ee" 'flycheck-display-error-at-point ;; not sure?
-    "eh" 'flycheck-explain-error-at-point ;; not sure?
-    "ei" 'flycheck-verify-setup
+;;     ;; e -- error
+;;     "ef" 'my|eslint-fix-file-and-revert
+;;     "en" 'flycheck-next-error
+;;     "ep" 'flycheck-previous-error
+;;     "el" 'flycheck-list-errors
+;;     "ee" 'flycheck-buffer
+;;     ;; "ee" 'flycheck-display-error-at-point ;; not sure?
+;;     "eh" 'flycheck-explain-error-at-point ;; not sure?
+;;     "ei" 'flycheck-verify-setup
 
-    ;; E - flyspell
-    "EE" 'flyspell-correct-wrapper
-    "ES" 'my|my-save-word
-    "EB" 'flyspell-buffer
-    "EP" 'evil-prev-flyspell-error
-    "EN" 'evil-next-flyspell-error
+;;     ;; E - flyspell
+;;     "EE" 'flyspell-correct-wrapper
+;;     "ES" 'my|my-save-word
+;;     "EB" 'flyspell-buffer
+;;     "EP" 'evil-prev-flyspell-error
+;;     "EN" 'evil-next-flyspell-error
 
-    ;; f --- File
-    "ff" 'counsel-find-file
-    "fr" 'counsel-recentf
-    "fv" 'my|open-init-file
-    "fk" 'my|delete-file-and-buffer
-    "fs" 'save-buffer
-    "fS" 'projectile-save-project-buffers
+;;     ;; f --- File
+;;     "ff" 'counsel-find-file
+;;     "fr" 'counsel-recentf
+;;     "fv" 'my|open-init-file
+;;     "fk" 'my|delete-file-and-buffer
+;;     "fs" 'save-buffer
+;;     "fS" 'projectile-save-project-buffers
 
-    ;; F --- fold
-    "FF"  'hydra-hs/body
-    "FO"  'hydra-folding/body
+;;     ;; F --- fold
+;;     "FF"  'hydra-hs/body
+;;     "FO"  'hydra-folding/body
 
-    ;; g -- global
-    "gs" 'my|reload-init-file ;; TODO make more glorious
-    "gg" 'magit-status
-    "gp" 'my|pomo
-    "gP" 'my|pomo-stop
-    "gl" 'counsel-find-library
+;;     ;; g -- global
+;;     "gs" 'my|reload-init-file ;; TODO make more glorious
+;;     "gg" 'magit-status
+;;     "gp" 'my|pomo
+;;     "gP" 'my|pomo-stop
+;;     "gl" 'counsel-find-library
 
-    ;; w -- window
-    "wK" 'elscreen-kill
-    "we" 'hydra-tabs/body
-    "wN" 'elscreen-create
-    "wd" 'ace-win-delete
-    "wk" 'delete-window
-    "wl" 'elscreen-toggle
-    "wo" 'delete-other-windows
-    "wr" 'elscreen-screen-nickname
-    "ws" 'ace-win-swap
-    "wt" 'elscreen-toggle-display-tab
-    "ww" 'evil-window-vsplit
+;;     ;; w -- window
+;;     "wK" 'elscreen-kill
+;;     "we" 'hydra-tabs/body
+;;     "wN" 'elscreen-create
+;;     "wd" 'ace-win-delete
+;;     "wk" 'delete-window
+;;     "wl" 'elscreen-toggle
+;;     "wo" 'delete-other-windows
+;;     "wr" 'elscreen-screen-nickname
+;;     "ws" 'ace-win-swap
+;;     "wt" 'elscreen-toggle-display-tab
+;;     "ww" 'evil-window-vsplit
 
-    ;; W -- window configurations
-    "WW" 'ivy-push-view
-    "WD" 'ivy-pop-view
-    "Wl" 'ivy-switch-view
+;;     ;; W -- window configurations
+;;     "WW" 'ivy-push-view
+;;     "WD" 'ivy-pop-view
+;;     "Wl" 'ivy-switch-view
 
-    ;; s -- search
-    "sf" 'swiper			;; great when you know what you need
-    "si" 'counsel-imenu			;; jump to def or explore
-    "sI" 'helm-imenu-in-all-buffers	;; ideal when don't know
-    "sp" 'deadgrep			;; also ag or grep
-    "ss" 'ripgrep-regexp		;; search from current dir out
-    "sl" 'xref-find-references		;; also ag or grep
+;;     ;; s -- search
+;;     "sf" 'swiper			;; great when you know what you need
+;;     "si" 'counsel-imenu			;; jump to def or explore
+;;     "sI" 'helm-imenu-in-all-buffers	;; ideal when don't know
+;;     "sp" 'deadgrep			;; also ag or grep
+;;     "ss" 'ripgrep-regexp		;; search from current dir out
+;;     "sl" 'xref-find-references		;; also ag or grep
 
-    ;;
-    "Sn" 'xwidget-webkit-browse-url
-    "SS" '(lambda () (interactive) (xwidget-webkit-new-session "https://google.com"))
-    "Sg" 'my|browse-at-point
-    ;; "SS" 'xwidget-webkit-cx3
+;;     ;;
+;;     "Sn" 'xwidget-webkit-browse-url
+;;     "SS" '(lambda () (interactive) (xwidget-webkit-new-session "https://google.com"))
+;;     "Sg" 'my|browse-at-point
+;;     ;; "SS" 'xwidget-webkit-cx3
 
-    ;; n --- notes
-    "na" 'org-agenda
-    "nb" 'org-switchb
-    "nc" 'org-capture
-    "nh" 'helm-org-agenda-files-headings ;; search through headings
-    "nl" 'org-store-link
-    "nn" 'my|open-my-notes-file
-    "nN" 'my|open-work-notes-file
+;;     ;; n --- notes
+;;     "na" 'org-agenda
+;;     "nb" 'org-switchb
+;;     "nc" 'org-capture
+;;     "nh" 'helm-org-agenda-files-headings ;; search through headings
+;;     "nl" 'org-store-link
+;;     "nn" 'my|open-my-notes-file
+;;     "nN" 'my|open-work-notes-file
 
-    ;; p --- project
-    "p!" 'projectile-run-shell-command-in-root		;;  "Run cmd in project root"
-    "pa" 'projectile-add-known-project			;;  "Add new project"
-    "pb" 'projectile-switch-to-buffer			;;  "Switch to project buffer"
-    "pc" 'projectile-compile-project			;;  "Compile in project"
-    "pd" 'projectile-find-dir				;;  "Remove known project"
-    "pe" 'projectile-edit-dir-locals			;;  "Edit project .dir-locals"
-    "pf" 'counsel-projectile-find-file			;;  "Find file in project"
-    "pF" 'projectile-find-file-in-known-projects	;;  "Find file in project"
-    "pg" 'projectile-find-file-dwim			;;  "Find file in project at point better ffap"
-    "pi" 'projectile-invalidate-cache			;;  "Invalidate project cache"
-    "pk" 'projectile-kill-buffers			;;  "Kill project buffers"
-    "po" 'projectile-toggle-between-implementation-and-test
-    "pO" 'projectile-find-other-file			;;  "Find other file"
-    "pp" 'counsel-projectile-switch-project		;;  "Switch project"
-    "pr" 'projectile-recentf				;;  "Find recent project files"
-    "pR" 'projectile-regenerate-tags			;;  "Find recent project files"
-    "ps" 'deadgrep					;;  "Search with rg"
-    "pt" 'my|test-file					;; test file in project
+;;     ;; p --- project
+;;     "p!" 'projectile-run-shell-command-in-root		;;  "Run cmd in project root"
+;;     "pa" 'projectile-add-known-project			;;  "Add new project"
+;;     "pb" 'projectile-switch-to-buffer			;;  "Switch to project buffer"
+;;     "pc" 'projectile-compile-project			;;  "Compile in project"
+;;     "pd" 'projectile-find-dir				;;  "Remove known project"
+;;     "pe" 'projectile-edit-dir-locals			;;  "Edit project .dir-locals"
+;;     "pf" 'counsel-projectile-find-file			;;  "Find file in project"
+;;     "pF" 'projectile-find-file-in-known-projects	;;  "Find file in project"
+;;     "pg" 'projectile-find-file-dwim			;;  "Find file in project at point better ffap"
+;;     "pi" 'projectile-invalidate-cache			;;  "Invalidate project cache"
+;;     "pk" 'projectile-kill-buffers			;;  "Kill project buffers"
+;;     "po" 'projectile-toggle-between-implementation-and-test
+;;     "pO" 'projectile-find-other-file			;;  "Find other file"
+;;     "pp" 'counsel-projectile-switch-project		;;  "Switch project"
+;;     "pr" 'projectile-recentf				;;  "Find recent project files"
+;;     "pR" 'projectile-regenerate-tags			;;  "Find recent project files"
+;;     "ps" 'deadgrep					;;  "Search with rg"
+;;     "pt" 'my|test-file					;; test file in project
 
-    ;; t --- terminal
-    "tn" 'multi-vterm
-    "tt" 'multi-vterm-project
+;;     ;; t --- terminal
+;;     "tn" 'multi-vterm
+;;     "tt" 'multi-vterm-project
 
-    ;; T --- Toggle
-    "TT" 'toggle-truncate-lines
-    "Ti" 'lsp-ui-imenu
-    "Tp" 'electric-pair-local-mode
-    "Tu" 'undo-tree-visualize
-    "Tv" 'visual-line-mode
-    "Tw" 'toggle-word-wrap
-    "Tz" 'global-ligature-mode
-    "Tl" 'global-display-line-numbers-mode
-    ))
+;;     ;; T --- Toggle
+;;     "TT" 'toggle-truncate-lines
+;;     "Ti" 'lsp-ui-imenu
+;;     "Tp" 'electric-pair-local-mode
+;;     "Tu" 'undo-tree-visualize
+;;     "Tv" 'visual-line-mode
+;;     "Tw" 'toggle-word-wrap
+;;     "Tz" 'global-ligature-mode
+;;     "Tl" 'global-display-line-numbers-mode
+;;     ))
 
-(use-package evil
-  :after (evil-leader avy)
-  :init
-  (setq evil-want-integration t)
-  (setq evil-want-keybinding nil) ; evil-colleciton expects this
-  (setq evil-want-C-i-jump nil)
-  (setq evil-respect-visual-line-mode t)
-  :bind
-  (:map evil-insert-state-map
-	;; ("C-@"   . completion-at-point)
-	;; ("C-SPC" . completion-at-point))
-	("C-@"   . company-complete)
-	("C-SPC" . company-complete)
-	("C-l"   . (lambda ()
-		     (interactive)
-		     (right-char 1))))
-	;; ("C-h"   . char-left))
-  (:map evil-normal-state-map
-	("C-\\" . counsel-projectile-rg)
-	("u"    . undo-tree-undo)
-	("C-r"  . undo-tree-redo)
-	("C-e"	. move-end-of-line) ; replace scroll up
-	("C-u"	. evil-scroll-up) ; get scroll up back and replace with C-m as it's just return
-	("C-y"	. universal-argument)
-	("s"	. avy-goto-word-1)
-	("S"	. avy-goto-char)
-	("gf"	. projectile-find-file-dwim)
-	("gh"	. lsp-describe-thing-at-point))
-  :config
-  ;; https://emacs.stackexchange.com/questions/9583/how-to-treat-underscore-as-part-of-the-word
-  (defadvice evil-inner-word (around underscore-as-word activate)
-    (let ((table (copy-syntax-table (syntax-table))))
-      (modify-syntax-entry ?_ "w" table)
-      (with-syntax-table table
-	ad-do-it)))
 
-  (evil-mode t)
-  (define-key universal-argument-map (kbd "C-y") 'universal-argument-more)
-  (evil-define-key 'normal org-mode-map (kbd "TAB") 'org-cycle)
-  (evil-define-key 'normal org-mode-map ",c" 'org-toggle-checkbox)
-  ;; - thing => - [ ] thing => - thing
-  (evil-define-key 'normal org-mode-map ",lt" 'my|org-toggle-list-checkbox)
-  (evil-define-key 'normal org-mode-map ",ls" 'org-sort-list)
-
-  (evil-define-key 'normal org-mode-map ",g" 'org-open-at-point)
-  (evil-define-key 'normal org-mode-map ",hh" 'org-toggle-heading)
-  (evil-define-key 'normal org-mode-map ",ho" 'evil-org-insert-heading-below)
-  (evil-define-key 'normal org-mode-map ",hn" 'org-insert-heading-respect-content)
-  (evil-define-key 'normal org-mode-map ",hs" 'org-insert-subheading)
-  (evil-define-key 'normal org-mode-map ",dr" 'org-table-kill-row)
-  (evil-define-key 'normal org-mode-map ",dc" 'org-table-delete-column)
-  (evil-define-key 'normal org-mode-map ",ic" 'org-table-insert-column)
-  (evil-define-key 'normal org-mode-map ",i-" 'org-table-insert-hline)
-  (evil-define-key 'normal org-mode-map ">" 'org-shiftmetaright)
-  (evil-define-key 'normal org-mode-map "<" 'org-shiftmetaleft)
-  (evil-define-key 'normal org-mode-map ",s" 'org-sort)
-  (evil-define-key 'normal org-mode-map ",I" 'org-toggle-inline-images)
-  ;; move over wrapped lines
-  (evil-define-key 'normal org-mode-map "j" 'evil-next-visual-line)
-  (evil-define-key 'normal org-mode-map "k" 'evil-previous-visual-line)
-
-  (evil-define-key 'normal markdown-mode-map ",c" 'markdown-toggle-markup-hiding)
-
-  ;; move over wrapped lines
-  (evil-define-key 'normal markdown-mode-map "j" 'evil-next-visual-line)
-  (evil-define-key 'normal markdown-mode-map "k" 'evil-previous-visual-line))
-
-(use-package evil-collection
-  :after evil
-  :config
-  (setq my/evil-collection-disabled-modes '(lispy))
-  (evil-collection-init
-   (seq-difference evil-collection--supported-modes my/evil-collection-disabled-modes)))
-
-;; https://github.com/Somelauw/evil-org-mode
-(use-package evil-org
-  :delight
-  :after org
-  :config
-  (add-hook 'org-mode-hook 'evil-org-mode)
-  (add-hook 'evil-org-mode-hook
-	    (lambda ()
-	      (evil-org-set-key-theme '(textobjects insert navigation additional shift todo heading))))
-  (require 'evil-org-agenda)
-  (evil-org-agenda-set-keys))
-
-(use-package evil-mc
-  :delight
-  :demand t
-  :bind ("M-d" . hydra-mc/body)
-  :init
-  (defhydra hydra-mc (:color red :hint nil)
-    "
-Add:		 Jump:
-------------------------------
-_a_ll		 _N_ext
-_n_ext		 _P_revious
-_p_reivous
-_s_kip
-"
-    ("a" evil-mc-make-all-cursors)
-    ("q" evil-mc-undo-all-cursors "quit" :color blue)
-    ("N" evil-mc-make-and-goto-next-cursor)
-    ("P" evil-mc-make-and-goto-prev-cursor)
-    ("s" evil-mc-skip-and-goto-next-match)
-    ("n" evil-mc-make-and-goto-next-match)
-    ("p" evil-mc-make-and-goto-prev-match))
-  :config
-  (global-evil-mc-mode  1))
-
-(use-package evil-commentary
-  :delight
-  :config
-  (evil-commentary-mode t))
-
-(use-package evil-surround
-  :config
-  (global-evil-surround-mode 1))
-
-(use-package evil-escape
-  :delight
-  :custom
-  ((evil-escape-key-sequence "jk"))
-  :config
-  (evil-escape-mode t))
-
-(use-package evil-matchit
-  :config
-  (global-evil-matchit-mode t))
-
-(use-package evil-args
-  :config
-  ;; bind evil-args text objects
-  (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
-  (define-key evil-outer-text-objects-map "a" 'evil-outer-arg))
-
-(use-package elscreen
-  :after (evil)
-  :custom
-  ((elscreen-display-screen-number nil)
-   (elscreen-default-buffer-initial-message nil)
-   (elscreen-display-tab nil)
-   (elscreen-tab-display-kill-screen nil)
-   (elscreen-tab-display-control nil))
-  :config
-  (defhydra hydra-tabs
-    (:color red :hint nil
-	    :pre (setq elscreen-display-tab t)
-	    :post (setq elscreen-display-tab nil))
-    "tabs"
-    ("l" elscreen-next "next")
-    ("h" elscreen-previous "previous")
-    ("x" elscreen-kill "close window")
-    ("j" nil "quit" :color blue)
-    ("n" elscreen-create "new" :color blue))
-  (elscreen-start)
-
-  ;; light theme
-  ;; :custom-face
-  ;; (elscreen-tab-background-face ((t (:background "#dfdfdf" :height 1.3))))
-  ;; (elscreen-tab-current-screen-face ((t (:background "#fafafa" :foreground "#a626a4"))))
-  ;; (elscreen-tab-other-screen-face ((t (:background "#dfdfdf" :foreground "#a190a7"))))
-
-  :custom-face
-  (elscreen-tab-background-face ((t (:background "#1c1f24" :height 1.3))))
-  (elscreen-tab-current-screen-face ((t (:background "#282c34" :foreground "#c678dd"))))
-  (elscreen-tab-other-screen-face ((t (:background "#1c1f24" :foreground "#a190a7")))))
 
 ;; -----------------------------------------------------
 ;; Evil -- end - do not remove this line
@@ -854,6 +878,7 @@ _s_kip
 
 (use-package projectile
   :delight '(:eval (concat " [" (projectile-project-name) "]"))
+  :commands (project-switch-project)
   :custom
   (projectile-completion-system 'default)
   (projectile-indexing-method 'hybrid) ; use git whilst honoring .projectile ignores
@@ -879,8 +904,6 @@ _s_kip
 				    :test-suffix "Test")
   (require 'my-projectile-fns)
   (projectile-mode)
-  :bind-keymap
-  ("C-c p" . projectile-command-map)
   :init
   (if (file-directory-p "~/sky")
     (setq projectile-project-search-path '("~/dev" "~/sky"))
@@ -904,6 +927,7 @@ _s_kip
 
 
 (use-package wakatime-mode
+  :after projectile
   :delight
   :config
   (setq wakatime-cli-path "/usr/local/bin/wakatime")
@@ -942,8 +966,8 @@ _s_kip
 	 :map ivy-reverse-i-search-map
 	 ("C-k" . ivy-previous-line)
 	 ("C-d" . ivy-reverse-i-search-kill))
-  :init
-  (ivy-mode 1)
+  ;; :init
+  ;; (ivy-mode 1)
   :custom
   ((ivy-use-virtual-buffers t)
    (ivy-wrap t)
@@ -951,6 +975,7 @@ _s_kip
    (ivy-initial-inputs-alist nil) ; Don't start searches with ^
    (ivy-extra-directories ())) ; hide . and .. from file lists
   :config
+  (ivy-mode 1)
   (setq ivy-re-builders-alist
 	'((counsel-projectile-rg . ivy--regex-plus)
 	  (swiper . ivy--regex-plus) ; fzy search in file is clumsy
@@ -958,6 +983,7 @@ _s_kip
   (setq enable-recursive-minibuffers t))
 
 (use-package ivy-rich
+  :after ivy
   :init
   (ivy-rich-mode 1))
 
@@ -975,7 +1001,8 @@ _s_kip
                                   (right-fringe . 8)))
   (ivy-posframe-mode 1))
 
-(use-package ivy-xref)
+(use-package ivy-xref
+  :after ivy)
 
 (use-package counsel
   :bind (("M-x" . counsel-M-x)
@@ -996,11 +1023,11 @@ _s_kip
 
 ;; Adds M-x recent command sorting for counsel-M-x
 (use-package smex
-  :defer 1
   :after counsel)
 
 ;; might want deadgrep-kill-all-buffers in a function
 (use-package deadgrep
+  :commands deadgrep
   :config
   (evil-define-key 'normal deadgrep-mode-map (kbd "C-j") 'deadgrep-forward-filename)
   (evil-define-key 'normal deadgrep-mode-map (kbd "C-k") 'deadgrep-backward-filename))
@@ -1058,20 +1085,16 @@ _s_kip
   :hook (prog-mode . flycheck-mode))
 
 (use-package editorconfig
-  :delight
-  :config
-  (editorconfig-mode 1))
+  :hook (prog-mode . editorconfig-mode)
+  :delight)
 
 ;; -----------------------------------------------------
 ;; Javascript / Typescript / Web
 ;; -----------------------------------------------------
 
 (use-package add-node-modules-path
-  :init
   :hook
   (web-mode)
-  (js-mode)
-  (js2-mode)
   (typescript-mode)
   (css-mode)
   (rjsx-mode))
@@ -1100,9 +1123,7 @@ _s_kip
   (setq js2-mode-show-strict-warnings nil))
 
 (use-package js2-refactor
-  :defer
-  :config
-  (add-hook 'js2-minor-mode-hook #'js2-refactor-mode))
+  :hook ((web-mode rjsx-mode typescript-mode) . js2-refactor-mode))
 
 (use-package web-mode
   :mode "\\.tsx\\'"
@@ -1132,6 +1153,7 @@ _s_kip
   ("scala" . scala-mode))
 
 (use-package lsp-metals
+  :disabled
   :config (setq lsp-metals-treeview-show-when-views-received t))
 
 ;; -----------------------------------------------------
@@ -1151,6 +1173,7 @@ _s_kip
 ;; -----------------------------------------------------
 
 (use-package lsp-python-ms
+  :disabled
   :init (setq lsp-python-ms-auto-install-server t)
   :hook (python-mode . (lambda ()
                           (require 'lsp-python-ms)
@@ -1183,7 +1206,7 @@ _s_kip
   :defer t)
 
 (use-package dotenv-mode
-  :mode "\\.env\\..*\\'" 
+  :mode "\\.env\\..*\\'"
   :hook (dotenv-mode . (lambda ()
               (set (make-local-variable 'comment-start) "# ")
               (set (make-local-variable 'comment-end) ""))))
@@ -1194,7 +1217,9 @@ _s_kip
 ;; lisp
 ;; -----------------------------------------------------
 (use-package lispy
-  :hook (emacs-lisp-mode . (lambda () (lispy-mode 1))))
+  :hook (emacs-lisp-mode . lispy-mode))
+;; (use-package lispy
+;;   :hook (emacs-lisp-mode . (lambda () (lispy-mode 1))))
 
 (use-package lispyville
   :hook (lispy-mode . lispyville-mode)
@@ -1229,14 +1254,12 @@ _s_kip
     (interactive)
     (let ((current-location (point))
 	  (word (flyspell-get-word)))
-      (when (consp word)    
+      (when (consp word)
 	(flyspell-do-correct 'save nil (car word) current-location (cadr word) (caddr word) current-location)))))
 
 (use-package flyspell-correct-ivy
   :after (flyspell ivy))
 
-(use-package ob-typescript
-  :after org)
 
 (use-package org
   :delight
@@ -1270,6 +1293,8 @@ _s_kip
 		      '("~/org-notes/org-me-notes/notes.org")))
   :config
   (require 'org-tempo) ;; needed to add this to get template expansion to work again
+
+  (use-package ob-typescript :after org)
 
   (setq org-startup-indented t
 	org-fontify-done-headline t
@@ -1376,33 +1401,33 @@ _s_kip
     "Turn off elisp's flycheck checkdoc in src blocks."
     (setq-local flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
 
-  (add-hook 'org-src-mode-hook 'my/disable-org-checkdoc))
+  (add-hook 'org-src-mode-hook 'my/disable-org-checkdoc)
 
-;; only show bullets in gui
-(use-package org-bullets
-  :after org
-  :if window-system
-  :commands org-bullets-mode
-  :hook (org-mode . org-bullets-mode)
-  :custom
-  (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+  ;; only show bullets in gui
+  (use-package org-bullets
+    :if window-system
+    :commands org-bullets-mode
+    :hook (org-mode . org-bullets-mode)
+    :custom
+    (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
 
-(use-package org-download
-  :after org
-  :config
-  ;; Drag-and-drop to `dired`
-  (add-hook 'dired-mode-hook 'org-download-enable))
+  (use-package org-download
+    :config
+    ;; Drag-and-drop to `dired`
+    (add-hook 'dired-mode-hook 'org-download-enable))
 
-(use-package org-alert
-  :after org
-  :custom (alert-default-style 'osx-notifier)
-  :config
-  (setq org-alert-interval 300)
-  (org-alert-enable))
+  (use-package org-alert
+    :custom (alert-default-style 'osx-notifier)
+    :config
+    (setq org-alert-interval 300)
+    (org-alert-enable)))
 
 (use-package markdown-mode
   :defer t
-  :hook (markdown-mode . visual-line-mode))
+  :hook (markdown-mode . visual-line-mode)
+  :general
+  (my-local-leader-def :keymaps 'markdown-mode-map
+    "c" 'markdown-toggle-markup-hiding))
 
 (use-package markdown-toc
   :after markdown)
