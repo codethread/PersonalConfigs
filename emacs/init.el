@@ -1,47 +1,24 @@
-;;; init.el --- emacs config focusing on a lagless experience -*- no-byte-compile: t -*-
-
+;;; init.el --- emacs config focusing on a lagless experience -*- no-byte-compile: t; lexical-binding: t -*-
 ;;; Commentary:
-
-;; I hate lag, so some features around fuzzy searching and UI enhancements
-;; are disabled in favour of snappiness.
-;; Startup speed is less of an issue so not fussed about that, I only
-;; need to restart in the event of an error.
-
 ;;; Code:
 
-;; -----------------------------------------------------
-;;;; Startup Performance
-;; -----------------------------------------------------
-
-;; reduce the frequency of garbage collection by making it happen on
-;; each 100MB of allocated data (the default is on every 0.76MB)
-(setq gc-cons-threshold (* 100 1000 1000))
-
-;; Profile emacs startup
 (add-hook 'emacs-startup-hook #'my/print-init-time)
 
-;; control some file locations, which could be shared across configs, rather in .emacs.d
-(setq user-emacs-directory "~/.emacs.d"
-      backup-directory-alist `(("." . ,(expand-file-name "backups" user-emacs-directory)))
-      auto-save-list-file-prefix (expand-file-name "auto-save-list/.saves-" user-emacs-directory))
+;; -----------------------------------------------------
+;; Package Manager
+;; -----------------------------------------------------
 
-;; -----------------------------------------------------
-;;; Set up package archives
-;; -----------------------------------------------------
 (require 'package)
 
 (setq package-archives
       '(("melpa" . "https://melpa.org/packages/")
 	("org" . "https://orgmode.org/elpa/")
-	("elpa" . "https://elpa.gnu.org/packages/")))
+	("elpa" . "https://elpa.gnu.org/packages/"))
+      user-emacs-directory "~/.emacs.d"
+      backup-directory-alist `(("." . ,(expand-file-name "backups" user-emacs-directory)))
+      auto-save-list-file-prefix (expand-file-name "auto-save-list/.saves-" user-emacs-directory))
 
-;; org is a special child that needs to be installed
-(unless (file-expand-wildcards (concat package-user-dir "/org-[0-9]*"))
- (package-install (elt (cdr (assoc 'org package-archive-contents)) 0)))
-
-;; -----------------------------------------------------
-;; Package Manager
-;; -----------------------------------------------------
+(global-set-key (kbd "C-x C-v") (lambda () (interactive) (find-file (concat user-emacs-directory "/init.el"))))
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -50,51 +27,27 @@
 (require 'use-package)
 (setq use-package-verbose t)
 
-;; all packages will be installed if not already present
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
 
 (use-package use-package-ensure-system-package
   :ensure t)
 
-(use-package auto-package-update
-  :custom
-  (auto-package-update-delete-old-versions t)
-  (auto-package-update-interval 1)
-  (auto-package-update-prompt-before-update t)
-  :config
-  (auto-package-update-at-time "09:18"))
-
 ;; controls minor mode descriptions in modeline
-(use-package delight)
+;; (use-package delight)
 
 (use-package cus-edit
+  :demand
   :ensure nil
-  :custom
-  (custom-file "~/.emacs.d/custom.el")
-  ;; (custom-file null-device "Don't store customizations")
+  :custom (custom-file "~/.emacs.d/custom.el")
   :config
   (unless (file-exists-p custom-file)
     (with-temp-buffer (write-file custom-file)))
   (load-file custom-file))
 
-;; -----------------------------------------------------
-;; Load Paths
-;; -----------------------------------------------------
-
-;; Add custom elisp files to load-path - used by require
-(push "~/.emacs.d/elisp" load-path)
-
-;; -----------------------------------------------------
-;; OSX specific code
-;; -----------------------------------------------------
-
-(declare-function exec-path-from-shell-initialize "exec-path-from-shell.el")
-
 (when (eq system-type 'darwin)
-  ;; On OS X Emacs doesn't use the shell PATH if it's not started from
-  ;; the shell. Let's fix that:
   (use-package exec-path-from-shell
+    :demand
     :custom
     (exec-path-from-shell-arguments '("-l"))
     (exec-path-from-shell-variables '("PATH" "MANPATH" "SPOTIFY_TOKEN" "SLACK_SKY_EMACS_TOKEN"))
@@ -102,11 +55,7 @@
     (exec-path-from-shell-initialize))
 
   ;; fix alt as meta key
-  (setq ns-function-modifier 'hyper)
-)
-  ;; Enable emoji, and stop the UI from freezing when trying to display them.
-  ;; (if (fboundp 'set-fontset-font)
-  ;;     (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend)))
+  (setq ns-function-modifier 'hyper))
 
 ;; -----------------------------------------------------
 ;; Emacs Settings
@@ -125,14 +74,10 @@
 ;;    ;; instead they should end up in temporary-file-directory
 ;;    ()))
 
-(when window-system
-  (setq browse-url-browser-function 'xwidget-webkit-browse-url))
-
-;; recomended to increase performance from https://emacs-lsp.github.io/lsp-mode/page/performance/
-(setq read-process-output-max (* 1024 1024)) ;; 1mb
-
 
 (setq indent-tabs-mode nil
+      read-process-output-max (* 1024 1024) ; recomended to increase performance from https://emacs-lsp.github.io/lsp-mode/page/performance/
+
       ;; prevent startup and scratch buffer loading lispy
       inhibit-startup-screen t
       initial-buffer-choice (lambda () (switch-to-buffer "*Messages*"))
@@ -141,7 +86,7 @@
       create-lockfiles nil
 
       large-file-warning-threshold 100000000 ; warn when opening files bigger than 100MB
-      line-number-display-limit 1 ; no line numbers in modeline
+      ;; line-number-display-limit 1	; no line numbers in modeline
 
       delete-by-moving-to-trash t
       help-window-select t
@@ -152,106 +97,77 @@
       window-resize-pixelwise t
       save-abbrevs 'silently
       frame-resize-pixelwise t
-      ;; dired-listing-switches "-lat" ; list, all, alphabetical
-      )
-
-;; control amount of fontification, can be done per mode if slow
-(setq font-lock-maximum-decoration t)
-
-;; backup file config
-(setq backup-by-copying t ; slow but sure way of saving
+      backup-by-copying t		; slow but sure way of saving
       ;; auto-save-file-name-transforms `((".*" . "~/.emacs-file-saves")) ; store all backup files in home directory
       ;; If that's too slow for some reason you might also
       ;; have a look at backup-by-copying-when-linked
       ;; https://stackoverflow.com/questions/151945/how-do-i-control-how-emacs-makes-backup-files
-      version-control t                 ; version numbers for backup files
-      delete-old-versions t ; delete excess backup files silently
-      )
+      version-control t		 ; version numbers for backup files
+      delete-old-versions t	 ; delete excess backup files silently
+      font-lock-maximum-decoration t ; control amount of fontification, can be done per mode if slow
+      kill-buffer-query-functions nil)
 
-(when (fboundp 'tool-bar-mode)
-  (tool-bar-mode -1))
-(scroll-bar-mode -1)
-(tooltip-mode -1)
-(menu-bar-mode -1)
+(when (window-system)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+  (tooltip-mode -1)
+  (menu-bar-mode -1)
+  (setq frame-title-format nil
+	;; TODO: put this behind function as I don't always like it
+	browse-url-browser-function 'xwidget-webkit-browse-url))
 
-(setq frame-title-format nil)
-
-;; Set symbol for the border
-(unless window-system
- (set-display-table-slot standard-display-table
-			'vertical-border
-			(make-glyph-code ?┃)))
-
-(setq kill-buffer-query-functions nil)
-
-
-(use-package which-key
-  :delight
-  :config
-  (which-key-mode t)
-  ;; (which-key-add-key-based-replacements
-  ;;   "<SPC> b" "Buffers"
-  ;;   "<SPC> e" "Errors"
-  ;;   "<SPC> E" "Spelling"
-  ;;   "<SPC> f" "Files"
-  ;;   "<SPC> F" "Fold"
-  ;;   "<SPC> g" "Global"
-  ;;   "<SPC> n" "Notes"
-  ;;   "<SPC> p" "Projects"
-  ;;   "<SPC> s" "Search"
-  ;;   "<SPC> S" "Web"
-  ;;   "<SPC> t" "Term"
-  ;;   "<SPC> T" "Toggle"
-  ;;   "<SPC> w" "Window"
-  ;;   "<SPC> W" "Layouts")
-  ;; (which-key-add-major-mode-key-based-replacements 'org-mode
-  ;; ", d" "Delete"
-  ;; ", h" "Heading"
-  ;; ", i" "Insert"
-  ;; ", l" "List")
-  )
+(unless (window-system)
+  (set-display-table-slot standard-display-table 'vertical-border (make-glyph-code ?┃)))
 
 ;; -----------------------------------------------------
-;; General
+;; Demanded early things like keymaps for general, hydra evil etc.
 ;; -----------------------------------------------------
 
 (use-package general
   :demand
-  :disabled
   :config
   (general-evil-setup t)
-  (general-create-definer my-leader-def :prefix "SPC" :states '(normal visual))
-  (general-create-definer my-local-leader-def :prefix "SPC l" :states '(normal visual))
+
+  (general-def :keymaps 'override
+    "C-s-<f8>" 'my|close-notifications-mac
+    "C-M-<left>" 'frame-half-size-left
+    "C-M-<right>" 'frame-half-size-right
+    "C-M-<return>" 'toggle-frame-maximized)
+
+  (general-create-definer my-leader-def
+    :prefix "SPC"
+    :states '(normal visual))
+  
+  (general-create-definer my-local-leader-def
+    :prefix "SPC l"
+    :states '(normal visual))
 
   (my-leader-def
     :keymaps 'override
-    "SPC" #'counsel-projectile-find-file
     ";" #'counsel-M-x
-    ":" #'counsel-command-history))
+    ":" #'counsel-command-history)
 
-(require 'general)
-(general-evil-setup t)
-(general-create-definer my-leader-def :prefix "SPC" :states '(normal visual))
-(general-create-definer my-local-leader-def :prefix "SPC l" :states '(normal visual))
-(my-leader-def
-  :keymaps 'override
-  "SPC" #'counsel-projectile-find-file
-  ";" #'counsel-M-x
-  ":" #'counsel-command-history)
-
-;; -----------------------------------------------------
-;; Hydras
-;; -----------------------------------------------------
+  (my-leader-def
+    "b" '(:ignore t :wk "Buffers")
+    "e" '(:ignore t :wk "Errors")
+    "E" '(:ignore t :wk "Spelling")
+    "f" '(:ignore t :wk "Files")
+    "F" '(:ignore t :wk "Fold")
+    "g" '(:ignore t :wk "Global")
+    "n" '(:ignore t :wk "Notes")
+    "p" '(:ignore t :wk "Projects")
+    "s" '(:ignore t :wk "Search")
+    "S" '(:ignore t :wk "Web")
+    "t" '(:ignore t :wk "Term")
+    "T" '(:ignore t :wk "Toggle")
+    "w" '(:ignore t :wk "Window")
+    "W" '(:ignore t :wk "Layouts")
+    "p" '(:ignore t :wk "Projectile")))
 
 (use-package hydra
   :demand
-  :commands
-  ;; remove flycheck/byte-compiler warnings about missing commands
-  hydra-default-pre
-  hydra-keyboard-quit
-  hydra--call-interactively-remap-maybe
-  hydra-show-hint
-  hydra-set-transient-map)
+  :config
+  (use-package use-package-hydra))
 
 (use-package evil
   :demand
@@ -260,26 +176,14 @@
   (setq evil-want-keybinding nil)	; evil-colleciton expects this
   (setq evil-want-C-i-jump nil)
   (setq evil-respect-visual-line-mode t)
-  :bind
-  (:map evil-insert-state-map
-	;; ("C-@"   . completion-at-point)
-	;; ("C-SPC" . completion-at-point))
-	("C-@"   . company-complete)
-	("C-SPC" . company-complete)
-	("C-l"   . (lambda ()
-		     (interactive)
-		     (right-char 1))))
-  ;; ("C-h"   . char-left))
-  (:map evil-normal-state-map
-	("C-\\" . counsel-projectile-rg)
-	("u"    . undo-tree-undo)
-	("C-r"  . undo-tree-redo)
-	("C-e"	. move-end-of-line)	; replace scroll up
-	("C-u"	. evil-scroll-up) ; get scroll up back and replace with C-m as it's just return
-	("C-y"	. universal-argument)
-	("gf"	. projectile-find-file-dwim)
-	("gh"	. lsp-describe-thing-at-point))
+  :general
+  (nmap 'override
+    "C-e" 'move-end-of-line
+    "C-u" 'evil-scroll-up
+    "C-y" 'universal-argument)
   :config
+  (define-key universal-argument-map (kbd "C-y") 'universal-argument-more)
+
   ;; https://emacs.stackexchange.com/questions/9583/how-to-treat-underscore-as-part-of-the-word
   (defadvice evil-inner-word (around underscore-as-word activate)
     (let ((table (copy-syntax-table (syntax-table))))
@@ -288,37 +192,6 @@
 	ad-do-it)))
 
   (evil-mode t)
-  (define-key universal-argument-map (kbd "C-y") 'universal-argument-more)
-
-  (evil-define-key 'normal org-mode-map (kbd "TAB") 'org-cycle)
-  (evil-define-key 'normal org-mode-map ",c" 'org-toggle-checkbox)
-  ;; - thing => - [ ] thing => - thing
-  (evil-define-key 'normal org-mode-map ",lt" 'my|org-toggle-list-checkbox)
-  (evil-define-key 'normal org-mode-map ",ls" 'org-sort-list)
-
-  (evil-define-key 'normal org-mode-map ",g" 'org-open-at-point)
-  (evil-define-key 'normal org-mode-map ",hh" 'org-toggle-heading)
-  (evil-define-key 'normal org-mode-map ",ho" 'evil-org-insert-heading-below)
-  (evil-define-key 'normal org-mode-map ",hn" 'org-insert-heading-respect-content)
-  (evil-define-key 'normal org-mode-map ",hs" 'org-insert-subheading)
-  (evil-define-key 'normal org-mode-map ",dr" 'org-table-kill-row)
-  (evil-define-key 'normal org-mode-map ",dc" 'org-table-delete-column)
-  (evil-define-key 'normal org-mode-map ",ic" 'org-table-insert-column)
-  (evil-define-key 'normal org-mode-map ",i-" 'org-table-insert-hline)
-  (evil-define-key 'normal org-mode-map ">" 'org-shiftmetaright)
-  (evil-define-key 'normal org-mode-map "<" 'org-shiftmetaleft)
-  (evil-define-key 'normal org-mode-map ",s" 'org-sort)
-  (evil-define-key 'normal org-mode-map ",I" 'org-toggle-inline-images)
-  ;; move over wrapped lines
-  (evil-define-key 'normal org-mode-map "j" 'evil-next-visual-line)
-  (evil-define-key 'normal org-mode-map "k" 'evil-previous-visual-line)
-
-  ;; (evil-define-key 'normal markdown-mode-map ",c" 'markdown-toggle-markup-hiding)
-
-  ;; move over wrapped lines
-  (evil-define-key 'normal markdown-mode-map "j" 'evil-next-visual-line)
-  (evil-define-key 'normal markdown-mode-map "k" 'evil-previous-visual-line)
-  
 
   (use-package evil-collection
     :after evil
@@ -327,49 +200,7 @@
     (evil-collection-init
      (seq-difference evil-collection--supported-modes my/evil-collection-disabled-modes)))
 
-  ;; https://github.com/Somelauw/evil-org-mode
-  (use-package evil-org
-    :delight
-    :after org
-    :config
-    (add-hook 'org-mode-hook 'evil-org-mode)
-    (add-hook 'evil-org-mode-hook
-	      (lambda ()
-		(evil-org-set-key-theme '(textobjects insert navigation additional shift todo heading))))
-    (require 'evil-org-agenda)
-    (evil-org-agenda-set-keys))
-
-  (use-package evil-mc
-    :delight
-    :bind ("C-M-d" . hydra-mc/body)
-    :config
-    (global-evil-mc-mode  1)
-
-    (defhydra hydra-mc (:color red :hint nil)
-      "
-Add:		 Jump:
-------------------------------
-_a_ll		 _N_ext
-_n_ext		 _P_revious
-_p_reivous
-_s_kip
-"
-      ("a" evil-mc-make-all-cursors)
-      ("q" evil-mc-undo-all-cursors "quit" :color blue)
-      ("N" evil-mc-make-and-goto-next-cursor)
-      ("P" evil-mc-make-and-goto-prev-cursor)
-      ("s" evil-mc-skip-and-goto-next-match)
-      ("n" evil-mc-make-and-goto-next-match)
-      ("p" evil-mc-make-and-goto-prev-match)))
-
-  (use-package evil-commentary
-    :delight
-    :bind (:map evil-normal-state-map ("gc" . evil-commentary))
-    :config
-    (evil-commentary-mode t))
-
   (use-package evil-surround
-    ;; :bind (:map evil-normal-state-map ("ys" . evil-surround))
     :config
     (global-evil-surround-mode 1))
 
@@ -380,55 +211,15 @@ _s_kip
     :config
     (evil-escape-mode t))
 
-  (use-package evil-matchit
-    :config
-    (global-evil-matchit-mode t))
-
   (use-package evil-args
     :config
     ;; bind evil-args text objects
     (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
-    (define-key evil-outer-text-objects-map "a" 'evil-outer-arg))
-
-  (use-package elscreen
-    :commands (hydra-tabs/body elscreen-create)
-    :custom
-    ((elscreen-display-screen-number nil)
-     (elscreen-default-buffer-initial-message nil)
-     (elscreen-display-tab nil)
-     (elscreen-tab-display-kill-screen nil)
-     (elscreen-tab-display-control nil))
-    :config
-    (defhydra hydra-tabs
-      (:color red :hint nil
-	      :pre (setq elscreen-display-tab t)
-	      :post (setq elscreen-display-tab nil))
-      "tabs"
-      ("l" elscreen-next "next")
-      ("h" elscreen-previous "previous")
-      ("x" elscreen-kill "close window")
-      ("j" nil "quit" :color blue)
-      ("n" elscreen-create "new" :color blue))
-    (elscreen-start)
-
-    ;; light theme
-    ;; :custom-face
-    ;; (elscreen-tab-background-face ((t (:background "#dfdfdf" :height 1.3))))
-    ;; (elscreen-tab-current-screen-face ((t (:background "#fafafa" :foreground "#a626a4"))))
-    ;; (elscreen-tab-other-screen-face ((t (:background "#dfdfdf" :foreground "#a190a7"))))
-
-    :custom-face
-    (elscreen-tab-background-face ((t (:background "#1c1f24" :height 1.3))))
-    (elscreen-tab-current-screen-face ((t (:background "#282c34" :foreground "#c678dd"))))
-    (elscreen-tab-other-screen-face ((t (:background "#1c1f24" :foreground "#a190a7"))))))
+    (define-key evil-outer-text-objects-map "a" 'evil-outer-arg)))
 
 ;; -----------------------------------------------------
 ;; Vanila Improvements
 ;; -----------------------------------------------------
-
-;; (electric-pair-mode) TODO turn off in lisp
-(winner-mode 1)
-
 
 (use-package vc-hooks
   :ensure nil
@@ -444,24 +235,18 @@ _s_kip
    (show-paren-when-point-in-periphery t))
   :hook (prog-mode . show-paren-mode))
 
-
-(use-package url-history
-  :ensure nil
-  :custom
-  ((url-history-file (expand-file-name "url/history" user-emacs-directory))))
-
 (use-package compile
   :ensure nil
   :custom
   ((compilation-scroll-output t)))
 
 (use-package eldoc
+  :hook (prog-mode org-mode)
   :ensure nil
   :delight)
 
 (use-package dired
   :ensure nil
-  :after (evil-collection)
   :custom (dired-listing-switches "-Algho --group-directories-first")
 
   :general
@@ -473,21 +258,41 @@ _s_kip
     "L" 'dired-display-file)
 
   :config
-  (use-package dired-single)
-  (use-package all-the-icons-dired))
+  (use-package dired-single
+    :hook (dired-mode . all-the-icons-dired-mode))
 
+  (use-package all-the-icons-dired
+    :hook (dired-mode . all-the-icons-dired-mode)))
+
+;; (electric-pair-mode) TODO turn off in lisp
+(winner-mode 1)
 ;; (use-package elec-pair
 ;;   :ensure nil
 ;;   :hook
 ;;   (prog-mode . electric-pair-local-mode))
 
-
 ;; -----------------------------------------------------
 ;; Lore friendly improvements
 ;; -----------------------------------------------------
+
 (use-package restart-emacs
+  :defer t
   :commands restart-emacs)
 
+(use-package which-key
+  :delight
+  :demand
+  :custom
+  (which-key-prefix-prefix "")
+  :custom-face
+  (which-key-group-description-face ((t (:foreground "#8FBCBB"))))
+  (which-key-separator-face ((t (:inherit font-lock-comment-face :slant normal))))
+  (which-key-note-face ((t (:inherit font-lock-comment-face))))
+  :general
+  (general-def :states '(normal visual normal)
+    "C-h M" 'which-key-show-major-mode)
+  :config
+  (which-key-mode t))
 
 (use-package helpful
   :custom
@@ -501,37 +306,49 @@ _s_kip
 
 (use-package rainbow-delimiters
   :hook
-  ((web-mode typescript-mode css-mode rjsx-mode scala-mode java-mode json-mode) . rainbow-delimiters-mode))
+  ((json-mode web-mode css-mode rjsx-mode typescript-mode scala-mode java-mode) . rainbow-delimiters-mode))
 
 (use-package expand-region
-  :demand
-  :commands er/contract-region
-  :config
-  (defhydra hydra-expand-region (global-map "C-=")
-    "expand-region"
-    ("k" er/expand-region "expand")
-    ("j" er/contract-region "shrink")))
+  :general
+  (general-def :states '(normal visual insert)
+    "C-=" 'hydra-expand-region/body)
+  :hydra
+  (hydra-expand-region (:hint nil)
+   "expand-region"
+   ("h" er/expand-region "expand")
+   ("l" er/contract-region "shrink")))
 
 (use-package undo-tree
+  :hook ((prog-mode org-mode) . global-undo-tree-mode)
   :delight
+  :general
+  (general-def :states 'normal
+    "u" 'undo-tree-undo
+    "C-r" 'undo-tree-redo)
+  (general-def :states '(normal insert)
+    "C-x u" 'hydra-undo/body)
+  :hydra
+  (hydra-undo
+   (:hint nil)
+   ("h" undo-tree-undo "undo")
+   ("l" undo-tree-redo "redo")
+   ("u" undo-tree-visualize "visualise" :color blue)
+   ("q" nil "quit" :color blue))
   :custom
   ((undo-tree-auto-save-history t)
-   (undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo"))))
-  :config
-  (global-undo-tree-mode))
+   (undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))))
 
 ;; adds highlights to TODO and FIXME.
 (use-package fic-mode
-  :hook
-  (prog-mode)
-  :config
-  (custom-set-faces
-   '(fic-face ((t (:inherit warning :weight bold))))))
+  :hook (prog-mode)
+  :custom-face
+  (fic-face ((t (:inherit warning :weight bold)))))
 
 ;; jump to char/word/line
 (use-package avy
   :general
   (general-def
+    :keymaps 'override
     :states '(normal visual)
     "s" 'avy-goto-word-1
     "S" 'avy-goto-char)
@@ -540,9 +357,16 @@ _s_kip
 
 (use-package ace-window
   :general
-  (general-def :states '(normal visual) "C-w C-w" 'ace-window)
+  (general-def :states '(normal visual)
+    "C-w C-w" 'ace-window)
+  (my-leader-def
+    "wd" 'ace-win-delete
+    "ws" 'ace-win-swap)
   :commands
   (ace-win-swap ace-win-delete)
+  :custom-face
+  (aw-leading-char-face ((t (:inherit error :weight bold))))
+  ;; (aw-leading-char-face ((t (:inherit warning :weight bold :height 2.0))))
   :config
   (setq aw-ignore-current t)
   (setq aw-minibuffer-flag t)
@@ -554,11 +378,7 @@ _s_kip
 
   (defun ace-win-swap ()
     (interactive)
-    (ace-window 4))
-
-  ;; turn off grey background
-  ;; (setq aw-background nil)
-  (custom-set-faces '(aw-leading-char-face ((t (:inherit warning :weight bold :height 2.0))))))
+    (ace-window 4)))
 
 (use-package yasnippet
   :disabled 				; TODO practice with this first
@@ -571,16 +391,15 @@ _s_kip
   (yas-global-mode 1))
 
 
-;; Completion will start automatically after you type a few letters.
-;; Use M-n and M-p to select, <return> to complete or <tab> to complete the common part.
-;; Search through the completions with C-s, C-r and C-o. Press M-(digit) to quickly
-;; complete with one of the first 10 candidates.
 (use-package company
-  ;; :hook (lsp-mode . company-mode)
   :config
   (global-company-mode)
-  :bind (:map company-active-map
-         ("C-l" . company-complete-selection))
+  :general
+  (imap 'override
+    "C-@"   'company-complete
+    "C-SPC" 'company-complete)
+  (imap 'company-active-map
+    "C-l" 'company-complete-selection)
   :custom
   (company-tooltip-align-annotations t)
   (company-minimum-prefix-length 100)
@@ -589,38 +408,96 @@ _s_kip
 (use-package company-box
   :hook (company-mode . company-box-mode))
 
+(use-package evil-commentary
+  :requires evil
+  :delight
+  :general
+  (general-def :states '(normal visual)
+    "gc" 'evil-commentary)
+  :config
+  (evil-commentary-mode t))
+
+(use-package evil-matchit
+  :requires evil
+  :general
+  (nvmap "%" 'evilmi-jump-items)
+  :config
+  (global-evil-matchit-mode t))
+
+(use-package elscreen
+  :custom
+  ((elscreen-display-screen-number nil)
+   (elscreen-default-buffer-initial-message nil)
+   (elscreen-display-tab nil)
+   (elscreen-tab-display-kill-screen nil)
+   (elscreen-tab-display-control nil))
+  :general
+  (my-leader-def
+    "we" 'hydra-tabs/body
+    "wK" 'elscreen-kill
+    "wN" 'elscreen-create
+    "wl" 'elscreen-toggle
+    "wr" 'elscreen-screen-nickname
+    "wt" 'elscreen-toggle-display-tab
+    )
+  :hydra
+  (hydra-tabs
+   (:color red :hint nil
+	   :pre (setq elscreen-display-tab t)
+	   :post (setq elscreen-display-tab nil))
+   "tabs"
+   ("l" elscreen-next "next")
+   ("h" elscreen-previous "previous")
+   ("x" elscreen-kill "close window")
+   ("j" nil "quit" :color blue)
+   ("n" elscreen-create "new" :color blue))
+  :config
+  (elscreen-start)
+
+  ;; light theme
+  ;; :custom-face
+  ;; (elscreen-tab-background-face ((t (:background "#dfdfdf" :height 1.3))))
+  ;; (elscreen-tab-current-screen-face ((t (:background "#fafafa" :foreground "#a626a4"))))
+  ;; (elscreen-tab-other-screen-face ((t (:background "#dfdfdf" :foreground "#a190a7"))))
+
+  :custom-face
+  (elscreen-tab-background-face ((t (:background "#1c1f24" :height 1.3))))
+  (elscreen-tab-current-screen-face ((t (:background "#282c34" :foreground "#c678dd"))))
+  (elscreen-tab-other-screen-face ((t (:background "#1c1f24" :foreground "#a190a7")))))
+
+(use-package auto-package-update
+  :defer 10
+  :custom
+  (auto-package-update-delete-old-versions t)
+  (auto-package-update-interval 1)
+  (auto-package-update-prompt-before-update t)
+  :config
+  (auto-package-update-at-time "09:18"))
+
 ;; -----------------------------------------------------
 ;; Terminal
 ;; -----------------------------------------------------
 
 (use-package vterm
-  :commands (vterm)
-  :config
-  ;; (defun terminal ()
-  ;;   "Switch to terminal. Launch if nonexistent."
-  ;;   (interactive)
-  ;;   (if (get-buffer "terminal")
-  ;;       (switch-to-buffer "terminal")
-  ;;     (vterm "terminal"))
-  ;;   (get-buffer-process "terminal"))
-  )
+  :defer t
+  :hook
+  (vterm-mode-hook . (lambda ()
+		       (setq-local evil-insert-state-cursor 'box) (evil-insert-state))))
 
 (use-package multi-vterm
-  :after (vterm evil)
+  :general
+  (my-leader-def
+    :keymaps 'override
+    "tt" 'multi-vterm-project
+    "tn" 'multi-vterm)
   :config
-  (add-hook 'vterm-mode-hook
-	    (lambda ()
-	      (setq-local evil-insert-state-cursor 'box)
-	      (evil-insert-state)))
-  (define-key vterm-mode-map [return] #'vterm-send-return)
-
-  (setq vterm-keymap-exceptions nil))
+  ;; (setq vterm-keymap-exceptions nil)
+  (define-key vterm-mode-map [return] #'vterm-send-return))
 
 ;; -----------------------------------------------------
 ;; Themes and Fonts
 ;; -----------------------------------------------------
 
-;; pretty sure this keeps causing flickering
 (use-package solaire-mode
   :config
   (setq solaire-mode-remap-modeline nil))
@@ -634,28 +511,28 @@ _s_kip
   :config
   ;; (load-theme 'doom-one t)
   (load-theme 'doom-nord t)
-   ;; Corrects (and improves) org-mode's native fontification.
-  (doom-themes-org-config))
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config)
 
-;; set these after theme load
-;; (set-face-attribute 'default nil :font "Hack Nerd Font")
-(set-face-attribute 'default nil :font "FiraCode Nerd Font")
+  ;; set these after theme load
+  ;; (set-face-attribute 'default nil :font "Hack Nerd Font")
+  (set-face-attribute 'default nil :font "FiraCode Nerd Font")
 
-(set-face-attribute 'font-lock-comment-face nil :slant 'italic)
+  (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
 
-(set-face-attribute 'font-lock-function-name-face nil :slant 'italic)
-(set-face-attribute 'font-lock-variable-name-face nil :weight 'semi-bold)
+  (set-face-attribute 'font-lock-function-name-face nil :slant 'italic)
+  (set-face-attribute 'font-lock-variable-name-face nil :weight 'semi-bold)
 
-;; Set the fixed pitch face
-;; (set-face-attribute 'fixed-pitch nil :font "Fira Code Retina")
+  ;; Set the fixed pitch face
+  ;; (set-face-attribute 'fixed-pitch nil :font "Fira Code Retina")
 
-;; Set the variable pitch face
-;; (set-face-attribute 'variable-pitch nil :font "Avenir Next" :weight 'regular)
+  ;; Set the variable pitch face
+  ;; (set-face-attribute 'variable-pitch nil :font "Avenir Next" :weight 'regular)
+  )
 
 (use-package all-the-icons)
 
 (use-package doom-modeline
-  ;; :unless window-system
   :hook (after-init . doom-modeline-mode)
   :config
   (setq doom-modeline-height 20
@@ -666,36 +543,11 @@ _s_kip
 	;; Whether display buffer encoding.
 	doom-modeline-buffer-encoding nil))
 
-(use-package smart-mode-line-atom-one-dark-theme
-  :disabled)
-
-;; smart-mode-line
-(use-package smart-mode-line
-  :disabled
-  :custom
-  (sml/no-confirm-load-theme t)
-  :config
-  (setq sml/theme 'atom-one-dark)
-  (sml/setup))
-
-;; change mode-line color by evil state
-;;(lexical-let ((default-color (cons (face-background 'mode-line)
-;;				   (face-foreground 'mode-line))))
-;;  (add-hook 'post-command-hook
-;;	    (lambda ()
-;;	      (let ((color (cond ((minibufferp) default-color)
-;;				 ((evil-insert-state-p) '("#e80000" . "#ffffff"))
-;;				 ((evil-emacs-state-p)  '("#444488" . "#ffffff"))
-;;				 ((buffer-modified-p)   '("#006fa0" . "#ffffff"))
-;;				 (t default-color))))
-;;		(set-face-background 'mode-line (car color))
-;;		(set-face-foreground 'mode-line (cdr color))))))
-
 ;; https://github.com/mickeynp/ligature.el
 (use-package ligature
   :ensure nil
   :load-path "elpa/ligature.el"
-  :hook (prog-mode . global-ligature-mode)
+  :hook (after-init . global-ligature-mode)
   :config
   ;; Enable the "www" ligature in every possible major mode
   (ligature-set-ligatures 't '("www"))
@@ -728,10 +580,6 @@ _s_kip
 ;;   (global-evil-leader-mode)
 ;;   (evil-leader/set-leader "<SPC>")
 ;;   (evil-leader/set-key
-;;     "<SPC>" 'counsel-projectile-find-file
-;;     ";" 'counsel-M-x
-;;     ":" 'counsel-command-history
-;;     "." 'ace-window
 
 ;;     ;; b --- buffers
 ;;     "bK" 'kill-buffer
@@ -762,13 +610,6 @@ _s_kip
 ;;     "eh" 'flycheck-explain-error-at-point ;; not sure?
 ;;     "ei" 'flycheck-verify-setup
 
-;;     ;; E - flyspell
-;;     "EE" 'flyspell-correct-wrapper
-;;     "ES" 'my|my-save-word
-;;     "EB" 'flyspell-buffer
-;;     "EP" 'evil-prev-flyspell-error
-;;     "EN" 'evil-next-flyspell-error
-
 ;;     ;; f --- File
 ;;     "ff" 'counsel-find-file
 ;;     "fr" 'counsel-recentf
@@ -789,16 +630,8 @@ _s_kip
 ;;     "gl" 'counsel-find-library
 
 ;;     ;; w -- window
-;;     "wK" 'elscreen-kill
-;;     "we" 'hydra-tabs/body
-;;     "wN" 'elscreen-create
-;;     "wd" 'ace-win-delete
 ;;     "wk" 'delete-window
-;;     "wl" 'elscreen-toggle
 ;;     "wo" 'delete-other-windows
-;;     "wr" 'elscreen-screen-nickname
-;;     "ws" 'ace-win-swap
-;;     "wt" 'elscreen-toggle-display-tab
 ;;     "ww" 'evil-window-vsplit
 
 ;;     ;; W -- window configurations
@@ -829,30 +662,6 @@ _s_kip
 ;;     "nn" 'my|open-my-notes-file
 ;;     "nN" 'my|open-work-notes-file
 
-;;     ;; p --- project
-;;     "p!" 'projectile-run-shell-command-in-root		;;  "Run cmd in project root"
-;;     "pa" 'projectile-add-known-project			;;  "Add new project"
-;;     "pb" 'projectile-switch-to-buffer			;;  "Switch to project buffer"
-;;     "pc" 'projectile-compile-project			;;  "Compile in project"
-;;     "pd" 'projectile-find-dir				;;  "Remove known project"
-;;     "pe" 'projectile-edit-dir-locals			;;  "Edit project .dir-locals"
-;;     "pf" 'counsel-projectile-find-file			;;  "Find file in project"
-;;     "pF" 'projectile-find-file-in-known-projects	;;  "Find file in project"
-;;     "pg" 'projectile-find-file-dwim			;;  "Find file in project at point better ffap"
-;;     "pi" 'projectile-invalidate-cache			;;  "Invalidate project cache"
-;;     "pk" 'projectile-kill-buffers			;;  "Kill project buffers"
-;;     "po" 'projectile-toggle-between-implementation-and-test
-;;     "pO" 'projectile-find-other-file			;;  "Find other file"
-;;     "pp" 'counsel-projectile-switch-project		;;  "Switch project"
-;;     "pr" 'projectile-recentf				;;  "Find recent project files"
-;;     "pR" 'projectile-regenerate-tags			;;  "Find recent project files"
-;;     "ps" 'deadgrep					;;  "Search with rg"
-;;     "pt" 'my|test-file					;; test file in project
-
-;;     ;; t --- terminal
-;;     "tn" 'multi-vterm
-;;     "tt" 'multi-vterm-project
-
 ;;     ;; T --- Toggle
 ;;     "TT" 'toggle-truncate-lines
 ;;     "Ti" 'lsp-ui-imenu
@@ -864,27 +673,56 @@ _s_kip
 ;;     "Tl" 'global-display-line-numbers-mode
 ;;     ))
 
+;; TODO needs to turn off lispy mode or figure out something here
+(use-package evil-mc
+  :delight
+  :general
+  (general-def :keymaps 'override
+    "C-M-d" 'hydra-mc/body)
+  :config
+  (global-evil-mc-mode 1)
+  :hydra
+  (hydra-mc
+   (:color red :hint nil)
+   "
+Add:		 Jump:
+------------------------------
+_a_ll		 _N_ext
+_n_ext		 _P_revious
+_p_reivous
+_s_kip
+"
+   ("a" evil-mc-make-all-cursors)
+   ("q" evil-mc-undo-all-cursors "quit" :color blue)
+   ("N" evil-mc-make-and-goto-next-cursor)
+   ("P" evil-mc-make-and-goto-prev-cursor)
+   ("s" evil-mc-skip-and-goto-next-match)
+   ("n" evil-mc-make-and-goto-next-match)
+   ("p" evil-mc-make-and-goto-prev-match)))
 
-
-;; -----------------------------------------------------
-;; Evil -- end - do not remove this line
 ;; -----------------------------------------------------
 ;; Projects / Navigation
 ;; -----------------------------------------------------
 
-;; quickly navigate to init.el
-(global-set-key (kbd "C-x C-v")
-		(lambda () (interactive) (find-file "~/.emacs.d/init.el")))
-
 (use-package projectile
+  :defer t
   :delight '(:eval (concat " [" (projectile-project-name) "]"))
-  :commands (project-switch-project)
   :custom
-  (projectile-completion-system 'default)
+  (projectile-completion-system 'ivy)
   (projectile-indexing-method 'hybrid) ; use git whilst honoring .projectile ignores
   (projectile-known-projects-file
    (expand-file-name "projectile-bookmarks.eld" user-emacs-directory))
+  :init
+  (if (file-directory-p "~/sky")
+      (setq projectile-project-search-path '("~/dev" "~/sky"))
+    (setq projectile-project-search-path '("~/dev")))
+
   :config
+  (projectile-mode)
+
+  (use-package my-projectile-fns
+    :load-path "~/.emacs.d/elisp")
+
   (projectile-register-project-type 'yarn '("yarn.lock")
 				    :compile "yarn"
 				    :test "yarn test"
@@ -896,22 +734,44 @@ _s_kip
 				    :test "npm test"
 				    :run "npm start"
 				    :test-suffix "_test")
-
   (projectile-register-project-type 'gradle '("build.gradle")
 				    :compile "npm i"
 				    :test "npm test"
 				    :run "npm start"
 				    :test-suffix "Test")
-  (require 'my-projectile-fns)
-  (projectile-mode)
-  :init
-  (if (file-directory-p "~/sky")
-    (setq projectile-project-search-path '("~/dev" "~/sky"))
-    (setq projectile-project-search-path '("~/dev"))))
+  :general
+  ;; TODO do I need gf here? Check evil gf
+  (general-def :states '(normal visual)
+    "gf" 'projectile-find-file-dwim)
+  (my-leader-def
+    "p!" 'projectile-run-shell-command-in-root		;;  "Run cmd in project root"
+    "pa" 'projectile-add-known-project			;;  "Add new project"
+    "pb" 'projectile-switch-to-buffer			;;  "Switch to project buffer"
+    "pc" 'projectile-compile-project			;;  "Compile in project"
+    "pd" 'projectile-find-dir				;;  "Remove known project"
+    "pe" 'projectile-edit-dir-locals			;;  "Edit project .dir-locals"
+    "pF" 'projectile-find-file-in-known-projects	;;  "Find file in project"
+    "pg" 'projectile-find-file-dwim			;;  "Find file in project at point better ffap"
+    "pi" 'projectile-invalidate-cache			;;  "Invalidate project cache"
+    "pk" 'projectile-kill-buffers			;;  "Kill project buffers"
+    "po" 'projectile-toggle-between-implementation-and-test
+    "pO" 'projectile-find-other-file			;;  "Find other file"
+    "pr" 'projectile-recentf				;;  "Find recent project files"
+    "pR" 'projectile-regenerate-tags			;;  "Find recent project files"
+    ;; "pt" 'my|test-file					;; test file in project
+    )
+  )
 
 (use-package counsel-projectile
-  :after (projectile counsel)
-  :config (counsel-projectile-mode))
+  :general
+  (general-def :keymaps 'override :states '(normal visual)
+    "C-\\" 'counsel-projectile-rg)
+  (my-leader-def
+    "SPC" 'counsel-projectile-find-file
+    "pf" 'counsel-projectile-find-file
+    "pp" 'counsel-projectile-switch-project)
+  :config
+  (counsel-projectile-mode))
 
 (use-package magit
   :bind ("C-x g" . magit-status))
@@ -924,7 +784,6 @@ _s_kip
   :after magit
   :config
   (setq auth-sources '("~/.authinfo")))
-
 
 (use-package wakatime-mode
   :after projectile
@@ -946,12 +805,11 @@ _s_kip
 ;; Helm was just slow out of the box, maybe it can be tweaked to be
 ;; faster but that would probably turn it into Ivy
 
-;; Improves sorting for fuzzy-matched results
-(use-package flx
-  :after ivy)
-
 (use-package ivy ;; TODO do i need these bindings and evil collection?
   :delight
+  :general
+  (my-leader-def
+    "sf" 'swiper)
   :bind (("C-s" . swiper)
 	 :map ivy-minibuffer-map
 	 ("C-c C-c" . ivy-immediate-done)
@@ -966,21 +824,25 @@ _s_kip
 	 :map ivy-reverse-i-search-map
 	 ("C-k" . ivy-previous-line)
 	 ("C-d" . ivy-reverse-i-search-kill))
-  ;; :init
-  ;; (ivy-mode 1)
   :custom
   ((ivy-use-virtual-buffers t)
    (ivy-wrap t)
    (ivy-count-format "(%d/%d) ")
-   (ivy-initial-inputs-alist nil) ; Don't start searches with ^
-   (ivy-extra-directories ())) ; hide . and .. from file lists
+   (ivy-initial-inputs-alist nil)      ; Don't start searches with ^
+   (ivy-extra-directories ()))	       ; hide . and .. from file lists
   :config
   (ivy-mode 1)
+
   (setq ivy-re-builders-alist
 	'((counsel-projectile-rg . ivy--regex-plus)
-	  (swiper . ivy--regex-plus) ; fzy search in file is clumsy
-	  (t . ivy--regex-fuzzy))) ; use fzy for everything else
+	  (swiper . ivy--regex-plus)	; fzy search in file is clumsy
+	  (t . ivy--regex-fuzzy)))	; use fzy for everything else
+
   (setq enable-recursive-minibuffers t))
+
+;; Improves sorting for fuzzy-matched results
+(use-package flx
+  :after ivy)
 
 (use-package ivy-rich
   :after ivy
@@ -1005,21 +867,16 @@ _s_kip
   :after ivy)
 
 (use-package counsel
-  :bind (("M-x" . counsel-M-x)
-	 ("C-x b" . counsel-ibuffer)
-	 ("C-x C-f" . counsel-find-file)
-	 :map minibuffer-local-map
-	 ("C-r" . 'counsel-minibuffer-history))
+  ;; :bind (:map minibuffer-local-map
+  ;; 	 ("C-r" . 'counsel-minibuffer-history))
+  :general
+  (general-def :keymaps 'override
+    "M-x" 'counsel-M-x
+    "C-x b" 'counsel-ibuffer
+    "C-x C-f" 'counsel-find-file)
   :custom
   ;; ((counsel-find-file-ignore-regexp "(.|..)"))
-  ((counsel-find-file-ignore-regexp ".."))
-  :config
-  (defun my|yank-pop-replace-selection (&optional arg)
-          "Delete the region before inserting poped string."
-          (when (and evil-mode (eq 'visual evil-state))
-            (kill-region (region-beginning) (region-end))))
-
-  (advice-add 'counsel-yank-pop :before #'moon-override-yank-pop))
+  ((counsel-find-file-ignore-regexp "..")))
 
 ;; Adds M-x recent command sorting for counsel-M-x
 (use-package smex
@@ -1028,9 +885,13 @@ _s_kip
 ;; might want deadgrep-kill-all-buffers in a function
 (use-package deadgrep
   :commands deadgrep
-  :config
-  (evil-define-key 'normal deadgrep-mode-map (kbd "C-j") 'deadgrep-forward-filename)
-  (evil-define-key 'normal deadgrep-mode-map (kbd "C-k") 'deadgrep-backward-filename))
+  :general
+  (general-def :keymaps 'deadgrep-mode-map
+    "C-j" 'deadgrep-forward-filename
+    "C-k" 'deadgrep-backward-filename)
+  (my-leader-def
+    "sp" 'deadgrep
+    "ps" 'deadgrep))
 
 ;; -----------------------------------------------------
 ;; Languages / General
@@ -1041,8 +902,10 @@ _s_kip
   :hook
   ((typescript-mode rjsx-mode web-mode scala-mode java-mode) . lsp)
   (lsp-mode . lsp-enable-which-key-integration)
-  :bind (:map lsp-mode-map
-	      ("C-SPC" . completion-at-point))
+  :general
+  (nmap "gh" 'lsp-describe-thing-at-point)
+  ;; :bind (:map lsp-mode-map
+  ;; 	      ("C-SPC" . completion-at-point))
   :custom
   (lsp-disabled-clients '((json-mode . eslint)))
   (lsp-enable-file-watchers 'nil)
@@ -1147,6 +1010,7 @@ _s_kip
 ;; -----------------------------------------------------
 ;; Scala
 ;; -----------------------------------------------------
+;; TODO probably need to set jenv
 
 (use-package scala-mode
   :interpreter
@@ -1247,6 +1111,14 @@ _s_kip
   :ensure nil
   :ensure-system-package aspell
   :hook ((markdown-mode org-mode) . flyspell-mode)
+  :general
+  (my-leader-def
+    "EE" 'flyspell-correct-wrapper
+    "ES" 'my|my-save-word
+    "EB" 'flyspell-buffer
+    "EP" 'evil-prev-flyspell-error
+    "EN" 'evil-next-flyspell-error)
+
   :config
   (setq ispell-program-name "/usr/local/bin/aspell")
 
@@ -1263,7 +1135,12 @@ _s_kip
 
 (use-package org
   :delight
+  :ensure nil
   :init
+  ;; org is a special child that needs to be installed
+  (unless (file-expand-wildcards (concat package-user-dir "/org-[0-9]*"))
+    (package-install (elt (cdr (assoc 'org package-archive-contents)) 0)))
+
   (defvar org-directory "~/org-notes/")
 
   (defvar org-work-file "~/org-notes/org-sky-notes/work.org")
@@ -1291,6 +1168,28 @@ _s_kip
 			'("~/org-notes/org-sky-notes/work.org"
 			  "~/org-notes/org-me-notes/notes.org")
 		      '("~/org-notes/org-me-notes/notes.org")))
+  :general
+  (nmap :keymaps 'org-mode-map
+    (kbd "TAB") 'org-cycle
+    ">" 'org-shiftmetaright
+    "<" 'org-shiftmetaleft
+    "j" 'evil-next-visual-line
+    "k" 'evil-previous-visual-line)
+  (my-local-leader-def :keymaps 'org-mode-map
+    "c" 'org-toggle-checkbox
+    "lt" 'my|org-toggle-list-checkbox
+    "ls" 'org-sort-list
+    "g" 'org-open-at-point
+    "hh" 'org-toggle-heading
+    "ho" 'evil-org-insert-heading-below
+    "hn" 'org-insert-heading-respect-content
+    "hs" 'org-insert-subheading
+    "dr" 'org-table-kill-row
+    "dc" 'org-table-delete-column
+    "ic" 'org-table-insert-column
+    "i-" 'org-table-insert-hline
+    "s" 'org-sort
+    ",I" 'org-toggle-inline-images)
   :config
   (require 'org-tempo) ;; needed to add this to get template expansion to work again
 
@@ -1299,17 +1198,17 @@ _s_kip
   (setq org-startup-indented t
 	org-fontify-done-headline t
 	org-fontify-whole-heading-line t
-        org-hide-leading-stars t
-        org-hide-block-startup t
+	org-hide-leading-stars t
+	org-hide-block-startup t
 	org-hide-emphasis-markers t
 	org-startup-folded t
 	org-log-done 'time
 	org-ellipsis " ▾"
-        org-image-actual-width nil ; allows images to be resized with #+ATTR_ORG: :width 100
-        org-indirect-buffer-display 'current-window
-        org-eldoc-breadcrumb-separator " → "
-        org-enforce-todo-dependencies t
-        org-list-demote-modify-bullet '(("+" . "-") ("-" . "+") ("*" . "+") ("1." . "a."))
+	org-image-actual-width nil ; allows images to be resized with #+ATTR_ORG: :width 100
+	org-indirect-buffer-display 'current-window
+	org-eldoc-breadcrumb-separator " → "
+	org-enforce-todo-dependencies t
+	org-list-demote-modify-bullet '(("+" . "-") ("-" . "+") ("*" . "+") ("1." . "a."))
 	org-agenda-span 8)
 
   (setq org-todo-keywords
@@ -1403,7 +1302,8 @@ _s_kip
 
   (add-hook 'org-src-mode-hook 'my/disable-org-checkdoc)
 
-  ;; only show bullets in gui
+  ;; (use-package org-eldoc)
+
   (use-package org-bullets
     :if window-system
     :commands org-bullets-mode
@@ -1411,11 +1311,20 @@ _s_kip
     :custom
     (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
 
-  (use-package org-download
-    :config
     ;; Drag-and-drop to `dired`
-    (add-hook 'dired-mode-hook 'org-download-enable))
-
+  (use-package org-download
+    :hook (dired-mode-hook . org-download-enable))
+  
+  (use-package evil-org
+    :delight
+    :config
+    (add-hook 'org-mode-hook 'evil-org-mode)
+    (add-hook 'evil-org-mode-hook
+	      (lambda ()
+		(evil-org-set-key-theme '(textobjects insert navigation additional shift todo heading))))
+    (require 'evil-org-agenda)
+    (evil-org-agenda-set-keys))
+  
   (use-package org-alert
     :custom (alert-default-style 'osx-notifier)
     :config
@@ -1426,19 +1335,17 @@ _s_kip
   :defer t
   :hook (markdown-mode . visual-line-mode)
   :general
+  (nmap :keymaps 'markdown-mode-map
+    "j" 'evil-next-visual-line
+    "k" 'evil-previous-visual-line)
+
   (my-local-leader-def :keymaps 'markdown-mode-map
-    "c" 'markdown-toggle-markup-hiding))
+    "c" 'markdown-toggle-markup-hiding)
+  :config
+  (use-package markdown-toc))
 
-(use-package markdown-toc
-  :after markdown)
-
-(require 'my-fns)
-
-(global-set-key (kbd "C-s-<f8>") 'my|close-notifications-mac)
-;; Put this somewhere better
-(global-set-key (kbd "C-M-<left>") 'frame-half-size-left)
-(global-set-key (kbd "C-M-<right>") 'frame-half-size-right)
-(global-set-key (kbd "C-M-<return>") 'toggle-frame-maximized)
+(use-package my-fns
+  :load-path "~/.emacs.d/elisp")
 
 ;; -----------------------------------------------------
 ;;; init.el ends here
