@@ -138,7 +138,7 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
   (interactive)
   (print (thing-at-point 'word)))
 
-(global-set-key (kbd "C-q") 'my|replace-word-under-cursor)
+;; (global-set-key (kbd "C-q") 'my|replace-word-under-cursor)
 
 (defun exercism-submit ()
   "Submit current file."

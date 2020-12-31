@@ -10,6 +10,8 @@
 ;; garbage collection every 100MB (default is every 0.76MB)
 (setq gc-cons-threshold (* 100 1000 1000))
 
+(add-hook 'emacs-startup-hook #'my/print-init-time)
+
 (defun my/print-init-time ()
   "Print EMACS load time."
   (message
