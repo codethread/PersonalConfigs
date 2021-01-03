@@ -1,3 +1,5 @@
+(global-set-key (kbd "C-x C-v") (lambda () (interactive) (find-file (concat user-emacs-directory "/init.el"))))
+
 (setq initial-frame-alist
       `((horizontal-scroll-bars . nil)
 	(vertical-scroll-bars . nil)
@@ -19,6 +21,15 @@
    (format "%.2f seconds" (float-time
 			   (time-subtract after-init-time before-init-time)))
    gcs-done))
+
+(setq user-emacs-directory "~/.emacs.d")
+
+(defvar user-temporary-file-directory
+  (concat temporary-file-directory user-login-name "/"))
+
+(unless (file-directory-p user-temporary-file-directory)
+  (make-directory user-temporary-file-directory))
+
 
 ;; Local Variables:
 ;; flycheck-disabled-checkers: (emacs-lisp-checkdoc)

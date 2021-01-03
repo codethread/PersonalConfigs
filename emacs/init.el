@@ -7,17 +7,10 @@
 
 (require 'package)
 
-(setq user-emacs-directory "~/.emacs.d")
-(setq user-temporary-file-directory
-  (concat temporary-file-directory user-login-name "/"))
-;; (make-directory user-temporary-file-directory)
-
 (setq package-archives
       '(("melpa" . "https://melpa.org/packages/")
 	("org" . "https://orgmode.org/elpa/")
 	("elpa" . "https://elpa.gnu.org/packages/")))
-
-(global-set-key (kbd "C-x C-v") (lambda () (interactive) (find-file (concat user-emacs-directory "/init.el"))))
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -31,8 +24,6 @@
 
 (use-package use-package-ensure-system-package
   :ensure t)
-
-(use-package delight)
 
 
 ;;; Initial packages --- these must load before everything
@@ -60,12 +51,6 @@
   :config
   (general-evil-setup t)
 
-  (general-def :keymaps 'override
-    "C-s-<f8>" 'my|close-notifications-mac
-    "C-M-<left>" 'frame-half-size-left
-    "C-M-<right>" 'frame-half-size-right
-    "C-M-<return>" 'toggle-frame-maximized)
-
   (general-create-definer my-leader-def
     :prefix "SPC"
     :states '(normal visual))
@@ -75,18 +60,17 @@
     :states '(normal visual))
 
   (my-leader-def
-    :keymaps 'override
-    ";" #'counsel-M-x
-    ":" #'counsel-command-history)
-
-  (my-leader-def
     "b" '(:ignore t :wk "Buffers")
+    "bK" 'kill-buffer
+    "br" 'rename-buffer
+
     "e" '(:ignore t :wk "Errors")
     "E" '(:ignore t :wk "Spelling")
     "f" '(:ignore t :wk "Files")
     "F" '(:ignore t :wk "Fold")
     "g" '(:ignore t :wk "Global")
     "n" '(:ignore t :wk "Notes")
+    "l" '(:ignore t :wk "<Local>")
     "p" '(:ignore t :wk "Projects")
     "s" '(:ignore t :wk "Search")
     "S" '(:ignore t :wk "Web")
@@ -119,6 +103,14 @@
     :states '(normal insert visual emacs motion)
     "C-e" 'move-end-of-line
     "C-y" 'universal-argument)
+  (my-leader-def
+    "ww" 'evil-window-vsplit
+
+    "bN" 'evil-split-next-buffer
+    "bP" 'evil-split-prev-buffer
+    "bj" 'evil-show-jumps
+    "bn" 'evil-next-buffer
+    "bp" 'evil-prev-buffer)
   :config
   (define-key universal-argument-map (kbd "C-y") 'universal-argument-more)
 
@@ -134,7 +126,7 @@
   (use-package evil-collection
     :after evil
     :config
-    (setq my/evil-collection-disabled-modes '(lispy))
+    (setq my/evil-collection-disabled-modes '(lispy company))
     (evil-collection-init
      (seq-difference evil-collection--supported-modes my/evil-collection-disabled-modes)))
 
@@ -143,9 +135,8 @@
     (global-evil-surround-mode 1))
 
   (use-package evil-escape
-    :delight
     :custom
-    ((evil-escape-key-sequence "jk"))
+    (evil-escape-key-sequence "jk")
     :config
     (evil-escape-mode t))
 
@@ -201,13 +192,36 @@
 
 (use-package window
   :ensure nil
+  :general
+  (my-leader-def
+    "wk" 'delete-window
+    "wo" 'delete-other-windows)
+  :config
   ;; Split horizontally when opening a new window from a command
   ;; split-height-threshold nil
   ;; split-width-threshold 170 ; always split vertically if there's room
-  )
+
+  (defadvice delete-window (after restore-balance activate)
+    "Balance deleted windows."
+    (balance-windows))
+
+  ;; recaculate split-width-threshold with every change
+  ;; (add-hook 'window-configuration-change-hook
+  ;;           'frontside-windowing-adjust-split-width-threshold)
+
+  (defun frontside-windowing-adjust-split-width-threshold ()
+    "Change the value of `split-width-threshold' to split once.
+For example, if the frame is 360 columns wide, then we want the
+`split-width-threshold' to be 181. That way, when you split horizontally,
+the two new windows will each be 180 columns wide, and sit just below the threshold."
+    (setq split-width-threshold (+ 1 (/ (frame-width) 2)))))
+
 
 (use-package files
   :ensure nil
+  :general
+  (my-leader-def
+    "fs" 'save-buffer)
   :custom
   (backup-by-copying t)		    ; slow but sure way of saving
   (version-control t)		    ; version numbers for backup files
@@ -246,8 +260,7 @@
 
 (use-package eldoc
   :hook (prog-mode org-mode)
-  :ensure nil
-  :delight)
+  :ensure nil)
 
 (use-package dired
   :ensure nil
@@ -274,6 +287,10 @@
   :config
   (winner-mode 1))
 
+(use-package electric-pair-mode
+  :ensure nil
+  :hook (prog-mode . electric-pair-mode))
+
 
 
 ;;; Lore friendly improvements
@@ -286,7 +303,6 @@
   :disabled) ; doesn't work on v28 yet
 
 (use-package which-key
-  :delight
   :demand
   :custom
   (which-key-prefix-prefix "")
@@ -326,7 +342,6 @@
 
 (use-package undo-tree
   :hook ((prog-mode org-mode) . global-undo-tree-mode)
-  :delight
   :general
   (general-def :states 'normal
     "u" 'undo-tree-undo
@@ -402,7 +417,6 @@
 
 (use-package evil-commentary
   :requires evil
-  :delight
   :general
   (general-def :states '(normal visual)
     "gc" 'evil-commentary)
@@ -466,7 +480,6 @@
   (elscreen-tab-other-screen-face ((t (:background "#272C36" :foreground "#5D80AE")))))
 
 (use-package evil-mc
-  :delight
   :general
   (general-def :keymaps 'override
     "C-M-d" 'hydra-mc/body)
@@ -585,12 +598,9 @@ _s_kip
 
 (use-package projectile
   :defer t
-  :delight '(:eval (concat " [" (projectile-project-name) "]"))
   :custom
   (projectile-completion-system 'ivy)
   (projectile-indexing-method 'hybrid) ; use git whilst honoring .projectile ignores
-  (projectile-known-projects-file
-   (expand-file-name "projectile-bookmarks.eld" user-emacs-directory))
   :init
   (if (file-directory-p "~/sky")
       (setq projectile-project-search-path '("~/dev" "~/sky"))
@@ -598,28 +608,32 @@ _s_kip
 
   :general
   (general-def :states '(normal visual)
-    "gf" 'projectile-find-file-dwim) ;; TODO do I need gf here? Check evil gf
+    "gf" 'projectile-find-file-dwim)
   (my-leader-def
-    "p!" 'projectile-run-shell-command-in-root
-    "pa" 'projectile-add-known-project
-    "pb" 'projectile-switch-to-buffer
-    "pc" 'projectile-compile-project
-    "pd" 'projectile-find-dir
-    "pe" 'projectile-edit-dir-locals
-    "pF" 'projectile-find-file-in-known-projects
-    "pg" 'projectile-find-file-dwim
-    "pi" 'projectile-invalidate-cache
-    "pk" 'projectile-kill-buffers
-    "po" 'projectile-toggle-between-implementation-and-test
-    "pO" 'projectile-find-other-file
+    "SPC" '(projectile-find-file :wk "find-file")
+    "be" '(projectile-ibuffer :wk "edit buffers")
+    "fS" '(projectile-save-project-buffers :wk "save buffers")
+
+    "p!" '(projectile-run-shell-command-in-root :wk "run-command-in-root")
+    "pa" '(projectile-add-known-project :wk "add-known-project")
+    "pb" '(projectile-switch-to-buffer :wk "switch-to-buffer")
+    "pc" '(projectile-compile-project :wk "compile")
+    "pd" '(projectile-find-dir :wk "find-dir")
+    "pe" '(projectile-edit-dir-locals :wk "edit-dir-locals")
+    "pf" '(projectile-find-file :wk "find-file")
+    "pF" '(projectile-find-file-in-known-projects :wk "find-file-in-known-projects")
+    "pg" '(projectile-find-file-dwim :wk "find-file-dwim")
+    "pi" '(projectile-invalidate-cache :wk "invalidate-cache")
+    "pk" '(projectile-kill-buffers :wk "kill-buffers")
+    "po" '(projectile-toggle-between-implementation-and-test :wk "toggle src / test")
+    "pO" '(projectile-find-other-file :wk "find-other-file")
+    "pp" '(projectile-switch-project :wk "switch")
     ;; "pt" 'my|test-file					;; test file in project
-    "pr" 'projectile-recentf
-    "pR" 'projectile-regenerate-tags)
+    "pr" '(projectile-recentf :wk "recentf")
+    "pR" '(projectile-regenerate-tags :wk "regenerate-tags"))
 
   :config
   (projectile-mode)
-
-  (use-package my-projectile-fns :load-path "~/.emacs.d/elisp")
 
   (projectile-register-project-type 'yarn '("yarn.lock")
 				    :compile "yarn"
@@ -637,19 +651,38 @@ _s_kip
 				    :run "npm start"
 				    :test-suffix "Test"))
 
-(use-package counsel-projectile
+(use-package my-projectile-fns
+  :after projectile
+  :load-path "~/.emacs.d/elisp"
   :general
-  (general-def :keymaps 'override :states '(normal visual)
-    "C-\\" 'counsel-projectile-rg)
   (my-leader-def
-    "SPC" 'counsel-projectile-find-file
-    "pf" 'counsel-projectile-find-file
-    "pp" 'counsel-projectile-switch-project)
+    "bb" '(my|split-last-buffer :wk "split last buffer")))
+
+(use-package counsel-projectile
+  :after (projectile counsel)
+  :custom ((counsel-projectile-org-capture-templates
+	    '(("t" "[${name}] Task" entry
+	       (file+headline org-default-notes-file "Tasks")
+	       "* TODO %?\n  %u\n  %a"))))
+  :general
+  (general-def :keymaps 'override
+    "C-\\" '(counsel-projectile-rg :wk "ripgrep"))
+
+  (my-leader-def
+    "nc" '(counsel-projectile-org-capture :wk "capture")
+    "np" '(counsel-projectile-org-agenda :wk "agenda")
+    "bl" '(counsel-projectile-switch-to-buffer :wk "project buffers")
+    "pn" '(counsel-projectile-org-agenda :wk "agenda"))
   :config
-  (counsel-projectile-mode))
+  (counsel-projectile-mode)
+  (setcar counsel-projectile-switch-project-action 2))
 
 (use-package magit
-  :bind ("C-x g" . magit-status))
+  :general
+  (general-def :keymaps 'override
+    "C-x g" 'magit-status)
+  (my-leader-def
+    "gg" 'magit-status))
 
 (use-package forge
   :after magit
@@ -658,7 +691,6 @@ _s_kip
 
 (use-package wakatime-mode
   :after projectile
-  :delight
   :config
   (setq wakatime-cli-path "/usr/local/bin/wakatime")
   (global-wakatime-mode))
@@ -667,7 +699,6 @@ _s_kip
 ;;; Narrowing / Searching / Lists
 
 (use-package ivy ;; TODO do i need these bindings and evil collection?
-  :delight
   :general
   (my-leader-def
     "sf" 'swiper)
@@ -697,7 +728,7 @@ _s_kip
   (setq ivy-re-builders-alist
 	'((counsel-projectile-rg . ivy--regex-plus)
 	  (swiper . ivy--regex-plus)	; fzy search in file is clumsy
-	  (t . ivy--regex-fuzzy)))	; use fzy for everything else
+	  (t . ivy--regex-fuzzy)))
 
   (setq enable-recursive-minibuffers t)
 
@@ -733,6 +764,19 @@ _s_kip
     "M-x" 'counsel-M-x
     "C-x b" 'counsel-ibuffer
     "C-x C-f" 'counsel-find-file)
+
+  (my-leader-def
+    ";" '(counsel-M-x :wk "M-x")
+    ":" '(counsel-command-history :wk "command history")
+    "ff" 'counsel-find-file
+    "fr" 'counsel-recentf
+    "bL" '(counsel-switch-buffer :wk "global buffers")
+    "si" 'counsel-imenu
+    "gl" 'counsel-find-library)
+
+  (my-local-leader-def :keymaps 'org-mode-map
+    "gh" '(counsel-org-goto-all :wk "find heading")
+    "gH" '(counsel-org-goto :wk "find heading in all"))
   :custom
   ;; ((counsel-find-file-ignore-regexp "(.|..)"))
   ((counsel-find-file-ignore-regexp "..")))
@@ -771,9 +815,12 @@ _s_kip
   (imap 'override
     "C-@"   'company-complete
     "C-SPC" 'company-complete)
-  (imap :keymaps 'company-mode-map
+  (imap :keymaps 'company-active-map
     "C-SPC" 'company-complete-common
-    "C-l" 'company-complete-selection)
+    "C-l" 'company-complete-selection
+    "C-j" 'company-select-next-or-abort
+    "C-k" 'company-select-previous-or-abort
+    )
   ;; (global-set-key (kbd "C-c /") 'company-files) ; Force complete file names on "C-c /" key
   :custom
   (company-tooltip-align-annotations t)
@@ -908,6 +955,8 @@ _s_kip
 
 (use-package elisp-mode
   :ensure nil
+  :hook (emacs-lisp-mode . (lambda () (when (fboundp 'electric-pair-mode)
+			       (electric-pair-mode -1))))
   :config
   (defun my/elisp-fold ()
     (interactive)
@@ -974,7 +1023,9 @@ _s_kip
   :defer t)
 
 (use-package docker
-  :bind ("C-c d" . docker))
+  :general
+  (my-leader-def
+    "gd" 'docker))
 
 (use-package lsp-python-ms
   :disabled
@@ -989,8 +1040,7 @@ _s_kip
   :hook (prog-mode . flycheck-mode))
 
 (use-package editorconfig
-  :hook (prog-mode . editorconfig-mode)
-  :delight)
+  :hook (prog-mode . editorconfig-mode))
 
 
 ;;; Writing
@@ -1021,8 +1071,6 @@ _s_kip
   :after (flyspell ivy))
 
 (use-package org
-  :delight
-  :ensure nil
   :init
   ;; org is a special child that needs to be installed
   (unless (file-expand-wildcards (concat package-user-dir "/org-[0-9]*"))
@@ -1057,7 +1105,6 @@ _s_kip
 		      '("~/org-notes/org-me-notes/notes.org")))
   :general
   (nmap :keymaps 'org-mode-map
-    (kbd "TAB") 'org-cycle
     ">" 'org-shiftmetaright
     "<" 'org-shiftmetaleft
     "j" 'evil-next-visual-line
@@ -1076,7 +1123,12 @@ _s_kip
     "ic" 'org-table-insert-column
     "i-" 'org-table-insert-hline
     "s" 'org-sort
-    ",I" 'org-toggle-inline-images)
+    "I" 'org-toggle-inline-images)
+  (my-leader-def
+    "nb" 'org-switchb
+    "nl" 'org-store-link
+    "nn" 'my|open-my-notes-file
+    "nN" 'my|open-work-notes-file)
   :config
   (require 'org-tempo) ;; needed to add this to get template expansion to work again
 
@@ -1140,8 +1192,7 @@ _s_kip
   (require 'ob-js)
   ;; overwrite default wrapper function which doesn't work
   (setq org-babel-js-function-wrapper "(function() {
-  const res = require('util').inspect((function(){\n%s\n})())
-  process.stdout.write(res !== 'undefined' ? res : 'no value returned from block');
+    require('util').inspect((function(){\n%s\n})())
   })()")
 
   ;; Highlight done todos with different colors.
@@ -1198,12 +1249,11 @@ _s_kip
     :custom
     (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
 
-    ;; Drag-and-drop to `dired`
+  ;; Drag-and-drop to `dired`
   (use-package org-download
     :hook (dired-mode-hook . org-download-enable))
   
   (use-package evil-org
-    :delight
     :config
     (add-hook 'org-mode-hook 'evil-org-mode)
     (add-hook 'evil-org-mode-hook
@@ -1216,7 +1266,20 @@ _s_kip
   :defer 20
   :custom (alert-default-style 'osx-notifier)
   :config
+
+  (defun my/org-alert-remove-progress (fn &rest args)
+    "Stop In Progress items having alerts"
+    (let ((original-keywords (-copy org-done-keywords-for-agenda)))
+      (setq org-done-keywords-for-agenda
+	    (cons "PROGRESS" org-done-keywords-for-agenda))
+      (let ((res (apply fn args)))
+	(setq org-done-keywords-for-agenda original-keywords)
+	res)))
+  
+  (advice-add 'org-alert--headline-complete? :around #'my/org-alert-remove-progress)
+
   (setq org-alert-interval 300)
+  (setq org-alert-notification-title "Emacs | Org")
   (org-alert-enable))
 
 (use-package markdown-mode
@@ -1233,7 +1296,19 @@ _s_kip
   (use-package markdown-toc))
 
 (use-package my-fns
-  :load-path "~/.emacs.d/elisp")
+  :load-path "~/.emacs.d/elisp"
+  :general
+  (general-def :keymaps 'override
+    "C-s-<f8>" 'my|close-notifications-mac
+    "C-M-<left>" 'frame-half-size-left
+    "C-M-<right>" 'frame-half-size-right
+    "C-M-<return>" 'toggle-frame-maximized)
+
+  (my-leader-def
+    "bk" '(my|kill-this-buffer :wk "kill buffer")
+    "fk" '(my|delete-file-and-buffer :wk "delete file")
+    "gp" 'my|pomo
+    "gP" 'my|pomo-stop))
 
 ;; reset gc to something sensible for normal operation
 (setq gc-cons-threshold (* 2 1000 1000))

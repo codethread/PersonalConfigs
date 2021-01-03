@@ -73,23 +73,6 @@
   (interactive)
   (find-file "~/.emacs.d/init.el"))
 
-(defun frontside-windowing-adjust-split-width-threshold ()
-  "Change the value of `split-width-threshold' to split once.
-
-For example, if the frame is 360 columns wide, then we want the
-`split-width-threshold' to be 181. That way, when you split horizontally,
-the two new windows will each be 180 columns wide, and sit just below the threshold."
-  (setq split-width-threshold (+ 1 (/ (frame-width) 2))))
-
-;; recaculate split-width-threshold with every change
-;; (add-hook 'window-configuration-change-hook
-;;           'frontside-windowing-adjust-split-width-threshold)
-
-(defadvice delete-window (after restore-balance activate)
-  "Balance deleted windows."
-  (balance-windows))
-
-
 (defun frame-half-size-left ()
   "Set the current frame to half the screen width."
   (interactive)
