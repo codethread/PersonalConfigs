@@ -682,6 +682,7 @@ _s_kip
   :load-path "~/.emacs.d/elisp"
   :general
   (my-leader-def
+    "gb" 'my/goto-github
     "bb" '(my/split-last-buffer :wk "split last buffer")))
 
 (use-package counsel-projectile
