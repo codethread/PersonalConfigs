@@ -30,17 +30,6 @@
 
 ;;; Code:
 
-(defun my/print-init-time ()
-  "Print EMACS load time."
-  (message
-   "*** Emacs loaded in %s with %d garbage collections."
-   (format "%.2f seconds" (float-time
-			   (time-subtract after-init-time before-init-time)))
-   gcs-done))
-
-;; help with googling
-
-;; stolen from crux https://github.com/bbatsov/crux/blob/master/crux.el#L347
 (defun my/delete-file-and-buffer ()
   "Kill the current buffer and deletes the file it is visiting."
   (interactive)
