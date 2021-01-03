@@ -41,7 +41,7 @@
 ;; help with googling
 
 ;; stolen from crux https://github.com/bbatsov/crux/blob/master/crux.el#L347
-(defun my|delete-file-and-buffer ()
+(defun my/delete-file-and-buffer ()
   "Kill the current buffer and deletes the file it is visiting."
   (interactive)
   (let ((filename (buffer-file-name)))
@@ -53,7 +53,7 @@
           (message "Deleted file %s" filename)
           (kill-buffer))))))
 
-;; (defun my|md-link-to-org ()
+;; (defun my/md-link-to-org ()
 ;;   ;; Can also be adapted to use the region, but one would need to add
 ;;   ;; a marker and region-end.  Remember to remove marker at end.
 ;;   (let ((markdown-regex-link-inline
@@ -63,12 +63,12 @@
 ;;       (replace-match "[[\\6][\\3]]"))))
 
 ;; https://www.reddit.com/r/emacs/comments/64xb3q/killthisbuffer_sometimes_just_stops_working/
-(defun my|kill-this-buffer ()
+(defun my/kill-this-buffer ()
   "Kill the current buffer."
   (interactive)
   (kill-buffer (current-buffer)))
 
-(defun my|open-init-file ()
+(defun my/open-init-file ()
   "Open init.el."
   (interactive)
   (find-file "~/.emacs.d/init.el"))
@@ -89,7 +89,7 @@
     (set-frame-width frame one-half-display-pixel-width nil 'pixelwise)
     (set-frame-position frame one-half-display-pixel-width 0)))
 
-(defun my|close-notifications-mac ()
+(defun my/close-notifications-mac ()
   "Close Mac notifications."
   (interactive)
   (message "closing notifications")
@@ -97,7 +97,7 @@
     (async-shell-command
      (concat "automator ~/Library/services/Close\\ all\\ notifications.workflow"))))
 
-(defun my|pomo ()
+(defun my/pomo ()
   "Start a pomodoro timer in the background."
   (interactive)
   (message "starting 25min timer")
@@ -105,7 +105,7 @@
     (async-shell-command
      (concat "pomo") "pomo-timer")))
 
-(defun my|pomo-stop ()
+(defun my/pomo-stop ()
   "Finish existing pomo timer."
   (interactive)
   (message "stopping pomo timer")
@@ -116,12 +116,12 @@
      (concat "pomo --complete"))))
 
 ;; TODO still getting there
-(defun my|replace-word-under-cursor ()
+(defun my/replace-word-under-cursor ()
   "Replace word under cursor."
   (interactive)
   (print (thing-at-point 'word)))
 
-;; (global-set-key (kbd "C-q") 'my|replace-word-under-cursor)
+;; (global-set-key (kbd "C-q") 'my/replace-word-under-cursor)
 
 (defun exercism-submit ()
   "Submit current file."
@@ -169,7 +169,7 @@
     "the currently failing "
     (propertize "unit test\n" 'face 'font-lock-constant-face))))
 
-(defun my|reload-init-file ()
+(defun my/reload-init-file ()
   "Reload init.el without restart."
   (interactive)
   (load-file "~/.emacs.d/init.el"))
@@ -187,7 +187,7 @@
 
 (define-key emacs-lisp-mode-map "#" #'endless/sharp)
 
-;; (defun my|teardown
+;; (defun my/teardown
 ;;     "Remove all files from teardown file."
 ;;   (interactive)
 ;;  ())

@@ -56,7 +56,7 @@
     :states '(normal visual))
   
   (general-create-definer my-local-leader-def
-    :prefix "SPC l"
+    :prefix ","
     :states '(normal visual))
 
   (my-leader-def
@@ -67,17 +67,23 @@
     "e" '(:ignore t :wk "Errors")
     "E" '(:ignore t :wk "Spelling")
     "f" '(:ignore t :wk "Files")
-    "F" '(:ignore t :wk "Fold")
     "g" '(:ignore t :wk "Global")
     "n" '(:ignore t :wk "Notes")
-    "l" '(:ignore t :wk "<Local>")
     "p" '(:ignore t :wk "Projects")
     "s" '(:ignore t :wk "Search")
-    "S" '(:ignore t :wk "Web")
     "t" '(:ignore t :wk "Term")
+
     "T" '(:ignore t :wk "Toggle")
+    "TT" 'toggle-truncate-lines
+    "Ti" 'lsp-ui-imenu
+    "Tp" 'electric-pair-local-mode
+    "Tu" 'undo-tree-visualize
+    "Tv" 'visual-line-mode
+    "Tw" 'toggle-word-wrap
+    "Tz" 'global-ligature-mode
+    "Tl" 'global-display-line-numbers-mode
+
     "w" '(:ignore t :wk "Window")
-    "W" '(:ignore t :wk "Layouts")
     "p" '(:ignore t :wk "Projectile")))
 
 (use-package hydra
@@ -173,9 +179,7 @@
     (scroll-bar-mode -1)
     (tooltip-mode -1)
     (menu-bar-mode -1)
-    (setq frame-title-format nil
-	  ;; TODO: put this behind function as I don't always like it
-	  browse-url-browser-function 'xwidget-webkit-browse-url))
+    (setq frame-title-format nil))
 
   (unless (window-system)
     (set-display-table-slot standard-display-table 'vertical-border (make-glyph-code ?┃))))
@@ -291,6 +295,28 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
   :ensure nil
   :hook (prog-mode . electric-pair-mode))
 
+(use-package xwidget
+  :ensure nil
+  :if (window-system)
+  :commands (xwidget-webkit-new-session)
+  :config
+  ;; (setq browse-url-browser-function 'xwidget-webkit-browse-url)
+  (defun my/google-browse (search)
+    (interactive "sSearch: ")
+    (browse-url (format "https://www.google.co.uk/search?q=%s" (s-replace-all '((" " . "+")) search))))
+
+  (defun my/google-xwidget (search)
+    (interactive "sSearch: ")
+    (xwidget-webkit-browse-url (format "https://www.google.co.uk/search?q=%s" (s-replace-all '((" " . "+")) search))))
+  :general
+  (nmap
+    "gX" 'browse-url-at-point)
+  (nmap :keymaps 'org-mode-map
+    "gx" 'org-open-at-point
+    "gX" 'xwidget-webkit-browse-url)
+  (my-leader-def
+    "gs" 'my/google-browse
+    "gS" 'my/google-xwidget))
 
 
 ;;; Lore friendly improvements
@@ -628,7 +654,7 @@ _s_kip
     "po" '(projectile-toggle-between-implementation-and-test :wk "toggle src / test")
     "pO" '(projectile-find-other-file :wk "find-other-file")
     "pp" '(projectile-switch-project :wk "switch")
-    ;; "pt" 'my|test-file					;; test file in project
+    ;; "pt" 'my/test-file					;; test file in project
     "pr" '(projectile-recentf :wk "recentf")
     "pR" '(projectile-regenerate-tags :wk "regenerate-tags"))
 
@@ -656,7 +682,7 @@ _s_kip
   :load-path "~/.emacs.d/elisp"
   :general
   (my-leader-def
-    "bb" '(my|split-last-buffer :wk "split last buffer")))
+    "bb" '(my/split-last-buffer :wk "split last buffer")))
 
 (use-package counsel-projectile
   :after (projectile counsel)
@@ -701,9 +727,14 @@ _s_kip
 (use-package ivy ;; TODO do i need these bindings and evil collection?
   :general
   (my-leader-def
-    "sf" 'swiper)
-  :bind (("C-s" . swiper)
-	 :map ivy-minibuffer-map
+    "sf" 'swiper
+
+    "WW" 'ivy-push-view
+    "WD" 'ivy-pop-view
+    "Wl" 'ivy-switch-view)
+  (general-def :keymaps 'override
+    "C-s" 'swiper)
+  :bind (:map ivy-minibuffer-map
 	 ("C-c C-c" . ivy-immediate-done)
 	 ("TAB" . ivy-alt-done)
 	 ("C-l" . ivy-alt-done)
@@ -763,6 +794,7 @@ _s_kip
   (general-def :keymaps 'override
     "M-x" 'counsel-M-x
     "C-x b" 'counsel-ibuffer
+    "C-x B" 'counsel-ibuffer
     "C-x C-f" 'counsel-find-file)
 
   (my-leader-def
@@ -808,20 +840,19 @@ _s_kip
   (use-package yasnippet-snippets)
   (yas-global-mode 1))
 
-
 (use-package company
   :hook (prog-mode . company-mode)
   :general
   (imap 'override
     "C-@"   'company-complete
     "C-SPC" 'company-complete)
-  (imap :keymaps 'company-active-map
+  (general-def :keymaps 'company-active-map
     "C-SPC" 'company-complete-common
     "C-l" 'company-complete-selection
-    "C-j" 'company-select-next-or-abort
-    "C-k" 'company-select-previous-or-abort
-    )
-  ;; (global-set-key (kbd "C-c /") 'company-files) ; Force complete file names on "C-c /" key
+    "C-j" 'company-select-next
+    "C-k" 'company-select-previous
+    "C-u" 'company-previous-page
+    "C-d" 'company-next-page)
   :custom
   (company-tooltip-align-annotations t)
   (company-minimum-prefix-length 10000)
@@ -845,15 +876,16 @@ _s_kip
   (lsp-auto-execute-action 'nil))
 
 (use-package lsp-ui
+  :commands (lsp-ui-imenu)
   :hook (lsp-mode . lsp-ui-mode)
-  :bind ("C-c C-k" . my|lsp-ui-doc-glance) ; just a test binding
+  :bind ("C-c C-k" . my/lsp-ui-doc-glance) ; just a test binding
   :config
-  (defun my|lsp-ui-doc--glance-hide-frame ()
+  (defun my/lsp-ui-doc--glance-hide-frame ()
     "Hook to hide hover information popup for lsp-ui-doc-glance."
     (lsp-ui-doc-hide)
     (remove-hook 'pre-command-hook 'lsp-ui-doc--glance-hide-frame))
 
-  (defun my|lsp-ui-doc-glance ()
+  (defun my/lsp-ui-doc-glance ()
     "Trigger display hover information popup and hide it on next typing."
     (interactive)
     (lsp-ui-doc-show)
@@ -918,9 +950,9 @@ _s_kip
 		'(("javascript" . "//")
                   ("typescript" . "//")))
 
-  (add-hook 'web-mode-hook #'my|web-mode-settings)
+  (add-hook 'web-mode-hook #'my/web-mode-settings)
 
-  (defun my|web-mode-settings ()
+  (defun my/web-mode-settings ()
     "Hooks for Web mode."
     (setq web-mode-enable-auto-closing t)
     (setq web-mode-enable-auto-quoting nil)
@@ -1037,7 +1069,17 @@ _s_kip
 (use-package flycheck
   ;; :custom
   ;; ((flycheck-check-syntax-automatically '(idle-buffer-switch save mode-enabled)))
-  :hook (prog-mode . flycheck-mode))
+  :hook (prog-mode . flycheck-mode)
+  :general
+  (my-leader-def
+    "ef" 'my/eslint-fix-file-and-revert
+    "en" 'flycheck-next-error
+    "ep" 'flycheck-previous-error
+    "el" 'flycheck-list-errors
+    "ee" 'flycheck-buffer
+    ;; "ee" 'flycheck-display-error-at-point ;; not sure?
+    "eh" 'flycheck-explain-error-at-point ;; not sure?
+    "ei" 'flycheck-verify-setup))
 
 (use-package editorconfig
   :hook (prog-mode . editorconfig-mode))
@@ -1052,7 +1094,7 @@ _s_kip
   :general
   (my-leader-def
     "EE" 'flyspell-correct-wrapper
-    "ES" 'my|my-save-word
+    "ES" 'my/my-save-word
     "EB" 'flyspell-buffer
     "EP" 'evil-prev-flyspell-error
     "EN" 'evil-next-flyspell-error)
@@ -1060,7 +1102,7 @@ _s_kip
   :config
   (setq ispell-program-name "/usr/local/bin/aspell")
 
-  (defun my|my-save-word ()
+  (defun my/my-save-word ()
     (interactive)
     (let ((current-location (point))
 	  (word (flyspell-get-word)))
@@ -1085,8 +1127,8 @@ _s_kip
 				     (expand-file-name org-work-file)
 				   (expand-file-name org-personal-file)))
   :commands
-  (my|open-work-notes-file
-   my|open-my-notes-file)
+  (my/open-work-notes-file
+   my/open-my-notes-file)
   :hook
   (org-mode . visual-line-mode)
   (org-mode . flyspell-mode)
@@ -1111,7 +1153,7 @@ _s_kip
     "k" 'evil-previous-visual-line)
   (my-local-leader-def :keymaps 'org-mode-map
     "c" 'org-toggle-checkbox
-    "lt" 'my|org-toggle-list-checkbox
+    "lt" 'my/org-toggle-list-checkbox
     "ls" 'org-sort-list
     "g" 'org-open-at-point
     "hh" 'org-toggle-heading
@@ -1127,8 +1169,8 @@ _s_kip
   (my-leader-def
     "nb" 'org-switchb
     "nl" 'org-store-link
-    "nn" 'my|open-my-notes-file
-    "nN" 'my|open-work-notes-file)
+    "nn" 'my/open-my-notes-file
+    "nN" 'my/open-work-notes-file)
   :config
   (require 'org-tempo) ;; needed to add this to get template expansion to work again
 
@@ -1154,21 +1196,21 @@ _s_kip
 	'((sequence "TODO(t)" "PROGRESS(p)" "|" "DONE(d)" "ARCHIVED(a)")))
 
   ;; seems broken
-  (defun my|org-toggle-list-checkbox ()
+  (defun my/org-toggle-list-checkbox ()
     (interactive)
     (org-toggle-checkbox 4))
 
-  (defun my|open-my-notes-file ()
+  (defun my/open-my-notes-file ()
     "Open rough notes."
     (interactive)
     (find-file org-personal-file))
 
-  (defun my|open-work-notes-file ()
+  (defun my/open-work-notes-file ()
     "Open work notes."
     (interactive)
     (find-file org-work-file))
 
-  (defun my|list-to-checkbox (arg)
+  (defun my/list-to-checkbox (arg)
     (interactive "P")
     (let ((n (or arg 1)))
       (when (region-active-p)
@@ -1295,20 +1337,36 @@ _s_kip
   :config
   (use-package markdown-toc))
 
+(use-package poet-theme
+  :disabled ; enable this section if writing
+  :config
+  (blink-cursor-mode 0)
+  (load-theme 'poet t)
+  (custom-set-faces
+   '(vertical-border ((t (:background "black" :foreground "controlColor")))))
+  ;; non monospace font
+  (set-frame-font "Avenir Next:size=14")
+  
+  (use-package hide-mode-line
+    :hook (org-mode . hide-mode-line-mode))
+
+  (use-package olivetti
+    :hook (org-mode . olivetti-mode)))
+
 (use-package my-fns
   :load-path "~/.emacs.d/elisp"
   :general
   (general-def :keymaps 'override
-    "C-s-<f8>" 'my|close-notifications-mac
+    "C-s-<f8>" 'my/close-notifications-mac
     "C-M-<left>" 'frame-half-size-left
     "C-M-<right>" 'frame-half-size-right
     "C-M-<return>" 'toggle-frame-maximized)
 
   (my-leader-def
-    "bk" '(my|kill-this-buffer :wk "kill buffer")
-    "fk" '(my|delete-file-and-buffer :wk "delete file")
-    "gp" 'my|pomo
-    "gP" 'my|pomo-stop))
+    "bk" '(my/kill-this-buffer :wk "kill buffer")
+    "fk" '(my/delete-file-and-buffer :wk "delete file")
+    "gp" 'my/pomo
+    "gP" 'my/pomo-stop))
 
 ;; reset gc to something sensible for normal operation
 (setq gc-cons-threshold (* 2 1000 1000))
