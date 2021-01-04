@@ -619,6 +619,29 @@ _s_kip
                 "?=" "?." "??" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
                 "\\\\" "://")))
 
+(use-package tree-sitter
+  :hook ((prog-mode . global-tree-sitter-mode)
+	 (tree-sitter-after-on . tree-sitter-hl-mode))
+  :commands (my/tree-sitter-hl)
+  :general
+  (my-leader-def
+    "Th" 'my/tree-sitter-hl)
+  :config
+  (defun my/tree-sitter-hl ()
+    "turn on syntax highlighting via tree-sitter"
+    (interactive)
+    (if (bound-and-true-p tree-sitter-mode)
+	(progn
+	  (message "turning syntax highlight off")
+	  (tree-sitter-hl-mode -1)
+	  (tree-sitter-mode -1))
+      (progn
+	(message "turning syntax highlight on")
+	(tree-sitter-mode 't)
+	(tree-sitter-hl-mode 't))))
+  
+  (use-package tree-sitter-langs))
+
 
 ;;; Projects / Navigation
 
@@ -648,7 +671,6 @@ _s_kip
     "pe" '(projectile-edit-dir-locals :wk "edit-dir-locals")
     "pf" '(projectile-find-file :wk "find-file")
     "pF" '(projectile-find-file-in-known-projects :wk "find-file-in-known-projects")
-    "pg" '(projectile-find-file-dwim :wk "find-file-dwim")
     "pi" '(projectile-invalidate-cache :wk "invalidate-cache")
     "pk" '(projectile-kill-buffers :wk "kill-buffers")
     "po" '(projectile-toggle-between-implementation-and-test :wk "toggle src / test")
@@ -682,7 +704,7 @@ _s_kip
   :load-path "~/.emacs.d/elisp"
   :general
   (my-leader-def
-    "gb" 'my/goto-github
+    "pg" 'my/goto-github
     "bb" '(my/split-last-buffer :wk "split last buffer")))
 
 (use-package counsel-projectile
@@ -710,6 +732,29 @@ _s_kip
     "C-x g" 'magit-status)
   (my-leader-def
     "gg" 'magit-status))
+
+(use-package git-gutter
+  :hook prog-mode
+  :general
+  (my-leader-def
+    "G" 'hydra-git/body)
+  :hydra
+  (hydra-git
+   (:hint nil
+	  :post my/gutter-close-git-diff)
+   "git-gutter"
+   ("q" nil "quit" :color blue)
+   ("r" git-gutter:update-all-windows "refresh")
+   ("j" git-gutter:next-hunk "next")
+   ("k" git-gutter:previous-hunk "previous")
+   ("d" git-gutter:popup-hunk "diff")
+   ("x" git-gutter:revert-hunk "revert hunk"))
+  :config
+  (defun my/gutter-close-git-diff ()
+    "Close git-gutter diff if open"
+    (interactive)
+    (when (-contains? (window-list) (git-gutter:popup-buffer-window))
+      (delete-window (git-gutter:popup-buffer-window)))))
 
 (use-package forge
   :after magit
@@ -1047,7 +1092,8 @@ _s_kip
               (set (make-local-variable 'comment-start) "# ")
               (set (make-local-variable 'comment-end) ""))))
 
-;; (use-package rustic)
+(use-package rustic
+  :defer 2)
 
 (use-package dockerfile-mode
   :defer t)
