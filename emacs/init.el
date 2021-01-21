@@ -53,10 +53,12 @@
 
   (general-create-definer my-leader-def
     :prefix "SPC"
+    :keymaps 'override
     :states '(normal visual))
   
   (general-create-definer my-local-leader-def
     :prefix ","
+    :keymaps 'override
     :states '(normal visual))
 
   (my-leader-def
@@ -300,14 +302,24 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
   :if (window-system)
   :commands (xwidget-webkit-new-session)
   :config
-  ;; (setq browse-url-browser-function 'xwidget-webkit-browse-url)
-  (defun my/google-browse (search)
-    (interactive "sSearch: ")
-    (browse-url (format "https://www.google.co.uk/search?q=%s" (s-replace-all '((" " . "+")) search))))
+  (defun my/google-browse ()
+    (interactive)
+    (browse-url (my/google--get-search-as-url)))
 
-  (defun my/google-xwidget (search)
-    (interactive "sSearch: ")
-    (xwidget-webkit-browse-url (format "https://www.google.co.uk/search?q=%s" (s-replace-all '((" " . "+")) search))))
+  (defun my/google-xwidget ()
+    (interactive)
+    (xwidget-webkit-browse-url (my/google--get-search-as-url)))
+
+  (defun my/google--get-search-as-url ()
+    (format "https://www.google.co.uk/search?q=%s"
+	    (url-hexify-string
+	     (s-replace-all '(("  " . " ")) (my/google--get-search)))))
+
+  (defun my/google--get-search ()
+    (if (evil-visual-state-p)
+	(buffer-substring-no-properties (region-beginning) (region-end))
+      (read-string "Search: ")))
+
   :general
   (nmap
     "gX" 'browse-url-at-point)
@@ -542,7 +554,6 @@ _s_kip
 (use-package multi-vterm
   :general
   (my-leader-def
-    :keymaps 'override
     "tt" 'multi-vterm-project
     "tn" 'multi-vterm)
   :config
@@ -605,7 +616,7 @@ _s_kip
   (ligature-set-ligatures 't '("www"))
   ;; Enable all Cascadia Code ligatures in programming modes
   (ligature-set-ligatures
-   'prog-mode '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
+   'prog-mode '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "||=" "||>"
                 ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
                 "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
                 "<~~" "<~>" "<*>" "<||" "<|>" "<$>" "<==" "<=>" "<=<" "<->"
@@ -737,7 +748,7 @@ _s_kip
   :hook prog-mode
   :general
   (my-leader-def
-    "G" 'hydra-git/body)
+    "G" '(hydra-git/body :wk "git-gutter"))
   :hydra
   (hydra-git
    (:hint nil
@@ -771,28 +782,6 @@ _s_kip
 ;;; Narrowing / Searching / Lists
 
 (use-package ivy ;; TODO do i need these bindings and evil collection?
-  :general
-  (my-leader-def
-    "sf" 'swiper
-
-    "WW" 'ivy-push-view
-    "WD" 'ivy-pop-view
-    "Wl" 'ivy-switch-view)
-  (general-def :keymaps 'override
-    "C-s" 'swiper)
-  :bind (:map ivy-minibuffer-map
-	 ("C-c C-c" . ivy-immediate-done)
-	 ("TAB" . ivy-alt-done)
-	 ("C-l" . ivy-alt-done)
-	 ("C-j" . ivy-next-line)
-	 ("C-k" . ivy-previous-line)
-	 :map ivy-switch-buffer-map
-	 ("C-k" . ivy-previous-line)
-	 ("C-l" . ivy-done)
-	 ("C-d" . ivy-switch-buffer-kill)
-	 :map ivy-reverse-i-search-map
-	 ("C-k" . ivy-previous-line)
-	 ("C-d" . ivy-reverse-i-search-kill))
   :custom
   ((ivy-use-virtual-buffers t)
    (ivy-wrap t)
@@ -813,7 +802,23 @@ _s_kip
     :config
     (ivy-rich-mode 1))
   
-  (use-package ivy-xref))
+  (use-package ivy-xref)
+    :general
+  (my-leader-def
+    "sf" 'swiper
+
+    "WW" 'ivy-push-view
+    "WD" 'ivy-pop-view
+    "Wl" 'ivy-switch-view)
+  (general-def :keymaps 'override
+    "C-s" 'swiper)
+  (general-def :keymaps '(override ivy-minibuffer-map)
+    "C-SPC" 'ivy-restrict-to-matches
+    "C-l" 'ivy-alt-done
+    "C-j" 'ivy-next-line
+    "C-k" 'ivy-previous-line
+    "C-u" 'ivy-scroll-down-command
+    "C-d" 'ivy-scroll-up-command))
 
 (use-package flx
   :after ivy)
@@ -848,6 +853,8 @@ _s_kip
     ":" '(counsel-command-history :wk "command history")
     "ff" 'counsel-find-file
     "fr" 'counsel-recentf
+    "fo" 'counsel-outline
+
     "bL" '(counsel-switch-buffer :wk "global buffers")
     "si" 'counsel-imenu
     "gl" 'counsel-find-library)
@@ -991,6 +998,7 @@ _s_kip
 
 (use-package web-mode
   :mode "\\.tsx\\'"
+  :mode "\\.ejs\\'"
   :config
   (setq-default web-mode-comment-formats
 		'(("javascript" . "//")
@@ -1008,22 +1016,40 @@ _s_kip
   :hook ((rjsx-mode web-mode typescript-mode) . jest-minor-mode)
   :custom (jest-executable "yarn test"))
 
+(use-package prettier-js
+  :after (:or web-mode rjsx-mode typescript-mode))
+
 ;;;; Scala
-;; TODO probably need to set jenv
 
 (use-package scala-mode
   :interpreter
   ("scala" . scala-mode))
 
 (use-package lsp-metals
-  :disabled
-  :config (setq lsp-metals-treeview-show-when-views-received t))
+  :after scala-mode
+  :custom
+  (lsp-metals-treeview-show-when-views-received nil)
+  :config
+  ;; (lsp-metals-sbt-script)
+  )
+
+(use-package sbt-mode
+  :commands sbt-start sbt-command
+  :after scala-mode
+  :config
+  ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
+  ;; allows using SPACE when in the minibuffer
+  (substitute-key-definition
+   'minibuffer-complete-word
+   'self-insert-command
+   minibuffer-local-completion-map)
+   ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
+   (setq sbt:program-options '("-Dsbt.supershell=false")))
 
 ;;;; Java
 
 (use-package lsp-java
-  :disabled
-  :config (add-hook 'java-mode-hook 'lsp))
+  :after (java-mode))
 
 (use-package dap-java
   :disabled
@@ -1214,6 +1240,7 @@ _s_kip
     "s" 'org-sort
     "I" 'org-toggle-inline-images)
   (my-leader-def
+    "na" 'org-agenda
     "nb" 'org-switchb
     "nl" 'org-store-link
     "nn" 'my/open-my-notes-file
@@ -1231,10 +1258,9 @@ _s_kip
 	org-hide-emphasis-markers t
 	org-startup-folded t
 	org-log-done 'time
-	org-ellipsis " ▾"
+	;; org-ellipsis " ▾"
 	org-image-actual-width nil ; allows images to be resized with #+ATTR_ORG: :width 100
 	org-indirect-buffer-display 'current-window
-	org-eldoc-breadcrumb-separator " → "
 	org-enforce-todo-dependencies t
 	org-list-demote-modify-bullet '(("+" . "-") ("-" . "+") ("*" . "+") ("1." . "a."))
 	org-agenda-span 8)
@@ -1329,8 +1355,6 @@ _s_kip
 
   (add-hook 'org-src-mode-hook 'my/disable-org-checkdoc)
 
-  ;; (use-package org-eldoc)
-
   (use-package org-bullets
     :if window-system
     :commands org-bullets-mode
@@ -1340,6 +1364,8 @@ _s_kip
 
   ;; Drag-and-drop to `dired`
   (use-package org-download
+    :demand
+    :custom (org-download-image-org-width 500)
     :hook (dired-mode-hook . org-download-enable))
   
   (use-package evil-org

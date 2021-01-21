@@ -70,7 +70,7 @@ alias npc="rm -rf ./node_modules; npm cache clear; npm i"
 alias npg="node_g_installs"
 alias npl="npm -g ls --depth=0"
 alias npl="npm -g ls --depth=0"
-alias yy="cat package.json | jq -S '.scripts' | fzf"
+alias yy="eval \$(cat package.json | jq -S '.scripts' | sed '1d;$d' | fzf -i --header='[run:]' | sed -E \"s/\\\"(.*)\\\":.*/yarn run \\1/\" )"
 
 #---------------------------------------------#
 # DOCKER

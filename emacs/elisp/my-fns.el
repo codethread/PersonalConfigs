@@ -134,7 +134,7 @@
   '(([C-c C-e s] . exercism-submit))
   :group 'exercism)
 
-(defun tdd-message ()
+(defun my/tdd-message ()
   "Display the three laws of TDD."
   (interactive)
   (message

@@ -134,7 +134,7 @@
     {
       "before": ["<leader>", "f", "r"],
       "commands": ["fileutils.renameFile"]
-    }
+    },
     {
       "before": ["<leader>", "u", "f"],
       "commands": ["editor.action.formatDocument"]
@@ -182,7 +182,7 @@
   },
   "typescript.updateImportsOnFileMove.enabled": "always",
   "[javascript]": {
-    "editor.defaultFormatter": "vscode.typescript-language-features"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
