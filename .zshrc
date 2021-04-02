@@ -16,6 +16,13 @@ fi
 # highlight tab
 zstyle ':completion:*' menu selecto
 
+# fix for navigation keys in IDEA terminal
+if [[ "$TERMINAL_EMULATOR" == "JetBrains-JediTerm" ]]; then
+  bindkey "∫" backward-word # Option-b
+  bindkey "ƒ" forward-word  # Option-f
+  bindkey "∂" delete-word   # Option-d
+fi
+
 #------------------------------------------
 #--- ZSH History
 #-----------------------------------------
