@@ -439,7 +439,7 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
     (ace-window 4)))
 
 (use-package auto-package-update
-  :defer 10
+  :defer 30
   :custom
   (auto-package-update-delete-old-versions t)
   (auto-package-update-interval 1)
@@ -1119,7 +1119,7 @@ _s_kip
               (set (make-local-variable 'comment-end) ""))))
 
 (use-package rustic
-  :defer 2)
+  :defer 60)
 
 (use-package dockerfile-mode
   :defer t)
@@ -1378,7 +1378,7 @@ _s_kip
     (evil-org-agenda-set-keys)))
 
 (use-package org-alert
-  :defer 20
+  :defer 30
   :custom (alert-default-style 'osx-notifier)
   :config
 

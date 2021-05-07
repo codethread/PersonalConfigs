@@ -81,6 +81,7 @@ alias dock_prune='docker system prune -a'
 alias dcup='docker-compose up'
 alias dcdn='docker-compose down'
 alias dick="docker ps | grep '[a-z0-9]' | awk '{ print $1 }' | xargs docker kill"
+alias dc="docker-compose config --services | fzf --multi | tr '\n' ' ' | xargs docker-compose up"
 
 #---------------------------------------------#
 # GIT
@@ -96,7 +97,8 @@ alias gnah="git reset --hard; git clean -df"
 alias gr='git rebase -i HEAD~$1'
 alias gclean="git clean -dfX"
 alias gwip="git add . && git commit -nm 'wip'"
-alias gl="git --no-pager log -n 5"
+alias gl="git log --oneline master..HEAD"
+alias gundo="git reset --soft HEAD~1 && git restore --staged ."
 
 #---------------------------------------------#
 # TMUXINATOR

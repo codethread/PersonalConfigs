@@ -16,6 +16,10 @@ map s :action AceAction<CR>
 imap jk <Esc>
 set timeoutlen=1000
 
+nmap gh :action QuickJavaDoc<CR>
+nmap gi :action QuickImplementations<CR>
+nmap gH :action QuickTypeDefinition<CR>
+
 imap § #
 
 " TODO not yet working
@@ -35,6 +39,7 @@ map <Leader>ep :action GotoPreviousError<CR>
 
 " file
 map <Leader>fv :action SelectInProjectView<CR>
+map <Leader>fr :action RenameFile<CR>
 map <Leader>fc <Action>(ReformatCode)
 
 " ActivateTerminalToolWindow
@@ -68,6 +73,8 @@ map <Leader>pt :action GotoTest<CR>
 
 " window
 map <Leader>ww :vsplit<CR>
+map <Leader>wk :action Unsplit<CR>
+map <Leader>ws :action MoveEditorToOppositeTabGroup<CR>
 map <Leader>W :action HideAllWindows<CR>
 
 " terminal
