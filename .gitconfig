@@ -3,7 +3,7 @@
 	name = Adam Hall
 [core]
 	excludesfile = ~/.gitignore_global
-	editor = nvim --clean
+	editor = nvim
 [pull]
 	rebase = true
 [push]

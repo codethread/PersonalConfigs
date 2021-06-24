@@ -84,7 +84,7 @@
   (message "closing notifications")
   (save-window-excursion
     (async-shell-command
-     (concat "automator ~/Library/services/Close\\ all\\ notifications.workflow"))))
+     (concat "automator ~/Library/services/Close\\ BSur\\ Notifications.workflow"))))
 
 (defun my/pomo ()
   "Start a pomodoro timer in the background."
@@ -119,13 +119,13 @@
 
 (define-minor-mode exercism-mode
   "Toggle exercism mode.
-     Interactively with no argument, this command toggles the mode.
-     A positive prefix argument enables the mode, any other prefix
-     argument disables it.  From Lisp, argument omitted or nil enables
-     the mode, `toggle' toggles the state.
+     Interactively with no argument, this command toggles the
+     mode.  A positive prefix argument enables the mode, any
+     other prefix argument disables it.  From Lisp, argument
+     omitted or nil enables the mode, `toggle' toggles the state.
      
-     When Exercism mode is enabled, A few things are bound to C-c.
-     See the command \\[exercism-submit]."
+     When Exercism mode is enabled, A few things are bound to
+     C-c.  See the command \\[exercism-submit]."
   ;; The initial value.
   nil
   ;; The indicator for the mode line.

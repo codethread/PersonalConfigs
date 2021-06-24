@@ -1,0 +1,19 @@
+# ~/.tmuxinator/dev.yml
+
+name: idris
+root: ~/
+
+windows:
+  - idris:
+      root: ~/sky/id-idris
+      layout: main-vertical
+      panes:
+        - sign-in:
+            - cd apps/sign-in
+            - yarn dev
+        - mockserver:
+            - cd apps/mockserver
+            - yarn dev
+        - iframe:
+            - cd apps/iframe-react-app
+            - yarn dev

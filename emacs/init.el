@@ -77,16 +77,20 @@
 
     "T" '(:ignore t :wk "Toggle")
     "TT" 'toggle-truncate-lines
+    "Tc" 'centered-window-mode
+    "Th" 'my/tree-sitter-hl
     "Ti" 'lsp-ui-imenu
+    "Tl" 'global-display-line-numbers-mode
     "Tp" 'electric-pair-local-mode
     "Tu" 'undo-tree-visualize
     "Tv" 'visual-line-mode
     "Tw" 'toggle-word-wrap
     "Tz" 'global-ligature-mode
-    "Tl" 'global-display-line-numbers-mode
 
     "w" '(:ignore t :wk "Window")
-    "p" '(:ignore t :wk "Projectile")))
+    "p" '(:ignore t :wk "Projectile")
+    "v" 'recenter 			;; this is a hack until i fix automcomplete
+    ))
 
 (use-package hydra
   :demand
@@ -153,6 +157,10 @@
     ;; bind evil-args text objects
     (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
     (define-key evil-outer-text-objects-map "a" 'evil-outer-arg)))
+
+(use-package dash)
+(use-package s)
+(use-package f)
 
 
 ;;; Builtin configurations
@@ -262,7 +270,7 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
 (use-package compile
   :ensure nil
   :custom
-  ((compilation-scroll-output t)))
+  (compilation-scroll-output t))
 
 (use-package eldoc
   :hook (prog-mode org-mode)
@@ -329,6 +337,18 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
   (my-leader-def
     "gs" 'my/google-browse
     "gS" 'my/google-xwidget))
+
+(use-package epg-config
+  ;; a.k.a: gpg epa
+  :ensure nil
+  :custom
+  ;; needed this on macos to get private key to be picked up
+  (epg-pinentry-mode 'loopback))
+
+(use-package password-cache
+  :ensure nil
+  :custom
+  ((password-cache-expiry (* 60 60 4))))
 
 
 ;;; Lore friendly improvements
@@ -449,6 +469,18 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
 
 (use-package page-break-lines
   :hook (emacs-lisp-mode . page-break-lines-mode))
+
+(use-package reveal-in-osx-finder
+  :if (memq window-system '(mac ns)))
+
+(use-package nameless
+  :hook (emacs-lisp . nameless-mode))
+
+(use-package super-save
+  :config
+  (setq auto-save-default nil)
+  (setq super-save-auto-save-when-idle t)
+  (super-save-mode +1))
 
 
 ;;; Evil helpers
@@ -588,6 +620,7 @@ _s_kip
   (set-face-attribute 'font-lock-function-name-face nil :slant 'italic)
   (set-face-attribute 'font-lock-variable-name-face nil :weight 'semi-bold)
 
+
   ;; Set the fixed pitch face
   ;; (set-face-attribute 'fixed-pitch nil :font "Fira Code Retina")
 
@@ -634,9 +667,9 @@ _s_kip
   :hook ((prog-mode . global-tree-sitter-mode)
 	 (tree-sitter-after-on . tree-sitter-hl-mode))
   :commands (my/tree-sitter-hl)
-  :general
-  (my-leader-def
-    "Th" 'my/tree-sitter-hl)
+  ;; :general
+  ;; (my-leader-def
+  ;;   "Th" 'my/tree-sitter-hl)
   :config
   (defun my/tree-sitter-hl ()
     "turn on syntax highlighting via tree-sitter"
@@ -831,7 +864,6 @@ _s_kip
   (ivy-posframe-height     10)
   (ivy-posframe-min-height 10)
   :config
-  ()
   (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
   (setq ivy-posframe-parameters '((parent-frame . nil)
                                   (left-fringe . 8)
@@ -884,7 +916,7 @@ _s_kip
 ;;; LSP and Completion
 
 (use-package yasnippet
-  :disabled 				; TODO practice with this first
+  ;; :disabled 				; TODO practice with this first
   :bind
   ("C-c y s" . yas-insert-snippet)
   ("C-c y v" . yas-visit-snippet-file)
@@ -914,13 +946,19 @@ _s_kip
 (use-package company-box
   :hook (company-mode . company-box-mode))
 
+(general-nmap
+  "gh" (general-predicate-dispatch 'helpful-at-point
+	 ;; if lsp is active
+	 (bound-and-true-p lsp-mode) 'lsp-describe-thing-at-point))
+
 (use-package lsp-mode
   :commands lsp
+  :init (add-to-list 'exec-path "~/.tooling/elixir-ls-1.11/")
   :hook
-  ((typescript-mode rjsx-mode web-mode scala-mode java-mode) . lsp)
+  ((typescript-mode rjsx-mode web-mode scala-mode java-mode elixir-mode) . lsp)
   (lsp-mode . lsp-enable-which-key-integration)
-  :general
-  (nmap "gh" 'lsp-describe-thing-at-point)
+  ;; :general
+  ;; (nmap "gh" 'lsp-describe-thing-at-point)
   :custom
   (lsp-headerline-breadcrumb-enable nil)
   (lsp-disabled-clients '((json-mode . eslint)))
@@ -1132,12 +1170,31 @@ _s_kip
   (my-leader-def
     "gd" 'docker))
 
+(use-package elixir-mode
+  :config
+  ;; Create a buffer-local hook to run elixir-format on save, only when we enable elixir-mode.
+  (add-hook 'elixir-mode-hook
+            (lambda () (add-hook 'before-save-hook 'elixir-format nil t))))
+
+(use-package mix
+  :hook (elixir-mode . mix-minor-mode)
+  :general
+  (my-leader-def
+    "pt" 'my/elixir-test-file)
+  :config
+  (defun my/elixir-test-file ()
+    "save buffer and run mix test file"
+    (interactive)
+    (progn
+      (save-buffer)
+      (mix-test-current-buffer))))
+
 (use-package lsp-python-ms
   :disabled
   :init (setq lsp-python-ms-auto-install-server t)
   :hook (python-mode . (lambda ()
-                          (require 'lsp-python-ms)
-                          (lsp))))
+                         (require 'lsp-python-ms)
+                         (lsp))))
 
 (use-package flycheck
   ;; :custom
@@ -1185,27 +1242,62 @@ _s_kip
 (use-package flyspell-correct-ivy
   :after (flyspell ivy))
 
+(use-package markdown-mode
+  :defer t
+  :hook (markdown-mode . visual-line-mode)
+  :general
+  (nmap :keymaps 'markdown-mode-map
+    "j" 'evil-next-visual-line
+    "k" 'evil-previous-visual-line)
+
+  (my-local-leader-def :keymaps 'markdown-mode-map
+    "c" 'markdown-toggle-markup-hiding)
+  :config
+  (use-package markdown-toc))
+
+(use-package poet-theme
+  :disabled ; enable this section if writing
+  :config
+  (blink-cursor-mode 0)
+  (load-theme 'poet t)
+  (custom-set-faces
+   '(vertical-border ((t (:background "black" :foreground "controlColor")))))
+  ;; non monospace font
+  (set-frame-font "Avenir Next:size=14")
+  
+  (use-package hide-mode-line
+    :hook (org-mode . hide-mode-line-mode))
+
+  (use-package olivetti
+    :hook (org-mode . olivetti-mode)))
+
+;; light weight version of the above
+(use-package centered-window)
+
+
+;;; Org mode and related
+
 (use-package org
+  :defer 10
   :init
   ;; org is a special child that needs to be installed
   (unless (file-expand-wildcards (concat package-user-dir "/org-[0-9]*"))
     (package-install (elt (cdr (assoc 'org package-archive-contents)) 0)))
 
-  (defvar org-directory "~/org-notes/")
+  (defvar org-directory "~/Dropbox/roam")
+  ;; (defvar org-work-file "~/org-notes/org-sky-notes/work.org")
+  (defvar org-personal-file "~/Dropbox/org-me-notes/notes.org")
+  (defvar org-default-notes-file (expand-file-name "~/Dropbox/roam/20210614152805-dump.org.gpg"))
 
-  (defvar org-work-file "~/org-notes/org-sky-notes/work.org")
-  (defvar org-personal-file "~/org-notes/org-me-notes/notes.org")
-
-  (defvar org-default-notes-file (if (file-directory-p "~/sky")
-				     (expand-file-name org-work-file)
-				   (expand-file-name org-personal-file)))
   :commands
   (my/open-work-notes-file
    my/open-my-notes-file)
+
   :hook
   (org-mode . visual-line-mode)
   (org-mode . flyspell-mode)
   (org-mode . abbrev-mode)
+
   :custom
   (org-src-lang-modes '(("C" . c)
 			("cpp" . c++)
@@ -1214,10 +1306,71 @@ _s_kip
 			("elisp" . emacs-lisp)
 			("javascript" . rjsx)
 			("js" . rjsx)))
-  (org-agenda-files (if (file-directory-p "~/sky")
-			'("~/org-notes/org-sky-notes/work.org"
-			  "~/org-notes/org-me-notes/notes.org")
-		      '("~/org-notes/org-me-notes/notes.org")))
+
+  (org-agenda-files (-non-nil (-list "~/Dropbox/roam"
+				     "~/Dropbox/org-me-notes/notes.org"
+				     (when (file-directory-p "~/OneDrive - Sky")
+				       (expand-file-name "~/OneDrive - Sky/dev/org-sky-notes/work.org")))))
+  (org-startup-indented t)
+  (org-fontify-done-headline t)
+  (org-fontify-whole-heading-line t)
+  (org-hide-leading-stars t)
+  (org-hide-emphasis-markers t)
+
+  (org-hide-block-startup nil)
+  (org-startup-folded nil)
+
+  (org-log-done 'time)
+  (org-ellipsis " ▾")
+  (org-image-actual-width nil) ; allows images to be resized with #+ATTR_ORG: :width 100
+  (org-indirect-buffer-display 'current-window)
+  (org-enforce-todo-dependencies t)
+  (org-list-demote-modify-bullet '(("+" . "-") ("-" . "+") ("*" . "+") ("1." . "a.")))
+  (org-agenda-span 8)
+  (org-todo-keywords '((sequence "TODO(t)" "PROGRESS(p)" "|" "DONE(d)" "ARCHIVED(a)")))
+
+  (org-capture-templates
+   '(("t" "TODO" entry (file+headline org-default-notes-file "Capture:Collect")
+      "* TODO %? %^G \n  %U" :empty-lines 1)
+     ("s" "Scheduled TODO" entry (file+headline org-default-notes-file "Capture:Collect")
+      "* TODO %? %^G \nSCHEDULED: %^t\n  %U" :empty-lines 1)
+     ("d" "Deadline" entry (file+headline org-default-notes-file "Capture:Collect")
+      "* TODO %? %^G \n  DEADLINE: %^t" :empty-lines 1)
+     ("p" "Priority" entry (file+headline org-default-notes-file "Capture:Collect")
+      "* TODO [#A] %? %^G \n  SCHEDULED: %^t")
+     ("a" "Appointment" entry (file+headline org-default-notes-file "Capture:Collect")
+      "* %? %^G \n  %^t")
+     ("l" "Link" entry (file+headline org-default-notes-file "Capture:Tasks")
+      "* TODO LINK %?\n  %u\n  %a")
+     ("n" "Note" entry (file+headline org-default-notes-file "Capture:Notes")
+      "* %? %^G\n%U" :empty-lines 1)
+     ("j" "Journal" entry (file+datetree org-default-notes-file)
+      "* %? %^G\nEntered on %U\n")))
+
+  (org-agenda-custom-commands
+   '(("p" todo "PROGRESS")
+     ("w" . "SKYPORT+Name tags searches") ; description for "w" prefix
+     ("ws" tags "+skyport+graphql")
+     ("u" "Unscheduled TODO"
+      ((todo ""
+	     ((org-agenda-overriding-header "\nUnscheduled TODO")
+	      (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'timestamp)))))
+      nil
+      nil)
+     ("a" "adenda and things"
+      ((agenda)
+       (todo "PROGRESS")
+       (tags-todo "work")
+       (tags-todo "skyport")))))
+
+  :custom-face
+  ;; found the default blue clashed with blue links in org-roam
+  (org-level-1 ((t :inherit 'outline-7)))
+
+  ;; hide the BEGIN and END in source blocks
+  (org-block-begin-line ((t :foreground "#373E4C")))
+  (org-block-end-line ((t :foreground "#373E4C")))
+
   :general
   (nmap :keymaps 'org-mode-map
     ">" 'org-shiftmetaright
@@ -1226,47 +1379,54 @@ _s_kip
     "k" 'evil-previous-visual-line)
   (my-local-leader-def :keymaps 'org-mode-map
     "c" 'org-toggle-checkbox
+    "l" '(:ignore t :wk "List")
     "lt" 'my/org-toggle-list-checkbox
     "ls" 'org-sort-list
     "g" 'org-open-at-point
+    "h" '(:ignore t :wk "Heading")
     "hh" 'org-toggle-heading
     "ho" 'evil-org-insert-heading-below
     "hn" 'org-insert-heading-respect-content
     "hs" 'org-insert-subheading
+    "d" '(:ignore t :wk "Delete")
     "dr" 'org-table-kill-row
     "dc" 'org-table-delete-column
+    "i" '(:ignore t :wk "Insert")
+    "ii" 'org-roam-insert
     "ic" 'org-table-insert-column
     "i-" 'org-table-insert-hline
     "s" 'org-sort
-    "I" 'org-toggle-inline-images)
+    "t" '(:ignore t :wk "Toggle")
+    "ti" 'org-toggle-inline-images
+    "tl" 'org-toggle-link-display)
   (my-leader-def
     "na" 'org-agenda
     "nb" 'org-switchb
     "nl" 'org-store-link
     "nn" 'my/open-my-notes-file
     "nN" 'my/open-work-notes-file)
+
   :config
+  ;; read gpg encrypted files
+  (unless (string-match-p "\\.gpg" org-agenda-file-regexp)
+    (setq org-agenda-file-regexp
+	  (replace-regexp-in-string "\\\\\\.org" "\\\\.org\\\\(\\\\.gpg\\\\)?"
+				    org-agenda-file-regexp)))
+
+  (org-babel-do-load-languages 'org-babel-load-languages '((shell . t) ; allow bash
+							   (typescript . t)
+							   (haskell . t)
+							   (ruby . t)
+							   (io . t)))
+
   (require 'org-tempo) ;; needed to add this to get template expansion to work again
 
-  (use-package ob-typescript :after org)
-
-  (setq org-startup-indented t
-	org-fontify-done-headline t
-	org-fontify-whole-heading-line t
-	org-hide-leading-stars t
-	org-hide-block-startup t
-	org-hide-emphasis-markers t
-	org-startup-folded t
-	org-log-done 'time
-	;; org-ellipsis " ▾"
-	org-image-actual-width nil ; allows images to be resized with #+ATTR_ORG: :width 100
-	org-indirect-buffer-display 'current-window
-	org-enforce-todo-dependencies t
-	org-list-demote-modify-bullet '(("+" . "-") ("-" . "+") ("*" . "+") ("1." . "a."))
-	org-agenda-span 8)
-
-  (setq org-todo-keywords
-	'((sequence "TODO(t)" "PROGRESS(p)" "|" "DONE(d)" "ARCHIVED(a)")))
+  ;; can't seem to get this to behave without nesting here with demand on
+  (use-package org-download
+    ;; drag and drop to dired
+    :demand
+    :custom (org-download-image-org-width 500)
+    :hook (dired-mode-hook . org-download-enable))
 
   ;; seems broken
   (defun my/org-toggle-list-checkbox ()
@@ -1297,134 +1457,68 @@ _s_kip
 	(forward-line))
       (beginning-of-line)))
 
-  (org-babel-do-load-languages
-   'org-babel-load-languages '((shell . t) ; allow bash
-			       (typescript . t)
-			       (haskell . t)
-			       (ruby . t)
-			       (io . t)))
+  ;; Turn off elisp's flycheck checkdoc in src blocks.
+  (add-hook 'org-src-mode-hook (lambda () (setq-local flycheck-disabled-checkers '(emacs-lisp-checkdoc)))))
 
-  (require 'ob-js)
+(use-package org-bullets
+  :if window-system
+  :commands org-bullets-mode
+  :hook (org-mode . org-bullets-mode)
+  :custom
+  (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+
+(use-package org-roam
+  :after org
+  :custom
+  (org-roam-directory (file-truename "~/Dropbox/roam/"))
+  (org-roam-db-update-method 'immediate)
+  (org-roam-encrypt-files t)
+  :config
+  (org-roam-mode)
+  :general
+  (my-leader-def
+    "nf" 'org-roam-find-file
+    ;; "nc" 'org-roam-capture
+    "NN" 'org-roam-capture
+    "ni" 'org-roam-insert)
+  :bind (:map org-roam-mode-map
+	      (("C-c n l" . org-roam)
+	       ("C-c n f" . org-roam-find-file)
+	       ("C-c n g" . org-roam-graph))
+	      :map org-mode-map
+	      (("C-c n i" . org-roam-insert))
+	      (("C-c n I" . org-roam-insert-immediate))))
+
+(use-package ob-typescript
+  :after org)
+
+(use-package ob-js
+  :ensure nil
+  :after org
+  :config
   ;; overwrite default wrapper function which doesn't work
   (setq org-babel-js-function-wrapper "(function() {
     require('util').inspect((function(){\n%s\n})())
-  })()")
+  })()"))
 
-  ;; Highlight done todos with different colors.
-  (font-lock-add-keywords
-   'org-mode
-   `(("^[ \t]*\\(?:[-+*]\\|[0-9]+[).]\\)[ \t]+\\(\\(?:\\[@\\(?:start:\\)?[0-9]+\\][ \t]*\\)?\\[\\(?:X\\|\\([0-9]+\\)/\\2\\)\\][^\n]*\n\\)" 1 'org-headline-done prepend))
-   'append)
-
-  (setq org-capture-templates
-	'(("t" "TODO" entry (file+headline org-default-notes-file "Capture:Collect")
-	   "* TODO %? %^G \n  %U" :empty-lines 1)
-	  ("s" "Scheduled TODO" entry (file+headline org-default-notes-file "Capture:Collect")
-	   "* TODO %? %^G \nSCHEDULED: %^t\n  %U" :empty-lines 1)
-	  ("d" "Deadline" entry (file+headline org-default-notes-file "Capture:Collect")
-	   "* TODO %? %^G \n  DEADLINE: %^t" :empty-lines 1)
-	  ("p" "Priority" entry (file+headline org-default-notes-file "Capture:Collect")
-	   "* TODO [#A] %? %^G \n  SCHEDULED: %^t")
-	  ("a" "Appointment" entry (file+headline org-default-notes-file "Capture:Collect")
-	   "* %? %^G \n  %^t")
-	  ("l" "Link" entry (file+headline org-default-notes-file "Capture:Tasks")
-	   "* TODO LINK %?\n  %u\n  %a")
-	  ("n" "Note" entry (file+headline org-default-notes-file "Capture:Notes")
-	   "* %? %^G\n%U" :empty-lines 1)
-	  ("j" "Journal" entry (file+datetree org-default-notes-file)
-	   "* %? %^G\nEntered on %U\n")))
-  (setq org-agenda-custom-commands
-	'(("p" todo "PROGRESS")
-	  ("w" . "SKYPORT+Name tags searches") ; description for "w" prefix
-	  ("ws" tags "+skyport+graphql")
-	  ("u" "Unscheduled TODO"
-	   ((todo ""
-		  ((org-agenda-overriding-header "\nUnscheduled TODO")
-		   (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'timestamp)))))
-	   nil
-	   nil)
-	  ("a" "adenda and things"
-	   ((agenda)
-	    (todo "PROGRESS")
-	    (tags-todo "work")
-	    (tags-todo "skyport")))))
-
-  (defun my/disable-org-checkdoc ()
-    "Turn off elisp's flycheck checkdoc in src blocks."
-    (setq-local flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
-
-  (add-hook 'org-src-mode-hook 'my/disable-org-checkdoc)
-
-  (use-package org-bullets
-    :if window-system
-    :commands org-bullets-mode
-    :hook (org-mode . org-bullets-mode)
-    :custom
-    (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
-
-  ;; Drag-and-drop to `dired`
-  (use-package org-download
-    :demand
-    :custom (org-download-image-org-width 500)
-    :hook (dired-mode-hook . org-download-enable))
-  
-  (use-package evil-org
-    :config
-    (add-hook 'org-mode-hook 'evil-org-mode)
-    (add-hook 'evil-org-mode-hook
-	      (lambda ()
-		(evil-org-set-key-theme '(textobjects insert navigation additional shift todo heading))))
-    (require 'evil-org-agenda)
-    (evil-org-agenda-set-keys)))
+(use-package evil-org
+  :after org
+  :config
+  (add-hook 'org-mode-hook 'evil-org-mode)
+  (add-hook 'evil-org-mode-hook
+	    (lambda ()
+	      (evil-org-set-key-theme '(textobjects insert navigation additional shift todo heading))))
+  (require 'evil-org-agenda)
+  (evil-org-agenda-set-keys))
 
 (use-package org-alert
-  :defer 30
-  :custom (alert-default-style 'osx-notifier)
+  :load-path "~/.emacs.d/elisp"
+  :after org
   :config
-
-  (defun my/org-alert-remove-progress (fn &rest args)
-    "Stop In Progress items having alerts"
-    (let ((original-keywords (-copy org-done-keywords-for-agenda)))
-      (setq org-done-keywords-for-agenda
-	    (cons "PROGRESS" org-done-keywords-for-agenda))
-      (let ((res (apply fn args)))
-	(setq org-done-keywords-for-agenda original-keywords)
-	res)))
-  
-  (advice-add 'org-alert--headline-complete? :around #'my/org-alert-remove-progress)
-
-  (setq org-alert-interval 300)
-  (setq org-alert-notification-title "Emacs | Org")
   (org-alert-enable))
 
-(use-package markdown-mode
-  :defer t
-  :hook (markdown-mode . visual-line-mode)
-  :general
-  (nmap :keymaps 'markdown-mode-map
-    "j" 'evil-next-visual-line
-    "k" 'evil-previous-visual-line)
-
-  (my-local-leader-def :keymaps 'markdown-mode-map
-    "c" 'markdown-toggle-markup-hiding)
-  :config
-  (use-package markdown-toc))
-
-(use-package poet-theme
-  :disabled ; enable this section if writing
-  :config
-  (blink-cursor-mode 0)
-  (load-theme 'poet t)
-  (custom-set-faces
-   '(vertical-border ((t (:background "black" :foreground "controlColor")))))
-  ;; non monospace font
-  (set-frame-font "Avenir Next:size=14")
-  
-  (use-package hide-mode-line
-    :hook (org-mode . hide-mode-line-mode))
-
-  (use-package olivetti
-    :hook (org-mode . olivetti-mode)))
+
+;;; Own scripts and packages
 
 (use-package my-fns
   :load-path "~/.emacs.d/elisp"
