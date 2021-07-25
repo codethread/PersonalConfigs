@@ -1,5 +1,0 @@
-#!/bin/bash
-
-ln -s "$HOME/Dropbox/org-me-notes" ./
-ln -s "$HOME/Dropbox/roam" ./
-[ -r "$SKY_PRIVATE_CONFIGS" ] && ln -s "$SKY_PRIVATE_CONFIGS/org-sky-notes" ./

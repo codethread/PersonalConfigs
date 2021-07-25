@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if [[ "$1" == *.gpg ]]
+then
+    gpg --recipient adamhalldesigns@gmail.com --quiet --decrypt $1
+else
+    echo "$1"
+fi

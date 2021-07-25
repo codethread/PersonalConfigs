@@ -7,7 +7,7 @@
 (require 's)
 (require 'org-agenda)
 
-(defvar org-alert-daily-times '("07:45am" "1:30pm" "3:45pm")
+(defvar org-alert-daily-times '("07:45" "13:30" "15:45")
   "Times to display all day agenda items.")
 
 (defvar org-alert-interval 300
@@ -25,6 +25,7 @@
     (org-alert-run-dailies)
 
     (run-at-time 0 org-alert-interval #'org-alert-run-overdue)
+
     ;; really not sure why the loop always prints an error
     (dolist (time org-alert-daily-times)
       (run-at-time time 86400 #'org-alert-run-dailies))))

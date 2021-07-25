@@ -76,14 +76,15 @@
     "t" '(:ignore t :wk "Term")
 
     "T" '(:ignore t :wk "Toggle")
-    "TT" 'toggle-truncate-lines
-    "Tc" 'centered-window-mode
+    "TT" 'toggle-truncate-lines		; when true, lines are not broken over multiple, instead they clip (useful for long tables in org)
+    "Tc" (general-predicate-dispatch 'centered-window-mode
+	   (string-equal major-mode "org-mode") 'olivetti-mode)
     "Th" 'my/tree-sitter-hl
     "Ti" 'lsp-ui-imenu
     "Tl" 'global-display-line-numbers-mode
     "Tp" 'electric-pair-local-mode
     "Tu" 'undo-tree-visualize
-    "Tv" 'visual-line-mode
+    "Tv" 'visual-line-mode 		; tries to break up lines to keep words whole
     "Tw" 'toggle-word-wrap
     "Tz" 'global-ligature-mode
 
@@ -101,7 +102,7 @@
   :demand
   :init
   (setq evil-want-integration t)
-  (setq evil-want-keybinding nil) 		; evil-colleciton expects this
+  (setq evil-want-keybinding nil)	; evil-colleciton expects this
   :custom
   ;; (evil-goto-definition-functions) ;; Might be useful
   (evil-want-C-u-scroll t)
@@ -125,6 +126,9 @@
     "bp" 'evil-prev-buffer)
   :config
   (define-key universal-argument-map (kbd "C-y") 'universal-argument-more)
+
+  (setq evil-insert-state-cursor '((bar . 2) "LightSkyBlue")
+	evil-normal-state-cursor '(box "SlateGrey"))
 
   ;; https://emacs.stackexchange.com/questions/9583/how-to-treat-underscore-as-part-of-the-word
   (defadvice evil-inner-word (around underscore-as-word activate)
@@ -170,6 +174,7 @@
   :config
   (defalias 'yes-or-no-p 'y-or-n-p)
 
+
   (setq indent-tabs-mode nil
 	read-process-output-max (* 1024 1024) ; increase performance: https://emacs-lsp.github.io/lsp-mode/page/performance/
 	;; line-number-display-limit 1	; no line numbers in modeline
@@ -183,6 +188,10 @@
 	create-lockfiles nil
 	kill-buffer-query-functions nil
 	delete-by-moving-to-trash t)
+
+  ;; prevent unsafe dir-locals being pestered for
+  ;; https://emacs.stackexchange.com/questions/10983/remember-permission-to-execute-risky-local-variables
+  (advice-add 'risky-local-variable-p :override #'ignore)
 
   (when (window-system)
     (tool-bar-mode -1)
@@ -270,7 +279,16 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
 (use-package compile
   :ensure nil
   :custom
-  (compilation-scroll-output t))
+  (compilation-scroll-output t)
+  (scroll-conservatively 101)
+  :config
+  (defun my/postprocess-compilation-buffer ()
+    (goto-char compilation-filter-start)
+    (when (looking-at "\033c")
+      (delete-region (point-min) (match-end 0)))
+    (ansi-color-apply-on-region (point) (point-max)))
+
+  (add-hook 'compilation-filter-hook 'my/postprocess-compilation-buffer))
 
 (use-package eldoc
   :hook (prog-mode org-mode)
@@ -294,6 +312,12 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
 
   (use-package all-the-icons-dired
     :hook (dired-mode . all-the-icons-dired-mode)))
+
+(use-package "paragraphs"
+  :ensure nil
+  :custom
+  ;; don't use double spaces in org files to indicate sentence ending - this may clash with other '.'s in words.
+  (sentence-end-double-space nil))
 
 (use-package winner
   :ensure nil
@@ -348,7 +372,7 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
 (use-package password-cache
   :ensure nil
   :custom
-  ((password-cache-expiry (* 60 60 4))))
+  ((password-cache-expiry (* 60 60 12))))
 
 
 ;;; Lore friendly improvements
@@ -385,6 +409,7 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
   ([remap describe-key] . helpful-key))
 
 (use-package rainbow-delimiters
+  :disabled
   :hook
   ((json-mode web-mode css-mode rjsx-mode typescript-mode scala-mode java-mode) . rainbow-delimiters-mode))
 
@@ -601,7 +626,7 @@ _s_kip
 
 (use-package doom-themes
   :init
-  (solaire-global-mode +1)
+  (solaire-global-mode 1)
   :custom
   ((doom-themes-enable-bold t)
    (doom-themes-enable-italic t))
@@ -613,22 +638,24 @@ _s_kip
 
   ;; set these after theme load
   ;; (set-face-attribute 'default nil :font "Hack Nerd Font")
-  (set-face-attribute 'default nil :font "FiraCode Nerd Font")
 
-  (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
+  ;; (set-face-attribute 'default nil :font "FiraCode Nerd Font")
+  ;; (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
+  ;; (set-face-attribute 'font-lock-function-name-face nil :slant 'italic)
+  ;; (set-face-attribute 'font-lock-variable-name-face nil :weight 'semi-bold)
+  ;; (set-face-attribute 'fixed-pitch nil :font "FiraCode Nerd Font")
+  ;; (set-face-attribute 'variable-pitch nil :font "Avenir Next")
 
-  (set-face-attribute 'font-lock-function-name-face nil :slant 'italic)
-  (set-face-attribute 'font-lock-variable-name-face nil :weight 'semi-bold)
-
-
-  ;; Set the fixed pitch face
-  ;; (set-face-attribute 'fixed-pitch nil :font "Fira Code Retina")
-
-  ;; Set the variable pitch face
-  ;; (set-face-attribute 'variable-pitch nil :font "Avenir Next" :weight 'regular)
-  )
+  (custom-set-faces
+   `(default ((t (:font "FiraCode Nerd Font"))))
+   `(fixed-pitch ((t (:font "FiraCode Nerd Font"))))
+   `(variable-pitch ((t (:font "Avenir Next:size=14"))))
+   `(font-lock-function-name-face ((t (:slant italic))))
+   `(font-lock-variable-name-face ((t (:weight semi-bold))))
+   `(font-lock-comment-face ((t (:slant italic))))))
 
 (use-package all-the-icons)
+
 (use-package doom-modeline
   :hook (after-init . doom-modeline-mode)
   :config
@@ -667,9 +694,6 @@ _s_kip
   :hook ((prog-mode . global-tree-sitter-mode)
 	 (tree-sitter-after-on . tree-sitter-hl-mode))
   :commands (my/tree-sitter-hl)
-  ;; :general
-  ;; (my-leader-def
-  ;;   "Th" 'my/tree-sitter-hl)
   :config
   (defun my/tree-sitter-hl ()
     "turn on syntax highlighting via tree-sitter"
@@ -827,6 +851,7 @@ _s_kip
   (setq ivy-re-builders-alist
 	'((counsel-projectile-rg . ivy--regex-plus)
 	  (swiper . ivy--regex-plus)	; fzy search in file is clumsy
+	  (swiper-all . ivy--regex-plus)	; fzy search in file is clumsy
 	  (t . ivy--regex-fuzzy)))
 
   (setq enable-recursive-minibuffers t)
@@ -1064,6 +1089,7 @@ _s_kip
   ("scala" . scala-mode))
 
 (use-package lsp-metals
+  :disabled
   :after scala-mode
   :custom
   (lsp-metals-treeview-show-when-views-received nil)
@@ -1087,6 +1113,7 @@ _s_kip
 ;;;; Java
 
 (use-package lsp-java
+  :disabled
   :after (java-mode))
 
 (use-package dap-java
@@ -1266,10 +1293,49 @@ _s_kip
   (set-frame-font "Avenir Next:size=14")
   
   (use-package hide-mode-line
-    :hook (org-mode . hide-mode-line-mode))
+    :hook (org-mode . hide-mode-line-mode)))
 
-  (use-package olivetti
-    :hook (org-mode . olivetti-mode)))
+(use-package mixed-pitch
+  :custom
+  (mixed-pitch-set-height t)
+  (mixed-pitch-fixed-pitch-faces
+   '(diff-added diff-context
+		diff-file-header diff-function diff-header diff-hunk-header
+		diff-removed font-latex-math-face font-latex-sedate-face
+		font-latex-warning-face font-latex-sectioning-5-face
+		font-lock-builtin-face font-lock-comment-delimiter-face
+		font-lock-constant-face font-lock-doc-face
+		font-lock-function-name-face font-lock-keyword-face
+		font-lock-negation-char-face font-lock-preprocessor-face
+		font-lock-regexp-grouping-backslash
+		font-lock-regexp-grouping-construct font-lock-string-face
+		font-lock-type-face font-lock-variable-name-face line-number
+		line-number-current-line line-number-major-tick
+		line-number-minor-tick markdown-code-face
+		markdown-gfm-checkbox-face markdown-inline-code-face
+		markdown-language-info-face markdown-language-keyword-face
+		markdown-math-face message-header-name message-header-to
+		message-header-cc message-header-newsgroups
+		message-header-xheader message-header-subject
+		message-header-other mu4e-header-key-face
+		mu4e-header-value-face mu4e-link-face mu4e-contact-face
+		mu4e-compose-separator-face mu4e-compose-header-face org-block
+		org-block-begin-line org-block-end-line
+		org-document-info-keyword org-code org-indent
+		org-latex-and-related org-checkbox org-formula org-meta-line
+		org-table org-verbatim
+		;; added by me
+		org-link))
+  :hook ((markdown-mode org-mode) . mixed-pitch-mode))
+
+;; - The unmatched delimiter face: `rainbow-delimiters-unmatched-face'.
+;; - The mismatched delimiter face: `rainbow-delimiters-mismatched-face'.
+
+(use-package olivetti
+  :custom
+  (olivetti-body-width 80)
+  (olivetti-enable-visual-line-mode nil)
+  :hook ((markdown-mode org-mode) . olivetti-mode))
 
 ;; light weight version of the above
 (use-package centered-window)
@@ -1294,7 +1360,8 @@ _s_kip
    my/open-my-notes-file)
 
   :hook
-  (org-mode . visual-line-mode)
+  ;; (org-mode . visual-line-mode)
+  (org-mode . auto-fill-mode)
   (org-mode . flyspell-mode)
   (org-mode . abbrev-mode)
 
@@ -1311,9 +1378,20 @@ _s_kip
 				     "~/Dropbox/org-me-notes/notes.org"
 				     (when (file-directory-p "~/OneDrive - Sky")
 				       (expand-file-name "~/OneDrive - Sky/dev/org-sky-notes/work.org")))))
+
+  ;; Not sure I fully understand what I've configured here but intention was to remove the filenames from agenda view
+  (org-agenda-prefix-format '((agenda . "  %?-12t% s")
+			      (timeline . " % s")
+			      (todo . " %i")
+			      (tags . " % s")
+			      (search . " % s")))
   (org-startup-indented t)
   (org-fontify-done-headline t)
   (org-fontify-whole-heading-line t)
+  (org-src-fontify-natively t)
+
+  (org-confirm-babel-evaluate nil)
+
   (org-hide-leading-stars t)
   (org-hide-emphasis-markers t)
 
@@ -1370,6 +1448,8 @@ _s_kip
   ;; hide the BEGIN and END in source blocks
   (org-block-begin-line ((t :foreground "#373E4C")))
   (org-block-end-line ((t :foreground "#373E4C")))
+
+  (org-document-title ((t :height 2.0)))
 
   :general
   (nmap :keymaps 'org-mode-map
@@ -1457,6 +1537,14 @@ _s_kip
 	(forward-line))
       (beginning-of-line)))
 
+  (defun fill-buffer ()
+    "call `fill-region' on entire buffer"
+    (interactive)
+    (save-excursion
+      (save-restriction
+	(widen)
+	(fill-region (point-min) (point-max)))))
+
   ;; Turn off elisp's flycheck checkdoc in src blocks.
   (add-hook 'org-src-mode-hook (lambda () (setq-local flycheck-disabled-checkers '(emacs-lisp-checkdoc)))))
 
@@ -1468,26 +1556,29 @@ _s_kip
   (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
 
 (use-package org-roam
+  :if (file-directory-p "~/Dropbox/roam")
+  :init
+  (setq org-roam-v2-ack t)
   :after org
   :custom
   (org-roam-directory (file-truename "~/Dropbox/roam/"))
-  (org-roam-db-update-method 'immediate)
+  (org-roam-db-update-method 'idle-timer)
   (org-roam-encrypt-files t)
   :config
-  (org-roam-mode)
+  (org-roam-setup)
   :general
   (my-leader-def
-    "nf" 'org-roam-find-file
-    ;; "nc" 'org-roam-capture
+    "nl" 'org-roam-buffer-toggle
+    "nf" 'org-roam-node-find
+    "ng" 'org-roam-graph
     "NN" 'org-roam-capture
-    "ni" 'org-roam-insert)
+    "ni" 'org-roam-node-insert)
   :bind (:map org-roam-mode-map
-	      (("C-c n l" . org-roam)
-	       ("C-c n f" . org-roam-find-file)
+	      (("C-c n l" . org-roam-buffer-toggle)
+	       ("C-c n f" . org-roam-node-find)
 	       ("C-c n g" . org-roam-graph))
 	      :map org-mode-map
-	      (("C-c n i" . org-roam-insert))
-	      (("C-c n I" . org-roam-insert-immediate))))
+	      (("C-c n i" . org-roam-node-insert))))
 
 (use-package ob-typescript
   :after org)
@@ -1516,6 +1607,10 @@ _s_kip
   :after org
   :config
   (org-alert-enable))
+
+;; watch out for performance issues here
+(use-package emojify
+  :hook ((markdown-mode org-mode) . emojify-mode))
 
 
 ;;; Own scripts and packages

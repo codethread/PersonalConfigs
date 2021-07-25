@@ -43,13 +43,12 @@ export VOLTA_HOME="$HOME/.volta"
 
 # Node
 [ -d "$VOLTA_HOME/bin" ] && pathprepend "$VOLTA_HOME/bin" PATH
-# [ -d "$HOME/.nodenv/shims" ] && pathprepend "$HOME/.nodenv/shims" PATH
 
 ###############################
 # WORK
 ###############################
 if [[ $(whoami) =~ 'adh23' ]]; then
-  [ -d "$HOME/confluent/bin" ] && pathappend "$HOME/confluent/bin" PATH
+    [ -d "$HOME/confluent/bin" ] && pathappend "$HOME/confluent/bin" PATH
 
     export TOOLKIT_PATH="$HOME/sky/toolkit"
     export SKYPORT_GRAPHQL_DIR="$HOME/skyport/graphql"

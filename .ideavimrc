@@ -28,6 +28,8 @@ map <Leader><Leader> :action GotoFile<CR>
 
 " buffer
 map <Leader>br :action RenameFile<CR>
+" got to last buffer
+map <Leader>bb :buffer #<CR>
 map <Leader>bj :action RecentLocations<CR>
 map <Leader>bp :action JumpToLastWindow<CR>
 map <Leader>bl :action RecentFiles<CR>

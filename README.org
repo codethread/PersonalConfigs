@@ -11,7 +11,7 @@ https://blog.petehouston.com/download-and-convert-macos-mojave-installer-into-is
 *** xcode tools
 This is required by most command line tools, so we'll need this first
 #+BEGIN_SRC bash
-xcode-select --install
+  xcode-select --install
 #+END_SRC
 
 
@@ -20,15 +20,15 @@ xcode-select --install
 
 [[https://help.github.com/en/enterprise/2.19/user/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent][instructions here]]
 #+BEGIN_SRC bash
-ssh-keygen -t rsa -b 4096 -C "adamhalldesigns@gmail.com"
+  ssh-keygen -t rsa -b 4096 -C "adamhalldesigns@gmail.com"
 #+END_SRC
 
 #+BEGIN_SRC bash
-eval "$(ssh-agent -s)"
+  eval "$(ssh-agent -s)"
 #+END_SRC
 
 #+BEGIN_SRC bash
-ssh-add -K ~/.ssh/id_rsa
+  ssh-add -K ~/.ssh/id_rsa
 #+END_SRC
 
 
@@ -37,7 +37,7 @@ ssh-add -K ~/.ssh/id_rsa
 [[https://help.github.com/en/enterprise/2.19/user/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account][instructions here]]
 
 #+BEGIN_SRC bash
-pbcopy < ~/.ssh/id_rsa.pub
+  pbcopy < ~/.ssh/id_rsa.pub
 #+END_SRC
 
 upload to github
@@ -49,34 +49,34 @@ Download [[https://brew.sh/][homebrew]]
 *command as of Feb 2020*
 
 #+BEGIN_SRC bash
-/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 #+END_SRC
 
 This is a package manager for mac, and stores executables in `/usr/local`
 
 #+BEGIN_SRC bash
-cd ~/PersonalConfigs && brew bundle
+  cd ~/PersonalConfigs && brew bundle
 #+END_SRC
 
 
 *** Anitbody (zsh plugin manager)
 
 #+BEGIN_SRC bash
-# link directories
-~/PersonalConfigs/_setup
-
-# run antiup to set up plugins
-~/PersonalConfigs/.bin/antiup
+  # link directories
+  ~/PersonalConfigs/_setup
+  
+  # run antiup to set up plugins
+  ~/PersonalConfigs/.bin/antiup
 #+END_SRC
 
 change /etc/zprofile to be:
-#+BEGIN_SRC zsh
-# system-wide environment settings for zsh(1)
-if [ -x /usr/libexec/path_helper ]; then
-  if [ -z "$TMUX" ]; then
-    eval `/usr/libexec/path_helper -s`
+#+BEGIN_SRC sh
+  # system-wide environment settings for zsh(1)
+  if [ -x /usr/libexec/path_helper ]; then
+    if [ -z "$TMUX" ]; then
+      eval `/usr/libexec/path_helper -s`
+    fi
   fi
-fi
 #+END_SRC
 
 *** Iterm
@@ -84,8 +84,8 @@ fi
 follow instructions in 
 
 #+BEGIN_SRC bash
-cd ~/PersonalConfigs/_colors+fonts
-cat xterm-256color-italic.terminfo
+  cd ~/PersonalConfigs/_colors+fonts
+  cat xterm-256color-italic.terminfo
 #+END_SRC
 
 
@@ -95,15 +95,15 @@ cat xterm-256color-italic.terminfo
 
 [[https://help.github.com/en/enterprise/2.19/user/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent][instructions here]]
 #+BEGIN_SRC bash
-ssh-keygen -t rsa -b 4096 -C "adamhalldesigns@gmail.com"
+  ssh-keygen -t rsa -b 4096 -C "adamhalldesigns@gmail.com"
 #+END_SRC
 
 #+BEGIN_SRC bash
-eval "$(ssh-agent -s)"
+  eval "$(ssh-agent -s)"
 #+END_SRC
 
 #+BEGIN_SRC bash
-ssh-add ~/.ssh/id_rsa
+  ssh-add ~/.ssh/id_rsa
 #+END_SRC
 
 
@@ -112,11 +112,11 @@ ssh-add ~/.ssh/id_rsa
 [[https://help.github.com/en/enterprise/2.19/user/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account][instructions here]]
 
 #+BEGIN_SRC bash
-sudo apt-get install xclip
-# Downloads and installs xclip. If you don't have `apt-get`, you might need to use another installer (like `yum`)
-
-xclip -sel clip < ~/.ssh/id_rsa.pub
-# Copies the contents of the id_rsa.pub file to your clipboard
+  sudo apt-get install xclip
+  # Downloads and installs xclip. If you don't have `apt-get`, you might need to use another installer (like `yum`)
+  
+  xclip -sel clip < ~/.ssh/id_rsa.pub
+  # Copies the contents of the id_rsa.pub file to your clipboard
 #+END_SRC
 
 upload to github
@@ -128,8 +128,8 @@ upload to github
 
 
 *** link scripts
-#+BEGIN_SRC 
-~/PersonalConfigs/_setup
+#+BEGIN_SRC sh
+  ~/PersonalConfigs/_setup
 #+END_SRC
 
 
@@ -140,24 +140,24 @@ follow install instructions per distro
 *command as of Feb 2020*
 
 #+BEGIN_SRC bash
-sudo apt-get install build-essential curl file git
+  sudo apt-get install build-essential curl file git
 #+END_SRC
 
 *Don't sudo*
 #+BEGIN_SRC bash
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
 #+END_SRC
 
 install from bundle file
 #+BEGIN_SRC bash
-cd ~/PersonalConfigs && brew bundle
+  cd ~/PersonalConfigs && brew bundle
 #+END_SRC
 
 
 *** get [[https://getantibody.github.io/install/][antibody]]
 
 #+BEGIN_SRC bash
-curl -sfL git.io/antibody | sudo sh -s - -b /usr/local/bin
+  curl -sfL git.io/antibody | sudo sh -s - -b /usr/local/bin
 #+END_SRC
 
 
@@ -171,7 +171,7 @@ Use apt, not brew
 ** Vim
 
 #+BEGIN_SRC bash
-vim --noplugin
+  vim --noplugin
 #+END_SRC
 
 then run =:PlugInstall=
@@ -182,23 +182,23 @@ then run =:PlugInstall=
 note the version of the latest LTS from [[https://nodejs.org/en/][Node]]
 
 #+BEGIN_SRC bash
-# install a LTS version
-nodenv install <latest version>
+  # install a LTS version
+  nodenv install <latest version>
 #+END_SRC
 
 #+BEGIN_SRC bash
-# set this up globally
-nodenv global <latest version>
+  # set this up globally
+  nodenv global <latest version>
 #+END_SRC
 
 #+BEGIN_SRC bash
-# install global npm modules
-~/PersonalConfigs/.bin/npmg
+  # install global npm modules
+  ~/PersonalConfigs/.bin/npmg
 #+END_SRC
 
 #+BEGIN_SRC bash
-# rehash to pick up the executables now known to nodenv
-nodenv rehash
+  # rehash to pick up the executables now known to nodenv
+  nodenv rehash
 #+END_SRC
 
 
