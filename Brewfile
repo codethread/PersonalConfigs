@@ -28,6 +28,8 @@ brew "exercism"
 brew "fd"
 # Collection of GNU find, xargs, and locate
 brew "findutils"
+# Command-line fuzzy finder written in Go
+brew "fzf"
 # Test automation tool that supports executable documentation
 brew "gauge"
 # GNU awk utility
@@ -125,8 +127,12 @@ brew "getantibody/tap/antibody"
 brew "tankerhq/repo/ruplacer"
 # Maintained ctags implementation
 brew "universal-ctags/universal-ctags/universal-ctags", args: ["HEAD"], link: false
+# Application launcher and productivity software
+cask "alfred"
 # Tool to hide status bar icons
 cask "dozer"
+# Client for the Dropbox cloud storage service
+cask "dropbox"
 cask "font-fira-code-nerd-font"
 cask "font-hack-nerd-font"
 # Terminal emulator as alternative to Apple's Terminal app
