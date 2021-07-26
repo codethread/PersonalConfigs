@@ -1,38 +1,43 @@
-* Configs
+#+title:  Dotfiles
 
 Life and soul
 
-** Mac
+* xcode tools
 
-https://www.maketecheasier.com/install-macos-virtualbox/
-experimenting with virtual box
-https://blog.petehouston.com/download-and-convert-macos-mojave-installer-into-iso-file/
-
-*** xcode tools
 This is required by most command line tools, so we'll need this first
 #+BEGIN_SRC bash
   xcode-select --install
 #+END_SRC
 
 
-*** github
-**** generate key
+* github
+** generate key
 
 [[https://help.github.com/en/enterprise/2.19/user/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent][instructions here]]
+*commands as of Jul 2021*
 #+BEGIN_SRC bash
-  ssh-keygen -t rsa -b 4096 -C "adamhalldesigns@gmail.com"
+  ssh-keygen -t ed25519 "adamhalldesigns@gmail.com"
 #+END_SRC
 
 #+BEGIN_SRC bash
   eval "$(ssh-agent -s)"
+  touch ~/.ssh/config
 #+END_SRC
 
-#+BEGIN_SRC bash
-  ssh-add -K ~/.ssh/id_rsa
-#+END_SRC
+update =~/.ssh/config=
+#+begin_src shell
+  Host *
+  AddKeysToAgent yes
+  UseKeychain yes
+  IdentityFile ~/.ssh/id_ed25519
+#+end_src
+
+#+begin_src shell
+  ssh-add -K ~/.ssh/id_ed25519
+#+end_src
 
 
-**** upload key
+** upload key
 
 [[https://help.github.com/en/enterprise/2.19/user/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account][instructions here]]
 
@@ -43,8 +48,8 @@ This is required by most command line tools, so we'll need this first
 upload to github
 
 
+* brew
 
-*** brew
 Download [[https://brew.sh/][homebrew]]
 *command as of Feb 2020*
 
@@ -59,7 +64,7 @@ This is a package manager for mac, and stores executables in `/usr/local`
 #+END_SRC
 
 
-*** Anitbody (zsh plugin manager)
+* Anitbody (zsh plugin manager)
 
 #+BEGIN_SRC bash
   # link directories
@@ -69,17 +74,18 @@ This is a package manager for mac, and stores executables in `/usr/local`
   ~/PersonalConfigs/.bin/antiup
 #+END_SRC
 
-change /etc/zprofile to be:
+change =/etc/zprofile= to be:
 #+BEGIN_SRC sh
   # system-wide environment settings for zsh(1)
   if [ -x /usr/libexec/path_helper ]; then
-    if [ -z "$TMUX" ]; then
-      eval `/usr/libexec/path_helper -s`
-    fi
+      if [ -z "$TMUX" ]; then
+          eval `/usr/libexec/path_helper -s`
+      fi
   fi
 #+END_SRC
 
-*** Iterm
+
+* Iterm
 
 follow instructions in 
 
@@ -89,116 +95,18 @@ follow instructions in
 #+END_SRC
 
 
-** Linux (Ubuntu flavour, but change =apt install= to whatever)
-*** github
-**** generate key
+* Vim
 
-[[https://help.github.com/en/enterprise/2.19/user/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent][instructions here]]
-#+BEGIN_SRC bash
-  ssh-keygen -t rsa -b 4096 -C "adamhalldesigns@gmail.com"
-#+END_SRC
+Install vim-plug [[https://github.com/junegunn/vim-plug#installation][instructions]]
+#+begin_src shell
+  curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+#+end_src
 
-#+BEGIN_SRC bash
-  eval "$(ssh-agent -s)"
-#+END_SRC
-
-#+BEGIN_SRC bash
-  ssh-add ~/.ssh/id_rsa
-#+END_SRC
-
-
-**** upload key
-
-[[https://help.github.com/en/enterprise/2.19/user/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account][instructions here]]
-
-#+BEGIN_SRC bash
-  sudo apt-get install xclip
-  # Downloads and installs xclip. If you don't have `apt-get`, you might need to use another installer (like `yum`)
-  
-  xclip -sel clip < ~/.ssh/id_rsa.pub
-  # Copies the contents of the id_rsa.pub file to your clipboard
-#+END_SRC
-
-upload to github
-
-
-*** zsh
-
-[[https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH#install-and-set-up-zsh-as-default][install info]]
-
-
-*** link scripts
-#+BEGIN_SRC sh
-  ~/PersonalConfigs/_setup
-#+END_SRC
-
-
-*** brew (if using)
-Download [[https://docs.brew.sh/Homebrew-on-Linux][homebrew]]
-follow install instructions per distro
-
-*command as of Feb 2020*
-
-#+BEGIN_SRC bash
-  sudo apt-get install build-essential curl file git
-#+END_SRC
-
-*Don't sudo*
-#+BEGIN_SRC bash
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
-#+END_SRC
-
-install from bundle file
-#+BEGIN_SRC bash
-  cd ~/PersonalConfigs && brew bundle
-#+END_SRC
-
-
-*** get [[https://getantibody.github.io/install/][antibody]]
-
-#+BEGIN_SRC bash
-  curl -sfL git.io/antibody | sudo sh -s - -b /usr/local/bin
-#+END_SRC
-
-
-*** get fira-code
-
-
-*** [[http://ubuntuhandbook.org/index.php/2019/02/install-gnu-emacs-26-1-ubuntu-18-04-16-04-18-10/][emacs on linux]]
-Use apt, not brew
-
-
-** Vim
+Run =nvim= with no plugins
 
 #+BEGIN_SRC bash
   vim --noplugin
 #+END_SRC
 
 then run =:PlugInstall=
-
-
-** Nodenv
-
-note the version of the latest LTS from [[https://nodejs.org/en/][Node]]
-
-#+BEGIN_SRC bash
-  # install a LTS version
-  nodenv install <latest version>
-#+END_SRC
-
-#+BEGIN_SRC bash
-  # set this up globally
-  nodenv global <latest version>
-#+END_SRC
-
-#+BEGIN_SRC bash
-  # install global npm modules
-  ~/PersonalConfigs/.bin/npmg
-#+END_SRC
-
-#+BEGIN_SRC bash
-  # rehash to pick up the executables now known to nodenv
-  nodenv rehash
-#+END_SRC
-
-
