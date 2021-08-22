@@ -691,6 +691,7 @@ _s_kip
                 "\\\\" "://")))
 
 (use-package tree-sitter
+  :disabled
   :hook ((prog-mode . global-tree-sitter-mode)
 	 (tree-sitter-after-on . tree-sitter-hl-mode))
   :commands (my/tree-sitter-hl)
@@ -951,7 +952,9 @@ _s_kip
   (yas-global-mode 1))
 
 (use-package company
-  :hook (prog-mode . company-mode)
+  :hook
+  (prog-mode . company-mode)
+  (org-mode . company-mode)
   :general
   (imap 'override
     "C-@"   'company-complete
@@ -1351,8 +1354,6 @@ _s_kip
     (package-install (elt (cdr (assoc 'org package-archive-contents)) 0)))
 
   (defvar org-directory "~/Dropbox/roam")
-  ;; (defvar org-work-file "~/org-notes/org-sky-notes/work.org")
-  (defvar org-personal-file "~/Dropbox/org-me-notes/notes.org")
   (defvar org-default-notes-file (expand-file-name "~/Dropbox/roam/20210614152805-dump.org.gpg"))
 
   :commands
@@ -1370,10 +1371,9 @@ _s_kip
 			("cpp" . c++)
 			("bash" . sh)
 			("sh" . sh)
-			("elisp" . emacs-lisp)
-			("javascript" . rjsx)
-			("js" . rjsx)))
+			("elisp" . emacs-lisp)))
 
+  ;; adding roam files does have the consequence of loading all buffers into memory, which could get out of hand
   (org-agenda-files (-non-nil (-list "~/Dropbox/roam"
 				     "~/Dropbox/org-me-notes/notes.org"
 				     (when (file-directory-p "~/OneDrive - Sky")
@@ -1494,6 +1494,7 @@ _s_kip
 				    org-agenda-file-regexp)))
 
   (org-babel-do-load-languages 'org-babel-load-languages '((shell . t) ; allow bash
+							   (js . t)
 							   (typescript . t)
 							   (haskell . t)
 							   (ruby . t)
@@ -1507,43 +1508,6 @@ _s_kip
     :demand
     :custom (org-download-image-org-width 500)
     :hook (dired-mode-hook . org-download-enable))
-
-  ;; seems broken
-  (defun my/org-toggle-list-checkbox ()
-    (interactive)
-    (org-toggle-checkbox 4))
-
-  (defun my/open-my-notes-file ()
-    "Open rough notes."
-    (interactive)
-    (find-file org-personal-file))
-
-  (defun my/open-work-notes-file ()
-    "Open work notes."
-    (interactive)
-    (find-file org-work-file))
-
-  (defun my/list-to-checkbox (arg)
-    (interactive "P")
-    (let ((n (or arg 1)))
-      (when (region-active-p)
-	(setq n (count-lines (region-beginning)
-			     (region-end)))
-	(goto-char (region-beginning)))
-      (dotimes (i n)
-	(beginning-of-line)
-	(re-search-forward "- " nil t)
-	(replace-match "- [ ] ")
-	(forward-line))
-      (beginning-of-line)))
-
-  (defun fill-buffer ()
-    "call `fill-region' on entire buffer"
-    (interactive)
-    (save-excursion
-      (save-restriction
-	(widen)
-	(fill-region (point-min) (point-max)))))
 
   ;; Turn off elisp's flycheck checkdoc in src blocks.
   (add-hook 'org-src-mode-hook (lambda () (setq-local flycheck-disabled-checkers '(emacs-lisp-checkdoc)))))
@@ -1559,11 +1523,12 @@ _s_kip
   :if (file-directory-p "~/Dropbox/roam")
   :init
   (setq org-roam-v2-ack t)
-  :after org
+  ;; :after org
   :custom
   (org-roam-directory (file-truename "~/Dropbox/roam/"))
   (org-roam-db-update-method 'idle-timer)
   (org-roam-encrypt-files t)
+  (org-roam-completion-everywhere t) 	; allow completion for inserting node links
   :config
   (org-roam-setup)
   :general
@@ -1604,9 +1569,15 @@ _s_kip
 
 (use-package org-alert
   :load-path "~/.emacs.d/elisp"
-  :after org
+  :defer 30
+  ;; :disabled
+  ;; :after org
   :config
   (org-alert-enable))
+
+(use-package org-helpers
+  :load-path "~/.emacs.d/elisp"
+  :after org)
 
 ;; watch out for performance issues here
 (use-package emojify
@@ -1619,16 +1590,22 @@ _s_kip
   :load-path "~/.emacs.d/elisp"
   :general
   (general-def :keymaps 'override
-    "C-s-<f8>" 'my/close-notifications-mac
-    "C-M-<left>" 'frame-half-size-left
-    "C-M-<right>" 'frame-half-size-right
-    "C-M-<return>" 'toggle-frame-maximized)
-
+    "C-s-<f8>" 'my/close-notifications-mac)
+  
   (my-leader-def
     "bk" '(my/kill-this-buffer :wk "kill buffer")
     "fk" '(my/delete-file-and-buffer :wk "delete file")
     "gp" 'my/pomo
     "gP" 'my/pomo-stop))
+
+(use-package my-gui-controls
+  :if (window-system)
+  :load-path "~/.emacs.d/elisp"
+  :general
+  (general-def :keymaps 'override
+    "C-M-<left>" 'frame-half-size-left
+    "C-M-<right>" 'frame-half-size-right
+    "C-M-<return>" 'toggle-frame-maximized))
 
 ;; reset gc to something sensible for normal operation
 (setq gc-cons-threshold (* 2 1000 1000))

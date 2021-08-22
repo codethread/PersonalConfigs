@@ -2,9 +2,9 @@
 ;;; Commentary:
 ;;; Requires terminal-notifier and expects GUI Emacs.
 ;;; Code:
-
-(require 'dash)
+;;* Requires
 (require 's)
+(require 'dash)
 (require 'org-agenda)
 
 (defvar org-alert-daily-times '("07:45" "13:30" "15:45")
@@ -39,13 +39,19 @@
 	    (eq (elt timer 5) 'org-alert-run-overdue))
 	(cancel-timer timer))))
 
+(defun org-alert-run ()
+  "Get all reminders."
+  (interactive)
+  (org-alert-run-dailies)
+  (org-alert-run-overdue))
+
 (defun org-alert-run-overdue ()
   "Test function."
   (interactive)
   (--> (org-alert--get-agenda)
-    (org-alert--get-overdue-tasks it)
-    (-map #'org-alert--get-info-from-task it)
-    (--each it (apply #'org-alert--call-alert it))))
+       (org-alert--get-overdue-tasks it)
+       (-map #'org-alert--get-info-from-task it)
+       (--each it (apply #'org-alert--call-alert it))))
 
 (defun org-alert-run-dailies ()
   "Test function."
@@ -91,14 +97,15 @@
   (with-temp-buffer
     (let ((org-agenda-sticky nil)
 	  (org-agenda-buffer-tmp-name (buffer-name)))
+      (ignore-errors (org-agenda-list 1)) ; not sure why this is needed, but without the window resizes
       (org-agenda-list 1)
       (buffer-substring-no-properties (point-min) (point-max)))))
 
 (defun org-alert--split-agenda-to-list (agenda)
   "Get all lines from the AGENDA as a list without whitespace."
   (->> agenda
-    (s-lines)
-    (-map #'s-trim)))
+       (s-lines)
+       (-map #'s-trim)))
 
 (defun org-alert--get-all-day-tasks (agenda)
   "Get headings from AGENDA which have no timestamp."

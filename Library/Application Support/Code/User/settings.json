@@ -56,7 +56,6 @@
     "**/.DS_Store": true
   },
   "workbench.iconTheme": "vscode-icons",
-  "window.zoomLevel": 0,
   "javascript.updateImportsOnFileMove.enabled": "always",
   "javascript.validate.enable": false,
   //////// VIM

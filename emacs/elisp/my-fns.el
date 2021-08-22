@@ -62,22 +62,6 @@
   (interactive)
   (find-file "~/.emacs.d/init.el"))
 
-(defun frame-half-size-left ()
-  "Set the current frame to half the screen width."
-  (interactive)
-  (let ((frame (selected-frame))
-        (one-half-display-pixel-width (/ (display-pixel-width) 2)))
-    (set-frame-width frame one-half-display-pixel-width nil 'pixelwise)
-    (set-frame-position frame 0 0)))
-
-(defun frame-half-size-right ()
-  "Set the current frame to half the screen width."
-  (interactive)
-  (let ((frame (selected-frame))
-        (one-half-display-pixel-width (/ (display-pixel-width) 2)))
-    (set-frame-width frame one-half-display-pixel-width nil 'pixelwise)
-    (set-frame-position frame one-half-display-pixel-width 0)))
-
 (defun my/close-notifications-mac ()
   "Close Mac notifications."
   (interactive)
