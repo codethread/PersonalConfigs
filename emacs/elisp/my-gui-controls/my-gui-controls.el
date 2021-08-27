@@ -37,6 +37,13 @@
      ;; fallback
      (t (list :width (/ screen-size 2) :height (display-pixel-height) :x (/ screen-size 2))))))
 
+(defun my/close-notifications-mac ()
+  "Close Mac notifications."
+  (interactive)
+  (message "closing notifications")
+  (save-window-excursion
+    (async-shell-command
+     (concat "automator ~/Library/services/Close\\ BSur\\ Notifications.workflow"))))
 
 (provide 'my-gui-controls)
 

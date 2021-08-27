@@ -11,14 +11,14 @@
   "Times to display all day agenda items.")
 
 (defvar org-alert-interval 300
-  "Interval in seconds to recheck and display agenda items.  See
+  "Interval in seconds to recheck and display agenda items. See
 'org-alert-daily-times to see all day items.")
 
 (defvar org-alert-task "Sched.+?:  TODO"
   "Pattern to match in agenda items.")
 
 (defun org-alert-enable ()
-  "Begin alert timer."
+  "Enable notifications for all agenda items."
   (interactive)
   (progn
     (org-alert-disable)
@@ -40,13 +40,14 @@
 	(cancel-timer timer))))
 
 (defun org-alert-run ()
-  "Get all reminders."
+  "Display notifications for all agenda items for the day."
   (interactive)
   (org-alert-run-dailies)
   (org-alert-run-overdue))
 
 (defun org-alert-run-overdue ()
-  "Test function."
+  "Display notifications for all agenda items that have a timestamp
+that is overdue."
   (interactive)
   (--> (org-alert--get-agenda)
        (org-alert--get-overdue-tasks it)
@@ -54,7 +55,8 @@
        (--each it (apply #'org-alert--call-alert it))))
 
 (defun org-alert-run-dailies ()
-  "Test function."
+  "Display notifications for all agenda items that are marked for
+today without a specific timestamp."
   (interactive)
   (--> (org-alert--get-agenda)
     (org-alert--get-all-day-tasks it)

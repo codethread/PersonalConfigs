@@ -30,17 +30,6 @@
 
 ;;; Code:
 
-(defun my/delete-file-and-buffer ()
-  "Kill the current buffer and deletes the file it is visiting."
-  (interactive)
-  (let ((filename (buffer-file-name)))
-    (when filename
-      (if (vc-backend filename)
-          (vc-delete-file filename)
-        (progn
-          (delete-file filename)
-          (message "Deleted file %s" filename)
-          (kill-buffer))))))
 
 ;; (defun my/md-link-to-org ()
 ;;   ;; Can also be adapted to use the region, but one would need to add
@@ -51,24 +40,11 @@
 ;;     (while (search-forward-regexp markdown-regex-link-inline (point-max) t)
 ;;       (replace-match "[[\\6][\\3]]"))))
 
-;; https://www.reddit.com/r/emacs/comments/64xb3q/killthisbuffer_sometimes_just_stops_working/
-(defun my/kill-this-buffer ()
-  "Kill the current buffer."
-  (interactive)
-  (kill-buffer (current-buffer)))
 
 (defun my/open-init-file ()
   "Open init.el."
   (interactive)
   (find-file "~/.emacs.d/init.el"))
-
-(defun my/close-notifications-mac ()
-  "Close Mac notifications."
-  (interactive)
-  (message "closing notifications")
-  (save-window-excursion
-    (async-shell-command
-     (concat "automator ~/Library/services/Close\\ BSur\\ Notifications.workflow"))))
 
 (defun my/pomo ()
   "Start a pomodoro timer in the background."
@@ -95,28 +71,6 @@
   (print (thing-at-point 'word)))
 
 ;; (global-set-key (kbd "C-q") 'my/replace-word-under-cursor)
-
-(defun exercism-submit ()
-  "Submit current file."
-  (interactive)
-  (async-shell-command (concat "exercism submit " (buffer-file-name))))
-
-(define-minor-mode exercism-mode
-  "Toggle exercism mode.
-     Interactively with no argument, this command toggles the
-     mode.  A positive prefix argument enables the mode, any
-     other prefix argument disables it.  From Lisp, argument
-     omitted or nil enables the mode, `toggle' toggles the state.
-     
-     When Exercism mode is enabled, A few things are bound to
-     C-c.  See the command \\[exercism-submit]."
-  ;; The initial value.
-  nil
-  ;; The indicator for the mode line.
-  " exercism"
-  ;; The minor mode bindings.
-  '(([C-c C-e s] . exercism-submit))
-  :group 'exercism)
 
 (defun my/tdd-message ()
   "Display the three laws of TDD."
@@ -146,19 +100,6 @@
   "Reload init.el without restart."
   (interactive)
   (load-file "~/.emacs.d/init.el"))
-
-
-(defun endless/sharp ()
-  "Insert #' unless in a string or comment."
-  (interactive)
-  (call-interactively #'self-insert-command)
-  (let ((ppss (syntax-ppss)))
-    (unless (or (elt ppss 3)
-                (elt ppss 4)
-                (eq (char-after) ?'))
-      (insert "'"))))
-
-(define-key emacs-lisp-mode-map "#" #'endless/sharp)
 
 ;; (defun my/teardown
 ;;     "Remove all files from teardown file."

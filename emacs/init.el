@@ -5,32 +5,53 @@
 
 ;;; Package Manager setup --- inital setup of package.el and use-package (plus complimentary packages)
 
-(require 'package)
+;; (require 'package)
 
-(setq package-archives
-      '(("melpa" . "https://melpa.org/packages/")
-	("org" . "https://orgmode.org/elpa/")
-	("elpa" . "https://elpa.gnu.org/packages/")))
+;; (setq package-archives
+;;       '(("melpa" . "https://melpa.org/packages/")
+;; 	("org" . "https://orgmode.org/elpa/")
+;; 	("elpa" . "https://elpa.gnu.org/packages/")))
 
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
+;; (unless (package-installed-p 'use-package)
+;;   (package-refresh-contents)
+;;   (package-install 'use-package))
 
-(require 'use-package)
+
+;;; Straight setup
+(defvar bootstrap-version)
+(let ((bootstrap-file
+      (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+        "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+        'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+
+;;; use package setup
+
+(straight-use-package 'use-package)
+
+;; (require 'use-package)
+
+;; (require 'use-package-ensure)
+;; (setq use-package-always-ensure t)
+
+(setq straight-use-package-by-default t)
 (setq use-package-verbose t)
 
-(require 'use-package-ensure)
-(setq use-package-always-ensure t)
-
 (use-package use-package-ensure-system-package
-  :ensure t)
+  :straight t)
 
 
 ;;; Initial packages --- these must load before everything
 
 (use-package cus-edit
   :demand
-  :ensure nil
+  :straight nil
   :custom (custom-file "~/.emacs.d/custom.el")
   :config
   (unless (file-exists-p custom-file)
@@ -76,7 +97,7 @@
     "t" '(:ignore t :wk "Term")
 
     "T" '(:ignore t :wk "Toggle")
-    "TT" 'toggle-truncate-lines		; when true, lines are not broken over multiple, instead they clip (useful for long tables in org)
+    "TT" 'toggle-truncate-lines	; when true, lines are not broken over multiple, instead they clip (useful for long tables in org)
     "Tc" (general-predicate-dispatch 'centered-window-mode
 	   (string-equal major-mode "org-mode") 'olivetti-mode)
     "Th" 'my/tree-sitter-hl
@@ -84,13 +105,13 @@
     "Tl" 'global-display-line-numbers-mode
     "Tp" 'electric-pair-local-mode
     "Tu" 'undo-tree-visualize
-    "Tv" 'visual-line-mode 		; tries to break up lines to keep words whole
+    "Tv" 'visual-line-mode ; tries to break up lines to keep words whole
     "Tw" 'toggle-word-wrap
     "Tz" 'global-ligature-mode
 
     "w" '(:ignore t :wk "Window")
     "p" '(:ignore t :wk "Projectile")
-    "v" 'recenter 			;; this is a hack until i fix automcomplete
+    "v" 'recenter ;; this is a hack until i fix automcomplete
     ))
 
 (use-package hydra
@@ -170,7 +191,7 @@
 ;;; Builtin configurations
 
 (use-package emacs
-  :ensure nil
+  :straight nil
   :config
   (defalias 'yes-or-no-p 'y-or-n-p)
 
@@ -187,7 +208,8 @@
 
 	create-lockfiles nil
 	kill-buffer-query-functions nil
-	delete-by-moving-to-trash t)
+	delete-by-moving-to-trash t
+	native-comp-async-report-warnings-errors nil)
 
   ;; prevent unsafe dir-locals being pestered for
   ;; https://emacs.stackexchange.com/questions/10983/remember-permission-to-execute-risky-local-variables
@@ -204,17 +226,17 @@
     (set-display-table-slot standard-display-table 'vertical-border (make-glyph-code ?┃))))
 
 (use-package font-lock
-  :ensure nil
+  :straight nil
   :custom
   (font-lock-maximum-decoration t)) ; control amount of fontification, can be done per mode if slow
 
 (use-package help
-  :ensure nil
+  :straight nil
   :custom
   (help-window-select t))
 
 (use-package window
-  :ensure nil
+  :straight nil
   :general
   (my-leader-def
     "wk" 'delete-window
@@ -241,19 +263,40 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
 
 
 (use-package files
-  :ensure nil
+  :straight nil
   :general
   (my-leader-def
+    "bk" '(my/kill-this-buffer :wk "kill buffer")
+    "fk" '(my/delete-file-and-buffer :wk "delete file")
     "fs" 'save-buffer)
   :custom
   (backup-by-copying t)		    ; slow but sure way of saving
   (version-control t)		    ; version numbers for backup files
   (save-abbrevs 'silently)
-  (backup-directory-alist `(("." . , user-temporary-file-directory)))
-  (delete-old-versions t))
+  (backup-directory-alist `(("." . ,user-temporary-file-directory)))
+  (delete-old-versions t)
+
+  :config
+  ;; https://www.reddit.com/r/emacs/comments/64xb3q/killthisbuffer_sometimes_just_stops_working/
+  (defun my/kill-this-buffer ()
+    "Kill the current buffer."
+    (interactive)
+    (kill-buffer (current-buffer)))
+
+  (defun my/delete-file-and-buffer ()
+    "Kill the current buffer and deletes the file it is visiting."
+    (interactive)
+    (let ((filename (buffer-file-name)))
+      (when filename
+	(if (vc-backend filename)
+	    (vc-delete-file filename)
+	  (progn
+	    (delete-file filename)
+	    (message "Deleted file %s" filename)
+	    (kill-buffer)))))))
 
 (use-package "startup"
-  :ensure nil
+  :straight nil
   :custom
   (auto-save-list-file-prefix (concat user-temporary-file-directory ".auto-saves-"))
   (auto-save-file-name-transforms `((".*" ,user-temporary-file-directory t)))
@@ -263,12 +306,12 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
   (initial-scratch-message ";; Scratch Buffer, for lisp run (lisp-interaction-mode)"))
 
 (use-package vc-hooks
-  :ensure nil
+  :straight nil
   :custom
   (vc-follow-symlinks t))
 
 (use-package paren
-  :ensure nil
+  :straight nil
   :init
   (setq show-paren-mode t)
   :custom
@@ -277,7 +320,7 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
   :hook (prog-mode . show-paren-mode))
 
 (use-package compile
-  :ensure nil
+  :straight nil
   :custom
   (compilation-scroll-output t)
   (scroll-conservatively 101)
@@ -292,10 +335,10 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
 
 (use-package eldoc
   :hook (prog-mode org-mode)
-  :ensure nil)
+  :straight nil)
 
 (use-package dired
-  :ensure nil
+  :straight nil
   :custom (dired-listing-switches "-Algho --group-directories-first")
 
   :general
@@ -314,23 +357,23 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
     :hook (dired-mode . all-the-icons-dired-mode)))
 
 (use-package "paragraphs"
-  :ensure nil
+  :straight nil
   :custom
   ;; don't use double spaces in org files to indicate sentence ending - this may clash with other '.'s in words.
   (sentence-end-double-space nil))
 
 (use-package winner
-  :ensure nil
+  :straight nil
   :demand
   :config
   (winner-mode 1))
 
 (use-package electric-pair-mode
-  :ensure nil
+  :straight nil
   :hook (prog-mode . electric-pair-mode))
 
 (use-package xwidget
-  :ensure nil
+  :straight nil
   :if (window-system)
   :commands (xwidget-webkit-new-session)
   :config
@@ -364,13 +407,13 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
 
 (use-package epg-config
   ;; a.k.a: gpg epa
-  :ensure nil
+  :straight nil
   :custom
   ;; needed this on macos to get private key to be picked up
   (epg-pinentry-mode 'loopback))
 
 (use-package password-cache
-  :ensure nil
+  :straight nil
   :custom
   ((password-cache-expiry (* 60 60 12))))
 
@@ -483,14 +526,14 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
     (interactive)
     (ace-window 4)))
 
-(use-package auto-package-update
-  :defer 30
-  :custom
-  (auto-package-update-delete-old-versions t)
-  (auto-package-update-interval 1)
-  (auto-package-update-prompt-before-update t)
-  :config
-  (auto-package-update-at-time "09:18"))
+;; (use-package auto-package-update
+;;   :defer 30
+;;   :custom
+;;   (auto-package-update-delete-old-versions t)
+;;   (auto-package-update-interval 1)
+;;   (auto-package-update-prompt-before-update t)
+;;   :config
+;;   (auto-package-update-at-time "09:18"))
 
 (use-package page-break-lines
   :hook (emacs-lisp-mode . page-break-lines-mode))
@@ -668,8 +711,7 @@ _s_kip
 	doom-modeline-buffer-encoding nil))
 
 (use-package ligature
-  :ensure nil
-  :load-path "elpa/ligature.el"
+  :straight (ligature :host github :repo "mickeynp/ligature.el")
   :hook (after-init . global-ligature-mode)
   :config
   ;; Enable the "www" ligature in every possible major mode
@@ -768,13 +810,13 @@ _s_kip
 				    :run "npm start"
 				    :test-suffix "Test"))
 
-(use-package my-projectile-fns
-  :after projectile
-  :load-path "~/.emacs.d/elisp"
-  :general
-  (my-leader-def
-    "pg" 'my/goto-github
-    "bb" '(my/split-last-buffer :wk "split last buffer")))
+;; (use-package my-projectile-fns
+;;   :after projectile
+;;   :load-path "~/.emacs.d/elisp"
+;;   :general
+;;   (my-leader-def
+;;     "pg" 'my/goto-github
+;;     "bb" '(my/split-last-buffer :wk "split last buffer")))
 
 (use-package counsel-projectile
   :after (projectile counsel)
@@ -797,8 +839,6 @@ _s_kip
 
 (use-package magit
   :general
-  (general-def :keymaps 'override
-    "C-x g" 'magit-status)
   (my-leader-def
     "gg" 'magit-status))
 
@@ -841,11 +881,11 @@ _s_kip
 
 (use-package ivy ;; TODO do i need these bindings and evil collection?
   :custom
-  ((ivy-use-virtual-buffers t)
-   (ivy-wrap t)
-   (ivy-count-format "(%d/%d) ")
-   (ivy-initial-inputs-alist nil)      ; Don't start searches with ^
-   (ivy-extra-directories ()))	       ; hide . and .. from file lists
+  (ivy-use-virtual-buffers t)
+  (ivy-wrap t)
+  (ivy-count-format "(%d/%d) ")
+  (ivy-initial-inputs-alist nil)      ; Don't start searches with ^
+  (ivy-extra-directories ())	       ; hide . and .. from file lists
   :config
   (ivy-mode 1)
 
@@ -857,12 +897,7 @@ _s_kip
 
   (setq enable-recursive-minibuffers t)
 
-  (use-package ivy-rich
-    :config
-    (ivy-rich-mode 1))
-  
-  (use-package ivy-xref)
-    :general
+  :general
   (my-leader-def
     "sf" 'swiper
 
@@ -878,6 +913,14 @@ _s_kip
     "C-k" 'ivy-previous-line
     "C-u" 'ivy-scroll-down-command
     "C-d" 'ivy-scroll-up-command))
+
+(use-package ivy-rich
+  :after ivy
+  :config
+  (ivy-rich-mode 1))
+
+(use-package ivy-xref
+  :after ivy)
 
 (use-package flx
   :after ivy)
@@ -942,7 +985,6 @@ _s_kip
 ;;; LSP and Completion
 
 (use-package yasnippet
-  ;; :disabled 				; TODO practice with this first
   :bind
   ("C-c y s" . yas-insert-snippet)
   ("C-c y v" . yas-visit-snippet-file)
@@ -981,7 +1023,9 @@ _s_kip
 
 (use-package lsp-mode
   :commands lsp
-  :init (add-to-list 'exec-path "~/.tooling/elixir-ls-1.11/")
+  :init
+  ;; get from https://github.com/elixir-lsp/elixir-ls/releases
+  (add-to-list 'exec-path "~/.tooling/elixir-ls-1.11/")
   :hook
   ((typescript-mode rjsx-mode web-mode scala-mode java-mode elixir-mode) . lsp)
   (lsp-mode . lsp-enable-which-key-integration)
@@ -1068,12 +1112,21 @@ _s_kip
   :config
   (setq-default web-mode-comment-formats
 		'(("javascript" . "//")
-                  ("typescript" . "//")))
+		  ("typescript" . "//")))
+
 
   (add-hook 'web-mode-hook #'my/web-mode-settings)
 
   (defun my/web-mode-settings ()
     "Hooks for Web mode."
+    (interactive)
+    (flycheck-add-mode 'css-stylelint 'web-mode)
+    (flycheck-add-mode 'javascript-eslint 'web-mode)
+
+    (setq flycheck-checker 'javascript-eslint)
+    (flycheck-add-next-checker 'lsp 'javascript-eslint)
+    (flycheck-add-next-checker 'javascript-eslint 'css-stylelint)
+
     (setq web-mode-enable-auto-closing t)
     (setq web-mode-enable-auto-quoting nil)
     (setq web-mode-markup-indent-offset 2)))
@@ -1121,12 +1174,12 @@ _s_kip
 
 (use-package dap-java
   :disabled
-  :ensure nil)
+  :straight nil)
 
 ;;;; lisp
 
 (use-package elisp-mode
-  :ensure nil
+  :straight nil
   :hook (emacs-lisp-mode . (lambda () (when (fboundp 'electric-pair-mode)
 			       (electric-pair-mode -1))))
   :config
@@ -1155,16 +1208,28 @@ _s_kip
   :hook (lispy-mode . lispyville-mode)
   :config
   (lispyville-set-key-theme
-   '(commentary	; comments on gc
+   '(commentary ; comments on gc
      c-w	; C-w deletes backword word, so I should get used that
      ;; mark		 ; look into this another day
      prettify	 ; make == and the like work
      atom-motions ; make w and e respect atoms (e.g foo-bar is an atom)
      slurp/barf-cp
-     additional	; binds a bunch of things to alt https://github.com/noctuid/lispyville#additional-key-theme
-     additional-motions	; I mainly like this for so [ ] can act like 'd'
+     additional ; binds a bunch of things to alt https://github.com/noctuid/lispyville#additional-key-theme
+     additional-motions ; I mainly like this for so [ ] can act like 'd'
      additional-insert	; make M-[oO] M-[iI] smarter
-     operators)))
+     operators))
+
+  (defun endless/sharp ()
+    "Insert #' unless in a string or comment."
+    (interactive)
+    (call-interactively #'self-insert-command)
+    (let ((ppss (syntax-ppss)))
+      (unless (or (elt ppss 3)
+		  (elt ppss 4)
+		  (eq (char-after) ?'))
+	(insert "'"))))
+
+  (define-key emacs-lisp-mode-map "#" #'endless/sharp))
 
 (use-package paren-face
   :hook (lispy-mode . paren-face-mode))
@@ -1208,9 +1273,9 @@ _s_kip
 
 (use-package mix
   :hook (elixir-mode . mix-minor-mode)
-  :general
-  (my-leader-def
-    "pt" 'my/elixir-test-file)
+  ;; :general
+  ;; (my-leader-def
+  ;;   "pt" 'my/elixir-test-file)
   :config
   (defun my/elixir-test-file ()
     "save buffer and run mix test file"
@@ -1219,16 +1284,16 @@ _s_kip
       (save-buffer)
       (mix-test-current-buffer))))
 
-(use-package lsp-python-ms
-  :disabled
-  :init (setq lsp-python-ms-auto-install-server t)
-  :hook (python-mode . (lambda ()
-                         (require 'lsp-python-ms)
-                         (lsp))))
+;; (use-package lsp-python-ms
+;;   :disabled
+;;   :init (setq lsp-python-ms-auto-install-server t)
+;;   :hook (python-mode . (lambda ()
+;;                          (require 'lsp-python-ms)
+;;                          (lsp))))
 
 (use-package flycheck
-  ;; :custom
-  ;; ((flycheck-check-syntax-automatically '(idle-buffer-switch save mode-enabled)))
+  :custom
+  (flycheck-check-syntax-automatically '(idle-buffer-switch save mode-enabled))
   :hook (prog-mode . flycheck-mode)
   :general
   (my-leader-def
@@ -1248,7 +1313,7 @@ _s_kip
 ;;; Writing
 
 (use-package flyspell
-  :ensure nil
+  :straight nil
   :ensure-system-package aspell
   :hook ((markdown-mode org-mode) . flyspell-mode)
   :general
@@ -1281,12 +1346,13 @@ _s_kip
     "k" 'evil-previous-visual-line)
 
   (my-local-leader-def :keymaps 'markdown-mode-map
-    "c" 'markdown-toggle-markup-hiding)
-  :config
-  (use-package markdown-toc))
+    "c" 'markdown-toggle-markup-hiding))
+
+(use-package markdown-toc
+  :after markdown-mode)
 
 (use-package poet-theme
-  :disabled ; enable this section if writing
+  :disabled			      ; enable this section if writing
   :config
   (blink-cursor-mode 0)
   (load-theme 'poet t)
@@ -1349,9 +1415,9 @@ _s_kip
 (use-package org
   :defer 10
   :init
-  ;; org is a special child that needs to be installed
-  (unless (file-expand-wildcards (concat package-user-dir "/org-[0-9]*"))
-    (package-install (elt (cdr (assoc 'org package-archive-contents)) 0)))
+  ;; ;; org is a special child that needs to be installed
+  ;; (unless (file-expand-wildcards (concat package-user-dir "/org-[0-9]*"))
+  ;;   (package-install (elt (cdr (assoc 'org package-archive-contents)) 0)))
 
   (defvar org-directory "~/Dropbox/roam")
   (defvar org-default-notes-file (expand-file-name "~/Dropbox/roam/20210614152805-dump.org.gpg"))
@@ -1529,6 +1595,15 @@ _s_kip
   (org-roam-db-update-method 'idle-timer)
   (org-roam-encrypt-files t)
   (org-roam-completion-everywhere t) 	; allow completion for inserting node links
+  (org-roam-capture-templates
+   '(("d" "default" plain
+      "%?"
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+      :unnarrowed t)
+     ("s" "secure" plain
+      "%?"
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org.gpg" "#+title: ${title}\n")
+      :unnarrowed t)))
   :config
   (org-roam-setup)
   :general
@@ -1549,7 +1624,7 @@ _s_kip
   :after org)
 
 (use-package ob-js
-  :ensure nil
+  :straight nil
   :after org
   :config
   ;; overwrite default wrapper function which doesn't work
@@ -1568,41 +1643,29 @@ _s_kip
   (evil-org-agenda-set-keys))
 
 (use-package org-alert
-  :load-path "~/.emacs.d/elisp"
+  :straight (org-alert :local-repo "~/emacs/elisp/org-alert")
   :defer 30
-  ;; :disabled
-  ;; :after org
   :config
   (org-alert-enable))
 
 (use-package org-helpers
-  :load-path "~/.emacs.d/elisp"
+  :straight (org-helpers :local-repo "~/emacs/elisp/org-helpers")
   :after org)
 
 ;; watch out for performance issues here
 (use-package emojify
+  :disabled
   :hook ((markdown-mode org-mode) . emojify-mode))
 
 
 ;;; Own scripts and packages
 
-(use-package my-fns
-  :load-path "~/.emacs.d/elisp"
-  :general
-  (general-def :keymaps 'override
-    "C-s-<f8>" 'my/close-notifications-mac)
-  
-  (my-leader-def
-    "bk" '(my/kill-this-buffer :wk "kill buffer")
-    "fk" '(my/delete-file-and-buffer :wk "delete file")
-    "gp" 'my/pomo
-    "gP" 'my/pomo-stop))
-
 (use-package my-gui-controls
   :if (window-system)
-  :load-path "~/.emacs.d/elisp"
+  :straight (my-gui-controls :local-repo "~/emacs/elisp/my-gui-controls")
   :general
   (general-def :keymaps 'override
+    "C-s-<f8>" 'my/close-notifications-mac
     "C-M-<left>" 'frame-half-size-left
     "C-M-<right>" 'frame-half-size-right
     "C-M-<return>" 'toggle-frame-maximized))
