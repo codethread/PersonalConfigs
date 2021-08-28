@@ -3,21 +3,8 @@
 ;;; Code:
 
 
-;;; Package Manager setup --- inital setup of package.el and use-package (plus complimentary packages)
+;;; Package Manager setup --- inital setup of straight.el and use-package (plus complimentary packages)
 
-;; (require 'package)
-
-;; (setq package-archives
-;;       '(("melpa" . "https://melpa.org/packages/")
-;; 	("org" . "https://orgmode.org/elpa/")
-;; 	("elpa" . "https://elpa.gnu.org/packages/")))
-
-;; (unless (package-installed-p 'use-package)
-;;   (package-refresh-contents)
-;;   (package-install 'use-package))
-
-
-;;; Straight setup
 (defvar bootstrap-version)
 (let ((bootstrap-file
       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -31,14 +18,7 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
-;;; use package setup
-
 (straight-use-package 'use-package)
-
-;; (require 'use-package)
-
-;; (require 'use-package-ensure)
-;; (setq use-package-always-ensure t)
 
 (setq straight-use-package-by-default t)
 (setq use-package-verbose t)
@@ -48,6 +28,11 @@
 
 
 ;;; Initial packages --- these must load before everything
+
+;; Elisp libraries
+(use-package dash)
+(use-package s)
+(use-package f)
 
 (use-package cus-edit
   :demand
@@ -110,9 +95,7 @@
     "Tz" 'global-ligature-mode
 
     "w" '(:ignore t :wk "Window")
-    "p" '(:ignore t :wk "Projectile")
-    "v" 'recenter ;; this is a hack until i fix automcomplete
-    ))
+    "p" '(:ignore t :wk "Projectile")))
 
 (use-package hydra
   :demand
@@ -183,10 +166,6 @@
     (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
     (define-key evil-outer-text-objects-map "a" 'evil-outer-arg)))
 
-(use-package dash)
-(use-package s)
-(use-package f)
-
 
 ;;; Builtin configurations
 
@@ -205,6 +184,7 @@
 
 	window-resize-pixelwise t
 	frame-resize-pixelwise t
+	;; frame-title-format "%b" ; if wanted, turn off transparent (ns-transparent-titlebar . t)
 
 	create-lockfiles nil
 	kill-buffer-query-functions nil
@@ -568,6 +548,14 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
   :config
   (global-evil-matchit-mode t))
 
+(defun local/global-mode-line ()
+  "Generate a global mode line."
+  `(keymap (global . (menu-item
+		      ,(format-mode-line global-mode-string)
+		      ignore))))
+
+(advice-add 'tab-bar-make-keymap-1 :override #'local/global-mode-line)
+
 (use-package elscreen
   :custom
   (elscreen-display-screen-number nil)
@@ -906,7 +894,7 @@ _s_kip
     "Wl" 'ivy-switch-view)
   (general-def :keymaps 'override
     "C-s" 'swiper)
-  (general-def :keymaps '(override ivy-minibuffer-map)
+  (general-def :keymaps '(ivy-minibuffer-map)
     "C-SPC" 'ivy-restrict-to-matches
     "C-l" 'ivy-alt-done
     "C-j" 'ivy-next-line
@@ -924,20 +912,6 @@ _s_kip
 
 (use-package flx
   :after ivy)
-
-(use-package ivy-posframe
-  :disabled ;; this is pretty sexy, but clashes with frame resizing, macos full screen and elscreen
-  :custom
-  (ivy-posframe-width      115)
-  (ivy-posframe-min-width  115)
-  (ivy-posframe-height     10)
-  (ivy-posframe-min-height 10)
-  :config
-  (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
-  (setq ivy-posframe-parameters '((parent-frame . nil)
-                                  (left-fringe . 8)
-                                  (right-fringe . 8)))
-  (ivy-posframe-mode 1))
 
 (use-package counsel
   ;; :bind (:map minibuffer-local-map
@@ -1114,18 +1088,17 @@ _s_kip
 		'(("javascript" . "//")
 		  ("typescript" . "//")))
 
-
   (add-hook 'web-mode-hook #'my/web-mode-settings)
 
   (defun my/web-mode-settings ()
     "Hooks for Web mode."
     (interactive)
-    (flycheck-add-mode 'css-stylelint 'web-mode)
-    (flycheck-add-mode 'javascript-eslint 'web-mode)
+    ;; (flycheck-add-mode 'css-stylelint 'web-mode)
+    ;; (flycheck-add-mode 'javascript-eslint 'web-mode)
 
-    (setq flycheck-checker 'javascript-eslint)
-    (flycheck-add-next-checker 'lsp 'javascript-eslint)
-    (flycheck-add-next-checker 'javascript-eslint 'css-stylelint)
+    ;; (setq flycheck-checker 'javascript-eslint)
+    ;; (flycheck-add-next-checker 'lsp 'javascript-eslint)
+    ;; (flycheck-add-next-checker 'javascript-eslint 'css-stylelint)
 
     (setq web-mode-enable-auto-closing t)
     (setq web-mode-enable-auto-quoting nil)
@@ -1202,7 +1175,7 @@ _s_kip
     "F" '(:wk "unFold" :def my/elisp-unfold)))
 
 (use-package lispy
-  :hook (emacs-lisp-mode . lispy-mode))
+  :hook ((emacs-lisp-mode lisp-data-mode) . lispy-mode))
 
 (use-package lispyville
   :hook (lispy-mode . lispyville-mode)

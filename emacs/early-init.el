@@ -4,6 +4,8 @@
       `((horizontal-scroll-bars . nil)
 	(vertical-scroll-bars . nil)
 	(menu-bar-lines . 0)
+	(background-color . "#2E3440")
+	(ns-transparent-titlebar . t)
 	(top . 150)
 	(left . 400)))
 
@@ -29,7 +31,6 @@
 
 (unless (file-directory-p user-temporary-file-directory)
   (make-directory user-temporary-file-directory))
-
 
 ;; Local Variables:
 ;; flycheck-disabled-checkers: (emacs-lisp-checkdoc)

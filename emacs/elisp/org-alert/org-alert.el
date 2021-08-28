@@ -100,7 +100,6 @@ today without a specific timestamp."
     (let ((org-agenda-sticky nil)
 	  (org-agenda-buffer-tmp-name (buffer-name)))
       (ignore-errors (org-agenda-list 1)) ; not sure why this is needed, but without the window resizes
-      (org-agenda-list 1)
       (buffer-substring-no-properties (point-min) (point-max)))))
 
 (defun org-alert--split-agenda-to-list (agenda)
