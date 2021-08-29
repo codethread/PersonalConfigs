@@ -184,23 +184,22 @@
 
 	window-resize-pixelwise t
 	frame-resize-pixelwise t
-	;; frame-title-format "%b" ; if wanted, turn off transparent (ns-transparent-titlebar . t)
+	;; frame-title-format "%b"
+	frame-title-format nil
 
 	create-lockfiles nil
 	kill-buffer-query-functions nil
 	delete-by-moving-to-trash t
 	native-comp-async-report-warnings-errors nil)
 
+  ;; (global-visual-line-mode -1)
+  ;; don't wrap lines
+  (custom-set-variables '(truncate-lines t))
+
   ;; prevent unsafe dir-locals being pestered for
   ;; https://emacs.stackexchange.com/questions/10983/remember-permission-to-execute-risky-local-variables
   (advice-add 'risky-local-variable-p :override #'ignore)
 
-  (when (window-system)
-    (tool-bar-mode -1)
-    (scroll-bar-mode -1)
-    (tooltip-mode -1)
-    (menu-bar-mode -1)
-    (setq frame-title-format nil))
 
   (unless (window-system)
     (set-display-table-slot standard-display-table 'vertical-border (make-glyph-code ?┃))))
@@ -281,9 +280,7 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
   (auto-save-list-file-prefix (concat user-temporary-file-directory ".auto-saves-"))
   (auto-save-file-name-transforms `((".*" ,user-temporary-file-directory t)))
   (inhibit-startup-screen t)
-  (initial-buffer-choice (lambda () (switch-to-buffer "*Messages*")))
-  (initial-major-mode #'fundamental-mode)
-  (initial-scratch-message ";; Scratch Buffer, for lisp run (lisp-interaction-mode)"))
+  (initial-buffer-choice (lambda () (switch-to-buffer "*Messages*"))))
 
 (use-package vc-hooks
   :straight nil
@@ -658,29 +655,19 @@ _s_kip
 (use-package doom-themes
   :init
   (solaire-global-mode 1)
-  :custom
-  ((doom-themes-enable-bold t)
-   (doom-themes-enable-italic t))
   :config
   ;; (load-theme 'doom-one t)
   (load-theme 'doom-nord t)
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config)
 
-  ;; set these after theme load
-  ;; (set-face-attribute 'default nil :font "Hack Nerd Font")
-
-  ;; (set-face-attribute 'default nil :font "FiraCode Nerd Font")
-  ;; (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
-  ;; (set-face-attribute 'font-lock-function-name-face nil :slant 'italic)
-  ;; (set-face-attribute 'font-lock-variable-name-face nil :weight 'semi-bold)
-  ;; (set-face-attribute 'fixed-pitch nil :font "FiraCode Nerd Font")
-  ;; (set-face-attribute 'variable-pitch nil :font "Avenir Next")
+  ;; (font-family-list) is helpful
 
   (custom-set-faces
    `(default ((t (:font "FiraCode Nerd Font"))))
-   `(fixed-pitch ((t (:font "FiraCode Nerd Font"))))
-   `(variable-pitch ((t (:font "Avenir Next:size=14"))))
+   ;; :height should be a float to adjust the relative size to the normal default font
+   `(fixed-pitch ((t (:inherit default :font "Hack Nerd Font Mono" :height 0.9))))
+   `(variable-pitch ((t (:inherit default :font "Georgia" :height 1.1))))
    `(font-lock-function-name-face ((t (:slant italic))))
    `(font-lock-variable-name-face ((t (:weight semi-bold))))
    `(font-lock-comment-face ((t (:slant italic))))))
@@ -1109,7 +1096,7 @@ _s_kip
   :custom (jest-executable "yarn test"))
 
 (use-package prettier-js
-  :after (:or web-mode rjsx-mode typescript-mode))
+  :hook ((rjsx-mode web-mode typescript-mode json-mode markdown-mode) . prettier-js-mode))
 
 ;;;; Scala
 
@@ -1337,50 +1324,17 @@ _s_kip
   (use-package hide-mode-line
     :hook (org-mode . hide-mode-line-mode)))
 
-(use-package mixed-pitch
-  :custom
-  (mixed-pitch-set-height t)
-  (mixed-pitch-fixed-pitch-faces
-   '(diff-added diff-context
-		diff-file-header diff-function diff-header diff-hunk-header
-		diff-removed font-latex-math-face font-latex-sedate-face
-		font-latex-warning-face font-latex-sectioning-5-face
-		font-lock-builtin-face font-lock-comment-delimiter-face
-		font-lock-constant-face font-lock-doc-face
-		font-lock-function-name-face font-lock-keyword-face
-		font-lock-negation-char-face font-lock-preprocessor-face
-		font-lock-regexp-grouping-backslash
-		font-lock-regexp-grouping-construct font-lock-string-face
-		font-lock-type-face font-lock-variable-name-face line-number
-		line-number-current-line line-number-major-tick
-		line-number-minor-tick markdown-code-face
-		markdown-gfm-checkbox-face markdown-inline-code-face
-		markdown-language-info-face markdown-language-keyword-face
-		markdown-math-face message-header-name message-header-to
-		message-header-cc message-header-newsgroups
-		message-header-xheader message-header-subject
-		message-header-other mu4e-header-key-face
-		mu4e-header-value-face mu4e-link-face mu4e-contact-face
-		mu4e-compose-separator-face mu4e-compose-header-face org-block
-		org-block-begin-line org-block-end-line
-		org-document-info-keyword org-code org-indent
-		org-latex-and-related org-checkbox org-formula org-meta-line
-		org-table org-verbatim
-		;; added by me
-		org-link))
-  :hook ((markdown-mode org-mode) . mixed-pitch-mode))
-
-;; - The unmatched delimiter face: `rainbow-delimiters-unmatched-face'.
-;; - The mismatched delimiter face: `rainbow-delimiters-mismatched-face'.
-
 (use-package olivetti
   :custom
   (olivetti-body-width 80)
-  (olivetti-enable-visual-line-mode nil)
+  (olivetti-mode-on-hook (visual-line-mode -1))
   :hook ((markdown-mode org-mode) . olivetti-mode))
 
 ;; light weight version of the above
-(use-package centered-window)
+(use-package centered-window
+  :disabled
+  :custom
+  (cwm-centered-window-width 70))
 
 
 ;;; Org mode and related
@@ -1404,6 +1358,8 @@ _s_kip
   (org-mode . auto-fill-mode)
   (org-mode . flyspell-mode)
   (org-mode . abbrev-mode)
+  (org-mode . variable-pitch-mode)
+  (org-mode . (lambda () (setq line-spacing 0.2))) ; bit more breathing room for notes
 
   :custom
   (org-src-lang-modes '(("C" . c)
@@ -1426,8 +1382,10 @@ _s_kip
 			      (search . " % s")))
   (org-startup-indented t)
   (org-fontify-done-headline t)
+  (org-fontify-todo-headline t)
   (org-fontify-whole-heading-line t)
   (org-src-fontify-natively t)
+  (org-fontify-quote-and-verse-blocks t)
 
   (org-confirm-babel-evaluate nil)
 
@@ -1480,16 +1438,6 @@ _s_kip
        (tags-todo "work")
        (tags-todo "skyport")))))
 
-  :custom-face
-  ;; found the default blue clashed with blue links in org-roam
-  (org-level-1 ((t :inherit 'outline-7)))
-
-  ;; hide the BEGIN and END in source blocks
-  (org-block-begin-line ((t :foreground "#373E4C")))
-  (org-block-end-line ((t :foreground "#373E4C")))
-
-  (org-document-title ((t :height 2.0)))
-
   :general
   (nmap :keymaps 'org-mode-map
     ">" 'org-shiftmetaright
@@ -1526,6 +1474,42 @@ _s_kip
     "nN" 'my/open-work-notes-file)
 
   :config
+  ;; there are a few fonts that didn't scale and that's because they need to inherit from default
+  (defvar my/heading-font "Futura"
+    "Font to use for org title, headings and markdown headings.")
+
+  (custom-set-faces
+   ;; hide the BEGIN and END in source blocks
+   
+   `(org-block			((t (:inherit fixed-pitch :background ,(doom-color 'base3) :extend t))))
+   `(org-block-begin-line	((t (:foreground ,(doom-color 'base3)))))
+   `(org-block-end-line		((t (:foreground ,(doom-color 'base3)))))
+   
+
+   `(org-drawer			((t (:inherit fixed-pitch :foreground ,(doom-color 'base5) :height 1))))
+   `(org-meta-line		((t (:inherit fixed-pitch :foreground ,(doom-color 'base5)))))
+
+   `(org-document-title		((t (:foreground ,(doom-color 'teal) :font ,my/heading-font :height 1.6 :weight regular))))
+   `(org-quote			((t (:inherit fixed-pitch :font ,my/heading-font :height 1.1 :foreground ,(doom-color 'base6) :slant italic :extend t :background ,(doom-color 'base3)))))
+
+   `(org-link			((t (:inherit default :foreground ,(doom-color 'blue) :underline t))))
+
+   ;; stuff with =equals= (emphasis or inline quote)
+   `(org-verbatim		((t (:inherit org-block :foreground ,(doom-color 'base7)))))
+   ;; stuff with ~tilde~ (inline code snippets)
+   `(org-code			((t (:foreground ,(doom-color 'teal)))))
+
+   `(org-table			((t (:inherit org-block :foreground ,(doom-color 'teal)))))
+
+   `(org-level-1		((t (:foreground ,(doom-color 'base6) :font ,my/heading-font :height 1.3))))
+   `(org-level-2		((t (:foreground ,(doom-color 'base6) :font ,my/heading-font :height 1.2))))
+   `(org-level-3		((t (:foreground ,(doom-color 'base6) :height 1.1))))
+   `(org-level-4		((t (:foreground ,(doom-color 'base6) :height 1.1))))
+   `(org-level-5		((t (:foreground ,(doom-color 'base6) :height 1.1))))
+   `(org-level-6		((t (:foreground ,(doom-color 'base6) :height 1.1))))
+   `(org-level-7		((t (:foreground ,(doom-color 'base6) :height 1.1))))
+   `(org-level-8		((t (:foreground ,(doom-color 'base6) :height 1.1)))))
+
   ;; read gpg encrypted files
   (unless (string-match-p "\\.gpg" org-agenda-file-regexp)
     (setq org-agenda-file-regexp

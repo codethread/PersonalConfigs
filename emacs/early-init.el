@@ -11,6 +11,11 @@
 
 (setq default-frame-alist (copy-alist initial-frame-alist))
 
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+(tooltip-mode -1)
+(menu-bar-mode -1)
+
 ;; garbage collection every 100MB (default is every 0.76MB)
 (setq gc-cons-threshold (* 100 1000 1000))
 
