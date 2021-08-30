@@ -82,7 +82,7 @@
     "t" '(:ignore t :wk "Term")
 
     "T" '(:ignore t :wk "Toggle")
-    "TT" 'toggle-truncate-lines	; when true, lines are not broken over multiple, instead they clip (useful for long tables in org)
+    "TT" 'visual-line-mode ; when true, lines are not broken over multiple, instead they clip (useful for long tables in org)
     "Tc" (general-predicate-dispatch 'centered-window-mode
 	   (string-equal major-mode "org-mode") 'olivetti-mode)
     "Th" 'my/tree-sitter-hl
@@ -90,7 +90,6 @@
     "Tl" 'global-display-line-numbers-mode
     "Tp" 'electric-pair-local-mode
     "Tu" 'undo-tree-visualize
-    "Tv" 'visual-line-mode ; tries to break up lines to keep words whole
     "Tw" 'toggle-word-wrap
     "Tz" 'global-ligature-mode
 
@@ -583,25 +582,10 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
    ("n" elscreen-create "new" :color blue))
   :config
   (elscreen-start)
-
-  ;; light theme
-  ;; :custom-face
-  ;; (elscreen-tab-background-face ((t (:background "#dfdfdf" :height 1.3))))
-  ;; (elscreen-tab-current-screen-face ((t (:background "#fafafa" :foreground "#a626a4"))))
-  ;; (elscreen-tab-other-screen-face ((t (:background "#dfdfdf" :foreground "#a190a7"))))
-
-  ;; one dark
-  :custom-face
-  ;; (elscreen-tab-background-face ((t (:background "#1c1f24" :height 1.3))))
-  ;; (elscreen-tab-current-screen-face ((t (:background "#282c34" :foreground "#c678dd"))))
-  ;; (elscreen-tab-other-screen-face ((t (:background "#1c1f24" :foreground "#a190a7"))))
-
-  ;; nord
-  :custom-face
-  (elscreen-tab-background-face ((t (:background "#272C36" :height 1.5))))
-  (elscreen-tab-current-screen-face ((t (:background "#2E3440" :foreground "#88C0D0"))))
-  (elscreen-tab-other-screen-face ((t (:background "#272C36" :foreground "#5D80AE")))))
-
+  (custom-set-faces
+   `(elscreen-tab-background-face ((t (:background ,(doom-color 'bg) :height 1.5))))
+   `(elscreen-tab-current-screen-face ((t (:background ,(doom-color 'bg) :foreground ,(doom-color 'yellow) :underline (:color ,(doom-color 'yellow))))))
+   `(elscreen-tab-other-screen-face ((t (:background ,(doom-color 'bg) :foreground ,(doom-color 'blue)))))))
 (use-package evil-mc
   :general
   (general-def :keymaps 'override
@@ -664,10 +648,11 @@ _s_kip
   ;; (font-family-list) is helpful
 
   (custom-set-faces
-   `(default ((t (:font "FiraCode Nerd Font"))))
+   `(default ((t (:font "FiraCode Nerd Font" :height 120))))
    ;; :height should be a float to adjust the relative size to the normal default font
-   `(fixed-pitch ((t (:inherit default :font "Hack Nerd Font Mono" :height 0.9))))
-   `(variable-pitch ((t (:inherit default :font "Georgia" :height 1.1))))
+   `(fixed-pitch ((t (:inherit default :font "FiraCode Nerd Font Mono" :height 0.9))))
+   `(variable-pitch ((t (:inherit default :font "Georgia" :height 1.1 :foreground ,(doom-color 'base7)))))
+
    `(font-lock-function-name-face ((t (:slant italic))))
    `(font-lock-variable-name-face ((t (:weight semi-bold))))
    `(font-lock-comment-face ((t (:slant italic))))))
@@ -1226,6 +1211,7 @@ _s_kip
     "gd" 'docker))
 
 (use-package elixir-mode
+  :mode ("\\.ex\\'" "\\.exs\\'" "\\.elixir\\'")
   :config
   ;; Create a buffer-local hook to run elixir-format on save, only when we enable elixir-mode.
   (add-hook 'elixir-mode-hook
@@ -1299,7 +1285,14 @@ _s_kip
 
 (use-package markdown-mode
   :defer t
-  :hook (markdown-mode . visual-line-mode)
+  :hook
+  ;; (markdown-mode . visual-line-mode) ; might need this, will see
+  (markdown-mode . flyspell-mode)
+  (markdown-mode . abbrev-mode)
+  (markdown-mode . variable-pitch-mode)
+  (markdown-mode . (lambda () (setq line-spacing 0.2))) ; bit more breathing room for notes
+  :custom
+  (markdown-hide-markup t)
   :general
   (nmap :keymaps 'markdown-mode-map
     "j" 'evil-next-visual-line
@@ -1311,18 +1304,9 @@ _s_kip
 (use-package markdown-toc
   :after markdown-mode)
 
-(use-package poet-theme
-  :disabled			      ; enable this section if writing
-  :config
-  (blink-cursor-mode 0)
-  (load-theme 'poet t)
-  (custom-set-faces
-   '(vertical-border ((t (:background "black" :foreground "controlColor")))))
-  ;; non monospace font
-  (set-frame-font "Avenir Next:size=14")
-  
-  (use-package hide-mode-line
-    :hook (org-mode . hide-mode-line-mode)))
+(use-package hide-mode-line
+  :hook
+  ((org-mode vterm-mode term-mode org-roam-mode) . hide-mode-line-mode))
 
 (use-package olivetti
   :custom
@@ -1330,31 +1314,14 @@ _s_kip
   (olivetti-mode-on-hook (visual-line-mode -1))
   :hook ((markdown-mode org-mode) . olivetti-mode))
 
-;; light weight version of the above
-(use-package centered-window
-  :disabled
-  :custom
-  (cwm-centered-window-width 70))
-
 
 ;;; Org mode and related
 
 (use-package org
-  :defer 10
   :init
-  ;; ;; org is a special child that needs to be installed
-  ;; (unless (file-expand-wildcards (concat package-user-dir "/org-[0-9]*"))
-  ;;   (package-install (elt (cdr (assoc 'org package-archive-contents)) 0)))
-
   (defvar org-directory "~/Dropbox/roam")
   (defvar org-default-notes-file (expand-file-name "~/Dropbox/roam/20210614152805-dump.org.gpg"))
-
-  :commands
-  (my/open-work-notes-file
-   my/open-my-notes-file)
-
   :hook
-  ;; (org-mode . visual-line-mode)
   (org-mode . auto-fill-mode)
   (org-mode . flyspell-mode)
   (org-mode . abbrev-mode)
@@ -1469,47 +1436,9 @@ _s_kip
   (my-leader-def
     "na" 'org-agenda
     "nb" 'org-switchb
-    "nl" 'org-store-link
-    "nn" 'my/open-my-notes-file
-    "nN" 'my/open-work-notes-file)
-
+    "nl" 'org-store-link)
+  
   :config
-  ;; there are a few fonts that didn't scale and that's because they need to inherit from default
-  (defvar my/heading-font "Futura"
-    "Font to use for org title, headings and markdown headings.")
-
-  (custom-set-faces
-   ;; hide the BEGIN and END in source blocks
-   
-   `(org-block			((t (:inherit fixed-pitch :background ,(doom-color 'base3) :extend t))))
-   `(org-block-begin-line	((t (:foreground ,(doom-color 'base3)))))
-   `(org-block-end-line		((t (:foreground ,(doom-color 'base3)))))
-   
-
-   `(org-drawer			((t (:inherit fixed-pitch :foreground ,(doom-color 'base5) :height 1))))
-   `(org-meta-line		((t (:inherit fixed-pitch :foreground ,(doom-color 'base5)))))
-
-   `(org-document-title		((t (:foreground ,(doom-color 'teal) :font ,my/heading-font :height 1.6 :weight regular))))
-   `(org-quote			((t (:inherit fixed-pitch :font ,my/heading-font :height 1.1 :foreground ,(doom-color 'base6) :slant italic :extend t :background ,(doom-color 'base3)))))
-
-   `(org-link			((t (:inherit default :foreground ,(doom-color 'blue) :underline t))))
-
-   ;; stuff with =equals= (emphasis or inline quote)
-   `(org-verbatim		((t (:inherit org-block :foreground ,(doom-color 'base7)))))
-   ;; stuff with ~tilde~ (inline code snippets)
-   `(org-code			((t (:foreground ,(doom-color 'teal)))))
-
-   `(org-table			((t (:inherit org-block :foreground ,(doom-color 'teal)))))
-
-   `(org-level-1		((t (:foreground ,(doom-color 'base6) :font ,my/heading-font :height 1.3))))
-   `(org-level-2		((t (:foreground ,(doom-color 'base6) :font ,my/heading-font :height 1.2))))
-   `(org-level-3		((t (:foreground ,(doom-color 'base6) :height 1.1))))
-   `(org-level-4		((t (:foreground ,(doom-color 'base6) :height 1.1))))
-   `(org-level-5		((t (:foreground ,(doom-color 'base6) :height 1.1))))
-   `(org-level-6		((t (:foreground ,(doom-color 'base6) :height 1.1))))
-   `(org-level-7		((t (:foreground ,(doom-color 'base6) :height 1.1))))
-   `(org-level-8		((t (:foreground ,(doom-color 'base6) :height 1.1)))))
-
   ;; read gpg encrypted files
   (unless (string-match-p "\\.gpg" org-agenda-file-regexp)
     (setq org-agenda-file-regexp
@@ -1522,6 +1451,11 @@ _s_kip
 							   (haskell . t)
 							   (ruby . t)
 							   (io . t)))
+
+  ;; TODO add pretty bullets
+  ;; (font-lock-add-keywords 'org-mode
+  ;;                         '(("^ *\\([-]\\) "
+  ;;                            (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
 
   (require 'org-tempo) ;; needed to add this to get template expansion to work again
 
@@ -1605,9 +1539,23 @@ _s_kip
   :config
   (org-alert-enable))
 
-(use-package org-helpers
-  :straight (org-helpers :local-repo "~/emacs/elisp/org-helpers")
-  :after org)
+(use-package my-org-helpers
+  :straight (my-org-helpers :local-repo "~/emacs/elisp/my-org-helpers")
+  :after (:any org org-roam)
+  :demand t
+  :general
+  (my-leader-def
+    "nn" 'my/open-my-notes-file
+    "nN" 'my/open-work-notes-file)
+  :config
+  (my/org-theme))
+
+(use-package my-markdown-helpers
+  :straight (my-markdown-helpers :local-repo "~/emacs/elisp/my-markdown-helpers")
+  :after (markdown-mode)
+  ;; :demand t
+  :config
+  (my/markdown-theme))
 
 ;; watch out for performance issues here
 (use-package emojify
