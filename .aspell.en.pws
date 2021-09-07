@@ -1,4 +1,4 @@
-personal_ws-1.1 en 52 
+personal_ws-1.1 en 53 
 Applicative
 Applicatives
 Atomicity
@@ -33,6 +33,7 @@ async
 cli
 config
 contentinfo
+deps
 dired
 elisp
 env

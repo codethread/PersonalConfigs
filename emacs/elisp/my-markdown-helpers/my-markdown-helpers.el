@@ -23,6 +23,7 @@
 
    `(markdown-table-face	((t (:inherit fixed-pitch :foreground ,(doom-color 'base6)))))
 
+   `(markdown-blockquote-face   ((t (:slant normal))))
    `(markdown-inline-code-face	((t (:inherit fixed-pitch :foreground ,(doom-color 'magenta) :background ,(doom-color 'base3)))))
    `(markdown-pre-face		((t (:inherit fixed-pitch :foreground ,(doom-color 'teal) :background ,(doom-color 'base3) :extend t))))
    `(markdown-code-face		((t (:inherit fixed-pitch :background ,(doom-color 'base3) :extend t))))))

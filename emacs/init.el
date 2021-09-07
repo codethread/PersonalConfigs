@@ -175,7 +175,7 @@
 
 
   (setq indent-tabs-mode nil
-	read-process-output-max (* 1024 1024) ; increase performance: https://emacs-lsp.github.io/lsp-mode/page/performance/
+	read-process-output-max (* 2 1024 1024) ; increase performance: https://emacs-lsp.github.io/lsp-mode/page/performance/
 	;; line-number-display-limit 1	; no line numbers in modeline
 
 	ring-bell-function #'ignore
@@ -248,7 +248,7 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
     "fk" '(my/delete-file-and-buffer :wk "delete file")
     "fs" 'save-buffer)
   :custom
-  (backup-by-copying t)		    ; slow but sure way of saving
+  (backup-by-copying nil)		    ; slow but sure way of saving if set to t
   (version-control t)		    ; version numbers for backup files
   (save-abbrevs 'silently)
   (backup-directory-alist `(("." . ,user-temporary-file-directory)))
@@ -521,10 +521,46 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
   :hook (emacs-lisp . nameless-mode))
 
 (use-package super-save
+  :custom
+  (super-save-idle-duration 300) 	; in seconds
+  (super-save-auto-save-when-idle t)
   :config
   (setq auto-save-default nil)
-  (setq super-save-auto-save-when-idle t)
   (super-save-mode +1))
+
+(use-package popwin
+  :custom
+  (popwin:special-display-config
+   '(;; Emacs
+    ("*Miniedit Help*" :noselect t)
+    help-mode
+    (completion-list-mode :noselect t)
+    (compilation-mode :noselect t)
+    (grep-mode :noselect t)
+    (occur-mode :noselect t)
+    ("*Pp Macroexpand Output*" :noselect t)
+    "*Shell Command Output*"
+    vterm-mode
+    ;; lsp and flycheck
+    "*Flycheck errors*"
+    ;; VC
+    ;; "*vc-diff*"
+    ;; "*vc-change-log*"
+    ;; Undo-Tree
+    (" *undo-tree*" :width 60 :position right)
+    ;; Anything
+    ("^\\*anything.*\\*$" :regexp t)
+    ;; SLIME
+    "*slime-apropos*"
+    "*slime-macroexpansion*"
+    "*slime-description*"
+    ("*slime-compilation*" :noselect t)
+    "*slime-xref*"
+    (sldb-mode :stick t)
+    slime-repl-mode
+    slime-connection-list-mode))
+  :config
+  (popwin-mode 1))
 
 
 ;;; Evil helpers
@@ -586,6 +622,7 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
    `(elscreen-tab-background-face ((t (:background ,(doom-color 'bg) :height 1.5))))
    `(elscreen-tab-current-screen-face ((t (:background ,(doom-color 'bg) :foreground ,(doom-color 'yellow) :underline (:color ,(doom-color 'yellow))))))
    `(elscreen-tab-other-screen-face ((t (:background ,(doom-color 'bg) :foreground ,(doom-color 'blue)))))))
+
 (use-package evil-mc
   :general
   (general-def :keymaps 'override
@@ -638,7 +675,7 @@ _s_kip
 
 (use-package doom-themes
   :init
-  (solaire-global-mode 1)
+  ;; (solaire-global-mode 1)
   :config
   ;; (load-theme 'doom-one t)
   (load-theme 'doom-nord t)
@@ -660,6 +697,7 @@ _s_kip
 (use-package all-the-icons)
 
 (use-package doom-modeline
+  :disabled
   :hook (after-init . doom-modeline-mode)
   :config
   (setq doom-modeline-height 20
@@ -906,12 +944,12 @@ _s_kip
     "si" 'counsel-imenu
     "gl" 'counsel-find-library)
 
-  (my-local-leader-def :keymaps 'org-mode-map
-    "gh" '(counsel-org-goto-all :wk "find heading")
-    "gH" '(counsel-org-goto :wk "find heading in all"))
+  ;; (my-local-leader-def :keymaps 'org-mode-map
+  ;;   "gh" '(counsel-org-goto-all :wk "find heading")
+  ;;   "gH" '(counsel-org-goto :wk "find heading in all"))
   :custom
   ;; ((counsel-find-file-ignore-regexp "(.|..)"))
-  ((counsel-find-file-ignore-regexp "..")))
+  (counsel-find-file-ignore-regexp "\\(.elc\\|..\\|.yarn/cache\\)"))
 
 (use-package smex
   :after counsel)
@@ -978,13 +1016,31 @@ _s_kip
   ;; :general
   ;; (nmap "gh" 'lsp-describe-thing-at-point)
   :custom
+  ;; general
+  (lsp-auto-execute-action 'nil)
   (lsp-headerline-breadcrumb-enable nil)
   (lsp-disabled-clients '((json-mode . eslint)))
   (lsp-enable-file-watchers 'nil)
-  (lsp-eslint-run "onType")
-  (lsp-auto-execute-action 'nil))
+  ;; rust
+  (lsp-rust-server 'rust-analyzer)
+
+  ;; typescript
+  (lsp-typescript-update-imports-on-file-move-enabled "always")
+  (lsp-clients-typescript-log-verbosity "off")
+
+  ;; eslint
+  (lsp-eslint-run "onSave")
+  (lsp-eslint-package-manager "yarn")
+  (lsp-eslint-server-command (if (file-directory-p "~/sky")
+				 '("node"
+				   "/Users/adh23/.vscode/extensions/dbaeumer.vscode-eslint-2.1.23/server/out/eslintServer.js"
+				   "--stdio")
+			       '("node"
+				 "/Users/adam/.vscode/extensions/dbaeumer.vscode-eslint-2.1.8/server/out/eslintServer.js"
+				 "--stdio"))))
 
 (use-package lsp-ui
+  :disabled
   :commands (lsp-ui-imenu)
   :hook (lsp-mode . lsp-ui-mode)
   :bind ("C-c C-k" . my/lsp-ui-doc-glance) ; just a test binding
@@ -1033,6 +1089,17 @@ _s_kip
   :config
   (setq typescript-indent-level 2))
 
+(use-package js2-mode
+  :custom
+  ;; Don't use built-in syntax checking
+  (js2-mode-show-strict-warnings nil)
+  (js2-mode-show-parse-errors nil)
+  (js2-strict-trailing-comma-warning nil)
+  (js2-strict-missing-semi-warning nil)
+  (js2-strict-inconsistent-return-warning nil)
+  (js2-strict-cond-assign-warning nil)
+  (js2-strict-var-redeclaration-warning nil))
+
 (use-package rjsx-mode
   :mode "\\.jsx?\\'"
   :interpreter "node"
@@ -1044,12 +1111,10 @@ _s_kip
   ;; doom-nord
   (js2-object-property ((t (:foreground "#ECEFF4"))))
   :config
-  (add-hook 'rjsx-mode-hook #'js2-minor-mode)
-
-  ;; Don't use built-in syntax checking
-  (setq js2-mode-show-strict-warnings nil))
+  (add-hook 'rjsx-mode-hook #'js2-minor-mode))
 
 (use-package js2-refactor
+  :disabled
   :hook ((web-mode rjsx-mode typescript-mode) . js2-refactor-mode))
 
 (use-package web-mode
@@ -1072,15 +1137,18 @@ _s_kip
     ;; (flycheck-add-next-checker 'lsp 'javascript-eslint)
     ;; (flycheck-add-next-checker 'javascript-eslint 'css-stylelint)
 
+    (setq web-mode-code-indent-offset 2)
+    (setq web-mode-markup-indent-offset 2)
     (setq web-mode-enable-auto-closing t)
-    (setq web-mode-enable-auto-quoting nil)
-    (setq web-mode-markup-indent-offset 2)))
+    (setq web-mode-enable-auto-quoting nil)))
 
 (use-package jest
   :hook ((rjsx-mode web-mode typescript-mode) . jest-minor-mode)
   :custom (jest-executable "yarn test"))
 
 (use-package prettier-js
+  :custom
+  (prettier-js-show-errors "None")
   :hook ((rjsx-mode web-mode typescript-mode json-mode markdown-mode) . prettier-js-mode))
 
 ;;;; Scala
@@ -1196,8 +1264,7 @@ _s_kip
               (set (make-local-variable 'comment-start) "# ")
               (set (make-local-variable 'comment-end) ""))))
 
-(use-package rustic
-  :defer 60)
+(use-package rustic)
 
 (use-package dockerfile-mode
   :defer t)
@@ -1238,12 +1305,30 @@ _s_kip
 ;;                          (lsp))))
 
 (use-package flycheck
+  :commands (my|eslint-fix-file-and-revert)
   :custom
   (flycheck-check-syntax-automatically '(idle-buffer-switch save mode-enabled))
   :hook (prog-mode . flycheck-mode)
+  :config
+  (defun my|eslint-fix-file ()
+    "Run eslint --fix on current file."
+    (interactive)
+    (message (concat "eslint --fixing " (buffer-file-name) " using"))
+    (save-buffer)
+    (shell-command
+     (concat "cd " (projectile-project-root) " && node_modules/eslint/bin/eslint.js"
+	     (cond ((file-exists-p "./.eslintrc.js") " --config ./.eslintrc.js")
+		   ((file-exists-p "./.eslintrc.yml") " --config ./.eslintrc.yml"))
+	     " --fix " (buffer-file-name))))
+
+  (defun my|eslint-fix-file-and-revert ()
+    (interactive)
+    (my|eslint-fix-file)
+    (revert-buffer t t))
+
   :general
   (my-leader-def
-    "ef" 'my/eslint-fix-file-and-revert
+    "ef" 'my/eslint-fix-file
     "en" 'flycheck-next-error
     "ep" 'flycheck-previous-error
     "el" 'flycheck-list-errors
@@ -1437,13 +1522,15 @@ _s_kip
     "na" 'org-agenda
     "nb" 'org-switchb
     "nl" 'org-store-link)
-  
+
   :config
   ;; read gpg encrypted files
   (unless (string-match-p "\\.gpg" org-agenda-file-regexp)
     (setq org-agenda-file-regexp
 	  (replace-regexp-in-string "\\\\\\.org" "\\\\.org\\\\(\\\\.gpg\\\\)?"
 				    org-agenda-file-regexp)))
+
+  (use-package ob-typescript)
 
   (org-babel-do-load-languages 'org-babel-load-languages '((shell . t) ; allow bash
 							   (js . t)
@@ -1511,9 +1598,6 @@ _s_kip
 	      :map org-mode-map
 	      (("C-c n i" . org-roam-node-insert))))
 
-(use-package ob-typescript
-  :after org)
-
 (use-package ob-js
   :straight nil
   :after org
@@ -1534,6 +1618,7 @@ _s_kip
   (evil-org-agenda-set-keys))
 
 (use-package org-alert
+  :disabled
   :straight (org-alert :local-repo "~/emacs/elisp/org-alert")
   :defer 30
   :config
@@ -1565,15 +1650,15 @@ _s_kip
 
 ;;; Own scripts and packages
 
-(use-package my-gui-controls
-  :if (window-system)
-  :straight (my-gui-controls :local-repo "~/emacs/elisp/my-gui-controls")
-  :general
-  (general-def :keymaps 'override
-    "C-s-<f8>" 'my/close-notifications-mac
-    "C-M-<left>" 'frame-half-size-left
-    "C-M-<right>" 'frame-half-size-right
-    "C-M-<return>" 'toggle-frame-maximized))
+;; (use-package my-gui-controls
+;;   :if (window-system)
+;;   :straight (my-gui-controls :local-repo "~/emacs/elisp/my-gui-controls")
+;;   :general
+;;   (general-def :keymaps 'override
+;;     "C-s-<f8>" 'my/close-notifications-mac
+;;     "C-M-<left>" 'frame-half-size-left
+;;     "C-M-<right>" 'frame-half-size-right
+;;     "C-M-<return>" 'toggle-frame-maximized))
 
 ;; reset gc to something sensible for normal operation
 (setq gc-cons-threshold (* 2 1000 1000))

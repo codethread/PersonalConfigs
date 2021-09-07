@@ -29,7 +29,8 @@ alias ctags="`brew --prefix`/bin/ctags"
 alias grep='grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}'
 
 alias ls='ls -pGF'
-alias l='ls -lah'
+# alias l='ls -lah'
+alias l='exa -lah'
 alias lc='colorls -A --sd --gs'
 
 alias pathis='echo $PATH | tr -s ":" "\n"'

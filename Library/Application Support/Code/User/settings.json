@@ -210,4 +210,12 @@
       "my-blog-275207"
     ]
   },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "files.autoSave": "onFocusChange",
+  "files.associations": {
+    ".eslintrc": "jsonc"
+  },
+  "editor.formatOnSave": true,
 }
