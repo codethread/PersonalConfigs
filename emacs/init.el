@@ -57,6 +57,21 @@
   :config
   (general-evil-setup t)
 
+  (defun my/open-scratch-buffer ()
+    "Open the *scratch* buffer."
+    (interactive)
+    (switch-to-buffer "*scratch*"))
+
+  (defun my/open-messages-buffer ()
+    "Open the *Messages* buffer."
+    (interactive)
+    (switch-to-buffer "*Messages*"))
+
+  (defun my/open-init-file ()
+    "Open my init.el buffer."
+    (interactive)
+    (find-file (concat user-emacs-directory "/init.el")))
+
   (general-create-definer my-leader-def
     :prefix "SPC"
     :keymaps 'override
@@ -77,6 +92,13 @@
     "f" '(:ignore t :wk "Files")
     "g" '(:ignore t :wk "Global")
     "n" '(:ignore t :wk "Notes")
+
+    "o" '(:ignore t :wk "Open")
+    "os" 'my/open-scratch-buffer
+    "om" 'my/open-messages-buffer
+    "oi" 'my/open-init-file
+    "ot" 'vterm
+
     "p" '(:ignore t :wk "Projects")
     "s" '(:ignore t :wk "Search")
     "t" '(:ignore t :wk "Term")
@@ -176,7 +198,6 @@
 
   (setq indent-tabs-mode nil
 	read-process-output-max (* 2 1024 1024) ; increase performance: https://emacs-lsp.github.io/lsp-mode/page/performance/
-	;; line-number-display-limit 1	; no line numbers in modeline
 
 	ring-bell-function #'ignore
 	visible-bell t
@@ -346,7 +367,7 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
 
 (use-package electric-pair-mode
   :straight nil
-  :hook (prog-mode . electric-pair-mode))
+  :hook ((prog-mode) . electric-pair-mode))
 
 (use-package xwidget
   :straight nil
@@ -430,7 +451,7 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
 (use-package rainbow-delimiters
   :disabled
   :hook
-  ((json-mode web-mode css-mode rjsx-mode typescript-mode scala-mode java-mode) . rainbow-delimiters-mode))
+  ((web-mode typescript-mode scala-mode java-mode) . rainbow-delimiters-mode))
 
 (use-package expand-region
   :general
@@ -518,7 +539,7 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
   :if (memq window-system '(mac ns)))
 
 (use-package nameless
-  :hook (emacs-lisp . nameless-mode))
+  :hook (emacs-lisp-mode . nameless-mode))
 
 (use-package super-save
   :custom
@@ -682,8 +703,6 @@ _s_kip
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config)
 
-  ;; (font-family-list) is helpful
-
   (custom-set-faces
    `(default ((t (:font "FiraCode Nerd Font" :height 120))))
    ;; :height should be a float to adjust the relative size to the normal default font
@@ -697,16 +716,19 @@ _s_kip
 (use-package all-the-icons)
 
 (use-package doom-modeline
-  :disabled
   :hook (after-init . doom-modeline-mode)
+  :custom
+  (doom-modeline-height 20)
+  (doom-modeline-env-version t)
+  (doom-modeline-modal-icon t)
+  (doom-modeline-vcs-max-length 24)
+  ;; doom-modeline-buffer-file-name-style 'truncate-except-project
+  (doom-modeline-buffer-file-name-style 'relative-from-project)
+  ;; Whether display buffer encoding.
+  (doom-modeline-buffer-encoding nil)
   :config
-  (setq doom-modeline-height 20
-	doom-modeline-env-version t
-	doom-modeline-modal-icon t
-	doom-modeline-vcs-max-length 24
-	doom-modeline-buffer-file-name-style 'truncate-except-project
-	;; Whether display buffer encoding.
-	doom-modeline-buffer-encoding nil))
+  (setq line-number-mode nil
+	size-indication-mode nil))
 
 (use-package ligature
   :straight (ligature :host github :repo "mickeynp/ligature.el")
@@ -731,7 +753,7 @@ _s_kip
                 "\\\\" "://")))
 
 (use-package tree-sitter
-  :disabled
+  ;; :disabled
   :hook ((prog-mode . global-tree-sitter-mode)
 	 (tree-sitter-after-on . tree-sitter-hl-mode))
   :commands (my/tree-sitter-hl)
@@ -747,9 +769,13 @@ _s_kip
       (progn
 	(message "turning syntax highlight on")
 	(tree-sitter-mode 't)
-	(tree-sitter-hl-mode 't))))
-  
-  (use-package tree-sitter-langs))
+	(tree-sitter-hl-mode 't)))))
+
+(use-package tree-sitter-langs
+  :after tree-sitter
+  :config
+  (tree-sitter-require 'tsx)
+  (add-to-list 'tree-sitter-major-mode-language-alist '(typescript-tsx-mode . tsx)))
 
 
 ;;; Projects / Navigation
@@ -841,14 +867,15 @@ _s_kip
     "gg" 'magit-status))
 
 (use-package git-gutter
-  :hook prog-mode
+  :custom
+  (git-gutter:visual-line t)
+  (git-gutter:hide-gutter t)
   :general
   (my-leader-def
     "G" '(hydra-git/body :wk "git-gutter"))
   :hydra
   (hydra-git
-   (:hint nil
-	  :post my/gutter-close-git-diff)
+   (:hint nil :post my/gutter-close-git-diff)
    "git-gutter"
    ("q" nil "quit" :color blue)
    ("r" git-gutter:update-all-windows "refresh")
@@ -857,11 +884,45 @@ _s_kip
    ("d" git-gutter:popup-hunk "diff")
    ("x" git-gutter:revert-hunk "revert hunk"))
   :config
+  (global-git-gutter-mode 1)
   (defun my/gutter-close-git-diff ()
     "Close git-gutter diff if open"
     (interactive)
     (when (-contains? (window-list) (git-gutter:popup-buffer-window))
       (delete-window (git-gutter:popup-buffer-window)))))
+
+(use-package git-gutter-fringe
+  :if window-system
+  :after git-gutter
+  :init
+  ;; turn off git-gutter
+  (global-git-gutter-mode 0)
+  :config
+  ;; now enable the git-gutter from fringe mode
+  (global-git-gutter-mode 1)
+
+  (dolist (icon '(git-gutter-fr:added git-gutter-fr:deleted git-gutter-fr:modified))
+    (fringe-helper-define icon nil
+      "XX....."
+      "XX....."
+      "XX....."
+      "XX....."
+      "XX....."
+      "XX....."
+      "XX....."
+      "XX....."
+      "XX....."
+      "XX....."
+      "XX....."
+      "XX....."
+      "XX....."
+      "XX....."
+      "XX....."))
+
+  (custom-set-faces
+   `(git-gutter-fr:added	((t (:foreground ,(doom-color 'teal)))))
+   `(git-gutter-fr:deleted	((t (:foreground ,(doom-color 'orange)))))
+   `(git-gutter-fr:modified	((t (:foreground ,(doom-color 'base6)))))))
 
 (use-package forge
   :after magit
@@ -935,7 +996,8 @@ _s_kip
 
   (my-leader-def
     ";" '(counsel-M-x :wk "M-x")
-    ":" '(counsel-command-history :wk "command history")
+    ;; ":" '(counsel-command-history :wk "command history")
+    ":" 'eval-expression
     "ff" 'counsel-find-file
     "fr" 'counsel-recentf
     "fo" 'counsel-outline
@@ -1005,22 +1067,23 @@ _s_kip
 	 ;; if lsp is active
 	 (bound-and-true-p lsp-mode) 'lsp-describe-thing-at-point))
 
+
 (use-package lsp-mode
   :commands lsp
   :init
   ;; get from https://github.com/elixir-lsp/elixir-ls/releases
   (add-to-list 'exec-path "~/.tooling/elixir-ls-1.11/")
   :hook
-  ((typescript-mode rjsx-mode web-mode scala-mode java-mode elixir-mode) . lsp)
+  ((web-mode typescript-mode scala-mode java-mode elixir-mode) . lsp)
   (lsp-mode . lsp-enable-which-key-integration)
   ;; :general
   ;; (nmap "gh" 'lsp-describe-thing-at-point)
   :custom
   ;; general
-  (lsp-auto-execute-action 'nil)
+  (lsp-auto-execute-action '())
   (lsp-headerline-breadcrumb-enable nil)
   (lsp-disabled-clients '((json-mode . eslint)))
-  (lsp-enable-file-watchers 'nil)
+  (lsp-enable-file-watchers '())
   ;; rust
   (lsp-rust-server 'rust-analyzer)
 
@@ -1029,15 +1092,14 @@ _s_kip
   (lsp-clients-typescript-log-verbosity "off")
 
   ;; eslint
-  (lsp-eslint-run "onSave")
+  ;; (lsp-eslint-run "onSave")
+  (lsp-eslint-run "onType")
   (lsp-eslint-package-manager "yarn")
-  (lsp-eslint-server-command (if (file-directory-p "~/sky")
-				 '("node"
-				   "/Users/adh23/.vscode/extensions/dbaeumer.vscode-eslint-2.1.23/server/out/eslintServer.js"
-				   "--stdio")
-			       '("node"
-				 "/Users/adam/.vscode/extensions/dbaeumer.vscode-eslint-2.1.8/server/out/eslintServer.js"
-				 "--stdio"))))
+  (lsp-eslint-server-command
+   (list "node"
+	 (expand-file-name
+	  (car (file-expand-wildcards "~/.vscode/extensions/dbaeumer.vscode-eslint-*/server/out/eslintServer.js")))
+	 "--stdio")))
 
 (use-package lsp-ui
   :disabled
@@ -1056,11 +1118,11 @@ _s_kip
     (lsp-ui-doc-show)
     (add-hook 'pre-command-hook 'lsp-ui-doc--glance-hide-frame))
   :custom
-  (lsp-ui-doc-header 'nil) ; looks shit
-  (lsp-ui-sideline-enable 'nil) ; bloody overwhelming
-  (lsp-ui-doc-use-webkit 'nil) ; don't be tempted by this, unless you really want to configure it
-  (lsp-ui-doc-include-signature 'nil) ; eldoc does a better job of this
-  (lsp-ui-doc-show-with-cursor 'nil) ; use keybinding instead or mouse
+  (lsp-ui-doc-header '())		; looks shit
+  (lsp-ui-sideline-enable '())		; bloody overwhelming
+  (lsp-ui-doc-use-webkit '()) ; don't be tempted by this, unless you really want to configure it
+  (lsp-ui-doc-include-signature '()) ; eldoc does a better job of this
+  (lsp-ui-doc-show-with-cursor '())  ; use keybinding instead or mouse
   (lsp-ui-imenu--custom-mode-line-format "lsp-ui-menu")
   (lsp-ui-doc-border "brightblack")
   (lsp-ui-doc-position 'at-point))
@@ -1079,18 +1141,16 @@ _s_kip
   :hook
   (web-mode)
   (typescript-mode)
-  (css-mode)
-  (rjsx-mode))
-
-(use-package typescript-mode
-  :mode "\\.ts\\'"
-  :custom
-  (js-indent-level 2)
-  :config
-  (setq typescript-indent-level 2))
+  (css-mode))
 
 (use-package js2-mode
+  :general
+  (general-def :states 'insert :keymaps 'js2-minor-mode-map
+    "RET" 'js2-line-break)
   :custom
+  (js-chain-indent t)
+  (js-indent-level 2)
+  ;(js2-highlight-level 3)
   ;; Don't use built-in syntax checking
   (js2-mode-show-strict-warnings nil)
   (js2-mode-show-parse-errors nil)
@@ -1098,32 +1158,32 @@ _s_kip
   (js2-strict-missing-semi-warning nil)
   (js2-strict-inconsistent-return-warning nil)
   (js2-strict-cond-assign-warning nil)
-  (js2-strict-var-redeclaration-warning nil))
-
-(use-package rjsx-mode
-  :mode "\\.jsx?\\'"
-  :interpreter "node"
-  :custom-face
-  ;; doom-one
-  ;; (rjsx-tag ((t (:slant italic :foreground "#c678dd"))))
-  ;; (rjsx-attr ((t (:foreground "#ECBE7B"))))
-
-  ;; doom-nord
-  (js2-object-property ((t (:foreground "#ECEFF4"))))
-  :config
-  (add-hook 'rjsx-mode-hook #'js2-minor-mode))
+  (js2-strict-var-redeclaration-warning nil)
+  :hook
+  ((web-mode typescript-mode) . js2-minor-mode))
 
 (use-package js2-refactor
   :disabled
-  :hook ((web-mode rjsx-mode typescript-mode) . js2-refactor-mode))
+  :hook ((web-mode typescript-mode) . js2-refactor-mode))
+
+(use-package typescript-mode
+  :interpreter "node"
+  :mode "\\.ts\\'"
+  :mode "\\.js\\'"
+  :custom
+  (typescript-indent-level 2))
+
+(use-package typescript-tsx-mode
+  :load-path "~/emacs/elisp/typescript-tsx-mode"
+  :straight nil
+  :mode "\\.tsx\\'"
+  :mode "\\.jsx\\'")
 
 (use-package web-mode
-  :mode "\\.tsx\\'"
   :mode "\\.ejs\\'"
   :config
   (setq-default web-mode-comment-formats
-		'(("javascript" . "//")
-		  ("typescript" . "//")))
+		'(("javascript" . "//")))
 
   (add-hook 'web-mode-hook #'my/web-mode-settings)
 
@@ -1143,13 +1203,22 @@ _s_kip
     (setq web-mode-enable-auto-quoting nil)))
 
 (use-package jest
-  :hook ((rjsx-mode web-mode typescript-mode) . jest-minor-mode)
+  :hook ((web-mode typescript-mode) . jest-minor-mode)
   :custom (jest-executable "yarn test"))
 
 (use-package prettier-js
   :custom
   (prettier-js-show-errors "None")
-  :hook ((rjsx-mode web-mode typescript-mode json-mode markdown-mode) . prettier-js-mode))
+  :config
+  (defun my-prettier ()
+    "Runs prettier, which can then be called from a hook. Not sure
+why but the original mode doesn't work very well"
+    (prettier-js))
+
+  (defun prettier-js-save-hook ()
+    (add-hook 'before-save-hook #'my-prettier nil 'local))
+
+  :hook ((web-mode typescript-mode json-mode) . prettier-js-save-hook))
 
 ;;;; Scala
 
@@ -1250,7 +1319,11 @@ _s_kip
 ;;;; Others
 
 (use-package json-mode
-  :mode "\\.json\\'")
+  :mode "\\.json\\'"
+  :config
+  ;; TODO tidy this, as I imagine it runs every init
+  (defconst json-mode-comments-re (rx (group "//" (zero-or-more nonl) line-end)))
+  (push (list json-mode-comments-re 1 font-lock-comment-face) json-font-lock-keywords-1))
 
 (use-package yaml-mode
   :defer t)
@@ -1307,6 +1380,7 @@ _s_kip
 (use-package flycheck
   :commands (my|eslint-fix-file-and-revert)
   :custom
+  (flycheck-indication-mode 'right-fringe)
   (flycheck-check-syntax-automatically '(idle-buffer-switch save mode-enabled))
   :hook (prog-mode . flycheck-mode)
   :config
@@ -1404,8 +1478,8 @@ _s_kip
 
 (use-package org
   :init
-  (defvar org-directory "~/Dropbox/roam")
-  (defvar org-default-notes-file (expand-file-name "~/Dropbox/roam/20210614152805-dump.org.gpg"))
+  (setq org-directory "~/Dropbox/roam")
+  (setq org-default-notes-file (expand-file-name "~/Dropbox/roam/20210614152805-dump.org"))
   :hook
   (org-mode . auto-fill-mode)
   (org-mode . flyspell-mode)
@@ -1576,11 +1650,11 @@ _s_kip
   (org-roam-capture-templates
    '(("d" "default" plain
       "%?"
-      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n\n")
       :unnarrowed t)
      ("s" "secure" plain
       "%?"
-      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org.gpg" "#+title: ${title}\n")
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org.gpg" "#+title: ${title}\n\n")
       :unnarrowed t)))
   :config
   (org-roam-setup)

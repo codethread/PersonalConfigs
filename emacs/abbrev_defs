@@ -1,0 +1,15 @@
+;;-*-coding: utf-8;-*-
+(define-abbrev-table 'global-abbrev-table
+  '(
+    ("U" "Unity" nil :count 0)
+    ("bc" "because" nil :count 2)
+    ("dep" "dependency" nil :count 1)
+    ("deps" "dependencies" nil :count 2)
+    ("dyna" "Dynatrace" nil :count 2)
+    ("js" "JavaScript" nil :count 2)
+    ("node" "Node" nil :count 1)
+    ("parens" "parentheses" nil :count 1)
+    ("sk" "Skyport" nil :count 2)
+    ("ts" "TypeScript" nil :count 0)
+   ))
+

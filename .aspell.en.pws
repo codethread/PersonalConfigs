@@ -1,4 +1,4 @@
-personal_ws-1.1 en 53 
+personal_ws-1.1 en 57 
 Applicative
 Applicatives
 Atomicity
@@ -20,6 +20,7 @@ Monads
 Nvim
 OAuth
 OOP
+PR's
 Pinterest
 REPL
 SOIP
@@ -37,6 +38,7 @@ deps
 dired
 elisp
 env
+eslint
 falsy
 flycheck
 gpg
@@ -51,4 +53,6 @@ param
 params
 repo
 testcafe
+theming
 truthy
+webpack
