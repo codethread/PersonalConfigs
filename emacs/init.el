@@ -224,6 +224,12 @@
   (unless (window-system)
     (set-display-table-slot standard-display-table 'vertical-border (make-glyph-code ?┃))))
 
+;; (use-package fringe
+;;   :if (window-system)
+;;   :straight nil
+;;   :config
+;;   (fringe-mode '(4 . 4)))
+
 (use-package font-lock
   :straight nil
   :custom
@@ -541,13 +547,29 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
 (use-package nameless
   :hook (emacs-lisp-mode . nameless-mode))
 
-(use-package super-save
-  :custom
-  (super-save-idle-duration 300) 	; in seconds
-  (super-save-auto-save-when-idle t)
+;; (use-package super-save
+;;   :custom
+;;   (super-save-idle-duration 300) 	; in seconds
+;;   (super-save-auto-save-when-idle t)
+;;   (super-save-hook-triggers nil)
+;;   :config
+;;   (setq auto-save-default nil)
+;;   (super-save-mode +1))
+
+(use-package my-auto-save
+  :disabled 				; this is clashing with
+					; prettier, not sure why but
+					; it's like it save too many
+					; files, or tries to format
+					; the wrong thing. Popwin
+					; exagerates the issue but
+					; it's mainly between prettier
+					; and auto-save
+  :straight nil
+  :load-path "~/emacs/elisp/my-auto-save"
+  :after projectile
   :config
-  (setq auto-save-default nil)
-  (super-save-mode +1))
+  (my-auto-save-mode +1))
 
 (use-package popwin
   :custom
@@ -564,6 +586,7 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
     vterm-mode
     ;; lsp and flycheck
     "*Flycheck errors*"
+    " *LV*"
     ;; VC
     ;; "*vc-diff*"
     ;; "*vc-change-log*"
@@ -785,6 +808,11 @@ _s_kip
   :custom
   (projectile-completion-system 'ivy)
   (projectile-indexing-method 'hybrid) ; use git whilst honoring .projectile ignores
+  (projectile-globally-ignored-directories '(".idea" ".vscode" ".ensime_cache" ".eunit"
+					     ".git" ".hg" ".fslckout" "_FOSSIL_" ".bzr"
+					     "_darcs" ".tox" ".svn" ".stack-work"
+					     ".ccls-cache" ".cache" ".clangd"
+					     ".yarn/cache"))
   :init
   (if (file-directory-p "~/sky")
       (setq projectile-project-search-path '("~/dev" "~/sky"))
@@ -819,20 +847,26 @@ _s_kip
   (projectile-mode)
 
   (projectile-register-project-type 'yarn '("yarn.lock")
-				    :compile "yarn"
+				    :project-file "package.json"
+				    :install "yarn install"
+				    :compile "yarn build"
 				    :test "yarn test"
 				    :run "yarn start"
-				    :test-suffix ".test")
+				    :test-suffix ".spec")
+
   (projectile-register-project-type 'npm '("package-lock.json")
 				    :compile "npm i"
 				    :test "npm test"
 				    :run "npm start"
 				    :test-suffix "_test")
-  (projectile-register-project-type 'gradle '("build.gradle")
-				    :compile "npm i"
-				    :test "npm test"
-				    :run "npm start"
-				    :test-suffix "Test"))
+
+  (projectile-register-project-type 'idris '("build.gradle" "yarn.lock")
+				    :project-file "package.json"
+				    :install "yarn install"
+				    :compile "yarn build"
+				    :test "yarn test"
+				    :run "yarn start"
+				    :test-suffix ".test"))
 
 ;; (use-package my-projectile-fns
 ;;   :after projectile
@@ -1010,8 +1044,7 @@ _s_kip
   ;;   "gh" '(counsel-org-goto-all :wk "find heading")
   ;;   "gH" '(counsel-org-goto :wk "find heading in all"))
   :custom
-  ;; ((counsel-find-file-ignore-regexp "(.|..)"))
-  (counsel-find-file-ignore-regexp "\\(.elc\\|..\\|.yarn/cache\\)"))
+  (counsel-find-file-ignore-regexp "(.|..|.elc)"))
 
 (use-package smex
   :after counsel)
@@ -1180,6 +1213,7 @@ _s_kip
   :mode "\\.jsx\\'")
 
 (use-package web-mode
+  ;; still need web-mode stuff as typescript-tsx-mode is actually derived from it
   :mode "\\.ejs\\'"
   :config
   (setq-default web-mode-comment-formats
@@ -1210,15 +1244,7 @@ _s_kip
   :custom
   (prettier-js-show-errors "None")
   :config
-  (defun my-prettier ()
-    "Runs prettier, which can then be called from a hook. Not sure
-why but the original mode doesn't work very well"
-    (prettier-js))
-
-  (defun prettier-js-save-hook ()
-    (add-hook 'before-save-hook #'my-prettier nil 'local))
-
-  :hook ((web-mode typescript-mode json-mode) . prettier-js-save-hook))
+  :hook ((web-mode typescript-mode json-mode) . prettier-js-mode))
 
 ;;;; Scala
 
@@ -1384,6 +1410,16 @@ why but the original mode doesn't work very well"
   (flycheck-check-syntax-automatically '(idle-buffer-switch save mode-enabled))
   :hook (prog-mode . flycheck-mode)
   :config
+  ;; simple clean line for flycheck errors in fringe
+  ;; arrows all look pixelated, and I haven't worked out how to use hidpi verison
+  (define-fringe-bitmap 'flycheck-fringe-bitmap-double-arrow
+    [#b000000000
+     #b000000000
+     #b000111111
+     #b000111111
+     #b000000000
+     #b000000000])
+
   (defun my|eslint-fix-file ()
     "Run eslint --fix on current file."
     (interactive)
@@ -1407,7 +1443,6 @@ why but the original mode doesn't work very well"
     "ep" 'flycheck-previous-error
     "el" 'flycheck-list-errors
     "ee" 'flycheck-buffer
-    ;; "ee" 'flycheck-display-error-at-point ;; not sure?
     "eh" 'flycheck-explain-error-at-point ;; not sure?
     "ei" 'flycheck-verify-setup))
 
