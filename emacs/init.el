@@ -22,6 +22,7 @@
 
 (setq straight-use-package-by-default t)
 (setq use-package-verbose t)
+;; (setq use-package-always-defer t)
 
 (use-package use-package-ensure-system-package
   :straight t)
@@ -345,7 +346,8 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
   :custom (dired-listing-switches "-Algho --group-directories-first")
 
   :general
-  (nmap "-" 'dired-jump)
+  (my-leader-def
+    "od" 'dired-jump)
   (nmap
     :keymaps 'dired-mode-map
     "h" 'dired-single-up-directory
@@ -572,6 +574,7 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
   (my-auto-save-mode +1))
 
 (use-package popwin
+  :disabled
   :custom
   (popwin:special-display-config
    '(;; Emacs
@@ -1018,6 +1021,11 @@ _s_kip
 (use-package flx
   :after ivy)
 
+(use-package ivy-xref
+  :after ivy
+  :init
+  (setq xref-show-definitions-function #'ivy-xref-show-defs))
+
 (use-package counsel
   ;; :bind (:map minibuffer-local-map
   ;; 	 ("C-r" . 'counsel-minibuffer-history))
@@ -1125,14 +1133,16 @@ _s_kip
   (lsp-clients-typescript-log-verbosity "off")
 
   ;; eslint
+  ;; XXX: turning off for now and trying eslint_d as a flycheck fixer instead
   ;; (lsp-eslint-run "onSave")
-  (lsp-eslint-run "onType")
-  (lsp-eslint-package-manager "yarn")
-  (lsp-eslint-server-command
-   (list "node"
-	 (expand-file-name
-	  (car (file-expand-wildcards "~/.vscode/extensions/dbaeumer.vscode-eslint-*/server/out/eslintServer.js")))
-	 "--stdio")))
+  ;; ;; (lsp-eslint-run "onType")
+  ;; (lsp-eslint-package-manager "yarn")
+  ;; (lsp-eslint-server-command
+  ;;  (list "node"
+  ;; 	 (expand-file-name
+  ;; 	  (car (file-expand-wildcards "~/.vscode/extensions/dbaeumer.vscode-eslint-*/server/out/eslintServer.js")))
+  ;; 	 "--stdio")))
+  )
 
 (use-package lsp-ui
   :disabled
@@ -1204,13 +1214,27 @@ _s_kip
   :mode "\\.ts\\'"
   :mode "\\.js\\'"
   :custom
-  (typescript-indent-level 2))
+  (typescript-indent-level 2)
+  :config
+  (defun my/ts-mode-settings ()
+    "Hook for ts mode."
+    ;; (setq flycheck-checker 'javascript-eslint)
+    (flycheck-add-next-checker 'lsp 'javascript-eslint))
+  
+  :hook ((typescript-mode) . my/ts-mode-settings))
 
 (use-package typescript-tsx-mode
   :load-path "~/emacs/elisp/typescript-tsx-mode"
   :straight nil
   :mode "\\.tsx\\'"
-  :mode "\\.jsx\\'")
+  :mode "\\.jsx\\'"
+  :config
+  (defun my/tsx-mode-settings ()
+    "Hook for ts mode."
+    (flycheck-add-mode 'javascript-eslint 'typescript-tsx-mode)
+    ;; (setq flycheck-checker 'javascript-eslint)
+    (flycheck-add-next-checker 'lsp 'javascript-eslint))
+  :hook ((typescript-tsx-mode) . my/tsx-mode-settings))
 
 (use-package web-mode
   ;; still need web-mode stuff as typescript-tsx-mode is actually derived from it
@@ -1225,10 +1249,10 @@ _s_kip
     "Hooks for Web mode."
     (interactive)
     ;; (flycheck-add-mode 'css-stylelint 'web-mode)
-    ;; (flycheck-add-mode 'javascript-eslint 'web-mode)
+    (flycheck-add-mode 'javascript-eslint 'web-mode)
 
-    ;; (setq flycheck-checker 'javascript-eslint)
-    ;; (flycheck-add-next-checker 'lsp 'javascript-eslint)
+    (setq flycheck-checker 'javascript-eslint)
+    (flycheck-add-next-checker 'lsp 'javascript-eslint)
     ;; (flycheck-add-next-checker 'javascript-eslint 'css-stylelint)
 
     (setq web-mode-code-indent-offset 2)
@@ -1242,6 +1266,8 @@ _s_kip
 
 (use-package prettier-js
   :custom
+  ;; this is cool but can't get it to respect .prettierrc, and it's pretty fast
+  ;; (prettier-js-command "prettier_d_slim")
   (prettier-js-show-errors "None")
   :config
   :hook ((web-mode typescript-mode json-mode) . prettier-js-mode))
@@ -1284,12 +1310,14 @@ _s_kip
   :disabled
   :straight nil)
 
+(use-package groovy-mode)
+
 ;;;; lisp
 
 (use-package elisp-mode
   :straight nil
   :hook (emacs-lisp-mode . (lambda () (when (fboundp 'electric-pair-mode)
-			       (electric-pair-mode -1))))
+					(electric-pair-mode -1))))
   :config
   (defun my/elisp-fold ()
     (interactive)
@@ -1407,7 +1435,9 @@ _s_kip
   :commands (my|eslint-fix-file-and-revert)
   :custom
   (flycheck-indication-mode 'right-fringe)
-  (flycheck-check-syntax-automatically '(idle-buffer-switch save mode-enabled))
+  ;; (flycheck-check-syntax-automatically '(idle-buffer-switch save mode-enabled))
+  (flycheck-check-syntax-automatically '(idle-buffer-switch new-line mode-enabled idle-change))
+  (flycheck-javascript-eslint-executable "eslint_d")
   :hook (prog-mode . flycheck-mode)
   :config
   ;; simple clean line for flycheck errors in fringe
@@ -1475,7 +1505,8 @@ _s_kip
 	(flyspell-do-correct 'save nil (car word) current-location (cadr word) (caddr word) current-location)))))
 
 (use-package flyspell-correct-ivy
-  :after (flyspell ivy))
+  :defer t
+  :after (:all (flyspell ivy)))
 
 (use-package markdown-mode
   :defer t
