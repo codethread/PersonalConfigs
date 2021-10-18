@@ -54,7 +54,7 @@ require('telescope').load_extension('fzf')
 -- vim.cmd 'source ~/.config/nvim/keymap.vim'
 
 local tele = require('telescope.builtin')
-nnoremap { '<leader><leader>', function() tele.find_files() end }
+nnoremap { '<leader><leader>', function() tele.find_files({ hidden = true }) end }
 nnoremap { '<leader>h', function() tele.help_tags() end }
 nnoremap { '<leader>bl', function() tele.buffers() end }
 nnoremap { '<leader>sf', function() tele.live_grep() end }
@@ -75,6 +75,57 @@ require'nvim-treesitter.configs'.setup {
     },
   },
 }
+
+local cmp = require'cmp'
+
+  cmp.setup({
+    snippet = {
+      expand = function(args)
+        -- For `vsnip` user.
+        vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` user.
+
+        -- For `luasnip` user.
+        -- require('luasnip').lsp_expand(args.body)
+
+        -- For `ultisnips` user.
+        -- vim.fn["UltiSnips#Anon"](args.body)
+      end,
+    },
+    mapping = {
+      ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+      ['<C-f>'] = cmp.mapping.scroll_docs(4),
+      ['<C-Space>'] = cmp.mapping.complete(),
+      ['<C-e>'] = cmp.mapping.close(),
+      ['<CR>'] = cmp.mapping.confirm({ select = true }),
+    },
+    sources = {
+      { name = 'nvim_lsp' },
+
+      -- For vsnip user.
+      { name = 'vsnip' },
+
+      -- For luasnip user.
+      -- { name = 'luasnip' },
+
+      -- For ultisnips user.
+      -- { name = 'ultisnips' },
+
+      { name = 'buffer' },
+    }
+  })
+
+
+
+local system_name
+if vim.fn.has("mac") == 1 then
+  system_name = "macOS"
+elseif vim.fn.has("unix") == 1 then
+  system_name = "Linux"
+elseif vim.fn.has('win32') == 1 then
+  system_name = "Windows"
+else
+  print("Unsupported system for sumneko")
+end
 
 local nvim_lsp = require("lspconfig")
 

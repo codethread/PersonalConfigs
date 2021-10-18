@@ -26,16 +26,130 @@
 
 ;;; Commentary:
 
-;; commentary
+;; Used to get nice highlighting with tree sitter. Need to get indent
+;; to work and start adding cool functions from web-mode
 
 ;;; Code:
-(require 'web-mode)
+;; (require 'typescript-mode)
+(require 'tree-sitter)
+(require 'tree-sitter-hl)
+(require 'tree-sitter-langs)
+(require 'tree-sitter-indent)
 
-(define-derived-mode typescript-tsx-mode web-mode "typescript[TSX]"
+(defcustom typescript-tsx-indent-offset 2
+  "Indent offset for typescript-tsx-mode."
+  :type 'integer
+  :group 'typescript-tsx)
+
+(defvar tree-sitter-indent-typescript-tsx-scopes
+  '((indent-all .
+		;; these nodes are always indented
+		(
+		 ;; arguments
+		 ;; statement_block
+		 ;; formal_parameters
+
+
+
+		 ;; ;; jsx_text
+		 ;; jsx_attribute
+
+		 ;; TODO this doesnt indent till after created
+
+
+		 "." 			; dot chaining
+
+		 ))
+    (indent-rest . ;; if parent node is one of this and node is not
+		 ;; first → indent
+		 (
+		  ;; arrow_function
+
+		  ;; jsx_opening_element
+		  jsx_element
+
+		  import_statement
+		  export_statement
+
+		  ;; export_clause
+		  ;; import_clause
+
+		  object_pattern
+		  array_pattern
+
+		  object
+		  array
+
+		  ;; export_clause
+		  ))
+    (indent-body . ;; if parent node is one of this and current node
+		   ;; is in middle → indent
+		 (
+		  statement_block
+		  formal_parameters
+		  ))
+    
+    (paren-indent . ;; if parent node is one of these → indent to
+		    ;; paren opener not done in the js world
+		  ())
+    ;; (align-char-to . ;; chaining char → node types we move parentwise
+    ;; 		     ;; to find the first chaining char
+    ;; 		   ((?. . (member_expression))))
+    (aligned-siblings . ;; siblings (nodes with same parent) should be
+			;; aligned to the first child
+		      (
+		       ;; function arguments
+		       required_parameter
+		       optional_parameter
+
+		       ;; export_clause
+
+		       ;; destructured
+		       ;; object_pattern
+		       shorthand_property_identifier_pattern
+		       ;; pair_pattern
+		       ;; jsx_attribute
+
+		       ))
+
+    (multi-line-text . ;; if node is one of this, then don't modify
+		       ;; the indent this is basically a peaceful way
+		       ;; out by saying "this looks like something
+		       ;; that cannot be indented using AST, so best I
+		       ;; leave it as-is"
+		     (comment))
+    (outdent . ;; these nodes always outdent (1 shift in opposite direction)
+	     ("}" ")" "]"
+	      jsx_closing_element)))
+  "Scopes for indenting in typescript-tsx.")
+
+;;;###autoload
+(define-derived-mode typescript-tsx-mode prog-mode "typescript-tsx"
   "Major mode for editing TSX files.
 
-Refer to Typescript documentation for syntactic differences
-between normal and TSX variants of Typescript.")
+WIP trying to create a major mode based off tree-sitter."
+  :group 'typescript-tsx
+
+  (setq-local indent-line-function #'tree-sitter-indent-line)
+
+  (setq font-lock-defaults '(nil))
+
+  (setq-local comment-start "// ")
+  (setq-local comment-start-skip "\\(?://+\\|/\\*+\\)\\s *")
+  (setq-local comment-end "")
+
+  ;; (tree-sitter-require 'tsx)
+  (tree-sitter-indent-mode)
+  (tree-sitter-hl-mode))
+
+(add-to-list 'tree-sitter-major-mode-language-alist '(typescript-tsx-mode . tsx))
+
+;; TODO not working yet
+
+;;;###autoload
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" . typescript-tsx-mode))
+;;;###autoload
+(add-to-list 'auto-mode-alist '("\\.jsx\\'" . typescript-tsx-mode))
 
 (provide 'typescript-tsx-mode)
 

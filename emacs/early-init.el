@@ -1,3 +1,6 @@
+;; garbage collection every 100MB (default is every 0.76MB)
+(setq gc-cons-threshold (* 1000 1000 1000))
+
 (global-set-key (kbd "C-x C-v") (lambda () (interactive) (find-file (concat user-emacs-directory "/init.el"))))
 
 (setq initial-frame-alist
@@ -5,6 +8,7 @@
 	(vertical-scroll-bars . nil)
 	(menu-bar-lines . 0)
 	(background-color . "#2E3440")
+	(foreground-color . "white")
 	(ns-transparent-titlebar . t)
 	(top . 150)
 	(left . 400)))
@@ -15,9 +19,6 @@
 (scroll-bar-mode -1)
 (tooltip-mode -1)
 (menu-bar-mode -1)
-
-;; garbage collection every 100MB (default is every 0.76MB)
-(setq gc-cons-threshold (* 100 1000 1000))
 
 (add-hook 'emacs-startup-hook #'my/print-init-time)
 

@@ -117,3 +117,5 @@ fi
     # export SDKMAN_DIR="/Users/adh23/.sdkman"
     # [[ -s "/Users/adh23/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/adh23/.sdkman/bin/sdkman-init.sh"
 # fnm
+
+alias luamake=/Users/adh23/.tooling/lua-language-server/3rd/luamake/luamake

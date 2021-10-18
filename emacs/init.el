@@ -5,6 +5,9 @@
 
 ;;; Package Manager setup --- inital setup of straight.el and use-package (plus complimentary packages)
 
+;; speeds up startup, but requires manual recompile, see 'emacs straight' notes
+(setq straight-check-for-modifications nil)
+
 (defvar bootstrap-version)
 (let ((bootstrap-file
       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -22,7 +25,7 @@
 
 (setq straight-use-package-by-default t)
 (setq use-package-verbose t)
-;; (setq use-package-always-defer t)
+(setq use-package-always-defer t)
 
 (use-package use-package-ensure-system-package
   :straight t)
@@ -52,6 +55,12 @@
   (exec-path-from-shell-variables '("PATH" "MANPATH" "SPOTIFY_TOKEN" "SLACK_SKY_EMACS_TOKEN"))
   :config
   (exec-path-from-shell-initialize))
+
+(use-package hydra
+  :demand t)
+
+(use-package use-package-hydra
+  :demand t)
 
 (use-package general
   :demand
@@ -119,11 +128,6 @@
     "w" '(:ignore t :wk "Window")
     "p" '(:ignore t :wk "Projectile")))
 
-(use-package hydra
-  :demand
-  :config
-  (use-package use-package-hydra))
-
 (use-package evil
   :demand
   :init
@@ -163,35 +167,43 @@
       (with-syntax-table table
 	ad-do-it)))
 
-  (evil-mode t)
+  (evil-mode t))
 
-  (use-package evil-collection
-    :after evil
-    :config
-    (setq my/evil-collection-disabled-modes '(lispy company))
-    (evil-collection-init
-     (seq-difference evil-collection--supported-modes my/evil-collection-disabled-modes)))
+(use-package evil-collection
+  :demand
+  :after evil
+  :config
+  (setq my/evil-collection-disabled-modes '(lispy company))
+  (evil-collection-init
+   (seq-difference evil-collection--supported-modes my/evil-collection-disabled-modes)))
 
-  (use-package evil-surround
-    :config
-    (global-evil-surround-mode 1))
+(use-package evil-surround
+  :demand
+  :after evil
+  :config
+  (global-evil-surround-mode 1))
 
-  (use-package evil-escape
-    :custom
-    (evil-escape-key-sequence "jk")
-    :config
-    (evil-escape-mode t))
+(use-package evil-escape
+  :demand
+  :after evil
+  :custom
+  (evil-escape-key-sequence "jk")
+  :config
+  (evil-escape-mode t))
 
-  (use-package evil-args
-    :config
-    ;; bind evil-args text objects
-    (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
-    (define-key evil-outer-text-objects-map "a" 'evil-outer-arg)))
+(use-package evil-args
+  :demand
+  :after evil
+  :config
+  ;; bind evil-args text objects
+  (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
+  (define-key evil-outer-text-objects-map "a" 'evil-outer-arg))
 
 
 ;;; Builtin configurations
 
 (use-package emacs
+  :demand
   :straight nil
   :config
   (defalias 'yes-or-no-p 'y-or-n-p)
@@ -232,16 +244,19 @@
 ;;   (fringe-mode '(4 . 4)))
 
 (use-package font-lock
+  :demand
   :straight nil
   :custom
   (font-lock-maximum-decoration t)) ; control amount of fontification, can be done per mode if slow
 
 (use-package help
+  :demand
   :straight nil
   :custom
   (help-window-select t))
 
 (use-package window
+  :demand
   :straight nil
   :general
   (my-leader-def
@@ -269,6 +284,7 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
 
 
 (use-package files
+  :demand
   :straight nil
   :general
   (my-leader-def
@@ -302,6 +318,7 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
 	    (kill-buffer)))))))
 
 (use-package "startup"
+  :demand
   :straight nil
   :custom
   (auto-save-list-file-prefix (concat user-temporary-file-directory ".auto-saves-"))
@@ -310,6 +327,7 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
   (initial-buffer-choice (lambda () (switch-to-buffer "*Messages*"))))
 
 (use-package vc-hooks
+  :demand
   :straight nil
   :custom
   (vc-follow-symlinks t))
@@ -324,6 +342,7 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
   :hook (prog-mode . show-paren-mode))
 
 (use-package compile
+  :demand
   :straight nil
   :custom
   (compilation-scroll-output t)
@@ -362,6 +381,7 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
     :hook (dired-mode . all-the-icons-dired-mode)))
 
 (use-package "paragraphs"
+  :demand
   :straight nil
   :custom
   ;; don't use double spaces in org files to indicate sentence ending - this may clash with other '.'s in words.
@@ -411,6 +431,7 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
     "gS" 'my/google-xwidget))
 
 (use-package epg-config
+  :demand
   ;; a.k.a: gpg epa
   :straight nil
   :custom
@@ -418,6 +439,7 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
   (epg-pinentry-mode 'loopback))
 
 (use-package password-cache
+  :demand
   :straight nil
   :custom
   ((password-cache-expiry (* 60 60 12))))
@@ -426,14 +448,12 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
 ;;; Lore friendly improvements
 
 (use-package restart-emacs
-  :defer t
   :commands restart-emacs)
 
 (use-package esup
   :disabled) ; doesn't work on v28 yet
 
 (use-package which-key
-  :demand
   :custom
   (which-key-prefix-prefix "")
   :custom-face
@@ -468,8 +488,8 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
   :hydra
   (hydra-expand-region (:hint nil)
    "expand-region"
-   ("h" er/expand-region "expand")
-   ("l" er/contract-region "shrink")))
+   ("k" er/expand-region "expand")
+   ("j" er/contract-region "shrink")))
 
 (use-package undo-tree
   :hook ((prog-mode org-mode) . global-undo-tree-mode)
@@ -492,6 +512,8 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
 
 (use-package fic-mode
   :hook (prog-mode)
+  :custom
+  (fic-highlighted-words '("FIXME" "TODO" "BUG" "XXX" "HACK"))
   :custom-face
   (fic-face ((t (:inherit warning :weight bold)))))
 
@@ -506,6 +528,10 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
   ((avy-background t)))
 
 (use-package ace-window
+  :custom
+  (aw-ignore-current t)
+  (aw-minibuffer-flag t)
+  (aw-keys '(?w ?e ?f ?j ?k ?l))
   :general
   (general-def :states '(normal visual emacs)
     "C-x o" 'ace-window
@@ -516,12 +542,9 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
   :commands
   (ace-win-swap ace-win-delete)
   :custom-face
-  (aw-leading-char-face ((t (:inherit error :weight bold))))
-  ;; (aw-leading-char-face ((t (:inherit warning :weight bold :height 2.0))))
+  ;; (aw-leading-char-face ((t (:inherit error :weight bold))))
+  (aw-leading-char-face ((t (:inherit error :weight bold :height 2.0))))
   :config
-  (setq aw-ignore-current t)
-  (setq aw-minibuffer-flag t)
-  (setq aw-keys '(?w ?e ?f ?j ?k ?l))
 
   (defun ace-win-delete ()
     (interactive)
@@ -544,7 +567,8 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
   :hook (emacs-lisp-mode . page-break-lines-mode))
 
 (use-package reveal-in-osx-finder
-  :if (memq window-system '(mac ns)))
+  :if (memq window-system '(mac ns))
+  :commands (reveal-in-osx-finder))
 
 (use-package nameless
   :hook (emacs-lisp-mode . nameless-mode))
@@ -627,14 +651,6 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
   :config
   (global-evil-matchit-mode t))
 
-(defun local/global-mode-line ()
-  "Generate a global mode line."
-  `(keymap (global . (menu-item
-		      ,(format-mode-line global-mode-string)
-		      ignore))))
-
-(advice-add 'tab-bar-make-keymap-1 :override #'local/global-mode-line)
-
 (use-package elscreen
   :custom
   (elscreen-display-screen-number nil)
@@ -699,7 +715,6 @@ _s_kip
 ;;; Terminals
 
 (use-package vterm
-  :defer t
   :hook
   (vterm-mode-hook . (lambda ()
 		       (setq-local evil-insert-state-cursor 'box) (evil-insert-state))))
@@ -730,6 +745,7 @@ _s_kip
   (doom-themes-org-config)
 
   (custom-set-faces
+   ;; `(default ((t (:font "FiraCode Nerd Font" :height 160))))
    `(default ((t (:font "FiraCode Nerd Font" :height 120))))
    ;; :height should be a float to adjust the relative size to the normal default font
    `(fixed-pitch ((t (:inherit default :font "FiraCode Nerd Font Mono" :height 0.9))))
@@ -780,8 +796,14 @@ _s_kip
 
 (use-package tree-sitter
   ;; :disabled
-  :hook ((prog-mode . global-tree-sitter-mode)
-	 (tree-sitter-after-on . tree-sitter-hl-mode))
+  :straight (tree-sitter :type git
+			 :flavor melpa
+			 :files ("lisp/*.el" (:exclude "lisp/tree-sitter-tests.el") "tree-sitter-pkg.el")
+			 :host github :repo "emacs-tree-sitter/elisp-tree-sitter")
+  :hook
+  ((typescript-mode) . tree-sitter-mode)
+  ((typescript-mode) . tree-sitter-hl-mode)
+  ;; (tree-sitter-after-on . tree-sitter-hl-mode)
   :commands (my/tree-sitter-hl)
   :config
   (defun my/tree-sitter-hl ()
@@ -798,16 +820,19 @@ _s_kip
 	(tree-sitter-hl-mode 't)))))
 
 (use-package tree-sitter-langs
-  :after tree-sitter
-  :config
-  (tree-sitter-require 'tsx)
-  (add-to-list 'tree-sitter-major-mode-language-alist '(typescript-tsx-mode . tsx)))
+  :after tree-sitter)
+
+(use-package tree-sitter-indent
+  :straight (tree-sitter-indent :host github
+				:repo " emacsmirror/tree-sitter-indent"
+				:branch "master"
+				:files ("tree-sitter-indent.el"))
+  :after tree-sitter)
 
 
 ;;; Projects / Navigation
 
 (use-package projectile
-  :defer t
   :custom
   (projectile-completion-system 'ivy)
   (projectile-indexing-method 'hybrid) ; use git whilst honoring .projectile ignores
@@ -899,6 +924,7 @@ _s_kip
   (setcar counsel-projectile-switch-project-action 2))
 
 (use-package magit
+  :commands (magit-blame magit-log-buffer-file)
   :general
   (my-leader-def
     "gg" 'magit-status))
@@ -931,6 +957,7 @@ _s_kip
 (use-package git-gutter-fringe
   :if window-system
   :after git-gutter
+  :demand
   :init
   ;; turn off git-gutter
   (global-git-gutter-mode 0)
@@ -967,6 +994,7 @@ _s_kip
   (setq auth-sources '("~/.authinfo")))
 
 (use-package wakatime-mode
+  :demand
   :after projectile
   :config
   (setq wakatime-cli-path "/usr/local/bin/wakatime")
@@ -1097,8 +1125,10 @@ _s_kip
     "C-d" 'company-next-page)
   :custom
   (company-tooltip-align-annotations t)
-  (company-minimum-prefix-length 10000)
-  (company-idle-delay 0.0))
+  (company-minimum-prefix-length 3)
+  ;; (company-minimum-prefix-length 10000)
+  ;; (company-idle-delay 0.0)
+  (company-idle-delay 0.2))
 
 (use-package company-box
   :hook (company-mode . company-box-mode))
@@ -1115,7 +1145,7 @@ _s_kip
   ;; get from https://github.com/elixir-lsp/elixir-ls/releases
   (add-to-list 'exec-path "~/.tooling/elixir-ls-1.11/")
   :hook
-  ((web-mode typescript-mode scala-mode java-mode elixir-mode) . lsp)
+  ((web-mode typescript-mode typescript-tsx-mode scala-mode java-mode elixir-mode) . lsp)
   (lsp-mode . lsp-enable-which-key-integration)
   ;; :general
   ;; (nmap "gh" 'lsp-describe-thing-at-point)
@@ -1124,7 +1154,7 @@ _s_kip
   (lsp-auto-execute-action '())
   (lsp-headerline-breadcrumb-enable nil)
   (lsp-disabled-clients '((json-mode . eslint)))
-  (lsp-enable-file-watchers '())
+  ;; (lsp-enable-file-watchers '())
   ;; rust
   (lsp-rust-server 'rust-analyzer)
 
@@ -1142,6 +1172,33 @@ _s_kip
   ;; 	 (expand-file-name
   ;; 	  (car (file-expand-wildcards "~/.vscode/extensions/dbaeumer.vscode-eslint-*/server/out/eslintServer.js")))
   ;; 	 "--stdio")))
+  :config
+  (defun lsp-js-ts-rename-file ()
+  "Rename current file and all it's references in other files."
+  (interactive)
+  (let* ((name (buffer-name))
+         (old (buffer-file-name))
+         (basename (file-name-nondirectory old)))
+    (unless (and old (file-exists-p old))
+      (error "Buffer '%s' is not visiting a file." name))
+    (let ((new (read-file-name "New name: " (file-name-directory old) basename nil basename)))
+      (when (get-file-buffer new)
+        (error "A buffer named '%s' already exists." new))
+      (when (file-exists-p new)
+        (error "A file named '%s' already exists." new))
+      (lsp--send-execute-command
+       "_typescript.applyRenameFile"
+       (vector (list :sourceUri (lsp--buffer-uri)
+                     :targetUri (lsp--path-to-uri new))))
+      (mkdir (file-name-directory new) t)
+      (rename-file old new)
+      (rename-buffer new)
+      (set-visited-file-name new)
+      (set-buffer-modified-p nil)
+      (lsp-disconnect)
+      (setq-local lsp-buffer-uri nil)
+      (lsp)
+      (lsp--info "Renamed '%s' to '%s'." name (file-name-nondirectory new)))))
   )
 
 (use-package lsp-ui
@@ -1172,6 +1229,7 @@ _s_kip
 
 (use-package dap-mode
   :disabled
+  :commands dap-debug 			; might not need this, wory about this when setting up
   :after lsp-mode
   :config (dap-auto-configure-mode))
 
@@ -1183,6 +1241,7 @@ _s_kip
 (use-package add-node-modules-path
   :hook
   (web-mode)
+  (typescript-tsx-mode)
   (typescript-mode)
   (css-mode))
 
@@ -1213,46 +1272,41 @@ _s_kip
   :interpreter "node"
   :mode "\\.ts\\'"
   :mode "\\.js\\'"
+  :hook ((typescript-mode) . my/ts-mode-settings)
   :custom
   (typescript-indent-level 2)
   :config
   (defun my/ts-mode-settings ()
     "Hook for ts mode."
     ;; (setq flycheck-checker 'javascript-eslint)
-    (flycheck-add-next-checker 'lsp 'javascript-eslint))
-  
-  :hook ((typescript-mode) . my/ts-mode-settings))
+    (flycheck-add-next-checker 'lsp 'javascript-eslint)))
 
 (use-package typescript-tsx-mode
   :load-path "~/emacs/elisp/typescript-tsx-mode"
   :straight nil
-  :mode "\\.tsx\\'"
-  :mode "\\.jsx\\'"
+  :hook ((typescript-tsx-mode) . my/tsx-mode-settings)
   :config
   (defun my/tsx-mode-settings ()
     "Hook for ts mode."
     (flycheck-add-mode 'javascript-eslint 'typescript-tsx-mode)
-    ;; (setq flycheck-checker 'javascript-eslint)
-    (flycheck-add-next-checker 'lsp 'javascript-eslint))
-  :hook ((typescript-tsx-mode) . my/tsx-mode-settings))
+    (flycheck-add-next-checker 'lsp 'javascript-eslint)))
 
 (use-package web-mode
   ;; still need web-mode stuff as typescript-tsx-mode is actually derived from it
   :mode "\\.ejs\\'"
+  :mode "\\.tsx\\'"
+  :mode "\\.jsx\\'"
+  :hook ((web-mode-hook) . my/web-mode-settings)
   :config
   (setq-default web-mode-comment-formats
 		'(("javascript" . "//")))
 
-  (add-hook 'web-mode-hook #'my/web-mode-settings)
-
   (defun my/web-mode-settings ()
     "Hooks for Web mode."
     (interactive)
-    ;; (flycheck-add-mode 'css-stylelint 'web-mode)
     (flycheck-add-mode 'javascript-eslint 'web-mode)
-
-    (setq flycheck-checker 'javascript-eslint)
     (flycheck-add-next-checker 'lsp 'javascript-eslint)
+    ;; (flycheck-add-mode 'css-stylelint 'web-mode)
     ;; (flycheck-add-next-checker 'javascript-eslint 'css-stylelint)
 
     (setq web-mode-code-indent-offset 2)
@@ -1261,8 +1315,10 @@ _s_kip
     (setq web-mode-enable-auto-quoting nil)))
 
 (use-package jest
-  :hook ((web-mode typescript-mode) . jest-minor-mode)
-  :custom (jest-executable "yarn test"))
+  :hook ((web-mode typescript-mode typescript-tsx-mode) . jest-minor-mode)
+  :custom
+  (jest-executable "yarn test --color")
+  (jest-unsaved-buffers-behavior 'save-current))
 
 (use-package prettier-js
   :custom
@@ -1270,7 +1326,7 @@ _s_kip
   ;; (prettier-js-command "prettier_d_slim")
   (prettier-js-show-errors "None")
   :config
-  :hook ((web-mode typescript-mode json-mode) . prettier-js-mode))
+  :hook ((web-mode typescript-mode typescript-tsx-mode json-mode) . prettier-js-mode))
 
 ;;;; Scala
 
@@ -1379,11 +1435,9 @@ _s_kip
   (defconst json-mode-comments-re (rx (group "//" (zero-or-more nonl) line-end)))
   (push (list json-mode-comments-re 1 font-lock-comment-face) json-font-lock-keywords-1))
 
-(use-package yaml-mode
-  :defer t)
+(use-package yaml-mode)
 
-(use-package graphql-mode
-  :defer t)
+(use-package graphql-mode)
 
 (use-package dotenv-mode
   :mode "\\.env\\..*\\'"
@@ -1393,11 +1447,9 @@ _s_kip
 
 (use-package rustic)
 
-(use-package dockerfile-mode
-  :defer t)
+(use-package dockerfile-mode)
 
-(use-package docker-compose-mode
-  :defer t)
+(use-package docker-compose-mode)
 
 (use-package docker
   :general
@@ -1423,6 +1475,10 @@ _s_kip
     (progn
       (save-buffer)
       (mix-test-current-buffer))))
+
+(use-package csharp-mode
+  :config
+  (add-to-list 'auto-mode-alist '("\\.cs\\" . csharp-tree-sitter-mode)))
 
 ;; (use-package lsp-python-ms
 ;;   :disabled
@@ -1505,11 +1561,9 @@ _s_kip
 	(flyspell-do-correct 'save nil (car word) current-location (cadr word) (caddr word) current-location)))))
 
 (use-package flyspell-correct-ivy
-  :defer t
   :after (:all (flyspell ivy)))
 
 (use-package markdown-mode
-  :defer t
   :hook
   ;; (markdown-mode . visual-line-mode) ; might need this, will see
   (markdown-mode . flyspell-mode)
@@ -1749,6 +1803,7 @@ _s_kip
 
 (use-package evil-org
   :after org
+  :demand
   :config
   (add-hook 'org-mode-hook 'evil-org-mode)
   (add-hook 'evil-org-mode-hook
@@ -1778,7 +1833,6 @@ _s_kip
 (use-package my-markdown-helpers
   :straight (my-markdown-helpers :local-repo "~/emacs/elisp/my-markdown-helpers")
   :after (markdown-mode)
-  ;; :demand t
   :config
   (my/markdown-theme))
 
