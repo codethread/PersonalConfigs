@@ -100,6 +100,7 @@
     "e" '(:ignore t :wk "Errors")
     "E" '(:ignore t :wk "Spelling")
     "f" '(:ignore t :wk "Files")
+    "j" '(:ignore t :wk "Test")
     "g" '(:ignore t :wk "Global")
     "n" '(:ignore t :wk "Notes")
 
@@ -126,6 +127,7 @@
     "Tz" 'global-ligature-mode
 
     "w" '(:ignore t :wk "Window")
+    "wl" '(:ignore t :wk "Layout")
     "p" '(:ignore t :wk "Projectile")))
 
 (use-package evil
@@ -533,9 +535,10 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
   (aw-minibuffer-flag t)
   (aw-keys '(?w ?e ?f ?j ?k ?l))
   :general
-  (general-def :states '(normal visual emacs)
-    "C-x o" 'ace-window
-    "C-w C-w" 'ace-window)
+  (general-def :states '(normal visual insert emacs)
+    "C-x o" 'ace-window)
+  (my-leader-def
+    "W" 'ace-window)
   (my-leader-def
     "wd" 'ace-win-delete
     "ws" 'ace-win-swap)
@@ -664,7 +667,7 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
     "we" 'hydra-tabs/body
     "wK" 'elscreen-kill
     "wN" 'elscreen-create
-    "wl" 'elscreen-toggle
+    "wL" 'elscreen-toggle
     "wr" 'elscreen-screen-nickname
     "wt" 'elscreen-toggle-display-tab
     )
@@ -801,8 +804,8 @@ _s_kip
 			 :files ("lisp/*.el" (:exclude "lisp/tree-sitter-tests.el") "tree-sitter-pkg.el")
 			 :host github :repo "emacs-tree-sitter/elisp-tree-sitter")
   :hook
-  ((typescript-mode) . tree-sitter-mode)
-  ((typescript-mode) . tree-sitter-hl-mode)
+  ((typescript-mode rustic-mode) . tree-sitter-mode)
+  ((typescript-mode rustic-mode) . tree-sitter-hl-mode)
   ;; (tree-sitter-after-on . tree-sitter-hl-mode)
   :commands (my/tree-sitter-hl)
   :config
@@ -828,6 +831,25 @@ _s_kip
 				:branch "master"
 				:files ("tree-sitter-indent.el"))
   :after tree-sitter)
+
+(use-package evil-textobj-tree-sitter
+  :disabled   ; some fun stuff in here, will look into this more later
+  :after tree-sitter
+  :straight (evil-textobj-tree-sitter :type git
+				      :host github
+				      :repo "meain/evil-textobj-tree-sitter"
+				      :files (:defaults "queries"))
+  :config
+  ;; bind `function.outer`(entire function block) to `f` for use in things like `vaf`, `yaf`
+  (define-key evil-outer-text-objects-map "f" (evil-textobj-tree-sitter-get-textobj "function.outer"))
+  ;; bind `function.inner`(function block without name and args) to `f` for use in things like `vif`, `yif`
+  (define-key evil-inner-text-objects-map "f" (evil-textobj-tree-sitter-get-textobj "function.inner"))
+
+  (define-key evil-outer-text-objects-map "a" (evil-textobj-tree-sitter-get-textobj "param.outer"
+						'((typescript-mode . [(required_parameter) @param.outer]))))
+  ;; bind `function.inner`(function block without name and args) to `f` for use in things like `vif`, `yif`
+  (define-key evil-inner-text-objects-map "a" (evil-textobj-tree-sitter-get-textobj "param.inner"
+						'((typescript-mode . [(required_parameter) @param.inner])))))
 
 
 ;;; Projects / Navigation
@@ -1025,9 +1047,9 @@ _s_kip
   (my-leader-def
     "sf" 'swiper
 
-    "WW" 'ivy-push-view
-    "WD" 'ivy-pop-view
-    "Wl" 'ivy-switch-view)
+    "wlw" 'ivy-push-view
+    "wld" 'ivy-pop-view
+    "wll" 'ivy-switch-view)
   (general-def :keymaps 'override
     "C-s" 'swiper)
   (general-def :keymaps '(ivy-minibuffer-map)
@@ -1147,64 +1169,72 @@ _s_kip
   :hook
   ((web-mode typescript-mode typescript-tsx-mode scala-mode java-mode elixir-mode) . lsp)
   (lsp-mode . lsp-enable-which-key-integration)
-  ;; :general
-  ;; (nmap "gh" 'lsp-describe-thing-at-point)
   :custom
   ;; general
   (lsp-auto-execute-action '())
   (lsp-headerline-breadcrumb-enable nil)
   (lsp-disabled-clients '((json-mode . eslint)))
-  ;; (lsp-enable-file-watchers '())
+
+  ;; optimisations that may improve as lsp matures
+
+  (lsp-log-io nil)
+  (lsp-clients-typescript-log-verbosity nil)
+
+  ;; (lsp-completion-enable-additional-text-edit nil)
+  ;; (lsp-completion-show-detail nil) 	; i think this is help
+  ;; (lsp-completion-show-kind nil) ; variable or function stuff in autocomplete
+  (lsp-enable-file-watchers '())
+
   ;; rust
   (lsp-rust-server 'rust-analyzer)
+  (lsp-rust-analyzer-display-chaining-hints t)
+  (lsp-rust-analyzer-display-parameter-hints t)
+  (lsp-rust-analyzer-server-display-inlay-hints t)
 
-  ;; typescript
-  (lsp-typescript-update-imports-on-file-move-enabled "always")
-  (lsp-clients-typescript-log-verbosity "off")
-
-  ;; eslint
-  ;; XXX: turning off for now and trying eslint_d as a flycheck fixer instead
-  ;; (lsp-eslint-run "onSave")
-  ;; ;; (lsp-eslint-run "onType")
-  ;; (lsp-eslint-package-manager "yarn")
-  ;; (lsp-eslint-server-command
-  ;;  (list "node"
-  ;; 	 (expand-file-name
-  ;; 	  (car (file-expand-wildcards "~/.vscode/extensions/dbaeumer.vscode-eslint-*/server/out/eslintServer.js")))
-  ;; 	 "--stdio")))
   :config
+  ;; (add-hook 'typescript-mode #'my/lsp-limit-lsp)
+  ;; (add-hook 'web-mode #'my/lsp-limit-lsp)
+
+  ;; this gets a nice speed boost, but makes the experience a bit worse
+  (defun my/lsp-limit-lsp ()
+    "Limit some of the steps lsp will do with typescript lsp responses, as they are huge"
+    (setq lsp-completion-enable-additional-text-edit nil)
+    (setq lsp-completion-show-detail nil)	; i think this is help
+    (setq lsp-completion-show-kind nil) ; variable or function stuff in autocomplete
+    )
+
+  
   (defun lsp-js-ts-rename-file ()
-  "Rename current file and all it's references in other files."
-  (interactive)
-  (let* ((name (buffer-name))
-         (old (buffer-file-name))
-         (basename (file-name-nondirectory old)))
-    (unless (and old (file-exists-p old))
-      (error "Buffer '%s' is not visiting a file." name))
-    (let ((new (read-file-name "New name: " (file-name-directory old) basename nil basename)))
-      (when (get-file-buffer new)
-        (error "A buffer named '%s' already exists." new))
-      (when (file-exists-p new)
-        (error "A file named '%s' already exists." new))
-      (lsp--send-execute-command
-       "_typescript.applyRenameFile"
-       (vector (list :sourceUri (lsp--buffer-uri)
-                     :targetUri (lsp--path-to-uri new))))
-      (mkdir (file-name-directory new) t)
-      (rename-file old new)
-      (rename-buffer new)
-      (set-visited-file-name new)
-      (set-buffer-modified-p nil)
-      (lsp-disconnect)
-      (setq-local lsp-buffer-uri nil)
-      (lsp)
-      (lsp--info "Renamed '%s' to '%s'." name (file-name-nondirectory new)))))
+    "Rename current file and all it's references in other files."
+    (interactive)
+    (let* ((name (buffer-name))
+           (old (buffer-file-name))
+           (basename (file-name-nondirectory old)))
+      (unless (and old (file-exists-p old))
+	(error "Buffer '%s' is not visiting a file." name))
+      (let ((new (read-file-name "New name: " (file-name-directory old) basename nil basename)))
+	(when (get-file-buffer new)
+          (error "A buffer named '%s' already exists." new))
+	(when (file-exists-p new)
+          (error "A file named '%s' already exists." new))
+	(lsp--send-execute-command
+	 "_typescript.applyRenameFile"
+	 (vector (list :sourceUri (lsp--buffer-uri)
+                       :targetUri (lsp--path-to-uri new))))
+	(mkdir (file-name-directory new) t)
+	(rename-file old new)
+	(rename-buffer new)
+	(set-visited-file-name new)
+	(set-buffer-modified-p nil)
+	(lsp-disconnect)
+	(setq-local lsp-buffer-uri nil)
+	(lsp)
+	(lsp--info "Renamed '%s' to '%s'." name (file-name-nondirectory new)))))
   )
 
 (use-package lsp-ui
-  :disabled
   :commands (lsp-ui-imenu)
-  :hook (lsp-mode . lsp-ui-mode)
+  :hook ((rustic-mode lsp-mode) . lsp-ui-mode)
   :bind ("C-c C-k" . my/lsp-ui-doc-glance) ; just a test binding
   :config
   (defun my/lsp-ui-doc--glance-hide-frame ()
@@ -1217,6 +1247,12 @@ _s_kip
     (interactive)
     (lsp-ui-doc-show)
     (add-hook 'pre-command-hook 'lsp-ui-doc--glance-hide-frame))
+
+  ;; temp while trying out rust
+  (add-hook 'rustic-mode-hook
+	    (lambda ()
+	      (make-local-variable 'lsp-ui-sideline-enable)
+	      (setq lsp-ui-sideline-enable t)))
   :custom
   (lsp-ui-doc-header '())		; looks shit
   (lsp-ui-sideline-enable '())		; bloody overwhelming
@@ -1281,15 +1317,16 @@ _s_kip
     ;; (setq flycheck-checker 'javascript-eslint)
     (flycheck-add-next-checker 'lsp 'javascript-eslint)))
 
-(use-package typescript-tsx-mode
-  :load-path "~/emacs/elisp/typescript-tsx-mode"
-  :straight nil
-  :hook ((typescript-tsx-mode) . my/tsx-mode-settings)
-  :config
-  (defun my/tsx-mode-settings ()
-    "Hook for ts mode."
-    (flycheck-add-mode 'javascript-eslint 'typescript-tsx-mode)
-    (flycheck-add-next-checker 'lsp 'javascript-eslint)))
+;; (use-package typescript-tsx-mode
+;;   :load-path "~/emacs/elisp/typescript-tsx-mode"
+;;   :disabled
+;;   :straight nil
+;;   :hook ((typescript-tsx-mode) . my/tsx-mode-settings)
+;;   :config
+;;   (defun my/tsx-mode-settings ()
+;;     "Hook for ts mode."
+;;     (flycheck-add-mode 'javascript-eslint 'typescript-tsx-mode)
+;;     (flycheck-add-next-checker 'lsp 'javascript-eslint)))
 
 (use-package web-mode
   ;; still need web-mode stuff as typescript-tsx-mode is actually derived from it
@@ -1317,8 +1354,19 @@ _s_kip
 (use-package jest
   :hook ((web-mode typescript-mode typescript-tsx-mode) . jest-minor-mode)
   :custom
-  (jest-executable "yarn test --color")
-  (jest-unsaved-buffers-behavior 'save-current))
+  (jest-executable "yarn test --color --maxWorkers=1")
+  (jest-unsaved-buffers-behavior 'save-current)
+  :general
+  (general-define-key
+   :prefix "SPC"
+   :states 'normal
+   :keymaps '(typescript-mode-map web-mode-map)
+   "jj" 'jest-function
+   "jl" 'jest-repeat
+   ;; file test needs creating as a lambda
+   "jf" 'jest-file-dwim
+   "jp" 'jest-popup))
+
 
 (use-package prettier-js
   :custom
@@ -1445,7 +1493,56 @@ _s_kip
               (set (make-local-variable 'comment-start) "# ")
               (set (make-local-variable 'comment-end) ""))))
 
-(use-package rustic)
+(use-package rustic
+  :config
+  ;; (add-hook 'rustic-mode-hook 'my/rustic-mode-hook)
+  ;; (remove-hook 'rustic-mode-hook 'my/rustic-mode-hook)
+  (defun my/rustic-mode-hook ()
+    ;; so that run C-c C-c C-r (lsp-rename) works without having to confirm, but don't try to
+    ;; save rust buffers that are not file visiting. Once
+    ;; https://github.com/brotzeit/rustic/issues/253 has been resolved this should
+    ;; no longer be necessary.
+    (when buffer-file-name
+      (setq-local buffer-save-without-query t)))
+
+  ;; (defun my/rustic-expand-macro ()
+  ;;   (interactive)
+  ;;   (let ((current rustic-format-trigger))
+  ;;     (setq rustic-format-trigger 'nil)
+  ;;     (lsp-rust-analyzer-expand-macro)
+  ;;     (setq rustic-format-trigger current)))
+  :custom (rustic-indent-offset 2)
+  :general
+  ;; (my-leader-def
+  ;;   "jj" 'rustic-cargo-current-test
+  ;;   "jl" 'rustic-cargo-test-rerun
+  ;;   ;; file test needs creating as a lambda
+  ;;   "jf" 'rustic-cargo-current-test
+  ;;   "jp" 'rustic-cargo-test
+
+  ;;   "pt" 'rustic-cargo-test
+  ;;   "pc" 'rustic-cargo-build)
+
+  ;; might be better as a hydra
+  (general-define-key
+   :prefix "SPC"
+   :states 'normal
+   :keymaps 'rustic-mode-map
+   "jj" 'rustic-cargo-current-test
+   "jl" 'rustic-cargo-test-rerun
+   ;; file test needs creating as a lambda
+   "jf" 'rustic-cargo-current-test
+   "jp" 'rustic-cargo-test
+
+   "eN" 'next-error
+   "eP" 'previous-error
+
+   "pt" 'rustic-cargo-test
+   "pc" 'rustic-cargo-build)
+  
+
+  :custom
+  (rustic-format-trigger 'on-save))
 
 (use-package dockerfile-mode)
 
@@ -1493,17 +1590,17 @@ _s_kip
   (flycheck-indication-mode 'right-fringe)
   ;; (flycheck-check-syntax-automatically '(idle-buffer-switch save mode-enabled))
   (flycheck-check-syntax-automatically '(idle-buffer-switch new-line mode-enabled idle-change))
-  (flycheck-javascript-eslint-executable "eslint_d")
+  ;; (flycheck-javascript-eslint-executable "eslint_d")
   :hook (prog-mode . flycheck-mode)
   :config
   ;; simple clean line for flycheck errors in fringe
   ;; arrows all look pixelated, and I haven't worked out how to use hidpi verison
   (define-fringe-bitmap 'flycheck-fringe-bitmap-double-arrow
     [#b000000000
-     #b000000000
-     #b000111111
-     #b000111111
-     #b000000000
+     #b111111111
+     #b111111111
+     #b111111111
+     #b111111111
      #b000000000])
 
   (defun my|eslint-fix-file ()
@@ -1648,7 +1745,7 @@ _s_kip
   (org-enforce-todo-dependencies t)
   (org-list-demote-modify-bullet '(("+" . "-") ("-" . "+") ("*" . "+") ("1." . "a.")))
   (org-agenda-span 8)
-  (org-todo-keywords '((sequence "TODO(t)" "PROGRESS(p)" "|" "DONE(d)" "ARCHIVED(a)")))
+  (org-todo-keywords '((sequence "TODO(t)" "PROGRESS(p)" "BLOCKED(b)" "|" "DONE(d)" "ARCHIVED(a)")))
 
   (org-capture-templates
    '(("t" "TODO" entry (file+headline org-default-notes-file "Capture:Collect")

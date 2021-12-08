@@ -1,191 +1,103 @@
+require('general.settings')
+vim.cmd 'source ~/.config/nvim/lua/general/mappings.vim'
 require('plugins')
 
 require('nord').set()
+-- require('onedark').setup()
 
--- use space as a the leader key
-vim.g.mapleader = ' '
+require('modeline')
+require('tele')
+
+require('completion')
+
+require('lsp.config')
+require('lsp.typescript')
+require('lsp.rust')
+
+-- require('nvim-autopairs').setup {}
 
 -- local nnoremap = vim.keymap.nnoremap
-local nnoremap = require('astronauta.keymap').nnoremap
+-- local nnoremap = require('astronauta.keymap').nnoremap
 
-nnoremap { '<leader>hello', function() print("Hello world, from lua") end }
+-- nnoremap {
+--   '<leader>hello', function()
+--     print("Hello world, from lua")
+--   end
+-- }
 
-
-local set = vim.opt
--- Set the behavior of tab
-set.tabstop = 2
-set.shiftwidth = 2
-set.softtabstop = 2
-set.expandtab = true
-vim.opt.cursorline = true
-
-require('lualine').setup({
-  options = {
-    icons_enabled = true,
-    theme = 'nord',
-    component_separators = {'', ''},
-    section_separators = {'', ''},
-    disabled_filetypes = {}
-  },
-  sections = {
-    lualine_a = {'mode'},
-    lualine_b = {'branch'},
-    lualine_c = {'filename'},
-    lualine_x = {'encoding', 'fileformat', 'filetype'},
-    lualine_y = {'progress'},
-    lualine_z = {'location'}
-  },
-  inactive_sections = {
-    lualine_a = {},
-    lualine_b = {},
-    lualine_c = {'filename'},
-    lualine_x = {'location'},
-    lualine_y = {},
-    lualine_z = {}
-  },
-  tabline = {},
-  extensions = {}
-
-})
 -- vim.cmd[[colorscheme nord]]
 -- To get fzf loaded and working with telescope, you need to call
 -- load_extension, somewhere after setup function:
-require('telescope').load_extension('fzf')
 -- vim.cmd 'source ~/.config/nvim/keymap.vim'
 
-local tele = require('telescope.builtin')
-nnoremap { '<leader><leader>', function() tele.find_files({ hidden = true }) end }
-nnoremap { '<leader>h', function() tele.help_tags() end }
-nnoremap { '<leader>bl', function() tele.buffers() end }
-nnoremap { '<leader>sf', function() tele.live_grep() end }
--- nnoremap { '<leader>sf' <cmd>Telescope live_grep<cr> }
--- nnoremap { '<leader>bl' <cmd>Telescope buffers<cr> }
--- nnoremap { '<leader>pt' <cmd>Telescope help_tags<cr> }
-
---vim.cmd 'source ~/.config/nvim/keymap.vim'
+-- vim.cmd 'source ~/.config/nvim/keymap.vim'
 --
 require'nvim-treesitter.configs'.setup {
   ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
   -- ignore_install = { "javascript" }, -- List of parsers to ignore installing
   highlight = {
-    enable = true,              -- false will disable the whole extension
-    disable = {   -- list of language that will be disabled
-      "c", 
-      "commonlisp"  -- chockes on my elisp ligatures
-    },
-  },
+    enable = true, -- false will disable the whole extension
+    disable = { -- list of language that will be disabled
+      "c", "commonlisp" -- chockes on my elisp ligatures
+    }
+  }
 }
 
-local cmp = require'cmp'
+HOME = vim.fn.expand('$HOME')
 
-  cmp.setup({
-    snippet = {
-      expand = function(args)
-        -- For `vsnip` user.
-        vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` user.
+-- set the path to the sumneko installation; if you previously installed via the now deprecated :LspInstall, use
+local sumneko_root_path = HOME .. '/.config/nvim/lua-language-server'
+local sumneko_binary = HOME
+                           .. '/.config/nvim/lua-language-server/bin/macOS/lua-language-server'
 
-        -- For `luasnip` user.
-        -- require('luasnip').lsp_expand(args.body)
+local runtime_path = vim.split(package.path, ';')
+table.insert(runtime_path, "lua/?.lua")
+table.insert(runtime_path, "lua/?/init.lua")
 
-        -- For `ultisnips` user.
-        -- vim.fn["UltiSnips#Anon"](args.body)
-      end,
-    },
-    mapping = {
-      ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-      ['<C-f>'] = cmp.mapping.scroll_docs(4),
-      ['<C-Space>'] = cmp.mapping.complete(),
-      ['<C-e>'] = cmp.mapping.close(),
-      ['<CR>'] = cmp.mapping.confirm({ select = true }),
-    },
-    sources = {
-      { name = 'nvim_lsp' },
-
-      -- For vsnip user.
-      { name = 'vsnip' },
-
-      -- For luasnip user.
-      -- { name = 'luasnip' },
-
-      -- For ultisnips user.
-      -- { name = 'ultisnips' },
-
-      { name = 'buffer' },
+require'lspconfig'.sumneko_lua.setup {
+  cmd = {sumneko_binary, "-E", sumneko_root_path .. "/main.lua"},
+  settings = {
+    Lua = {
+      runtime = {
+        -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+        version = 'LuaJIT',
+        -- Setup your lua path
+        path = runtime_path
+      },
+      diagnostics = {
+        -- Get the language server to recognize the `vim` global
+        globals = {'vim'}
+      },
+      workspace = {
+        -- Make the server aware of Neovim runtime files
+        library = vim.api.nvim_get_runtime_file("", true)
+      },
+      -- Do not send telemetry data containing a randomized but unique identifier
+      telemetry = {enable = false}
     }
-  })
+  }
+}
 
+vim.api.nvim_command([[
+  autocmd BufWritePre *.lua lua vim.lsp.buf.formatting_sync(nil, 100)
+]])
 
-
-local system_name
-if vim.fn.has("mac") == 1 then
-  system_name = "macOS"
-elseif vim.fn.has("unix") == 1 then
-  system_name = "Linux"
-elseif vim.fn.has('win32') == 1 then
-  system_name = "Windows"
-else
-  print("Unsupported system for sumneko")
-end
-
-local nvim_lsp = require("lspconfig")
-
-require("null-ls").config {}
-require("lspconfig")["null-ls"].setup {}
-
-nvim_lsp.tsserver.setup{
-  on_attach = function(client, bufnr)
-        -- disable tsserver formatting if you plan on formatting via null-ls
-        client.resolved_capabilities.document_formatting = false
-        client.resolved_capabilities.document_range_formatting = false
-
-        local ts_utils = require("nvim-lsp-ts-utils")
-
-        -- defaults
-        ts_utils.setup {
-            debug = false,
-            disable_commands = false,
-            enable_import_on_completion = false,
-
-            -- import all
-            import_all_timeout = 5000, -- ms
-            import_all_priorities = {
-                buffers = 4, -- loaded buffer names
-                buffer_content = 3, -- loaded buffer content
-                local_files = 2, -- git files or files with relative path markers
-                same_file = 1, -- add to existing import statement
-            },
-            import_all_scan_buffers = 100,
-            import_all_select_source = false,
-
-            -- eslint
-            eslint_enable_code_actions = true,
-            eslint_enable_disable_comments = true,
-            eslint_bin = "eslint_d",
-            eslint_enable_diagnostics = true,
-            eslint_opts = {},
-
-            -- formatting
-            enable_formatting = false,
-            formatter = "prettier",
-            formatter_opts = {},
-
-            -- update imports on file move
-            update_imports_on_move = false,
-            require_confirmation_on_move = false,
-            watch_dir = nil,
-
-            -- filter diagnostics
-            filter_out_diagnostics_by_severity = {},
-            filter_out_diagnostics_by_code = {},
+require'lspconfig'.efm.setup {
+  init_options = {documentFormatting = true},
+  filetypes = {"lua"},
+  settings = {
+    rootMarkers = {".git/"},
+    languages = {
+      lua = {
+        {
+          formatCommand = "lua-format -i --no-keep-simple-function-one-line --no-break-after-operator --column-limit=80 --break-after-table-lb --indent-width=2",
+          formatStdin = true
         }
+      }
+    }
+  }
+}
 
-        -- required to fix code action ranges and filter diagnostics
-        ts_utils.setup_client(client)
-
-        -- no default maps, so you may want to define some here
-        local opts = { silent = true }
-        vim.api.nvim_buf_set_keymap(bufnr, "n", "gs", ":TSLspOrganize<CR>", opts)
-        vim.api.nvim_buf_set_keymap(bufnr, "n", "gr", ":TSLspRenameFile<CR>", opts)
-        vim.api.nvim_buf_set_keymap(bufnr, "n", "gi", ":TSLspImportAll<CR>", opts)
-    end
+require('nvim-treesitter.configs').setup {
+  context_commentstring = {enable = true}
 }

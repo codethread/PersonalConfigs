@@ -1,4 +1,4 @@
-personal_ws-1.1 en 59 
+personal_ws-1.1 en 66 
 Applicative
 Applicatives
 Atomicity
@@ -14,6 +14,7 @@ Kleisli
 Lua
 Luhmann
 MDN
+MVC
 Magit
 Milner
 Monadic
@@ -25,9 +26,11 @@ PR's
 Pinterest
 REPL
 SOIP
+Struct
 Todoist
 UI
 WIP
+Wiremock
 Zettelkasten
 Zoid
 arithmatic
@@ -35,6 +38,7 @@ async
 cli
 config
 contentinfo
+cst
 deps
 dired
 elisp
@@ -42,6 +46,7 @@ env
 eslint
 falsy
 flycheck
+globals
 gpg
 iframe
 iframes
@@ -53,7 +58,9 @@ nav
 nushell
 param
 params
+relavent
 repo
+tauri
 testcafe
 theming
 truthy
