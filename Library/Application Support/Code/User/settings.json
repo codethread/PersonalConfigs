@@ -163,18 +163,18 @@
     {
       "text": "TODO:",
       "color": "#ffab00",
-      "backgroundColor": "#2a2c2d",
+      "backgroundColor": "#2a2c2d"
     },
     {
       "text": "HACK:",
-      "color": "#ff0000",
-    },
+      "color": "#ff0000"
+    }
   ],
   "todohighlight.defaultStyle": {
     "color": "#ffab00",
     "backgroundColor": "#2a2c2d",
     "cursor": "pointer",
-    "isWholeLine": false,
+    "isWholeLine": false
   },
   "[json]": {
     "editor.defaultFormatter": "vscode.json-language-features"
@@ -200,22 +200,23 @@
   "[html]": {
     "editor.defaultFormatter": "vscode.html-language-features"
   },
-  "javascript.implicitProjectConfig.checkJs": true,
-  "workbench.panel.defaultLocation": "right",
+  "js/ts.implicitProjectConfig.checkJs": true,
   "[javascriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "cloudcode.gke": {
-    "projectIds": [
-      "my-blog-275207"
-    ]
+    "projectIds": ["my-blog-275207"]
   },
   "[jsonc]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[svelte]": {
+    "editor.defaultFormatter": "svelte.svelte-vscode"
   },
   "files.autoSave": "onFocusChange",
   "files.associations": {
     ".eslintrc": "jsonc"
   },
   "editor.formatOnSave": true,
+  "svelte.enable-ts-plugin": true
 }

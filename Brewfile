@@ -18,22 +18,32 @@ brew "cmake"
 brew "colordiff"
 # GNU File, Shell, and Text utilities
 brew "coreutils"
+# More intuitive version of du in rust
+brew "dust"
+# General purpose Language Server
+brew "efm-langserver"
+# Programming language for highly scalable real-time systems
+brew "erlang"
 # Functional metaprogramming aware language built on Erlang VM
 brew "elixir"
 # Emoji on the command-line :scream:
 brew "emojify"
+# Modern replacement for 'ls'
+brew "exa"
 # Command-line tool to interact with exercism.io
 brew "exercism"
 # Simple, fast and user-friendly alternative to find
 brew "fd"
 # Collection of GNU find, xargs, and locate
 brew "findutils"
-# Command-line fuzzy finder written in Go
-brew "fzf"
+# Collection of reusable C++ library artifacts developed at Facebook
+brew "folly"
 # Test automation tool that supports executable documentation
 brew "gauge"
 # GNU awk utility
 brew "gawk"
+# GNU compiler collection
+brew "gcc"
 # Toolkit for image loading and pixel buffer manipulation
 brew "gdk-pixbuf"
 # GitHub command-line tool
@@ -44,16 +54,22 @@ brew "gnu-indent"
 brew "gnu-sed"
 # GNU version of the tar archiving utility
 brew "gnu-tar"
-# HTTP/2 C Library
-brew "nghttp2"
 # Validating, recursive, caching DNS resolver
 brew "unbound"
 # GNU Transport Layer Security (TLS) Library
 brew "gnutls"
+# HTTP/2 C Library
+brew "nghttp2"
 # GNU Pretty Good Privacy (PGP) package
 brew "gnupg"
 # Generate introspection data for GObject libraries
 brew "gobject-introspection"
+# OpenType text shaping engine
+brew "harfbuzz"
+# Powerful, lightweight programming language
+brew "lua"
+# Framework for layout and rendering of i18n text
+brew "pango"
 # Command-driven, interactive function plotting
 brew "gnuplot"
 # Open-source build automation tool based on the Groovy and Kotlin DSL
@@ -72,16 +88,28 @@ brew "jenv"
 brew "jq"
 # Library to render SVG files using Cairo
 brew "librsvg"
+# C library implementing the SSH2 protocol
+brew "libssh2"
+# Package manager for the Lua programming language
+brew "luarocks"
 # Java-based project management
 brew "maven"
 # Simple tool to make locally trusted development certificates
 brew "mkcert"
 # Ambitious Vim-fork focused on extensibility and agility
 brew "neovim"
+# Utility for managing network connections
+brew "netcat"
+# Small build system for use with gyp or CMake
+brew "ninja"
+# Modern shell for the GitHub era
+brew "nushell"
 # Paste PNG into files
 brew "pngpaste"
 # Modern replacement for ps written by Rust
 brew "procs"
+# Cross-platform application and UI framework
+brew "qt"
 # File browser
 brew "ranger"
 # Util like xargs + awk with pattern matching support
@@ -94,10 +122,14 @@ brew "ripgrep"
 brew "rlwrap"
 # Powerful, clean, object-oriented scripting language
 brew "ruby"
+# Experimental Rust compiler front-end for IDEs
+brew "rust-analyzer"
 # Build tool for Scala projects
 brew "sbt"
 # Tool to create intelligent and beautiful documentation
 brew "sphinx-doc"
+# Cross-shell prompt for astronauts
+brew "starship"
 # User interface to the TELNET protocol
 brew "telnet"
 # Send macOS User Notifications from the command-line
@@ -108,6 +140,8 @@ brew "the_silver_searcher"
 brew "tmux"
 # Manage complex tmux sessions easily
 brew "tmuxinator"
+# Program that allows you to count code, quickly
+brew "tokei"
 # Display directories as trees (with optional color/HTML output)
 brew "tree"
 # Vi 'workalike' with many additional features
@@ -120,19 +154,19 @@ brew "wakatime-cli"
 brew "watch"
 # Watch files and take action when they change
 brew "watchman"
-brew "d12frosted/emacs-plus/emacs-plus@28", args: ["with-ctags", "with-xwidgets"]
+brew "d12frosted/emacs-plus/emacs-plus@28", args: ["with-native-comp", "with-nobu417-big-sur-icon", "with-xwidgets"]
 # The fastest shell plugin manager
 brew "getantibody/tap/antibody"
 # Find and replace text in source files
 brew "tankerhq/repo/ruplacer"
 # Maintained ctags implementation
 brew "universal-ctags/universal-ctags/universal-ctags", args: ["HEAD"], link: false
+# GPU-accelerated terminal emulator
+cask "alacritty"
 # Application launcher and productivity software
 cask "alfred"
 # Tool to hide status bar icons
 cask "dozer"
-# Client for the Dropbox cloud storage service
-cask "dropbox"
 cask "font-fira-code-nerd-font"
 cask "font-hack-nerd-font"
 # Terminal emulator as alternative to Apple's Terminal app
