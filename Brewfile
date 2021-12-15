@@ -8,6 +8,8 @@ tap "tankerhq/repo"
 tap "universal-ctags/universal-ctags"
 # Spell checker with better logic than ispell
 brew "aspell"
+# Tool for generating GNU Standards-compliant Makefiles
+brew "automake"
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
 # Core application library for C
@@ -38,6 +40,8 @@ brew "fd"
 brew "findutils"
 # Collection of reusable C++ library artifacts developed at Facebook
 brew "folly"
+# Command-line fuzzy finder written in Go
+brew "fzf"
 # Test automation tool that supports executable documentation
 brew "gauge"
 # GNU awk utility
@@ -124,6 +128,8 @@ brew "rlwrap"
 brew "ruby"
 # Experimental Rust compiler front-end for IDEs
 brew "rust-analyzer"
+# Safe, concurrent, practical language
+brew "rust"
 # Build tool for Scala projects
 brew "sbt"
 # Tool to create intelligent and beautiful documentation
@@ -165,9 +171,13 @@ brew "universal-ctags/universal-ctags/universal-ctags", args: ["HEAD"], link: fa
 cask "alacritty"
 # Application launcher and productivity software
 cask "alfred"
+# App to build and share containerized applications and microservices
+cask "docker"
 # Tool to hide status bar icons
 cask "dozer"
 cask "font-fira-code-nerd-font"
 cask "font-hack-nerd-font"
 # Terminal emulator as alternative to Apple's Terminal app
 cask "iterm2"
+# Music streaming service
+cask "spotify"
