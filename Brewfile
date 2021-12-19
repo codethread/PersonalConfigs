@@ -167,8 +167,6 @@ brew "getantibody/tap/antibody"
 brew "tankerhq/repo/ruplacer"
 # Maintained ctags implementation
 brew "universal-ctags/universal-ctags/universal-ctags", args: ["HEAD"], link: false
-# GPU-accelerated terminal emulator
-cask "alacritty"
 # Application launcher and productivity software
 cask "alfred"
 # App to build and share containerized applications and microservices

@@ -739,8 +739,9 @@ _s_kip
   (setq solaire-mode-remap-modeline nil))
 
 (use-package doom-themes
+  :demand
   :init
-  ;; (solaire-global-mode 1)
+  (solaire-global-mode 1)
   :config
   ;; (load-theme 'doom-one t)
   (load-theme 'doom-nord t)
@@ -798,15 +799,9 @@ _s_kip
                 "\\\\" "://")))
 
 (use-package tree-sitter
-  ;; :disabled
-  :straight (tree-sitter :type git
-			 :flavor melpa
-			 :files ("lisp/*.el" (:exclude "lisp/tree-sitter-tests.el") "tree-sitter-pkg.el")
-			 :host github :repo "emacs-tree-sitter/elisp-tree-sitter")
   :hook
   ((typescript-mode rustic-mode) . tree-sitter-mode)
   ((typescript-mode rustic-mode) . tree-sitter-hl-mode)
-  ;; (tree-sitter-after-on . tree-sitter-hl-mode)
   :commands (my/tree-sitter-hl)
   :config
   (defun my/tree-sitter-hl ()
@@ -825,12 +820,12 @@ _s_kip
 (use-package tree-sitter-langs
   :after tree-sitter)
 
-(use-package tree-sitter-indent
-  :straight (tree-sitter-indent :host github
-				:repo " emacsmirror/tree-sitter-indent"
-				:branch "master"
-				:files ("tree-sitter-indent.el"))
-  :after tree-sitter)
+;; (use-package tree-sitter-indent
+;;   :straight (tree-sitter-indent :host git
+;; 				:repo "https://codeberg.org/FelipeLema/tree-sitter-indent.el.git"
+;; 				:branch "main"
+;; 				:files ("tree-sitter-indent.el"))
+;;   :after tree-sitter)
 
 (use-package evil-textobj-tree-sitter
   :disabled   ; some fun stuff in here, will look into this more later
@@ -1019,7 +1014,8 @@ _s_kip
   :demand
   :after projectile
   :config
-  (setq wakatime-cli-path "/usr/local/bin/wakatime")
+  (setq wakatime-cli-path
+	(s-concat (s-trim (shell-command-to-string "brew --prefix")) "/bin/wakatime-cli"))
   (global-wakatime-mode))
 
 
@@ -1354,7 +1350,7 @@ _s_kip
 (use-package jest
   :hook ((web-mode typescript-mode typescript-tsx-mode) . jest-minor-mode)
   :custom
-  (jest-executable "yarn test --color --maxWorkers=1")
+  (jest-executable "yarn test --no-coverage --color --maxWorkers=1")
   (jest-unsaved-buffers-behavior 'save-current)
   :general
   (general-define-key

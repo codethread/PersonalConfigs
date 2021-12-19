@@ -31,7 +31,6 @@ alias grep='grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}'
 alias ls='ls -pGF'
 # alias l='ls -lah'
 alias l='exa -lah'
-alias lc='colorls -A --sd --gs'
 
 alias pathis='echo $PATH | tr -s ":" "\n"'
 
@@ -65,7 +64,6 @@ alias pipes="pipes.sh -f 60 -s 8"
 # NODE
 # -------------------------------------------#
 alias npc="rm -rf ./node_modules; npm cache clear; npm i"
-alias npg="node_g_installs"
 alias npl="npm -g ls --depth=0"
 alias yy="eval \$(cat package.json | jq -S '.scripts' | sed '1d;$d' | fzf -i --header='[run:]' | sed -E \"s/\\\"(.*)\\\":.*/yarn run \\1/\" )"
 
@@ -96,7 +94,7 @@ alias gnuke="git clean -dfX"
 alias gr='git rebase -i HEAD~$1'
 alias gundo="git reset --soft HEAD~1 && git restore --staged ."
 alias gwip="git add . && git commit -nm 'wip'"
-# alias gh="open -a '/Applications/Google Chrome.app' \`git remote -v | grep git@github.com | grep fetch | head -1 | cut -f2 | cut -d' ' -f1 | sed -e's/:/\//' -e 's/git@/http:\/\//'\`"
+alias ghub="open -a '/Applications/Google Chrome.app' \`git remote -v | grep git@github.com | grep fetch | head -1 | cut -f2 | cut -d' ' -f1 | sed -e's/:/\//' -e 's/git@/http:\/\//'\`"
 
 #---------------------------------------------#
 # TMUXINATOR

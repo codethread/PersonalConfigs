@@ -1,15 +1,7 @@
 #!/bin/bash
 
-# npm i -g eslint 
-# npm i -g babel-cli
 npm i -g npm-merge-driver 
-npm i -g yarn 
-# npm i -g fkill
-# npm i -g vtop
-
-npm i -g @ahdesigns/js-gen
-npm i -g create-react-app 
-# npm i -g create-react-native-app 
+npm i -g eslint_d
 
 npm i -g typescript
 npm i -g typescript-language-server

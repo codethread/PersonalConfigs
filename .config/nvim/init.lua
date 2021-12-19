@@ -2,6 +2,7 @@ require('general.settings')
 vim.cmd 'source ~/.config/nvim/lua/general/mappings.vim'
 require('plugins')
 
+vim.g.nord_italic = true
 require('nord').set()
 -- require('onedark').setup()
 

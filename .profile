@@ -2,11 +2,20 @@
 
 # maconly
 if [ "$(uname 2> /dev/null)" != "Linux" ]; then
+  # one of these will be installed depending on intel/arm
   [ -d "/usr/local/bin" ] && pathprepend "/usr/local/bin" PATH
-  [ -d "/usr/local/opt/gnu-sed/libexec/gnubin" ] && pathprepend "/usr/local/opt/gnu-sed/libexec/gnubin" PATH
-  [ -d "/Library/Frameworks/Mono.framework/Versions/Current/Commands" ] && pathprepend "/Library/Frameworks/Mono.framework/Versions/Current/Commands" PATH
+  [ -d "/opt/homebrew/bin" ] && pathprepend "/opt/homebrew/bin" PATH
+
+  # now we have brew somewhere
+  if [ $(brew --prefix 2> /dev/null) ]; then
+    # use gnu coreutils instead of mac, e.g sed
+    pathprepend "$(brew --prefix)/opt/coreutils/libexec/gnubin" PATH
+    pathprepend "$(brew --prefix)/opt/gnu-sed/libexec/gnubin" PATH
+    pathprepend "$(brew --prefix)/opt/gnu-tar/libexec/gnubin" PATH
+  fi
+
   [ -d "/usr/local/opt/python/libexec/bin" ] && pathprepend "/usr/local/opt/python/libexec/bin" PATH
-  [ -d "/usr/local/opt/coreutils/libexec/gnubin" ] && pathprepend "/usr/local/opt/coreutils/libexec/gnubin" PATH
+  [ -d "/Library/Frameworks/Mono.framework/Versions/Current/Commands" ] && pathprepend "/Library/Frameworks/Mono.framework/Versions/Current/Commands" PATH
 fi
 
 # linux
@@ -18,12 +27,12 @@ if [ "$(uname 2> /dev/null)" = "Linux" ]; then
 fi
 
 export EDITOR='vim'
-export SOURCED_PROFILE=true
 
 # Golang
 export GOPATH=$HOME/go
 export GOBIN=$GOPATH/bin
 export GO111MODULE=on
+
 export VOLTA_HOME="$HOME/.volta"
 
 [ -d "$GOBIN" ] && pathprepend "$GOBIN" PATH
