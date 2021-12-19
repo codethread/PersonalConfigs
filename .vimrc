@@ -177,9 +177,7 @@ let g:indentLine_fileTypeExclude = ['help', 'man', 'startify', 'NERDTree', 'netr
 " }}}
 Plug 'airblade/vim-gitgutter'
 Plug 'chrisbra/Colorizer'
-Plug 'connorholyday/vim-snazzy'
-Plug 'rakr/vim-one'
-Plug 'morhetz/gruvbox'
+Plug 'arcticicestudio/nord-vim'
 " lightline.vim  {{{
 Plug 'itchyny/lightline.vim'
 
@@ -233,7 +231,7 @@ endfunction
 
 " let g:lightline = { 'colorscheme': 'one' }
 " let g:lightline = {  }
-let g:lightline = { 'colorscheme': 'snazzier' }
+let g:lightline = { 'colorscheme': 'nord' }
 let g:lightline.active = {
       \ 'left': [
       \   [
@@ -676,7 +674,7 @@ inoremap <expr> <C-Space> pumvisible() \|\| &omnifunc == '' ?
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum" " something to do with vim in a terminal
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 
-color snazzier
+colorscheme nord
 
 " set background=light " for the light version or dark for dark
 let g:one_allow_italics = 1 " I love italic for comments
