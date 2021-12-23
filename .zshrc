@@ -107,7 +107,7 @@ rbenv() {
 #--- Sky Stuff
 #-----------------------------------------
 if [[ $(whoami) =~ 'adh23' ]]; then
-    ssource $SKY_SERVICE_DEV_TOOLS/.sky.sh
+    # ssource $SKY_SERVICE_DEV_TOOLS/.sky.sh
 fi
 
 # enable this and ~/.zshenv for profiling

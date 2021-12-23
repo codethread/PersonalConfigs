@@ -799,6 +799,7 @@ _s_kip
                 "\\\\" "://")))
 
 (use-package tree-sitter
+  :disabled
   :hook
   ((typescript-mode rustic-mode) . tree-sitter-mode)
   ((typescript-mode rustic-mode) . tree-sitter-hl-mode)
@@ -1186,6 +1187,7 @@ _s_kip
   (lsp-rust-analyzer-display-chaining-hints t)
   (lsp-rust-analyzer-display-parameter-hints t)
   (lsp-rust-analyzer-server-display-inlay-hints t)
+  (lsp-rust-analyzer-cargo-watch-command "clippy")
 
   :config
   ;; (add-hook 'typescript-mode #'my/lsp-limit-lsp)

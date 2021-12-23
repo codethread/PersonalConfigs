@@ -126,10 +126,6 @@ brew "ripgrep"
 brew "rlwrap"
 # Powerful, clean, object-oriented scripting language
 brew "ruby"
-# Experimental Rust compiler front-end for IDEs
-brew "rust-analyzer"
-# Safe, concurrent, practical language
-brew "rust"
 # Build tool for Scala projects
 brew "sbt"
 # Tool to create intelligent and beautiful documentation
