@@ -152,7 +152,6 @@
     }
   ],
   "vsicons.dontShowNewVersionMessage": true,
-  "workbench.colorTheme": "Nord",
   "problems.decorations.enabled": false,
   "editor.codeLens": false,
   "todohighlight.keywords": [
@@ -218,5 +217,6 @@
     ".eslintrc": "jsonc"
   },
   "editor.formatOnSave": true,
-  "svelte.enable-ts-plugin": true
+  "svelte.enable-ts-plugin": true,
+  "workbench.colorTheme": "Nord"
 }

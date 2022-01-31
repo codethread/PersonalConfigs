@@ -1509,7 +1509,7 @@ _s_kip
   ;;     (setq rustic-format-trigger 'nil)
   ;;     (lsp-rust-analyzer-expand-macro)
   ;;     (setq rustic-format-trigger current)))
-  :custom (rustic-indent-offset 2)
+  :custom (rustic-indent-offset 4)
   :general
   ;; (my-leader-def
   ;;   "jj" 'rustic-cargo-current-test
@@ -1541,6 +1541,8 @@ _s_kip
 
   :custom
   (rustic-format-trigger 'on-save))
+
+(use-package just-mode)
 
 (use-package dockerfile-mode)
 
@@ -1588,7 +1590,7 @@ _s_kip
   (flycheck-indication-mode 'right-fringe)
   ;; (flycheck-check-syntax-automatically '(idle-buffer-switch save mode-enabled))
   (flycheck-check-syntax-automatically '(idle-buffer-switch new-line mode-enabled idle-change))
-  ;; (flycheck-javascript-eslint-executable "eslint_d")
+  (flycheck-javascript-eslint-executable "eslint_d")
   :hook (prog-mode . flycheck-mode)
   :config
   ;; simple clean line for flycheck errors in fringe
@@ -1646,7 +1648,8 @@ _s_kip
     "EN" 'evil-next-flyspell-error)
 
   :config
-  (setq ispell-program-name "/usr/local/bin/aspell")
+  (setq ispell-program-name
+	(concat (string-trim (shell-command-to-string "brew --prefix")) "/bin/aspell"))
 
   (defun my/my-save-word ()
     (interactive)
@@ -1820,14 +1823,15 @@ _s_kip
 				    org-agenda-file-regexp)))
 
   (use-package ob-typescript)
+  (use-package ob-restclient)
 
   (org-babel-do-load-languages 'org-babel-load-languages '((shell . t) ; allow bash
 							   (js . t)
 							   (typescript . t)
+							   (restclient . t)
 							   (haskell . t)
-							   (ruby . t)
-							   (io . t)))
-
+							   (ruby . t)))
+  
   ;; TODO add pretty bullets
   ;; (font-lock-add-keywords 'org-mode
   ;;                         '(("^ *\\([-]\\) "

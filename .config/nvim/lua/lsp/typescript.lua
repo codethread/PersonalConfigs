@@ -2,6 +2,14 @@ local nvim_lsp = require("lspconfig")
 
 require("null-ls").config {}
 require("lspconfig")["null-ls"].setup {}
+require'lspconfig'.svelte.setup{
+  on_attach = function() 
+
+    -- format on save
+    vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()")
+
+  end
+}
 
 nvim_lsp.tsserver.setup {
   on_attach = function(client, bufnr)
