@@ -1543,6 +1543,8 @@ _s_kip
   (rustic-format-trigger 'on-save))
 
 (use-package just-mode)
+(use-package lua-mode)
+(use-package vimrc-mode)
 
 (use-package dockerfile-mode)
 
