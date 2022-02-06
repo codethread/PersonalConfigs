@@ -1,6 +1,3 @@
--- use space as a the leader key
-vim.g.mapleader = ' '
-
 local set = vim.opt
 
 -- Set the behavior of tab
@@ -41,6 +38,7 @@ set.clipboard:append('unnamedplus') -- Copy paste between vim and everything els
 -- set.autochdir = true -- Your working directory will always be the same as your working directory
 --
 set.completeopt = 'menu,menuone,noselect'
+set.termguicolors = true -- adds more colors
 
 -- au! BufWritePost $MYVIMRC source %      " auto source when writing to init.vm alternatively you can run :source $MYVIMRC
 
