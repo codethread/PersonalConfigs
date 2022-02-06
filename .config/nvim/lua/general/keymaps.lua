@@ -16,6 +16,9 @@ map("", "<Space>", "<Nop>")
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 
+map("i", "<C-f>", "<Right>")
+map("i", "<C-b>", "<Left>")
+
 -- swap ; and :
 -- nmap(';', ':')
 -- nmap(':', ';')
