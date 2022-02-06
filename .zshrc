@@ -60,7 +60,7 @@ export JQ_COLORS="1;30:0;31:0;32:0;35:0;33:1;35:1;35"
 export FZF_DEFAULT_COMMAND='fd --type f'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # quickest way to cd around
-export FZF_ALT_C_COMMAND="fd --type d --exclude '{Library,Music,Applications,Pictures,Unity,VirtualBox VMs,WebstormProjects,Tools,node_modules,.git}' . ${HOME}"
+export FZF_ALT_C_COMMAND="fd --hidden --type d --exclude '{Library,Music,Applications,Pictures,Unity,VirtualBox VMs,WebstormProjects,Tools,node_modules,.git}' . ${HOME}"
 
 #------------------------------------------
 #--- Language specific
