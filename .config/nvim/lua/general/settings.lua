@@ -7,9 +7,9 @@ set.relativenumber = true
 
 set.hidden = true -- Required to keep multiple buffers open multiple buffers
 -- set.nowrap = true -- Display long lines as just one line
-set.encoding = 'utf-8' -- The encoding displayed
+set.encoding = "utf-8" -- The encoding displayed
 set.pumheight = 10 -- Makes popup menu smaller
-set.fileencoding = 'utf-8' -- The encoding written to file
+set.fileencoding = "utf-8" -- The encoding written to file
 set.ruler = true -- Show the cursor position all the time
 set.cmdheight = 2 -- More space for displaying messages
 -- set.iskeyword+=-                      	-- treat dash separated words as a word text object"
@@ -34,11 +34,10 @@ set.showtabline = 2 -- Always show tabs
 set.updatetime = 300 -- Faster completion
 set.timeoutlen = 500 -- By default timeoutlen is 1000 ms
 -- set.formatoptions-=cro                  -- Stop newline continution of comments
-set.clipboard:append('unnamedplus') -- Copy paste between vim and everything else
+set.clipboard:append("unnamedplus") -- Copy paste between vim and everything else
 -- set.autochdir = true -- Your working directory will always be the same as your working directory
---
-set.completeopt = 'menu,menuone,noselect'
+set.signcolumn = "yes"
+set.completeopt = "menu,menuone,noselect"
 set.termguicolors = true -- adds more colors
 
 -- au! BufWritePost $MYVIMRC source %      " auto source when writing to init.vm alternatively you can run :source $MYVIMRC
-

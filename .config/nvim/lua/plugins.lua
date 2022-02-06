@@ -66,6 +66,12 @@ return packer.startup(function(use)
 	})
 
 	-- project navigation
+	use({
+		"goolord/alpha-nvim",
+		config = function()
+			require("dashboard")
+		end,
+	})
 	use("nvim-telescope/telescope.nvim")
 	use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
 

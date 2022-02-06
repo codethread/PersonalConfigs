@@ -1,5 +1,7 @@
+-- :checkhealth which_key
 local status_ok, which_key = pcall(require, "which-key")
 if not status_ok then
+	print("could not load which key")
 	return
 end
 
@@ -29,9 +31,9 @@ local setup = {
 	key_labels = {
 		-- override the label used to display some keys. It doesn't effect WK in any other way.
 		-- For example:
-		-- ["<space>"] = "SPC",
-		-- ["<cr>"] = "RET",
-		-- ["<tab>"] = "TAB",
+		["<space>"] = "<SPC>",
+		["<cr>"] = "<RET>",
+		["<tab>"] = "<TAB>",
 	},
 	icons = {
 		breadcrumb = "»", -- symbol used in the command line area that shows your active key combo
@@ -79,6 +81,7 @@ local opts = {
 }
 
 local mappings = {
+	["<leader>"] = { "<cmd>Telescope find_files<cr>", "Files" },
 	["a"] = { "<cmd>Alpha<cr>", "Alpha" },
 	["b"] = {
 		"<cmd>lua require('telescope.builtin').buffers(require('telescope.themes').get_dropdown{previewer = false})<cr>",
@@ -159,6 +162,7 @@ local mappings = {
 			"Workspace Symbols",
 		},
 	},
+
 	s = {
 		name = "Search",
 		b = { "<cmd>Telescope git_branches<cr>", "Checkout branch" },

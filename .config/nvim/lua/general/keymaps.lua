@@ -1,4 +1,4 @@
-local utils = require('utils')
+local utils = require("utils")
 local map = utils.map
 local nmap = utils.nmap
 local vmap = utils.vmap
@@ -12,9 +12,9 @@ local vmap = utils.vmap
 --   command_mode = "c",
 
 -- use space as the leader key
-map('', '<Space>', '<Nop>')
-vim.g.mapleader = ' '
-vim.g.maplocalleader = ','
+map("", "<Space>", "<Nop>")
+vim.g.mapleader = " "
+vim.g.maplocalleader = ","
 
 -- swap ; and :
 -- nmap(';', ':')
@@ -23,5 +23,5 @@ vim.g.maplocalleader = ','
 -- vmap(':', ';')
 
 -- Escape
-map('i', 'jk', '<ESC>')
-nmap('<leader><leader>', ':Telescope find_files<cr>')
+map("i", "jk", "<ESC>")
+-- nmap('<leader><leader>', ':Telescope find_files<cr>')
