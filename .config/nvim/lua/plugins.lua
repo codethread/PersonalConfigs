@@ -107,7 +107,7 @@ return packer.startup(function(use)
 	use("tpope/vim-commentary")
 	use("tpope/vim-surround")
 	use("windwp/nvim-autopairs") -- Autopairs, integrates with both cmp and treesitter
-	-- use 'chun-yang/auto-pairs'
+	use("mbbill/undotree")
 
 	-- uses tree sitter for comment detection
 	use("JoosepAlviste/nvim-ts-context-commentstring")
