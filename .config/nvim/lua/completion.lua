@@ -50,7 +50,7 @@ cmp.setup({
 		end,
 	},
 	completion = {
-		--	autocomplete = false,
+		autocomplete = false,
 	},
 	mapping = {
 		["<C-k>"] = cmp.mapping.select_prev_item(),
@@ -63,9 +63,7 @@ cmp.setup({
 			c = cmp.mapping.close(),
 		}),
 		-- start completion
-		["<C-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
-		-- Accept currently selected item. If none selected, `select` first item.
-		-- Set `select` to `false` to only confirm explicitly selected items.
+		-- ["<C-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
 		["<C-l>"] = cmp.mapping.confirm({ select = true }),
 		["<Tab>"] = cmp.mapping(function(fallback)
 			if luasnip.expandable() then
@@ -109,14 +107,7 @@ cmp.setup({
 		end,
 	},
 
-	-- grab more from https://github.com/topics/nvim-cmp
-	sources = {
-		{ name = "nvim_lsp" },
-		{ name = "nvim_lua" },
-		{ name = "luasnip" },
-		{ name = "buffer" },
-		{ name = "path" },
-	},
+	sources = {},
 	confirm_opts = {
 		behavior = cmp.ConfirmBehavior.Replace,
 		select = false,
@@ -129,3 +120,55 @@ cmp.setup({
 		native_menu = false,
 	},
 })
+
+_G.vimrc = _G.vimrc or {}
+_G.vimrc.cmp = _G.vimrc.cmp or {}
+
+_G.vimrc.cmp.lsp = function()
+	cmp.complete({
+		config = {
+			sources = {
+				{ name = "nvim_lsp" },
+				{ name = "nvim_lua" },
+			},
+		},
+	})
+end
+
+_G.vimrc.cmp.snippet = function()
+	cmp.complete({
+		config = {
+			sources = {
+				{ name = "luasnip" },
+			},
+		},
+	})
+end
+
+_G.vimrc.cmp.buffer = function()
+	cmp.complete({
+		config = {
+			sources = {
+				{ name = "buffer" },
+			},
+		},
+	})
+end
+
+_G.vimrc.cmp.path = function()
+	cmp.complete({
+		config = {
+			sources = {
+				{ name = "path" },
+			},
+		},
+	})
+end
+
+vim.cmd([[
+  inoremap <C-Space> <Cmd>lua vimrc.cmp.lsp()<CR>
+  inoremap <C-x><C-o> <Cmd>lua vimrc.cmp.lsp()<CR>
+  inoremap <C-x><C-s> <Cmd>lua vimrc.cmp.snippet()<CR>
+  inoremap <C-x><C-n> <Cmd>lua vimrc.cmp.buffer()<CR>
+  inoremap <C-x><C-f> <Cmd>lua vimrc.cmp.path()<CR>
+]])

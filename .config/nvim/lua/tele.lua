@@ -80,6 +80,9 @@ telescope.setup({
 		},
 	},
 	pickers = {
+    find_files = {
+        hidden = true
+    },
 		-- Default configuration for builtin pickers goes here:
 		-- picker_name = {
 		--   picker_config_key = value,
