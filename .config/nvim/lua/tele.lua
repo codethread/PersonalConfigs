@@ -5,14 +5,18 @@ if not status_ok then
 end
 
 local actions = require("telescope.actions")
+local action_layout = require("telescope.actions.layout")
+
+telescope.load_extension("lsp_handlers")
 
 telescope.setup({
 	defaults = {
-		theme = "ivy",
-
 		prompt_prefix = " ",
 		selection_caret = " ",
 		path_display = { "truncate" },
+		file_ignore_patterns = {
+			"^.git/",
+		},
 
 		mappings = {
 			i = {
@@ -44,6 +48,7 @@ telescope.setup({
 				["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
 				["<C-l>"] = actions.complete_tag,
 				["<C-_>"] = actions.which_key, -- keys from pressing <C-/>
+				["<M-p>"] = action_layout.toggle_preview,
 			},
 
 			n = {
@@ -76,13 +81,15 @@ telescope.setup({
 				["<PageDown>"] = actions.results_scrolling_down,
 
 				["?"] = actions.which_key,
+				["<M-p>"] = action_layout.toggle_preview,
 			},
 		},
 	},
 	pickers = {
-    find_files = {
-        hidden = true
-    },
+		find_files = {
+			hidden = true,
+			find_command = { "fd", "--type", "f", "--strip-cwd-prefix" },
+		},
 		-- Default configuration for builtin pickers goes here:
 		-- picker_name = {
 		--   picker_config_key = value,
@@ -92,10 +99,10 @@ telescope.setup({
 		-- builtin picker
 	},
 	extensions = {
-		-- Your extension configuration goes here:
-		-- extension_name = {
-		--   extension_config_key = value,
-		-- }
-		-- please take a look at the readme of the extension you want to configure
+		lsp_handlers = {
+			code_action = {
+				telescope = require("telescope.themes").get_dropdown({}),
+			},
+		},
 	},
 })
