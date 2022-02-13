@@ -88,7 +88,7 @@ local mappings = {
 		"Buffers",
 	},
 	["w"] = { "<cmd>w!<CR>", "Save" },
-	["q"] = { "<cmd>q!<CR>", "Quit" },
+	["q"] = { "<cmd>luafile %<CR>", "Reload Luafile" },
 	["c"] = { "<cmd>Bdelete!<CR>", "Close Buffer" },
 	["h"] = { "<cmd>nohlsearch<CR>", "No Highlight" },
 	["F"] = { "<cmd>Telescope live_grep theme=ivy<cr>", "Find Text" },

@@ -32,7 +32,7 @@ if [ "$(uname 2> /dev/null)" = "Linux" ]; then
   [ -d "/opt/local/bin" ] && pathprepend "/opt/local/bin" PATH
 fi
 
-export EDITOR='vim'
+export EDITOR='nvim'
 
 # Personal shared
 #------------------------------------------

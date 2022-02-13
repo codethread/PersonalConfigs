@@ -2,6 +2,8 @@ require("general.settings")
 require("general.keymaps")
 require("plugins")
 require("general.colors")
+require("autocommands")
+
 require("completion")
 require("lsp")
 require("treesitter")

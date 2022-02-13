@@ -1,7 +1,7 @@
-local status_ok, toggleterm pcall(require, 'toggleterm')
+local status_ok, toggleterm = pcall(require, "toggleterm")
 if not status_ok then
-   return
-   end
+	return
+end
 
 toggleterm.setup({
 	-- size can be a number or function which is passed the current terminal
@@ -12,11 +12,11 @@ toggleterm.setup({
 			return vim.o.columns * 0.4
 		end
 	end,
-	open_mapping = [[<c-\>]],
+	open_mapping = [[<C-\>]],
 	hide_numbers = true, -- hide the number column in toggleterm buffers
 	shade_filetypes = {},
-	shade_terminals = false, -- darkens the terminal
-	shading_factor = "3", -- the degree by which to darken to terminal colour, default: 1 for dark backgrounds, 3 for light
+	shade_terminals = true, -- darkens the terminal
+	shading_factor = 3, -- the degree by which to darken to terminal colour, default: 1 for dark backgrounds, 3 for light
 	start_in_insert = true,
 	insert_mappings = true, -- whether or not the open mapping applies in insert mode
 	terminal_mappings = true, -- whether or not the open mapping applies in the opened terminals

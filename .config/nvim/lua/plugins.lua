@@ -64,6 +64,7 @@ return packer.startup(function(use)
 		"hoob3rt/lualine.nvim",
 		requires = { "kyazdani42/nvim-web-devicons", opt = true },
 	})
+	use("arkav/lualine-lsp-progress")
 
 	-- project navigation
 	use({
@@ -74,17 +75,37 @@ return packer.startup(function(use)
 	})
 	use("nvim-telescope/telescope.nvim")
 	use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
-	use("gbrlsnchs/telescope-lsp-handlers.nvim")
-	use("camgraff/telescope-tmux.nvim")
+	use({ "gbrlsnchs/telescope-lsp-handlers.nvim" })
+	use({ "camgraff/telescope-tmux.nvim" })
 
 	use("tpope/vim-fugitive")
 	use("tpope/vim-rhubarb")
 	use("tpope/vim-vinegar")
 	use("tpope/vim-eunuch")
 
-	-- core
+	-- treesitter
 	use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" })
+	use("nvim-treesitter/playground")
+	use("nvim-treesitter/nvim-treesitter-textobjects")
+	use("windwp/nvim-ts-autotag") -- close <div tags, and ciw
+
+	-- keymaps
 	use("folke/which-key.nvim")
+	use({
+		"christoomey/vim-tmux-navigator",
+		config = function()
+			vim.cmd([[
+      " Disable tmux navigator when zooming the Vim pane
+      let g:tmux_navigator_disable_when_zoomed = 1
+
+      let g:tmux_navigator_no_mappings = 1
+      nnoremap <silent> <C-h> :TmuxNavigateLeft<cr>
+      nnoremap <silent> <C-j> :TmuxNavigateDown<cr>
+      nnoremap <silent> <C-k> :TmuxNavigateUp<cr>
+      nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
+      ]])
+		end,
+	})
 
 	-- lsp
 	use("neovim/nvim-lspconfig")

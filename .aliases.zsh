@@ -1,6 +1,7 @@
 #---------------------------------------------#
 # EDITOR-ish
 # -------------------------------------------#
+alias vim="nvim"
 alias vi="vim --noplugin" # vi is vim on mac anyway so this is a 'light' version
 alias zz="vi ~/.zshrc" # open zsh
 alias vv="vi ~/.vimrc" # open vim config
@@ -9,7 +10,6 @@ alias codij="vim -c \"Codi javascript | let ale_enabled = 0\" dmp.javascript"
 
 alias zr="source ~/.zshrc"
 alias vo="vim \$(fzf)"
-alias mvim="/Applications/MacVim.app/Contents/bin/mvim"
 alias als="eval \$(cat ~/.aliases.zsh | grep \"^alias.\+=\\\"\" | fzf -i --header='[run:]' | sed -E \"s:alias.*\\\"(.*)\\\":\\1:\" )"
 
 #---------------------------------------------#

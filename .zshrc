@@ -5,9 +5,9 @@
 # this has some tips on speeding up zsh
 # https://htr3n.github.io/2018/07/faster-zsh/
 
-#------------------------------------------
+#------------------------------------------------------------------------------
 #--- ZSH settings
-#-----------------------------------------
+#------------------------------------------------------------------------------
 bindkey -e # emacs key bindings
 if [[ "${terminfo[kcbt]}" != "" ]]; then
     bindkey "${terminfo[kcbt]}" reverse-menu-complete   # [Shift-Tab] - move through the completion menu backwards
@@ -23,9 +23,9 @@ if [[ "$TERMINAL_EMULATOR" == "JetBrains-JediTerm" ]]; then
   bindkey "∂" delete-word   # Option-d
 fi
 
-#------------------------------------------
+#------------------------------------------------------------------------------
 #--- ZSH History
-#-----------------------------------------
+#------------------------------------------------------------------------------
 # see https://zsh.sourceforge.io/Doc/Release/Options.html#History for more info
 
 setopt INC_APPEND_HISTORY        # Write to the history file immediately, not when the shell exits.
@@ -40,9 +40,9 @@ HISTFILE=$HOME/.zsh_history
 HISTSIZE=999999999
 SAVEHIST=$HISTSIZE
 
-#------------------------------------------
+#------------------------------------------------------------------------------
 #--- terminal specific envs and aliases
-#-----------------------------------------
+#------------------------------------------------------------------------------
 # Prompt https://scriptingosx.com/2019/07/moving-to-zsh-06-customizing-the-zsh-prompt/
 NEWLINE=$'\n' # couldn't get the newline to behave without this
 PROMPT="${NEWLINE}%F{cyan}%~${NEWLINE}%(?.%F{magenta}ᕕ(ᐛ)ᕗ.%F{red}(╯°□°%)╯︵ ┻━┻) %F{normal}"
@@ -62,9 +62,9 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # quickest way to cd around
 export FZF_ALT_C_COMMAND="fd --hidden --type d --exclude '{Library,Music,Applications,Pictures,Unity,VirtualBox VMs,WebstormProjects,Tools,node_modules,.git}' . ${HOME}"
 
-#------------------------------------------
+#------------------------------------------------------------------------------
 #--- Language specific
-#-----------------------------------------
+#------------------------------------------------------------------------------
 
 # haskell
 #-----------------------------------------
@@ -103,9 +103,9 @@ rbenv() {
   rbenv "$@"
 }
 
-#------------------------------------------
+#------------------------------------------------------------------------------
 #--- Sky Stuff
-#-----------------------------------------
+#------------------------------------------------------------------------------
 if [[ $(whoami) =~ 'adh23' ]]; then
     # ssource $SKY_SERVICE_DEV_TOOLS/.sky.sh
 fi
@@ -117,5 +117,3 @@ fi
     # export SDKMAN_DIR="/Users/adh23/.sdkman"
     # [[ -s "/Users/adh23/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/adh23/.sdkman/bin/sdkman-init.sh"
 # fnm
-
-alias luamake=/Users/adh23/.tooling/lua-language-server/3rd/luamake/luamake
