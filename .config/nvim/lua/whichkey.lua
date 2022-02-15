@@ -97,7 +97,7 @@ local mappings = {
 	e = {
 		name = "Errors",
 		l = {
-			"<cmd>Telescope diagnostics bufnr=0<cr> theme=ivy",
+			"<cmd>Telescope diagnostics theme=ivy bufnr=0<cr> ",
 			"Document Diagnostics",
 		},
 		p = {
@@ -181,6 +181,7 @@ local mappings = {
 		R = { "<cmd>Telescope registers<cr>", "Registers" },
 		k = { "<cmd>Telescope keymaps<cr>", "Keymaps" },
 		C = { "<cmd>Telescope commands<cr>", "Commands" },
+		p = { "<cmd>Telescope live_grep<cr>", "Live Grep" },
 	},
 
 	t = {

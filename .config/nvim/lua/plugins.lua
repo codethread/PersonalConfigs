@@ -50,6 +50,7 @@ return packer.startup(function(use)
 	use("wbthomason/packer.nvim")
 	use("nvim-lua/plenary.nvim")
 	use("nvim-lua/popup.nvim")
+	use("wakatime/vim-wakatime")
 
 	-- help for lua, TODO need to make this work
 	-- use 'wsdjeg/luarefvim'
@@ -57,6 +58,13 @@ return packer.startup(function(use)
 
 	-- colorscheme
 	use("shaunsingh/nord.nvim")
+	use({
+		"mcchrish/zenbones.nvim",
+		-- Optionally install Lush. Allows for more configuration or extending the colorscheme
+		-- If you don't want to install lush, make sure to set g:zenbones_compat = 1
+		-- In Vim, compat mode is turned on as Lush only works in Neovim.
+		requires = "rktjmp/lush.nvim",
+	})
 	-- use 'navarasu/onedark.nvim'
 
 	-- modeline

@@ -103,17 +103,10 @@ rbenv() {
   rbenv "$@"
 }
 
-#------------------------------------------------------------------------------
-#--- Sky Stuff
-#------------------------------------------------------------------------------
-if [[ $(whoami) =~ 'adh23' ]]; then
-    # ssource $SKY_SERVICE_DEV_TOOLS/.sky.sh
-fi
-
 # enable this and ~/.zshenv for profiling
 # zprof
 
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-    # export SDKMAN_DIR="/Users/adh23/.sdkman"
-    # [[ -s "/Users/adh23/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/adh23/.sdkman/bin/sdkman-init.sh"
-# fnm
+if [[ "$PROFILE_STARTUP" == true ]]; then
+    unsetopt xtrace
+    exec 2>&3 3>&-
+fi

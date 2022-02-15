@@ -25,7 +25,7 @@ alias eg="/Applications/Emacs.app/Contents/MacOS/Emacs"
 #---------------------------------------------#
 # HELPERS
 # -------------------------------------------#
-alias ctags="`brew --prefix`/bin/ctags"
+alias ctags="`$BREW_PATH`/bin/ctags"
 alias grep='grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}'
 
 alias ls='ls -pGF'
@@ -107,6 +107,7 @@ alias kmux="kill_tmux_session"
 # SKY
 ##############################################
 alias uni="unicorn_build"
+alias cdi="cd ~/sky/id-idris"
 
 #---------------------------------------------#
 # OTHER

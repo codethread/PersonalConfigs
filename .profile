@@ -3,17 +3,21 @@
 #------------------------------------------
 #--- mac only
 #-----------------------------------------
+if [ $(brews --prefix 2> /dev/null) ]; then
+  BREW_PATH=$(brew --prefix)
+fi
+
 if [ "$(uname 2> /dev/null)" != "Linux" ]; then
   # one of these will be installed depending on intel/arm
   [ -d "/usr/local/bin" ] && pathprepend "/usr/local/bin" PATH
   [ -d "/opt/homebrew/bin" ] && pathprepend "/opt/homebrew/bin" PATH
 
   # now we have brew somewhere
-  if [ $(brew --prefix 2> /dev/null) ]; then
+  if [ -z "$BREW_PATH" ]; then
     # use gnu coreutils instead of mac, e.g sed
-    pathprepend "$(brew --prefix)/opt/coreutils/libexec/gnubin" PATH
-    pathprepend "$(brew --prefix)/opt/gnu-sed/libexec/gnubin" PATH
-    pathprepend "$(brew --prefix)/opt/gnu-tar/libexec/gnubin" PATH
+    pathprepend "$BREW_PATH/opt/coreutils/libexec/gnubin" PATH
+    pathprepend "$BREW_PATH/opt/gnu-sed/libexec/gnubin" PATH
+    pathprepend "$BREW_PATH/opt/gnu-tar/libexec/gnubin" PATH
   fi
 
   [ -d "/usr/local/opt/python/libexec/bin" ] && pathprepend "/usr/local/opt/python/libexec/bin" PATH

@@ -1,6 +1,14 @@
 # loaded first by by all shells including emacs during command execution
 # enable this and zshrc `zprof` for profiling
 # zmodload zsh/zprof
+#
+PROFILE_STARTUP=true
+if [[ "$PROFILE_STARTUP" == true ]]; then
+    # http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
+    PS4=$'%D{%M%S%.} %N:%i> '
+    exec 3>&2 2>$HOME/tmp/startlog.$$
+    setopt xtrace prompt_subst
+fi
 
 # some ideas on this at: https://bitbucket.org/flowblok/shell-startup/src/default/.shell/env_functions
 # and https://blog.flowblok.id.au/2013-02/shell-startup-scripts.html
@@ -34,7 +42,7 @@ pathremove () {
 pathprepend () {
     # if the path is already in the variable,
     # remove it so we can move it to the front
-    pathremove "$1" "$2"
+    # pathremove "$1" "$2"
     #[ -d "${1}" ] || return
     local var="${2:-PATH}"
     local value=`indirect_expand "$var"`
@@ -45,7 +53,7 @@ pathprepend () {
 # Eg, to append ~/bin to $PATH
 #     pathappend ~/bin PATH
 pathappend () {
-    pathremove "${1}" "${2}"
+    # pathremove "${1}" "${2}"
     #[ -d "${1}" ] || return
     local var=${2:-PATH}
     local value=`indirect_expand "$var"`
