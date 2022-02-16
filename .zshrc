@@ -9,6 +9,7 @@
 #--- ZSH settings
 #------------------------------------------------------------------------------
 bindkey -e # emacs key bindings
+
 if [[ "${terminfo[kcbt]}" != "" ]]; then
     bindkey "${terminfo[kcbt]}" reverse-menu-complete   # [Shift-Tab] - move through the completion menu backwards
 fi

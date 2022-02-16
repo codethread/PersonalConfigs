@@ -15,8 +15,8 @@ vim.g.nord_contrast = true
 vim.cmd([[
   colorscheme nordbones
 
-  highlight Normal ctermbg=none guibg=none
-  highlight NonText ctermbg=none guibg=none
+  " highlight Normal ctermbg=none guibg=none
+  " highlight NonText ctermbg=none guibg=none
 ]])
 
 local status_ok, lualine = pcall(require, "lualine")
@@ -55,7 +55,7 @@ lualine.setup({
 		lualine_a = {
 			{
 				"mode",
-				separator = { left = " " },
+				separator = { left = " ", right = "" },
 				right_padding = 2,
 				fmt = mode_map,
 			},
@@ -119,7 +119,7 @@ lualine.setup({
 			{
 
 				"branch",
-				separator = { right = " " },
+				separator = { right = " ", left = "" },
 				left_padding = 2,
 			},
 		},

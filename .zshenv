@@ -1,8 +1,9 @@
 # loaded first by by all shells including emacs during command execution
 # enable this and zshrc `zprof` for profiling
 # zmodload zsh/zprof
-#
-PROFILE_STARTUP=true
+
+
+PROFILE_STARTUP=false
 if [[ "$PROFILE_STARTUP" == true ]]; then
     # http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
     PS4=$'%D{%M%S%.} %N:%i> '

@@ -16,6 +16,7 @@ telescope.setup({
 		path_display = { "truncate" },
 		file_ignore_patterns = {
 			"^.git/",
+			"^.yarn/",
 		},
 
 		mappings = {

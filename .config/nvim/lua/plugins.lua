@@ -57,6 +57,7 @@ return packer.startup(function(use)
 	-- use 'rafcamlet/nvim-luapad'
 
 	-- colorscheme
+	-- TODO: https://github.com/rebelot/kanagawa.nvim
 	use("shaunsingh/nord.nvim")
 	use({
 		"mcchrish/zenbones.nvim",
