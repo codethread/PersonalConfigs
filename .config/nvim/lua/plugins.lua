@@ -120,8 +120,8 @@ return packer.startup(function(use)
 	use("neovim/nvim-lspconfig")
 	use("williamboman/nvim-lsp-installer")
 	use("tamago324/nlsp-settings.nvim") -- language server settings defined in json for
-
 	use("jose-elias-alvarez/null-ls.nvim")
+	use("jose-elias-alvarez/nvim-lsp-ts-utils")
 
 	-- completion
 	use("hrsh7th/cmp-buffer")
