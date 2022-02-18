@@ -40,4 +40,13 @@ set.signcolumn = "yes"
 set.completeopt = "menu,menuone,noselect"
 set.termguicolors = true -- adds more colors
 
+-- set.foldmethod = "expr"
+-- set.foldexpr = "nvim_treesitter#foldexpr()"
+
+vim.cmd([[
+  set foldlevel=99
+  set foldmethod=expr
+  set foldexpr=nvim_treesitter#foldexpr()
+]])
+
 -- au! BufWritePost $MYVIMRC source %      " auto source when writing to init.vm alternatively you can run :source $MYVIMRC
