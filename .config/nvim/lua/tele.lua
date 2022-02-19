@@ -7,7 +7,7 @@ end
 local actions = require("telescope.actions")
 local action_layout = require("telescope.actions.layout")
 
-telescope.load_extension("lsp_handlers")
+-- telescope.load_extension("lsp_handlers")
 
 telescope.setup({
 	defaults = {
@@ -103,10 +103,13 @@ telescope.setup({
 		-- builtin picker
 	},
 	extensions = {
-		lsp_handlers = {
-			code_action = {
-				telescope = require("telescope.themes").get_dropdown({}),
-			},
+		["ui-select"] = {
+			require("telescope.themes").get_dropdown({
+				-- even more opts
+			}),
 		},
+		-- code_action = {
+		-- 	telescope = require("telescope.themes").get_dropdown({}),
+		-- },
 	},
 })

@@ -50,7 +50,12 @@ return packer.startup(function(use)
 	use("wbthomason/packer.nvim")
 	use("nvim-lua/plenary.nvim")
 	use("nvim-lua/popup.nvim")
+
+	-- misc
 	use("wakatime/vim-wakatime")
+	use("folke/which-key.nvim")
+	use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" })
+	use("nvim-treesitter/playground")
 
 	-- help for lua, TODO need to make this work
 	-- use 'wsdjeg/luarefvim'
@@ -84,37 +89,38 @@ return packer.startup(function(use)
 	})
 	use("nvim-telescope/telescope.nvim")
 	use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
-	use({ "gbrlsnchs/telescope-lsp-handlers.nvim" })
-	use({ "camgraff/telescope-tmux.nvim" })
-
-	use("tpope/vim-fugitive")
-	use("tpope/vim-rhubarb")
-	use("tpope/vim-vinegar")
-	use("tpope/vim-eunuch")
-
-	-- treesitter
-	use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" })
-	use("nvim-treesitter/playground")
-	use("nvim-treesitter/nvim-treesitter-textobjects")
-	use("windwp/nvim-ts-autotag") -- close <div tags, and ciw
-
-	-- keymaps
-	use("folke/which-key.nvim")
+	-- use({ "gbrlsnchs/telescope-lsp-handlers.nvim" })
+	use({ "nvim-telescope/telescope-ui-select.nvim" })
 	use({
-		"christoomey/vim-tmux-navigator",
+		"lewis6991/spellsitter.nvim",
 		config = function()
-			vim.cmd([[
-      " Disable tmux navigator when zooming the Vim pane
-      let g:tmux_navigator_disable_when_zoomed = 1
-
-      let g:tmux_navigator_no_mappings = 1
-      nnoremap <silent> <C-h> :TmuxNavigateLeft<cr>
-      nnoremap <silent> <C-j> :TmuxNavigateDown<cr>
-      nnoremap <silent> <C-k> :TmuxNavigateUp<cr>
-      nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
-      ]])
+			require("spellsitter").setup()
 		end,
 	})
+
+	use({
+		"kyazdani42/nvim-tree.lua",
+		requires = {
+			"kyazdani42/nvim-web-devicons", -- optional, for file icon
+		},
+		config = function()
+			require("nvim-tree").setup({})
+		end,
+	})
+
+	-- use("tpope/vim-vinegar")
+
+	use("tpope/vim-eunuch") -- unix helpers, :Rename, :Delete
+
+	-- project editing
+	use("famiu/bufdelete.nvim") -- delete buffer
+	use({ -- automatically creates missing folders
+		"jghauser/mkdir.nvim",
+		config = function()
+			require("mkdir")
+		end,
+	})
+	use("windwp/nvim-spectre") -- find/replace
 
 	-- lsp
 	use("neovim/nvim-lspconfig")
@@ -136,18 +142,41 @@ return packer.startup(function(use)
 	use("rafamadriz/friendly-snippets")
 
 	-- editing
+	use("nvim-treesitter/nvim-treesitter-textobjects")
+	use("windwp/nvim-ts-autotag") -- close <div tags, and ciw
 	use("tpope/vim-commentary")
 	use("tpope/vim-surround")
 	use("windwp/nvim-autopairs") -- Autopairs, integrates with both cmp and treesitter
 	use("mbbill/undotree")
 
-	-- uses tree sitter for comment detection
-	use("JoosepAlviste/nvim-ts-context-commentstring")
+	use("JoosepAlviste/nvim-ts-context-commentstring") -- uses tree sitter for comment detection
 
 	-- git
+	use({ "TimUntersberger/neogit" })
 	use("lewis6991/gitsigns.nvim")
 
+	use("tpope/vim-fugitive")
+	use("tpope/vim-rhubarb") -- :GBrowse and other git things
+
+	-- terminal
 	use("akinsho/toggleterm.nvim")
+	use({ "camgraff/telescope-tmux.nvim" })
+
+	use({
+		"christoomey/vim-tmux-navigator",
+		config = function()
+			vim.cmd([[
+      " Disable tmux navigator when zooming the Vim pane
+      let g:tmux_navigator_disable_when_zoomed = 1
+
+      let g:tmux_navigator_no_mappings = 1
+      nnoremap <silent> <C-h> :TmuxNavigateLeft<cr>
+      nnoremap <silent> <C-j> :TmuxNavigateDown<cr>
+      nnoremap <silent> <C-k> :TmuxNavigateUp<cr>
+      nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
+      ]])
+		end,
+	})
 
 	if PACKER_BOOTSTRAP then
 		require("packer").sync()

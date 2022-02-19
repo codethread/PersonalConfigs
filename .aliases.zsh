@@ -98,7 +98,7 @@ alias ghub="open -a '/Applications/Google Chrome.app' \`git remote -v | grep git
 #---------------------------------------------#
 # TMUXINATOR
 # -------------------------------------------#
-alias mux="tmuxinator start"
+alias mux="tmuxinator"
 alias muxa="mux spages; mux exc;"
 alias kmux="kill_tmux_session"
 
