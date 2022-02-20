@@ -84,13 +84,12 @@ return packer.startup(function(use)
 	use({
 		"goolord/alpha-nvim",
 		config = function()
-			require("dashboard")
+			require("codethread.dashboard")
 		end,
 	})
 	use("nvim-telescope/telescope.nvim")
 	use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
-	-- use({ "gbrlsnchs/telescope-lsp-handlers.nvim" })
-	use({ "nvim-telescope/telescope-ui-select.nvim" })
+	-- use({ "nvim-telescope/telescope-ui-select.nvim" })
 	use({
 		"lewis6991/spellsitter.nvim",
 		config = function()
@@ -125,16 +124,17 @@ return packer.startup(function(use)
 	-- lsp
 	use("neovim/nvim-lspconfig")
 	use("williamboman/nvim-lsp-installer")
-	use("tamago324/nlsp-settings.nvim") -- language server settings defined in json for
 	use("jose-elias-alvarez/null-ls.nvim")
 	use("jose-elias-alvarez/nvim-lsp-ts-utils")
+	use("b0o/schemastore.nvim")
+	use("gbrlsnchs/telescope-lsp-handlers.nvim")
 
 	-- completion
+	use("hrsh7th/nvim-cmp")
 	use("hrsh7th/cmp-buffer")
 	use("hrsh7th/cmp-path")
 	use("hrsh7th/cmp-cmdline")
 	use("hrsh7th/cmp-nvim-lua")
-	use("hrsh7th/nvim-cmp")
 	use("hrsh7th/cmp-nvim-lsp")
 
 	use("saadparwaiz1/cmp_luasnip")
@@ -160,7 +160,6 @@ return packer.startup(function(use)
 
 	-- terminal
 	use("akinsho/toggleterm.nvim")
-	use({ "camgraff/telescope-tmux.nvim" })
 
 	use({
 		"christoomey/vim-tmux-navigator",

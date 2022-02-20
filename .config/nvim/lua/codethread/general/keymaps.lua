@@ -1,4 +1,4 @@
-local utils = require("utils")
+local utils = require("codethread.utils")
 local map = utils.map
 local nmap = utils.nmap
 local vmap = utils.vmap
@@ -34,7 +34,7 @@ vim.cmd([[
 nnoremap <silent> <C-g> <C-c>
 imap <silent> <C-g> <C-c>
 
-nnoremap <silent> - :NvimTreeToggle<CR>
+nnoremap <silent> - :NvimTreeFindFile<CR>
 
 nnoremap <silent> <C-h> :wincmd h<CR>
 nnoremap <silent> <C-j> :wincmd j<CR>

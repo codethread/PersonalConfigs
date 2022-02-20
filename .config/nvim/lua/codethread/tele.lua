@@ -7,8 +7,6 @@ end
 local actions = require("telescope.actions")
 local action_layout = require("telescope.actions.layout")
 
--- telescope.load_extension("lsp_handlers")
-
 telescope.setup({
 	defaults = {
 		prompt_prefix = " ",
@@ -18,6 +16,11 @@ telescope.setup({
 			"^.git/",
 			"^.yarn/",
 		},
+		border = true,
+		borderchars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
+		-- prompt = { "─", "│", " ", "│", "┌", "┐", "│", "│" },
+		-- results = { "─", "│", "─", "│", "├", "┤", "┘", "└" },
+		-- preview = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
 
 		mappings = {
 			i = {
@@ -102,14 +105,14 @@ telescope.setup({
 		-- Now the picker_config_key will be applied every time you call this
 		-- builtin picker
 	},
-	extensions = {
-		["ui-select"] = {
-			require("telescope.themes").get_dropdown({
-				-- even more opts
-			}),
-		},
-		-- code_action = {
-		-- 	telescope = require("telescope.themes").get_dropdown({}),
-		-- },
-	},
+	-- extensions = {
+	-- ["ui-select"] = {
+	-- 	require("telescope.themes").get_dropdown({
+	-- 		-- even more opts
+	-- 	}),
+	-- },
+	-- code_action = {
+	-- 	telescope = require("telescope.themes").get_dropdown({}),
+	-- },
+	-- },
 })
