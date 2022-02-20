@@ -1,6 +1,7 @@
 -- Needed for inlayHints. Merge this table with your settings or copy
 -- it from the source if you want to add your own init_options.
 -- init_options = require("nvim-lsp-ts-utils").init_options,
+local wk = require("which-key")
 
 return {
 	on_attach = function(client, bufnr)
@@ -68,5 +69,14 @@ return {
 		-- vim.api.nvim_buf_set_keymap(bufnr, "n", "gi", ":TSLspImportAll<CR>", opts)
 		require("codethread.lsp.settings.shared").lsp_highlight_document(client)
 		require("codethread.lsp.settings.shared").lsp_keymaps(bufnr)
+
+		wk.register({
+			T = {
+				i = {
+					"<cmd>TSLspToggleInlayHints<cr>",
+					"Inlay Hints",
+				},
+			},
+		}, { prefix = "<leader>" })
 	end,
 }

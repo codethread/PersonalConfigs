@@ -7,6 +7,8 @@ end
 local actions = require("telescope.actions")
 local action_layout = require("telescope.actions.layout")
 
+telescope.load_extension("lsp_handlers")
+
 telescope.setup({
 	defaults = {
 		prompt_prefix = " ",

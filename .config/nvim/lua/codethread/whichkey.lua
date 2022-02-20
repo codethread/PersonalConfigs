@@ -149,7 +149,7 @@ local mappings = {
 
 	g = {
 		name = "Git",
-		g = { "<cmd>lua _LAZYGIT_TOGGLE()<CR>", "Lazygit" },
+		g = { "<cmd>Neogit<CR>", "Lazygit" },
 		j = { "<cmd>lua require 'gitsigns'.next_hunk()<cr>", "Next Hunk" },
 		k = { "<cmd>lua require 'gitsigns'.prev_hunk()<cr>", "Prev Hunk" },
 		l = { "<cmd>lua require 'gitsigns'.blame_line()<cr>", "Blame" },
@@ -174,7 +174,7 @@ local mappings = {
 		name = "LSP",
 		-- a = { "<cmd>Telescope lsp_code_actions them=cursor<cr>", "Code Action" },
 		a = {
-			"<cmd>lua require('telescope.builtin').lsp_code_actions(require('telescope.themes').get_cursor())<cr>",
+			"<cmd>lua require('codethread.telescope.commands').lsp_code_actions()<cr>",
 			"Code Action",
 		},
 		i = { "<cmd>LspInfo<cr>", "Info" },
@@ -211,6 +211,14 @@ local mappings = {
 		f = { "<cmd>ToggleTerm direction=float<cr>", "Float" },
 		h = { "<cmd>ToggleTerm size=10 direction=horizontal<cr>", "Horizontal" },
 		v = { "<cmd>ToggleTerm size=80 direction=vertical<cr>", "Vertical" },
+	},
+
+	T = {
+		name = "Toggle",
+		i = {
+			"<cmd>lua print'nothing setup'<cr>",
+			"Inlay Hints",
+		},
 	},
 }
 
