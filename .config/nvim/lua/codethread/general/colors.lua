@@ -1,7 +1,3 @@
-vim.g.nord_italic = true
-vim.g.nord_borders = true
-vim.g.nord_contrast = true
-
 -- local status_ok, nord = pcall(require, "nord")
 -- if not status_ok then
 -- 	vim.cmd([[
@@ -10,14 +6,6 @@ vim.g.nord_contrast = true
 
 -- 	return
 -- end
-
--- nord.set()
-vim.cmd([[
-  colorscheme nordbones
-
-  " highlight Normal ctermbg=none guibg=none
-  " highlight NonText ctermbg=none guibg=none
-]])
 
 local status_ok, lualine = pcall(require, "lualine")
 if not status_ok then
@@ -45,7 +33,8 @@ lualine.setup({
 	options = {
 		icons_enabled = true,
 		-- theme = "nord",
-		theme = "nordbones",
+		-- theme = "nordbones",
+		theme = "kanagawa",
 		disabled_filetypes = {},
 		section_separators = { left = "", right = "" },
 		-- component_separators = { left = "", right = "" },

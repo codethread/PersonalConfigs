@@ -63,15 +63,37 @@ return packer.startup(function(use)
 
 	-- colorscheme
 	-- TODO: https://github.com/rebelot/kanagawa.nvim
-	use("shaunsingh/nord.nvim")
+	use({
+		"shaunsingh/nord.nvim",
+		-- config = function()
+		-- 	vim.g.nord_italic = true
+		-- 	vim.g.nord_borders = true
+		-- 	vim.g.nord_contrast = true
+
+		-- 	local nord = require("nord")
+		-- 	nord.set()
+		-- end,
+	})
+
 	use({
 		"mcchrish/zenbones.nvim",
-		-- Optionally install Lush. Allows for more configuration or extending the colorscheme
-		-- If you don't want to install lush, make sure to set g:zenbones_compat = 1
-		-- In Vim, compat mode is turned on as Lush only works in Neovim.
-		requires = "rktjmp/lush.nvim",
+		requires = "rktjmp/lush.nvim", -- Optionally install Lush. Allows for more configuration or extending the colorscheme
+		-- config = function()
+		-- 	vim.cmd([[
+		-- colorscheme nordbones
+
+		-- " highlight Normal ctermbg=none guibg=none
+		-- " highlight NonText ctermbg=none guibg=none
+		-- ]])
+		-- end,
 	})
-	-- use 'navarasu/onedark.nvim'
+
+	use({
+		"rebelot/kanagawa.nvim",
+		config = function()
+			vim.cmd("colorscheme kanagawa")
+		end,
+	})
 
 	-- modeline
 	use({
