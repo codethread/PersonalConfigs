@@ -18,6 +18,16 @@ telescope.setup({
 			"^.git/",
 			"^.yarn/",
 		},
+		vimgrep_arguments = {
+			"rg",
+			"--color=never",
+			"--no-heading",
+			"--with-filename",
+			"--line-number",
+			"--column",
+			"--smart-case",
+			"--hidden",
+		},
 		border = true,
 		borderchars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
 		-- prompt = { "─", "│", " ", "│", "┌", "┐", "│", "│" },
@@ -107,14 +117,11 @@ telescope.setup({
 		-- Now the picker_config_key will be applied every time you call this
 		-- builtin picker
 	},
-	-- extensions = {
-	-- ["ui-select"] = {
-	-- 	require("telescope.themes").get_dropdown({
-	-- 		-- even more opts
-	-- 	}),
-	-- },
-	-- code_action = {
-	-- 	telescope = require("telescope.themes").get_dropdown({}),
-	-- },
-	-- },
+	extensions = {
+		lsp_handlers = {
+			references = {
+				telescope = require("telescope.themes").get_dropdown({}),
+			},
+		},
+	},
 })

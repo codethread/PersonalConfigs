@@ -17,12 +17,14 @@ end
 
 M.setup = function()
 	vim.diagnostic.config({
+
 		virtual_text = true,
+		underline = false,
+
 		signs = {
 			active = set_signs(),
 		},
 		update_in_insert = false, -- update on InsertLeave
-		underline = true,
 		severity_sort = true,
 		float = {
 			focusable = false,
