@@ -21,6 +21,7 @@ null_ls.setup({
 		-- js/ts
 		formatting.prettierd,
 		diagnostics.eslint_d,
+		diagnostics.stylelint,
 		code_actions.eslint_d,
 	},
 })
