@@ -63,37 +63,7 @@ return packer.startup(function(use)
 
 	-- colorscheme
 	-- TODO: https://github.com/rebelot/kanagawa.nvim
-	use({
-		"shaunsingh/nord.nvim",
-		-- config = function()
-		-- 	vim.g.nord_italic = true
-		-- 	vim.g.nord_borders = true
-		-- 	vim.g.nord_contrast = true
-
-		-- 	local nord = require("nord")
-		-- 	nord.set()
-		-- end,
-	})
-
-	use({
-		"mcchrish/zenbones.nvim",
-		requires = "rktjmp/lush.nvim", -- Optionally install Lush. Allows for more configuration or extending the colorscheme
-		-- config = function()
-		-- 	vim.cmd([[
-		-- colorscheme nordbones
-
-		-- " highlight Normal ctermbg=none guibg=none
-		-- " highlight NonText ctermbg=none guibg=none
-		-- ]])
-		-- end,
-	})
-
-	use({
-		"rebelot/kanagawa.nvim",
-		config = function()
-			vim.cmd("colorscheme kanagawa")
-		end,
-	})
+	use({ "shaunsingh/nord.nvim" })
 
 	-- modeline
 	use({
@@ -125,11 +95,30 @@ return packer.startup(function(use)
 			"kyazdani42/nvim-web-devicons", -- optional, for file icon
 		},
 		config = function()
-			require("nvim-tree").setup({})
+			require("nvim-tree").setup({
+				hijack_netrw = false,
+				filters = { -- remove things from view
+					dotfiles = false,
+				},
+				view = {
+					auto_resize = true,
+				},
+				actions = {
+					change_dir = {
+						enable = false, -- stay in the current directory
+					},
+					open_file = {
+						quit_on_open = true,
+						window_picker = {
+							chars = "jfkdlsa;",
+						},
+					},
+				},
+			})
 		end,
 	})
 
-	-- use("tpope/vim-vinegar")
+	use("tpope/vim-vinegar") -- netrw improvements
 
 	use("tpope/vim-eunuch") -- unix helpers, :Rename, :Delete
 

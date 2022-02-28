@@ -34,8 +34,6 @@ vim.cmd([[
 nnoremap <silent> <C-g> <C-c>
 imap <silent> <C-g> <C-c>
 
-nnoremap <silent> - :NvimTreeFindFile<CR>
-
 nnoremap <silent> <C-h> :wincmd h<CR>
 nnoremap <silent> <C-j> :wincmd j<CR>
 nnoremap <silent> <C-k> :wincmd k<CR>

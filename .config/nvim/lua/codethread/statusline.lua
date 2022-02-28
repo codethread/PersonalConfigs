@@ -1,14 +1,6 @@
--- local status_ok, nord = pcall(require, "nord")
--- if not status_ok then
--- 	vim.cmd([[
---     colorscheme slate
--- ]])
-
--- 	return
--- end
-
 local status_ok, lualine = pcall(require, "lualine")
 if not status_ok then
+	print("could not load lualine")
 	return
 end
 
@@ -32,9 +24,7 @@ end
 lualine.setup({
 	options = {
 		icons_enabled = true,
-		-- theme = "nord",
-		-- theme = "nordbones",
-		theme = "kanagawa",
+		theme = require("codethread.theme").lualine,
 		disabled_filetypes = {},
 		section_separators = { left = "", right = "" },
 		-- component_separators = { left = "", right = "" },

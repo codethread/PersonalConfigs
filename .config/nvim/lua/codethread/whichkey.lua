@@ -170,6 +170,11 @@ local mappings = {
 		},
 	},
 
+	G = {
+		name = "Global",
+		v = { "<cmd>lua _LINK_DOTFILES()<cr>", "Link Dotfiles" },
+	},
+
 	l = {
 		name = "LSP",
 		-- a = { "<cmd>Telescope lsp_code_actions them=cursor<cr>", "Code Action" },
