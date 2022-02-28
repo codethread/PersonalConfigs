@@ -82,13 +82,11 @@ local opts = {
 
 local mappings = {
 	["<leader>"] = { "<cmd>Telescope find_files shorten_path=false<cr>", "Files" },
-	["a"] = { "<cmd>Alpha<cr>", "Alpha" },
-	["w"] = { "<cmd>w!<CR>", "Save" },
+	-- ["a"] = { "<cmd>Alpha<cr>", "Alpha" },
 	["q"] = { "<cmd>luafile %<CR>", "Reload Luafile" },
-	["c"] = { "<cmd>Bdelete!<CR>", "Close Buffer" },
-	["h"] = { "<cmd>nohlsearch<CR>", "No Highlight" },
-	["F"] = { "<cmd>Telescope live_grep theme=ivy<cr>", "Find Text" },
-	["P"] = { "<cmd>lua require('telescope').extensions.projects.projects()<cr>", "Projects" },
+	-- ["h"] = { "<cmd>nohlsearch<CR>", "No Highlight" },
+	-- ["F"] = { "<cmd>Telescope live_grep theme=ivy<cr>", "Find Text" },
+	-- ["P"] = { "<cmd>lua require('telescope').extensions.projects.projects()<cr>", "Projects" },
 
 	b = {
 		name = "Buffers",
@@ -191,6 +189,15 @@ local mappings = {
 			"<cmd>Telescope lsp_dynamic_workspace_symbols<cr>",
 			"Workspace Symbols",
 		},
+	},
+
+	w = {
+		name = "Window",
+		N = { "<cmd>tabnew<cr>", "New Tab" },
+		l = { "<cmd>tabs<cr>", "List Tabs" }, -- TODO: put through telescope
+		n = { "<cmd>tabNext<cr>", "Next Tab" }, -- TODO: put through telescope
+		p = { "<cmd>tabprevious<cr>", "Previous Tab" }, -- TODO: put through telescope
+		w = { "<cmd>vsplit<cr>", "Split" }, -- TODO: put through telescope
 	},
 
 	s = {
