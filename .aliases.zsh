@@ -78,6 +78,11 @@ alias dick="docker ps | grep '[a-z0-9]' | awk '{ print $1 }' | xargs docker kill
 alias dc="docker-compose config --services | fzf --multi | tr '\n' ' ' | xargs docker-compose up"
 
 #---------------------------------------------#
+# GOLANG
+# -------------------------------------------#
+alias gob=go1.18beta1
+
+#---------------------------------------------#
 # GIT
 # -------------------------------------------#
 alias gBranch='git rev-parse --abbrev-ref HEAD'
