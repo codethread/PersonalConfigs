@@ -1,0 +1,6 @@
+#!/usr/bin/env node
+
+const arg = process.argv.join(",");
+
+require("child_process").exec(`/opt/homebrew/bin/tmux send-keys -t 2 ${arg}`);
+// # /opt/homebrew/bin/tmux send-keys -t 1 :e Space $FILE_TO_OPEN Enter

@@ -136,6 +136,17 @@ local mappings = {
 		},
 	},
 
+	j = {
+		name = "Test",
+		j = {
+			function()
+				local jest = require("jester")
+				jest.run_last({ path_to_jest = "./node_modules/bin/jest" })
+			end,
+			"file",
+		},
+	},
+
 	p = {
 		name = "Packer",
 		c = { "<cmd>PackerCompile<cr>", "Compile" },
@@ -217,12 +228,10 @@ local mappings = {
 	t = {
 		name = "Terminal",
 		n = { "<cmd>lua _NODE_TOGGLE()<cr>", "Node" },
-		u = { "<cmd>lua _NCDU_TOGGLE()<cr>", "NCDU" },
-		t = { "<cmd>lua _HTOP_TOGGLE()<cr>", "Htop" },
-		p = { "<cmd>lua _PYTHON_TOGGLE()<cr>", "Python" },
-		f = { "<cmd>ToggleTerm direction=float<cr>", "Float" },
+		t = { "<cmd>ToggleTerm direction=float<cr>", "Float" },
 		h = { "<cmd>ToggleTerm size=10 direction=horizontal<cr>", "Horizontal" },
 		v = { "<cmd>ToggleTerm size=80 direction=vertical<cr>", "Vertical" },
+		r = { '<cmd>TermExec cmd="eslint_d restart"', "Vertical" },
 	},
 
 	T = {

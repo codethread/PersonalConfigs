@@ -50,7 +50,7 @@ cmp.setup({
 		end,
 	},
 	completion = {
-		autocomplete = false,
+		-- autocomplete = false,
 	},
 	mapping = {
 		["<C-k>"] = cmp.mapping.select_prev_item(),
@@ -131,6 +131,11 @@ _G.vimrc.cmp.lsp = function()
 			sources = {
 				{ name = "nvim_lsp" },
 				{ name = "nvim_lua" },
+			},
+
+			completion = {
+				autocomplete = true,
+				keyword_length = 2,
 			},
 		},
 	})

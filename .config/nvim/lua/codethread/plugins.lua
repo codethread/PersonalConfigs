@@ -62,7 +62,6 @@ return packer.startup(function(use)
 	-- use 'rafcamlet/nvim-luapad'
 
 	-- colorscheme
-	-- TODO: https://github.com/rebelot/kanagawa.nvim
 	use({ "shaunsingh/nord.nvim" })
 
 	-- modeline
@@ -237,6 +236,19 @@ return packer.startup(function(use)
       nnoremap <silent> <C-k> :TmuxNavigateUp<cr>
       nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
       ]])
+		end,
+	})
+
+	-- languages
+	use("David-Kunz/jester") -- jest runner
+	use({
+		"klen/nvim-test",
+		config = function()
+			require("nvim-test").setup({
+				runners = {
+					typescriptreact = "nvim-test.runners.jest",
+				},
+			})
 		end,
 	})
 
