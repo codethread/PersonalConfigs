@@ -1,6 +1,101 @@
 #!/usr/bin/env node
+const { join, relative } = require("path");
+const { spawn } = require("child_process");
 
-const arg = process.argv.join(",");
+async function main() {
+  const { stdout: brew } = await shell("brew --prefix");
+  const {
+    file,
+    pos: { line },
+  } = getPath();
 
-require("child_process").exec(`/opt/homebrew/bin/tmux send-keys -t 2 ${arg}`);
-// # /opt/homebrew/bin/tmux send-keys -t 1 :e Space $FILE_TO_OPEN Enter
+  const { nvimPath, diff } = await getPathDifference();
+  const path = join(nvimPath, diff, file);
+
+  if (line) {
+    console.log({ line });
+    shell(
+      `${brew}/bin/tmux send-keys -t 1 :e Space +${line} Space ${path} Enter`
+    );
+  } else {
+    shell(`${brew}/bin/tmux send-keys -t 1 :e Space ${path} Enter`);
+  }
+  shell(`${brew}/bin/tmux select-pane -t 1`);
+  // shell(`${brew}/bin/tmux send-keys -t 2 ${path}`);
+}
+main();
+
+// --------------------------------------------------------------------
+// --------------------------------------------------------------------
+// --------------------------------------------------------------------
+
+async function getPathDifference() {
+  let { stdout: panes } = await shell(
+    'tmux list-panes -F "#{pane_index} #{pane_active} #{pane_current_path}"'
+  );
+  // 1 0 /Users/adh23/PersonalConfigs
+  // 2 1 /Users/adh23/PersonalConfigs
+  // 3 0 /Users/adh23/PersonalConfigs
+
+  panes = panes.trim().split("\n");
+
+  const [, , nvimPath] = panes[0].split(" ");
+  const [, , activePath] = panes
+    .find((p) => p.split(" ")[1] === "1")
+    .split(" ");
+
+  const diff = relative(nvimPath, activePath);
+
+  return { nvimPath, activePath, diff };
+}
+
+function getPath() {
+  let oFile = process.argv[2] || "";
+  // const home = process.
+  // wierd kitty+tmux thing that likes to grab the border char
+  oFile = oFile.replace("|", "");
+  let [file, line, col] = oFile.split(":");
+  console.log({ file, line, col });
+
+  if (file.startsWith("/")) {
+    file = !file.startsWith("/Users") ? "." + file : file;
+  }
+
+  return { file, pos: line ? { line, col } : {} };
+}
+
+async function shell(cmd) {
+  return new Promise((resolve, reject) => {
+    const [exe, ...args] = cmd.split(" ");
+    const spawned = spawn(exe, args, { shell: true });
+
+    let stdout = "";
+    let stderr = "";
+
+    spawned.stdout.on("data", (data) => {
+      const str = data.toString();
+      stdout += str;
+    });
+
+    spawned.stderr.on("data", (data) => {
+      const str = data.toString();
+      stderr += str;
+    });
+
+    spawned.on("close", (code) => {
+      if (code === 0) {
+        resolve({ stdout: stdout.trim(), stderr });
+      } else {
+        reject(
+          new Error(
+            `spawned process "${cmd}" exited with code "${code}", stderr:\n${stderr}`
+          )
+        );
+      }
+    });
+
+    spawned.on("error", (e) => {
+      reject(new Error(e.message));
+    });
+  });
+}
