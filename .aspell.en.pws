@@ -1,4 +1,4 @@
-personal_ws-1.1 en 66 
+personal_ws-1.1 en 68 
 Applicative
 Applicatives
 Atomicity
@@ -26,6 +26,7 @@ PR's
 Pinterest
 REPL
 SOIP
+Saf
 Struct
 Todoist
 UI
@@ -51,6 +52,7 @@ gpg
 iframe
 iframes
 intelisense
+intellij
 lispy
 morphism
 morphisms
