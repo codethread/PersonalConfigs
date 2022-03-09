@@ -1,69 +1,182 @@
 #!/usr/bin/env node
 const { join, relative } = require("path");
 const { spawn } = require("child_process");
+const { existsSync, writeFileSync } = require("fs");
+
+const editors = ["vim", "nvim", "emacs", "emacsclient"];
+
+/**
+ * Opens a filepath in the current vim instance, when passed as first argument to script
+ *
+ * Coupled heavily to my tumux workflow at this point.
+ *
+ * If run from a pane, tmux will used the PWD of that pane, allowing for monorepo structures.
+ *
+ * If run from vim, tmux will try to find a pane with the last active pane (i.e a test command was run, and then I navigated back to vim)
+ */
 
 async function main() {
-  const { stdout: brew } = await shell("brew --prefix");
-  const {
-    file,
-    pos: { line },
-  } = getPath();
+  let tmux;
 
-  const { nvimPath, diff } = await getPathDifference();
-  const path = join(nvimPath, diff, file);
-
-  if (line) {
-    console.log({ line });
-    shell(
-      `${brew}/bin/tmux send-keys -t 1 :e Space +${line} Space ${path} Enter`
-    );
-  } else {
-    shell(`${brew}/bin/tmux send-keys -t 1 :e Space ${path} Enter`);
+  try {
+    tmux = getTmux();
+  } catch (e) {
+    writeFileSync(join(__dirname, "my-tmp-log.txt"), "could not get tmux");
+    process.exit(1);
   }
-  shell(`${brew}/bin/tmux select-pane -t 1`);
-  // shell(`${brew}/bin/tmux send-keys -t 2 ${path}`);
+
+  try {
+    const home = getHome();
+
+    const { file, line } = getChosenPath();
+
+    const panes = await getPanes();
+
+    const isActivePaneEditor = Boolean(
+      panes.find((p) => p.active && editors.includes(p.cmd))
+    );
+
+    const filePWD = isActivePaneEditor
+      ? lastPanePWD(panes)
+      : activePanePWD(panes);
+
+    const editorPWD = getEditorPWD(panes);
+
+    const diff = relative(editorPWD, filePWD);
+
+    const path = file.startsWith(home) ? file : join(editorPWD, diff, file);
+
+    if (!existsSync(path)) {
+      throw new Error(`path is not valid: ${path}`);
+    }
+
+    // await shell(`${tmux} display-message -d 0 "${diff} ${line} ${path}"`);
+    // return;
+
+    await shell(
+      `${tmux} send-keys -t 1 :e ${
+        line ? `Space +${line} Space` : "Space"
+      } ${path} Enter`
+    );
+    await shell(`${tmux} select-pane -t 1`);
+    // shell(`${tmux} send-keys -t 2 ${path}`);
+  } catch (e) {
+    writeFileSync(join(__dirname, "my-tmp-log.txt"), e.message);
+    shell(`${tmux} display-message -d 0 "${e.message}"`);
+  }
 }
 main();
 
 // --------------------------------------------------------------------
 // --------------------------------------------------------------------
 // --------------------------------------------------------------------
+/**
+ * A list of tmux panes
+ * @typedef {Array<{ cmd: string; active: boolean; lastActive: boolean; currentPath: string; }>} Panes
+ */
 
-async function getPathDifference() {
-  let { stdout: panes } = await shell(
-    'tmux list-panes -F "#{pane_index} #{pane_active} #{pane_current_path}"'
+/**
+ *
+ * @returns {Promise<Panes>}
+ */
+async function getPanes() {
+  let { stdout: panesString } = await shell(
+    'tmux list-panes -F "#{pane_current_command} #{pane_active} #{pane_last} #{pane_current_path}"'
   );
-  // 1 0 /Users/adh23/PersonalConfigs
-  // 2 1 /Users/adh23/PersonalConfigs
-  // 3 0 /Users/adh23/PersonalConfigs
+  // nvim 0 0 /Users/adh23/PersonalConfigs
+  // tmux 1 0 /Users/adh23/PersonalConfigs
+  // zsh 0 1 /Users/adh23/PersonalConfigs
+  // man 0 0 /Users/adh23/PersonalConfigs
 
-  panes = panes.trim().split("\n");
-
-  const [, , nvimPath] = panes[0].split(" ");
-  const [, , activePath] = panes
-    .find((p) => p.split(" ")[1] === "1")
-    .split(" ");
-
-  const diff = relative(nvimPath, activePath);
-
-  return { nvimPath, activePath, diff };
+  const panes = panesString
+    .trim()
+    .split("\n")
+    .map((p) => {
+      const [cmd, active, lastActive, currentPath] = p.split(" ");
+      return {
+        cmd,
+        active: active === "1",
+        lastActive: lastActive === "1",
+        currentPath,
+      };
+    });
+  return panes;
 }
 
-function getPath() {
-  let oFile = process.argv[2] || "";
-  // const home = process.
-  // wierd kitty+tmux thing that likes to grab the border char
-  oFile = oFile.replace("|", "");
-  let [file, line, col] = oFile.split(":");
-  console.log({ file, line, col });
+/**
+ * @param {Panes} panes
+ */
+function lastPanePWD(panes) {
+  const lastPane = panes.find((p) => p.lastActive);
+  if (!lastPane) {
+    throw new Error("no last tmux pane available");
+  }
+  return lastPane.currentPath;
+}
 
-  if (file.startsWith("/")) {
-    file = !file.startsWith("/Users") ? "." + file : file;
+/**
+ * @param {Panes} panes
+ */
+function activePanePWD(panes) {
+  const activePane = panes.find((p) => p.active);
+  if (!activePane) {
+    throw new Error("no active tmux pane available");
+  }
+  return activePane.currentPath;
+}
+
+/**
+ * @param {Panes} panes
+ */
+function getEditorPWD(panes) {
+  const activePane = panes.find((p) => editors.includes(p.cmd));
+  if (!activePane) {
+    throw new Error("no editor pane found");
+  }
+  return activePane.currentPath;
+}
+
+function getChosenPath() {
+  const chosenFile = (process.argv[2] || "").trim().replace("|", "");
+
+  let [file, line, col] = chosenFile.split(":");
+
+  return { file, line, col };
+}
+
+function getHome() {
+  const home = process.env.HOME;
+  if (!home) {
+    throw new Error("no HOME found");
+  }
+  return home;
+}
+
+/**
+ * @returns {string}
+ */
+function getTmux() {
+  let tmux;
+  // less than fancy of way of getting brew prefix
+  if (existsSync("/usr/local/bin/tmux")) {
+    tmux = "/usr/local/bin/tmux";
   }
 
-  return { file, pos: line ? { line, col } : {} };
+  if (existsSync("/opt/homebrew/bin/tmux")) {
+    tmux = "/opt/homebrew/bin/tmux";
+  }
+  if (!tmux) {
+    throw new Error("could not find tmux");
+  }
+
+  return tmux;
 }
 
+/*
+ * @param {string} cmd
+ *
+ * @returns {Promise<{ stdout: string; stderr: string }>}
+ */
 async function shell(cmd) {
   return new Promise((resolve, reject) => {
     const [exe, ...args] = cmd.split(" ");
@@ -88,7 +201,7 @@ async function shell(cmd) {
       } else {
         reject(
           new Error(
-            `spawned process "${cmd}" exited with code "${code}", stderr:\n${stderr}`
+            `spawned process ${cmd} exited with code ${code}, stderr ${stderr}`
           )
         );
       }

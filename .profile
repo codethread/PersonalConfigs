@@ -38,6 +38,8 @@ if [ "$(uname 2> /dev/null)" = "Linux" ]; then
 fi
 
 export EDITOR='nvim'
+export MANPAGER="/bin/sh -c \"col -b | nvim -c 'set ft=man ts=8 nomod nolist nonu' -\""
+
 
 # Personal shared
 #------------------------------------------
