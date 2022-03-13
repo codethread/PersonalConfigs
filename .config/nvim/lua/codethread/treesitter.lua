@@ -18,7 +18,11 @@ configs.setup({
 		disable = { "" }, -- list of language that will be disabled
 		additional_vim_regex_highlighting = false, -- use regex highlighting too, this is slow
 	},
-	indent = { enable = true, disable = { "yaml" } },
+	indent = {
+		enable = true,
+		-- disable = { "yaml" }
+		disable = {},
+	},
 
 	context_commentstring = {
 		enable = true,
@@ -52,3 +56,6 @@ configs.setup({
 		enable = true,
 	},
 })
+
+-- local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+-- parser_config.jsonc.used_by = "json"

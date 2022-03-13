@@ -28,7 +28,7 @@ set.showtabline = 2 -- Always show tabs
 set.updatetime = 300 -- Faster completion
 set.timeoutlen = 500 -- By default timeoutlen is 1000 ms
 -- set.formatoptions-=cro                  -- Stop newline continution of comments
-set.clipboard:append("unnamedplus") -- Copy paste between vim and everything else
+-- set.clipboard:append("unnamed") -- Copy paste between vim and everything else
 set.signcolumn = "yes"
 -- set.completeopt = "menu,menuone,noselect"
 set.completeopt = "menuone,noselect,preview"

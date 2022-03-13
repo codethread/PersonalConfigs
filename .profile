@@ -40,6 +40,10 @@ fi
 export EDITOR='nvim'
 export MANPAGER="/bin/sh -c \"col -b | nvim -c 'set ft=man ts=8 nomod nolist nonu' -\""
 
+# Emacs
+#------------------------------------------
+# https://emacs-lsp.github.io/lsp-mode/page/performance/#use-plists-for-deserialization
+export LSP_USE_PLISTS=true
 
 # Personal shared
 #------------------------------------------

@@ -212,7 +212,7 @@
 
 
   (setq indent-tabs-mode nil
-	read-process-output-max (* 2 1024 1024) ; increase performance: https://emacs-lsp.github.io/lsp-mode/page/performance/
+	read-process-output-max (* 4 1024 1024) ; increase performance: https://emacs-lsp.github.io/lsp-mode/page/performance/
 
 	ring-bell-function #'ignore
 	visible-bell t
@@ -718,6 +718,8 @@ _s_kip
 ;;; Terminals
 
 (use-package vterm
+  :custom
+  (vterm-timer-delay 0.01)
   :hook
   (vterm-mode-hook . (lambda ()
 		       (setq-local evil-insert-state-cursor 'box) (evil-insert-state))))
