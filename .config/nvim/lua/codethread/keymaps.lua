@@ -50,4 +50,19 @@ nnoremap <leader>v "+p
 nnoremap <leader>v "+P
 vnoremap <leader>v "+p
 vnoremap <leader>v "+P
+
+" keep cursor centered
+nnoremap n nzzzv
+nnoremap N Nzzzv
+nnoremap J mzJ`z
+
+" add undo break points on key stroke to make undo more granular
+inoremap , ,<c-g>u
+inoremap . .<c-g>u
+inoremap ( (<c-g>u
+inoremap { {<c-g>u
+
+" move text
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
 ]])

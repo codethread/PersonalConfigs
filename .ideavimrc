@@ -24,7 +24,8 @@ imap § #
 
 " TODO not yet working
 map <Leader>; :action GotoAction<CR>
-map <Leader><Leader> :action GotoFile<CR>
+" map <Leader><Leader> :action GotoFile<CR>
+map <Leader><Leader> :action SearchEverywhere<CR>
 
 " buffer
 map <Leader>br :action RenameFile<CR>

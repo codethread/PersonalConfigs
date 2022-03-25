@@ -15,6 +15,7 @@ local capabilities = vim.lsp.protocol.make_client_capabilities()
 lsp_installer.on_server_ready(function(server)
 	local opts = {}
 
+	print(server.name)
 	local config_ok, config_opts = pcall(require, "codethread.lsp.settings." .. server.name)
 
 	if config_ok then

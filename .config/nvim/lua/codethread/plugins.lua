@@ -122,6 +122,14 @@ return packer.startup(function(use)
 
 	use("tpope/vim-eunuch") -- unix helpers, :Rename, :Delete
 
+	-- visual
+	use({
+		"norcalli/nvim-colorizer.lua", -- show colors for css
+		config = function()
+			require("colorizer").setup()
+		end,
+	})
+
 	-- project editing
 	use("famiu/bufdelete.nvim") -- delete buffer
 	use({ -- automatically creates missing folders
@@ -159,6 +167,10 @@ return packer.startup(function(use)
 	use("tpope/vim-surround")
 	use("windwp/nvim-autopairs") -- Autopairs, integrates with both cmp and treesitter
 	use("mbbill/undotree")
+	use("tpope/vim-abolish") -- string  Coercion
+	-- Want to turn fooBar into foo_bar? Press crs (coerce to snake_case). MixedCase
+	-- (crm), camelCase (crc), snake_case (crs), UPPER_CASE (cru), dash-case (cr-),
+	-- dot.case (cr.), space case (cr<space>), and Title Case (crt) are all just 3 keystrokes away.
 
 	use("JoosepAlviste/nvim-ts-context-commentstring") -- uses tree sitter for comment detection
 
@@ -215,11 +227,21 @@ return packer.startup(function(use)
 	})
 
 	-- git
-	use({ "TimUntersberger/neogit" })
+	use({
+		"TimUntersberger/neogit",
+		config = function()
+			require("neogit").setup({
+				integrations = {
+					diffview = true,
+				},
+			})
+		end,
+	})
 	use("lewis6991/gitsigns.nvim")
+	use({ "sindrets/diffview.nvim" })
 
-	use("tpope/vim-fugitive")
-	use("tpope/vim-rhubarb") -- :GBrowse and other git things
+	-- use("tpope/vim-fugitive")
+	-- use("tpope/vim-rhubarb") -- :GBrowse and other git things
 
 	-- terminal
 	use("akinsho/toggleterm.nvim")

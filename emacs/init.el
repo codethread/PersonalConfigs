@@ -779,6 +779,7 @@ _s_kip
 	size-indication-mode nil))
 
 (use-package ligature
+  :disabled
   :straight (ligature :host github :repo "mickeynp/ligature.el")
   :hook (after-init . global-ligature-mode)
   :config
@@ -801,7 +802,6 @@ _s_kip
                 "\\\\" "://")))
 
 (use-package tree-sitter
-  :disabled
   :hook
   ((typescript-mode rustic-mode) . tree-sitter-mode)
   ((typescript-mode rustic-mode) . tree-sitter-hl-mode)
@@ -822,6 +822,9 @@ _s_kip
 
 (use-package tree-sitter-langs
   :after tree-sitter)
+
+(use-package tsi
+  :straight (tsi :host github :repo "orzechowskid/tsi.el"))
 
 ;; (use-package tree-sitter-indent
 ;;   :straight (tree-sitter-indent :host git
@@ -844,10 +847,10 @@ _s_kip
   (define-key evil-inner-text-objects-map "f" (evil-textobj-tree-sitter-get-textobj "function.inner"))
 
   (define-key evil-outer-text-objects-map "a" (evil-textobj-tree-sitter-get-textobj "param.outer"
-						'((typescript-mode . [(required_parameter) @param.outer]))))
+										    '((typescript-mode . [(required_parameter) @param.outer]))))
   ;; bind `function.inner`(function block without name and args) to `f` for use in things like `vif`, `yif`
   (define-key evil-inner-text-objects-map "a" (evil-textobj-tree-sitter-get-textobj "param.inner"
-						'((typescript-mode . [(required_parameter) @param.inner])))))
+										    '((typescript-mode . [(required_parameter) @param.inner])))))
 
 
 ;;; Projects / Navigation
@@ -1328,11 +1331,15 @@ _s_kip
 ;;     (flycheck-add-mode 'javascript-eslint 'typescript-tsx-mode)
 ;;     (flycheck-add-next-checker 'lsp 'javascript-eslint)))
 
+(use-package tsx-mode
+  :straight (tsx-mode :host github :repo "orzechowskid/tsx-mode.el")
+  )
+
 (use-package web-mode
   ;; still need web-mode stuff as typescript-tsx-mode is actually derived from it
   :mode "\\.ejs\\'"
-  :mode "\\.tsx\\'"
-  :mode "\\.jsx\\'"
+  ;; :mode "\\.tsx\\'"
+  ;; :mode "\\.jsx\\'"
   :hook ((web-mode-hook) . my/web-mode-settings)
   :config
   (setq-default web-mode-comment-formats
@@ -1772,8 +1779,10 @@ _s_kip
 
   (org-agenda-custom-commands
    '(("p" todo "PROGRESS")
-     ("w" . "SKYPORT+Name tags searches") ; description for "w" prefix
+     ;; ("w" . "SKYPORT+Name tags searches") ; description for "w" prefix
+     ("w" . "IDRIS+Name tags searches") ; description for "w" prefix
      ("ws" tags "+skyport+graphql")
+     ("ww" tags "+idris+work")
      ("u" "Unscheduled TODO"
       ((todo ""
 	     ((org-agenda-overriding-header "\nUnscheduled TODO")
@@ -1784,7 +1793,7 @@ _s_kip
       ((agenda)
        (todo "PROGRESS")
        (tags-todo "work")
-       (tags-todo "skyport")))))
+       (tags-todo "idris")))))
 
   :general
   (nmap :keymaps 'org-mode-map

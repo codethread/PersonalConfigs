@@ -12,6 +12,7 @@ npairs.setup({
 		java = false,
 	},
 	disable_filetype = { "TelescopePrompt", "spectre_panel" },
+	disable_in_macro = true,
 	fast_wrap = {
 		map = "<M-e>",
 		chars = { "{", "[", "(", '"', "'" },
