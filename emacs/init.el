@@ -1332,8 +1332,9 @@ _s_kip
 ;;     (flycheck-add-next-checker 'lsp 'javascript-eslint)))
 
 (use-package tsx-mode
-  :straight (tsx-mode :host github :repo "orzechowskid/tsx-mode.el")
-  )
+  :mode "\\.tsx\\'"
+  :custom (tsx-mode-tsx-auto-tags t)
+  :straight (tsx-mode :host github :repo "orzechowskid/tsx-mode.el"))
 
 (use-package web-mode
   ;; still need web-mode stuff as typescript-tsx-mode is actually derived from it
