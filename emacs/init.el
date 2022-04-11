@@ -752,7 +752,8 @@ _s_kip
 
   (custom-set-faces
    ;; `(default ((t (:font "FiraCode Nerd Font" :height 160))))
-   `(default ((t (:font "FiraCode Nerd Font" :height 120))))
+   ;; `(default ((t (:font "FiraCode Nerd Font" :height 140)))) ; come up with some monitor specific setups
+   `(default ((t (:font "FiraCode Nerd Font")))) ; come up with some monitor specific setups
    ;; :height should be a float to adjust the relative size to the normal default font
    `(fixed-pitch ((t (:inherit default :font "FiraCode Nerd Font Mono" :height 0.9))))
    `(variable-pitch ((t (:inherit default :font "Georgia" :height 1.1 :foreground ,(doom-color 'base7)))))
@@ -1334,7 +1335,7 @@ _s_kip
 (use-package tsx-mode
   :mode "\\.tsx\\'"
   :custom (tsx-mode-tsx-auto-tags t)
-  :straight (tsx-mode :host github :repo "orzechowskid/tsx-mode.el"))
+  :straight (tsx-mode :host github :repo "orzechowskid/tsx-mode.el")))
 
 (use-package web-mode
   ;; still need web-mode stuff as typescript-tsx-mode is actually derived from it

@@ -50,7 +50,10 @@ async function main() {
       throw new Error(`path is not valid: ${path}`);
     }
 
-    // await shell(`${tmux} display-message -d 0 "${diff} ${line} ${path}"`);
+    // await shell(
+    //   `${tmux} display-message -d 0 "${file} ${diff} ${line} ${path}"`
+    // );
+
     // return;
 
     await shell(
@@ -83,10 +86,6 @@ async function getPanes() {
   let { stdout: panesString } = await shell(
     'tmux list-panes -F "#{pane_current_command} #{pane_active} #{pane_last} #{pane_current_path}"'
   );
-  // nvim 0 0 /Users/adh23/PersonalConfigs
-  // tmux 1 0 /Users/adh23/PersonalConfigs
-  // zsh 0 1 /Users/adh23/PersonalConfigs
-  // man 0 0 /Users/adh23/PersonalConfigs
 
   const panes = panesString
     .trim()
@@ -137,7 +136,7 @@ function getEditorPWD(panes) {
 }
 
 function getChosenPath() {
-  const chosenFile = (process.argv[2] || "").trim().replace("|", "");
+  const chosenFile = (process.argv[2] || "").trim().replace("│", ""); // don't grab the tmux border char please
 
   let [file, line, col] = chosenFile.split(":");
 
@@ -172,7 +171,7 @@ function getTmux() {
   return tmux;
 }
 
-/*
+/**
  * @param {string} cmd
  *
  * @returns {Promise<{ stdout: string; stderr: string }>}
