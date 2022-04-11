@@ -2,13 +2,11 @@
 ;;; Commentary:
 ;;; Code:
 (require 'org)
+(require 'my/markdown-theme)
 
 (defvar org-personal-file "~/Dropbox/org-me-notes/notes.org")
 
 (defvar org-work-file "~/OneDrive - Sky/dev/org-sky-notes/work.org")
-
-(defvar my/heading-font "Futura"
-  "Font to use for org title, headings and markdown headings.")
 
 ;; seems broken
 (defun my/toggle-list-checkbox ()

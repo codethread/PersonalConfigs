@@ -1928,13 +1928,13 @@ _s_kip
 
 (use-package org-alert
   :disabled
-  :straight (org-alert :local-repo "~/emacs/elisp/org-alert")
+  :straight (org-alert :local-repo "~/PersonalConfigs/emacs/elisp/org-alert")
   :defer 30
   :config
   (org-alert-enable))
 
 (use-package my-org-helpers
-  :straight (my-org-helpers :local-repo "~/emacs/elisp/my-org-helpers")
+  :straight (my-org-helpers :local-repo "~/PersonalConfigs/emacs/elisp/my-org-helpers")
   :after (:any org org-roam)
   :demand t
   :general
@@ -1945,10 +1945,8 @@ _s_kip
   (my/org-theme))
 
 (use-package my-markdown-helpers
-  :straight (my-markdown-helpers :local-repo "~/emacs/elisp/my-markdown-helpers")
-  :after (markdown-mode)
-  :config
-  (my/markdown-theme))
+  :straight (my-markdown-helpers :local-repo "~/PersonalConfigs/emacs/elisp/my-markdown-helpers")
+  :hook (markdown-mode . my/markdown-theme))
 
 ;; watch out for performance issues here
 (use-package emojify

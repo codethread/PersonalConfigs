@@ -2,6 +2,9 @@
 ;;; Commentary:
 ;;; Code:
 
+(defvar my/heading-font "Futura"
+  "Font to use for org title, headings and markdown headings.")
+
 (defun my/markdown-theme ()
   "Change org faces to a more minal style."
   (interactive)
