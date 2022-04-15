@@ -63,3 +63,47 @@
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
+
+(use-package! tree-sitter
+  :hook
+  (tree-sitter-after-on . tree-sitter-hl-mode)
+  ((typescript-mode rustic-mode) . tree-sitter-mode)
+  :config
+  ;; This makes every node a link to a section of code
+  (setq tree-sitter-debug-jump-buttons t
+        ;; and this highlights the entire sub tree in your code
+        tree-sitter-debug-highlight-jump-region t)
+  (add-to-list 'tree-sitter-major-mode-language-alist '(typescript-tsx-mode . tsx))
+  (add-to-list 'tree-sitter-major-mode-language-alist '(typescript-mode . tsx)))
+
+(use-package! my-org-helpers
+  :hook (org-mode . my/org-theme)
+  :after (:any org org-roam))
+
+(use-package! my-markdown-helpers
+  :hook (markdown-mode . my/markdown-theme))
+
+;; (use-package! typescript-mode
+;;   :hook (typescript-mode . my/ts-mode-settings)
+;;   :config
+;;   (defun my/ts-mode-settings ()
+;;     "Hook for ts mode."
+;;     ;; (setq flycheck-checker 'javascript-eslint)
+;;     (flycheck-add-next-checker 'lsp 'javascript-eslint)))
+
+;; (use-package! web-mode
+;;   :hook ((web-mode-hook) . my/web-mode-settings)
+;;   :config
+;;   (defun my/web-mode-settings ()
+;;     "Hooks for Web mode."
+;;     (interactive)
+;;     (flycheck-add-mode 'javascript-eslint 'web-mode)
+;;     (flycheck-add-next-checker 'lsp 'javascript-eslint)
+;;     ;; (flycheck-add-mode 'css-stylelint 'web-mode)
+;;     ;; (flycheck-add-next-checker 'javascript-eslint 'css-stylelint)
+
+;;     ;; (setq web-mode-code-indent-offset 2)
+;;     ;; (setq web-mode-markup-indent-offset 2)
+;;     ;; (setq web-mode-enable-auto-closing t)
+;;     ;; (setq web-mode-enable-auto-quoting nil)
+;;     ))

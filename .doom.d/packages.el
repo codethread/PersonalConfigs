@@ -48,3 +48,9 @@
 ;(unpin! pinned-package another-pinned-package)
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
+
+(package! my-org-helpers
+  :recipe (:local-repo "~/PersonalConfigs/emacs/elisp/my-org-helpers"))
+
+(package! my-markdown-helpers
+  :recipe (:local-repo "~/PersonalConfigs/emacs/elisp/my-markdown-helpers"))

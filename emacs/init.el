@@ -34,9 +34,9 @@
 ;;; Initial packages --- these must load before everything
 
 ;; Elisp libraries
-(use-package dash)
-(use-package s)
-(use-package f)
+(use-package dash :demand)
+(use-package s :demand)
+(use-package f :demand)
 
 (use-package cus-edit
   :demand
@@ -244,6 +244,10 @@
 ;;   :straight nil
 ;;   :config
 ;;   (fringe-mode '(4 . 4)))
+
+(use-package hl-line
+  :straight nil
+  :hook (prog-mode . hl-line-mode))
 
 (use-package font-lock
   :demand
@@ -456,6 +460,7 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
   :disabled) ; doesn't work on v28 yet
 
 (use-package which-key
+  :demand
   :custom
   (which-key-prefix-prefix "")
   :custom-face
@@ -522,7 +527,6 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
 (use-package avy
   :general
   (general-def
-    :keymaps 'override
     :states '(normal visual)
     "s" 'avy-goto-word-1
     "S" 'avy-goto-char)
@@ -636,6 +640,16 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
   :config
   (popwin-mode 1))
 
+
+;; watch out, this might be slow!
+(use-package beacon
+  :custom
+  (beacon-blink-when-focused t)
+  (beacon-blink-when-point-moves-vertically t)
+  (beacon-color (doom-color 'red))
+  :config
+  (beacon-mode 1))
+
 
 ;;; Evil helpers
 
@@ -742,6 +756,7 @@ _s_kip
 
 (use-package doom-themes
   :demand
+  :hook (prog-mode . (lambda () (setq line-spacing 0.1)))
   :init
   (solaire-global-mode 1)
   :config
@@ -750,10 +765,11 @@ _s_kip
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config)
 
+
   (custom-set-faces
    ;; `(default ((t (:font "FiraCode Nerd Font" :height 160))))
-   ;; `(default ((t (:font "FiraCode Nerd Font" :height 140)))) ; come up with some monitor specific setups
-   `(default ((t (:font "FiraCode Nerd Font")))) ; come up with some monitor specific setups
+   `(default ((t (:font "FiraCode Nerd Font" :height 130)))) ; come up with some monitor specific setups
+   ;; `(default ((t (:font "FiraCode Nerd Font")))) ; come up with some monitor specific setups
    ;; :height should be a float to adjust the relative size to the normal default font
    `(fixed-pitch ((t (:inherit default :font "FiraCode Nerd Font Mono" :height 0.9))))
    `(variable-pitch ((t (:inherit default :font "Georgia" :height 1.1 :foreground ,(doom-color 'base7)))))
@@ -780,7 +796,6 @@ _s_kip
 	size-indication-mode nil))
 
 (use-package ligature
-  :disabled
   :straight (ligature :host github :repo "mickeynp/ligature.el")
   :hook (after-init . global-ligature-mode)
   :config
@@ -857,6 +872,7 @@ _s_kip
 ;;; Projects / Navigation
 
 (use-package projectile
+  :demand
   :custom
   (projectile-completion-system 'ivy)
   (projectile-indexing-method 'hybrid) ; use git whilst honoring .projectile ignores
@@ -1029,7 +1045,9 @@ _s_kip
 ;;; Narrowing / Searching / Lists
 
 (use-package ivy ;; TODO do i need these bindings and evil collection?
+  :demand
   :custom
+  (ivy-height 30)
   (ivy-use-virtual-buffers t)
   (ivy-wrap t)
   (ivy-count-format "(%d/%d) ")
@@ -1066,10 +1084,58 @@ _s_kip
 (use-package ivy-rich
   :after ivy
   :config
+  (ivy-rich-modify-column
+   'counsel-M-x
+   'counsel-M-x-transformer
+   '(:width 70))
+  
+  (ivy-rich-modify-column
+   'counsel-describe-function
+   'counsel-describe-function-transformer
+   '(:width 70))
+
+  (ivy-rich-modify-column
+   'counsel-describe-variable
+   'counsel-describe-variable-transformer
+   '(:width 70))
+
+  (ivy-rich-modify-column
+   'ivy-switch-buffer
+   'ivy-switch-buffer-transformer
+   '(:width 70))
+
   (ivy-rich-mode 1))
 
 (use-package ivy-xref
   :after ivy)
+
+;; TODO likely want to disable this for small monitors
+(use-package ivy-posframe
+  :demand
+  :after ivy
+  :custom
+  (ivy-posframe-border-width 2)
+  (ivy-posframe-height 30)
+  (ivy-posframe-width 200)
+  (ivy-posframe-min-width 200)
+  :custom-face
+  (ivy-posframe-border ((t (:background ,(doom-color 'cyan)))))
+  :config
+  ;; display at `ivy-posframe-style'
+  ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display)))
+  (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
+  ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-window-center)))
+  ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-point)))
+  ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-top-center)))
+
+  (let ((bg (doom-color 'bg)))
+    (setq ivy-posframe-parameters
+	  `((left-fringe . 8)
+            (right-fringe . 8)
+	    (border-width . 5)
+	    (background-color . ,bg))))
+
+  (ivy-posframe-mode 1))
 
 (use-package flx
   :after ivy)
@@ -1080,6 +1146,7 @@ _s_kip
   (setq xref-show-definitions-function #'ivy-xref-show-defs))
 
 (use-package counsel
+  :after ivy
   ;; :bind (:map minibuffer-local-map
   ;; 	 ("C-r" . 'counsel-minibuffer-history))
   :general
@@ -1158,11 +1225,6 @@ _s_kip
 (use-package company-box
   :hook (company-mode . company-box-mode))
 
-(general-nmap
-  "gh" (general-predicate-dispatch 'helpful-at-point
-	 ;; if lsp is active
-	 (bound-and-true-p lsp-mode) 'lsp-describe-thing-at-point))
-
 
 (use-package lsp-mode
   :commands lsp
@@ -1176,7 +1238,9 @@ _s_kip
   ;; general
   (lsp-auto-execute-action '())
   (lsp-headerline-breadcrumb-enable nil)
-  (lsp-disabled-clients '((json-mode . eslint)))
+
+  
+  ;; (lsp-disabled-clients '((json-mode . eslint)))
 
   ;; optimisations that may improve as lsp matures
 
@@ -1203,7 +1267,7 @@ _s_kip
   (defun my/lsp-limit-lsp ()
     "Limit some of the steps lsp will do with typescript lsp responses, as they are huge"
     (setq lsp-completion-enable-additional-text-edit nil)
-    (setq lsp-completion-show-detail nil)	; i think this is help
+    (setq lsp-completion-show-detail nil) ; i think this is help
     (setq lsp-completion-show-kind nil) ; variable or function stuff in autocomplete
     )
 
@@ -1238,32 +1302,46 @@ _s_kip
 
 (use-package lsp-ui
   :commands (lsp-ui-imenu)
-  :hook ((rustic-mode lsp-mode) . lsp-ui-mode)
-  :bind ("C-c C-k" . my/lsp-ui-doc-glance) ; just a test binding
+  :hook ((lsp-mode . lsp-ui-mode)
+	 (lsp-ui-mode . (lambda () (eldoc-mode -1))))
+  :general
+  (general-nmap
+    "K" (general-predicate-dispatch 'helpful-at-point
+	  (lsp-ui-doc--frame-visible-p) 'lsp-ui-doc-focus-frame
+	  ;; if inside a ui-doc frame
+	  (bound-and-true-p lsp-ui-doc-frame-mode) 'lsp-ui-doc-unfocus-frame
+	  ;; if lsp is active
+	  (bound-and-true-p lsp-mode) 'lsp-ui-doc-glance))
   :config
-  (defun my/lsp-ui-doc--glance-hide-frame ()
-    "Hook to hide hover information popup for lsp-ui-doc-glance."
-    (lsp-ui-doc-hide)
-    (remove-hook 'pre-command-hook 'lsp-ui-doc--glance-hide-frame))
+  (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
+  (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
 
-  (defun my/lsp-ui-doc-glance ()
-    "Trigger display hover information popup and hide it on next typing."
-    (interactive)
-    (lsp-ui-doc-show)
-    (add-hook 'pre-command-hook 'lsp-ui-doc--glance-hide-frame))
 
   ;; temp while trying out rust
   (add-hook 'rustic-mode-hook
 	    (lambda ()
 	      (make-local-variable 'lsp-ui-sideline-enable)
 	      (setq lsp-ui-sideline-enable t)))
+  
   :custom
-  (lsp-ui-doc-header '())		; looks shit
-  (lsp-ui-sideline-enable '())		; bloody overwhelming
-  (lsp-ui-doc-use-webkit '()) ; don't be tempted by this, unless you really want to configure it
-  (lsp-ui-doc-include-signature '()) ; eldoc does a better job of this
-  (lsp-ui-doc-show-with-cursor '())  ; use keybinding instead or mouse
-  (lsp-ui-imenu--custom-mode-line-format "lsp-ui-menu")
+  ;; (lsp-ui-doc-header '())		; looks shit
+  ;; (lsp-ui-sideline-enable '())		; bloody overwhelming
+  ;; (lsp-ui-doc-use-webkit '()) ; don't be tempted by this, unless you really want to configure it
+  ;; (lsp-ui-doc-include-signature '()) ; eldoc does a better job of this
+  ;; (lsp-ui-doc-show-with-cursor '())  ; use keybinding instead or mouse
+  ;; (lsp-ui-imenu--custom-mode-line-format "lsp-ui-menu")
+
+  ;; experiements
+  ;; sideline
+  (lsp-ui-sideline-show-diagnostics t)
+  ;; TODO set this per mode, rust is fine, but typescript is not a nice mix
+  ;; (lsp-ui-sideline-show-hover t)
+  (lsp-ui-sideline-show-code-actions t)
+
+  ;; docs
+  (lsp-ui-doc-enable t)
+  (lsp-ui-doc-include-signature t)
+  (lsp-ui-doc-show-with-cursor nil)
   (lsp-ui-doc-border "brightblack")
   (lsp-ui-doc-position 'at-point))
 
@@ -1283,6 +1361,7 @@ _s_kip
   (web-mode)
   (typescript-tsx-mode)
   (typescript-mode)
+  (tsx-mode)
   (css-mode))
 
 (use-package js2-mode
@@ -1302,11 +1381,11 @@ _s_kip
   (js2-strict-cond-assign-warning nil)
   (js2-strict-var-redeclaration-warning nil)
   :hook
-  ((web-mode typescript-mode) . js2-minor-mode))
+  ((web-mode typescript-mode tsx-mode) . js2-minor-mode))
 
 (use-package js2-refactor
   :disabled
-  :hook ((web-mode typescript-mode) . js2-refactor-mode))
+  :hook ((web-mode typescript-mode tsx-mode) . js2-refactor-mode))
 
 (use-package typescript-mode
   :interpreter "node"
@@ -1319,29 +1398,25 @@ _s_kip
   (defun my/ts-mode-settings ()
     "Hook for ts mode."
     ;; (setq flycheck-checker 'javascript-eslint)
-    (flycheck-add-next-checker 'lsp 'javascript-eslint)))
-
-;; (use-package typescript-tsx-mode
-;;   :load-path "~/emacs/elisp/typescript-tsx-mode"
-;;   :disabled
-;;   :straight nil
-;;   :hook ((typescript-tsx-mode) . my/tsx-mode-settings)
-;;   :config
-;;   (defun my/tsx-mode-settings ()
-;;     "Hook for ts mode."
-;;     (flycheck-add-mode 'javascript-eslint 'typescript-tsx-mode)
-;;     (flycheck-add-next-checker 'lsp 'javascript-eslint)))
+    ;; (flycheck-add-next-checker 'lsp 'javascript-eslint)
+    ))
 
 (use-package tsx-mode
+  :straight (tsx-mode :host github :repo "orzechowskid/tsx-mode.el")
   :mode "\\.tsx\\'"
   :custom (tsx-mode-tsx-auto-tags t)
-  :straight (tsx-mode :host github :repo "orzechowskid/tsx-mode.el")))
+  :hook (tsx-mode-hook . my/tsx-settings)
+  :config
+  (defun my/tsx-settings ()
+    "Hooks for tsx mode"
+    (interactive)
+    ;; (flycheck-add-mode 'javascript-eslint 'tsx-mode)
+    ;; (flycheck-add-next-checker 'lsp 'javascript-eslint)
+    ))
 
 (use-package web-mode
   ;; still need web-mode stuff as typescript-tsx-mode is actually derived from it
   :mode "\\.ejs\\'"
-  ;; :mode "\\.tsx\\'"
-  ;; :mode "\\.jsx\\'"
   :hook ((web-mode-hook) . my/web-mode-settings)
   :config
   (setq-default web-mode-comment-formats
@@ -1350,8 +1425,8 @@ _s_kip
   (defun my/web-mode-settings ()
     "Hooks for Web mode."
     (interactive)
-    (flycheck-add-mode 'javascript-eslint 'web-mode)
-    (flycheck-add-next-checker 'lsp 'javascript-eslint)
+    ;; (flycheck-add-mode 'javascript-eslint 'web-mode)
+    ;; (flycheck-add-next-checker 'lsp 'javascript-eslint)
     ;; (flycheck-add-mode 'css-stylelint 'web-mode)
     ;; (flycheck-add-next-checker 'javascript-eslint 'css-stylelint)
 
@@ -1361,7 +1436,7 @@ _s_kip
     (setq web-mode-enable-auto-quoting nil)))
 
 (use-package jest
-  :hook ((web-mode typescript-mode typescript-tsx-mode) . jest-minor-mode)
+  :hook ((web-mode typescript-mode typescript-tsx-mode tsx-mode) . jest-minor-mode)
   :custom
   (jest-executable "yarn test --no-coverage --color --maxWorkers=1")
   (jest-unsaved-buffers-behavior 'save-current)
@@ -1369,7 +1444,7 @@ _s_kip
   (general-define-key
    :prefix "SPC"
    :states 'normal
-   :keymaps '(typescript-mode-map web-mode-map)
+   :keymaps '(typescript-mode-map web-mode-map tsx-mode-map)
    "jj" 'jest-function
    "jl" 'jest-repeat
    ;; file test needs creating as a lambda
@@ -1380,10 +1455,13 @@ _s_kip
 (use-package prettier-js
   :custom
   ;; this is cool but can't get it to respect .prettierrc, and it's pretty fast
-  ;; (prettier-js-command "prettier_d_slim")
-  (prettier-js-show-errors "None")
+  ;; (prettier-js-command "prettierd")
+  (prettier-js-show-errors "Own buffer")
   :config
-  :hook ((web-mode typescript-mode typescript-tsx-mode json-mode) . prettier-js-mode))
+  :hook ((web-mode typescript-mode typescript-tsx-mode tsx-mode json-mode) . prettier-js-mode))
+
+(use-package yarn
+  :straight (yarn :host github :repo "jmfirth/yarn.el"))
 
 ;;;; Scala
 
@@ -1642,6 +1720,9 @@ _s_kip
     "eh" 'flycheck-explain-error-at-point ;; not sure?
     "ei" 'flycheck-verify-setup))
 
+;; (use-package flycheck-posframe
+;;   :hook (flycheck-mode .  flycheck-posframe-mode))
+
 (use-package editorconfig
   :hook (prog-mode . editorconfig-mode))
 
@@ -1676,11 +1757,10 @@ _s_kip
 
 (use-package markdown-mode
   :hook
-  ;; (markdown-mode . visual-line-mode) ; might need this, will see
   (markdown-mode . flyspell-mode)
   (markdown-mode . abbrev-mode)
   (markdown-mode . variable-pitch-mode)
-  (markdown-mode . (lambda () (setq line-spacing 0.2))) ; bit more breathing room for notes
+  (markdown-mode . (lambda () (setq line-spacing 0.2)))
   :custom
   (markdown-hide-markup t)
   :general
@@ -1699,10 +1779,22 @@ _s_kip
   ((org-mode vterm-mode term-mode org-roam-mode) . hide-mode-line-mode))
 
 (use-package olivetti
+  :commands (my/olivetti-prose-settings my/olivetti-code-settings)
+  :hook (((markdown-mode org-mode prog-mode) . olivetti-mode)
+	 ((markdown-mode org-mode) . 'my/olivetti-prose-settings)
+	 ((prog-mode) . 'my/olivetti-code-settings))
   :custom
-  (olivetti-body-width 80)
-  (olivetti-mode-on-hook (visual-line-mode -1))
-  :hook ((markdown-mode org-mode) . olivetti-mode))
+  (olivetti-mode-on-hook '())
+  :config
+  (defun my/olivetti-prose-settings ()
+    "Set olivetti parameters to look good for markdown and org"
+    (setq olivetti-body-width 80)
+    (visual-line-mode -1))
+
+  (defun my/olivetti-code-settings ()
+    "Set olivetti parameters to look good code editing"
+    (setq olivetti-body-width 120)
+    (visual-line-mode 1)))
 
 
 ;;; Org mode and related
@@ -1928,13 +2020,19 @@ _s_kip
 
 (use-package org-alert
   :disabled
-  :straight (org-alert :local-repo "~/PersonalConfigs/emacs/elisp/org-alert")
+  :straight
+  (org-alert
+   :local-repo "~/PersonalConfigs/emacs/elisp/org-alert"
+   :type nil)
   :defer 30
   :config
   (org-alert-enable))
 
 (use-package my-org-helpers
-  :straight (my-org-helpers :local-repo "~/PersonalConfigs/emacs/elisp/my-org-helpers")
+  :straight
+  (my-org-helpers
+   :local-repo "~/PersonalConfigs/emacs/elisp/my-org-helpers"
+   :type nil)
   :after (:any org org-roam)
   :demand t
   :general
@@ -1945,7 +2043,10 @@ _s_kip
   (my/org-theme))
 
 (use-package my-markdown-helpers
-  :straight (my-markdown-helpers :local-repo "~/PersonalConfigs/emacs/elisp/my-markdown-helpers")
+  :straight
+  (my-markdown-helpers
+   :local-repo "~/PersonalConfigs/emacs/elisp/my-markdown-helpers"
+   :type nil)
   :hook (markdown-mode . my/markdown-theme))
 
 ;; watch out for performance issues here
