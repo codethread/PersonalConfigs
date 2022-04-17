@@ -10,7 +10,7 @@ This is required by most command line tools, so we'll need this first
 #+END_SRC
 
 
-* github
+* Github
 ** generate key
 
 [[https://help.github.com/en/enterprise/2.19/user/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent][instructions here]]
@@ -60,11 +60,14 @@ Download [[https://brew.sh/][homebrew]]
 This is a package manager for mac, and stores executables in `/usr/local`
 
 #+BEGIN_SRC bash
+  # this takes a long time, so grab a ☕️
   cd ~/PersonalConfigs && brew bundle
 #+END_SRC
 
 
 * Anitbody (zsh plugin manager)
+/Important to have run =brew= above (or whatever package manager) to
+ensure  =gnu-sed= is installed/ 
 
 #+BEGIN_SRC bash
   # link directories
@@ -74,18 +77,7 @@ This is a package manager for mac, and stores executables in `/usr/local`
   ~/PersonalConfigs/.bin/antiup
 #+END_SRC
 
-change =/etc/zprofile= to be:
-#+BEGIN_SRC sh
-  # system-wide environment settings for zsh(1)
-  if [ -x /usr/libexec/path_helper ]; then
-      if [ -z "$TMUX" ]; then
-          eval `/usr/libexec/path_helper -s`
-      fi
-  fi
-#+END_SRC
-
-
-* Iterm
+* Terminal Fonts
 
 follow instructions in 
 
@@ -96,12 +88,7 @@ follow instructions in
 
 
 * Vim
-
-Install vim-plug [[https://github.com/junegunn/vim-plug#installation][instructions]]
-#+begin_src shell
-  curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-#+end_src
+(mostly kept for historical purposes, mainly use nvim if not emacs)
 
 Run =nvim= with no plugins
 

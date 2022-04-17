@@ -1,6 +1,7 @@
 local M = {}
 
 function M.setup()
+	vim.g.background = "light"
 	vim.g.nord_italic = false -- this makes too many things italic
 	vim.g.nord_borders = true
 	vim.g.nord_contrast = true

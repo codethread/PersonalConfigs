@@ -43,7 +43,7 @@ pathremove () {
 pathprepend () {
     # if the path is already in the variable,
     # remove it so we can move it to the front
-    # pathremove "$1" "$2"
+    pathremove "$1" "$2"
     #[ -d "${1}" ] || return
     local var="${2:-PATH}"
     local value=`indirect_expand "$var"`
@@ -54,7 +54,7 @@ pathprepend () {
 # Eg, to append ~/bin to $PATH
 #     pathappend ~/bin PATH
 pathappend () {
-    # pathremove "${1}" "${2}"
+    pathremove "${1}" "${2}"
     #[ -d "${1}" ] || return
     local var=${2:-PATH}
     local value=`indirect_expand "$var"`

@@ -159,8 +159,8 @@
   :config
   (define-key universal-argument-map (kbd "C-y") 'universal-argument-more)
 
-  (setq evil-insert-state-cursor '((bar . 2) "LightSkyBlue")
-	evil-normal-state-cursor '(box "SlateGrey"))
+  (setq evil-insert-state-cursor '((bar . 2))
+	evil-normal-state-cursor '(box))
 
   ;; https://emacs.stackexchange.com/questions/9583/how-to-treat-underscore-as-part-of-the-word
   (defadvice evil-inner-word (around underscore-as-word activate)
@@ -207,6 +207,8 @@
 (use-package emacs
   :demand
   :straight nil
+  :hook
+  (prog-mode . visual-line-mode)
   :config
   (defalias 'yes-or-no-p 'y-or-n-p)
 
@@ -237,7 +239,22 @@
 
 
   (unless (window-system)
-    (set-display-table-slot standard-display-table 'vertical-border (make-glyph-code ?┃))))
+    (set-display-table-slot standard-display-table 'vertical-border (make-glyph-code ?┃)))
+
+
+  ;; (custom-set-faces
+  ;;  ;; `(default ((t (:font "FiraCode Nerd Font" :height 160))))
+  ;;  `(default ((t (:family "IBM Plex Mono" :height 130)))) ; come up with some monitor specific setups
+  ;;  ;; `(default ((t (:font "FiraCode Nerd Font")))) ; come up with some monitor specific setups
+  ;;  ;; :height should be a float to adjust the relative size to the normal default font
+  ;;  `(fixed-pitch ((t (:family "IBM Plex Sans" :height 130))))
+  ;;  ;; `(org-modern-symbol ((t (:font "Hack Nerd Font" :height 130))))
+  ;;  `(variable-pitch ((t (:family "IBM Plex Serif" :height 130))))
+
+  ;;  `(font-lock-function-name-face ((t (:slant italic))))
+  ;;  `(font-lock-variable-name-face ((t (:weight semi-bold))))
+  ;;  `(font-lock-comment-face ((t (:slant italic)))))
+  )
 
 ;; (use-package fringe
 ;;   :if (window-system)
@@ -245,9 +262,42 @@
 ;;   :config
 ;;   (fringe-mode '(4 . 4)))
 
+(use-package modus-themes
+  ;; docs are hidden away a bit https://protesilaos.com/emacs/modus-themes#h:51ba3547-b8c8-40d6-ba5a-4586477fd4ae
+  :demand
+  :init
+  (modus-themes-load-themes)
+  :custom
+  (modus-themes-italic-constructs t)
+  (modus-themes-bold-constructs t)
+  (modus-themes-variable-pitch-headings t)
+  (modus-themes-variable-pitch-ui t)
+  (modus-themes-mode-line '(accented borderless (padding . 4) (height . 1.2)))
+  (modus-themes-paren-match '(underline))
+  (modus-themes-org-blocks 'tinted-background)
+  (modus-themes--markup '(background))
+  (modus-themes-headings '((1 . (1.3))
+			   (2 . (1.2))))
+  (modus-themes-syntax '(alt-syntax yellow-comments)) 	; more colors
+  (modus-themes-prompts '(bold))
+  (modus-themes-lang-checkers '(background straight-underline))
+  ;; (modus-themes-hl-line '(underline accented)) ;underline clashes with brackets
+  (modus-themes-hl-line '(accented))
+  (modus-themes-operandi-color-overrides '(;; (bg-main . "#EFEFEF") ; readable, bit a little too grey
+					   (bg-main . "#ffffff")
+					   (fg-main . "#1b1b1b")))
+  :config
+  (set-face-attribute 'default nil :font "IBM Plex Mono")
+  (set-face-attribute 'variable-pitch nil :font "IBM Plex Serif")
+  (modus-themes-load-operandi)
+  ;; (custom-set-faces
+  ;;  '(font-lock-function-name-face ((t :slant italic)))
+  ;;  '(font-lock-variable-name-face ((t :weight semi-bold))))
+  )
+
 (use-package hl-line
   :straight nil
-  :hook (prog-mode . hl-line-mode))
+  :hook ((prog-mode text-mode messages-buffer-mode Info-mode help-mode helpful-mode) . hl-line-mode))
 
 (use-package font-lock
   :demand
@@ -364,7 +414,9 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
 
 (use-package eldoc
   :hook (prog-mode org-mode)
-  :straight nil)
+  :straight nil
+  :config
+  (global-eldoc-mode -1))
 
 (use-package dired
   :straight nil
@@ -449,6 +501,11 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
   :straight nil
   :custom
   ((password-cache-expiry (* 60 60 12))))
+
+(use-package info
+  :straight nil
+  :hook
+  (Info-mode . variable-pitch-mode))
 
 
 ;;; Lore friendly improvements
@@ -641,14 +698,44 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
   (popwin-mode 1))
 
 
-;; watch out, this might be slow!
-(use-package beacon
+(use-package pulsar
+  :hook
+  (emacs-startup . pulsar-global-mode)
   :custom
-  (beacon-blink-when-focused t)
-  (beacon-blink-when-point-moves-vertically t)
-  (beacon-color (doom-color 'red))
-  :config
-  (beacon-mode 1))
+  (pulsar-face 'pulsar-yellow)
+  (pulsar-delay 0.08)
+  (pulsar-pulse-functions '(recenter-top-bottom
+			    move-to-window-line-top-bottom
+			    reposition-window
+			    forward-page
+			    backward-page
+			    scroll-up-command
+			    scroll-down-command
+			    org-next-visible-heading
+			    org-previous-visible-heading
+			    org-forward-heading-same-level
+			    org-backward-heading-same-level
+			    outline-backward-same-level
+			    outline-forward-same-level
+			    outline-next-visible-heading
+			    outline-previous-visible-heading
+			    outline-up-heading
+
+			    ;; evil
+			    evil-scroll-line-to-center
+			    evil-scroll-line-to-bottom
+			    evil-scroll-line-to-top
+			    evil-search-next
+			    evil-search-previous
+
+			    evil-window-vsplit
+			    evil-window-split
+
+			    goto-last-change
+			    goto-last-change-reverse)))
+
+(use-package lin
+  :hook (emacs-startup . lin-global-mode))
 
 
 ;;; Evil helpers
@@ -735,17 +822,30 @@ _s_kip
   :custom
   (vterm-timer-delay 0.01)
   :hook
-  (vterm-mode-hook . (lambda ()
-		       (setq-local evil-insert-state-cursor 'box) (evil-insert-state))))
+  (vterm-mode . my/vterm-settings)
+  :config
+  (defun my/vterm-settings ()
+    "Make vterm great"
+    (print "hook fired")
+    ;; start in insert mode
+    (evil-insert-state)
+    ;; highlight current line when not typing
+    (add-hook 'evil-insert-state-exit-hook '(lambda () (hl-line-mode 1)) nil 'make-it-local)
+    (add-hook 'evil-insert-state-entry-hook '(lambda () (hl-line-mode -1)) nil 'make-it-local)))
 
 (use-package multi-vterm
-  :general
-  (my-leader-def
-    "tt" 'multi-vterm-project
-    "tn" 'multi-vterm)
+  :general (general-def :keymaps 'override
+	     "C-\\" 'multi-vterm-project)
+
+  ;; (my-leader-def
+  ;;   "tt" 'multi-vterm-project
+  ;;   "tn" 'multi-vterm)
   :config
   ;; (setq vterm-keymap-exceptions nil)
   (define-key vterm-mode-map [return] #'vterm-send-return))
+
+;; tmux integration
+(use-package emamux)
 
 
 ;;; Themes and Fonts
@@ -755,9 +855,13 @@ _s_kip
   (setq solaire-mode-remap-modeline nil))
 
 (use-package doom-themes
+  :disabled
   :demand
   :hook (prog-mode . (lambda () (setq line-spacing 0.1)))
   :init
+  (set-face-attribute 'default nil :font "IBM Plex Mono")
+  (set-face-attribute 'variable-pitch nil :font "IBM Plex Serif")
+
   (solaire-global-mode 1)
   :config
   ;; (load-theme 'doom-one t)
@@ -768,11 +872,24 @@ _s_kip
 
   (custom-set-faces
    ;; `(default ((t (:font "FiraCode Nerd Font" :height 160))))
-   `(default ((t (:font "FiraCode Nerd Font" :height 130)))) ; come up with some monitor specific setups
+   ;; `(default ((t (:font "IBM Plex Mono" :height 130))))
+					; come up with some monitor specific setups
    ;; `(default ((t (:font "FiraCode Nerd Font")))) ; come up with some monitor specific setups
    ;; :height should be a float to adjust the relative size to the normal default font
-   `(fixed-pitch ((t (:inherit default :font "FiraCode Nerd Font Mono" :height 0.9))))
-   `(variable-pitch ((t (:inherit default :font "Georgia" :height 1.1 :foreground ,(doom-color 'base7)))))
+   ;; `(fixed-pitch ((t (:inherit default :font "FiraCode Nerd Font Mono" :height 0.9))))
+   ;; `(variable-pitch ((t (:inherit default :font "Georgia" :height 1.1 :foreground ,(doom-color 'base7)))))
+
+   `(font-lock-function-name-face ((t (:slant italic))))
+   `(font-lock-variable-name-face ((t (:weight semi-bold))))
+   `(font-lock-comment-face ((t (:slant italic)))))
+  (custom-set-faces
+   ;; `(default ((t (:font "FiraCode Nerd Font" :height 160))))
+   ;; `(default ((t (:font "IBM Plex Mono" :height 130))))
+					; come up with some monitor specific setups
+   ;; `(default ((t (:font "FiraCode Nerd Font")))) ; come up with some monitor specific setups
+   ;; :height should be a float to adjust the relative size to the normal default font
+   ;; `(fixed-pitch ((t (:inherit default :font "FiraCode Nerd Font Mono" :height 0.9))))
+   ;; `(variable-pitch ((t (:inherit default :font "Georgia" :height 1.1 :foreground ,(doom-color 'base7)))))
 
    `(font-lock-function-name-face ((t (:slant italic))))
    `(font-lock-variable-name-face ((t (:weight semi-bold))))
@@ -781,6 +898,7 @@ _s_kip
 (use-package all-the-icons)
 
 (use-package doom-modeline
+  :disabled
   :hook (after-init . doom-modeline-mode)
   :custom
   (doom-modeline-height 20)
@@ -823,6 +941,22 @@ _s_kip
   ((typescript-mode rustic-mode) . tree-sitter-hl-mode)
   :commands (my/tree-sitter-hl)
   :config
+  (defface my/obvious-face '((t (:inherit 'default :foreground "red" :weight bold :underline t))) "Face for things I do not want to miss!")
+  ;; register "return" as a new pattern under a new name
+  (dolist (lang '(javascript typescript tsx))
+    (tree-sitter-hl-add-patterns lang
+      [("return") @keyword.return])
+    (tree-sitter-hl-add-patterns lang
+      [("!") @keyword.bang]))
+
+  ;; set that new name up with a vibrant face to make "return"s stand out
+  (add-function :before-until tree-sitter-hl-face-mapping-function
+		(lambda (capture-name)
+		  (pcase capture-name
+		    ("keyword.return" 'my/obvious-face)
+		    ("keyword.bang" 'my/obvious-face))))
+
+
   (defun my/tree-sitter-hl ()
     "turn on syntax highlighting via tree-sitter"
     (interactive)
@@ -951,8 +1085,8 @@ _s_kip
 	       (file+headline org-default-notes-file "Tasks")
 	       "* TODO %?\n  %u\n  %a"))))
   :general
-  (general-def :keymaps 'override
-    "C-\\" '(counsel-projectile-rg :wk "ripgrep"))
+  ;; (general-def :keymaps 'override
+    ;; "C-\\" '(counsel-projectile-rg :wk "ripgrep"))
 
   (my-leader-def
     "nc" '(counsel-projectile-org-capture :wk "capture")
@@ -1023,10 +1157,11 @@ _s_kip
       "XX....."
       "XX....."))
 
-  (custom-set-faces
-   `(git-gutter-fr:added	((t (:foreground ,(doom-color 'teal)))))
-   `(git-gutter-fr:deleted	((t (:foreground ,(doom-color 'orange)))))
-   `(git-gutter-fr:modified	((t (:foreground ,(doom-color 'base6)))))))
+  ;; (custom-set-faces
+  ;;  `(git-gutter-fr:added	((t (:foreground ,(doom-color 'teal)))))
+  ;;  `(git-gutter-fr:deleted	((t (:foreground ,(doom-color 'orange)))))
+  ;;  `(git-gutter-fr:modified	((t (:foreground ,(doom-color 'base6))))))
+  )
 
 (use-package forge
   :after magit
@@ -1119,21 +1254,18 @@ _s_kip
   (ivy-posframe-width 200)
   (ivy-posframe-min-width 200)
   :custom-face
-  (ivy-posframe-border ((t (:background ,(doom-color 'cyan)))))
+  ;; (ivy-posframe-border ((t (:background ,(doom-color 'cyan)))))
   :config
   ;; display at `ivy-posframe-style'
-  ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display)))
-  (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
-  ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-window-center)))
-  ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-point)))
-  ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-top-center)))
+  (setq ivy-posframe-display-functions-alist '((swiper . ivy-display-function-fallback)
+					       (t . ivy-posframe-display-at-frame-center)))
 
-  (let ((bg (doom-color 'bg)))
-    (setq ivy-posframe-parameters
-	  `((left-fringe . 8)
-            (right-fringe . 8)
-	    (border-width . 5)
-	    (background-color . ,bg))))
+  ;; (let ((bg (doom-color 'bg)))
+  ;;   (setq ivy-posframe-parameters
+  ;; 	  `((left-fringe . 8)
+  ;;           (right-fringe . 8)
+  ;; 	    (border-width . 5)
+  ;; 	    (background-color . ,bg))))
 
   (ivy-posframe-mode 1))
 
@@ -1279,12 +1411,12 @@ _s_kip
            (old (buffer-file-name))
            (basename (file-name-nondirectory old)))
       (unless (and old (file-exists-p old))
-	(error "Buffer '%s' is not visiting a file." name))
+	(error "Buffer '%s' is not visiting a file" name))
       (let ((new (read-file-name "New name: " (file-name-directory old) basename nil basename)))
 	(when (get-file-buffer new)
-          (error "A buffer named '%s' already exists." new))
+          (error "A buffer named '%s' already exists" new))
 	(when (file-exists-p new)
-          (error "A file named '%s' already exists." new))
+          (error "A file named '%s' already exists" new))
 	(lsp--send-execute-command
 	 "_typescript.applyRenameFile"
 	 (vector (list :sourceUri (lsp--buffer-uri)
@@ -1407,6 +1539,7 @@ _s_kip
   :custom (tsx-mode-tsx-auto-tags t)
   :hook (tsx-mode-hook . my/tsx-settings)
   :config
+
   (defun my/tsx-settings ()
     "Hooks for tsx mode"
     (interactive)
@@ -1757,10 +1890,7 @@ _s_kip
 
 (use-package markdown-mode
   :hook
-  (markdown-mode . flyspell-mode)
-  (markdown-mode . abbrev-mode)
-  (markdown-mode . variable-pitch-mode)
-  (markdown-mode . (lambda () (setq line-spacing 0.2)))
+  (markdown-mode . my/markdown-settings)
   :custom
   (markdown-hide-markup t)
   :general
@@ -1769,7 +1899,14 @@ _s_kip
     "k" 'evil-previous-visual-line)
 
   (my-local-leader-def :keymaps 'markdown-mode-map
-    "c" 'markdown-toggle-markup-hiding))
+    "c" 'markdown-toggle-markup-hiding)
+  :config
+  (defun my/markdown-settings ()
+    "Set up markdown with the right settings"
+    (flyspell-mode)
+    (abbrev-mode)
+    (variable-pitch-mode)
+    (setq line-spacing 0.2)))
 
 (use-package markdown-toc
   :after markdown-mode)
@@ -1788,13 +1925,11 @@ _s_kip
   :config
   (defun my/olivetti-prose-settings ()
     "Set olivetti parameters to look good for markdown and org"
-    (setq olivetti-body-width 80)
-    (visual-line-mode -1))
+    (setq olivetti-body-width 80))
 
   (defun my/olivetti-code-settings ()
     "Set olivetti parameters to look good code editing"
-    (setq olivetti-body-width 120)
-    (visual-line-mode 1)))
+    (setq olivetti-body-width 120)))
 
 
 ;;; Org mode and related
@@ -1804,52 +1939,61 @@ _s_kip
   (setq org-directory "~/Dropbox/roam")
   (setq org-default-notes-file (expand-file-name "~/Dropbox/roam/20210614152805-dump.org"))
   :hook
-  (org-mode . auto-fill-mode)
-  (org-mode . flyspell-mode)
-  (org-mode . abbrev-mode)
-  (org-mode . variable-pitch-mode)
-  (org-mode . (lambda () (setq line-spacing 0.2))) ; bit more breathing room for notes
+  (org-mode . my/org-mode-settings)
 
   :custom
+
+  ;; org-modern clashes
+  (org-hide-leading-stars t)
+  (org-fontify-done-headline t)
+  (org-fontify-todo-headline t)
+  (org-fontify-whole-heading-line t)
+  (org-src-fontify-natively t)
+  (org-fontify-quote-and-verse-blocks t)
+  ;; (org-list-demote-modify-bullet '(("+" . "-") ("-" . "+") ("*" . "+") ("1." . "a.")))
+  ;; (org-startup-indented t)
+  ;; org-modern clashes end
+  (org-ellipsis " ▾")
+  (org-pretty-entities t)
+  (org-hide-emphasis-markers t)
+  (org-agenda-block-separator ?─)
+  (org-auto-align-tags nil)
+  (org-tags-column 0)
+  (org-catch-invisible-edits 'show-and-error)
+  (org-special-ctrl-a/e t)
+  (org-insert-heading-respect-content t)
+  ;; visual changes
+
+  ;; code evaluation
   (org-src-lang-modes '(("C" . c)
 			("cpp" . c++)
 			("bash" . sh)
 			("sh" . sh)
 			("elisp" . emacs-lisp)))
-
   ;; adding roam files does have the consequence of loading all buffers into memory, which could get out of hand
+
   (org-agenda-files (-non-nil (-list "~/Dropbox/roam"
 				     "~/Dropbox/org-me-notes/notes.org"
 				     (when (file-directory-p "~/OneDrive - Sky")
 				       (expand-file-name "~/OneDrive - Sky/dev/org-sky-notes/work.org")))))
-
   ;; Not sure I fully understand what I've configured here but intention was to remove the filenames from agenda view
   (org-agenda-prefix-format '((agenda . "  %?-12t% s")
 			      (timeline . " % s")
 			      (todo . " %i")
 			      (tags . " % s")
 			      (search . " % s")))
-  (org-startup-indented t)
-  (org-fontify-done-headline t)
-  (org-fontify-todo-headline t)
-  (org-fontify-whole-heading-line t)
-  (org-src-fontify-natively t)
-  (org-fontify-quote-and-verse-blocks t)
 
-  (org-confirm-babel-evaluate nil)
 
-  (org-hide-leading-stars t)
-  (org-hide-emphasis-markers t)
-
+  ;; folding
   (org-hide-block-startup nil)
   (org-startup-folded nil)
+  (org-image-actual-width nil)
 
-  (org-log-done 'time)
-  (org-ellipsis " ▾")
-  (org-image-actual-width nil) ; allows images to be resized with #+ATTR_ORG: :width 100
+  ;; behaviour
+  (org-confirm-babel-evaluate nil)
+  (org-log-done 'time) ; allows images to be resized with #+ATTR_ORG: :width 100
   (org-indirect-buffer-display 'current-window)
   (org-enforce-todo-dependencies t)
-  (org-list-demote-modify-bullet '(("+" . "-") ("-" . "+") ("*" . "+") ("1." . "a.")))
   (org-agenda-span 8)
   (org-todo-keywords '((sequence "TODO(t)" "PROGRESS(p)" "BLOCKED(b)" "|" "DONE(d)" "ARCHIVED(a)")))
 
@@ -1923,6 +2067,16 @@ _s_kip
     "nl" 'org-store-link)
 
   :config
+  (defun my/org-mode-settings ()
+    "Set up org mode with correct settings"
+    (auto-fill-mode)
+    (flyspell-mode)
+    (abbrev-mode)
+    (variable-pitch-mode)
+    (visual-line-mode -1)
+    (setq line-spacing 0.4)	   ; bit more breathing room for notes
+    )
+
   ;; read gpg encrypted files
   (unless (string-match-p "\\.gpg" org-agenda-file-regexp)
     (setq org-agenda-file-regexp
@@ -1938,7 +2092,7 @@ _s_kip
 							   (restclient . t)
 							   (haskell . t)
 							   (ruby . t)))
-  
+
   ;; TODO add pretty bullets
   ;; (font-lock-add-keywords 'org-mode
   ;;                         '(("^ *\\([-]\\) "
@@ -1956,7 +2110,18 @@ _s_kip
   ;; Turn off elisp's flycheck checkdoc in src blocks.
   (add-hook 'org-src-mode-hook (lambda () (setq-local flycheck-disabled-checkers '(emacs-lisp-checkdoc)))))
 
+(use-package org-modern
+  :hook (org-mode . org-modern-mode)
+  :custom
+  (org-modern-table nil)
+  :config
+  ;; (custom-set-faces `(org-table ((t (:inherit fixed-pitch)))))
+  (set-face-attribute 'org-table nil :font "IBM Plex Mono")
+  (set-face-attribute 'org-block nil :font "IBM Plex Mono" :background "#f8f8f8" :extend t)
+  (set-face-attribute 'org-modern-symbol nil :font "Hack Nerd Font"))
+
 (use-package org-bullets
+  :disabled
   :if window-system
   :commands org-bullets-mode
   :hook (org-mode . org-bullets-mode)
@@ -2029,30 +2194,25 @@ _s_kip
   (org-alert-enable))
 
 (use-package my-org-helpers
-  :straight
-  (my-org-helpers
-   :local-repo "~/PersonalConfigs/emacs/elisp/my-org-helpers"
-   :type nil)
+  :straight (my-org-helpers :local-repo "~/PersonalConfigs/emacs/elisp/my-org-helpers" :type nil)
   :after (:any org org-roam)
-  :demand t
+  :commands
+  (my/open-my-notes-file my/open-work-notes-file)
   :general
   (my-leader-def
     "nn" 'my/open-my-notes-file
     "nN" 'my/open-work-notes-file)
   :config
-  (my/org-theme))
+  ;; (my/org-theme)
+  )
 
 (use-package my-markdown-helpers
   :straight
   (my-markdown-helpers
    :local-repo "~/PersonalConfigs/emacs/elisp/my-markdown-helpers"
    :type nil)
-  :hook (markdown-mode . my/markdown-theme))
-
-;; watch out for performance issues here
-(use-package emojify
-  :disabled
-  :hook ((markdown-mode org-mode) . emojify-mode))
+  ;; :hook (markdown-mode . my/markdown-theme)
+  )
 
 
 ;;; Own scripts and packages
