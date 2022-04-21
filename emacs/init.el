@@ -141,7 +141,7 @@
   (evil-want-C-w-delete nil) 		; shift windows in insert
   (evil-want-C-w-in-emacs-state t) 	; I don't yank in emacs
   (evil-respect-visual-line-mode t)
-  (evil-auto-balance-windows t)	; default but leaving here for reference
+  (evil-auto-balance-windows nil)	; default is t but leaving here for reference
   (evil-want-Y-yank-to-eol t)
   :general
   (general-def 'override
@@ -201,6 +201,15 @@
   (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
   (define-key evil-outer-text-objects-map "a" 'evil-outer-arg))
 
+(use-package my-gui-controls
+  ;; :if (window-system)
+  :straight (my-gui-controls :local-repo "~/PersonalConfigs/emacs/elisp/my-gui-controls" :type nil)
+  :demand
+  :general
+  (general-def :keymaps 'override
+    "C-s-<f8>" 'my/close-notifications-mac))
+
+
 
 ;;; Builtin configurations
 
@@ -209,6 +218,13 @@
   :straight nil
   :hook
   (prog-mode . visual-line-mode)
+  (prog-mode . (lambda () (setq line-spacing 0.1)))
+  :init
+  (set-face-attribute 'default nil :font "IBM Plex Mono" :height (when-monitor-size :small 130 :large 140))
+  ;; (set-face-attribute 'default nil :font "FiraCode Nerd Font" :height (when-monitor-size :small 130 :large 140))
+  (set-face-attribute 'variable-pitch nil :font "IBM Plex Serif")
+  (set-face-attribute 'fixed-pitch nil :font "IBM Plex Mono")
+
   :config
   (defalias 'yes-or-no-p 'y-or-n-p)
 
@@ -262,43 +278,6 @@
 ;;   :config
 ;;   (fringe-mode '(4 . 4)))
 
-(use-package modus-themes
-  ;; docs are hidden away a bit https://protesilaos.com/emacs/modus-themes#h:51ba3547-b8c8-40d6-ba5a-4586477fd4ae
-  :demand
-  :init
-  (modus-themes-load-themes)
-  :custom
-  (modus-themes-italic-constructs t)
-  (modus-themes-bold-constructs t)
-  (modus-themes-variable-pitch-headings t)
-  (modus-themes-variable-pitch-ui t)
-  (modus-themes-mode-line '(accented borderless (padding . 4) (height . 1.2)))
-  (modus-themes-paren-match '(underline))
-  (modus-themes-org-blocks 'tinted-background)
-  (modus-themes--markup '(background))
-  (modus-themes-headings '((1 . (1.3))
-			   (2 . (1.2))))
-  (modus-themes-syntax '(alt-syntax yellow-comments)) 	; more colors
-  (modus-themes-prompts '(bold))
-  (modus-themes-lang-checkers '(background straight-underline))
-  ;; (modus-themes-hl-line '(underline accented)) ;underline clashes with brackets
-  (modus-themes-hl-line '(accented))
-  (modus-themes-operandi-color-overrides '(;; (bg-main . "#EFEFEF") ; readable, bit a little too grey
-					   (bg-main . "#ffffff")
-					   (fg-main . "#1b1b1b")))
-  :config
-  (set-face-attribute 'default nil :font "IBM Plex Mono")
-  (set-face-attribute 'variable-pitch nil :font "IBM Plex Serif")
-  (modus-themes-load-operandi)
-  ;; (custom-set-faces
-  ;;  '(font-lock-function-name-face ((t :slant italic)))
-  ;;  '(font-lock-variable-name-face ((t :weight semi-bold))))
-  )
-
-(use-package hl-line
-  :straight nil
-  :hook ((prog-mode text-mode messages-buffer-mode Info-mode help-mode helpful-mode) . hl-line-mode))
-
 (use-package font-lock
   :demand
   :straight nil
@@ -310,34 +289,6 @@
   :straight nil
   :custom
   (help-window-select t))
-
-(use-package window
-  :demand
-  :straight nil
-  :general
-  (my-leader-def
-    "wk" 'delete-window
-    "wo" 'delete-other-windows)
-  :config
-  ;; Split horizontally when opening a new window from a command
-  ;; split-height-threshold nil
-  ;; split-width-threshold 170 ; always split vertically if there's room
-
-  (defadvice delete-window (after restore-balance activate)
-    "Balance deleted windows."
-    (balance-windows))
-
-  ;; recaculate split-width-threshold with every change
-  ;; (add-hook 'window-configuration-change-hook
-  ;;           'frontside-windowing-adjust-split-width-threshold)
-
-  (defun frontside-windowing-adjust-split-width-threshold ()
-    "Change the value of `split-width-threshold' to split once.
-For example, if the frame is 360 columns wide, then we want the
-`split-width-threshold' to be 181. That way, when you split horizontally,
-the two new windows will each be 180 columns wide, and sit just below the threshold."
-    (setq split-width-threshold (+ 1 (/ (frame-width) 2)))))
-
 
 (use-package files
   :demand
@@ -412,6 +363,7 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
 
   (add-hook 'compilation-filter-hook 'my/postprocess-compilation-buffer))
 
+;; TODO: needs work
 (use-package eldoc
   :hook (prog-mode org-mode)
   :straight nil
@@ -531,17 +483,14 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
   (which-key-mode t))
 
 (use-package helpful
-  :custom
-  (counsel-describe-function-function #'helpful-callable)
-  (counsel-describe-variable-function #'helpful-variable)
   :bind
-  ([remap describe-function] . counsel-describe-function)
+  ([remap describe-function] . helpful-callable)
   ([remap describe-command] . helpful-command)
-  ([remap describe-variable] . counsel-describe-variable)
+  ([remap describe-symbol] . helpful-symbol)
+  ([remap describe-variable] . helpful-variable)
   ([remap describe-key] . helpful-key))
 
 (use-package rainbow-delimiters
-  :disabled
   :hook
   ((web-mode typescript-mode scala-mode java-mode) . rainbow-delimiters-mode))
 
@@ -590,52 +539,12 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
   :custom
   ((avy-background t)))
 
-(use-package ace-window
-  :custom
-  (aw-ignore-current t)
-  (aw-minibuffer-flag t)
-  (aw-keys '(?w ?e ?f ?j ?k ?l))
-  :general
-  (general-def :states '(normal visual insert emacs)
-    "C-x o" 'ace-window)
-  (my-leader-def
-    "W" 'ace-window)
-  (my-leader-def
-    "wd" 'ace-win-delete
-    "ws" 'ace-win-swap)
-  :commands
-  (ace-win-swap ace-win-delete)
-  :custom-face
-  ;; (aw-leading-char-face ((t (:inherit error :weight bold))))
-  (aw-leading-char-face ((t (:inherit error :weight bold :height 2.0))))
-  :config
-
-  (defun ace-win-delete ()
-    (interactive)
-    (ace-window 16))
-
-  (defun ace-win-swap ()
-    (interactive)
-    (ace-window 4)))
-
-;; (use-package auto-package-update
-;;   :defer 30
-;;   :custom
-;;   (auto-package-update-delete-old-versions t)
-;;   (auto-package-update-interval 1)
-;;   (auto-package-update-prompt-before-update t)
-;;   :config
-;;   (auto-package-update-at-time "09:18"))
-
 (use-package page-break-lines
   :hook (emacs-lisp-mode . page-break-lines-mode))
 
 (use-package reveal-in-osx-finder
   :if (memq window-system '(mac ns))
   :commands (reveal-in-osx-finder))
-
-(use-package nameless
-  :hook (emacs-lisp-mode . nameless-mode))
 
 ;; (use-package super-save
 ;;   :custom
@@ -661,39 +570,139 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
   :config
   (my-auto-save-mode +1))
 
+
+;;; Window Managment / Navigation
+
+(use-package window
+  :demand
+  :straight nil
+  :general
+  (my-leader-def
+    "wk" 'delete-window
+    "wo" 'delete-other-windows)
+  :config
+  ;; Split horizontally when opening a new window from a command
+  ;; split-height-threshold nil
+  ;; split-width-threshold 170 ; always split vertically if there's room
+
+  ;; (defadvice delete-window (after restore-balance activate)
+  ;;   "Balance deleted windows."
+  ;;   (balance-windows))
+
+  ;; recaculate split-width-threshold with every change
+  ;; (add-hook 'window-configuration-change-hook
+  ;;           'frontside-windowing-adjust-split-width-threshold)
+
+  ;; (defun frontside-windowing-adjust-split-width-threshold ()
+;;     "Change the value of `split-width-threshold' to split once.
+;; For example, if the frame is 360 columns wide, then we want the
+;; `split-width-threshold' to be 181. That way, when you split horizontally,
+;; the two new windows will each be 180 columns wide, and sit just below the threshold."
+;;     (setq split-width-threshold (+ 1 (/ (frame-width) 2))))
+  )
+
+(use-package ace-window
+  :custom
+  (aw-ignore-current t)
+  (aw-minibuffer-flag t)
+  (aw-keys '(?j ?k ?l ?f ?d ?d))
+  :general
+  (general-def :states '(normal visual insert emacs)
+    "C-x C-o" 'ace-window)
+  (my-leader-def
+    "W" 'ace-window)
+  (my-leader-def
+    "wd" 'ace-win-delete
+    "ws" 'ace-win-swap)
+  :commands
+  (ace-win-swap ace-win-delete)
+  :custom-face
+  ;; (aw-leading-char-face ((t (:inherit error :weight bold))))
+  (aw-leading-char-face ((t (:inherit error :weight bold :height 2.0))))
+  :config
+
+  (defun ace-win-delete ()
+    (interactive)
+    (ace-window 16))
+
+  (defun ace-win-swap ()
+    (interactive)
+    (ace-window 4)))
+
+(use-package popper
+  :straight t
+  :general (general-def :keymaps 'override
+	     "C-\\" 'popper-toggle-latest
+	     "M-\\" 'popper-cycle
+	     "C-M-\\" 'popper-toggle-type)
+
+  :custom
+  (popper-window-height 30)
+  (popper-group-function #'popper-group-by-projectile)
+  (popper-reference-buffers
+   '("\\*Messages\\*"
+     "Output\\*$"
+     "\\*Customize Group:"
+     "\\*Async Shell Command\\*"
+     help-mode
+     helpful-mode
+     compilation-mode
+     "^\\*jest"
+     "^\\*eshell.*\\*$" eshell-mode	      ;eshell as a popup
+     "^\\*shell.*\\*$"  shell-mode	      ;shell as a popup
+     "^\\*term.*\\*$"   term-mode	      ;term as a popup
+     "^\\*vterm.*\\*$"  vterm-mode	      ;vterm as a popup
+     "\\*Flycheck errors\\*"))
+  :config
+  (popper-mode +1)
+  (popper-echo-mode +1))                ; For echo area hints
+
 (use-package popwin
+  ;; using popper for now, seems to have simpler out the box working
   :disabled
   :custom
-  (popwin:special-display-config
-   '(;; Emacs
-    ("*Miniedit Help*" :noselect t)
-    help-mode
-    (completion-list-mode :noselect t)
-    (compilation-mode :noselect t)
-    (grep-mode :noselect t)
-    (occur-mode :noselect t)
-    ("*Pp Macroexpand Output*" :noselect t)
-    "*Shell Command Output*"
-    vterm-mode
-    ;; lsp and flycheck
-    "*Flycheck errors*"
-    " *LV*"
-    ;; VC
-    ;; "*vc-diff*"
-    ;; "*vc-change-log*"
-    ;; Undo-Tree
-    (" *undo-tree*" :width 60 :position right)
-    ;; Anything
-    ("^\\*anything.*\\*$" :regexp t)
-    ;; SLIME
-    "*slime-apropos*"
-    "*slime-macroexpansion*"
-    "*slime-description*"
-    ("*slime-compilation*" :noselect t)
-    "*slime-xref*"
-    (sldb-mode :stick t)
-    slime-repl-mode
-    slime-connection-list-mode))
+  (popwin:popup-window-position 'left)
+  (popwin:popup-window-width 0.33)
+  (popwin:popup-window-height 15)
+  (popwin:special-display-config '(;; Emacs
+				   ("*Miniedit Help*" :noselect t)
+				   (help-mode :stick t)
+				   (helpful-mode :stick t)
+				   (completion-list-mode :noselect t)
+				   (compilation-mode :noselect t :tail t)
+				   (grep-mode :noselect t)
+				   (occur-mode :noselect t)
+				   ("*Pp Macroexpand Output*" :noselect t)
+				   "*Shell Command Output*"
+				   vterm-mode
+				   ;; lsp and flycheck
+				   "*Flycheck errors*"
+				   " *LV*"
+				   ;; VC
+				   ;; "*vc-diff*"
+				   ;; "*vc-change-log*"
+				   ;; Undo-Tree
+				   " *undo-tree*"
+				   ;; Anything
+				   ("^\\*anything.*\\*$" :regexp t)
+				   ;; SLIME
+				   "*slime-apropos*"
+				   "*slime-macroexpansion*"
+				   "*slime-description*"
+				   ("*slime-compilation*" :noselect t)
+				   "*slime-xref*"
+				   (sldb-mode :stick t)
+				   slime-repl-mode
+				   slime-connection-list-mode))
+  :general
+  
+  ;; (general-define-key
+  ;;  :prefix "SPC"
+  ;;  :keymaps 'override
+  ;;  :states '(normal visual)
+  ;;  "wp" popwin:keymap)
+  (my-leader-def
+    "wp" '(:keymap popwin:keymap :wk "Popwin"))
   :config
   (popwin-mode 1))
 
@@ -721,6 +730,10 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
 			    outline-previous-visible-heading
 			    outline-up-heading
 
+			    ;; undo/redo
+			    undo-tree-undo
+			    undo-tree-redo
+			    
 			    ;; evil
 			    evil-scroll-line-to-center
 			    evil-scroll-line-to-bottom
@@ -731,8 +744,16 @@ the two new windows will each be 180 columns wide, and sit just below the thresh
 			    evil-window-vsplit
 			    evil-window-split
 
+			    evil-goto-definition
+			    evil-jump-backward
+			    evil-jump-forward
+
 			    goto-last-change
 			    goto-last-change-reverse)))
+
+(use-package hl-line
+  :straight nil
+  :hook ((prog-mode text-mode messages-buffer-mode Info-mode helpful-mode) . hl-line-mode))
 
 (use-package lin
   :hook (emacs-startup . lin-global-mode))
@@ -834,12 +855,12 @@ _s_kip
     (add-hook 'evil-insert-state-entry-hook '(lambda () (hl-line-mode -1)) nil 'make-it-local)))
 
 (use-package multi-vterm
-  :general (general-def :keymaps 'override
-	     "C-\\" 'multi-vterm-project)
-
-  ;; (my-leader-def
-  ;;   "tt" 'multi-vterm-project
-  ;;   "tn" 'multi-vterm)
+  :general
+  ;; :general (general-def :keymaps 'override
+  ;; 	     "C-\\" 'multi-vterm-project)
+  (my-leader-def
+    "tt" 'multi-vterm-project
+    "tn" 'multi-vterm)
   :config
   ;; (setq vterm-keymap-exceptions nil)
   (define-key vterm-mode-map [return] #'vterm-send-return))
@@ -850,55 +871,56 @@ _s_kip
 
 ;;; Themes and Fonts
 
+(use-package modus-themes
+  ;; docs are hidden away a bit https://protesilaos.com/emacs/modus-themes#h:51ba3547-b8c8-40d6-ba5a-4586477fd4ae
+  :init
+  (modus-themes-load-themes)
+  :hook
+  (after-init . (lambda () (modus-themes-load-operandi) (solaire-global-mode)))
+  :custom
+  (modus-themes-italic-constructs t)
+  (modus-themes-bold-constructs t)
+  (modus-themes-variable-pitch-headings t)
+  (modus-themes-variable-pitch-ui t)
+  ;; (modus-themes-mode-line '(accented borderless (padding . 4) (height . 1.2)))
+  (modus-themes-mode-line '(borderless))
+  (modus-themes-paren-match '(underline))
+  (modus-themes-org-blocks 'tinted-background)
+  (modus-themes--markup '(background))
+  (modus-themes-headings '((1 . (1.3))
+			   (2 . (1.2))))
+  (modus-themes-syntax '(alt-syntax yellow-comments)) ; more colors
+  (modus-themes-prompts '(bold))
+  (modus-themes-lang-checkers '(background straight-underline))
+  ;; (modus-themes-hl-line '(underline accented)) ;underline clashes with brackets
+  (modus-themes-hl-line '(accented))
+  (modus-themes-operandi-color-overrides '(;; (bg-main . "#EFEFEF") ; readable, bit a little too grey
+					   (bg-main . "#ffffff")
+					   (fg-main . "#1b1b1b"))))
+
 (use-package solaire-mode
   :config
   (setq solaire-mode-remap-modeline nil))
 
 (use-package doom-themes
   :disabled
-  :demand
-  :hook (prog-mode . (lambda () (setq line-spacing 0.1)))
-  :init
-  (set-face-attribute 'default nil :font "IBM Plex Mono")
-  (set-face-attribute 'variable-pitch nil :font "IBM Plex Serif")
-
-  (solaire-global-mode 1)
+  :hook (after-init . my/load-doom-theme)
   :config
-  ;; (load-theme 'doom-one t)
-  (load-theme 'doom-nord t)
-  ;; Corrects (and improves) org-mode's native fontification.
-  (doom-themes-org-config)
+  (defun my/load-doom-theme ()
+    (interactive)
+    (solaire-global-mode 1)
+    (load-theme 'doom-nord t)
+    ;; Corrects (and improves) org-mode's native fontification.
+    (doom-themes-org-config)
 
-
-  (custom-set-faces
-   ;; `(default ((t (:font "FiraCode Nerd Font" :height 160))))
-   ;; `(default ((t (:font "IBM Plex Mono" :height 130))))
-					; come up with some monitor specific setups
-   ;; `(default ((t (:font "FiraCode Nerd Font")))) ; come up with some monitor specific setups
-   ;; :height should be a float to adjust the relative size to the normal default font
-   ;; `(fixed-pitch ((t (:inherit default :font "FiraCode Nerd Font Mono" :height 0.9))))
-   ;; `(variable-pitch ((t (:inherit default :font "Georgia" :height 1.1 :foreground ,(doom-color 'base7)))))
-
-   `(font-lock-function-name-face ((t (:slant italic))))
-   `(font-lock-variable-name-face ((t (:weight semi-bold))))
-   `(font-lock-comment-face ((t (:slant italic)))))
-  (custom-set-faces
-   ;; `(default ((t (:font "FiraCode Nerd Font" :height 160))))
-   ;; `(default ((t (:font "IBM Plex Mono" :height 130))))
-					; come up with some monitor specific setups
-   ;; `(default ((t (:font "FiraCode Nerd Font")))) ; come up with some monitor specific setups
-   ;; :height should be a float to adjust the relative size to the normal default font
-   ;; `(fixed-pitch ((t (:inherit default :font "FiraCode Nerd Font Mono" :height 0.9))))
-   ;; `(variable-pitch ((t (:inherit default :font "Georgia" :height 1.1 :foreground ,(doom-color 'base7)))))
-
-   `(font-lock-function-name-face ((t (:slant italic))))
-   `(font-lock-variable-name-face ((t (:weight semi-bold))))
-   `(font-lock-comment-face ((t (:slant italic))))))
+    (custom-set-faces
+     `(font-lock-function-name-face ((t (:slant italic))))
+     `(font-lock-variable-name-face ((t (:weight semi-bold))))
+     `(font-lock-comment-face ((t (:slant italic)))))))
 
 (use-package all-the-icons)
 
 (use-package doom-modeline
-  :disabled
   :hook (after-init . doom-modeline-mode)
   :custom
   (doom-modeline-height 20)
@@ -937,11 +959,11 @@ _s_kip
 
 (use-package tree-sitter
   :hook
-  ((typescript-mode rustic-mode) . tree-sitter-mode)
-  ((typescript-mode rustic-mode) . tree-sitter-hl-mode)
+  ((typescript-mode rustic-mode) . (lambda () (tree-sitter-mode) (tree-sitter-hl-mode)))
   :commands (my/tree-sitter-hl)
   :config
-  (defface my/obvious-face '((t (:inherit 'default :foreground "red" :weight bold :underline t))) "Face for things I do not want to miss!")
+  (defface my/unmissable-face '((t (:inherit 'default :foreground "red" :weight bold :underline t))) "Face for things I do not want to miss!")
+  (defface my/obvious-face '((t (:inherit 'mode-line-emphasis))) "Face for things I want to see clearly like return statements")
   ;; register "return" as a new pattern under a new name
   (dolist (lang '(javascript typescript tsx))
     (tree-sitter-hl-add-patterns lang
@@ -954,7 +976,7 @@ _s_kip
 		(lambda (capture-name)
 		  (pcase capture-name
 		    ("keyword.return" 'my/obvious-face)
-		    ("keyword.bang" 'my/obvious-face))))
+		    ("keyword.bang" 'my/unmissable-face))))
 
 
   (defun my/tree-sitter-hl ()
@@ -1191,11 +1213,12 @@ _s_kip
   :config
   (ivy-mode 1)
 
-  (setq ivy-re-builders-alist
-	'((counsel-projectile-rg . ivy--regex-plus)
-	  (swiper . ivy--regex-plus)	; fzy search in file is clumsy
-	  (swiper-all . ivy--regex-plus)	; fzy search in file is clumsy
-	  (t . ivy--regex-fuzzy)))
+  (setq ivy-re-builders-alist '((t . ivy--regex-ignore-order)))
+  ;; (setq ivy-re-builders-alist
+  ;; 	'((counsel-projectile-rg . ivy--regex-plus)
+  ;; 	  (swiper . ivy--regex-plus)	; fzy search in file is clumsy
+  ;; 	  (swiper-all . ivy--regex-plus)	; fzy search in file is clumsy
+  ;; 	  (t . ivy--regex-fuzzy)))
 
   (setq enable-recursive-minibuffers t)
 
@@ -1215,6 +1238,9 @@ _s_kip
     "C-k" 'ivy-previous-line
     "C-u" 'ivy-scroll-down-command
     "C-d" 'ivy-scroll-up-command))
+
+(use-package ivy-hydra
+  :after ivy)
 
 (use-package ivy-rich
   :after ivy
@@ -1270,7 +1296,7 @@ _s_kip
   (ivy-posframe-mode 1))
 
 (use-package flx
-  :after ivy)
+  :demand)
 
 (use-package ivy-xref
   :after ivy
@@ -1359,12 +1385,12 @@ _s_kip
 
 
 (use-package lsp-mode
-  :commands lsp
+  :commands (lsp lsp-deferred)
   :init
   ;; get from https://github.com/elixir-lsp/elixir-ls/releases
   (add-to-list 'exec-path "~/.tooling/elixir-ls-1.11/")
   :hook
-  ((web-mode typescript-mode typescript-tsx-mode scala-mode java-mode elixir-mode) . lsp)
+  ((web-mode typescript-mode typescript-tsx-mode scala-mode java-mode elixir-mode) . lsp-deferred)
   (lsp-mode . lsp-enable-which-key-integration)
   :custom
   ;; general
@@ -1499,7 +1525,8 @@ _s_kip
 (use-package js2-mode
   :general
   (general-def :states 'insert :keymaps 'js2-minor-mode-map
-    "RET" 'js2-line-break)
+    "RET" 'js2-line-break
+    "M-RET" 'newline)
   :custom
   (js-chain-indent t)
   (js-indent-level 2)
@@ -1637,6 +1664,9 @@ _s_kip
 (use-package groovy-mode)
 
 ;;;; lisp
+
+(use-package nameless
+  :hook (emacs-lisp-mode . nameless-mode))
 
 (use-package elisp-mode
   :straight nil
@@ -2216,16 +2246,6 @@ _s_kip
 
 
 ;;; Own scripts and packages
-
-;; (use-package my-gui-controls
-;;   :if (window-system)
-;;   :straight (my-gui-controls :local-repo "~/emacs/elisp/my-gui-controls")
-;;   :general
-;;   (general-def :keymaps 'override
-;;     "C-s-<f8>" 'my/close-notifications-mac
-;;     "C-M-<left>" 'frame-half-size-left
-;;     "C-M-<right>" 'frame-half-size-right
-;;     "C-M-<return>" 'toggle-frame-maximized))
 
 ;; reset gc to something sensible for normal operation
 (setq gc-cons-threshold (* 2 1000 1000))
