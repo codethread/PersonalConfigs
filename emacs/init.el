@@ -34,7 +34,7 @@
 ;;; Initial packages --- these must load before everything
 
 ;; Elisp libraries
-(use-package dash :demand)
+(use-package dash :demand :hook (emacs-lisp-mode . dash-fontify-mode))
 (use-package s :demand)
 (use-package f :demand)
 
@@ -277,6 +277,53 @@
 ;;   :straight nil
 ;;   :config
 ;;   (fringe-mode '(4 . 4)))
+
+(use-package modus-themes
+  ;; docs are hidden away a bit https://protesilaos.com/emacs/modus-themes#h:51ba3547-b8c8-40d6-ba5a-4586477fd4ae
+  :demand
+  :init
+  (modus-themes-load-themes)
+  :custom
+  (modus-themes-italic-constructs t)
+  (modus-themes-bold-constructs t)
+  (modus-themes-variable-pitch-headings t)
+  (modus-themes-variable-pitch-ui t)
+  (modus-themes-mode-line '(accented borderless (padding . 4) (height . 1.2)))
+  (modus-themes-paren-match '(underline))
+  (modus-themes-org-blocks 'tinted-background)
+  (modus-themes--markup '(background))
+  (modus-themes-headings '((1 . (1.3))
+			   (2 . (1.2))))
+  (modus-themes-syntax '(alt-syntax yellow-comments)) ; more colors
+  (modus-themes-prompts '(bold))
+  (modus-themes-lang-checkers '(background straight-underline))
+  ;; (modus-themes-hl-line '(underline accented)) ;underline clashes with brackets
+  (modus-themes-hl-line '(accented))
+  (modus-themes-operandi-color-overrides '(;; (bg-main . "#EFEFEF") ; readable, bit a little too grey
+					   (bg-main . "#ffffff")
+					   (fg-main . "#1b1b1b")))
+  (modus-themes-vivendi-color-overrides '((bg-main . "#24292f")))
+  :config
+  (set-face-attribute 'default nil :font "IBM Plex Mono")
+  (set-face-attribute 'variable-pitch nil :font "IBM Plex Serif")
+  (modus-themes-load-operandi)
+
+  (defun my/apply-theme (appearance)
+    "Load theme, taking current system APPEARANCE into consideration."
+    (mapc #'disable-theme custom-enabled-themes)
+    (pcase appearance
+      ('light (load-theme 'modus-operandi t))
+      ('dark (load-theme 'modus-vivendi t))))
+
+  (add-hook 'ns-system-appearance-change-functions #'my/apply-theme)
+  ;; (custom-set-faces
+  ;;  '(font-lock-function-name-face ((t :slant italic)))
+  ;;  '(font-lock-variable-name-face ((t :weight semi-bold))))
+  )
+
+(use-package hl-line
+  :straight nil
+  :hook ((prog-mode text-mode messages-buffer-mode Info-mode help-mode helpful-mode) . hl-line-mode))
 
 (use-package font-lock
   :demand
@@ -706,8 +753,9 @@
   :config
   (popwin-mode 1))
 
-
 (use-package pulsar
+  :straight
+  (pulsar :host github :repo "protesilaos/pulsar")
   :hook
   (emacs-startup . pulsar-global-mode)
   :custom
