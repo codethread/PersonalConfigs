@@ -56,7 +56,7 @@ provided for a :medium, then the value provided for :small will
 be used)."
   (let* ((screen (display-pixel-width))
 	 (size (cond
-		((< screen 1320) 's)
+		((<= screen 1280) 's)
 		((< screen 1600) 'm)
 		(t 'l))))
     (cond

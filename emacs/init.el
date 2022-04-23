@@ -220,11 +220,10 @@
   (prog-mode . visual-line-mode)
   (prog-mode . (lambda () (setq line-spacing 0.1)))
   :init
+  ;; font strings "FiraCode Nerd Font"
   (set-face-attribute 'default nil :font "IBM Plex Mono" :height (when-monitor-size :small 130 :large 140))
-  ;; (set-face-attribute 'default nil :font "FiraCode Nerd Font" :height (when-monitor-size :small 130 :large 140))
   (set-face-attribute 'variable-pitch nil :font "IBM Plex Serif")
   (set-face-attribute 'fixed-pitch nil :font "IBM Plex Mono")
-
   :config
   (defalias 'yes-or-no-p 'y-or-n-p)
 
@@ -277,53 +276,6 @@
 ;;   :straight nil
 ;;   :config
 ;;   (fringe-mode '(4 . 4)))
-
-(use-package modus-themes
-  ;; docs are hidden away a bit https://protesilaos.com/emacs/modus-themes#h:51ba3547-b8c8-40d6-ba5a-4586477fd4ae
-  :demand
-  :init
-  (modus-themes-load-themes)
-  :custom
-  (modus-themes-italic-constructs t)
-  (modus-themes-bold-constructs t)
-  (modus-themes-variable-pitch-headings t)
-  (modus-themes-variable-pitch-ui t)
-  (modus-themes-mode-line '(accented borderless (padding . 4) (height . 1.2)))
-  (modus-themes-paren-match '(underline))
-  (modus-themes-org-blocks 'tinted-background)
-  (modus-themes--markup '(background))
-  (modus-themes-headings '((1 . (1.3))
-			   (2 . (1.2))))
-  (modus-themes-syntax '(alt-syntax yellow-comments)) ; more colors
-  (modus-themes-prompts '(bold))
-  (modus-themes-lang-checkers '(background straight-underline))
-  ;; (modus-themes-hl-line '(underline accented)) ;underline clashes with brackets
-  (modus-themes-hl-line '(accented))
-  (modus-themes-operandi-color-overrides '(;; (bg-main . "#EFEFEF") ; readable, bit a little too grey
-					   (bg-main . "#ffffff")
-					   (fg-main . "#1b1b1b")))
-  (modus-themes-vivendi-color-overrides '((bg-main . "#24292f")))
-  :config
-  (set-face-attribute 'default nil :font "IBM Plex Mono")
-  (set-face-attribute 'variable-pitch nil :font "IBM Plex Serif")
-  (modus-themes-load-operandi)
-
-  (defun my/apply-theme (appearance)
-    "Load theme, taking current system APPEARANCE into consideration."
-    (mapc #'disable-theme custom-enabled-themes)
-    (pcase appearance
-      ('light (load-theme 'modus-operandi t))
-      ('dark (load-theme 'modus-vivendi t))))
-
-  (add-hook 'ns-system-appearance-change-functions #'my/apply-theme)
-  ;; (custom-set-faces
-  ;;  '(font-lock-function-name-face ((t :slant italic)))
-  ;;  '(font-lock-variable-name-face ((t :weight semi-bold))))
-  )
-
-(use-package hl-line
-  :straight nil
-  :hook ((prog-mode text-mode messages-buffer-mode Info-mode help-mode helpful-mode) . hl-line-mode))
 
 (use-package font-lock
   :demand
@@ -530,6 +482,9 @@
   (which-key-mode t))
 
 (use-package helpful
+  :general
+  (general-nmap
+    "K" 'helpful-at-point)
   :bind
   ([remap describe-function] . helpful-callable)
   ([remap describe-command] . helpful-command)
@@ -944,7 +899,21 @@ _s_kip
   (modus-themes-hl-line '(accented))
   (modus-themes-operandi-color-overrides '(;; (bg-main . "#EFEFEF") ; readable, bit a little too grey
 					   (bg-main . "#ffffff")
-					   (fg-main . "#1b1b1b"))))
+					   (fg-main . "#1b1b1b")))
+  (modus-themes-vivendi-color-overrides '((bg-main . "#24292f")))
+  :config
+  (set-face-attribute 'default nil :font "IBM Plex Mono")
+  (set-face-attribute 'variable-pitch nil :font "IBM Plex Serif")
+  (modus-themes-load-operandi)
+
+  (defun my/apply-theme (appearance)
+    "Load theme, taking current system APPEARANCE into consideration."
+    (mapc #'disable-theme custom-enabled-themes)
+    (pcase appearance
+      ('light (load-theme 'modus-operandi t))
+      ('dark (load-theme 'modus-vivendi t))))
+
+  (add-hook 'ns-system-appearance-change-functions #'my/apply-theme))
 
 (use-package solaire-mode
   :config
@@ -1513,7 +1482,7 @@ _s_kip
   :general
   (general-nmap
     "K" (general-predicate-dispatch 'helpful-at-point
-	  (lsp-ui-doc--frame-visible-p) 'lsp-ui-doc-focus-frame
+	  (and (bound-and-true-p lsp-mode) (lsp-ui-doc--frame-visible-p)) 'lsp-ui-doc-focus-frame
 	  ;; if inside a ui-doc frame
 	  (bound-and-true-p lsp-ui-doc-frame-mode) 'lsp-ui-doc-unfocus-frame
 	  ;; if lsp is active
