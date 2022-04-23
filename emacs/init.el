@@ -175,7 +175,7 @@
   :demand
   :after evil
   :config
-  (setq my/evil-collection-disabled-modes '(lispy company))
+  (setq my/evil-collection-disabled-modes '(lispy company go-mode))
   (evil-collection-init
    (seq-difference evil-collection--supported-modes my/evil-collection-disabled-modes)))
 
@@ -753,7 +753,7 @@
 
 (use-package hl-line
   :straight nil
-  :hook ((prog-mode text-mode messages-buffer-mode Info-mode helpful-mode) . hl-line-mode))
+  :hook ((prog-mode text-mode messages-buffer-mode Info-mode helpful-mode compilation-mode) . hl-line-mode))
 
 (use-package lin
   :hook (emacs-startup . lin-global-mode))
@@ -1390,7 +1390,7 @@ _s_kip
   ;; get from https://github.com/elixir-lsp/elixir-ls/releases
   (add-to-list 'exec-path "~/.tooling/elixir-ls-1.11/")
   :hook
-  ((web-mode typescript-mode typescript-tsx-mode scala-mode java-mode elixir-mode) . lsp-deferred)
+  ((web-mode typescript-mode typescript-tsx-mode scala-mode java-mode elixir-mode go-mode) . lsp-deferred)
   (lsp-mode . lsp-enable-which-key-integration)
   :custom
   ;; general
@@ -1837,6 +1837,14 @@ _s_kip
 ;;   :hook (python-mode . (lambda ()
 ;;                          (require 'lsp-python-ms)
 ;;                          (lsp))))
+
+(use-package go-mode
+  :hook
+  (go-mode . my/lsp-go-install-save-hooks)
+  :config
+  (defun my/lsp-go-install-save-hooks ()
+    (add-hook 'before-save-hook #'lsp-format-buffer t t)
+    (add-hook 'before-save-hook #'lsp-organize-imports t t)))
 
 (use-package flycheck
   :commands (my|eslint-fix-file-and-revert)

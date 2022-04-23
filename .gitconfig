@@ -26,3 +26,5 @@
 	user = AHDesigns
 [diff "image"]
 	command = ~/.tooling/git-diff-image/git_diff_image
+[init]
+	defaultBranch = main
