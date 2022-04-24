@@ -2272,6 +2272,27 @@ _s_kip
 
 ;;; Own scripts and packages
 
+;; wip to find duplicate packages
+
+;; (-let ((buff (get-file-buffer "~/PersonalConfigs/emacs/init.el"))
+;;        (current-match t))
+;;   (with-current-buffer buff
+;;     (message (buffer-file-name))
+;;     (save-excursion
+;;       (goto-char (point-min))
+;;       ;; skip past bootsrap code
+;;       (search-forward ";;; Initial packages")
+;;       (setq packages '())
+;;       (while (setq current-match (search-forward "use-package " nil t))
+;; 	(-when-let (package (thing-at-point 'symbol t))
+;; 	  (-if-let (duplicate (alist-get package packages nil nil #'equal))
+;; 	      (push (list package 2 (line-number-at-pos)) packages)
+;; 	    (push (list package 1 (line-number-at-pos)) packages))))
+;;       ;; (sort packages #'s-less?)
+;;       packages)))
+
+
+
 ;; reset gc to something sensible for normal operation
 (setq gc-cons-threshold (* 2 1000 1000))
 
