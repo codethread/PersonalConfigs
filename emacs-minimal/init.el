@@ -90,7 +90,8 @@
   :hook
   (after-init . (lambda ()
 		  (modus-themes-load-operandi)
-		  (solaire-global-mode)))
+					;(solaire-global-mode)
+		  ))
   :custom
   (modus-themes-italic-constructs t)
   (modus-themes-bold-constructs t)
