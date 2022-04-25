@@ -30,7 +30,7 @@ async function main() {
 
     const { file, line } = getChosenPath();
 
-    const panes = await getPanes();
+    const panes = await getPanes(tmux);
 
     const isActivePaneEditor = Boolean(
       panes.find((p) => p.active && editors.includes(p.cmd))
@@ -82,9 +82,9 @@ main();
  *
  * @returns {Promise<Panes>}
  */
-async function getPanes() {
+async function getPanes(tmux) {
   let { stdout: panesString } = await shell(
-    'tmux list-panes -F "#{pane_current_command} #{pane_active} #{pane_last} #{pane_current_path}"'
+    `${tmux} list-panes -F "#{pane_current_command} #{pane_active} #{pane_last} #{pane_current_path}"`
   );
 
   const panes = panesString

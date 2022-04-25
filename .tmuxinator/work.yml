@@ -1,0 +1,9 @@
+name: Configs
+root: ~/
+
+windows:
+  - main:
+      root: ~/PersonalConfigs
+      layout: main-vertical
+      panes:
+        - nvim
