@@ -130,85 +130,11 @@
     "wl" '(:ignore t :wk "Layout")
     "p" '(:ignore t :wk "Projectile")))
 
-(use-package evil
-  :demand
-  :init
-  (setq evil-want-integration t)
-  (setq evil-want-keybinding nil)	; evil-colleciton expects this
-  :custom
-  ;; (evil-goto-definition-functions) ;; Might be useful
-  (evil-want-C-u-scroll t)
-  (evil-want-C-w-delete nil) 		; shift windows in insert
-  (evil-want-C-w-in-emacs-state t) 	; I don't yank in emacs
-  (evil-respect-visual-line-mode t)
-  (evil-auto-balance-windows nil)	; default is t but leaving here for reference
-  (evil-want-Y-yank-to-eol t)
-  :general
-  (general-def 'override
-    :states '(normal insert visual emacs motion)
-    "C-e" 'move-end-of-line
-    "C-y" 'universal-argument)
-  (my-leader-def
-    "ww" 'evil-window-vsplit
-
-    "bN" 'evil-split-next-buffer
-    "bP" 'evil-split-prev-buffer
-    "bj" 'evil-show-jumps
-    "bn" 'evil-next-buffer
-    "bp" 'evil-prev-buffer)
-  :config
-  (define-key universal-argument-map (kbd "C-y") 'universal-argument-more)
-
-  (setq evil-insert-state-cursor '((bar . 2))
-	evil-normal-state-cursor '(box))
-
-  ;; https://emacs.stackexchange.com/questions/9583/how-to-treat-underscore-as-part-of-the-word
-  (defadvice evil-inner-word (around underscore-as-word activate)
-    (let ((table (copy-syntax-table (syntax-table))))
-      (modify-syntax-entry ?_ "w" table)
-      (with-syntax-table table
-	ad-do-it)))
-
-  (evil-mode t))
-
-(use-package evil-collection
-  :demand
-  :after evil
-  :config
-  (setq my/evil-collection-disabled-modes '(lispy company go-mode))
-  (evil-collection-init
-   (seq-difference evil-collection--supported-modes my/evil-collection-disabled-modes)))
-
-(use-package evil-surround
-  :demand
-  :after evil
-  :config
-  (global-evil-surround-mode 1))
-
-(use-package evil-escape
-  :demand
-  :after evil
-  :custom
-  (evil-escape-key-sequence "jk")
-  :config
-  (evil-escape-mode t))
-
-(use-package evil-args
-  :demand
-  :after evil
-  :config
-  ;; bind evil-args text objects
-  (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
-  (define-key evil-outer-text-objects-map "a" 'evil-outer-arg))
-
-(use-package my-gui-controls
-  ;; :if (window-system)
-  :straight (my-gui-controls :local-repo "~/PersonalConfigs/emacs/elisp/my-gui-controls" :type nil)
-  :demand
+(use-package +utils
+  :straight (+utils :local-repo "~/PersonalConfigs/emacs/elisp/+utils")
   :general
   (general-def :keymaps 'override
-    "C-s-<f8>" 'my/close-notifications-mac))
-
+    "C-s-<f8>" '+utils-close-notifications-mac))
 
 
 ;;; Builtin configurations
@@ -221,7 +147,7 @@
   (prog-mode . (lambda () (setq line-spacing 0.1)))
   :init
   ;; font strings "FiraCode Nerd Font"
-  (set-face-attribute 'default nil :font "IBM Plex Mono" :height (when-monitor-size :small 130 :large 140))
+  (set-face-attribute 'default nil :font "IBM Plex Mono" :height (+utils-when-monitor-size :small 130 :large 140))
   (set-face-attribute 'variable-pitch nil :font "IBM Plex Serif")
   (set-face-attribute 'fixed-pitch nil :font "IBM Plex Mono")
   :config
@@ -654,6 +580,7 @@
      "^\\*shell.*\\*$"  shell-mode	      ;shell as a popup
      "^\\*term.*\\*$"   term-mode	      ;term as a popup
      "^\\*vterm.*\\*$"  vterm-mode	      ;vterm as a popup
+     deadgrep-mode
      "\\*Flycheck errors\\*"))
   :config
   (popper-mode +1)
@@ -762,7 +689,78 @@
   :hook (emacs-startup . lin-global-mode))
 
 
-;;; Evil helpers
+;;; Evil
+
+(use-package evil
+  :demand
+  :init
+  (setq evil-want-integration t)
+  (setq evil-want-keybinding nil)	; evil-colleciton expects this
+  :custom
+  ;; (evil-goto-definition-functions) ;; Might be useful
+  (evil-want-C-u-scroll t)
+  (evil-want-C-w-delete nil) 		; shift windows in insert
+  (evil-want-C-w-in-emacs-state t) 	; I don't yank in emacs
+  (evil-respect-visual-line-mode t)
+  (evil-auto-balance-windows nil)	; default is t but leaving here for reference
+  (evil-want-Y-yank-to-eol t)
+  :general
+  (general-def 'override
+    :states '(normal insert visual emacs motion)
+    "C-e" 'move-end-of-line
+    "C-y" 'universal-argument)
+  (my-leader-def
+    "ww" 'evil-window-vsplit
+
+    "bN" 'evil-split-next-buffer
+    "bP" 'evil-split-prev-buffer
+    "bj" 'evil-show-jumps
+    "bn" 'evil-next-buffer
+    "bp" 'evil-prev-buffer)
+  :config
+  (define-key universal-argument-map (kbd "C-y") 'universal-argument-more)
+
+  (setq evil-insert-state-cursor '((bar . 2))
+	evil-normal-state-cursor '(box))
+
+  ;; https://emacs.stackexchange.com/questions/9583/how-to-treat-underscore-as-part-of-the-word
+  (defadvice evil-inner-word (around underscore-as-word activate)
+    (let ((table (copy-syntax-table (syntax-table))))
+      (modify-syntax-entry ?_ "w" table)
+      (with-syntax-table table
+	ad-do-it)))
+
+  (evil-mode t))
+
+(use-package evil-collection
+  :demand
+  :after evil
+  :config
+  (setq my/evil-collection-disabled-modes '(lispy company go-mode))
+  (evil-collection-init
+   (seq-difference evil-collection--supported-modes my/evil-collection-disabled-modes)))
+
+(use-package evil-surround
+  :demand
+  :after evil
+  :config
+  (global-evil-surround-mode 1))
+
+(use-package evil-escape
+  :demand
+  :after evil
+  :custom
+  (evil-escape-key-sequence "jk")
+  :config
+  (evil-escape-mode t))
+
+(use-package evil-args
+  :demand
+  :after evil
+  :config
+  ;; bind evil-args text objects
+  (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
+  (define-key evil-outer-text-objects-map "a" 'evil-outer-arg))
 
 (use-package evil-commentary
   :requires evil
@@ -1521,9 +1519,10 @@ _s_kip
   (lsp-ui-doc-position 'at-point))
 
 (use-package dap-mode
-  :disabled
-  :commands dap-debug 			; might not need this, wory about this when setting up
-  :after lsp-mode
+  :custom
+  (dap-node-debug-path "~/.vscode/extensions/ms-vscode.node-debug2-1.43.0")
+  ;; (dap-node-debug-program '("node" "~/.vscode/extensions/ms-vscode.node-debug2-1.43.0/out/src/nodeDebug.js"))
+  ;; :after lsp-mode
   :config (dap-auto-configure-mode))
 
 
@@ -1583,6 +1582,8 @@ _s_kip
   :custom (tsx-mode-tsx-auto-tags t)
   :hook (tsx-mode-hook . my/tsx-settings)
   :config
+  (require 'dap-node)
+  (dap-node-setup)
 
   (defun my/tsx-settings ()
     "Hooks for tsx mode"
@@ -1744,7 +1745,7 @@ _s_kip
 ;;;; Others
 
 (use-package json-mode
-  :mode "\\.json\\'"
+  :mode ("\\.json\\'" . jsonc-mode)
   :config
   ;; TODO tidy this, as I imagine it runs every init
   (defconst json-mode-comments-re (rx (group "//" (zero-or-more nonl) line-end)))
@@ -1962,6 +1963,11 @@ _s_kip
     (abbrev-mode)
     (variable-pitch-mode)
     (setq line-spacing 0.2)))
+
+(use-package +markdown
+  :straight (my-markdown-helpers :local-repo "~/PersonalConfigs/emacs/elisp/+markdown")
+  ;; :hook (markdown-mode . my/markdown-theme)
+  )
 
 (use-package markdown-toc
   :after markdown-mode)
@@ -2238,18 +2244,15 @@ _s_kip
   (require 'evil-org-agenda)
   (evil-org-agenda-set-keys))
 
-(use-package org-alert
+(use-package +org-alert
   :disabled
-  :straight
-  (org-alert
-   :local-repo "~/PersonalConfigs/emacs/elisp/org-alert"
-   :type nil)
+  :straight (org-alert :local-repo "~/PersonalConfigs/emacs/elisp/org-alert")
   :defer 30
   :config
   (org-alert-enable))
 
-(use-package my-org-helpers
-  :straight (my-org-helpers :local-repo "~/PersonalConfigs/emacs/elisp/my-org-helpers" :type nil)
+(use-package +org
+  :straight (my-org-helpers :local-repo "~/PersonalConfigs/emacs/elisp/+org")
   :after (:any org org-roam)
   :commands
   (my/open-my-notes-file my/open-work-notes-file)
@@ -2260,38 +2263,6 @@ _s_kip
   :config
   ;; (my/org-theme)
   )
-
-(use-package my-markdown-helpers
-  :straight
-  (my-markdown-helpers
-   :local-repo "~/PersonalConfigs/emacs/elisp/my-markdown-helpers"
-   :type nil)
-  ;; :hook (markdown-mode . my/markdown-theme)
-  )
-
-
-;;; Own scripts and packages
-
-;; wip to find duplicate packages
-
-;; (-let ((buff (get-file-buffer "~/PersonalConfigs/emacs/init.el"))
-;;        (current-match t))
-;;   (with-current-buffer buff
-;;     (message (buffer-file-name))
-;;     (save-excursion
-;;       (goto-char (point-min))
-;;       ;; skip past bootsrap code
-;;       (search-forward ";;; Initial packages")
-;;       (setq packages '())
-;;       (while (setq current-match (search-forward "use-package " nil t))
-;; 	(-when-let (package (thing-at-point 'symbol t))
-;; 	  (-if-let (duplicate (alist-get package packages nil nil #'equal))
-;; 	      (push (list package 2 (line-number-at-pos)) packages)
-;; 	    (push (list package 1 (line-number-at-pos)) packages))))
-;;       ;; (sort packages #'s-less?)
-;;       packages)))
-
-
 
 ;; reset gc to something sensible for normal operation
 (setq gc-cons-threshold (* 2 1000 1000))

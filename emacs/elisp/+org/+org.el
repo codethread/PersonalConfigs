@@ -1,31 +1,21 @@
-;;; my-org-helpers.el --- small utils for org-mode -*- lexical-binding: t -*-
+;;; +org.el --- small utils for org-mode -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;; Code:
 (require 'org)
 
-(defvar org-personal-file "~/Dropbox/org-me-notes/notes.org")
+(defvar +org-personal-file "~/Dropbox/org-me-notes/notes.org")
 
-(defvar org-work-file "~/OneDrive - Sky/dev/org-sky-notes/work.org")
+(defvar +org-work-file "~/OneDrive - Sky/dev/org-sky-notes/work.org")
 
-(defvar my/heading-font "Futura"
+(defvar +org-heading-font "Futura"
   "Font to use for org title, headings and markdown headings.")
 
 ;; seems broken
-(defun my/toggle-list-checkbox ()
+(defun +org-toggle-list-checkbox ()
   (interactive)
   (org-toggle-checkbox 4))
 
-(defun my/open-my-notes-file ()
-  "Open rough notes."
-  (interactive)
-  (find-file org-personal-file))
-
-(defun my/open-work-notes-file ()
-  "Open work notes."
-  (interactive)
-  (find-file org-work-file))
-
-(defun my/list-to-checkbox (arg)
+(defun +org-list-to-checkbox (arg)
   (interactive "P")
   (let ((n (or arg 1)))
     (when (region-active-p)
@@ -39,7 +29,7 @@
       (forward-line))
     (beginning-of-line)))
 
-(defun fill-buffer ()
+(defun +org-fill-buffer ()
   "call `fill-region' on entire buffer"
   (interactive)
   (save-excursion
@@ -47,8 +37,7 @@
       (widen)
       (fill-region (point-min) (point-max)))))
 
-
-(defun my/org-theme ()
+(defun +org-theme ()
   "Change org faces to a more minal style."
   (interactive)
   (custom-set-faces
@@ -64,7 +53,7 @@
    `(org-meta-line		((t (:inherit fixed-pitch :foreground ,(doom-color 'base5)))))
    '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
 
-   `(org-document-title		((t (:foreground ,(doom-color 'teal) :font ,my/heading-font :height 1.6 :weight regular))))
+   `(org-document-title		((t (:foreground ,(doom-color 'teal) :font ,+org-heading-font :height 1.6 :weight regular))))
    `(org-quote			((t (:inherit default :foreground ,(doom-color 'base6) :background ,(doom-color 'base3) :extend t :slant italic))))
 
    `(org-link			((t (:inherit fixed-pitch :foreground ,(doom-color 'blue) :underline t))))
@@ -85,8 +74,8 @@
    `(org-checkbox		((t (:foreground ,(doom-color 'blue)))))
    `(org-date			((t (:foreground ,(doom-color 'magenta)))))
 
-   `(org-level-1		((t (:foreground ,(doom-color 'base6) :font ,my/heading-font :height 1.3))))
-   `(org-level-2		((t (:foreground ,(doom-color 'base6) :font ,my/heading-font :height 1.2))))
+   `(org-level-1		((t (:foreground ,(doom-color 'base6) :font ,+org-heading-font :height 1.3))))
+   `(org-level-2		((t (:foreground ,(doom-color 'base6) :font ,+org-heading-font :height 1.2))))
    `(org-level-3		((t (:foreground ,(doom-color 'base6) :height 1.1 :slant italic))))
    `(org-level-4		((t (:foreground ,(doom-color 'base6) :height 1.1))))
    `(org-level-5		((t (:foreground ,(doom-color 'base6) :height 1.1))))
@@ -94,6 +83,18 @@
    `(org-level-7		((t (:foreground ,(doom-color 'base6) :height 1.1))))
    `(org-level-8		((t (:foreground ,(doom-color 'base6) :height 1.1))))))
 
-(provide 'my-org-helpers)
-;;; my-org-helpers.el ends here
+;;;###autoload
+(defun +org-open-my-notes-file ()
+  "Open rough notes."
+  (interactive)
+  (find-file +org-personal-file))
+
+;;;###autoload
+(defun +org-open-work-notes-file ()
+  "Open work notes."
+  (interactive)
+  (find-file +org-work-file))
+
+(provide '+org)
+;;; +org.el ends here
 

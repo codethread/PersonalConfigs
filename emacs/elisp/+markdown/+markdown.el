@@ -1,17 +1,18 @@
-;;; my-markdown-helpers.el --- small utils for org-mode -*- lexical-binding: t -*-
+;;; +markdown.el --- small utils for org-mode -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;; Code:
 
-(defvar my/heading-font "Futura"
+(defvar +markdown-heading-font "Futura"
   "Font to use for org title, headings and markdown headings.")
 
-(defun my/markdown-theme ()
+;;;###autoload
+(defun +markdown-theme ()
   "Change org faces to a more minal style."
   (interactive)
   (custom-set-faces
    ;; hide the BEGIN and END in source blocks
 
-   `(markdown-header-face	((t (:font ,my/heading-font :foreground ,(doom-color 'base6)))))
+   `(markdown-header-face	((t (:font ,+markdown-heading-font :foreground ,(doom-color 'base6)))))
    `(markdown-header-face-1	((t (:inherit markdown-header-face :height 1.8 :underline t :extend t))))
    `(markdown-header-face-2	((t (:inherit markdown-header-face :height 1.5))))
    `(markdown-header-face-3	((t (:inherit markdown-header-face :height 1.3 :underline t :extend t))))
@@ -31,6 +32,6 @@
    `(markdown-pre-face		((t (:inherit fixed-pitch :foreground ,(doom-color 'teal) :background ,(doom-color 'base3) :extend t))))
    `(markdown-code-face		((t (:inherit fixed-pitch :background ,(doom-color 'base3) :extend t))))))
 
-(provide 'my-markdown-helpers)
-;;; my-markdown-helpers.el ends here
+(provide '+markdown)
+;;; +markdown.el ends here
 

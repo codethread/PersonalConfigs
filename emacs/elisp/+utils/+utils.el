@@ -1,37 +1,49 @@
-;;; my-fns.el --- summary -*- lexical-binding: t -*-
-
-;; Author: Adam
-;; Maintainer: Adam
-;; Version: 1
-;; Package-Requires: (none)
-;; Homepage: none
-;; Keywords: none
-
-
-;; This file is not part of GNU Emacs
-
-;; This file is free software; you can redistribute it and/or modify
-;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 3, or (at your option)
-;; any later version.
-
-;; This program is distributed in the hope that it will be useful,
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-;; GNU General Public License for more details.
-
-;; For a full copy of the GNU General Public License
-;; see <http://www.gnu.org/licenses/>.
-
-
+;;; +utils.el --- utility functions -*- lexical-binding: t -*-
 ;;; Commentary:
-
-;; useful fns for my configs
-
 ;;; Code:
+(require 'dash)
+(require 's)
+(require 'cl-lib)
 
+;;;###autoload
+(defun +utils-shell-command-to-string (cmd)
+  "Return stdout from `CMD' removing trailing line."
+  (substring
+   (shell-command-to-string (concat cmd " 2>/dev/null"))
+   0 -1))
 
-;; (defun my/md-link-to-org ()
+;;;###autoload
+(defun +utils-replace-in-string (WHAT WITH in)
+  "`WHAT' to be replaced with `WITH' `IN' string."
+  (replace-regexp-in-string (regexp-quote WHAT) WITH in nil 'literal))
+
+;;;###autoload
+(defun +utils-close-notifications-mac ()
+  "Close Mac notifications."
+  (interactive)
+  (message "closing notifications")
+  (save-window-excursion
+    (async-shell-command
+     (concat "automator ~/Library/services/Close\\ BSur\\ Notifications.workflow"))))
+
+;;;###autoload
+(cl-defun +utils-when-monitor-size (&key small medium large)
+  "Get a value based on the current monitor size. REST should be
+key value pairs where the key is one of :small :medium
+:large (1320 1600 1920 pixels respectively). If a size is not
+matched, it will use the next lowest size (e.g if no value is
+provided for a :medium, then the value provided for :small will
+be used)."
+  (let* ((screen (display-pixel-width))
+	 (size (cond
+		((<= screen 1280) 's)
+		((< screen 1600) 'm)
+		(t 'l))))
+    (cond
+     ((eq size 's) small)
+     ((eq size 'm) (or medium small))
+     ((eq size 'l) (or large medium small)))))
+;; (defun +utils-md-link-to-org ()
 ;;   ;; Can also be adapted to use the region, but one would need to add
 ;;   ;; a marker and region-end.  Remember to remove marker at end.
 ;;   (let ((markdown-regex-link-inline
@@ -41,12 +53,12 @@
 ;;       (replace-match "[[\\6][\\3]]"))))
 
 
-(defun my/open-init-file ()
+(defun +utils-open-init-file ()
   "Open init.el."
   (interactive)
   (find-file "~/.emacs.d/init.el"))
 
-(defun my/pomo ()
+(defun +utils-pomo ()
   "Start a pomodoro timer in the background."
   (interactive)
   (message "starting 25min timer")
@@ -54,7 +66,7 @@
     (async-shell-command
      (concat "pomo") "pomo-timer")))
 
-(defun my/pomo-stop ()
+(defun +utils-pomo-stop ()
   "Finish existing pomo timer."
   (interactive)
   (message "stopping pomo timer")
@@ -65,14 +77,14 @@
      (concat "pomo --complete"))))
 
 ;; TODO still getting there
-(defun my/replace-word-under-cursor ()
+(defun +utils-replace-word-under-cursor ()
   "Replace word under cursor."
   (interactive)
   (print (thing-at-point 'word)))
 
-;; (global-set-key (kbd "C-q") 'my/replace-word-under-cursor)
+;; (global-set-key (kbd "C-q") '+utils-replace-word-under-cursor)
 
-(defun my/tdd-message ()
+(defun +utils-tdd-message ()
   "Display the three laws of TDD."
   (interactive)
   (message
@@ -96,12 +108,12 @@
     "the currently failing "
     (propertize "unit test\n" 'face 'font-lock-constant-face))))
 
-(defun my/reload-init-file ()
+(defun +utils-reload-init-file ()
   "Reload init.el without restart."
   (interactive)
   (load-file "~/.emacs.d/init.el"))
 
-;; (defun my/teardown
+;; (defun +utils-teardown
 ;;     "Remove all files from teardown file."
 ;;   (interactive)
 ;;  ())
@@ -124,6 +136,24 @@
 ;; (push "Steph" list-of-names)
 ;; (mapcar 'hello list-of-names)
 
-(provide 'my-fns)
+;; wip to find duplicate packages
 
-;;; my-fns.el ends here
+;; (-let ((buff (get-file-buffer "~/PersonalConfigs/emacs/init.el"))
+;;        (current-match t))
+;;   (with-current-buffer buff
+;;     (message (buffer-file-name))
+;;     (save-excursion
+;;       (goto-char (point-min))
+;;       ;; skip past bootsrap code
+;;       (search-forward ";;; Initial packages")
+;;       (setq packages '())
+;;       (while (setq current-match (search-forward "use-package " nil t))
+;; 	(-when-let (package (thing-at-point 'symbol t))
+;; 	  (-if-let (duplicate (alist-get package packages nil nil #'equal))
+;; 	      (push (list package 2 (line-number-at-pos)) packages)
+;; 	    (push (list package 1 (line-number-at-pos)) packages))))
+;;       ;; (sort packages #'s-less?)
+;;       packages)))
+
+(provide '+utils)
+;;; +utils.el ends here
