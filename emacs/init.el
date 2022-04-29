@@ -686,6 +686,7 @@
   :hook ((prog-mode text-mode messages-buffer-mode Info-mode helpful-mode compilation-mode) . hl-line-mode))
 
 (use-package lin
+  :straight (:host github :repo "protesilaos/lin")
   :hook (emacs-startup . lin-global-mode))
 
 
@@ -1405,7 +1406,7 @@ _s_kip
   ;; get from https://github.com/elixir-lsp/elixir-ls/releases
   (add-to-list 'exec-path "~/.tooling/elixir-ls-1.11/")
   :hook
-  ((web-mode typescript-mode typescript-tsx-mode scala-mode java-mode elixir-mode go-mode) . lsp-deferred)
+  ((web-mode typescript-mode tsx-mode scala-mode java-mode elixir-mode go-mode) . lsp-deferred)
   (lsp-mode . lsp-enable-which-key-integration)
   :custom
   ;; general
@@ -1579,6 +1580,7 @@ _s_kip
 (use-package tsx-mode
   :straight (tsx-mode :host github :repo "orzechowskid/tsx-mode.el")
   :mode "\\.tsx\\'"
+  :mode "\\.jsx\\'"
   :custom (tsx-mode-tsx-auto-tags t)
   :hook (tsx-mode-hook . my/tsx-settings)
   :config
@@ -1588,9 +1590,9 @@ _s_kip
   (defun my/tsx-settings ()
     "Hooks for tsx mode"
     (interactive)
-    ;; (flycheck-add-mode 'javascript-eslint 'tsx-mode)
-    ;; (flycheck-add-next-checker 'lsp 'javascript-eslint)
-    ))
+    (flycheck-add-mode 'javascript-eslint 'tsx-mode)
+    (setq flycheck-checker 'javascript-eslint)
+    (flycheck-add-next-checker 'lsp 'javascript-eslint)))
 
 (use-package web-mode
   ;; still need web-mode stuff as typescript-tsx-mode is actually derived from it
@@ -1629,14 +1631,9 @@ _s_kip
    "jf" 'jest-file-dwim
    "jp" 'jest-popup))
 
-
-(use-package prettier-js
-  :custom
-  ;; this is cool but can't get it to respect .prettierrc, and it's pretty fast
-  ;; (prettier-js-command "prettierd")
-  (prettier-js-show-errors "Own buffer")
+(use-package prettier
   :config
-  :hook ((web-mode typescript-mode typescript-tsx-mode tsx-mode json-mode) . prettier-js-mode))
+  (global-prettier-mode))
 
 (use-package yarn
   :straight (yarn :host github :repo "jmfirth/yarn.el"))
