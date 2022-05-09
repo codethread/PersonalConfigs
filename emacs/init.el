@@ -1406,7 +1406,7 @@ _s_kip
   ;; get from https://github.com/elixir-lsp/elixir-ls/releases
   (add-to-list 'exec-path "~/.tooling/elixir-ls-1.11/")
   :hook
-  ((web-mode typescript-mode tsx-mode scala-mode java-mode elixir-mode go-mode) . lsp-deferred)
+  ((web-mode typescript-mode tsx-mode scala-mode java-mode elixir-mode go-mode scss-mode css-mode) . lsp-deferred)
   (lsp-mode . lsp-enable-which-key-integration)
   :custom
   ;; general
@@ -1582,7 +1582,8 @@ _s_kip
   :mode "\\.tsx\\'"
   :mode "\\.jsx\\'"
   :custom (tsx-mode-tsx-auto-tags t)
-  :hook (tsx-mode-hook . my/tsx-settings)
+  :hook
+  (tsx-mode . my/tsx-settings)
   :config
   (require 'dap-node)
   (dap-node-setup)
@@ -1590,9 +1591,11 @@ _s_kip
   (defun my/tsx-settings ()
     "Hooks for tsx mode"
     (interactive)
-    (flycheck-add-mode 'javascript-eslint 'tsx-mode)
-    (setq flycheck-checker 'javascript-eslint)
-    (flycheck-add-next-checker 'lsp 'javascript-eslint)))
+    ;; flycheck
+    ;; (flycheck-add-mode 'javascript-eslint 'tsx-mode)
+    ;; (setq flycheck-checker 'javascript-eslint)
+    ;; (flycheck-add-next-checker 'lsp 'javascript-eslint)
+    ))
 
 (use-package web-mode
   ;; still need web-mode stuff as typescript-tsx-mode is actually derived from it
@@ -1632,8 +1635,14 @@ _s_kip
    "jp" 'jest-popup))
 
 (use-package prettier
+  :hook
+  (tsx-mode . prettier-mode)
+  (after-init . global-prettier-mode)
   :config
-  (global-prettier-mode))
+  (defun +prettier-tsx ()
+    "hooks for tsx and prettier."
+    (prettier-mode)
+    (setq-local prettier-parsers '(typescript))))
 
 (use-package yarn
   :straight (yarn :host github :repo "jmfirth/yarn.el"))
@@ -1645,7 +1654,6 @@ _s_kip
   ("scala" . scala-mode))
 
 (use-package lsp-metals
-  :disabled
   :after scala-mode
   :custom
   (lsp-metals-treeview-show-when-views-received nil)

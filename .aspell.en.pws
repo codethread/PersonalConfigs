@@ -1,4 +1,5 @@
-personal_ws-1.1 en 71 
+personal_ws-1.1 en 77 
+API's
 Applicative
 Applicatives
 Atomicity
@@ -26,6 +27,7 @@ OAuth
 OOP
 PR's
 Pinterest
+Pomodoro
 REPL
 SDK
 SOIP
@@ -39,6 +41,7 @@ Zettelkasten
 Zoid
 arithmatic
 async
+backend
 cli
 config
 contentinfo
@@ -50,8 +53,11 @@ env
 eslint
 falsy
 flycheck
+frontend
 globals
+golang
 gpg
+graphql
 iframe
 iframes
 intelisense

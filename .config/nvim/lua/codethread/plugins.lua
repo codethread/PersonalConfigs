@@ -22,12 +22,13 @@ if fn.empty(fn.glob(install_path)) > 0 then
 end
 
 -- Update on save
-vim.cmd([[
-  augroup packer_user_config
-    autocmd!
-    autocmd BufWritePost plugins.lua source <afile> | PackerSync
-  augroup end
-]])
+-- too annoying, would prefer a manual update
+-- vim.cmd([[
+--   augroup packer_user_config
+--     autocmd!
+--     autocmd BufWritePost plugins.lua source <afile> | PackerSync
+--   augroup end
+-- ]])
 
 -- protected load
 local status_ok, packer = pcall(require, "packer")
@@ -37,7 +38,8 @@ if not status_ok then
 end
 
 packer.init({
-	-- config here
+	-- snapshot = "zero-point-six",
+	-- snapshot_path = vim.fn.expand("%:h"),
 	display = {
 		open_fn = function()
 			return require("packer.util").float({ border = "rounded" })
