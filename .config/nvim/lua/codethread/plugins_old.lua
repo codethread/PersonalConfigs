@@ -22,12 +22,12 @@ if fn.empty(fn.glob(install_path)) > 0 then
 end
 
 -- Update on save
--- vim.cmd([[
---   augroup packer_user_config
---     autocmd!
---     autocmd BufWritePost plugins.lua source <afile> | PackerSync
---   augroup end
--- ]])
+vim.cmd([[
+  augroup packer_user_config
+    autocmd!
+    autocmd BufWritePost plugins.lua source <afile> | PackerSync
+  augroup end
+]])
 
 -- protected load
 local status_ok, packer = pcall(require, "packer")
@@ -37,8 +37,7 @@ if not status_ok then
 end
 
 packer.init({
-	-- snapshot = "zero-point-six",
-	-- snapshot_path = vim.fn.expand("%:h"),
+	-- config here
 	display = {
 		open_fn = function()
 			return require("packer.util").float({ border = "rounded" })
@@ -56,20 +55,21 @@ return packer.startup(function(use)
 	use("wakatime/vim-wakatime")
 	use("folke/which-key.nvim")
 	use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" })
-	-- use("nvim-treesitter/playground")
+	use("nvim-treesitter/playground")
 
 	-- help for lua, TODO need to make this work
 	-- use 'wsdjeg/luarefvim'
 	-- use 'rafcamlet/nvim-luapad'
 
 	-- colorscheme
+	-- TODO: https://github.com/rebelot/kanagawa.nvim
 	use({ "shaunsingh/nord.nvim" })
 
 	-- modeline
-	use({
-		"hoob3rt/lualine.nvim",
-		requires = { "kyazdani42/nvim-web-devicons", opt = true },
-	})
+	-- use({
+	-- 	"hoob3rt/lualine.nvim",
+	-- 	requires = { "kyazdani42/nvim-web-devicons", opt = true },
+	-- })
 	-- use("arkav/lualine-lsp-progress")
 
 	-- project navigation
@@ -79,11 +79,48 @@ return packer.startup(function(use)
 			require("codethread.dashboard")
 		end,
 	})
-	-- use("nvim-telescope/telescope.nvim")
-	-- use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
+	use("nvim-telescope/telescope.nvim")
+	use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
+	-- use({ "nvim-telescope/telescope-ui-select.nvim" })
+	use({
+		"lewis6991/spellsitter.nvim",
+		config = function()
+			require("spellsitter").setup()
+		end,
+	})
 
-	-- use("tpope/vim-vinegar") -- netrw improvements
-	-- use("tpope/vim-eunuch") -- unix helpers, :Rename, :Delete
+	use({
+		"kyazdani42/nvim-tree.lua",
+		requires = {
+			"kyazdani42/nvim-web-devicons", -- optional, for file icon
+		},
+		config = function()
+			require("nvim-tree").setup({
+				hijack_netrw = false,
+				filters = { -- remove things from view
+					dotfiles = false,
+				},
+				view = {
+					auto_resize = true,
+				},
+				actions = {
+					change_dir = {
+						enable = false, -- stay in the current directory
+					},
+					open_file = {
+						quit_on_open = true,
+						window_picker = {
+							chars = "jfkdlsa;",
+						},
+					},
+				},
+			})
+		end,
+	})
+
+	use("tpope/vim-vinegar") -- netrw improvements
+
+	use("tpope/vim-eunuch") -- unix helpers, :Rename, :Delete
 
 	-- visual
 	use({
@@ -106,14 +143,15 @@ return packer.startup(function(use)
 			require("mkdir")
 		end,
 	})
+	use("windwp/nvim-spectre") -- find/replace
 
 	-- lsp
-	-- use("neovim/nvim-lspconfig")
-	-- use("williamboman/nvim-lsp-installer")
-	-- use("jose-elias-alvarez/null-ls.nvim")
-	-- use("jose-elias-alvarez/nvim-lsp-ts-utils")
-	-- use("b0o/schemastore.nvim")
-	-- use("gbrlsnchs/telescope-lsp-handlers.nvim")
+	use("neovim/nvim-lspconfig")
+	use("williamboman/nvim-lsp-installer")
+	use("jose-elias-alvarez/null-ls.nvim")
+	use("jose-elias-alvarez/nvim-lsp-ts-utils")
+	use("b0o/schemastore.nvim")
+	use("gbrlsnchs/telescope-lsp-handlers.nvim")
 
 	-- completion
 	use("hrsh7th/nvim-cmp")
@@ -128,7 +166,7 @@ return packer.startup(function(use)
 	use("rafamadriz/friendly-snippets")
 
 	-- editing
-	-- use("nvim-treesitter/nvim-treesitter-textobjects")
+	use("nvim-treesitter/nvim-treesitter-textobjects")
 	use("windwp/nvim-ts-autotag") -- close <div tags, and ciw
 	use("tpope/vim-commentary")
 	use("tpope/vim-surround")
@@ -141,57 +179,57 @@ return packer.startup(function(use)
 
 	use("JoosepAlviste/nvim-ts-context-commentstring") -- uses tree sitter for comment detection
 
-	-- use({
-	-- 	"phaazon/hop.nvim",
-	-- 	branch = "v1", -- optional but strongly recommended
-	-- 	config = function()
-	-- 		-- you can configure Hop the way you like here; see :h hop-config
-	-- 		require("hop").setup({ keys = "fjdksla;rucnei" })
-	-- 		vim.api.nvim_set_keymap(
-	-- 			"n",
-	-- 			"f",
-	-- 			"<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>",
-	-- 			{}
-	-- 		)
-	-- 		vim.api.nvim_set_keymap(
-	-- 			"n",
-	-- 			"F",
-	-- 			"<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true })<cr>",
-	-- 			{}
-	-- 		)
-	-- 		vim.api.nvim_set_keymap(
-	-- 			"o",
-	-- 			"f",
-	-- 			"<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true, inclusive_jump = true })<cr>",
-	-- 			{}
-	-- 		)
-	-- 		vim.api.nvim_set_keymap(
-	-- 			"o",
-	-- 			"F",
-	-- 			"<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true, inclusive_jump = true })<cr>",
-	-- 			{}
-	-- 		)
-	-- 		vim.api.nvim_set_keymap(
-	-- 			"",
-	-- 			"t",
-	-- 			"<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>",
-	-- 			{}
-	-- 		)
-	-- 		vim.api.nvim_set_keymap(
-	-- 			"",
-	-- 			"T",
-	-- 			"<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true })<cr>",
-	-- 			{}
-	-- 		)
+	use({
+		"phaazon/hop.nvim",
+		branch = "v1", -- optional but strongly recommended
+		config = function()
+			-- you can configure Hop the way you like here; see :h hop-config
+			require("hop").setup({ keys = "fjdksla;rucnei" })
+			vim.api.nvim_set_keymap(
+				"n",
+				"f",
+				"<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>",
+				{}
+			)
+			vim.api.nvim_set_keymap(
+				"n",
+				"F",
+				"<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true })<cr>",
+				{}
+			)
+			vim.api.nvim_set_keymap(
+				"o",
+				"f",
+				"<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true, inclusive_jump = true })<cr>",
+				{}
+			)
+			vim.api.nvim_set_keymap(
+				"o",
+				"F",
+				"<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true, inclusive_jump = true })<cr>",
+				{}
+			)
+			vim.api.nvim_set_keymap(
+				"",
+				"t",
+				"<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>",
+				{}
+			)
+			vim.api.nvim_set_keymap(
+				"",
+				"T",
+				"<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true })<cr>",
+				{}
+			)
 
-	-- 		vim.api.nvim_set_keymap(
-	-- 			"n",
-	-- 			"s",
-	-- 			"<cmd>lua require'hop'.hint_char2({ jump_on_sole_occurrence = true })<cr>",
-	-- 			{}
-	-- 		)
-	-- 	end,
-	-- })
+			vim.api.nvim_set_keymap(
+				"n",
+				"s",
+				"<cmd>lua require'hop'.hint_char2({ jump_on_sole_occurrence = true })<cr>",
+				{}
+			)
+		end,
+	})
 
 	-- git
 	use({

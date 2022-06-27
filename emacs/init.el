@@ -153,6 +153,7 @@
   :config
   (defalias 'yes-or-no-p 'y-or-n-p)
 
+  (pixel-scroll-precision-mode)
 
   (setq indent-tabs-mode nil
 	read-process-output-max (* 4 1024 1024) ; increase performance: https://emacs-lsp.github.io/lsp-mode/page/performance/
@@ -168,7 +169,8 @@
 	create-lockfiles nil
 	kill-buffer-query-functions nil
 	delete-by-moving-to-trash t
-	native-comp-async-report-warnings-errors nil)
+	native-comp-async-report-warnings-errors nil
+	 )
 
   ;; (global-visual-line-mode -1)
   ;; don't wrap lines
@@ -1406,14 +1408,14 @@ _s_kip
   ;; get from https://github.com/elixir-lsp/elixir-ls/releases
   (add-to-list 'exec-path "~/.tooling/elixir-ls-1.11/")
   :hook
-  ((web-mode typescript-mode tsx-mode scala-mode java-mode elixir-mode go-mode scss-mode css-mode) . lsp-deferred)
+  ((web-mode typescript-mode tsx-mode scala-mode java-mode elixir-mode go-mode scss-mode css-mode svelte-mode) . lsp-deferred)
   (lsp-mode . lsp-enable-which-key-integration)
   :custom
   ;; general
   (lsp-auto-execute-action '())
   (lsp-headerline-breadcrumb-enable nil)
 
-  
+
   ;; (lsp-disabled-clients '((json-mode . eslint)))
 
   ;; optimisations that may improve as lsp matures
@@ -1445,24 +1447,24 @@ _s_kip
     (setq lsp-completion-show-kind nil) ; variable or function stuff in autocomplete
     )
 
-  
+
   (defun lsp-js-ts-rename-file ()
     "Rename current file and all it's references in other files."
     (interactive)
     (let* ((name (buffer-name))
-           (old (buffer-file-name))
-           (basename (file-name-nondirectory old)))
+	   (old (buffer-file-name))
+	   (basename (file-name-nondirectory old)))
       (unless (and old (file-exists-p old))
 	(error "Buffer '%s' is not visiting a file" name))
       (let ((new (read-file-name "New name: " (file-name-directory old) basename nil basename)))
 	(when (get-file-buffer new)
-          (error "A buffer named '%s' already exists" new))
+	  (error "A buffer named '%s' already exists" new))
 	(when (file-exists-p new)
-          (error "A file named '%s' already exists" new))
+	  (error "A file named '%s' already exists" new))
 	(lsp--send-execute-command
 	 "_typescript.applyRenameFile"
 	 (vector (list :sourceUri (lsp--buffer-uri)
-                       :targetUri (lsp--path-to-uri new))))
+		       :targetUri (lsp--path-to-uri new))))
 	(mkdir (file-name-directory new) t)
 	(rename-file old new)
 	(rename-buffer new)
@@ -1471,8 +1473,13 @@ _s_kip
 	(lsp-disconnect)
 	(setq-local lsp-buffer-uri nil)
 	(lsp)
-	(lsp--info "Renamed '%s' to '%s'." name (file-name-nondirectory new)))))
-  )
+	(lsp--info "Renamed '%s' to '%s'." name (file-name-nondirectory new))))))
+
+(use-package lsp-tailwindcss
+  :init
+  (setq lsp-tailwindcss-add-on-mode t)
+  :straight (:type git :host github :repo "merrickluo/lsp-tailwindcss")
+  :custom (lsp-tailwindcss-major-modes '(rjsx-mode web-mode html-mode css-mode typescript-mode tsx-mode)))
 
 (use-package lsp-ui
   :commands (lsp-ui-imenu)
@@ -1537,7 +1544,8 @@ _s_kip
   (typescript-tsx-mode)
   (typescript-mode)
   (tsx-mode)
-  (css-mode))
+  (css-mode)
+  (svelte-mode))
 
 (use-package js2-mode
   :general
@@ -1576,6 +1584,16 @@ _s_kip
     ;; (setq flycheck-checker 'javascript-eslint)
     ;; (flycheck-add-next-checker 'lsp 'javascript-eslint)
     ))
+
+;; web mode might be better
+;; (use-package svelte
+;;   :straight (svelte-mode :host github :repo "leafOfTree/svelte-mode")
+;;   ;:hook (svelte-mode . my/svelte-settings)
+;;   :config
+;;   (defun my/svelte-settings ()
+;;     (flycheck-add-mode 'javascript-eslint 'svelte-mode)
+;;     (setq flycheck-checker 'javascript-eslint)
+;;     (flycheck-add-next-checker 'lsp 'javascript-eslint)))
 
 (use-package tsx-mode
   :straight (tsx-mode :host github :repo "orzechowskid/tsx-mode.el")
