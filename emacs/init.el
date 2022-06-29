@@ -1415,7 +1415,8 @@ _s_kip
   (lsp-auto-execute-action '())
   (lsp-headerline-breadcrumb-enable nil)
 
-
+  
+  (lsp-disabled-clients '(eslint))
   ;; (lsp-disabled-clients '((json-mode . eslint)))
 
   ;; optimisations that may improve as lsp matures

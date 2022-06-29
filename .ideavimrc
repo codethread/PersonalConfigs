@@ -41,7 +41,6 @@ map <Leader>en :action GotoNextError<CR>
 map <Leader>ep :action GotoPreviousError<CR>
 
 " file
-map <Leader>fv :action SelectInProjectView<CR>
 map <Leader>fr :action RenameFile<CR>
 map <Leader>fc <Action>(ReformatCode)
 
@@ -69,6 +68,9 @@ map <Leader>sf :action Find<CR>
 " refactor
 map <Leader>rr :action Refactorings.QuickListPopupAction<CR>
 map <Leader>rn :action RenameElement<CR>
+
+"open
+map <Leader>od :action SelectInProjectView<CR>
 
 " project
 map <Leader>pc :action ChooseRunConfiguration<CR>

@@ -75,6 +75,9 @@ ensure  =gnu-sed= is installed/
   
   # run antiup to set up plugins
   ~/PersonalConfigs/.bin/antiup
+
+  # symlink node into somewhere that xcode can find for react-native
+  ln -s $(which node) /usr/local/bin/node
 #+END_SRC
 
 * Terminal Fonts
