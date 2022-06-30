@@ -2,6 +2,13 @@ local M = {}
 
 function M.setup()
 	vim.g.background = "light"
+	vim.g.tokyonight_style = "day"
+
+	vim.cmd([[colorscheme tokyonight]])
+end
+
+function M.setupX()
+	vim.g.background = "light"
 	vim.g.nord_italic = false -- this makes too many things italic
 	vim.g.nord_borders = true
 	vim.g.nord_contrast = true
@@ -52,6 +59,7 @@ function M.setup()
 	vim.cmd("hi typescriptTSProperty gui=italic guifg=" .. colors.seconary)
 end
 
-M.lualine = "nord"
+-- M.lualine = "nord"
+M.lualine = "tokyonight"
 
 return M

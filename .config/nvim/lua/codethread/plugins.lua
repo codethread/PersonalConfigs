@@ -52,7 +52,8 @@ return packer.startup(function(use)
 
 	-- colorscheme
 	-- TODO: https://github.com/rebelot/kanagawa.nvim
-	use({ "shaunsingh/nord.nvim" })
+	-- use({ "shaunsingh/nord.nvim" })
+	use("folke/tokyonight.nvim")
 
 	-- modeline
 	use({
