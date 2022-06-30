@@ -1,13 +1,17 @@
 local M = {}
 
-function M.setup()
+local function tokyonightTheme()
 	vim.g.background = "light"
 	vim.g.tokyonight_style = "day"
+	vim.g.tokyonight_day_brightness = 0.25 -- Adjusts the brightness of the colors of the Day style. Number between 0 and 1, from dull to vibrant colors
 
 	vim.cmd([[colorscheme tokyonight]])
+
+	local colors = require("tokyonight.colors").setup({})
+	vim.cmd("hi TSKeywordReturn gui=bold guifg=" .. colors.orange)
 end
 
-function M.setupX()
+local function nordTheme()
 	vim.g.background = "light"
 	vim.g.nord_italic = false -- this makes too many things italic
 	vim.g.nord_borders = true
@@ -59,6 +63,7 @@ function M.setupX()
 	vim.cmd("hi typescriptTSProperty gui=italic guifg=" .. colors.seconary)
 end
 
+M.setup = tokyonightTheme
 -- M.lualine = "nord"
 M.lualine = "tokyonight"
 

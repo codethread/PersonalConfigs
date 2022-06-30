@@ -9,14 +9,6 @@
 -- Bootstrap Packer
 require("codethread.plugins_init")
 
--- Update on save
-vim.cmd([[
-  augroup packer_user_config
-    autocmd!
-    autocmd BufWritePost plugins.lua source <afile> | PackerSync
-  augroup end
-]])
-
 -- protected load
 local status_ok, packer = pcall(require, "packer")
 if not status_ok then
@@ -25,8 +17,6 @@ if not status_ok then
 end
 
 packer.init({
-	-- snapshot = "zero-point-six",
-	-- snapshot_path = vim.fn.expand("%:h"),
 	display = {
 		open_fn = function()
 			return require("packer.util").float({ border = "rounded" })
@@ -34,33 +24,33 @@ packer.init({
 	},
 })
 
-return packer.startup(function(use)
+packer.startup(function(use)
 	-- Packer can manage itself
-	use("wbthomason/packer.nvim")
-	use("nvim-lua/plenary.nvim")
-	use("nvim-lua/popup.nvim")
+	use({ "wbthomason/packer.nvim", commit = "671076b3a81e5033a866ca769749e75a827784ef" })
+	use({ "nvim-lua/plenary.nvim", commit = "968a4b9afec0c633bc369662e78f8c5db0eba249" })
+	use({ "nvim-lua/popup.nvim", commit = "b7404d35d5d3548a82149238289fa71f7f6de4ac" })
 
 	-- misc
-	use("wakatime/vim-wakatime")
-	use("folke/which-key.nvim")
-	use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" })
-	use("nvim-treesitter/playground")
+	use({ "wakatime/vim-wakatime", tag = "9.*" })
+	use({ "folke/which-key.nvim", commit = "bd4411a2ed4dd8bb69c125e339d837028a6eea71" })
+	use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate", commit = "3b1ce2e1b30b731c80753fa9bbcb2cfec38a43da" })
+	use({ "nvim-treesitter/playground", commit = "ce7e4b757598f1c785ed0fd94fc65959acd7d39c" })
 
 	-- help for lua, TODO need to make this work
 	-- use 'wsdjeg/luarefvim'
 	-- use 'rafcamlet/nvim-luapad'
 
 	-- colorscheme
-	-- TODO: https://github.com/rebelot/kanagawa.nvim
 	-- use({ "shaunsingh/nord.nvim" })
-	use("folke/tokyonight.nvim")
+	use({ "folke/tokyonight.nvim" })
 
 	-- modeline
 	use({
 		"nvim-lualine/lualine.nvim",
 		requires = { "kyazdani42/nvim-web-devicons", opt = true },
+		commit = "5113cdb32f9d9588a2b56de6d1df6e33b06a554a",
 	})
-	use("arkav/lualine-lsp-progress")
+	use({ "arkav/lualine-lsp-progress", commit = "56842d097245a08d77912edf5f2a69ba29f275d7" })
 
 	-- project navigation
 	use({
@@ -69,8 +59,12 @@ return packer.startup(function(use)
 			require("codethread.dashboard")
 		end,
 	})
-	use("nvim-telescope/telescope.nvim")
-	use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
+	use({ "nvim-telescope/telescope.nvim", commit = "b98b9a93c67cb999493ccdc602e711c8a7a98d64" })
+	use({
+		"nvim-telescope/telescope-fzf-native.nvim",
+		run = "make",
+		commit = "6a33ecefa9b3d9ade654f9a7a6396a00c3758ca6",
+	})
 	-- use({ "nvim-telescope/telescope-ui-select.nvim" })
 	use({
 		"lewis6991/spellsitter.nvim",
@@ -116,12 +110,7 @@ return packer.startup(function(use)
 	use({
 		"norcalli/nvim-colorizer.lua", -- show colors for css
 		config = function()
-			require("colorizer").setup({
-				"css",
-				"scss",
-				"html",
-				"svelte",
-			})
+			require("colorizer").setup({ "css", "scss", "html", "svelte" })
 		end,
 	})
 
@@ -169,57 +158,7 @@ return packer.startup(function(use)
 
 	use("JoosepAlviste/nvim-ts-context-commentstring") -- uses tree sitter for comment detection
 
-	use({
-		"phaazon/hop.nvim",
-		branch = "v1", -- optional but strongly recommended
-		config = function()
-			-- you can configure Hop the way you like here; see :h hop-config
-			require("hop").setup({ keys = "fjdksla;rucnei" })
-			vim.api.nvim_set_keymap(
-				"n",
-				"f",
-				"<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>",
-				{}
-			)
-			vim.api.nvim_set_keymap(
-				"n",
-				"F",
-				"<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true })<cr>",
-				{}
-			)
-			vim.api.nvim_set_keymap(
-				"o",
-				"f",
-				"<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true, inclusive_jump = true })<cr>",
-				{}
-			)
-			vim.api.nvim_set_keymap(
-				"o",
-				"F",
-				"<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true, inclusive_jump = true })<cr>",
-				{}
-			)
-			vim.api.nvim_set_keymap(
-				"",
-				"t",
-				"<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>",
-				{}
-			)
-			vim.api.nvim_set_keymap(
-				"",
-				"T",
-				"<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true })<cr>",
-				{}
-			)
-
-			vim.api.nvim_set_keymap(
-				"n",
-				"s",
-				"<cmd>lua require'hop'.hint_char2({ jump_on_sole_occurrence = true })<cr>",
-				{}
-			)
-		end,
-	})
+	use({ "phaazon/hop.nvim", branch = "v1" })
 
 	-- git
 	use({
@@ -239,7 +178,7 @@ return packer.startup(function(use)
 	-- use("tpope/vim-rhubarb") -- :GBrowse and other git things
 
 	-- terminal
-	use("akinsho/toggleterm.nvim")
+	use({ "akinsho/toggleterm.nvim", tag = "v1.*" })
 
 	use({
 		"christoomey/vim-tmux-navigator",
@@ -261,3 +200,11 @@ return packer.startup(function(use)
 		require("packer").sync()
 	end
 end)
+
+-- Update on save
+vim.cmd([[
+  augroup packer_user_config
+    autocmd!
+    autocmd BufWritePost plugins.lua source <afile> | PackerSync
+  augroup end
+]])
