@@ -49,22 +49,16 @@ cmp.setup({
 			luasnip.lsp_expand(args.body) -- For `luasnip` users.
 		end,
 	},
-	completion = {
-		-- autocomplete = false,
-	},
-	mapping = {
+	mapping = cmp.mapping.preset.insert({
 		["<C-k>"] = cmp.mapping.select_prev_item(),
 		["<C-j>"] = cmp.mapping.select_next_item(),
-		["<C-u>"] = cmp.mapping(cmp.mapping.scroll_docs(-1), { "i", "c" }),
-		["<C-d>"] = cmp.mapping(cmp.mapping.scroll_docs(1), { "i", "c" }),
-		["<C-y>"] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
-		["<C-e>"] = cmp.mapping({
-			i = cmp.mapping.abort(),
-			c = cmp.mapping.close(),
-		}),
+		["<C-u>"] = cmp.mapping.scroll_docs(-4),
+		["<C-d>"] = cmp.mapping.scroll_docs(4),
+		["<C-e>"] = cmp.mapping(),
 		-- start completion
 		-- ["<C-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
 		["<C-l>"] = cmp.mapping.confirm({ select = true }),
+
 		["<Tab>"] = cmp.mapping(function(fallback)
 			if luasnip.expandable() then
 				luasnip.expand()
@@ -89,7 +83,7 @@ cmp.setup({
 			"i",
 			"s",
 		}),
-	},
+	}),
 	formatting = {
 		fields = { "kind", "abbr", "menu" },
 		format = function(entry, vim_item)
@@ -112,14 +106,14 @@ cmp.setup({
 		behavior = cmp.ConfirmBehavior.Replace,
 		select = false,
 	},
-	documentation = {
-		border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
-		-- border = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
-	},
-	experimental = {
-		ghost_text = false,
-		native_menu = false,
-	},
+	-- documentation = {
+	-- border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+	-- border = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
+	-- },
+	-- experimental = {
+	-- 	ghost_text = false,
+	-- 	native_menu = false,
+	-- },
 })
 
 _G.vimrc = _G.vimrc or {}
