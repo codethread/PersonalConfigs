@@ -24,6 +24,13 @@ alias ed="emacs --daemon"
 alias eg="/Applications/Emacs.app/Contents/MacOS/Emacs"
 
 #---------------------------------------------#
+# KITTY
+# -------------------------------------------#
+alias ktt="kitty +kitten themes"
+alias ktt-dark="kitty +kitten themes --reload-in=all Tokyo Night Storm"
+alias ktt-light="kitty +kitten themes --reload-in=all Tokyo Night Day"
+
+#---------------------------------------------#
 # HELPERS
 # -------------------------------------------#
 alias grep='grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}'
