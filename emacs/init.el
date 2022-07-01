@@ -153,7 +153,8 @@
   :config
   (defalias 'yes-or-no-p 'y-or-n-p)
 
-  (pixel-scroll-precision-mode)
+  (if (version<= "29" emacs-version)
+    (pixel-scroll-precision-mode))
 
   (setq indent-tabs-mode nil
 	read-process-output-max (* 4 1024 1024) ; increase performance: https://emacs-lsp.github.io/lsp-mode/page/performance/
