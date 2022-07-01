@@ -159,7 +159,9 @@ packer.startup({
 
     use("JoosepAlviste/nvim-ts-context-commentstring") -- uses tree sitter for comment detection
 
+	use("junegunn/vim-easy-align")
     use({ "phaazon/hop.nvim", branch = "v1" })
+
 
     -- git
     use({

@@ -74,7 +74,7 @@ map <Leader>od :action SelectInProjectView<CR>
 
 " project
 map <Leader>pc :action ChooseRunConfiguration<CR>
-map <Leader>pt :action GotoTest<CR>
+map <Leader>po :action GotoTest<CR>
 
 " window
 map <Leader>ww :vsplit<CR>

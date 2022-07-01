@@ -65,4 +65,8 @@ inoremap { {<c-g>u
 " move text
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
+
+xmap ga <Plug>(EasyAlign)
+
+let @c = 'vi(:EasyAlign */ , /\<cr>'
 ]])

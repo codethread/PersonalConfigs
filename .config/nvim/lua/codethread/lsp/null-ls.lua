@@ -43,6 +43,9 @@ null_ls.setup({
 		diagnostics.eslint_d,
 		diagnostics.stylelint,
 		code_actions.eslint_d,
+
+		-- c/c++
+		formatting.clang_format,
 	},
 })
 
