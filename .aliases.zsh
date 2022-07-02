@@ -1,12 +1,12 @@
 #---------------------------------------------#
 # EDITOR-ish
 # -------------------------------------------#
-alias vim="nvim"
-alias vi="vim --noplugin" # vi is vim on mac anyway so this is a 'light' version
+alias vi="nvim --noplugin" # vi is vim on mac anyway so this is a 'light' version
 alias zz="vi ~/.zshrc" # open zsh
 alias vv="vi ~/.vimrc" # open vim config
 alias aa="vi ~/.aliases.zsh" # open aliases
 alias codij="vim -c \"Codi javascript | let ale_enabled = 0\" dmp.javascript"
+alias nvim-boot="nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'"
 
 alias zr="source ~/.zshrc"
 alias vo="vim \$(fzf)"
