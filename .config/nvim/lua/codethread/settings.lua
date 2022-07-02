@@ -2,9 +2,7 @@ local set = vim.opt
 
 -- Set the behavior of tab
 set.softtabstop = 2
-
 set.relativenumber = true
-
 set.hidden = true -- Required to keep multiple buffers open multiple buffers
 set.encoding = "utf-8" -- The encoding displayed
 set.pumheight = 10 -- Makes popup menu smaller
@@ -23,7 +21,6 @@ set.autoindent = true -- Good auto indent
 -- set.laststatus = 0 -- Always display the status line
 set.number = true -- Line numbers
 set.cursorline = true -- Enable highlighting of the current line
--- set.background=dark                     -- tell vim what the background color looks like
 set.showtabline = 2 -- Always show tabs
 set.updatetime = 300 -- Faster completion
 set.timeoutlen = 500 -- By default timeoutlen is 1000 ms
@@ -32,7 +29,6 @@ set.timeoutlen = 500 -- By default timeoutlen is 1000 ms
 set.signcolumn = "yes"
 -- set.completeopt = "menu,menuone,noselect"
 set.completeopt = "menuone,noselect,preview"
-set.termguicolors = true -- adds more colors
 
 vim.cmd([[
   set foldlevel=99

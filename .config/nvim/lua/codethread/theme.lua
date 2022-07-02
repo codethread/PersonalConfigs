@@ -1,11 +1,28 @@
 local M = {}
 
+vim.opt.termguicolors = true -- adds more colors
+
 local function tokyonightTheme()
-	vim.g.background = "light"
-	vim.g.tokyonight_style = "day"
 	vim.g.tokyonight_day_brightness = 0.25 -- Adjusts the brightness of the colors of the Day style. Number between 0 and 1, from dull to vibrant colors
 
-	vim.cmd([[colorscheme tokyonight]])
+	local status_ok, dark_notify = pcall(require, "dark_notify")
+	if not status_ok then
+		print("could notload dark-notify")
+	else
+		dark_notify.run({
+			onchange = function(mode)
+				if mode == "light" then
+					vim.g.background = "light"
+					vim.g.tokyonight_style = "day"
+					vim.cmd([[colorscheme tokyonight]])
+				else
+					vim.g.background = "dark"
+					vim.g.tokyonight_style = "storm"
+					vim.cmd([[colorscheme tokyonight]])
+				end
+			end,
+		})
+	end
 
 	local colors = require("tokyonight.colors").setup({})
 	vim.cmd("hi TSKeywordReturn gui=bold guifg=" .. colors.orange)

@@ -39,6 +39,7 @@ packer.startup({
 		-- use 'rafcamlet/nvim-luapad'
 
 		-- colorscheme
+		use({ "cormacrelf/dark-notify", run = "brew install cormacrelf/tap/dark-notify" })
 		-- use({ "shaunsingh/nord.nvim" })
 		use({ "folke/tokyonight.nvim" })
 

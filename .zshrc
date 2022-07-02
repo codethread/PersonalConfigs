@@ -111,3 +111,10 @@ if [[ "$PROFILE_STARTUP" == true ]]; then
     unsetopt xtrace
     exec 2>&3 3>&-
 fi
+
+if [[ "$STARTUP_SCRIPTS_RUN" != true ]]; then
+  # toggle kitty theme to light/dark based on MacOS theme
+  (exec nohup dark-notify -c 'kitty-toggle-theme') 2>/dev/null &
+
+  STARTUP_SCRIPTS_RUN=true
+fi
