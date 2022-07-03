@@ -55,8 +55,9 @@ ssource ~/.fzf.zsh
 ssource "$HOME/.aliases.zsh" # TODO: move?
 
 # set up colors for ls, fd, tree etc https://github.com/sharkdp/vivid
-# ssource ~/.config/vivid/built/snazzy.sh
+export LS_COLORS="$(vivid generate ayu)"
 export JQ_COLORS="1;30:0;31:0;32:0;35:0;33:1;35:1;35"
+export BAT_THEME="Coldark-Cold"
 
 export FZF_DEFAULT_COMMAND='fd --type f'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
@@ -112,9 +113,9 @@ if [[ "$PROFILE_STARTUP" == true ]]; then
     exec 2>&3 3>&-
 fi
 
-if [[ "$STARTUP_SCRIPTS_RUN" != true ]]; then
+if [[ -z "$STARTUP_SCRIPTS_RUN" ]]; then
   # toggle kitty theme to light/dark based on MacOS theme
   (exec nohup dark-notify -c 'kitty-toggle-theme') 2>/dev/null &
 
-  STARTUP_SCRIPTS_RUN=true
+  export STARTUP_SCRIPTS_RUN=true
 fi

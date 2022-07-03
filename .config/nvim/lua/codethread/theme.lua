@@ -10,16 +10,11 @@ local function tokyonightTheme()
 		print("could notload dark-notify")
 	else
 		dark_notify.run({
-			onchange = function(mode)
-				if mode == "light" then
-					vim.g.background = "light"
-					vim.g.tokyonight_style = "day"
-					vim.cmd([[colorscheme tokyonight]])
-				else
-					vim.g.background = "dark"
-					vim.g.tokyonight_style = "storm"
-					vim.cmd([[colorscheme tokyonight]])
-				end
+			onchange = function(mode) -- light or dark
+				vim.g.background = mode
+				vim.g.tokyonight_style = mode == "light" and "day" or "storm"
+
+				vim.cmd([[colorscheme tokyonight]])
 			end,
 		})
 	end

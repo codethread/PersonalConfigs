@@ -1,3 +1,5 @@
 .private
 .config/exercism
 .config/yarn
+
+.config/kitty/kitty.conf.bak 

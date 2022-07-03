@@ -3,7 +3,7 @@
 # -------------------------------------------#
 alias vi="nvim --noplugin" # vi is vim on mac anyway so this is a 'light' version
 alias zz="vi ~/.zshrc" # open zsh
-alias vv="vi ~/.vimrc" # open vim config
+alias vv="cd ~/PersonalConfigs/.config/nvim; nvim ./init.lua" # open vim config
 alias aa="vi ~/.aliases.zsh" # open aliases
 alias codij="vim -c \"Codi javascript | let ale_enabled = 0\" dmp.javascript"
 alias nvim-boot="nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'"
@@ -35,7 +35,7 @@ alias ktt-light="kitty +kitten themes --reload-in=all Tokyo Night Day"
 # -------------------------------------------#
 alias grep='grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}'
 
-alias ls='ls -pGF'
+alias ls='ls -pGF --color=auto'
 # alias l='ls -lah'
 alias l='exa -lah'
 
@@ -107,6 +107,7 @@ alias gr='git rebase -i HEAD~$1'
 alias gundo="git reset --soft HEAD~1 && git restore --staged ."
 alias gwip="git add . && git commit -nm 'wip'"
 alias ghub="open -a '/Applications/Google Chrome.app' \`git remote -v | grep git@github.com | grep fetch | head -1 | cut -f2 | cut -d' ' -f1 | sed -e's/:/\//' -e 's/git@/http:\/\//'\`"
+alias bdiff="git diff --name-only --relative --diff-filter=d | xargs bat --diff"
 
 #---------------------------------------------#
 # TMUXINATOR

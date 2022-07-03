@@ -68,5 +68,5 @@ vnoremap K :m '<-2<CR>gv=gv
 
 xmap ga <Plug>(EasyAlign)
 
-let @c = 'vi(:EasyAlign */ , /\<cr>'
+let @c = 'vi(:EasyAlign */ , /'
 ]])
