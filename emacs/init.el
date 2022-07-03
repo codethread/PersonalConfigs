@@ -877,6 +877,7 @@ _s_kip
 ;;; Themes and Fonts
 
 (use-package modus-themes
+  ;; :disabled
   ;; docs are hidden away a bit https://protesilaos.com/emacs/modus-themes#h:51ba3547-b8c8-40d6-ba5a-4586477fd4ae
   :init
   (modus-themes-load-themes)
@@ -1417,7 +1418,7 @@ _s_kip
   (lsp-headerline-breadcrumb-enable nil)
 
   
-  (lsp-disabled-clients '(eslint))
+  ;; (lsp-disabled-clients '(eslint))
   ;; (lsp-disabled-clients '((json-mode . eslint)))
 
   ;; optimisations that may improve as lsp matures
@@ -1597,6 +1598,7 @@ _s_kip
 ;;     (setq flycheck-checker 'javascript-eslint)
 ;;     (flycheck-add-next-checker 'lsp 'javascript-eslint)))
 
+(use-package coverlay)
 (use-package tsx-mode
   :straight (tsx-mode :host github :repo "orzechowskid/tsx-mode.el")
   :mode "\\.tsx\\'"
@@ -2203,7 +2205,7 @@ _s_kip
   :config
   ;; (custom-set-faces `(org-table ((t (:inherit fixed-pitch)))))
   (set-face-attribute 'org-table nil :font "IBM Plex Mono")
-  (set-face-attribute 'org-block nil :font "IBM Plex Mono" :background "#f8f8f8" :extend t)
+  (set-face-attribute 'org-block nil :font "IBM Plex Mono" :extend t)
   (set-face-attribute 'org-modern-symbol nil :font "Hack Nerd Font"))
 
 (use-package org-bullets
@@ -2214,13 +2216,16 @@ _s_kip
   :custom
   (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
 
+(setq +org-roam-dir "~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/roam")
+
 (use-package org-roam
-  :if (file-directory-p "~/Dropbox/roam")
+    ;; :if (file-directory-p "~/Dropbox/roam")
+  :if (file-directory-p +org-roam-dir)
   :init
   (setq org-roam-v2-ack t)
   ;; :after org
   :custom
-  (org-roam-directory (file-truename "~/Dropbox/roam/"))
+  (org-roam-directory (file-truename +org-roam-dir))
   (org-roam-db-update-method 'idle-timer)
   (org-roam-encrypt-files t)
   (org-roam-completion-everywhere t) 	; allow completion for inserting node links
@@ -2248,6 +2253,20 @@ _s_kip
 	       ("C-c n g" . org-roam-graph))
 	      :map org-mode-map
 	      (("C-c n i" . org-roam-node-insert))))
+
+(use-package org-roam-ui
+  :straight
+    (:host github :repo "org-roam/org-roam-ui" :branch "main" :files ("*.el" "out"))
+    :after org-roam
+;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+;;         a hookable mode anymore, you're advised to pick something yourself
+;;         if you don't care about startup time, use
+;;  :hook (after-init . org-roam-ui-mode)
+    :config
+    (setq org-roam-ui-sync-theme t
+          org-roam-ui-follow t
+          org-roam-ui-update-on-save t
+          org-roam-ui-open-on-start t))
 
 (use-package ob-js
   :straight nil

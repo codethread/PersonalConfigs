@@ -1,13 +1,6 @@
 ;; garbage collection every 100MB (default is every 0.76MB)
 (setq gc-cons-threshold (* 1000 1000 1000))
 
-;; maybe some dvorak things
-;; (define-key key-translation-map "\C-t" "\C-x")
-;; (keyboard-translate ?\C-x ?\C-h)	
-;; (keyboard-translate ?\C-h ?\C-x)	
-;; (keyboard-translate ?\C-t ?\C-f)	
-;; (keyboard-translate ?\C-f ?\C-t)
-
 (global-set-key (kbd "C-x C-v") (lambda () (interactive) (find-file (concat user-emacs-directory "/init.el"))))
 
 (setq initial-frame-alist
