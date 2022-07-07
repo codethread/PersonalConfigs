@@ -50,8 +50,13 @@ null_ls.setup({
 })
 
 vim.cmd([[
-  augroup _lsp
+  augroup _LspFormat
     autocmd!
     autocmd BufWritePre * lua vim.lsp.buf.formatting_sync()
+  augroup end
+
+  augroup _LspFormatDisable
+    autocmd!
+    autocmd BufWritePre *keymap.c autocmd! _LspFormat
   augroup end
 ]])
