@@ -113,9 +113,15 @@ if [[ "$PROFILE_STARTUP" == true ]]; then
     exec 2>&3 3>&-
 fi
 
-if [[ -z "$STARTUP_SCRIPTS_RUN" ]]; then
-  # toggle kitty theme to light/dark based on MacOS theme
-  (exec nohup dark-notify -c 'kitty-toggle-theme') 2>/dev/null &
+# TODO: look into background stuff, eg https://redis.io/docs/getting-started/installation/install-redis-on-mac-os/
+# we are in a kitty session
+if [[ ! -z $KITTY_PID ]]; then
+  # no startup scripts have run
+  if [[ -z "$STARTUP_SCRIPTS_RUN"  ]]; then
+    export STARTUP_SCRIPTS_RUN=true
 
-  export STARTUP_SCRIPTS_RUN=true
+    # toggle kitty theme to light/dark based on MacOS theme
+    (exec nohup dark-notify -c 'kitty-toggle-theme' 2>/dev/null) 2>/dev/null &
+
+  fi
 fi
