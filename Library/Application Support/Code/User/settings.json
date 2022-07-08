@@ -217,7 +217,7 @@
   },
   "editor.formatOnSave": true,
   "svelte.enable-ts-plugin": true,
-  "workbench.colorTheme": "Nord Light Brighter",
+  "workbench.colorTheme": "Tokyo Night Storm",
   "editor.guides.indentation": true,
   "editor.quickSuggestions": {
     "other": "on",
