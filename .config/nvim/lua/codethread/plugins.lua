@@ -62,6 +62,7 @@ packer.startup({
 			run = "make",
 			commit = "6a33ecefa9b3d9ade654f9a7a6396a00c3758ca6",
 		})
+		use({ "tpope/vim-projectionist" })
 		-- use({ "nvim-telescope/telescope-ui-select.nvim" })
 		use({
 			"lewis6991/spellsitter.nvim",
