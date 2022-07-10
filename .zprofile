@@ -88,6 +88,9 @@ fi
 #------------------------------------------
 [ -d "$HOME/istio-1.5.1/bin" ] && pathprepend "$HOME/istio-1.5.1/bin" PATH
 
+# lua
+[ -d "$HOME/.luarocks/bin" ] && pathprepend "$HOME/.luarocks/bin" PATH
+
 ssource ~/.private
 
 ###############################

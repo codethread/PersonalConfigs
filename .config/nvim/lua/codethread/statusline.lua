@@ -21,6 +21,9 @@ local function mode_map(str)
 	return mode_maps[str]
 end
 
+-- enable global status line
+-- vim.opt.laststatus = 3
+
 lualine.setup({
 	options = {
 		icons_enabled = true,

@@ -105,18 +105,23 @@ local mappings = {
 	e = {
 		name = "Errors",
 		l = {
-			"<cmd>Telescope diagnostics theme=ivy bufnr=0<cr> ",
+			"<cmd>Telescope diagnostics theme=ivy bufnr=0<cr>",
 			"Document Diagnostics",
 		},
-		p = {
+		L = {
 			"<cmd>Telescope diagnostics<cr>",
 			"Workspace Diagnostics",
 		},
-		j = {
+		h = {
+			"<cmd>lua vim.diagnostic.open_float()<CR>",
+			"Diagnostic at point",
+		},
+
+		n = {
 			"<cmd>lua vim.diagnostic.goto_next()<CR>",
 			"Next Diagnostic",
 		},
-		k = {
+		p = {
 			"<cmd>lua vim.diagnostic.goto_prev()<cr>",
 			"Prev Diagnostic",
 		},
