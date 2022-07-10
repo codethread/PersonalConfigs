@@ -2,7 +2,9 @@
 # EDITOR-ish
 # -------------------------------------------#
 alias vi="nvim --noplugin" # vi is vim on mac anyway so this is a 'light' version
-alias zz="vi ~/.zshrc" # open zsh
+alias v="nvim --noplugin" # vi is vim on mac anyway so this is a 'light' version
+alias zz="vi ~/.zshrc"
+alias zp="vi ~/.zprofile"
 alias vv="cd ~/PersonalConfigs/.config/nvim; nvim ./init.lua" # open vim config
 alias aa="vi ~/.aliases.zsh" # open aliases
 alias codij="vim -c \"Codi javascript | let ale_enabled = 0\" dmp.javascript"
