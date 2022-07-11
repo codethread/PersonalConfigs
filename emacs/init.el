@@ -143,7 +143,7 @@
   :demand
   :straight nil
   :hook
-  (prog-mode . visual-line-mode)
+  ;; (prog-mode . visual-line-mode)
   (prog-mode . (lambda () (setq line-spacing 0.1)))
   :init
   ;; font strings "FiraCode Nerd Font"
@@ -713,6 +713,8 @@
     :states '(normal insert visual emacs motion)
     "C-e" 'move-end-of-line
     "C-y" 'universal-argument)
+  (general-nmap
+    "-" 'dired-jump)
   (my-leader-def
     "ww" 'evil-window-vsplit
 
@@ -811,10 +813,18 @@
    ("n" elscreen-create "new" :color blue))
   :config
   (elscreen-start)
-  (custom-set-faces
-   `(elscreen-tab-background-face ((t (:background ,(doom-color 'bg) :height 1.5))))
-   `(elscreen-tab-current-screen-face ((t (:background ,(doom-color 'bg) :foreground ,(doom-color 'yellow) :underline (:color ,(doom-color 'yellow))))))
-   `(elscreen-tab-other-screen-face ((t (:background ,(doom-color 'bg) :foreground ,(doom-color 'blue)))))))
+  ;; (custom-set-faces
+  ;;  `(elscreen-tab-background-face ((t (:background ,(doom-color 'bg) :height 1.5))))
+  ;;  `(elscreen-tab-current-screen-face ((t (:background ,(doom-color 'bg) :foreground ,(doom-color 'yellow) :underline (:color ,(doom-color 'yellow))))))
+  ;;  `(elscreen-tab-other-screen-face ((t (:background ,(doom-color 'bg) :foreground ,(doom-color 'blue))))))
+
+  (let ((bg (modus-themes-color 'bg-main))
+	(yellow (modus-themes-color 'yellow))
+	(blue (modus-themes-color 'blue)))
+    (custom-set-faces
+     `(elscreen-tab-background-face ((t (:background ,bg :height 1.5))))
+     `(elscreen-tab-current-screen-face ((t (:background ,bg :foreground ,yellow :underline (:color ,yellow)))))
+     `(elscreen-tab-other-screen-face ((t (:background ,bg :foreground ,blue)))))))
 
 (use-package evil-mc
   :general
@@ -888,6 +898,8 @@ _s_kip
   (modus-themes-bold-constructs t)
   (modus-themes-variable-pitch-headings t)
   (modus-themes-variable-pitch-ui t)
+  ;; highlight selected region more clearly
+  (modus-themes-region '(accented))
   ;; (modus-themes-mode-line '(accented borderless (padding . 4) (height . 1.2)))
   (modus-themes-mode-line '(borderless))
   (modus-themes-paren-match '(underline))
