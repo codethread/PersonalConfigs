@@ -888,8 +888,10 @@ _s_kip
   ;; docs are hidden away a bit https://protesilaos.com/emacs/modus-themes#h:51ba3547-b8c8-40d6-ba5a-4586477fd4ae
   :init
   (modus-themes-load-themes)
-  :hook
-  (after-init . (lambda () (modus-themes-load-operandi) (solaire-global-mode)))
+  :commands (+my-apply-theme)
+  :hook ((after-init . (lambda ()
+			 (+my-apply-theme)
+			 (solaire-global-mode))))
   :custom
   (modus-themes-italic-constructs t)
   (modus-themes-bold-constructs t)
@@ -918,14 +920,12 @@ _s_kip
   (set-face-attribute 'variable-pitch nil :font "IBM Plex Serif")
   (modus-themes-load-operandi)
 
-  (defun my/apply-theme (appearance)
+  (defun +my-apply-theme ()
     "Load theme, taking current system APPEARANCE into consideration."
-    (mapc #'disable-theme custom-enabled-themes)
-    (pcase appearance
-      ('light (load-theme 'modus-operandi t))
-      ('dark (load-theme 'modus-vivendi t))))
-
-  (add-hook 'ns-system-appearance-change-functions #'my/apply-theme))
+    ;; (mapc #'disable-theme custom-enabled-themes)
+    (pcase ns-system-appearance
+      ('dark (modus-themes-load-vivendi))
+      ('light (modus-themes-load-operandi)))))
 
 (use-package solaire-mode
   :config
