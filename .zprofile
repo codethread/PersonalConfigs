@@ -60,6 +60,7 @@ export GO111MODULE=on
 # node
 #------------------------------------------
 export VOLTA_HOME="$HOME/.volta"
+export HUSKY=0 # I don't need my hand holding, thanks
 [ -d "$VOLTA_HOME/bin" ] && pathprepend "$VOLTA_HOME/bin" PATH
 
 # ruby
