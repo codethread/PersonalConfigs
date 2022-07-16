@@ -2,28 +2,15 @@
 ;;; Commentary:
 ;;; Code:
 
+(global-set-key (kbd "C-x C-v") (lambda () (interactive) (find-file (concat user-emacs-directory "/init.el"))))
+(add-to-list 'load-path "~/PersonalConfigs/emacs/scripts")
+(require '+constants)
+
 
-;;; Package Manager setup --- inital setup of straight.el and use-package (plus complimentary packages)
+;;; Setup Straight package manager
 
-;; speeds up startup, but requires manual recompile, see 'emacs straight' notes
-(setq straight-check-for-modifications nil)
+(require '+bootstrap)
 
-(defvar bootstrap-version)
-(let ((bootstrap-file
-      (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-        "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-        'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
-
-(straight-use-package 'use-package)
-
-(setq straight-use-package-by-default t)
 (setq use-package-verbose t)
 (setq use-package-always-defer t)
 
@@ -531,6 +518,7 @@
 ;; the two new windows will each be 180 columns wide, and sit just below the threshold."
 ;;     (setq split-width-threshold (+ 1 (/ (frame-width) 2))))
   )
+(define-key input-decode-map [?\C-m] [C-m])
 
 (use-package ace-window
   :custom
@@ -539,6 +527,7 @@
   (aw-keys '(?j ?k ?l ?f ?d ?d))
   :general
   (general-def :states '(normal visual insert emacs)
+    "<C-m>" 'ace-window
     "C-x C-o" 'ace-window)
   (my-leader-def
     "W" 'ace-window)
@@ -1910,6 +1899,7 @@ _s_kip
   ;; (flycheck-check-syntax-automatically '(idle-buffer-switch save mode-enabled))
   (flycheck-check-syntax-automatically '(idle-buffer-switch new-line mode-enabled idle-change))
   (flycheck-javascript-eslint-executable "eslint_d")
+  (flycheck-emacs-lisp-load-path 'inherit)
   :hook (prog-mode . flycheck-mode)
   :config
   ;; simple clean line for flycheck errors in fringe

@@ -1,7 +1,6 @@
-;; garbage collection every 100MB (default is every 0.76MB)
-(setq gc-cons-threshold (* 1000 1000 1000))
+(setq gc-cons-threshold (* 1000 1000 1000)) ; garbage collection every 100MB (default is every 0.76MB)
 
-(global-set-key (kbd "C-x C-v") (lambda () (interactive) (find-file (concat user-emacs-directory "/init.el"))))
+(add-hook 'emacs-startup-hook #'my/print-init-time)
 
 (setq initial-frame-alist
       `((horizontal-scroll-bars . nil)
@@ -20,7 +19,6 @@
 (tooltip-mode -1)
 (menu-bar-mode -1)
 
-(add-hook 'emacs-startup-hook #'my/print-init-time)
 
 (defun my/print-init-time ()
   "Print EMACS load time."
@@ -29,8 +27,6 @@
    (format "%.2f seconds" (float-time
 			   (time-subtract after-init-time before-init-time)))
    gcs-done))
-
-(setq user-emacs-directory "~/.emacs.d")
 
 (defvar user-temporary-file-directory
   (concat temporary-file-directory user-login-name "/"))

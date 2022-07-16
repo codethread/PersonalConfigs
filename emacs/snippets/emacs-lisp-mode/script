@@ -1,0 +1,21 @@
+# -*- mode: snippet -*-
+#name : script
+#key : script
+#contributor : Adam
+# --
+;;; ${1:name}.el --- script -*- lexical-binding: t -*-
+
+;;; Commentary:
+
+;; ${2:commentary}
+
+;;; Code:
+
+(add-to-list 'load-path "~/PersonalConfigs/emacs/scripts")
+(require '+scripty)
+
+(print
+ (--> '(1 2 3 4)
+      (-reduce #'+ it)))$3
+
+;;; $1.el ends here
