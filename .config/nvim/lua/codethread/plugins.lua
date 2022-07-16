@@ -54,6 +54,7 @@ packer.startup({
 			config = function()
 				require("codethread.dashboard")
 			end,
+			commit = "95d522b2056657eb9968411ef801f51af86fc839",
 		})
 		use({ "nvim-telescope/telescope.nvim", commit = "b98b9a93c67cb999493ccdc602e711c8a7a98d64" })
 		use({
@@ -117,11 +118,14 @@ packer.startup({
 		use("famiu/bufdelete.nvim") -- delete buffer
 		use({ -- automatically creates missing folders
 			"jghauser/mkdir.nvim",
-			config = function()
-				require("mkdir")
-			end,
+			commit = "01261650382bef195dab8ac39344234b57914f09",
 		})
-		use("windwp/nvim-spectre") -- find/replace
+
+		use({ -- find/replace
+			"windwp/nvim-spectre",
+			run = "brew install gnu-sed",
+			commit = "b1a084c05bf6cf32a3b55196e5cde44bb94422fb",
+		})
 
 		-- lsp
 		use("neovim/nvim-lspconfig")
@@ -157,8 +161,8 @@ packer.startup({
 
 		use("JoosepAlviste/nvim-ts-context-commentstring") -- uses tree sitter for comment detection
 
-		use("junegunn/vim-easy-align")
-		use({ "phaazon/hop.nvim", branch = "v1" })
+		use({ "junegunn/vim-easy-align", tag = "2.*" })
+		use({ "phaazon/hop.nvim", tag = "v2.*" })
 
 		-- git
 		use({
@@ -172,7 +176,7 @@ packer.startup({
 			end,
 		})
 		use("lewis6991/gitsigns.nvim")
-		use({ "sindrets/diffview.nvim" })
+		use({ "sindrets/diffview.nvim", commit = "16c3985581ee65bccdfbebbe014b24a01adc7d1f" })
 
 		-- use("tpope/vim-fugitive")
 		-- use("tpope/vim-rhubarb") -- :GBrowse and other git things
@@ -207,8 +211,6 @@ packer.startup({
 		end
 	end,
 	config = {
-		snapshot = "packersnap.json",
-		snapshot_path = os.getenv("HOME") .. "/PersonalConfigs/.config/nvim",
 		display = {
 			open_fn = function()
 				return require("packer.util").float({ border = "rounded" })
