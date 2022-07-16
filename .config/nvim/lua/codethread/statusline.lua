@@ -95,11 +95,12 @@ lualine.setup({
 		},
 		lualine_b = {},
 		lualine_c = {},
-		lualine_x = {},
+		lualine_x = {
+			"%{ObsessionStatus('', '')} ",
+		},
 		lualine_y = { "diff" },
 		lualine_z = {
 			{
-
 				"branch",
 				separator = { right = " ", left = "" },
 				left_padding = 2,

@@ -23,6 +23,7 @@ packer.startup({
 		use({ "wbthomason/packer.nvim", commit = "671076b3a81e5033a866ca769749e75a827784ef" })
 		use({ "nvim-lua/plenary.nvim", commit = "968a4b9afec0c633bc369662e78f8c5db0eba249" })
 		use({ "nvim-lua/popup.nvim", commit = "b7404d35d5d3548a82149238289fa71f7f6de4ac" })
+		use({ "tpope/vim-obsession" })
 
 		-- misc
 		use({ "wakatime/vim-wakatime", tag = "9.*" })
@@ -33,10 +34,6 @@ packer.startup({
 			commit = "3b1ce2e1b30b731c80753fa9bbcb2cfec38a43da",
 		})
 		use({ "nvim-treesitter/playground", commit = "ce7e4b757598f1c785ed0fd94fc65959acd7d39c" })
-
-		-- help for lua, TODO need to make this work
-		-- use 'wsdjeg/luarefvim'
-		-- use 'rafcamlet/nvim-luapad'
 
 		-- colorscheme
 		use({ "cormacrelf/dark-notify", run = "brew install cormacrelf/tap/dark-notify" })
@@ -179,6 +176,12 @@ packer.startup({
 
 		-- use("tpope/vim-fugitive")
 		-- use("tpope/vim-rhubarb") -- :GBrowse and other git things
+
+		-- langs
+
+		-- help for lua, TODO need to make this work
+		-- use 'wsdjeg/luarefvim'
+		-- use 'rafcamlet/nvim-luapad'
 
 		-- terminal
 		use({ "akinsho/toggleterm.nvim", tag = "v1.*" })
