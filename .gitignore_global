@@ -54,6 +54,7 @@ flycheck_*.el
 
 # session
 Session.vim
+**/Session.vim
 
 # temporary
 .netrwhist
