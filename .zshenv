@@ -2,6 +2,7 @@
 # enable this and zshrc `zprof` for profiling
 # zmodload zsh/zprof
 
+HISTSIZE=999999999
 
 PROFILE_STARTUP=false
 if [[ "$PROFILE_STARTUP" == true ]]; then
