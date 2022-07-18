@@ -121,7 +121,7 @@ if [[ ! -z $KITTY_PID ]]; then
     export STARTUP_SCRIPTS_RUN=true
 
     # toggle kitty theme to light/dark based on MacOS theme
-    (exec nohup dark-notify -c 'kitty-toggle-theme' 2>/dev/null) 2>/dev/null &
+    (exec nohup dark-notify -c 'kitty-toggle-theme' > /dev/null) 2>/dev/null &
 
   fi
 fi
