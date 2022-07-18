@@ -126,6 +126,14 @@
 
 ;;; Builtin configurations
 
+(use-package desktop
+  :demand
+  :straight nil
+  :custom
+  (desktop-restore-eager 15) 		; only load 15 buffers on start, do the rest when idle
+  :config
+  (desktop-save-mode 1))
+
 (use-package emacs
   :demand
   :straight nil
