@@ -3,11 +3,11 @@
 #key : script
 #contributor : Adam
 # --
-;;; ${1:name}.el --- script -*- lexical-binding: t -*-
+;;; ${1:`(or (file-name-nondirectory (buffer-file-name)) "name.el")`} --- ${2:summary} -*- lexical-binding: t -*-
 
 ;;; Commentary:
 
-;; ${2:commentary}
+;; ${3:commentary}
 
 ;;; Code:
 
@@ -16,6 +16,6 @@
 
 (print
  (--> '(1 2 3 4)
-      (-reduce #'+ it)))$3
+      (-reduce #'+ it)))$4
 
-;;; $1.el ends here
+;;; $1 ends here
