@@ -1722,6 +1722,20 @@ _s_kip
 (use-package nameless
   :hook (emacs-lisp-mode . nameless-mode))
 
+(use-package highlight-defined
+  :hook (emacs-lisp-mode . highlight-defined-mode)
+  :config
+  (let ((normal (modus-themes-color 'blue-alt-faint)))
+    (custom-set-faces
+     `(highlight-defined-function-name-face ((t (:foreground ,normal))))
+     `(highlight-defined-builtin-function-name-face ((t (:foreground ,normal))))
+     `(highlight-defined-macro-name-face ((t (:weight bold))))
+     `(highlight-defined-face-name-face ((t (:slant italic)))))))
+
+;; run with C-x C-e
+(use-package eros
+  :hook (emacs-lisp-mode . eros-mode))
+
 (use-package elisp-mode
   :straight nil
   :hook (emacs-lisp-mode . (lambda () (when (fboundp 'electric-pair-mode)
