@@ -14,4 +14,10 @@ require("codethread.git")
 require("codethread.whichkey")
 require("codethread.terminal")
 require("codethread.undo")
-require("codethread.neog")
+
+-- Playing around with oxi vim
+-- vim.cmd([[
+-- set rtp+=~/dev/nvim-rs
+-- ]])
+
+-- require("settings")

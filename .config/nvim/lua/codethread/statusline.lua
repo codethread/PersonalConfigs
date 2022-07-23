@@ -22,7 +22,7 @@ local function mode_map(str)
 end
 
 -- enable global status line
--- vim.opt.laststatus = 3
+vim.opt.laststatus = 3
 
 lualine.setup({
 	options = {
@@ -37,6 +37,7 @@ lualine.setup({
 		lualine_a = {
 			{
 				"mode",
+				icons_enabled = true,
 				separator = { left = " ", right = "" },
 				right_padding = 2,
 				fmt = mode_map,
@@ -47,6 +48,7 @@ lualine.setup({
 				"filename",
 				path = 1, -- relative path
 				shorting_target = 40, -- leave at least 40 characters in line
+				show_filename_only = false, -- can show full path with global status line
 				symbols = {
 					modified = "  ",
 					readonly = " ",
@@ -57,6 +59,7 @@ lualine.setup({
 		lualine_x = {},
 		lualine_y = { "filetype" },
 		lualine_z = {
+			"progress",
 			{ "location", separator = { right = " " }, left_padding = 2 },
 		},
 	},
@@ -109,5 +112,7 @@ lualine.setup({
 	},
 	extensions = {
 		"quickfix",
+		"toggleterm",
+		"fugitive",
 	},
 })

@@ -1,5 +1,6 @@
 -- :checkhealth which_key
 local status_ok, which_key = pcall(require, "which-key")
+
 if not status_ok then
 	print("could not load which key")
 	return

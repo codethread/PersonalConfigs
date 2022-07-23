@@ -21,7 +21,7 @@ local simple = {
 dashboard.section.header.val = simple
 
 dashboard.section.buttons.val = {
-	dashboard.button("e", "  New File    ", ":enew<CR>"),
+	dashboard.button("e", "  New File    ", ":enew<CR>", {}),
 	dashboard.button("f", "  Find File   ", ":Telescope find_files<CR>"),
 	dashboard.button("t", "  Find Text   ", ":Telescope live_grep<CR>"),
 	dashboard.button("c", "  NVIM Config ", ":Telescope dotfiles<CR>"),

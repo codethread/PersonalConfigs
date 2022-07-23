@@ -179,7 +179,7 @@ packer.startup({
 		use("lewis6991/gitsigns.nvim")
 		use({ "sindrets/diffview.nvim", commit = "16c3985581ee65bccdfbebbe014b24a01adc7d1f" })
 
-		-- use("tpope/vim-fugitive")
+		use("tpope/vim-fugitive")
 		-- use("tpope/vim-rhubarb") -- :GBrowse and other git things
 
 		-- langs
