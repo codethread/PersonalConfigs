@@ -13,7 +13,9 @@ local function tokyonightTheme()
 			onchange = function(mode) -- light or dark
 				vim.g.background = mode
 				vim.g.tokyonight_style = mode == "light" and "day" or "storm"
+				vim.g.tokyonight_hide_inactive_statusline = true
 				vim.g.tokyonight_transparent = true
+				vim.g.tokyonight_dark_float = false
 
 				vim.cmd([[colorscheme tokyonight]])
 			end,

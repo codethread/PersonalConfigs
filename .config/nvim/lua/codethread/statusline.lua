@@ -29,7 +29,8 @@ lualine.setup({
 		icons_enabled = true,
 		theme = require("codethread.theme").lualine,
 		disabled_filetypes = {},
-		section_separators = { left = "", right = "" },
+		section_separators = { left = " ", right = "" },
+		-- section_separators = { left = "", right = "" },
 		-- component_separators = { left = "", right = "" },
 		component_separators = { left = "", right = "" },
 	},
@@ -38,9 +39,11 @@ lualine.setup({
 			{
 				"mode",
 				icons_enabled = true,
-				separator = { left = " ", right = "" },
-				right_padding = 2,
-				fmt = mode_map,
+				-- separator = { left = " ", right = "" },
+				-- separator = { left = "", right = "" },
+				separator = { left = "", right = "" },
+				-- right_padding = 2,
+				-- fmt = mode_map,
 			},
 		},
 		lualine_b = {
@@ -57,10 +60,13 @@ lualine.setup({
 		},
 		lualine_c = { "diagnostics", "lsp_progress" },
 		lualine_x = {},
-		lualine_y = { "filetype" },
-		lualine_z = {
+		lualine_y = {
+			"filetype",
 			"progress",
-			{ "location", separator = { right = " " }, left_padding = 2 },
+		},
+		lualine_z = {
+			-- { "location", separator = { right = " " }, left_padding = 2 },
+			{ "location", separator = { right = "", left = "" } },
 		},
 	},
 	inactive_sections = {
@@ -72,8 +78,8 @@ lualine.setup({
 				path = 1, -- relative path
 				shorting_target = 40, -- leave at least 40 characters in line
 				-- let g:lightline.component = { 'readonlyS': '%{&readonly?"":""}', 'modifiedS': '%{&modified?" ":""}', }
-				separator = { left = " " },
-				right_padding = 2,
+				-- separator = { left = " " },
+				-- right_padding = 2,
 				symbols = {
 					modified = "  ",
 					readonly = " ",
@@ -81,7 +87,8 @@ lualine.setup({
 			},
 		},
 		lualine_x = {
-			{ "location", separator = { right = " " }, left_padding = 2 },
+			-- { "location", separator = { right = " " }, left_padding = 2 },
+			{ "location", separator = { right = "" } },
 		},
 		lualine_y = {},
 		lualine_z = {},
@@ -92,21 +99,23 @@ lualine.setup({
 				"tabs",
 				max_length = vim.o.columns / 2,
 				mode = 2, -- tab name and number
-				separator = { left = " ", right = " " },
-				right_padding = 2,
+				-- separator = { left = " ", right = " " },
+				-- separator = { left = "樂", right = "" },
+				separator = { left = "", right = "" },
+				-- right_padding = 2,
 			},
 		},
 		lualine_b = {},
 		lualine_c = {},
 		lualine_x = {
-			"%{ObsessionStatus('', '')} ",
+			"%{ObsessionStatus('樂', '')} ",
 		},
 		lualine_y = { "diff" },
 		lualine_z = {
 			{
 				"branch",
-				separator = { right = " ", left = "" },
-				left_padding = 2,
+				separator = { right = " ", left = "" },
+				-- left_padding = 2,
 			},
 		},
 	},
