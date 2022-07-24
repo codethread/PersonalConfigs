@@ -1,3 +1,6 @@
+-- TIPS
+-- to see raw key
+-- go to insert mode, type <C-v> then type, and that key will be shown
 local utils = require("codethread.utils")
 local map = utils.map
 local nmap = utils.nmap
@@ -63,8 +66,8 @@ inoremap ( (<c-g>u
 inoremap { {<c-g>u
 
 " move text
-vnoremap J :m '>+1<CR>gv=gv
-vnoremap K :m '<-2<CR>gv=gv
+vnoremap <Down> :m '>+1<CR>gv=gv
+vnoremap <Up> :m '<-2<CR>gv=gv
 
 xmap ga <Plug>(EasyAlign)
 

@@ -40,3 +40,41 @@ vim.api.nvim_set_keymap(
 	"<cmd>lua require'hop'.hint_words({ jump_on_sole_occurrence = true, multi_windows = true })<cr>",
 	{}
 )
+
+local hydra_ok, Hydra = pcall(require, "hydra")
+if not hydra_ok then
+	print("could not load hydra")
+	return
+end
+
+local function cmd(command)
+	return table.concat({ "<Cmd>", command, "<CR>" })
+end
+
+local mover_hint = [[
+ Params:
+ move: ← _h_ → _l_
+ goto: ↓ _j_ ↑ _k_
+]]
+
+local mover_hydra = Hydra({
+	name = "Param Mover",
+	mode = "n",
+	hint = mover_hint,
+	config = {
+		invoke_on_body = true,
+	},
+	heads = {
+		{ "j", cmd("TSTextobjectGotoNextStart @parameter.inner") },
+		{ "k", cmd("TSTextobjectGotoPreviousStart @parameter.inner") },
+		{ "h", cmd("TSTextobjectSwapPrevious @parameter.inner") },
+		{ "l", cmd("TSTextobjectSwapNext @parameter.inner") },
+	},
+})
+
+-- TODO: some more cool plugins:
+-- https://github.com/mfussenegger/nvim-treehopper
+
+return {
+	mover_hydra = mover_hydra,
+}

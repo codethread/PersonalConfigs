@@ -208,6 +208,13 @@ local mappings = {
 		},
 	},
 
+	["m"] = {
+		function()
+			require("codethread.movement").mover_hydra:activate()
+		end,
+		"🐉 Mover",
+	},
+
 	w = {
 		name = "Window",
 		N = { "<cmd>tabnew<cr>", "New Tab" },

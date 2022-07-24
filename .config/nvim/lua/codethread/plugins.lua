@@ -21,19 +21,24 @@ packer.startup({
 	function(use)
 		-- Packer can manage itself
 		use({ "wbthomason/packer.nvim", commit = "671076b3a81e5033a866ca769749e75a827784ef" })
+
+		-- Things required early
 		use({ "nvim-lua/plenary.nvim", commit = "968a4b9afec0c633bc369662e78f8c5db0eba249" })
 		use({ "nvim-lua/popup.nvim", commit = "b7404d35d5d3548a82149238289fa71f7f6de4ac" })
 		use({ "tpope/vim-obsession" })
-
-		-- misc
-		use({ "wakatime/vim-wakatime", tag = "9.*" })
-		use({ "folke/which-key.nvim", commit = "bd4411a2ed4dd8bb69c125e339d837028a6eea71" })
 		use({
 			"nvim-treesitter/nvim-treesitter",
 			run = ":TSUpdate",
 			commit = "3b1ce2e1b30b731c80753fa9bbcb2cfec38a43da",
 		})
+
+		-- misc
+		use({ "wakatime/vim-wakatime", tag = "9.*" })
 		use({ "nvim-treesitter/playground", commit = "ce7e4b757598f1c785ed0fd94fc65959acd7d39c" })
+
+		-- key bindings
+		use({ "folke/which-key.nvim", commit = "bd4411a2ed4dd8bb69c125e339d837028a6eea71" })
+		use({ "anuvyklack/hydra.nvim", commit = "7a471169f2fd577e8893b95a0253dce7b9abf96f" })
 
 		-- colorscheme
 		use({ "cormacrelf/dark-notify", run = "brew install cormacrelf/tap/dark-notify" })
@@ -149,7 +154,7 @@ packer.startup({
 		use("rafamadriz/friendly-snippets")
 
 		-- editing
-		use("nvim-treesitter/nvim-treesitter-textobjects")
+		use({ "nvim-treesitter/nvim-treesitter-textobjects", commit = "40f20e6788e6ce850802cbd2ca029fbb66b5d043" })
 		use("windwp/nvim-ts-autotag") -- close <div tags, and ciw
 		use("tpope/vim-commentary")
 		use("tpope/vim-surround")
@@ -189,7 +194,7 @@ packer.startup({
 		-- use 'rafcamlet/nvim-luapad'
 
 		-- terminal
-		use({ "akinsho/toggleterm.nvim", tag = "v1.*" })
+		use({ "akinsho/toggleterm.nvim", tag = "v2.*" })
 
 		use({
 			"christoomey/vim-tmux-navigator",

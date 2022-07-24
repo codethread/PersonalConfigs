@@ -56,6 +56,16 @@ configs.setup({
 		enable = true,
 	},
 
+	incremental_selection = {
+		enable = true,
+		keymaps = {
+			init_selection = "gnn",
+			node_incremental = "<M-j>",
+			scope_incremental = "<M-h>",
+			node_decremental = "<M-k>",
+		},
+	},
+
 	playground = {
 		enable = false,
 	},
@@ -63,20 +73,24 @@ configs.setup({
 	textobjects = {
 		select = {
 			enable = true,
-
 			-- Automatically jump forward to textobj, similar to targets.vim
-			lookahead = true,
-
+			lookahead = false,
 			keymaps = {
 				-- You can use the capture groups defined in textobjects.scm
 				["af"] = "@function.outer",
 				["if"] = "@function.inner",
 				["ac"] = "@class.outer",
 				["ic"] = "@class.inner",
+				["ai"] = "@call.outer", -- i for 'invocation'
+				["ii"] = "@call.inner",
 				["aa"] = "@parameter.outer",
 				["ia"] = "@parameter.inner",
+
+				["ab"] = "@conditional.outer", -- b for 'branch'
+				["ib"] = "@conditional.inner",
 			},
 		},
+		swap = { enable = true },
 	},
 
 	autotag = {
