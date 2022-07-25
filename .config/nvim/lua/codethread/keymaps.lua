@@ -72,4 +72,17 @@ vnoremap <Up> :m '<-2<CR>gv=gv
 xmap ga <Plug>(EasyAlign)
 
 let @c = 'vi(:EasyAlign */ , /'
+
+" Maximise Window
+nnoremap <silent><C-Y> :MaximizerToggle<CR>
+vnoremap <silent><C-Y> :MaximizerToggle<CR>gv
+inoremap <silent><C-Y> <C-o>:MaximizerToggle<CR>
+
+" MAPS ON COMMANDS I DONT LIKE
+" map <C-B>
+" map <C-G>
+" map <C-Q>
+" map <C-E>
+" map <C-Y>
+" map <C-P>
 ]])

@@ -14,5 +14,7 @@ return {
 
 		require("codethread.lsp.settings.shared").lsp_highlight_document(client)
 		require("codethread.lsp.settings.shared").lsp_keymaps(bufnr)
+
+		require("nvim-navic").attach(client, bufnr)
 	end,
 }

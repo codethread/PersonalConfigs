@@ -83,6 +83,7 @@ local opts = {
 
 local mappings = {
 	["<leader>"] = { "<cmd>Telescope find_files shorten_path=false<cr>", "Files" },
+	[";"] = { "<cmd>Telescope commands<cr>", "M-x" },
 	-- ["a"] = { "<cmd>Alpha<cr>", "Alpha" },
 	["q"] = { "<cmd>luafile %<CR>", "Reload Luafile" },
 	-- ["h"] = { "<cmd>nohlsearch<CR>", "No Highlight" },
@@ -126,7 +127,7 @@ local mappings = {
 			"<cmd>lua vim.diagnostic.goto_prev()<cr>",
 			"Prev Diagnostic",
 		},
-		q = { "<cmd>lua vim.diagnostic.set_loclist()<cr>", "Quickfix" },
+		q = { "<cmd>lua vim.diagnostic.setloclist()<cr>", "Quickfix" },
 	},
 
 	f = {
@@ -194,7 +195,7 @@ local mappings = {
 		name = "LSP",
 		-- a = { "<cmd>Telescope lsp_code_actions them=cursor<cr>", "Code Action" },
 		a = {
-			"<cmd>lua require('codethread.telescope.commands').lsp_code_actions()<cr>",
+			"<cmd>lua vim.lsp.buf.code_action()<cr>",
 			"Code Action",
 		},
 		i = { "<cmd>LspInfo<cr>", "Info" },
@@ -222,6 +223,7 @@ local mappings = {
 		n = { "<cmd>tabNext<cr>", "Next Tab" }, -- TODO: put through telescope
 		p = { "<cmd>tabprevious<cr>", "Previous Tab" }, -- TODO: put through telescope
 		w = { "<cmd>vsplit<cr>", "Split" }, -- TODO: put through telescope
+		m = { "<cmd>MaximizerToggle!<cr>", "Maximise" },
 	},
 
 	s = {
@@ -236,6 +238,11 @@ local mappings = {
 		k = { "<cmd>Telescope keymaps<cr>", "Keymaps" },
 		C = { "<cmd>Telescope commands<cr>", "Commands" },
 		p = { "<cmd>Telescope live_grep<cr>", "Live Grep" },
+	},
+
+	o = {
+		name = "Open",
+		d = { "<cmd>NvimTreeFindFile<cr>", "File Tree" },
 	},
 
 	t = {

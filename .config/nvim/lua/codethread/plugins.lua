@@ -68,7 +68,7 @@ packer.startup({
 			commit = "6a33ecefa9b3d9ade654f9a7a6396a00c3758ca6",
 		})
 		use({ "tpope/vim-projectionist" })
-		-- use({ "nvim-telescope/telescope-ui-select.nvim" })
+		use({ "nvim-telescope/telescope-ui-select.nvim" })
 		use({
 			"lewis6991/spellsitter.nvim",
 			commit = "c1b318f8b959e015f5cc7941624d1ca0f84705dd",
@@ -133,6 +133,20 @@ packer.startup({
 			commit = "b1a084c05bf6cf32a3b55196e5cde44bb94422fb",
 		})
 
+		-- file navigation
+
+		-- use({
+		-- 	"nvim-treesitter/nvim-treesitter-context",
+		-- 	commit = "0d086d23c0742404e9bd52977712619a621c3da9",
+		-- 	config = function()
+		-- 		require("treesitter-context").setup({})
+		-- 	end,
+		-- })
+		use({
+			"SmiteshP/nvim-navic",
+			commit = "94bf6fcb1dc27bdad230d9385da085e72c390019",
+		})
+
 		-- lsp
 		use("neovim/nvim-lspconfig")
 		use("williamboman/nvim-lsp-installer")
@@ -140,6 +154,12 @@ packer.startup({
 		use("jose-elias-alvarez/nvim-lsp-ts-utils")
 		use("b0o/schemastore.nvim")
 		use("gbrlsnchs/telescope-lsp-handlers.nvim")
+		use({
+			"https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+			config = function()
+				require("lsp_lines").setup()
+			end,
+		})
 
 		-- completion
 		use("hrsh7th/nvim-cmp")
@@ -153,8 +173,12 @@ packer.startup({
 		use("L3MON4D3/LuaSnip")
 		use("rafamadriz/friendly-snippets")
 
+		-- windows
+		use("szw/vim-maximizer")
+
 		-- editing
 		use({ "nvim-treesitter/nvim-treesitter-textobjects", commit = "40f20e6788e6ce850802cbd2ca029fbb66b5d043" })
+
 		use("windwp/nvim-ts-autotag") -- close <div tags, and ciw
 		use("tpope/vim-commentary")
 		use("tpope/vim-surround")

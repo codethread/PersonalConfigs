@@ -5,6 +5,7 @@ local wk = require("which-key")
 
 return {
 	on_attach = function(client, bufnr)
+		require("nvim-navic").attach(client, bufnr)
 		-- turn off formatting as we'll use eslint/prettier
 		client.resolved_capabilities.document_formatting = false
 		client.resolved_capabilities.document_range_formatting = false

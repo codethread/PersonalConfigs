@@ -1,3 +1,4 @@
+local navic = require("nvim-navic")
 local status_ok, lualine = pcall(require, "lualine")
 if not status_ok then
 	print("could not load lualine")
@@ -105,7 +106,9 @@ lualine.setup({
 				-- right_padding = 2,
 			},
 		},
-		lualine_b = {},
+		lualine_b = {
+			{ navic.get_location, cond = navic.is_available },
+		},
 		lualine_c = {},
 		lualine_x = {
 			"%{ObsessionStatus('樂', '')} ",
