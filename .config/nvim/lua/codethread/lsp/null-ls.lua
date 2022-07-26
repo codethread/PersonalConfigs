@@ -40,9 +40,11 @@ null_ls.setup({
 				"svelte",
 			},
 		}),
-		diagnostics.eslint_d,
 		diagnostics.stylelint,
-		code_actions.eslint_d,
+
+		-- using eslint lsp instead
+		-- diagnostics.eslint_d,
+		-- code_actions.eslint_d,
 
 		-- c/c++
 		formatting.clang_format,
