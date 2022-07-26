@@ -3,8 +3,6 @@
 -- go to insert mode, type <C-v> then type, and that key will be shown
 local utils = require("codethread.utils")
 local map = utils.map
-local nmap = utils.nmap
-local vmap = utils.vmap
 
 -- Modes
 --   normal_mode = "n",
