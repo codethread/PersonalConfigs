@@ -1,7 +1,7 @@
-local command = require("codethread.utils").command
+local command = require('codethread.utils').command
 
 local function nmap(desc, lhs, rhs)
-	vim.keymap.set("n", lhs, rhs, { desc = desc })
+	vim.keymap.set('n', lhs, rhs, { desc = desc })
 end
 
 local M = {}
@@ -23,31 +23,31 @@ M.lsp_highlight_document = function(client)
 end
 
 M.lsp_keymaps = function()
-	nmap("go to declaration", "gD", function()
+	nmap('go to declaration', 'gD', function()
 		vim.lsp.buf.declaration()
 	end)
 
-	nmap("go to definition", "gd", function()
+	nmap('go to definition', 'gd', function()
 		vim.lsp.buf.definition()
 	end)
 
-	nmap("hover lsp", "K", function()
+	nmap('hover lsp', 'K', function()
 		vim.lsp.buf.hover()
 	end)
 
-	nmap("go to implementations", "gi", function()
+	nmap('go to implementations', 'gi', function()
 		vim.lsp.buf.implementation()
 	end)
 
-	nmap("hover signature help", "gh", function()
+	nmap('hover signature help', 'gh', function()
 		vim.lsp.buf.implementation()
 	end)
 
-	nmap("find references", "gr", function()
+	nmap('find references', 'gr', function()
 		vim.lsp.buf.references()
 	end)
 
-	command("format the buffer with LSP", "Format", function()
+	command('format the buffer with LSP', 'Format', function()
 		vim.lsp.buf.formatting()
 	end)
 end

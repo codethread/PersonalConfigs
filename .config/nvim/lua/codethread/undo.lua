@@ -1,4 +1,4 @@
-vim.cmd([[
+vim.cmd [[
 if has("persistent_undo")
    let target_path = expand('~/.local/share/nvim/undodir')
 
@@ -11,4 +11,4 @@ if has("persistent_undo")
     let &undodir=target_path
     set undofile
 endif
-]])
+]]

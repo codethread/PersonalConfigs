@@ -1,9 +1,9 @@
 return {
 	settings = {
-		["rust-analyzer"] = {
+		['rust-analyzer'] = {
 			checkOnSave = {
 				allFeatures = true,
-				command = "clippy",
+				command = 'clippy',
 			},
 		},
 	},
@@ -12,9 +12,9 @@ return {
 		-- turn off formatting as we'll use rustfmt
 		client.resolved_capabilities.document_formatting = false
 
-		require("codethread.lsp.settings.shared").lsp_highlight_document(client)
-		require("codethread.lsp.settings.shared").lsp_keymaps(bufnr)
+		require('codethread.lsp.settings.shared').lsp_highlight_document(client)
+		require('codethread.lsp.settings.shared').lsp_keymaps(bufnr)
 
-		require("nvim-navic").attach(client, bufnr)
+		require('nvim-navic').attach(client, bufnr)
 	end,
 }

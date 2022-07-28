@@ -4,9 +4,9 @@ local set = vim.opt
 set.softtabstop = 2
 set.relativenumber = true
 set.hidden = true -- Required to keep multiple buffers open multiple buffers
-set.encoding = "utf-8" -- The encoding displayed
+set.encoding = 'utf-8' -- The encoding displayed
 set.pumheight = 10 -- Makes popup menu smaller
-set.fileencoding = "utf-8" -- The encoding written to file
+set.fileencoding = 'utf-8' -- The encoding written to file
 set.ruler = true -- Show the cursor position all the time
 set.cmdheight = 2 -- More space for displaying messages
 set.splitbelow = true -- Horizontal splits will automatically be below
@@ -26,11 +26,11 @@ set.updatetime = 300 -- Faster completion
 set.timeoutlen = 500 -- By default timeoutlen is 1000 ms
 -- set.formatoptions-=cro                  -- Stop newline continution of comments
 -- set.clipboard:append("unnamed") -- Copy paste between vim and everything else
-set.signcolumn = "yes"
+set.signcolumn = 'yes'
 -- set.completeopt = "menu,menuone,noselect"
-set.completeopt = "menuone,noselect,preview"
+set.completeopt = 'menuone,noselect,preview'
 
-vim.cmd([[
+vim.cmd [[
   set foldlevel=99
   set foldmethod=expr
   set foldexpr=nvim_treesitter#foldexpr()
@@ -40,6 +40,6 @@ vim.cmd([[
   set nowrap " Display long lines as just one line
   set iskeyword+=-                      	" treat dash separated words as a word text object"
   set mouse=a                             " Enable your mouse
-]])
+]]
 
 -- au! BufWritePost $MYVIMRC source %      " auto source when writing to init.vm alternatively you can run :source $MYVIMRC

@@ -1,14 +1,14 @@
-local status_ok, toggleterm = pcall(require, "toggleterm")
+local status_ok, toggleterm = pcall(require, 'toggleterm')
 if not status_ok then
 	return
 end
 
-toggleterm.setup({
+toggleterm.setup {
 	-- size can be a number or function which is passed the current terminal
 	size = function(term)
-		if term.direction == "horizontal" then
+		if term.direction == 'horizontal' then
 			return 15
-		elseif term.direction == "vertical" then
+		elseif term.direction == 'vertical' then
 			return vim.o.columns * 0.4
 		end
 	end,
@@ -23,7 +23,7 @@ toggleterm.setup({
 	insert_mappings = true, -- whether or not the open mapping applies in insert mode
 	terminal_mappings = true, -- whether or not the open mapping applies in the opened terminals
 	persist_size = true,
-	direction = "float",
+	direction = 'float',
 	close_on_exit = false, -- close the terminal window when the process exits
 	-- This field is only relevant if direction is set to 'float'
 	float_opts = {
@@ -31,39 +31,39 @@ toggleterm.setup({
 		-- see :h nvim_open_win for details on borders however
 		-- the 'curved' border is a custom border type
 		-- not natively supported but implemented in this plugin.
-		border = "single",
+		border = 'single',
 		-- width = <value>,
 		-- height = <value>,
 		winblend = 3,
 		highlights = {
-			border = "Normal",
-			background = "Normal",
+			border = 'Normal',
+			background = 'Normal',
 		},
 	},
-})
+}
 
 function _G.set_terminal_keymaps()
 	local opts = { noremap = true }
-	vim.api.nvim_buf_set_keymap(0, "t", "<esc>", [[<C-\><C-n>]], opts)
-	vim.api.nvim_buf_set_keymap(0, "t", "jk", [[<C-\><C-n>]], opts)
-	vim.api.nvim_buf_set_keymap(0, "t", "<C-h>", [[<C-\><C-n><C-W>h]], opts)
-	vim.api.nvim_buf_set_keymap(0, "t", "<C-j>", [[<C-\><C-n><C-W>j]], opts)
-	vim.api.nvim_buf_set_keymap(0, "t", "<C-k>", [[<C-\><C-n><C-W>k]], opts)
-	vim.api.nvim_buf_set_keymap(0, "t", "<C-l>", [[<C-\><C-n><C-W>l]], opts)
+	vim.api.nvim_buf_set_keymap(0, 't', '<esc>', [[<C-\><C-n>]], opts)
+	vim.api.nvim_buf_set_keymap(0, 't', 'jk', [[<C-\><C-n>]], opts)
+	vim.api.nvim_buf_set_keymap(0, 't', '<C-h>', [[<C-\><C-n><C-W>h]], opts)
+	vim.api.nvim_buf_set_keymap(0, 't', '<C-j>', [[<C-\><C-n><C-W>j]], opts)
+	vim.api.nvim_buf_set_keymap(0, 't', '<C-k>', [[<C-\><C-n><C-W>k]], opts)
+	vim.api.nvim_buf_set_keymap(0, 't', '<C-l>', [[<C-\><C-n><C-W>l]], opts)
 end
 
 -- if you only want these mappings for toggle term use term://*toggleterm#* instead
-vim.cmd("autocmd! TermOpen term://* lua set_terminal_keymaps()")
+vim.cmd 'autocmd! TermOpen term://* lua set_terminal_keymaps()'
 
-local Term = require("toggleterm.terminal").Terminal
-local node = Term:new({ cmd = "node", hidden = true, close_on_exit = true })
+local Term = require('toggleterm.terminal').Terminal
+local node = Term:new { cmd = 'node', hidden = true, close_on_exit = true }
 
-local link_dotfiles = Term:new({
-	cmd = "./_setup",
-	dir = "~/PersonalConfigs",
+local link_dotfiles = Term:new {
+	cmd = './_setup',
+	dir = '~/PersonalConfigs',
 	close_on_exit = true,
-	direction = "horizontal",
-})
+	direction = 'horizontal',
+}
 
 function _NODE_TOGGLE()
 	node:toggle()

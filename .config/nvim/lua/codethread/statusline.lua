@@ -1,17 +1,17 @@
-local navic = require("nvim-navic")
-local status_ok, lualine = pcall(require, "lualine")
+local navic = require 'nvim-navic'
+local status_ok, lualine = pcall(require, 'lualine')
 if not status_ok then
-	print("could not load lualine")
+	print 'could not load lualine'
 	return
 end
 
 local mode_maps = {
-	["NORMAL"] = "",
-	["INSERT"] = "",
-	["VISUAL"] = "",
-	["V-BLOCK"] = "",
-	["V-LINE"] = "",
-	["TERMINAL"] = "❯",
+	['NORMAL'] = '',
+	['INSERT'] = '',
+	['VISUAL'] = '',
+	['V-BLOCK'] = '',
+	['V-LINE'] = '',
+	['TERMINAL'] = '❯',
 	-- ["TERMINAL"] = "",
 }
 
@@ -25,49 +25,49 @@ end
 -- enable global status line
 vim.opt.laststatus = 3
 
-lualine.setup({
+lualine.setup {
 	options = {
 		icons_enabled = true,
-		theme = require("codethread.theme").lualine,
+		theme = require('codethread.theme').lualine,
 		disabled_filetypes = {},
-		section_separators = { left = " ", right = "" },
+		section_separators = { left = ' ', right = '' },
 		-- section_separators = { left = "", right = "" },
 		-- component_separators = { left = "", right = "" },
-		component_separators = { left = "", right = "" },
+		component_separators = { left = '', right = '' },
 	},
 	sections = {
 		lualine_a = {
 			{
-				"mode",
+				'mode',
 				icons_enabled = true,
 				-- separator = { left = " ", right = "" },
 				-- separator = { left = "", right = "" },
-				separator = { left = "", right = "" },
+				separator = { left = '', right = '' },
 				-- right_padding = 2,
 				-- fmt = mode_map,
 			},
 		},
 		lualine_b = {
 			{
-				"filename",
+				'filename',
 				path = 1, -- relative path
 				shorting_target = 40, -- leave at least 40 characters in line
 				show_filename_only = false, -- can show full path with global status line
 				symbols = {
-					modified = "  ",
-					readonly = " ",
+					modified = '  ',
+					readonly = ' ',
 				},
 			},
 		},
-		lualine_c = { "diagnostics", "lsp_progress" },
+		lualine_c = { 'diagnostics', 'lsp_progress' },
 		lualine_x = {},
 		lualine_y = {
-			"filetype",
-			"progress",
+			'filetype',
+			'progress',
 		},
 		lualine_z = {
 			-- { "location", separator = { right = " " }, left_padding = 2 },
-			{ "location", separator = { right = "", left = "" } },
+			{ 'location', separator = { right = '', left = '' } },
 		},
 	},
 	inactive_sections = {
@@ -75,21 +75,21 @@ lualine.setup({
 		lualine_b = {},
 		lualine_c = {
 			{
-				"filename",
+				'filename',
 				path = 1, -- relative path
 				shorting_target = 40, -- leave at least 40 characters in line
 				-- let g:lightline.component = { 'readonlyS': '%{&readonly?"":""}', 'modifiedS': '%{&modified?" ":""}', }
 				-- separator = { left = " " },
 				-- right_padding = 2,
 				symbols = {
-					modified = "  ",
-					readonly = " ",
+					modified = '  ',
+					readonly = ' ',
 				},
 			},
 		},
 		lualine_x = {
 			-- { "location", separator = { right = " " }, left_padding = 2 },
-			{ "location", separator = { right = "" } },
+			{ 'location', separator = { right = '' } },
 		},
 		lualine_y = {},
 		lualine_z = {},
@@ -97,12 +97,12 @@ lualine.setup({
 	tabline = {
 		lualine_a = {
 			{
-				"tabs",
+				'tabs',
 				max_length = vim.o.columns / 2,
 				mode = 2, -- tab name and number
 				-- separator = { left = " ", right = " " },
 				-- separator = { left = "樂", right = "" },
-				separator = { left = "", right = "" },
+				separator = { left = '', right = '' },
 				-- right_padding = 2,
 			},
 		},
@@ -113,18 +113,18 @@ lualine.setup({
 		lualine_x = {
 			"%{ObsessionStatus('樂', '')} ",
 		},
-		lualine_y = { "diff" },
+		lualine_y = { 'diff' },
 		lualine_z = {
 			{
-				"branch",
-				separator = { right = " ", left = "" },
+				'branch',
+				separator = { right = ' ', left = '' },
 				-- left_padding = 2,
 			},
 		},
 	},
 	extensions = {
-		"quickfix",
-		"toggleterm",
-		"fugitive",
+		'quickfix',
+		'toggleterm',
+		'fugitive',
 	},
-})
+}

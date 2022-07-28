@@ -1,6 +1,6 @@
 return {
 	settings = {
-		run = "onSave",
+		run = 'onSave',
 	},
 
 	on_attach = function(client)

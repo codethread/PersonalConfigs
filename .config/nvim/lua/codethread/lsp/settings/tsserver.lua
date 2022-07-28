@@ -1,19 +1,19 @@
 -- Needed for inlayHints. Merge this table with your settings or copy
 -- it from the source if you want to add your own init_options.
 -- init_options = require("nvim-lsp-ts-utils").init_options,
-local wk = require("which-key")
+local wk = require 'which-key'
 
 return {
 	on_attach = function(client, bufnr)
-		require("nvim-navic").attach(client, bufnr)
+		require('nvim-navic').attach(client, bufnr)
 		-- turn off formatting as we'll use eslint/prettier
 		client.resolved_capabilities.document_formatting = false
 		client.resolved_capabilities.document_range_formatting = false
 
-		local ts_utils = require("nvim-lsp-ts-utils")
+		local ts_utils = require 'nvim-lsp-ts-utils'
 
 		-- defaults
-		ts_utils.setup({
+		ts_utils.setup {
 			debug = false,
 			disable_commands = false,
 			enable_import_on_completion = false,
@@ -38,7 +38,7 @@ return {
 
 			-- inlay hints
 			auto_inlay_hints = true,
-			inlay_hints_highlight = "Comment",
+			inlay_hints_highlight = 'Comment',
 			inlay_hints_priority = 200, -- priority of the hint extmarks
 			inlay_hints_throttle = 150, -- throttle the inlay hint request
 			inlay_hints_format = { -- format options for individual hint kind
@@ -58,7 +58,7 @@ return {
 			update_imports_on_move = false,
 			require_confirmation_on_move = false,
 			watch_dir = nil,
-		})
+		}
 
 		-- required to fix code action ranges and filter diagnostics
 		ts_utils.setup_client(client)
@@ -68,16 +68,16 @@ return {
 		-- vim.api.nvim_buf_set_keymap(bufnr, "n", "gs", ":TSLspOrganize<CR>", opts)
 		-- vim.api.nvim_buf_set_keymap(bufnr, "n", "gr", ":TSLspRenameFile<CR>", opts)
 		-- vim.api.nvim_buf_set_keymap(bufnr, "n", "gi", ":TSLspImportAll<CR>", opts)
-		require("codethread.lsp.settings.shared").lsp_highlight_document(client)
-		require("codethread.lsp.settings.shared").lsp_keymaps(bufnr)
+		require('codethread.lsp.settings.shared').lsp_highlight_document(client)
+		require('codethread.lsp.settings.shared').lsp_keymaps(bufnr)
 
 		wk.register({
 			T = {
 				i = {
-					"<cmd>TSLspToggleInlayHints<cr>",
-					"Inlay Hints",
+					'<cmd>TSLspToggleInlayHints<cr>',
+					'Inlay Hints',
 				},
 			},
-		}, { prefix = "<leader>" })
+		}, { prefix = '<leader>' })
 	end,
 }

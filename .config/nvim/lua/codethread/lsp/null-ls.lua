@@ -1,7 +1,7 @@
-local null_ls_status_ok, null_ls = pcall(require, "null-ls")
+local null_ls_status_ok, null_ls = pcall(require, 'null-ls')
 
 if not null_ls_status_ok then
-	print("could not load null ls")
+	print 'could not load null ls'
 	return
 end
 
@@ -12,7 +12,7 @@ local formatting = null_ls.builtins.formatting
 local diagnostics = null_ls.builtins.diagnostics
 local code_actions = null_ls.builtins.code_actions
 
-null_ls.setup({
+null_ls.setup {
 	debug = false,
 	sources = {
 		-- lua
@@ -20,26 +20,26 @@ null_ls.setup({
 		-- rust
 		formatting.rustfmt,
 		-- js/ts
-		formatting.prettierd.with({
+		formatting.prettierd.with {
 			filetypes = {
-				"javascript",
-				"javascriptreact",
-				"typescript",
-				"typescriptreact",
-				"vue",
-				"css",
-				"scss",
-				"less",
-				"html",
-				"json",
-				"jsonc",
-				"yaml",
-				"markdown",
-				"graphql",
-				"handlebars",
-				"svelte",
+				'javascript',
+				'javascriptreact',
+				'typescript',
+				'typescriptreact',
+				'vue',
+				'css',
+				'scss',
+				'less',
+				'html',
+				'json',
+				'jsonc',
+				'yaml',
+				'markdown',
+				'graphql',
+				'handlebars',
+				'svelte',
 			},
-		}),
+		},
 		diagnostics.stylelint,
 
 		-- using eslint lsp instead
@@ -52,9 +52,9 @@ null_ls.setup({
 		-- go
 		formatting.gofmt,
 	},
-})
+}
 
-vim.cmd([[
+vim.cmd [[
   augroup _LspFormat
     autocmd!
     autocmd BufWritePre * lua vim.lsp.buf.formatting_sync()
@@ -64,4 +64,4 @@ vim.cmd([[
     autocmd!
     autocmd BufWritePre *keymap.c autocmd! _LspFormat
   augroup end
-]])
+]]

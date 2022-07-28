@@ -1,7 +1,7 @@
 -- TIPS
 -- to see raw key
 -- go to insert mode, type <C-v> then type, and that key will be shown
-local utils = require("codethread.utils")
+local utils = require 'codethread.utils'
 local map = utils.map
 
 -- Modes
@@ -13,12 +13,12 @@ local map = utils.map
 --   command_mode = "c",
 
 -- use space as the leader key
-map("", "<Space>", "<Nop>")
-vim.g.mapleader = " "
-vim.g.maplocalleader = ","
+map('', '<Space>', '<Nop>')
+vim.g.mapleader = ' '
+vim.g.maplocalleader = ','
 
-map("i", "<C-f>", "<Right>")
-map("i", "<C-b>", "<Left>")
+map('i', '<C-f>', '<Right>')
+map('i', '<C-b>', '<Left>')
 
 -- swap ; and :
 -- nmap(';', ':')
@@ -27,10 +27,10 @@ map("i", "<C-b>", "<Left>")
 -- vmap(':', ';')
 
 -- Escape
-map("i", "jk", "<ESC>")
+map('i', 'jk', '<ESC>')
 -- nmap('<leader><leader>', ':Telescope find_files<cr>')
 
-vim.cmd([[
+vim.cmd [[
 " emacs habbits
 nnoremap <silent> <C-g> <C-c>
 imap <silent> <C-g> <C-c>
@@ -83,4 +83,4 @@ inoremap <silent><C-Y> <C-o>:MaximizerToggle<CR>
 " map <C-E>
 " map <C-Y>
 " map <C-P>
-]])
+]]
