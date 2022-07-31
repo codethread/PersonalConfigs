@@ -48,6 +48,9 @@ null_ls.setup({
 
 		-- c/c++
 		formatting.clang_format,
+
+		-- go
+		formatting.gofmt,
 	},
 })
 
