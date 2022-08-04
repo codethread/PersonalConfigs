@@ -156,9 +156,7 @@ packer.startup({
 		use("gbrlsnchs/telescope-lsp-handlers.nvim")
 		use({
 			"https://git.sr.ht/~whynothugo/lsp_lines.nvim",
-			config = function()
-				require("lsp_lines").setup()
-			end,
+			commit = "db67e94c813aae166c3d2f119ea7d2e85164922a",
 		})
 
 		-- completion

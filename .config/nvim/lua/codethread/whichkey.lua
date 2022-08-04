@@ -115,8 +115,10 @@ local mappings = {
 			"Workspace Diagnostics",
 		},
 		h = {
-			"<cmd>lua vim.diagnostic.open_float()<CR>",
-			"Diagnostic at point",
+			function()
+				require("lsp_lines").toggle()
+			end,
+			"Toggle Diagnostics",
 		},
 
 		n = {

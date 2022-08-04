@@ -16,11 +16,11 @@ local function set_signs()
 end
 
 require("lsp_lines").setup() -- instead of builtin diagnsotics
-
 M.setup = function()
 	vim.diagnostic.config({
 
 		virtual_text = false, -- see lsp_lines above
+		virtual_lines = true, -- use lsp_lines
 		underline = false,
 
 		signs = {
