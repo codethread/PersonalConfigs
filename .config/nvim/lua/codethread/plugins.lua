@@ -54,6 +54,7 @@ packer.startup {
 		use { 'arkav/lualine-lsp-progress', commit = '56842d097245a08d77912edf5f2a69ba29f275d7' }
 
 		-- project navigation
+		use { 'farmergreg/vim-lastplace' }
 		use {
 			'goolord/alpha-nvim',
 			config = function()
@@ -118,6 +119,17 @@ packer.startup {
 			config = function()
 				require('colorizer').setup { 'css', 'scss', 'html', 'svelte' }
 			end,
+		}
+
+		use {
+			'bennypowers/nvim-regexplainer',
+			config = function()
+				require('regexplainer').setup()
+			end,
+			requires = {
+				'nvim-treesitter/nvim-treesitter',
+				'MunifTanjim/nui.nvim',
+			},
 		}
 
 		-- project editing
@@ -228,19 +240,20 @@ packer.startup {
 		-- terminal
 		use { 'akinsho/toggleterm.nvim', tag = 'v2.*' }
 
+		use 'hkupty/nvimux'
 		use {
 			'christoomey/vim-tmux-navigator',
 			config = function()
 				vim.cmd [[
-      " Disable tmux navigator when zooming the Vim pane
-      let g:tmux_navigator_disable_when_zoomed = 1
+		" Disable tmux navigator when zooming the Vim pane
+		let g:tmux_navigator_disable_when_zoomed = 1
 
-      let g:tmux_navigator_no_mappings = 1
-      nnoremap <silent> <C-h> :TmuxNavigateLeft<cr>
-      nnoremap <silent> <C-j> :TmuxNavigateDown<cr>
-      nnoremap <silent> <C-k> :TmuxNavigateUp<cr>
-      nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
-      ]]
+		let g:tmux_navigator_no_mappings = 1
+		nnoremap <silent> <C-h> :TmuxNavigateLeft<cr>
+		nnoremap <silent> <C-j> :TmuxNavigateDown<cr>
+		nnoremap <silent> <C-k> :TmuxNavigateUp<cr>
+		nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
+		]]
 			end,
 		}
 

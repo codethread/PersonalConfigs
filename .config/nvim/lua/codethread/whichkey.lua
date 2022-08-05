@@ -193,6 +193,11 @@ local mappings = {
 		v = { '<cmd>lua _LINK_DOTFILES()<cr>', 'Link Dotfiles' },
 	},
 
+	h = {
+		name = 'Help',
+		h = { '<cmd>Telescope help_tags<cr>', 'Tags' },
+	},
+
 	l = {
 		name = 'LSP',
 		-- a = { "<cmd>Telescope lsp_code_actions them=cursor<cr>", "Code Action" },
