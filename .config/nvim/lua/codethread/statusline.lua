@@ -30,9 +30,7 @@ lualine.setup {
 		icons_enabled = true,
 		theme = require('codethread.theme').lualine,
 		disabled_filetypes = {},
-		section_separators = { left = ' ', right = '' },
-		-- section_separators = { left = "", right = "" },
-		-- component_separators = { left = "", right = "" },
+		section_separators = { right = '', left = '' },
 		component_separators = { left = '', right = '' },
 	},
 	sections = {
@@ -40,11 +38,8 @@ lualine.setup {
 			{
 				'mode',
 				icons_enabled = true,
-				-- separator = { left = " ", right = "" },
-				-- separator = { left = "", right = "" },
-				separator = { left = '', right = '' },
-				-- right_padding = 2,
-				-- fmt = mode_map,
+				separator = { left = ' ', right = '' },
+				fmt = mode_map,
 			},
 		},
 		lualine_b = {
@@ -66,8 +61,11 @@ lualine.setup {
 			'progress',
 		},
 		lualine_z = {
-			-- { "location", separator = { right = " " }, left_padding = 2 },
-			{ 'location', separator = { right = '', left = '' } },
+			{
+				'location',
+				separator = { right = '', left = '' },
+				left_padding = 2,
+			},
 		},
 	},
 	inactive_sections = {
@@ -78,8 +76,7 @@ lualine.setup {
 				'filename',
 				path = 1, -- relative path
 				shorting_target = 40, -- leave at least 40 characters in line
-				-- let g:lightline.component = { 'readonlyS': '%{&readonly?"":""}', 'modifiedS': '%{&modified?" ":""}', }
-				-- separator = { left = " " },
+				separator = { left = ' ' },
 				-- right_padding = 2,
 				symbols = {
 					modified = '  ',
@@ -88,8 +85,10 @@ lualine.setup {
 			},
 		},
 		lualine_x = {
-			-- { "location", separator = { right = " " }, left_padding = 2 },
-			{ 'location', separator = { right = '' } },
+			{
+				'location',
+				-- separator = { right = "" },
+			},
 		},
 		lualine_y = {},
 		lualine_z = {},
@@ -100,24 +99,25 @@ lualine.setup {
 				'tabs',
 				max_length = vim.o.columns / 2,
 				mode = 2, -- tab name and number
-				-- separator = { left = " ", right = " " },
-				-- separator = { left = "樂", right = "" },
-				separator = { left = '', right = '' },
+				separator = { left = ' ', right = '' },
 				-- right_padding = 2,
 			},
 		},
 		lualine_b = {
-			{ navic.get_location, cond = navic.is_available },
+			{
+				navic.get_location,
+				cond = navic.is_available,
+			},
 		},
 		lualine_c = {},
 		lualine_x = {
-			"%{ObsessionStatus('樂', '')} ",
+			"%{ObsessionStatus('', '')} ",
 		},
 		lualine_y = { 'diff' },
 		lualine_z = {
 			{
 				'branch',
-				separator = { right = ' ', left = '' },
+				separator = { right = ' ', left = '' },
 				-- left_padding = 2,
 			},
 		},
