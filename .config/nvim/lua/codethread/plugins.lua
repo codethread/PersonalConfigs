@@ -186,6 +186,7 @@ packer.startup {
 		-- windows
 		use 'szw/vim-maximizer'
 		use 'simrat39/symbols-outline.nvim'
+		use 'rcarriga/nvim-notify'
 
 		-- editing
 		use { 'nvim-treesitter/nvim-treesitter-textobjects', commit = '40f20e6788e6ce850802cbd2ca029fbb66b5d043' }
@@ -240,7 +241,6 @@ packer.startup {
 		-- terminal
 		use { 'akinsho/toggleterm.nvim', tag = 'v2.*' }
 
-		use 'hkupty/nvimux'
 		use {
 			'christoomey/vim-tmux-navigator',
 			config = function()
