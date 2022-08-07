@@ -14,6 +14,7 @@ require 'codethread.git'
 require 'codethread.whichkey'
 require 'codethread.terminal'
 require 'codethread.undo'
+require 'codethread.xstate'
 
 -- Playing around with oxi vim
 -- vim.cmd([[
@@ -21,3 +22,4 @@ require 'codethread.undo'
 -- ]])
 
 -- require("settings")
+--

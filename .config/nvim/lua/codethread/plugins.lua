@@ -51,15 +51,11 @@ packer.startup {
 			requires = { 'kyazdani42/nvim-web-devicons', opt = true },
 			commit = '5113cdb32f9d9588a2b56de6d1df6e33b06a554a',
 		}
-		use { 'arkav/lualine-lsp-progress', commit = '56842d097245a08d77912edf5f2a69ba29f275d7' }
-
 		-- project navigation
 		use { 'farmergreg/vim-lastplace' }
 		use {
 			'goolord/alpha-nvim',
-			config = function()
-				require 'codethread.dashboard'
-			end,
+			config = function() require 'codethread.dashboard' end,
 			commit = '95d522b2056657eb9968411ef801f51af86fc839',
 		}
 		use { 'nvim-telescope/telescope.nvim', commit = 'b98b9a93c67cb999493ccdc602e711c8a7a98d64' }
@@ -73,9 +69,7 @@ packer.startup {
 		use {
 			'lewis6991/spellsitter.nvim',
 			commit = 'c1b318f8b959e015f5cc7941624d1ca0f84705dd',
-			config = function()
-				require('spellsitter').setup()
-			end,
+			config = function() require('spellsitter').setup() end,
 		}
 
 		use {
@@ -116,16 +110,12 @@ packer.startup {
 		use {
 			'norcalli/nvim-colorizer.lua', -- show colors for css
 			commit = '36c610a9717cc9ec426a07c8e6bf3b3abcb139d6',
-			config = function()
-				require('colorizer').setup { 'css', 'scss', 'html', 'svelte' }
-			end,
+			config = function() require('colorizer').setup { 'css', 'scss', 'html', 'svelte' } end,
 		}
 
 		use {
 			'bennypowers/nvim-regexplainer',
-			config = function()
-				require('regexplainer').setup()
-			end,
+			config = function() require('regexplainer').setup {} end,
 			requires = {
 				'nvim-treesitter/nvim-treesitter',
 				'MunifTanjim/nui.nvim',
@@ -186,22 +176,34 @@ packer.startup {
 		-- windows
 		use 'szw/vim-maximizer'
 		use 'simrat39/symbols-outline.nvim'
-		use 'rcarriga/nvim-notify'
+		use {
+			'rcarriga/nvim-notify',
+			tag = 'v3.*',
+			config = function()
+				local notify = require 'notify'
+				notify.setup {
+					background_colour = '#000000',
+					max_width = 100,
+					stages = 'slide',
+					timeout = 500,
+				}
+				vim.notify = notify
+			end,
+			-- requires = 'codethread.spinner',
+		}
 
 		-- editing
-		use { 'nvim-treesitter/nvim-treesitter-textobjects', commit = '40f20e6788e6ce850802cbd2ca029fbb66b5d043' }
+		use {
+			'nvim-treesitter/nvim-treesitter-textobjects',
+			commit = '40f20e6788e6ce850802cbd2ca029fbb66b5d043',
+		}
 
 		use 'windwp/nvim-ts-autotag' -- close <div tags, and ciw
 		use 'tpope/vim-commentary'
 
-		-- use("tpope/vim-surround")
 		use {
 			'kylechui/nvim-surround',
-			config = function()
-				require('nvim-surround').setup {
-					-- Configuration here, or leave empty to use defaults
-				}
-			end,
+			config = function() require('nvim-surround').setup {} end,
 		}
 		use 'windwp/nvim-autopairs' -- Autopairs, integrates with both cmp and treesitter
 		use 'mbbill/undotree'
@@ -257,15 +259,11 @@ packer.startup {
 			end,
 		}
 
-		if PACKER_BOOTSTRAP then
-			require('packer').sync()
-		end
+		if PACKER_BOOTSTRAP then require('packer').sync() end
 	end,
 	config = {
 		display = {
-			open_fn = function()
-				return require('packer.util').float { border = 'rounded' }
-			end,
+			open_fn = function() return require('packer.util').float { border = 'rounded' } end,
 		},
 	},
 }

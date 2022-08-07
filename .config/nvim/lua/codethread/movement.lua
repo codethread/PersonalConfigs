@@ -33,7 +33,12 @@ vim.api.nvim_set_keymap(
 	{}
 )
 
-vim.api.nvim_set_keymap('n', 's', "<cmd>lua require'hop'.hint_words({ jump_on_sole_occurrence = true })<cr>", {})
+vim.api.nvim_set_keymap(
+	'n',
+	's',
+	"<cmd>lua require'hop'.hint_words({ jump_on_sole_occurrence = true })<cr>",
+	{}
+)
 vim.api.nvim_set_keymap(
 	'n',
 	'S',
@@ -47,9 +52,7 @@ if not hydra_ok then
 	return
 end
 
-local function cmd(command)
-	return table.concat { '<Cmd>', command, '<CR>' }
-end
+local function cmd(command) return table.concat { '<Cmd>', command, '<CR>' } end
 
 local mover_hint = [[
  Params:

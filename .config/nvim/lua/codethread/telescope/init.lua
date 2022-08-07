@@ -7,6 +7,8 @@ end
 local actions = require 'telescope.actions'
 local action_layout = require 'telescope.actions.layout'
 
+require('telescope').load_extension 'notify'
+
 telescope.load_extension 'lsp_handlers'
 telescope.load_extension 'ui-select'
 

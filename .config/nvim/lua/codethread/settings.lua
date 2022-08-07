@@ -40,6 +40,7 @@ vim.cmd [[
   set nowrap " Display long lines as just one line
   set iskeyword+=-                      	" treat dash separated words as a word text object"
   set mouse=a                             " Enable your mouse
+  " hi Search gui=undercurl guibg=none guifg=inherit guisp=green "underlineline", "undercurl", "underdot", and "underdash" fall back
 ]]
 
 -- au! BufWritePost $MYVIMRC source %      " auto source when writing to init.vm alternatively you can run :source $MYVIMRC

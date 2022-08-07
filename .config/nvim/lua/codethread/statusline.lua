@@ -16,9 +16,7 @@ local mode_maps = {
 }
 
 local function mode_map(str)
-	if mode_maps[str] == nil then
-		return str
-	end
+	if mode_maps[str] == nil then return str end
 	return mode_maps[str]
 end
 
@@ -54,7 +52,7 @@ lualine.setup {
 				},
 			},
 		},
-		lualine_c = { 'diagnostics', 'lsp_progress' },
+		lualine_c = { 'diagnostics' },
 		lualine_x = {},
 		lualine_y = {
 			'filetype',

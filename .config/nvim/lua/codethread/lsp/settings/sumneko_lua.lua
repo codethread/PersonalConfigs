@@ -28,5 +28,6 @@ return {
 
 		require('codethread.lsp.settings.shared').lsp_highlight_document(client)
 		require('codethread.lsp.settings.shared').lsp_keymaps(bufnr)
+		require('codethread.lsp.settings.shared').lsp_progress(client)
 	end,
 }

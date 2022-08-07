@@ -115,9 +115,7 @@ local mappings = {
 			'Workspace Diagnostics',
 		},
 		h = {
-			function()
-				require('lsp_lines').toggle()
-			end,
+			function() require('lsp_lines').toggle() end,
 			'Toggle Diagnostics',
 		},
 
@@ -217,9 +215,7 @@ local mappings = {
 	},
 
 	['m'] = {
-		function()
-			require('codethread.movement').mover_hydra:activate()
-		end,
+		function() require('codethread.movement').mover_hydra:activate() end,
 		'🐉 Mover',
 	},
 

@@ -1,7 +1,5 @@
 local status_ok, toggleterm = pcall(require, 'toggleterm')
-if not status_ok then
-	return
-end
+if not status_ok then return end
 
 toggleterm.setup {
 	-- size can be a number or function which is passed the current terminal
@@ -65,10 +63,6 @@ local link_dotfiles = Term:new {
 	direction = 'horizontal',
 }
 
-function _NODE_TOGGLE()
-	node:toggle()
-end
+function _NODE_TOGGLE() node:toggle() end
 
-function _LINK_DOTFILES()
-	link_dotfiles:toggle()
-end
+function _LINK_DOTFILES() link_dotfiles:toggle() end
