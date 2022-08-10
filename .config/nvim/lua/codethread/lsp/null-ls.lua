@@ -42,6 +42,10 @@ null_ls.setup {
 		},
 		diagnostics.stylelint,
 
+		-- shell
+		diagnostics.shellcheck,
+		code_actions.shellcheck,
+
 		-- using eslint lsp instead
 		-- diagnostics.eslint_d,
 		-- code_actions.eslint_d,
