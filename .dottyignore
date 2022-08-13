@@ -1,0 +1,4 @@
+^.git$
+^_.*
+.gitignore$
+README
