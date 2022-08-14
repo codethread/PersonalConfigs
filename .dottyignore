@@ -2,3 +2,5 @@
 ^_.*
 .gitignore$
 README
+^.stylua.toml$
+^.dottyignore$
