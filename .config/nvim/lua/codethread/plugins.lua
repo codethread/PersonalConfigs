@@ -199,11 +199,11 @@ packer.startup {
 		}
 
 		use 'windwp/nvim-ts-autotag' -- close <div tags, and ciw
-		use 'tpope/vim-commentary'
 
 		use {
 			'kylechui/nvim-surround',
 			config = function() require('nvim-surround').setup {} end,
+			tag = 'v1.*',
 		}
 		use 'windwp/nvim-autopairs' -- Autopairs, integrates with both cmp and treesitter
 		use 'mbbill/undotree'
@@ -212,7 +212,11 @@ packer.startup {
 		-- (crm), camelCase (crc), snake_case (crs), UPPER_CASE (cru), dash-case (cr-),
 		-- dot.case (cr.), space case (cr<space>), and Title Case (crt) are all just 3 keystrokes away.
 
-		use 'JoosepAlviste/nvim-ts-context-commentstring' -- uses tree sitter for comment detection
+		use {
+			'JoosepAlviste/nvim-ts-context-commentstring',
+			commit = '4befb8936f5cbec3b726300ab29edacb891e1a7b',
+			requires = { 'tpope/vim-commentary' },
+		} -- uses tree sitter for comment detection
 
 		use { 'junegunn/vim-easy-align', tag = '2.*' }
 		use { 'phaazon/hop.nvim', tag = 'v2.*' }
@@ -227,9 +231,12 @@ packer.startup {
 					},
 				}
 			end,
+			requires = {
+				'sindrets/diffview.nvim',
+				commit = '16c3985581ee65bccdfbebbe014b24a01adc7d1f',
+			},
 		}
 		use 'lewis6991/gitsigns.nvim'
-		use { 'sindrets/diffview.nvim', commit = '16c3985581ee65bccdfbebbe014b24a01adc7d1f' }
 
 		use 'tpope/vim-fugitive'
 		-- use("tpope/vim-rhubarb") -- :GBrowse and other git things
