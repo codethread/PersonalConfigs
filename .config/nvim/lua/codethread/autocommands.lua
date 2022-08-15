@@ -22,30 +22,3 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 	group = vim.api.nvim_create_augroup('YankHighlight', { clear = true }),
 	pattern = '*',
 })
-
--- wip
-vim.api.nvim_create_autocmd('BufWritePost', {
-	callback = function(opts)
-		-- {
-		--  buf = 1,
-		--  event = "BufWritePost",
-		--  file = ".config/nvim/init.lua",
-		--  group = 11,
-		--  id = 2,
-		--  match = "/Users/adam/PersonalConfigs/.config/nvim/init.lua"
-		-- }
-		--
-		-- don't want this to run for
-		--   buf = 84,
-		--event = "BufWritePost",
-		--file = ".git/NEOGIT_COMMIT_EDITMSG",
-		--group = 11,
-		--id = 2,
-		--match = "/Users/adam/PersonalConfigs/.git/NEOGIT_COMMIT_EDITMSG"
-
-		print 'bufwrite'
-		print(vim.inspect(opts))
-	end,
-	group = vim.api.nvim_create_augroup('Dotty', { clear = true }),
-	pattern = '*/PersonalConfigs/*',
-})

@@ -15,6 +15,7 @@ require 'codethread.whichkey'
 require 'codethread.terminal'
 require 'codethread.undo'
 require 'codethread.xstate'
+require 'codethread.dotty'
 
 -- Playing around with oxi vim
 -- vim.cmd([[
