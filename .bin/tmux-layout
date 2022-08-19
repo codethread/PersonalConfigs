@@ -1,0 +1,12 @@
+#!/usr/bin/env node
+const { shell } = require("./shared/shell");
+
+(async () => {
+  const { stderr, stdout } = await shell(
+    'tmux select-layout "4431,429x57,0,0{108x57,0,0[108x28,0,0,33,108x28,0,29,36],320x57,109,0,1}"'
+  );
+
+  if (stderr) {
+    console.log(stderr);
+  }
+})();

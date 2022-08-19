@@ -11,12 +11,19 @@ require('telescope').load_extension 'notify'
 
 telescope.load_extension 'lsp_handlers'
 telescope.load_extension 'ui-select'
+telescope.load_extension 'neoclip'
 
 telescope.setup {
 	defaults = {
-		prompt_prefix = ' ',
-		selection_caret = ' ',
+		prompt_prefix = '   ',
+		selection_caret = '  ',
+		entry_prefix = '  ',
+		initial_mode = 'insert',
 		path_display = { 'truncate' },
+		winblend = 0,
+		borderchars = { '─', '│', '─', '│', '╭', '╮', '╯', '╰' },
+		color_devicons = true,
+		-- me
 		file_ignore_patterns = {
 			'^.git/',
 			'^.yarn/',
@@ -32,7 +39,7 @@ telescope.setup {
 			'--hidden',
 		},
 		border = true,
-		borderchars = { '─', '│', '─', '│', '┌', '┐', '┘', '└' },
+		-- borderchars = { '─', '│', '─', '│', '┌', '┐', '┘', '└' },
 		-- prompt = { "─", "│", " ", "│", "┌", "┐", "│", "│" },
 		-- results = { "─", "│", "─", "│", "├", "┤", "┘", "└" },
 		-- preview = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },

@@ -5,13 +5,34 @@ if not cmp_status_ok then
 	return
 end
 
-local snip_status_ok, luasnip = pcall(require, 'luasnip')
+local snip_status_ok, ls = pcall(require, 'luasnip')
 if not snip_status_ok then
 	print 'could not load luasnip'
 	return
 end
 
 require('luasnip/loaders/from_vscode').lazy_load()
+require('luasnip.loaders.from_lua').load { paths = '~/.config/nvim/snippets' }
+
+-- Virtual Text{{{
+-- local types = require("luasnip.util.types")
+-- ls.config.set_config({
+-- 	history = true, --keep around last snippet local to jump back
+-- 	updateevents = "TextChanged,TextChangedI", --update changes as you type
+-- 	enable_autosnippets = true,
+-- 	ext_opts = {
+-- 		[types.choiceNode] = {
+-- 			active = {
+-- 				virt_text = { { "●", "GruvboxOrange" } },
+-- 			},
+-- 		},
+-- 		-- [types.insertNode] = {
+-- 		-- 	active = {
+-- 		-- 		virt_text = { { "●", "GruvboxBlue" } },
+-- 		-- 	},
+-- 		-- },
+-- 	},
+-- }) --}}}
 
 --   פּ ﯟ   some other good icons
 local kind_icons = {
@@ -46,7 +67,7 @@ local kind_icons = {
 cmp.setup {
 	snippet = {
 		expand = function(args)
-			luasnip.lsp_expand(args.body) -- For `luasnip` users.
+			ls.lsp_expand(args.body) -- For `luasnip` users.
 		end,
 	},
 	mapping = cmp.mapping.preset.insert {
@@ -60,10 +81,10 @@ cmp.setup {
 		['<C-l>'] = cmp.mapping.confirm { select = true },
 
 		['<Tab>'] = cmp.mapping(function(fallback)
-			if luasnip.expandable() then
-				luasnip.expand()
-			elseif luasnip.expand_or_jumpable() then
-				luasnip.expand_or_jump()
+			if ls.expandable() then
+				ls.expand()
+			elseif ls.expand_or_jumpable() then
+				ls.expand_or_jump()
 			else
 				fallback()
 			end
@@ -74,8 +95,8 @@ cmp.setup {
 		['<S-Tab>'] = cmp.mapping(function(fallback)
 			if cmp.visible() then
 				cmp.select_prev_item()
-			elseif luasnip.jumpable(-1) then
-				luasnip.jump(-1)
+			elseif ls.jumpable(-1) then
+				ls.jump(-1)
 			else
 				fallback()
 			end

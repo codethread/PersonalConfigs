@@ -110,7 +110,7 @@ packer.startup {
 		use {
 			'norcalli/nvim-colorizer.lua', -- show colors for css
 			commit = '36c610a9717cc9ec426a07c8e6bf3b3abcb139d6',
-			config = function() require('colorizer').setup { 'css', 'scss', 'html', 'svelte' } end,
+			config = function() require('colorizer').setup { 'css', 'scss', 'html', 'svelte', 'lua' } end,
 		}
 
 		use {
@@ -120,6 +120,13 @@ packer.startup {
 				'nvim-treesitter/nvim-treesitter',
 				'MunifTanjim/nui.nvim',
 			},
+		}
+		use {
+			'ellisonleao/glow.nvim',
+			-- tag = '0.1.*',
+			commit = '764527caeb36cd68cbf3f6d905584750cb02229d',
+			run = 'brew install glow',
+			config = function() require 'codethread.plugins.glow' end,
 		}
 
 		-- project editing
@@ -211,6 +218,13 @@ packer.startup {
 		-- Want to turn fooBar into foo_bar? Press crs (coerce to snake_case). MixedCase
 		-- (crm), camelCase (crc), snake_case (crs), UPPER_CASE (cru), dash-case (cr-),
 		-- dot.case (cr.), space case (cr<space>), and Title Case (crt) are all just 3 keystrokes away.
+
+		use {
+			'AckslD/nvim-neoclip.lua',
+			commit = '74af02e289b3ea465bc8a4d7b9b83adc4e4b8c06',
+			requires = { 'nvim-telescope/telescope.nvim' },
+			config = function() require('neoclip').setup() end,
+		}
 
 		use {
 			'JoosepAlviste/nvim-ts-context-commentstring',

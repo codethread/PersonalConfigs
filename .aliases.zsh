@@ -75,7 +75,7 @@ alias pipes="pipes.sh -f 60 -s 8"
 alias npc="rm -rf ./node_modules; npm cache clear; npm i"
 alias npl="npm -g ls --depth=0"
 alias yy="eval \$(cat package.json | jq -S '.scripts' | sed '1d;$d' | fzf -i --header='[run:]' | sed -E \"s/\\\"(.*)\\\":.*/yarn run \\1/\" )"
-alias nuke="rm -rf node_modules package-lock.json yarn.lock && yarn && cd ios && pod install && cd .. && yarn start --reset-cache"
+alias rn-nuke="rm -rf node_modules package-lock.json yarn.lock && yarn && cd ios && pod install && cd .. && yarn start --reset-cache"
 
 #---------------------------------------------#
 # DOCKER

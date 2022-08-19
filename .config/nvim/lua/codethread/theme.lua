@@ -23,6 +23,7 @@ local function tokyonightTheme()
 	end
 
 	local colors = require('tokyonight.colors').setup {}
+
 	vim.cmd('hi TSKeywordReturn gui=bold guifg=' .. colors.orange)
 end
 
