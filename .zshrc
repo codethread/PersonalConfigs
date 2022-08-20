@@ -48,7 +48,7 @@ SAVEHIST=$HISTSIZE
 NEWLINE=$'\n' # couldn't get the newline to behave without this
 PROMPT="${NEWLINE}%F{cyan}%~${NEWLINE}%(?.%F{magenta}ᕕ(ᐛ)ᕗ.%F{red}(╯°□°%)╯︵ ┻━┻) %F{normal}"
 # time
-# RPROMPT='%F{yellow}%*'
+RPROMPT='%F{blue}%*'
 
 ssource ~/.zsh_plugins.sh
 ssource ~/.fzf.zsh
