@@ -15,9 +15,10 @@ if [ "$(uname 2> /dev/null)" != "Linux" ]; then
   fi
 
   # use gnu coreutils instead of mac, e.g sed
-  pathprepend "$BREW_PATH/opt/coreutils/libexec/gnubin" PATH
-  pathprepend "$BREW_PATH/opt/gnu-sed/libexec/gnubin" PATH
-  pathprepend "$BREW_PATH/opt/gnu-tar/libexec/gnubin" PATH
+  # this actually messed with a lot of packages that expected the defaults
+  # pathprepend "$BREW_PATH/opt/coreutils/libexec/gnubin" PATH
+  # pathprepend "$BREW_PATH/opt/gnu-sed/libexec/gnubin" PATH
+  # pathprepend "$BREW_PATH/opt/gnu-tar/libexec/gnubin" PATH
 
   [ -d "/usr/local/opt/python/libexec/bin" ] && pathprepend "/usr/local/opt/python/libexec/bin" PATH
 fi
@@ -56,6 +57,7 @@ export GOPATH=$HOME/go
 export GOBIN=$GOPATH/bin
 export GO111MODULE=on
 [ -d "$GOBIN" ] && pathprepend "$GOBIN" PATH
+[ -d "/usr/local/go/bin" ] && pathprepend "/usr/local/go/bin" PATH
 
 # node
 #------------------------------------------

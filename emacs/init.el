@@ -36,6 +36,7 @@
 
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns))
+  :disabled
   :demand
   :custom
   (exec-path-from-shell-arguments '("-l"))

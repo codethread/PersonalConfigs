@@ -67,17 +67,19 @@ This is a package manager for mac, and stores executables in `/usr/local`
 
 * Anitbody (zsh plugin manager)
 /Important to have run =brew= above (or whatever package manager) to
-ensure  =gnu-sed= is installed/ 
+ensure  =dotty= is installed/ 
 
 #+BEGIN_SRC bash
   # link directories
-  ~/PersonalConfigs/_setup
-  
-  # run antiup to set up plugins
-  ~/PersonalConfigs/.bin/antiup
+  dotty setup
 
-  # symlink node into somewhere that xcode can find for react-native
-  ln -s $(which node) /usr/local/bin/node
+  # run antiup to set up plugins
+  antiup
+
+  # ensure MacOS apps can see path
+  path-gui
+  # Reboot
+  # if Alfred already ran `clear Application cache` in advanced
 #+END_SRC
 
 * Terminal Fonts
