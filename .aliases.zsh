@@ -7,7 +7,6 @@ alias zz="vi ~/.zshrc"
 alias zp="vi ~/.zprofile"
 alias vv="cd ~/PersonalConfigs/.config/nvim; nvim ./init.lua" # open vim config
 alias aa="vi ~/.aliases.zsh" # open aliases
-alias codij="vim -c \"Codi javascript | let ale_enabled = 0\" dmp.javascript"
 alias nvim-boot="nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'"
 
 alias zr="source ~/.zshrc"
