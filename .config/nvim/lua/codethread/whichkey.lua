@@ -81,6 +81,15 @@ local opts = {
 	nowait = true, -- use `nowait` when creating keymaps
 }
 
+-- " MAPS ON COMMANDS I DONT LIKE
+-- " map <C-B>
+-- " map <C-G>
+-- " map <C-Q>
+-- " map <C-Y>
+-- map <C-F> :%s/
+-- map <C-P> :Files<CR>
+-- map \ :GrepFzf<CR>
+
 local mappings = {
 	['<leader>'] = { '<cmd>Telescope find_files shorten_path=false<cr>', 'Files' },
 	[';'] = { '<cmd>Telescope commands<cr>', 'M-x' },
