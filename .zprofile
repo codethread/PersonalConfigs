@@ -36,8 +36,11 @@ if [ "$(uname 2> /dev/null)" = "Linux" ]; then
   [ -d "/opt/local/bin" ] && pathprepend "/opt/local/bin" PATH
 fi
 
+# General
+#------------------------------------------
 export EDITOR='nvim'
 export MANPAGER="/bin/sh -c \"col -b | nvim -c 'set ft=man ts=8 nomod nolist nonu' -\""
+export WAKATIME_HOME="$HOME/.config/wakatime"
 
 # Emacs
 #------------------------------------------
@@ -46,8 +49,6 @@ export LSP_USE_PLISTS=true
 
 # Personal shared
 #------------------------------------------
-[ -d "$HOME/.bin" ] && pathprepend "$HOME/.bin" PATH
-[ -d "$HOME/bin" ] && pathprepend "$HOME/bin" PATH
 [ -d "$HOME/.local/bin" ] && pathprepend "$HOME/.local/bin" PATH
 [ -d "$HOME/.emacs.d/bin" ] && pathprepend "$HOME/.emacs.d/bin" PATH
 

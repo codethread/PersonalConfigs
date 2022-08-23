@@ -51,13 +51,23 @@ PROMPT="${NEWLINE}%F{cyan}%~${NEWLINE}%(?.%F{magenta}ᕕ(ᐛ)ᕗ.%F{red}(╯°�
 RPROMPT='%F{blue}%*'
 
 ssource ~/.zsh_plugins.sh
-ssource ~/.fzf.zsh
 ssource "$HOME/.aliases.zsh" # TODO: move?
 
 # set up colors for ls, fd, tree etc https://github.com/sharkdp/vivid
 export LS_COLORS="$(vivid generate ayu)"
 export JQ_COLORS="1;30:0;31:0;32:0;35:0;33:1;35:1;35"
 export BAT_THEME="Coldark-Cold"
+
+#------------------------------------------------------------------------------
+#--- Language specific
+#------------------------------------------------------------------------------
+# ssource ~/.fzf.zsh
+# Auto-completion
+# ---------------
+[[ $- == *i* ]] && source "$BREW_PATH/opt/fzf/shell/completion.zsh" 2> /dev/null
+# Key bindings
+# ------------
+source "$BREW_PATH/opt/fzf/shell/key-bindings.zsh"
 
 export FZF_DEFAULT_COMMAND='fd --type f'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
