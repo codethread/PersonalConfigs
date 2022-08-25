@@ -28,8 +28,8 @@ packer.startup {
 		use { 'tpope/vim-obsession' }
 		use {
 			'nvim-treesitter/nvim-treesitter',
-			run = ':TSUpdate',
-			commit = '3b1ce2e1b30b731c80753fa9bbcb2cfec38a43da',
+			run = function() require('nvim-treesitter.install').update { with_sync = true } end,
+			commit = '67fb8939ff1f7e29659f5c4efe50a5689e3458bc',
 		}
 
 		-- misc
