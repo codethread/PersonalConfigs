@@ -1,0 +1,36 @@
+{
+  "name": "friendly-snippets",
+  "inspiration": "https://github.com/rafamadriz/friendly-snippets/blob/main/package.json",
+  "engines": {
+    "vscode": "^1.11.0"
+  },
+  "contributes": {
+    "snippets": [
+      {
+        "language": [
+          "plaintext",
+          "markdown",
+          "tex",
+          "html",
+          "global",
+          "all"
+        ],
+        "path": "./snippets/global.json"
+      },
+      {
+        "language": [
+          "javascript",
+          "javascriptreact",
+          "typescript",
+          "typescriptreact",
+          "svelte"
+        ],
+        "path": "./web/javascript.json"
+      },
+      {
+        "language": "lua",
+        "path": "./lua.json"
+      }
+    ]
+  }
+}

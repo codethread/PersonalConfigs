@@ -197,7 +197,10 @@ local mappings = {
 
 	G = {
 		name = 'Global',
-		v = { '<cmd>lua _LINK_DOTFILES()<cr>', 'Link Dotfiles' },
+		p = {
+			'<cmd>source ~/.config/nvim/lua/codethread/plugins.lua | PackerSync<cr>',
+			'Packer Sync',
+		},
 	},
 
 	h = {

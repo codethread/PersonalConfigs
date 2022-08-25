@@ -11,3 +11,7 @@ if fn.empty(fn.glob(install_path)) > 0 then
 	}
 	vim.cmd 'packadd packer.nvim'
 end
+
+if not vim.fn.executable 'python' then
+	vim.notify "no python, make sure to link it, e.g 'ln -s /usr/local/bin/python3 /usr/local/bin/python'"
+end

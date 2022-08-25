@@ -3,6 +3,7 @@
 -- go to insert mode, type <C-v> then type, and that key will be shown
 local utils = require 'codethread.utils'
 local map = utils.map
+local imap = utils.imap
 
 -- Modes
 --   normal_mode = "n",
@@ -17,8 +18,8 @@ map('', '<Space>', '<Nop>')
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ','
 
-map('i', '<C-f>', '<Right>')
-map('i', '<C-b>', '<Left>')
+imap('<C-f>', '<Right>')
+imap('<C-b>', '<Left>')
 
 -- swap ; and :
 -- nmap(';', ':')
@@ -27,7 +28,7 @@ map('i', '<C-b>', '<Left>')
 -- vmap(':', ';')
 
 -- Escape
-map('i', 'jk', '<ESC>')
+imap('jk', '<ESC>')
 -- nmap('<leader><leader>', ':Telescope find_files<cr>')
 
 vim.cmd [[

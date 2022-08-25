@@ -20,7 +20,15 @@ end
 packer.startup {
 	function(use)
 		-- Packer can manage itself
-		use { 'wbthomason/packer.nvim', commit = '671076b3a81e5033a866ca769749e75a827784ef' }
+		use {
+			'wbthomason/packer.nvim',
+			commit = '671076b3a81e5033a866ca769749e75a827784ef',
+		}
+
+		-- rocks
+		-- if this hangs, check python is available
+		-- https://lunarmodules.github.io/Penlight/classes/pl.List.html
+		packer.use_rocks 'penlight'
 
 		-- Things required early
 		use { 'nvim-lua/plenary.nvim', commit = '968a4b9afec0c633bc369662e78f8c5db0eba249' }
@@ -128,6 +136,11 @@ packer.startup {
 			run = 'brew install glow',
 			config = function() require 'codethread.plugins.glow' end,
 		}
+		use {
+			'lukas-reineke/indent-blankline.nvim',
+			config = function() require 'codethread.plugins.indent-blankline' end,
+			tag = 'v2.*',
+		}
 
 		-- project editing
 		use 'famiu/bufdelete.nvim' -- delete buffer
@@ -169,16 +182,24 @@ packer.startup {
 		}
 
 		-- completion
-		use 'hrsh7th/nvim-cmp'
-		use 'hrsh7th/cmp-buffer'
-		use 'hrsh7th/cmp-path'
-		use 'hrsh7th/cmp-cmdline'
-		use 'hrsh7th/cmp-nvim-lua'
-		use 'hrsh7th/cmp-nvim-lsp'
+		use {
+			'hrsh7th/nvim-cmp',
+			requires = {
+				'hrsh7th/cmp-buffer',
+				'hrsh7th/cmp-path',
+				'hrsh7th/cmp-cmdline',
+				'hrsh7th/cmp-nvim-lsp',
+				'onsails/lspkind.nvim',
+			},
+		}
 
-		use 'saadparwaiz1/cmp_luasnip'
-		use 'L3MON4D3/LuaSnip'
-		use 'rafamadriz/friendly-snippets'
+		use {
+			'saadparwaiz1/cmp_luasnip',
+			requires = {
+				'L3MON4D3/LuaSnip',
+				'rafamadriz/friendly-snippets',
+			},
+		}
 
 		-- windows
 		use 'szw/vim-maximizer'
@@ -290,9 +311,9 @@ packer.startup {
 }
 
 -- Update on save
-vim.cmd [[
-  augroup packer_user_config
-    autocmd!
-    autocmd BufWritePost plugins.lua source <afile> | PackerSync
-  augroup end
-]]
+-- vim.cmd [[
+--   augroup packer_user_config
+--     autocmd!
+--     autocmd BufWritePost plugins.lua source <afile> | PackerSync
+--   augroup end
+-- ]]

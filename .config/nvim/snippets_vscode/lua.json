@@ -1,0 +1,12 @@
+{
+  "require": {
+    "prefix": "req",
+    "body": [
+      "local ${1:package}_status_ok, ${1} = pcall(require, '$1')",
+      "if not $1_status_ok then",
+      "\tprint 'could not load $1'",
+      "\treturn",
+      "end"
+    ]
+  }
+}

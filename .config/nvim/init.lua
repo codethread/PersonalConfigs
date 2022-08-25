@@ -22,9 +22,6 @@ require 'codethread.dotty'
 -- set rtp+=~/dev/nvim-rs
 -- ]])
 
--- require("settings")
---
--- let g:indentLine_char = get(g:, 'indentLine_char', '┊')
 -- let g:indentLine_fileTypeExclude = ['help', 'man', 'startify', 'NERDTree', 'netrw', 'gf']
 --
 -- map <leader>ll yiwoconsole.log('\n<C-r>0:', <C-r>0);<C-[>k
