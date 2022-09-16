@@ -74,7 +74,7 @@ alias pipes="pipes.sh -f 60 -s 8"
 alias npc="rm -rf ./node_modules; npm cache clear; npm i"
 alias npl="npm -g ls --depth=0"
 alias yy="eval \$(cat package.json | jq -S '.scripts' | sed '1d;$d' | fzf -i --header='[run:]' | sed -E \"s/\\\"(.*)\\\":.*/yarn run \\1/\" )"
-alias rn-nuke="rm -rf node_modules package-lock.json yarn.lock && yarn && cd ios && pod install && cd .. && yarn start --reset-cache"
+alias rn-nuke="rm -rf node_modules && yarn && cd ios && pod install && cd .. && yarn start --reset-cache"
 
 #---------------------------------------------#
 # DOCKER
@@ -101,7 +101,8 @@ alias gcp="git cherry-pick"
 alias gfuck='git fetch origin; git reset --hard origin ${gBranch}'
 alias gignore="git rm -r --cached .; git add .; git commit -m '.gitignore is now working'"
 alias gkill="git branch | grep -v \"master\" | xargs git branch -D"
-alias gl="git log --oneline master..HEAD"
+alias gl="git log --oneline main..HEAD"
+alias grr="git rebase -i HEAD~\`git log --oneline main..HEAD | wc -l\`"
 alias gmm="git checkout main && git pull && git checkout - && git rebase main"
 alias gnah="git reset --hard; git clean -df"
 alias gnuke="git clean -dfX"
