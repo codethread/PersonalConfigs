@@ -163,15 +163,6 @@ local mappings = {
 		},
 	},
 
-	p = {
-		name = 'Packer',
-		c = { '<cmd>PackerCompile<cr>', 'Compile' },
-		i = { '<cmd>PackerInstall<cr>', 'Install' },
-		s = { '<cmd>PackerSync<cr>', 'Sync' },
-		S = { '<cmd>PackerStatus<cr>', 'Status' },
-		u = { '<cmd>PackerUpdate<cr>', 'Update' },
-	},
-
 	g = {
 		name = 'Git',
 		g = { '<cmd>Neogit<CR>', 'Status' },
@@ -238,7 +229,6 @@ local mappings = {
 		n = { '<cmd>tabNext<cr>', 'Next Tab' }, -- TODO: put through telescope
 		p = { '<cmd>tabprevious<cr>', 'Previous Tab' }, -- TODO: put through telescope
 		w = { '<cmd>vsplit<cr>', 'Split' }, -- TODO: put through telescope
-		m = { '<cmd>MaximizerToggle!<cr>', 'Maximise' },
 	},
 
 	s = {

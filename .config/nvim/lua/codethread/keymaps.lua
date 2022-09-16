@@ -41,11 +41,14 @@ nnoremap <silent> <C-j> :wincmd j<CR>
 nnoremap <silent> <C-k> :wincmd k<CR>
 nnoremap <silent> <C-l> :wincmd l<CR>
 
+" paste in visual selection without adding to register
+xnoremap  <leader>p "_dP
+
 " " Copy to clipboard
-vnoremap  <leader>y  "+y
-nnoremap  <leader>Y  "+yg_
-nnoremap  <leader>y  "+y
-nnoremap  <leader>yy  "+yy
+vnoremap  <leader>y "+y
+nnoremap  <leader>Y "+yg_
+nnoremap  <leader>y "+y
+nnoremap  <leader>yy "+yy
 
 " " Paste from clipboard
 nnoremap <leader>v "+p

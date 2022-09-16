@@ -268,7 +268,8 @@ packer.startup {
 			end,
 			requires = {
 				'sindrets/diffview.nvim',
-				commit = '16c3985581ee65bccdfbebbe014b24a01adc7d1f',
+				commit = 'b31fafb71f35e4f2a4bd95481ff7d59b1caae387',
+				-- commit = '16c3985581ee65bccdfbebbe014b24a01adc7d1f',
 			},
 		}
 		use 'lewis6991/gitsigns.nvim'
