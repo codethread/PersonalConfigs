@@ -83,31 +83,9 @@ packer.startup {
 		use {
 			'kyazdani42/nvim-tree.lua',
 			commit = '72858986f9de019dc0e151c76090de29954081f0',
-			requires = {
-				'kyazdani42/nvim-web-devicons', -- optional, for file icon
-			},
-			config = function()
-				require('nvim-tree').setup {
-					hijack_netrw = false,
-					filters = { -- remove things from view
-						dotfiles = false,
-					},
-					-- view = {
-					-- 	auto_resize = true,
-					-- },
-					actions = {
-						change_dir = {
-							enable = false, -- stay in the current directory
-						},
-						open_file = {
-							quit_on_open = true,
-							window_picker = {
-								chars = 'jfkdlsa;',
-							},
-						},
-					},
-				}
-			end,
+			config = function() require 'codethread.plugins.nvim-tree' end,
+			-- optional, for file icon
+			requires = { 'kyazdani42/nvim-web-devicons' },
 		}
 
 		use 'tpope/vim-vinegar' -- netrw improvements

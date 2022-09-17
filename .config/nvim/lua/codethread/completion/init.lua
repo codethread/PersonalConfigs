@@ -15,6 +15,8 @@ end
 require('luasnip.loaders.from_vscode').lazy_load { paths = { '~/.config/nvim/snippets_vscode' } }
 require('luasnip.loaders.from_lua').load { paths = '~/.config/nvim/snippets' }
 
+if cmp == nil then return end
+
 cmp.setup {
 	window = {
 		completion = {
@@ -34,7 +36,7 @@ cmp.setup {
 		['<C-j>'] = cmp.mapping.select_next_item(),
 		['<C-l>'] = cmp.mapping.confirm { select = true }, -- select grabs first item if none were selected
 		['<Esc>'] = cmp.mapping.abort(),
-		['<C-Space>'] = cmp.mapping.complete_common_string(),
+		-- ['<C-Space>'] = cmp.mapping.complete_common_string(),
 		['<C-u>'] = cmp.mapping.scroll_docs(-4),
 		['<C-d>'] = cmp.mapping.scroll_docs(4),
 

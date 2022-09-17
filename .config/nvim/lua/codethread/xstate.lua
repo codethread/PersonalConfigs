@@ -73,7 +73,7 @@ local function machine_save()
 end
 
 vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
-	pattern = { '*.machine.ts', '*.machine.tsx' },
+	pattern = { '*machine.ts', '*machine.tsx' },
 	group = vim.api.nvim_create_augroup('Xstate', { clear = true }),
 	callback = machine_save,
 })
