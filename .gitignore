@@ -3,3 +3,4 @@
 .config/yarn
 
 .config/kitty/kitty.conf.bak 
+.luarc.json
