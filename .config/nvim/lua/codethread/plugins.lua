@@ -146,6 +146,12 @@ packer.startup {
 			'SmiteshP/nvim-navic',
 			commit = '94bf6fcb1dc27bdad230d9385da085e72c390019',
 		}
+		use {
+			'kevinhwang91/nvim-ufo',
+			requires = 'kevinhwang91/promise-async',
+			config = function() require 'codethread.plugins.ufo' end,
+			tag = 'v1.*',
+		}
 
 		-- lsp
 		use 'neovim/nvim-lspconfig'

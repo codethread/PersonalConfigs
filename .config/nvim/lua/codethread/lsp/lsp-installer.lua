@@ -25,5 +25,14 @@ lsp_installer.on_server_ready(function(server)
 
 	opts.capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
 
+	-- nvim-ufo
+	-- Tell the server the capability of foldingRange,
+	-- Neovim hasn't added foldingRange to default capabilities, users must add it manually
+	-- opts.capabilities.textDocument.foldingRange = {
+	-- 	dynamicRegistration = false,
+	-- 	lineFoldingOnly = true,
+	-- }
+	-- require('ufo').setup()
+
 	server:setup(opts)
 end)

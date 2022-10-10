@@ -2,8 +2,36 @@ local M = {}
 
 vim.opt.termguicolors = true -- adds more colors
 
-local function tokyonightTheme()
-	vim.g.tokyonight_day_brightness = 0.25 -- Adjusts the brightness of the colors of the Day style. Number between 0 and 1, from dull to vibrant colors
+local config = {
+
+	style = 'storm',
+	transparent = true,
+	day_brightness = 0.25,
+	hide_inactive_statusline = true,
+	dim_inactive = true,
+	on_highlights = function(hl, c)
+		hl.TSKeywordReturn = {
+			fg = c.orange,
+		}
+		hl.LineNr = {
+			fg = c.green2,
+		}
+		-- hl.CursorLineNr = {
+		-- 	fg = c.green1,
+		-- }
+	end,
+}
+
+function M.setup()
+	local tokyonight_status_ok, tk = pcall(require, 'tokyonight')
+	if not tokyonight_status_ok then
+		print 'could not load tokyonight'
+		return
+	end
+
+	tk.setup(config)
+
+	vim.cmd [[colorscheme tokyonight]]
 
 	local status_ok, dark_notify = pcall(require, 'dark_notify')
 	if not status_ok then
@@ -11,14 +39,8 @@ local function tokyonightTheme()
 	else
 		dark_notify.run {
 			onchange = function(mode) -- light or dark
-				vim.g.background = mode
 				vim.g.tokyonight_style = mode == 'light' and 'day' or 'storm'
-				vim.g.tokyonight_hide_inactive_statusline = true
-				vim.g.tokyonight_transparent = true
-				vim.g.tokyonight_dark_float = false
-
 				vim.cmd [[colorscheme tokyonight]]
-
 				if mode == 'light' then
 					vim.cmd [[doautocmd User ThemeChangedLight]]
 				else
@@ -27,20 +49,14 @@ local function tokyonightTheme()
 			end,
 		}
 	end
-
-	local colors = require('tokyonight.colors').setup {}
-
-	vim.cmd('hi TSKeywordReturn gui=bold guifg=' .. colors.orange)
 end
-
-M.setup = tokyonightTheme
 
 M.lualine = 'tokyonight'
 
 local group = vim.api.nvim_create_augroup('ThemeChanged', { clear = true })
 
 -- register callbacks for when color theme changes
-M.on_change = function(fn)
+function M.on_change(fn)
 	vim.api.nvim_create_autocmd('User', {
 		callback = function()
 			vim.notify 'dark'
