@@ -20,29 +20,25 @@ end
 packer.startup {
 	function(use)
 		-- Packer can manage itself
-		use {
-			'wbthomason/packer.nvim',
-			commit = '671076b3a81e5033a866ca769749e75a827784ef',
-		}
+		use { 'wbthomason/packer.nvim' }
 
 		-- rocks
-		-- if this hangs, check python is available
+		-- if this hangs, check python is available and https://github.com/wbthomason/packer.nvim/issues/180
 		-- https://lunarmodules.github.io/Penlight/classes/pl.List.html
 		packer.use_rocks 'penlight'
 
 		-- Things required early
-		use { 'nvim-lua/plenary.nvim', commit = '968a4b9afec0c633bc369662e78f8c5db0eba249' }
-		use { 'nvim-lua/popup.nvim', commit = 'b7404d35d5d3548a82149238289fa71f7f6de4ac' }
+		use { 'nvim-lua/plenary.nvim' }
+		use { 'nvim-lua/popup.nvim' }
 		use { 'tpope/vim-obsession' }
 		use {
 			'nvim-treesitter/nvim-treesitter',
 			run = function() require('nvim-treesitter.install').update { with_sync = true } end,
-			commit = '67fb8939ff1f7e29659f5c4efe50a5689e3458bc',
 		}
 
 		-- misc
 		use { 'wakatime/vim-wakatime', tag = '9.*' }
-		use { 'nvim-treesitter/playground', commit = 'ce7e4b757598f1c785ed0fd94fc65959acd7d39c' }
+		use { 'nvim-treesitter/playground' }
 
 		-- key bindings
 		use { 'folke/which-key.nvim', commit = 'bd4411a2ed4dd8bb69c125e339d837028a6eea71' }
@@ -154,10 +150,16 @@ packer.startup {
 		}
 
 		-- lsp
-		use 'neovim/nvim-lspconfig'
-		use 'williamboman/nvim-lsp-installer'
+		use {
+			'neovim/nvim-lspconfig',
+			requires = {
+				'williamboman/mason.nvim',
+				'williamboman/mason-lspconfig.nvim',
+				'jose-elias-alvarez/typescript.nvim',
+			},
+		}
+
 		use 'jose-elias-alvarez/null-ls.nvim'
-		use 'jose-elias-alvarez/nvim-lsp-ts-utils'
 		use 'b0o/schemastore.nvim'
 		use 'gbrlsnchs/telescope-lsp-handlers.nvim'
 		use {

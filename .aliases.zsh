@@ -7,7 +7,8 @@ alias zz="vi ~/.zshrc"
 alias zp="vi ~/.zprofile"
 alias vv="cd ~/PersonalConfigs/.config/nvim; nvim ./init.lua" # open vim config
 alias aa="vi ~/.aliases.zsh" # open aliases
-alias nvim-boot="nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'"
+# see https://github.com/wbthomason/packer.nvim/issues/180 for MACOSX_DEPLOYMENT_TARGET=10.15
+alias nvim-boot="MACOSX_DEPLOYMENT_TARGET=10.15 nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'"
 
 alias zr="source ~/.zshrc"
 alias vo="vim \$(fzf)"

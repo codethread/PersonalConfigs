@@ -1,4 +1,4 @@
-local List = require 'pl.List'
+-- local List = require 'pl.List'
 return {
 	settings = {
 		Lua = {
@@ -12,10 +12,11 @@ return {
 			},
 			workspace = {
 				-- Make the server aware of Neovim runtime files
-				library = List(vim.api.nvim_get_runtime_file('', true)):extend {
-					-- TODO: get this info in smarter way
-					vim.fn.stdpath 'cache' .. '/packer_hererocks/2.1.0-beta3/share/lua/5.1',
-				},
+				library = vim.api.nvim_get_runtime_file('', true),
+				-- library = List(vim.api.nvim_get_runtime_file('', true)):extend {
+				-- 	-- TODO: get this info in smarter way
+				-- 	vim.fn.stdpath 'cache' .. '/packer_hererocks/2.1.0-beta3/share/lua/5.1',
+				-- },
 			},
 			-- Do not send telemetry data containing a randomized but unique identifier
 			telemetry = {
@@ -23,15 +24,5 @@ return {
 			},
 		},
 	},
-
-	on_attach = function(client, bufnr)
-		require('nvim-navic').attach(client, bufnr)
-
-		client.resolved_capabilities.document_formatting = false
-		client.resolved_capabilities.document_range_formatting = false
-
-		require('codethread.lsp.settings.shared').lsp_highlight_document(client)
-		require('codethread.lsp.settings.shared').lsp_keymaps(bufnr)
-		require('codethread.lsp.settings.shared').lsp_progress(client)
-	end,
+	on_attach = function(client, bufnr) require('codethread.lsp.settings.shared').on_attach(client, bufnr) end,
 }
