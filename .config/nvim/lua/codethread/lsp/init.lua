@@ -4,7 +4,6 @@ if not status_ok then
 	return
 end
 
-require 'codethread.lsp.lsp-installer'
-require('codethread.lsp.handlers').setup()
+require 'codethread.lsp.setup'
 require('codethread.lsp.diagnostics').setup()
 require 'codethread.lsp.null-ls'

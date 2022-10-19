@@ -6,8 +6,6 @@ require 'codethread.statusline'
 require 'codethread.autocommands'
 require 'codethread.movement'
 require 'codethread.completion'
-require 'codethread.lsp'
-require 'codethread.treesitter'
 require 'codethread.telescope'
 require 'codethread.autopairs'
 require 'codethread.git'
@@ -16,6 +14,8 @@ require 'codethread.terminal'
 require 'codethread.undo'
 require 'codethread.xstate'
 require 'codethread.dotty'
+require 'codethread.lsp'
+require 'codethread.treesitter'
 
 -- Playing around with oxi vim
 -- vim.cmd([[

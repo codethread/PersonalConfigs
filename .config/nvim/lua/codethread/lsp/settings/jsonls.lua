@@ -6,5 +6,5 @@ return {
 		},
 	},
 
-	on_attach = function(client) client.resolved_capabilities.document_formatting = false end,
+	on_attach = function(client, bufnr) require('codethread.lsp.settings.shared').on_attach(client, bufnr) end,
 }
