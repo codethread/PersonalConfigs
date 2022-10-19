@@ -20,6 +20,7 @@ function M.on_attach(client, bufnr)
 			buffer = bufnr,
 			callback = function()
 				vim.lsp.buf.format {
+					-- this is straight from the docs and needs refining for servers i actually want to use
 					filter = function(c) return c.name == 'null-ls' end,
 					bufnr = bufnr,
 				}
