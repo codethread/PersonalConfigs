@@ -12,8 +12,12 @@ if not snip_status_ok then
 	return
 end
 
-require('luasnip.loaders.from_vscode').lazy_load { paths = { '~/.config/nvim/snippets_vscode' } }
-require('luasnip.loaders.from_lua').load { paths = '~/.config/nvim/snippets' }
+require('luasnip.loaders.from_vscode').lazy_load {
+	paths = {
+		'~/.config/nvim/snippets_vscode',
+		'~/.local/share/nvim/site/pack/packer/start/friendly-snippets',
+	},
+}
 
 if cmp == nil then return end
 

@@ -4,14 +4,15 @@ if not nvim_tree_status_ok then
 	return
 end
 
+-- nt.setup()
 nt.setup {
-	hijack_netrw = false,
+	-- hijack_netrw = false,
 	filters = { -- remove things from view
 		dotfiles = false,
 	},
-	-- view = {
-	-- 	auto_resize = true,
-	-- },
+	view = {
+		adaptive_size = true,
+	},
 	actions = {
 		change_dir = {
 			enable = false, -- stay in the current directory

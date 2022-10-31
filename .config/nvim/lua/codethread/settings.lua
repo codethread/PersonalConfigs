@@ -1,5 +1,10 @@
 local set = vim.opt
 
+-- turn of netrw and use nvim-tree
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
+set.shell = '/bin/zsh --login'
 -- Set the behavior of tab
 set.softtabstop = 2
 set.relativenumber = true
@@ -31,9 +36,9 @@ set.signcolumn = 'yes'
 set.completeopt = 'menuone,noselect,preview'
 
 vim.cmd [[
-  set foldlevel=99
-  set foldmethod=expr
-  set foldexpr=nvim_treesitter#foldexpr()
+  " set foldlevel=99
+  " set foldmethod=expr
+  " set foldexpr=nvim_treesitter#foldexpr()
   set noshowmode " We don't need to see things like -- INSERT -- anymore
   set nobackup " This is recommended by coc
   set nowritebackup " This is recommended by coc

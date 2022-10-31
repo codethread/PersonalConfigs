@@ -16,6 +16,7 @@ require 'codethread.xstate'
 require 'codethread.dotty'
 require 'codethread.lsp'
 require 'codethread.treesitter'
+require 'codethread.plugins.ufo'
 
 -- Playing around with oxi vim
 -- vim.cmd([[

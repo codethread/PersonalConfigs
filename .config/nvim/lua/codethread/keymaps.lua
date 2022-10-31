@@ -81,6 +81,7 @@ vnoremap <silent><C-Y> :MaximizerToggle<CR>gv
 inoremap <silent><C-Y> <C-o>:MaximizerToggle<CR>
 
 " MAPS ON COMMANDS I DONT LIKE
+nnoremap <silent>_ :NvimTreeToggle<CR>
 " map <C-B>
 " map <C-G>
 " map <C-Q>
