@@ -9,15 +9,7 @@
 
 -- Bootstrap Packer
 require 'codethread.plugins_init'
-
-local function safe_load(lib, fn)
-	local status_ok, loaded_lib = pcall(require, lib)
-	if not status_ok then
-		print('could not load ' .. lib)
-		return
-	end
-	fn(loaded_lib)
-end
+local safe_load = require('codethread.utils').safe_load
 
 safe_load('packer', function(packer)
 	packer.startup {
@@ -202,16 +194,7 @@ safe_load('packer', function(packer)
 			use {
 				'rcarriga/nvim-notify',
 				tag = 'v3.*',
-				config = function()
-					local notify = require 'notify'
-					notify.setup {
-						background_colour = '#000000',
-						max_width = 100,
-						stages = 'slide',
-						timeout = 500,
-					}
-					vim.notify = notify
-				end,
+				config = function() require 'codethread.plugins.vim-notify' end,
 				-- requires = 'codethread.spinner',
 			}
 
@@ -222,6 +205,21 @@ safe_load('packer', function(packer)
 			}
 
 			use 'windwp/nvim-ts-autotag' -- close <div tags, and ciw
+
+			use {
+				--[[
+        Text editing in Neovim with immediate visual feedback: view the effects of any command on your buffer contents live. Preview macros, the :norm command & more!
+        --]]
+				'smjonas/live-command.nvim',
+				tag = '1.*',
+				config = function()
+					require('live-command').setup {
+						commands = {
+							Norm = { cmd = 'norm' },
+						},
+					}
+				end,
+			}
 
 			use {
 				'kylechui/nvim-surround',

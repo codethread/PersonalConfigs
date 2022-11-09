@@ -47,7 +47,9 @@ null_ls.setup {
 		code_actions.shellcheck,
 
 		-- using eslint lsp instead
-		-- diagnostics.eslint_d,
+		-- diagnostics.eslint_d.with({
+		--   diagnostics_format = '[eslint] #{m}\n(#{c})'
+		-- }),
 		-- code_actions.eslint_d,
 
 		-- c/c++

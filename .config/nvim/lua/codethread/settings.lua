@@ -17,8 +17,8 @@ set.ruler = true -- Show the cursor position all the time
 set.splitbelow = true -- Horizontal splits will automatically be below
 set.splitright = true -- Vertical splits will automatically be to the right
 set.conceallevel = 0 -- So that I can see `` in markdown files
-set.tabstop = 2 -- Insert 2 spaces for a tab
-set.shiftwidth = 2 -- Change the number of space characters inserted for indentation
+set.tabstop = 4 -- Insert 2 spaces for a tab
+set.shiftwidth = 0 -- Indent to whatever tabstop is
 set.smarttab = true -- Makes tabbing smarter will realize you have 2 vs 4
 set.expandtab = true -- Converts tabs to spaces
 set.smartindent = true -- Makes indenting smart
@@ -45,7 +45,7 @@ vim.cmd [[
   set nowrap " Display long lines as just one line
   set iskeyword+=-                      	" treat dash separated words as a word text object"
   set mouse=a                             " Enable your mouse
-  " hi Search gui=undercurl guibg=none guifg=inherit guisp=green "underlineline", "undercurl", "underdot", and "underdash" fall back
+" hi Search gui=undercurl guibg=none guifg=inherit guisp=green "underlineline", "undercurl", "underdot", and "underdash" fall back
 ]]
 
 -- au! BufWritePost $MYVIMRC source %      " auto source when writing to init.vm alternatively you can run :source $MYVIMRC
