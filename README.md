@@ -69,3 +69,12 @@ follow instructions in
 
     cd ~/PersonalConfigs/_colors+fonts
     cat xterm-256color-italic.terminfo
+
+# Logseq notes
+
+Once installed and setup, symlink the settings from dropbox
+
+```sh
+rm -rf ~/.logseq
+ln -s ~/Dropbox/logseq-settings .logseq
+```
