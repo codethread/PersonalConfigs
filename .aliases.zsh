@@ -116,7 +116,7 @@ alias gnuke="git clean -dfX"
 alias gr='git rebase -i HEAD~$1'
 alias gundo="git reset --soft HEAD~1 && git restore --staged ."
 alias gwip="git add . && git commit -nm 'wip'"
-alias ghub="open -a '/Applications/Google Chrome.app' \`git remote -v | grep git@github.com | grep fetch | head -1 | cut -f2 | cut -d' ' -f1 | sed -e's/:/\//' -e 's/git@/http:\/\//'\`"
+alias ghub="gh repo view --web"
 alias bdiff="git diff --name-only --relative --diff-filter=d | xargs bat --diff"
 
 #---------------------------------------------#
