@@ -5,9 +5,9 @@ if not status_ok then
 end
 
 configs.setup {
-	ensure_installed = 'all', -- one of "all",(parsers with maintainers), or a list of languages
-
-	-- sync_install = false, -- install languages synchronously (only applied to `ensure_installed`)
+	ensure_installed = 'all', -- parsers with maintainers
+	auto_install = true,
+	sync_install = false, -- install languages synchronously (only applied to `ensure_installed`)
 	-- ignore_install = { "" }, -- List of parsers to ignore installing
 
 	autopairs = {
