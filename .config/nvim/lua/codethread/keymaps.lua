@@ -50,15 +50,19 @@ nnoremap  <leader>Y "+yg_
 nnoremap  <leader>y "+y
 nnoremap  <leader>yy "+yy
 
+" center on scroll"
+nnoremap <C-d> <C-d>zz
+nnoremap <C-u> <C-u>zz
+
 " " Paste from clipboard
 nnoremap <leader>v "+p
 nnoremap <leader>v "+P
 vnoremap <leader>v "+p
 vnoremap <leader>v "+P
 
-" keep cursor centered
-nnoremap n nzzzv
-nnoremap N Nzzzv
+" keep cursor centered (removed some while using scrolloff)
+" nnoremap n nzzzv
+" nnoremap N Nzzzv
 nnoremap J mzJ`z
 
 " add undo break points on key stroke to make undo more granular
@@ -85,7 +89,7 @@ nnoremap <silent>_ :NvimTreeToggle<CR>
 " map <C-B>
 " map <C-G>
 " map <C-Q>
-" map <C-E>
+nnoremap <C-E> $
 " map <C-Y>
 " map <C-P>
 ]]

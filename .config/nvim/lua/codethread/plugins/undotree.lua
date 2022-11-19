@@ -1,3 +1,10 @@
+local set = vim.opt
+
+set.undofile = false
+set.swapfile = false
+set.backup = false
+set.writebackup = false -- This is recommended by coc
+
 vim.cmd [[
 if has("persistent_undo")
    let target_path = expand('~/.local/share/nvim/undodir')
@@ -9,6 +16,5 @@ if has("persistent_undo")
     endif
 
     let &undodir=target_path
-    set undofile
 endif
 ]]

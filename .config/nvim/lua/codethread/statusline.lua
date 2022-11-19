@@ -44,7 +44,7 @@ lualine.setup {
 			{
 				'filename',
 				path = 1, -- relative path
-				shorting_target = 40, -- leave at least 40 characters in line
+				-- shorting_target = 40, -- leave at least 40 characters in line
 				show_filename_only = false, -- can show full path with global status line
 				symbols = {
 					modified = '  ',

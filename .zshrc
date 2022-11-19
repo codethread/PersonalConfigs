@@ -45,10 +45,10 @@ SAVEHIST=$HISTSIZE
 #--- terminal specific envs and aliases
 #------------------------------------------------------------------------------
 # Prompt https://scriptingosx.com/2019/07/moving-to-zsh-06-customizing-the-zsh-prompt/
-NEWLINE=$'\n' # couldn't get the newline to behave without this
-PROMPT="${NEWLINE}%F{cyan}%~${NEWLINE}%(?.%F{magenta}ᕕ(ᐛ)ᕗ.%F{red}(╯°□°%)╯︵ ┻━┻) %F{normal}"
-# time
-RPROMPT='%F{blue}%*'
+# NEWLINE=$'\n' # couldn't get the newline to behave without this
+# PROMPT="${NEWLINE}%F{cyan}%~${NEWLINE}%(?.%F{magenta}ᕕ(ᐛ)ᕗ.%F{red}(╯°□°%)╯︵ ┻━┻) %F{normal}"
+# # time
+# RPROMPT='%F{blue}%*'
 
 ssource ~/.zsh_plugins.sh
 ssource "$HOME/.aliases.zsh" # TODO: move?
@@ -125,13 +125,15 @@ fi
 
 # TODO: look into background stuff, eg https://redis.io/docs/getting-started/installation/install-redis-on-mac-os/
 # we are in a kitty session
-if [[ ! -z $KITTY_PID ]]; then
-  # no startup scripts have run
-  if [[ -z "$STARTUP_SCRIPTS_RUN"  ]]; then
-    export STARTUP_SCRIPTS_RUN=true
+# if [[ ! -z $KITTY_PID ]]; then
+#   # no startup scripts have run
+#   if [[ -z "$STARTUP_SCRIPTS_RUN"  ]]; then
+#     export STARTUP_SCRIPTS_RUN=true
 
-    # toggle kitty theme to light/dark based on MacOS theme
-    (exec nohup dark-notify -c 'kitty-toggle-theme' > /dev/null) 2>/dev/null &
+#     # toggle kitty theme to light/dark based on MacOS theme
+#     (exec nohup dark-notify -c 'kitty-toggle-theme' > /dev/null) 2>/dev/null &
 
-  fi
-fi
+#   fi
+# fi
+
+eval "$(starship init zsh)"

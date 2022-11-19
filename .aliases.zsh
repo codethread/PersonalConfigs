@@ -98,6 +98,7 @@ alias gob=go1.18beta1
 alias gBranch='git rev-parse --abbrev-ref HEAD'
 alias gclean="git clean -dfX"
 alias gcp="git cherry-pick"
+alias gst="git status -s"
 alias gfuck='git fetch origin; git reset --hard origin ${gBranch}'
 alias gignore="git rm -r --cached .; git add .; git commit -m '.gitignore is now working'"
 alias gkill="git branch | grep -v \"master\" | xargs git branch -D"

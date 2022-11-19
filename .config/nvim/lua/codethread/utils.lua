@@ -30,4 +30,13 @@ function M.safe_load(lib, fn)
 	fn(loaded_lib)
 end
 
+function M.autocmd(events, opts)
+	vim.api.nvim_clear_autocmds { group = opts.group, buffer = opts.buffer }
+	vim.api.nvim_create_autocmd(events, {
+		group = opts.group,
+		buffer = opts.buffer,
+		callback = opts.fn,
+	})
+end
+
 return M

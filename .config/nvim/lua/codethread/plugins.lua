@@ -30,6 +30,7 @@ safe_load('packer', function(packer)
 				'nvim-treesitter/nvim-treesitter',
 				run = function() require('nvim-treesitter.install').update { with_sync = true } end,
 			}
+			use { 'kyazdani42/nvim-web-devicons' }
 
 			-- misc
 			use { 'wakatime/vim-wakatime', tag = '9.*' }
@@ -47,7 +48,6 @@ safe_load('packer', function(packer)
 			-- modeline
 			use {
 				'nvim-lualine/lualine.nvim',
-				requires = { 'kyazdani42/nvim-web-devicons', opt = true },
 				commit = '5113cdb32f9d9588a2b56de6d1df6e33b06a554a',
 			}
 			-- project navigation
@@ -80,8 +80,6 @@ safe_load('packer', function(packer)
 				commit = '65c2ba895213c3641fc58dd33bc7a44423a6cdbe',
 				-- commit = '72858986f9de019dc0e151c76090de29954081f0',
 				config = function() require 'codethread.plugins.nvim-tree' end,
-				-- optional, for file icon
-				requires = { 'kyazdani42/nvim-web-devicons' },
 			}
 
 			use 'tpope/vim-vinegar' -- netrw improvements
@@ -227,7 +225,10 @@ safe_load('packer', function(packer)
 				tag = 'v1.*',
 			}
 			use 'windwp/nvim-autopairs' -- Autopairs, integrates with both cmp and treesitter
-			use 'mbbill/undotree'
+			use {
+				'mbbill/undotree',
+				config = function() require 'codethread.plugins.undotree' end,
+			}
 			use 'tpope/vim-abolish' -- string  Coercion
 			-- Want to turn fooBar into foo_bar? Press crs (coerce to snake_case). MixedCase
 			-- (crm), camelCase (crc), snake_case (crs), UPPER_CASE (cru), dash-case (cr-),

@@ -243,6 +243,7 @@ local mappings = {
 		k = { '<cmd>Telescope keymaps<cr>', 'Keymaps' },
 		C = { '<cmd>Telescope commands<cr>', 'Commands' },
 		p = { '<cmd>Telescope live_grep<cr>', 'Live Grep' },
+		w = { '<cmd>Telescope grep_string<cr>', 'Word' },
 	},
 
 	o = {
