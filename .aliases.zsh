@@ -61,6 +61,7 @@ alias bi="brew install"
 alias brewup='brew update; brew doctor; brew upgrade; brew cleanup'
 alias alert="osascript -e 'display notification \"Task Finished\" with title \"CMD\"'; afplay /System/Library/Sounds/Glass.aiff"
 alias ser='python -m SimpleHTTPServer $1' # start server
+alias nn='netlify'
 
 #---------------------------------------------#
 # RARE USE
