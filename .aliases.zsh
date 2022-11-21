@@ -69,6 +69,11 @@ alias mkssh="openssl rsa -in ~/.ssh/id_rsa | openssl base64 | tr -d '\n' | pbcop
 alias pipes="pipes.sh -f 60 -s 8"
 
 #---------------------------------------------#
+# QMK
+# -------------------------------------------#
+alias qmk-print="qmk c2json keymap.c -km codethread -kb preonic/rev3_drop --no-cpp"
+
+#---------------------------------------------#
 # NODE
 # -------------------------------------------#
 alias npc="rm -rf ./node_modules; npm cache clear; npm i"
