@@ -5,6 +5,49 @@
 # this has some tips on speeding up zsh
 # https://htr3n.github.io/2018/07/faster-zsh/
 
+#------------------------------------------
+#--- mac only
+#-----------------------------------------
+if [ "$(uname 2> /dev/null)" != "Linux" ]; then
+
+  # one of these will be installed depending on intel/arm
+  if [ -d "/usr/local/bin" ]; then
+    pathprepend "/usr/local/bin" PATH
+    export BREW_PATH="/usr/local"
+  fi
+
+  if [ -d "/opt/homebrew/bin" ]; then
+    pathprepend "/opt/homebrew/bin" PATH
+    export BREW_PATH="/opt/homebrew"
+  fi
+
+  # use gnu coreutils instead of mac, e.g sed
+  # this actually messed with a lot of packages that expected the defaults
+  # pathprepend "$BREW_PATH/opt/coreutils/libexec/gnubin" PATH
+  # pathprepend "$BREW_PATH/opt/gnu-sed/libexec/gnubin" PATH
+  # pathprepend "$BREW_PATH/opt/gnu-tar/libexec/gnubin" PATH
+
+  [ -d "/usr/local/opt/python/libexec/bin" ] && pathprepend "/usr/local/opt/python/libexec/bin" PATH
+fi
+
+#------------------------------------------
+#--- linux only
+#-----------------------------------------
+if [ "$(uname 2> /dev/null)" = "Linux" ]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+  # remap capslock to ctrl
+  gsettings set org.gnome.desktop.input-sources xkb-options "['ctrl:nocaps']"
+
+  [ -d "/opt/X12/bin" ] && pathprepend "/opt/X12/bin" PATH
+  [ -d "/opt/local/bin" ] && pathprepend "/opt/local/bin" PATH
+fi
+
+# Personal shared
+#------------------------------------------
+[ -d "$HOME/.local/bin" ] && pathprepend "$HOME/.local/bin" PATH
+[ -d "$HOME/.emacs.d/bin" ] && pathprepend "$HOME/.emacs.d/bin" PATH
+
 #------------------------------------------------------------------------------
 #--- ZSH settings
 #------------------------------------------------------------------------------
@@ -50,16 +93,14 @@ SAVEHIST=$HISTSIZE
 # # time
 # RPROMPT='%F{blue}%*'
 
+eval "$(starship init zsh)"
+
 ssource ~/.zsh_plugins.sh
 ssource "$HOME/.aliases.zsh" # TODO: move?
-
-# set up colors for ls, fd, tree etc https://github.com/sharkdp/vivid
-export LS_COLORS="$(vivid generate ayu)"
-export JQ_COLORS="1;30:0;31:0;32:0;35:0;33:1;35:1;35"
-export BAT_THEME="Coldark-Cold"
+ssource ~/.private
 
 #------------------------------------------------------------------------------
-#--- Language specific
+#--- HOMEBREW
 #------------------------------------------------------------------------------
 # ssource ~/.fzf.zsh
 # Auto-completion
@@ -69,6 +110,24 @@ export BAT_THEME="Coldark-Cold"
 # ------------
 source "$BREW_PATH/opt/fzf/shell/key-bindings.zsh"
 
+# General
+#------------------------------------------
+export EDITOR='nvim'
+export MANPAGER="/bin/sh -c \"col -b | nvim -c 'set ft=man ts=8 nomod nolist nonu' -\""
+export WAKATIME_HOME="$HOME/.config/wakatime"
+# set up colors for ls, fd, tree etc https://github.com/sharkdp/vivid
+export LS_COLORS="$(vivid generate ayu)"
+export JQ_COLORS="1;30:0;31:0;32:0;35:0;33:1;35:1;35"
+export BAT_THEME="Coldark-Cold"
+
+# Emacs
+#------------------------------------------
+# https://emacs-lsp.github.io/lsp-mode/page/performance/#use-plists-for-deserialization
+export LSP_USE_PLISTS=true
+
+#------------------------------------------------------------------------------
+#--- FZF
+#------------------------------------------------------------------------------
 export FZF_DEFAULT_COMMAND='fd --type f'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # quickest way to cd around
@@ -77,6 +136,20 @@ export FZF_ALT_C_COMMAND="fd --hidden --type d --exclude '{Library,Music,Applica
 #------------------------------------------------------------------------------
 #--- Language specific
 #------------------------------------------------------------------------------
+
+# node
+#------------------------------------------
+export VOLTA_HOME="$HOME/.volta"
+export HUSKY=0 # I don't need my hand holding, thanks
+[ -d "$VOLTA_HOME/bin" ] && pathprepend "$VOLTA_HOME/bin" PATH
+
+# Golang
+#------------------------------------------
+export GOPATH=$HOME/go
+export GOBIN=$GOPATH/bin
+export GO111MODULE=on
+[ -d "$GOBIN" ] && pathprepend "$GOBIN" PATH
+[ -d "/usr/local/go/bin" ] && pathprepend "/usr/local/go/bin" PATH
 
 # haskell
 #-----------------------------------------
@@ -99,8 +172,10 @@ gcloud() {
   ssource "$HOME/google-cloud-sdk/path.zsh.inc"
 }
 
-# java
+# jvm java
 #-----------------------------------------
+[ -d "$HOME/.jenv/bin" ] && pathprepend "$HOME/.jenv/bin" PATH
+[ -d "$HOME/.jenv/shims" ] && pathprepend "$HOME/.jenv/shims" PATH
 # ssource '/usr/local/Cellar/jenv/0.5.3/libexec/libexec/../completions/jenv.zsh'
 # https://github.com/jenv/jenv/issues/148 speed up ideas
 jenvy() {
@@ -110,10 +185,33 @@ jenvy() {
 
 ## ruby
 ##-----------------------------------------
+[ -d "$HOME/.rbenv/shims" ] && pathprepend "$HOME/.rbenv/shims" PATH
+
 rbenv() {
   eval "$(command rbenv init -)"
   rbenv "$@"
 }
+
+# rust
+#------------------------------------------
+[ -d "$HOME/.cargo/bin" ] && pathprepend "$HOME/.cargo/bin" PATH
+
+# lua
+[ -d "$HOME/.luarocks/bin" ] && pathprepend "$HOME/.luarocks/bin" PATH
+
+# unity
+#------------------------------------------
+[ -d "$HOME/.dotnet/tools" ] && pathprepend "$HOME/.dotnet/tools" PATH
+[ -d "/usr/local/share/dotnet" ] && pathprepend "/usr/local/share/dotnet" PATH
+
+if [ "$(uname 2> /dev/null)" != "Linux" ]; then
+  [ -d "/Library/Frameworks/Mono.framework/Versions/Current/Commands" ] && pathprepend "/Library/Frameworks/Mono.framework/Versions/Current/Commands" PATH
+fi
+
+# misc
+#------------------------------------------
+[ -d "$HOME/istio-1.5.1/bin" ] && pathprepend "$HOME/istio-1.5.1/bin" PATH
+
 
 # enable this and ~/.zshenv for profiling
 # zprof
@@ -135,5 +233,3 @@ fi
 
 #   fi
 # fi
-
-eval "$(starship init zsh)"

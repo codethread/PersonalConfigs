@@ -1,7 +1,6 @@
 # loaded first by by all shells including emacs during command execution
 # enable this and zshrc `zprof` for profiling
 # zmodload zsh/zprof
-
 HISTSIZE=999999999
 
 PROFILE_STARTUP=false
