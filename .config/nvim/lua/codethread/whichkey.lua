@@ -192,6 +192,10 @@ local mappings = {
 			'<cmd>source ~/.config/nvim/lua/codethread/plugins.lua | PackerSync<cr>',
 			'Packer Sync',
 		},
+		v = {
+			'<cmd>sourc ~/.config/nvim/init.lua<cr>',
+			'Reload vimrc',
+		},
 	},
 
 	h = {
