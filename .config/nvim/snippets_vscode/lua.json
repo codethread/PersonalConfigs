@@ -8,5 +8,14 @@
       "\treturn",
       "end"
     ]
+  },
+  "safe load": {
+    "prefix": "sl",
+    "body": [
+      "local safe_load = require('codethread.utils').safe_load",
+      "safe_load('${1:package}', function ($1)",
+      "\t$2",
+      "end)"
+    ]
   }
 }

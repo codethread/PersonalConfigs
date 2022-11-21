@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ $1 == "light" ]; then
+if [ "$1" == "light" ]; then
   kitty +kitten themes --reload-in=all Tokyo Night Day
 else
   kitty +kitten themes --reload-in=all Tokyo Night Storm

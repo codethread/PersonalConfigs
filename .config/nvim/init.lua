@@ -1,7 +1,13 @@
+local og_req = require
+local require = function(lib)
+	local ok = pcall(og_req, lib)
+	if not ok then vim.notify('could not load ' .. lib) end
+end
+
 require 'codethread.settings'
 require 'codethread.keymaps'
 require 'codethread.plugins'
-require('codethread.theme').setup()
+require 'codethread.themes'
 require 'codethread.statusline'
 require 'codethread.autocommands'
 require 'codethread.movement'
@@ -13,6 +19,7 @@ require 'codethread.whichkey'
 require 'codethread.terminal'
 require 'codethread.xstate'
 require 'codethread.dotty'
+require 'codethread.qmk'
 require 'codethread.lsp'
 require 'codethread.treesitter'
 require 'codethread.plugins.ufo'

@@ -42,8 +42,9 @@ safe_load('packer', function(packer)
 
 			-- colorscheme
 			use { 'cormacrelf/dark-notify', run = 'brew install cormacrelf/tap/dark-notify' }
-			-- use({ "shaunsingh/nord.nvim" })
-			use { 'folke/tokyonight.nvim' }
+			use { 'shaunsingh/nord.nvim' } -- classic, but very italic
+			use { 'rmehri01/onenord.nvim', tag = 'v0.7.*' } -- could this be the one?
+			use { 'folke/tokyonight.nvim' } -- snazzy and vibrant, works great with a background terminal image
 
 			-- modeline
 			use {
