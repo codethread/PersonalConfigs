@@ -1,7 +1,8 @@
 vim.opt.termguicolors = true -- adds more colors
 
--- local theme = require 'codethread.themes.nord'
-local theme = require 'codethread.themes.onenord'
+local theme = require 'codethread.themes.nord'
+-- local theme = require 'codethread.themes.onenord'
+-- local theme = require 'codethread.themes.nordic'
 
 local group = vim.api.nvim_create_augroup('ThemeChanged', { clear = true })
 

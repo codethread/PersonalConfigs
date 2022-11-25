@@ -1,3 +1,4 @@
+local nmap = require('codethread.utils').nmap
 local nvim_tree_status_ok, nt = pcall(require, 'nvim-tree')
 if not nvim_tree_status_ok then
 	print 'could not load nvim_tree'
@@ -7,6 +8,9 @@ end
 -- turn of netrw and use nvim-tree
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
+
+-- this is <C--> but maps this way :shrug:
+nmap('<C-_>', '<cmd>NvimTreeFindFileToggle<cr>')
 
 -- nt.setup()
 nt.setup {

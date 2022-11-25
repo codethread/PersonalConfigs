@@ -1,10 +1,7 @@
 -- TIPS
 -- to see raw key
 -- go to insert mode, type <C-v> then type, and that key will be shown
-local utils = require 'codethread.utils'
-local map = utils.map
-local imap = utils.imap
-
+--
 -- Modes
 --   normal_mode = "n",
 --   insert_mode = "i",
@@ -13,23 +10,26 @@ local imap = utils.imap
 --   term_mode = "t",
 --   command_mode = "c",
 
+local utils = require 'codethread.utils'
+local map = utils.map
+local imap = utils.imap
+local nmap = utils.nmap
+
 -- use space as the leader key
 map('', '<Space>', '<Nop>')
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ','
 
+-- emacs movements
 imap('<C-f>', '<Right>')
 imap('<C-b>', '<Left>')
-
--- swap ; and :
--- nmap(';', ':')
--- nmap(':', ';')
--- vmap(';', ':')
--- vmap(':', ';')
+imap('<A-b>', '<C-o>b')
+imap('<A-f>', '<C-o>w')
+imap('<C-e>', '<C-o>$')
+nmap('<C-e>', '$') -- could probably do something more exciting with this
 
 -- Escape
 imap('jk', '<ESC>')
--- nmap('<leader><leader>', ':Telescope find_files<cr>')
 
 vim.cmd [[
 " emacs habbits
@@ -77,19 +77,15 @@ vnoremap <Up> :m '<-2<CR>gv=gv
 
 xmap ga <Plug>(EasyAlign)
 
-let @c = 'vi(:EasyAlign */ , /'
-
 " Maximise Window
 nnoremap <silent><C-Y> :MaximizerToggle<CR>
 vnoremap <silent><C-Y> :MaximizerToggle<CR>gv
 inoremap <silent><C-Y> <C-o>:MaximizerToggle<CR>
 
 " MAPS ON COMMANDS I DONT LIKE
-nnoremap <silent>_ :NvimTreeToggle<CR>
 " map <C-B>
 " map <C-G>
 " map <C-Q>
-nnoremap <C-E> $
 " map <C-Y>
 " map <C-P>
 ]]

@@ -1,16 +1,21 @@
 local safe_load = require('codethread.utils').safe_load
 
 local function ts_word()
-	local winnr = vim.fn.winnr '#'
+	-- local winnr = vim.fn.winnr '#'
+	local winnr = vim.fn.winnr()
 	local buf = vim.fn.winbufnr(winnr)
 	local c = vim.fn.getcurpos(winnr)
 	local row = c[2] - 1
 	local col = c[3] - 1
 
-	local node = vim.treesitter.get_node_at_pos(buf, row, col, {})
+	local ts_utils = require 'nvim-treesitter.ts_utils'
+	local node = ts_utils.get_node_at_cursor(winnr)
+	-- local node = vim.treesitter.get_node_at_pos(buf, row, col, {})
 	local txt = vim.treesitter.get_node_text(node, buf, {})
 	return txt
 end
+
+vim.api.nvim_create_user_command('TSWord', function() print(ts_word()) end, {})
 
 safe_load('telescope', function(telescope)
 	local actions = require 'telescope.actions'

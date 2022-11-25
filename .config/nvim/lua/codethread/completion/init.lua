@@ -118,9 +118,9 @@ cmp.setup.cmdline('/', {
 	},
 })
 
-require('codethread.theme').on_change(
-	function() require('codethread.utils').hl(require 'codethread.completion.colors') end
-)
+-- require('codethread.theme').on_change(
+-- 	function() require('codethread.utils').hl(require 'codethread.completion.colors') end
+-- )
 
 local function complete(name) cmp.complete { config = { sources = { { name = name } } } } end
 

@@ -93,8 +93,10 @@ local opts = {
 local mappings = {
 	['<leader>'] = { '<cmd>Telescope find_files shorten_path=false<cr>', 'Files' },
 	[';'] = { '<cmd>Telescope commands<cr>', 'M-x' },
+	[':'] = { '<cmd>Telescope command_history<cr>', 'M-x [hist]' },
+	['/'] = { '<cmd>Telescope search_history<cr>', '/ [hist]' },
 	-- ["a"] = { "<cmd>Alpha<cr>", "Alpha" },
-	['q'] = { '<cmd>luafile %<CR>', 'Reload Luafile' },
+	['q'] = { '<cmd>w | luafile %<CR>', 'Reload Luafile' },
 	-- ["h"] = { "<cmd>nohlsearch<CR>", "No Highlight" },
 	-- ["F"] = { "<cmd>Telescope live_grep theme=ivy<cr>", "Find Text" },
 	-- ["P"] = { "<cmd>lua require('telescope').extensions.projects.projects()<cr>", "Projects" },
@@ -200,7 +202,10 @@ local mappings = {
 
 	h = {
 		name = 'Help',
-		h = { '<cmd>Telescope help_tags<cr>', 'Tags' },
+		h = { '<cmd>Telescope help_tags<cr>', 'Help' },
+		m = { '<cmd>Telescope man_pages<cr>', 'Man' },
+		v = { '<cmd>Telescope vim_options<cr>', 'Settings' },
+		t = { '<cmd>Telescope builtin<cr>', 'Telescope' },
 	},
 
 	l = {
