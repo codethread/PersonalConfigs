@@ -2,14 +2,23 @@ local ts = vim.treesitter
 
 -- look through the keymap file and find all layouts, capturing
 -- the keymap name and a list of all keys for formatting
-local keymap = ts.parse_query(
-	'cpp',
+local keymap_query = ts.parse_query(
+	'c',
 	[[
 (initializer_pair
     designator: (subscript_designator (identifier) @keymap_name) 
     value: (call_expression
              function: (identifier) @id (#eq? @id "LAYOUT_preonic_grid")
              arguments: (argument_list) @key_list))
+]]
+)
+
+local key_query = ts.parse_query(
+	'c',
+	[[
+(initializer_pair
+    value: (call_expression
+            arguments: (argument_list [(identifier) (call_expression)] @key)))
 ]]
 )
 
@@ -79,52 +88,39 @@ local function format_layout(layout)
 	return output
 end
 
-local function format_qmk_keymaps()
-	local bufnr = vim.api.nvim_get_current_buf()
-	local parser = ts.get_parser(bufnr, 'cpp')
+local function format_qmk_keymaps(buf)
+	local bufnr = buf or vim.api.nvim_get_current_buf()
+	local parser = ts.get_parser(bufnr, 'c')
 	local root = parser:parse()[1]:root()
 
-	local layouts = {}
-	local current_keymap = ''
+	for keymap_id, keymap_node in keymap_query:iter_captures(root, bufnr, 0, -1) do
+		local capture_name = keymap_query.captures[keymap_id]
 
-	for keymap_id, keymap_node in keymap:iter_captures(root, bufnr, 0, -1) do
-		local capture_name = keymap.captures[keymap_id]
+		-- if capture_name == "keymap_name" then
+		-- 	local keymap_name = ts.get_node_text(keymap_node, bufnr)
+		-- end
 
-		if capture_name == 'keymap_name' then
-			-- create a table for the current layout
-			local keymap_name = ts.get_node_text(keymap_node, bufnr)
-			current_keymap = keymap_name
-			layouts[current_keymap] = {}
-		end
 		if capture_name == 'key_list' then
-			-- get all keys for layout
-			for key_node in keymap_node:iter_children() do
-				if key_node:named() and key_node:type() ~= 'comment' then
-					local key_txt = ts.get_node_text(key_node, bufnr)
-					table.insert(layouts[current_keymap], key_txt)
-				end
+			local start, _, final = keymap_node:range()
+			local layout = {}
+
+			for _, key_node in key_query:iter_captures(root, bufnr, start, final) do
+				local key_txt = ts.get_node_text(key_node, bufnr)
+				table.insert(layout, key_txt)
 			end
 
-			-- { start row, start col, end row, end col }
-			local range = { keymap_node:range() }
-			local keylist_range = { start = range[1] + 1, final = range[3] }
-
-			local formatted_text = format_layout(layouts[current_keymap])
-
-			vim.api.nvim_buf_set_lines(
-				bufnr,
-				keylist_range.start,
-				keylist_range.final,
-				false,
-				formatted_text
-			)
+			vim.api.nvim_buf_set_lines(bufnr, start + 1, final, false, format_layout(layout))
+			-- TODO
+			-- vim.api.nvim_buf_set_lines(bufnr, start + 1, start + 1, false, print_layout(layout))
 		end
 	end
 end
+
+vim.api.nvim_create_user_command('QMKFormat', format_qmk_keymaps, {})
 
 vim.api.nvim_create_autocmd('BufWritePre', {
 	desc = 'Format keymap',
 	group = vim.api.nvim_create_augroup('QMK', {}),
 	pattern = '*keymap.c',
-	callback = format_qmk_keymaps,
+	callback = function() format_qmk_keymaps() end,
 })
