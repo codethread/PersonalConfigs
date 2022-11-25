@@ -82,10 +82,14 @@ safe_load('packer', function(packer)
 				-- commit = '72858986f9de019dc0e151c76090de29954081f0',
 				config = function() require 'codethread.plugins.nvim-tree' end,
 			}
-
-			use 'tpope/vim-vinegar' -- netrw improvements
+			-- use 'tpope/vim-vinegar' -- netrw improvements
 
 			use 'tpope/vim-eunuch' -- unix helpers, :Rename, :Delete
+
+			use {
+				'ThePrimeagen/harpoon',
+				config = function() require 'codethread.plugins.harpoon' end,
+			}
 
 			-- visual
 			use {

@@ -7,7 +7,8 @@ augroup CursorLine
 augroup END
 
 augroup JSONChange
-  au! BufRead,BufNewFile *.json set filetype=jsonc
+  au!
+  au BufRead,BufNewFile *.json set filetype=jsonc
 augroup END
 ]]
 

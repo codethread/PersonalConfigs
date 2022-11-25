@@ -20,10 +20,12 @@ safe_load('telescope', function(telescope)
 
 	telescope.load_extension 'lsp_handlers'
 	telescope.load_extension 'neoclip'
+	telescope.load_extension 'harpoon'
 
 	telescope.setup {
 		-- defaults = themes.get_ivy {
 		defaults = my_themes.bottom {
+			-- defaults = t_themes.get_dropdown {
 			prompt_prefix = '   ',
 			selection_caret = '  ',
 			entry_prefix = '  ',
