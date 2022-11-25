@@ -5,6 +5,8 @@ symbol = "  "
 symbol = " "
 
 [c]
+# really slow
+disabled = true
 symbol = " "
 
 [conda]
