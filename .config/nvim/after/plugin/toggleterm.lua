@@ -54,8 +54,8 @@ vim.cmd 'autocmd! TermOpen term://* lua set_terminal_keymaps()'
 local Term = require('toggleterm.terminal').Terminal
 local node = Term:new { cmd = 'node', hidden = true, close_on_exit = true }
 
-local link_dotfiles = Term:new {
-	cmd = './_setup',
+local format_dotfiles = Term:new {
+	cmd = "stylua --glob '**/*.lua' -- .config/nvim",
 	dir = '~/PersonalConfigs',
 	close_on_exit = true,
 	direction = 'horizontal',
@@ -63,4 +63,4 @@ local link_dotfiles = Term:new {
 
 function _NODE_TOGGLE() node:toggle() end
 
-function _LINK_DOTFILES() link_dotfiles:toggle() end
+function _FORMAT_DOTFILES() format_dotfiles:toggle() end

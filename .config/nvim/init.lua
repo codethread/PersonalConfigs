@@ -13,16 +13,15 @@ require 'codethread.autocommands'
 require 'codethread.movement'
 require 'codethread.completion'
 require 'codethread.telescope'
-require 'codethread.autopairs'
 require 'codethread.git'
 require 'codethread.whichkey'
-require 'codethread.terminal'
-require 'codethread.xstate'
-require 'codethread.dotty'
-require 'codethread.qmk'
 require 'codethread.lsp'
 require 'codethread.treesitter'
-require 'codethread.plugins.ufo'
+require 'codethread.dashboard'
+
+require 'xstate'
+require 'dotty'
+require 'qmk'
 
 -- Playing around with oxi vim
 -- vim.cmd([[

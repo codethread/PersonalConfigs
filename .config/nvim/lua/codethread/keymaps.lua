@@ -26,10 +26,11 @@ imap('<C-b>', '<Left>')
 imap('<A-b>', '<C-o>b')
 imap('<A-f>', '<C-o>w')
 imap('<C-e>', '<C-o>$')
-nmap('<C-e>', '$') -- could probably do something more exciting with this
 
 -- Escape
 imap('jk', '<ESC>')
+
+nmap('<C-q>', '<cmd>copen<cr>')
 
 vim.cmd [[
 " emacs habbits
@@ -42,7 +43,11 @@ nnoremap <silent> <C-k> :wincmd k<CR>
 nnoremap <silent> <C-l> :wincmd l<CR>
 
 " paste in visual selection without adding to register
-xnoremap  <leader>p "_dP
+xnoremap <leader>p "_dP
+
+" delete but without adding to register
+nnoremap x "_d
+nnoremap X "_D
 
 " " Copy to clipboard
 vnoremap  <leader>y "+y

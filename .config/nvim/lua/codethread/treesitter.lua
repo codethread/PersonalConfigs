@@ -5,36 +5,7 @@ if not status_ok then
 end
 
 configs.setup {
-	ensure_installed = {
-		'bash',
-		'c',
-		'css',
-		'dockerfile',
-		'elixir',
-		'gitignore',
-		'go',
-		'graphql',
-		'html',
-		'help', -- experimental
-		'javascript',
-		'json',
-		'jsdoc',
-		'json5',
-		'jsonc',
-		'lua',
-		'make',
-		'markdown',
-		'markdown_inline',
-		'regex',
-		'rust',
-		'svelte',
-		'swift',
-		'toml',
-		'tsx',
-		'typescript',
-		'vim',
-		'yaml',
-	}, -- one of "all",(parsers with maintainers), or a list of languages
+	ensure_installed = 'all', -- one of "all",(parsers with maintainers), or a list of languages
 
 	-- sync_install = false, -- install languages synchronously (only applied to `ensure_installed`)
 	-- ignore_install = { "" }, -- List of parsers to ignore installing
@@ -103,3 +74,8 @@ configs.setup {
 
 local ft_to_parser = require('nvim-treesitter.parsers').filetype_to_parsername
 ft_to_parser.json = 'jsonc'
+
+require('treesitter-context').setup {
+	max_lines = 2, -- How many lines the window should span. Values <= 0 mean no limit.
+	trim_scope = 'inner', -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
+}

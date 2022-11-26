@@ -238,6 +238,7 @@ local mappings = {
 		n = { '<cmd>tabNext<cr>', 'Next Tab' }, -- TODO: put through telescope
 		p = { '<cmd>tabprevious<cr>', 'Previous Tab' }, -- TODO: put through telescope
 		w = { '<cmd>vsplit<cr>', 'Split' }, -- TODO: put through telescope
+		s = { '<cmd>SwapSplit<cr>', 'Swap' },
 	},
 
 	s = {

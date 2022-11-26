@@ -38,7 +38,7 @@ function M.setup()
 
 		local colors = {
 			LineNr = { fg = c.teal },
-			SignColumn = { fg = c.red },
+			-- FoldColumn = { fg = c.dark_gray },
 			NormalDark = { bg = dark },
 			NvimTreeNormal = { bg = dark },
 			TelescopeSelection = { bg = t.nord1_gui },

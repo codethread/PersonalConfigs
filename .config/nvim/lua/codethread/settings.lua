@@ -39,9 +39,6 @@ set.hlsearch = false -- don't keep / highlights after searching
 set.showmode = false -- We don't need to see things like -- INSERT -- anymore
 
 vim.cmd [[
-  " set foldlevel=99
-  " set foldmethod=expr
-  " set foldexpr=nvim_treesitter#foldexpr()
   set iskeyword+=-                      	" treat dash separated words as a word text object"
   set mouse=a                             " Enable your mouse
 " hi Search gui=undercurl guibg=none guifg=inherit guisp=green "underlineline", "undercurl", "underdot", and "underdash" fall back

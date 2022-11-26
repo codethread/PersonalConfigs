@@ -8,7 +8,7 @@
 -- cache lives in ~/.cache/nvim/packer
 
 -- Bootstrap Packer
-require 'codethread.plugins_init'
+require 'codethread.packer'
 local safe_load = require('codethread.utils').safe_load
 
 safe_load('packer', function(packer)
@@ -53,11 +53,7 @@ safe_load('packer', function(packer)
 			}
 			-- project navigation
 			use { 'farmergreg/vim-lastplace' }
-			use {
-				'goolord/alpha-nvim',
-				config = function() require 'codethread.dashboard' end,
-				commit = '95d522b2056657eb9968411ef801f51af86fc839',
-			}
+			use { 'goolord/alpha-nvim', commit = '95d522b2056657eb9968411ef801f51af86fc839' }
 			use {
 				'nvim-telescope/telescope.nvim',
 				tag = '0.1.*',
@@ -76,48 +72,30 @@ safe_load('packer', function(packer)
 
 			use { 'tpope/vim-projectionist' }
 
-			use {
-				'kyazdani42/nvim-tree.lua',
-				commit = '65c2ba895213c3641fc58dd33bc7a44423a6cdbe',
-				-- commit = '72858986f9de019dc0e151c76090de29954081f0',
-				config = function() require 'codethread.plugins.nvim-tree' end,
-			}
+			use { 'kyazdani42/nvim-tree.lua', commit = '65c2ba895213c3641fc58dd33bc7a44423a6cdbe' }
 			-- use 'tpope/vim-vinegar' -- netrw improvements
 
 			use 'tpope/vim-eunuch' -- unix helpers, :Rename, :Delete
 
-			use {
-				'ThePrimeagen/harpoon',
-				config = function() require 'codethread.plugins.harpoon' end,
-			}
+			use { 'ThePrimeagen/harpoon' }
 
 			-- visual
 			use {
 				'norcalli/nvim-colorizer.lua', -- show colors for css
 				commit = '36c610a9717cc9ec426a07c8e6bf3b3abcb139d6',
-				config = function() require('colorizer').setup { 'css', 'scss', 'html', 'svelte', 'lua' } end,
 			}
 
 			use {
 				'bennypowers/nvim-regexplainer',
-				config = function() require('regexplainer').setup {} end,
-				requires = {
-					'nvim-treesitter/nvim-treesitter',
-					'MunifTanjim/nui.nvim',
-				},
+				requires = { 'MunifTanjim/nui.nvim' },
 			}
 			use {
 				'ellisonleao/glow.nvim',
 				-- tag = '0.1.*',
 				commit = '764527caeb36cd68cbf3f6d905584750cb02229d',
 				run = 'brew install glow',
-				config = function() require 'codethread.plugins.glow' end,
 			}
-			use {
-				'lukas-reineke/indent-blankline.nvim',
-				config = function() require 'codethread.plugins.indent-blankline' end,
-				tag = 'v2.*',
-			}
+			use { 'lukas-reineke/indent-blankline.nvim', tag = 'v2.*' }
 
 			-- project editing
 			use 'famiu/bufdelete.nvim' -- delete buffer
@@ -133,20 +111,8 @@ safe_load('packer', function(packer)
 			}
 
 			-- file navigation
-
-			use {
-				'nvim-treesitter/nvim-treesitter-context',
-				config = function()
-					require('treesitter-context').setup {
-						max_lines = 2, -- How many lines the window should span. Values <= 0 mean no limit.
-						trim_scope = 'inner', -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
-					}
-				end,
-			}
-			use {
-				'SmiteshP/nvim-navic',
-				commit = '94bf6fcb1dc27bdad230d9385da085e72c390019',
-			}
+			use { 'nvim-treesitter/nvim-treesitter-context' }
+			use { 'SmiteshP/nvim-navic', commit = '94bf6fcb1dc27bdad230d9385da085e72c390019' }
 			use {
 				'kevinhwang91/nvim-ufo',
 				requires = 'kevinhwang91/promise-async',
@@ -194,12 +160,8 @@ safe_load('packer', function(packer)
 			-- windows
 			use 'szw/vim-maximizer'
 			use 'simrat39/symbols-outline.nvim'
-			use {
-				'rcarriga/nvim-notify',
-				tag = 'v3.*',
-				config = function() require 'codethread.plugins.vim-notify' end,
-				-- requires = 'codethread.spinner',
-			}
+			use { 'rcarriga/nvim-notify', tag = 'v3.*' }
+			use 'xorid/swap-split.nvim'
 
 			-- editing
 			use {
@@ -215,25 +177,11 @@ safe_load('packer', function(packer)
         --]]
 				'smjonas/live-command.nvim',
 				tag = '1.*',
-				config = function()
-					require('live-command').setup {
-						commands = {
-							Norm = { cmd = 'norm' },
-						},
-					}
-				end,
 			}
 
-			use {
-				'kylechui/nvim-surround',
-				config = function() require('nvim-surround').setup {} end,
-				tag = 'v1.*',
-			}
+			use { 'kylechui/nvim-surround', tag = 'v1.*' }
 			use 'windwp/nvim-autopairs' -- Autopairs, integrates with both cmp and treesitter
-			use {
-				'mbbill/undotree',
-				config = function() require 'codethread.plugins.undotree' end,
-			}
+			use { 'mbbill/undotree' }
 			use 'tpope/vim-abolish' -- string  Coercion
 			-- Want to turn fooBar into foo_bar? Press crs (coerce to snake_case). MixedCase
 			-- (crm), camelCase (crc), snake_case (crs), UPPER_CASE (cru), dash-case (cr-),
@@ -242,8 +190,6 @@ safe_load('packer', function(packer)
 			use {
 				'AckslD/nvim-neoclip.lua',
 				commit = '74af02e289b3ea465bc8a4d7b9b83adc4e4b8c06',
-				requires = { 'nvim-telescope/telescope.nvim' },
-				config = function() require('neoclip').setup() end,
 			}
 
 			use {
@@ -258,17 +204,9 @@ safe_load('packer', function(packer)
 			-- git
 			use {
 				'TimUntersberger/neogit',
-				config = function()
-					require('neogit').setup {
-						integrations = {
-							diffview = true,
-						},
-					}
-				end,
 				requires = {
 					'sindrets/diffview.nvim',
 					commit = 'b31fafb71f35e4f2a4bd95481ff7d59b1caae387',
-					-- commit = '16c3985581ee65bccdfbebbe014b24a01adc7d1f',
 				},
 			}
 			use 'lewis6991/gitsigns.nvim'
@@ -286,10 +224,7 @@ safe_load('packer', function(packer)
 			-- terminal
 			use { 'akinsho/toggleterm.nvim', tag = 'v2.*' }
 
-			use {
-				'christoomey/vim-tmux-navigator',
-				config = function() require 'codethread.plugins.vim-tmux-navigator' end,
-			}
+			use { 'christoomey/vim-tmux-navigator' }
 
 			if PACKER_BOOTSTRAP then require('packer').sync() end
 		end,

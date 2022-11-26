@@ -9,8 +9,7 @@ end
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
--- this is <C--> but maps this way :shrug:
-nmap('<C-_>', '<cmd>NvimTreeFindFileToggle<cr>')
+nmap('<C-n>', '<cmd>NvimTreeFindFileToggle<cr>')
 
 -- nt.setup()
 nt.setup {
@@ -32,4 +31,10 @@ nt.setup {
 			},
 		},
 	},
+	-- remove_keymaps = {
+	-- 	'<C-e>',
+	-- },
+	-- on_attatch = function (bufnr)
+	--     nmap('<C-e>', '<cmd>NvimTreeFindFileToggle<cr>', { buffer = bufnr })
+	-- end
 }
