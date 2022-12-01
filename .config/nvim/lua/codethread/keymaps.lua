@@ -31,6 +31,7 @@ imap('<C-e>', '<C-o>$')
 imap('jk', '<ESC>')
 
 nmap('<C-q>', '<cmd>copen<cr>')
+nmap('<M-s>', '<cmd>w<cr>') -- alt or cmd on macos (terminal dependent, works with kitty)
 
 vim.cmd [[
 " emacs habbits

@@ -113,6 +113,7 @@ local mappings = {
 			'<cmd>Bdelete<cr>',
 			'kill',
 		},
+		s = { '<cmd>w<CR>', 'Save' },
 	},
 
 	e = {
@@ -142,15 +143,10 @@ local mappings = {
 	},
 
 	f = {
-		name = 'File',
-		s = { '<cmd>w<CR>', 'Save' },
+		name = 'Fold?',
 		f = {
-			"<cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_dropdown{previewer = false})<cr>",
-			'Find files',
-		},
-		v = {
-			'<cmd>NvimTreeFindFile<cr>',
-			'View in Tree',
+			'za',
+			'toggle',
 		},
 	},
 

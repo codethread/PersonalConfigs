@@ -13,6 +13,8 @@ local safe_load = require('codethread.utils').safe_load
 
 safe_load('packer', function(packer)
 	packer.startup {
+
+        -- stylua: ignore
 		function(use)
 			-- Packer can manage itself
 			use { 'wbthomason/packer.nvim' }
@@ -26,10 +28,7 @@ safe_load('packer', function(packer)
 			use { 'nvim-lua/plenary.nvim' }
 			use { 'nvim-lua/popup.nvim' }
 			use { 'tpope/vim-obsession' }
-			use {
-				'nvim-treesitter/nvim-treesitter',
-				run = function() require('nvim-treesitter.install').update { with_sync = true } end,
-			}
+			use { 'nvim-treesitter/nvim-treesitter', run = function() require('nvim-treesitter.install').update { with_sync = true } end, }
 			use { 'kyazdani42/nvim-web-devicons' }
 
 			-- misc
@@ -47,28 +46,20 @@ safe_load('packer', function(packer)
 			use { 'folke/tokyonight.nvim' } -- snazzy and vibrant, works great with a background terminal image
 
 			-- modeline
-			use {
-				'nvim-lualine/lualine.nvim',
-				commit = '5113cdb32f9d9588a2b56de6d1df6e33b06a554a',
-			}
+			use { 'nvim-lualine/lualine.nvim', commit = '5113cdb32f9d9588a2b56de6d1df6e33b06a554a', }
 			-- project navigation
 			use { 'farmergreg/vim-lastplace' }
 			use { 'goolord/alpha-nvim', commit = '95d522b2056657eb9968411ef801f51af86fc839' }
 			use {
-				'nvim-telescope/telescope.nvim',
-				tag = '0.1.*',
-				requires = {
-					'nvim-telescope/telescope-fzf-native.nvim',
-					run = 'make',
-				},
+				'nvim-telescope/telescope.nvim', tag = '0.1.*',
+				requires = { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make', },
 			}
-			use {
+
 				--[[
         It sets vim.ui.select to telescope. That means for example that neovim core stuff
         can fill the telescope picker. Example would be lua vim.lsp.buf.code_action().
         --]]
-				'nvim-telescope/telescope-ui-select.nvim',
-			}
+			use { 'nvim-telescope/telescope-ui-select.nvim', }
 
 			use { 'tpope/vim-projectionist' }
 
@@ -79,63 +70,41 @@ safe_load('packer', function(packer)
 
 			use { 'ThePrimeagen/harpoon' }
 
-			-- visual
-			use {
-				'norcalli/nvim-colorizer.lua', -- show colors for css
-				commit = '36c610a9717cc9ec426a07c8e6bf3b3abcb139d6',
-			}
+			-- visual 
+            -- show colors for css
+			use { 'norcalli/nvim-colorizer.lua', commit = '36c610a9717cc9ec426a07c8e6bf3b3abcb139d6', }
 
-			use {
-				'bennypowers/nvim-regexplainer',
-				requires = { 'MunifTanjim/nui.nvim' },
-			}
-			use {
-				'ellisonleao/glow.nvim',
-				-- tag = '0.1.*',
-				commit = '764527caeb36cd68cbf3f6d905584750cb02229d',
-				run = 'brew install glow',
+			use { 'bennypowers/nvim-regexplainer', requires = { 'MunifTanjim/nui.nvim' }, }
+			use { 'ellisonleao/glow.nvim', --[[tag = '0.1.*',]]  commit = '764527caeb36cd68cbf3f6d905584750cb02229d', run = 'brew install glow',
 			}
 			use { 'lukas-reineke/indent-blankline.nvim', tag = 'v2.*' }
 
 			-- project editing
 			use 'famiu/bufdelete.nvim' -- delete buffer
-			use { -- automatically creates missing folders
-				'jghauser/mkdir.nvim',
-				commit = '01261650382bef195dab8ac39344234b57914f09',
-			}
-
-			use { -- find/replace
-				'windwp/nvim-spectre',
-				run = 'brew install gnu-sed',
-				commit = 'b1a084c05bf6cf32a3b55196e5cde44bb94422fb',
+            -- automatically creates missing folders
+			use { 'jghauser/mkdir.nvim', commit = '01261650382bef195dab8ac39344234b57914f09', }
+ -- find/replace
+			use { 'windwp/nvim-spectre', commit = 'b1a084c05bf6cf32a3b55196e5cde44bb94422fb', run = 'brew install gnu-sed',
 			}
 
 			-- file navigation
 			use { 'nvim-treesitter/nvim-treesitter-context' }
 			use { 'SmiteshP/nvim-navic', commit = '94bf6fcb1dc27bdad230d9385da085e72c390019' }
-			use {
-				'kevinhwang91/nvim-ufo',
-				requires = 'kevinhwang91/promise-async',
-				tag = 'v1.*',
+			use { 'kevinhwang91/nvim-ufo', requires = 'kevinhwang91/promise-async', tag = 'v1.*',
 			}
 
 			-- lsp
-			use {
-				'neovim/nvim-lspconfig',
-				requires = {
+			use { 'neovim/nvim-lspconfig',
+                requires = {
 					'williamboman/mason.nvim',
 					'williamboman/mason-lspconfig.nvim',
 					'jose-elias-alvarez/typescript.nvim',
-				},
-			}
+            }, }
 
 			use 'jose-elias-alvarez/null-ls.nvim'
 			use 'b0o/schemastore.nvim'
 			use 'gbrlsnchs/telescope-lsp-handlers.nvim'
-			use {
-				'https://git.sr.ht/~whynothugo/lsp_lines.nvim',
-				commit = 'db67e94c813aae166c3d2f119ea7d2e85164922a',
-			}
+			use { 'https://git.sr.ht/~whynothugo/lsp_lines.nvim', commit = 'db67e94c813aae166c3d2f119ea7d2e85164922a', }
 
 			-- completion
 			use {
@@ -164,20 +133,14 @@ safe_load('packer', function(packer)
 			use 'xorid/swap-split.nvim'
 
 			-- editing
-			use {
-				'nvim-treesitter/nvim-treesitter-textobjects',
-				commit = '40f20e6788e6ce850802cbd2ca029fbb66b5d043',
-			}
+			use { 'nvim-treesitter/nvim-treesitter-textobjects', commit = '40f20e6788e6ce850802cbd2ca029fbb66b5d043', }
 
 			use 'windwp/nvim-ts-autotag' -- close <div tags, and ciw
 
-			use {
 				--[[
         Text editing in Neovim with immediate visual feedback: view the effects of any command on your buffer contents live. Preview macros, the :norm command & more!
         --]]
-				'smjonas/live-command.nvim',
-				tag = '1.*',
-			}
+			use { 'smjonas/live-command.nvim', tag = '1.*', }
 
 			use { 'kylechui/nvim-surround', tag = 'v1.*' }
 			use 'windwp/nvim-autopairs' -- Autopairs, integrates with both cmp and treesitter
@@ -187,10 +150,7 @@ safe_load('packer', function(packer)
 			-- (crm), camelCase (crc), snake_case (crs), UPPER_CASE (cru), dash-case (cr-),
 			-- dot.case (cr.), space case (cr<space>), and Title Case (crt) are all just 3 keystrokes away.
 
-			use {
-				'AckslD/nvim-neoclip.lua',
-				commit = '74af02e289b3ea465bc8a4d7b9b83adc4e4b8c06',
-			}
+			use { 'AckslD/nvim-neoclip.lua', commit = '74af02e289b3ea465bc8a4d7b9b83adc4e4b8c06', }
 
 			use {
 				'JoosepAlviste/nvim-ts-context-commentstring',
@@ -204,10 +164,7 @@ safe_load('packer', function(packer)
 			-- git
 			use {
 				'TimUntersberger/neogit',
-				requires = {
-					'sindrets/diffview.nvim',
-					commit = 'b31fafb71f35e4f2a4bd95481ff7d59b1caae387',
-				},
+				requires = { 'sindrets/diffview.nvim', commit = 'b31fafb71f35e4f2a4bd95481ff7d59b1caae387', },
 			}
 			use 'lewis6991/gitsigns.nvim'
 
