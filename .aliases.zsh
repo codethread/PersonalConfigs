@@ -41,27 +41,24 @@ alias ls='ls -pGF --color=auto'
 alias l='exa -lah'
 
 alias pathis='echo $PATH | tr -s ":" "\n"'
-
 alias portsinuse="lsof -i -p | grep -i 'listen'"
-
 alias ports="echo lsof -i tcp:3000"
-
 alias finder='open -a 'Finder' .'
-
 alias screen='export TERM=screen-256color && screen'
-
 alias treee='tree src -I "*~"'
 
-alias mcfuckoff='sudo /usr/local/McAfee/AntiMalware/VSControl stopoas'
+#---------------------------------------------#
+# RUNNERS
+# -------------------------------------------#
+alias alert="osascript -e 'display notification \"Task Finished\" with title \"CMD\"'; afplay /System/Library/Sounds/Glass.aiff"
+alias ser='python -m SimpleHTTPServer $1' # start server
+alias nn='netlify'
 
 #---------------------------------------------#
 # RUNNERS
 # -------------------------------------------#
 alias bi="brew install"
 alias brewup='brew update; brew doctor; brew upgrade; brew cleanup'
-alias alert="osascript -e 'display notification \"Task Finished\" with title \"CMD\"'; afplay /System/Library/Sounds/Glass.aiff"
-alias ser='python -m SimpleHTTPServer $1' # start server
-alias nn='netlify'
 
 #---------------------------------------------#
 # RARE USE
