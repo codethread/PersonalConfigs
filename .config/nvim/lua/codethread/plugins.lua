@@ -42,7 +42,6 @@ safe_load('packer', function(packer)
 			-- colorscheme
 			use { 'cormacrelf/dark-notify', run = 'brew install cormacrelf/tap/dark-notify' }
 			use { 'shaunsingh/nord.nvim' } -- classic, but very italic
-			use { 'rmehri01/onenord.nvim', tag = 'v0.7.*' } -- could this be the one?
 			use { 'folke/tokyonight.nvim' } -- snazzy and vibrant, works great with a background terminal image
 
 			-- modeline
@@ -63,7 +62,7 @@ safe_load('packer', function(packer)
 
 			use { 'tpope/vim-projectionist' }
 
-			use { 'kyazdani42/nvim-tree.lua', commit = '65c2ba895213c3641fc58dd33bc7a44423a6cdbe' }
+			use { 'kyazdani42/nvim-tree.lua', commit = '65c2ba895213c3641fc58dd33bc7a44423a6cdbe', requires = { 'gabebw/vim-github-link-opener' } }
 			-- use 'tpope/vim-vinegar' -- netrw improvements
 
 			use 'tpope/vim-eunuch' -- unix helpers, :Rename, :Delete
@@ -133,6 +132,7 @@ safe_load('packer', function(packer)
 			use 'xorid/swap-split.nvim'
 
 			-- editing
+            use 'tpope/vim-rsi' -- readline movement, e.g C-f is forward char
 			use { 'nvim-treesitter/nvim-treesitter-textobjects', commit = '40f20e6788e6ce850802cbd2ca029fbb66b5d043', }
 
 			use 'windwp/nvim-ts-autotag' -- close <div tags, and ciw

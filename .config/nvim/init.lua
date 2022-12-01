@@ -6,6 +6,7 @@ end
 
 require 'codethread.settings'
 require 'codethread.keymaps'
+require 'codethread.globals'
 require 'codethread.plugins'
 require 'codethread.themes'
 require 'codethread.statusline'

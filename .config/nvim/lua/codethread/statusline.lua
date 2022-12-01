@@ -23,6 +23,11 @@ end
 -- enable global status line
 vim.opt.laststatus = 3
 
+-- bar at top per window
+-- TODO: only for certain filetypes
+-- vim.api.nvim_set_option_value('winbar', '%=%m %f', { scope = 'local' })
+vim.api.nvim_set_option_value('winbar', '%=%m %f', {})
+
 lualine.setup {
 	options = {
 		icons_enabled = true,
@@ -44,15 +49,18 @@ lualine.setup {
 			{
 				'filename',
 				path = 1, -- relative path
-				-- shorting_target = 40, -- leave at least 40 characters in line
 				show_filename_only = false, -- can show full path with global status line
+				shorting_target = 0, -- don't shorten the component as I'm using global status line
 				symbols = {
 					modified = '  ',
 					readonly = ' ',
 				},
 			},
 		},
-		lualine_c = { 'diagnostics' },
+		lualine_c = { {
+			'diagnostics',
+			always_visible = true,
+		} },
 		lualine_x = {},
 		lualine_y = {
 			'filetype',

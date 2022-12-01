@@ -24,14 +24,9 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 	pattern = '*',
 })
 
-vim.api.nvim_create_autocmd('BufEnter', {
+vim.api.nvim_create_autocmd('FileType', {
 	desc = "Easy quit help with 'q'",
 	group = vim.api.nvim_create_augroup('Helpful', { clear = true }),
-	-- pattern = '$VIMRUNTIME/doc/*.txt',
-	pattern = '*.txt',
-	callback = function()
-		if vim.bo.filetype == 'help' then
-			vim.keymap.set('n', 'q', '<cmd>q<cr>', { silent = true, buffer = true })
-		end
-	end,
+	pattern = 'help',
+	callback = function() vim.keymap.set('n', 'q', '<cmd>q<cr>', { silent = true, buffer = true }) end,
 })

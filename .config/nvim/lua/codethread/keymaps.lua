@@ -20,24 +20,13 @@ map('', '<Space>', '<Nop>')
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ','
 
--- emacs movements
-imap('<C-f>', '<Right>')
-imap('<C-b>', '<Left>')
-imap('<A-b>', '<C-o>b')
-imap('<A-f>', '<C-o>w')
-imap('<C-e>', '<C-o>$')
-
 -- Escape
 imap('jk', '<ESC>')
 
-nmap('<C-q>', '<cmd>copen<cr>')
+nmap('<C-q>', '<cmd>copen<cr>') -- wip, ideally make this a toggle
 nmap('<M-s>', '<cmd>w<cr>') -- alt or cmd on macos (terminal dependent, works with kitty)
 
 vim.cmd [[
-" emacs habbits
-nnoremap <silent> <C-g> <C-c>
-imap <silent> <C-g> <C-c>
-
 nnoremap <silent> <C-h> :wincmd h<CR>
 nnoremap <silent> <C-j> :wincmd j<CR>
 nnoremap <silent> <C-k> :wincmd k<CR>
@@ -50,17 +39,18 @@ xnoremap <leader>p "_dP
 nnoremap x "_d
 nnoremap X "_D
 
-" " Copy to clipboard
+" Copy to clipboard
 vnoremap  <leader>y "+y
 nnoremap  <leader>Y "+yg_
 nnoremap  <leader>y "+y
 nnoremap  <leader>yy "+yy
 
-" center on scroll"
-nnoremap <C-d> <C-d>zz
-nnoremap <C-u> <C-u>zz
+" center on scroll
+" kind of prefer just using scroll off
+" nnoremap <C-d> <C-d>zz
+" nnoremap <C-u> <C-u>zz
 
-" " Paste from clipboard
+" Paste from clipboard
 nnoremap <leader>v "+p
 nnoremap <leader>v "+P
 vnoremap <leader>v "+p

@@ -5,15 +5,15 @@ if not nvim_tree_status_ok then
 	return
 end
 
--- turn of netrw and use nvim-tree
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
+-- turn off netrw and use nvim-tree
+vim.g.loaded_netrw = 0
+vim.g.loaded_netrwPlugin = 0
 
 nmap('<C-n>', '<cmd>NvimTreeFindFileToggle<cr>')
 
--- nt.setup()
 nt.setup {
-	-- hijack_netrw = false,
+	hijack_netrw = true,
+	disable_netrw = true,
 	filters = { -- remove things from view
 		dotfiles = false,
 	},
