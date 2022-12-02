@@ -235,6 +235,10 @@ local mappings = {
 		p = { '<cmd>tabprevious<cr>', 'Previous Tab' }, -- TODO: put through telescope
 		w = { '<cmd>vsplit<cr>', 'Split' }, -- TODO: put through telescope
 		s = { '<cmd>SwapSplit<cr>', 'Swap' },
+		e = {
+			function() require('codethread.movement').tab_hydra:activate() end,
+			'🐉 Tabs',
+		},
 	},
 
 	s = {

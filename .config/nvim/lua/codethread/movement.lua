@@ -75,9 +75,37 @@ local mover_hydra = Hydra {
 	},
 }
 
+local tab_hydra = Hydra {
+	name = 'Tab Jumper',
+	mode = 'n',
+	hint = [[
+ Params:
+ move: ← _h_ → _l_
+ exit: _j_
+ close: _x_
+ new: _n_
+]],
+
+	config = {
+		invoke_on_body = true,
+		hint = {
+			position = 'top-left',
+			offset = 1,
+		},
+	},
+	heads = {
+		{ 'j', nil, { exit = true } },
+		{ 'x', cmd 'tabclose' },
+		{ 'h', 'gT' },
+		{ 'l', 'gt' },
+		{ 'n', cmd 'tabnew', { exit = true } },
+	},
+}
+
 -- TODO: some more cool plugins:
 -- https://github.com/mfussenegger/nvim-treehopper
 
 return {
 	mover_hydra = mover_hydra,
+	tab_hydra = tab_hydra,
 }
