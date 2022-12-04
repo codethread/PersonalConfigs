@@ -16,11 +16,13 @@ require('live-command').setup {
 		},
 		S = {
 			-- run :%/result/outcome and see bottome text change, using vim-abolish
+			-- :S/result{,s} can also be used as just a search
 			cmd = 'Subvert',
 		},
 	},
 }
 
+-- results
 -- result
 -- Result
 -- RESULT
