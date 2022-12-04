@@ -34,6 +34,7 @@ safe_load('packer', function(packer)
 			-- misc
 			use { 'wakatime/vim-wakatime', tag = '9.*' }
 			use { 'nvim-treesitter/playground' }
+            use {'kevinhwang91/nvim-bqf'} -- mainly just like 'o' to close lists
 
 			-- key bindings
 			use { 'folke/which-key.nvim', commit = 'bd4411a2ed4dd8bb69c125e339d837028a6eea71' }

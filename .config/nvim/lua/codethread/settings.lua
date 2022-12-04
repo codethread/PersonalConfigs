@@ -38,9 +38,21 @@ set.scrolloff = 8
 set.hlsearch = false -- don't keep / highlights after searching
 set.showmode = false -- We don't need to see things like -- INSERT -- anymore
 
+-- can use abolish-grep with this
+-- e.g. :S /plugin/ *
+-- e.g. :S /plugin/ *.lua (globs other than * don't seem to work with ripgrep, but that's probably just my config)
+-- set grepprg=rg\ --hidden\ --glob\ '!.git'\ --vimgrep\ --with-filename
+-- stolen https://github.com/williamboman/nvim-config/blob/main/after/plugin/options.lua
+vim.opt.grepprg = 'rg --vimgrep --no-heading --smart-case'
+vim.opt.formatoptions:remove 't'
+vim.opt.formatoptions:remove 'o'
+vim.opt.grepformat = '%f:%l:%c:%m,%f:%l:%m'
+
 vim.cmd [[
   set iskeyword+=-                      	" treat dash separated words as a word text object"
   set mouse=a                             " Enable your mouse
+
+
 " hi Search gui=undercurl guibg=none guifg=inherit guisp=green "underlineline", "undercurl", "underdot", and "underdash" fall back
 ]]
 

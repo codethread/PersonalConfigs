@@ -29,7 +29,8 @@ safe_load('telescope', function(telescope)
 
 	telescope.setup {
 		-- defaults = themes.get_ivy {
-		defaults = my_themes.bottom {
+		-- defaults = my_themes.bottom {
+		defaults = {
 			-- defaults = t_themes.get_dropdown {
 			prompt_prefix = '   ',
 			selection_caret = '  ',
