@@ -6,4 +6,5 @@ jq -R -r '
 	| try fromjson catch $line; 
 
 
-    process'
+    process
+'
