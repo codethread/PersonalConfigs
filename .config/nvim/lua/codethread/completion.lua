@@ -118,10 +118,6 @@ cmp.setup.cmdline('/', {
 	},
 })
 
--- require('codethread.theme').on_change(
--- 	function() require('codethread.utils').hl(require 'codethread.completion.colors') end
--- )
-
 local function complete(name) cmp.complete { config = { sources = { { name = name } } } } end
 
 imap('<C-Space>', function() complete 'nvim_lsp' end)

@@ -1,8 +1,6 @@
 local safe_load = require('codethread.utils').safe_load
 
-local M = {}
-
-function M.colors()
+local function colors()
 	-- TODO make this easier to consume with some types perhaps??
 	return safe_load('nord', function()
 		local t = require 'nord.colors'
@@ -17,7 +15,7 @@ function M.colors()
 	end)
 end
 
-function M.setup()
+local function setup_nord()
 	safe_load('nord', function(nord)
 		vim.g.nord_contrast = true
 		vim.g.nord_borders = true
@@ -26,7 +24,7 @@ function M.setup()
 		vim.g.nord_uniform_diff_background = true
 		vim.g.nord_bold = false
 
-		local theme = M.colors() or {}
+		local theme = colors() or {}
 		local t = theme.t
 		local c = theme.c
 		local dark = theme.dark
@@ -36,7 +34,7 @@ function M.setup()
 		t.float = theme.dark
 		nord.set()
 
-		local colors = {
+		hl {
 			LineNr = { fg = c.teal },
 			-- FoldColumn = { fg = c.dark_gray },
 			NormalDark = { bg = dark },
@@ -44,8 +42,6 @@ function M.setup()
 			TelescopeSelection = { bg = t.nord1_gui },
 			['@keyword.return'] = { fg = c.orange },
 		}
-
-		hl(colors)
 
 		vim.cmd [[
             augroup NordHighlights
@@ -56,7 +52,13 @@ function M.setup()
 	end)
 end
 
-M.lualine = 'nord'
+---@type CTColorThemeConfig
+local M = {
+	statusline = 'nord',
+	dark = function() setup_nord() end,
+	light = function() setup_nord() end,
+	colors = colors,
+	initial = 'dark',
+}
 
--- M.setup()
 return M

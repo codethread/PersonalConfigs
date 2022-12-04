@@ -117,6 +117,11 @@ alias ghub="gh repo view --web"
 alias bdiff="git diff --name-only --relative --diff-filter=d | xargs bat --diff"
 
 #---------------------------------------------#
+# OS
+#---------------------------------------------#
+alias mac-dark-toggle="osascript -e 'tell app \"System Events\" to tell appearance preferences to set dark mode to not dark mode'"
+
+#---------------------------------------------#
 # TMUXINATOR
 # -------------------------------------------#
 alias mux="tmuxinator"

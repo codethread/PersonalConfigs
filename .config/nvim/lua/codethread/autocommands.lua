@@ -1,9 +1,10 @@
 vim.cmd [[
-" show cursor line for inactive buffer to make context switching easier
+" only show cursor for active window
 augroup CursorLine
   au!
-  au WinEnter,BufWinEnter * setlocal nocursorline
-  au WinLeave * setlocal cursorline
+  au WinEnter,BufWinEnter * setlocal cursorline
+  au WinLeave * setlocal nocursorline
+  au FileType TelescopePrompt setlocal nocursorline
 augroup END
 
 augroup JSONChange
