@@ -178,6 +178,8 @@ safe_load('packer', function(packer)
 			-- use 'wsdjeg/luarefvim'
 			-- use 'rafcamlet/nvim-luapad'
 			use 'milisims/nvim-luaref'
+            use 'nanotee/luv-vimdocs'
+            use "folke/neodev.nvim"
 
 			-- terminal
 			use { 'akinsho/toggleterm.nvim', tag = 'v2.*' }
