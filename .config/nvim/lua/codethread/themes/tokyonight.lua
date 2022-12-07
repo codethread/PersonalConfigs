@@ -39,9 +39,9 @@ local function setup_tokyo()
 					-- fix highlights in embeddedLanguages, i think by default this falls through to lower specificty selectors, and because these are embedded, that falls to 'string', so everything goes green
 					fg = c.fg,
 				}
-				-- hl.CursorLineNr = {
-				-- 	fg = c.green1,
-				-- }
+				hl.CursorLineNr = {
+					fg = c.green1,
+				}
 
 				-- borderless telescope
 				local prompt = '#2d3149'
@@ -116,11 +116,11 @@ local function setup_tokyo()
 				hl.CmpItemKindColor = { fg = '#D8EEEB', bg = '#58B5A8' }
 				hl.CmpItemKindTypeParameter = { fg = '#D8EEEB', bg = '#58B5A8' }
 			end,
-
-			vim.cmd [[colorscheme tokyonight]],
-
-			loaded = true,
 		}
+
+		vim.cmd [[colorscheme tokyonight]]
+
+		loaded = true
 	end)
 end
 
@@ -129,6 +129,16 @@ local function update_theme(mode)
 	vim.o.background = mode
 
 	if not loaded then setup_tokyo() end
+
+	vim.api.nvim_create_autocmd('User', {
+		desc = 'reload lualine after theme change',
+		group = vim.api.nvim_create_augroup('MyLuaLine', {}),
+		pattern = { 'ThemeChangedLight', 'ThemeChangedDark' },
+		callback = function()
+			print 'theme update'
+			vim.defer_fn(function() require('codethread.statusline').setup_flumpy() end, 99)
+		end,
+	})
 end
 
 ---@type CTColorThemeConfig
@@ -136,7 +146,7 @@ local M = {
 	statusline = 'tokyonight',
 	light = function() update_theme 'light' end,
 	dark = function() update_theme 'dark' end,
-	colors = function() require('tokyonight.colors').setup {} end,
+	colors = function() return require('tokyonight.colors').setup {} end,
 	initial = 'dark',
 }
 

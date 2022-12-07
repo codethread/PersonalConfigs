@@ -1,9 +1,6 @@
-local set = vim.opt
-
-set.undofile = false
-set.swapfile = false
-set.backup = false
-set.writebackup = false -- This is recommended by coc
+vim.opt.swapfile = false
+vim.opt.backup = false
+vim.opt.writebackup = false -- This is recommended by coc
 
 vim.cmd [[
 if has("persistent_undo")
@@ -16,5 +13,6 @@ if has("persistent_undo")
     endif
 
     let &undodir=target_path
+    set undofile
 endif
 ]]

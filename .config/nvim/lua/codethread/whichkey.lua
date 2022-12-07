@@ -202,6 +202,7 @@ local mappings = {
 		m = { '<cmd>Telescope man_pages<cr>', 'Man' },
 		v = { '<cmd>Telescope vim_options<cr>', 'Settings' },
 		t = { '<cmd>Telescope builtin<cr>', 'Telescope' },
+		c = { '<cmd>Telescope highlights<cr>', 'Telescope' },
 	},
 
 	l = {

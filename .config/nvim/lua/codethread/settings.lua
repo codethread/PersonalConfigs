@@ -1,5 +1,7 @@
 local set = vim.opt
 
+vim.opt.laststatus = 3
+set.termguicolors = true -- adds more colors
 set.hidden = true -- Required to keep multiple buffers open multiple buffers
 set.encoding = 'utf-8' -- The encoding displayed
 set.pumheight = 10 -- Makes popup menu smaller
