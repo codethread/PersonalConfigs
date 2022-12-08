@@ -19,6 +19,9 @@ require('live-command').setup {
 			-- :S/result{,s} can also be used as just a search
 			cmd = 'Subvert',
 		},
+		GG = {
+			cmd = 'g',
+		},
 	},
 }
 
