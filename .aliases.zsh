@@ -60,7 +60,9 @@ alias nn='netlify'
 alias bi="brew install"
 alias brewup='brew update; brew doctor; brew upgrade; brew cleanup'
 
-alias bbd="brew bundle dump --describe"
+alias bbd="brew bundle dump --describe" # update brewfile
+alias bbc="brew bundle check" # ensure all installed
+alias bbx="brew bundle cleanup" # removed unlisted
 alias bbi="brew bundle install"
 
 #---------------------------------------------#
