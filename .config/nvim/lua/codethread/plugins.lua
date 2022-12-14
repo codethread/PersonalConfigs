@@ -88,6 +88,7 @@ safe_load('packer', function(packer)
 			use 'shaunsingh/nord.nvim' -- classic, but very italic
 			use 'folke/tokyonight.nvim' -- snazzy and vibrant, works great with a background terminal image
 			use 'nvim-lualine/lualine.nvim'
+			use 'fgheng/winbar.nvim'
 
 			-- lsp
 			use {
