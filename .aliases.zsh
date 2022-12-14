@@ -55,10 +55,13 @@ alias ser='python -m SimpleHTTPServer $1' # start server
 alias nn='netlify'
 
 #---------------------------------------------#
-# RUNNERS
+# HOMEBREW
 # -------------------------------------------#
 alias bi="brew install"
 alias brewup='brew update; brew doctor; brew upgrade; brew cleanup'
+
+alias bbd="brew bundle dump --describe"
+alias bbi="brew bundle install"
 
 #---------------------------------------------#
 # RARE USE
