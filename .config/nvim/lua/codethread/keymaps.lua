@@ -15,6 +15,8 @@ local map = utils.map
 local imap = utils.imap
 local nmap = utils.nmap
 
+-- for folds see ufo.lua
+
 -- use space as the leader key
 map('', '<Space>', '<Nop>')
 vim.g.mapleader = ' '

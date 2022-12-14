@@ -16,6 +16,11 @@ nmap('zR', require('ufo').openAllFolds)
 nmap('zM', require('ufo').closeAllFolds)
 nmap('zp', require('ufo').peekFoldedLinesUnderCursor)
 
+nmap('-', 'zc', { desc = 'open fold under cursor' })
+nmap('=', 'zo', { desc = 'close fold under cursor' })
+nmap('_', 'zC', { desc = 'close all folds under cursor' })
+nmap('+', 'zO', { desc = 'open all folds under cursor' })
+
 local handler = function(virtText, lnum, endLnum, width, truncate)
 	local newVirtText = {}
 	local suffix = ('  %d '):format(endLnum - lnum)
