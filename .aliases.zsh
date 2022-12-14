@@ -58,9 +58,11 @@ alias nn='netlify'
 # HOMEBREW
 # -------------------------------------------#
 alias bi="brew install"
-alias brewup='brew update; brew doctor; brew upgrade; brew cleanup'
+alias brewup='brew update; brew doctor; brew upgrade; brewclean'
+alias brewclean='brew cleanup; brew autoremove'
+alias brewdeps="brew deps --graph --installed"
 
-alias bbd="brew bundle dump --describe" # update brewfile
+alias bbd="brew bundle dump" # update brewfile
 alias bbc="brew bundle check" # ensure all installed
 alias bbx="brew bundle cleanup" # removed unlisted
 alias bbi="brew bundle install"
