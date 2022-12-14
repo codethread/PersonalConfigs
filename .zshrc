@@ -7,33 +7,6 @@
 # this has some tips on speeding up zsh
 # https://htr3n.github.io/2018/07/faster-zsh/
 
-#: Mac only {{{
-
-if [ "$(uname 2> /dev/null)" != "Linux" ]; then
-
-  # one of these will be installed depending on intel/arm
-  if [ -d "/usr/local/bin" ]; then
-    pathprepend "/usr/local/bin" PATH
-    pathprepend "/usr/local/sbin" PATH
-    export BREW_PATH="/usr/local"
-  fi
-
-  if [ -d "/opt/homebrew/bin" ]; then
-    pathprepend "/opt/homebrew/bin" PATH
-    pathprepend "/opt/homebrew/sbin" PATH
-    export BREW_PATH="/opt/homebrew"
-  fi
-
-  # use gnu coreutils instead of mac, e.g sed
-  # this actually messed with a lot of packages that expected the defaults
-  # pathprepend "$BREW_PATH/opt/coreutils/libexec/gnubin" PATH
-  # pathprepend "$BREW_PATH/opt/gnu-sed/libexec/gnubin" PATH
-  # pathprepend "$BREW_PATH/opt/gnu-tar/libexec/gnubin" PATH
-
-  [ -d "/usr/local/opt/python/libexec/bin" ] && pathprepend "/usr/local/opt/python/libexec/bin" PATH
-fi
-
-#: }}}
 #: Linux only {{{
 
 if [ "$(uname 2> /dev/null)" = "Linux" ]; then
@@ -41,16 +14,7 @@ if [ "$(uname 2> /dev/null)" = "Linux" ]; then
 
   # remap capslock to ctrl
   gsettings set org.gnome.desktop.input-sources xkb-options "['ctrl:nocaps']"
-
-  [ -d "/opt/X12/bin" ] && pathprepend "/opt/X12/bin" PATH
-  [ -d "/opt/local/bin" ] && pathprepend "/opt/local/bin" PATH
 fi
-
-#: }}}
-#: Personal shared {{{
-
-[ -d "$HOME/.local/bin" ] && pathprepend "$HOME/.local/bin" PATH
-[ -d "$HOME/.emacs.d/bin" ] && pathprepend "$HOME/.emacs.d/bin" PATH
 
 #: }}}
 #: ZSH settings {{{
@@ -104,12 +68,22 @@ ssource ~/.private
 
 #: }}}
 #: Homebrew {{{
+  if [ -d "/usr/local/bin" ]; then
+    export BREW_PATH="/usr/local"
+  fi
+
+  if [ -d "/opt/homebrew/bin" ]; then
+    export BREW_PATH="/opt/homebrew"
+  fi
 
 # ssource ~/.fzf.zsh
 [[ $- == *i* ]] && source "$BREW_PATH/opt/fzf/shell/completion.zsh" 2> /dev/null
 source "$BREW_PATH/opt/fzf/shell/key-bindings.zsh"
 
-export HOMEBREW_BUNDLE_FILE="~/PersonalConfigs/Brewfile"
+
+export HOMEBREW_BUNDLE_FILE="~/PersonalConfigs/.config/cold-brew/Brewfile.work.conf"
+[[ $(whoami) == "adam" ]] && export HOMEBREW_BUNDLE_FILE="~/PersonalConfigs/.config/cold-brew/Brewfile.macbook.conf"
+[[ $(whoami) == "codethread" ]] && export HOMEBREW_BUNDLE_FILE="~/PersonalConfigs/.config/cold-brew/Brewfile.mini.conf"
 
 #: }}}
 #: General {{{
@@ -140,13 +114,10 @@ export FZF_ALT_C_COMMAND="fd --hidden --type d --exclude '{Library,Music,Applica
 #: }}}
 #: Language specific {{{
 
-
-
 #: node {{{
 
 export VOLTA_HOME="$HOME/.volta"
 export HUSKY=0 # I don't need my hand holding, thanks
-[ -d "$VOLTA_HOME/bin" ] && pathprepend "$VOLTA_HOME/bin" PATH
 
 #: }}}
 
@@ -155,8 +126,6 @@ export HUSKY=0 # I don't need my hand holding, thanks
 export GOPATH=$HOME/go
 export GOBIN=$GOPATH/bin
 export GO111MODULE=on
-[ -d "$GOBIN" ] && pathprepend "$GOBIN" PATH
-[ -d "/usr/local/go/bin" ] && pathprepend "/usr/local/go/bin" PATH
 
 #: }}}
 
@@ -188,8 +157,6 @@ gcloud() {
 
 #: jvm java {{{
 
-[ -d "$HOME/.jenv/bin" ] && pathprepend "$HOME/.jenv/bin" PATH
-[ -d "$HOME/.jenv/shims" ] && pathprepend "$HOME/.jenv/shims" PATH
 # ssource '/usr/local/Cellar/jenv/0.5.3/libexec/libexec/../completions/jenv.zsh'
 # https://github.com/jenv/jenv/issues/148 speed up ideas
 jenvy() {
@@ -201,44 +168,12 @@ jenvy() {
 
 #: ruby {{{
 
-[ -d "$HOME/.rbenv/shims" ] && pathprepend "$HOME/.rbenv/shims" PATH
-
 rbenv() {
   eval "$(command rbenv init -)"
   rbenv "$@"
 }
 
 #: }}}
-
-#: rust {{{
-
-[ -d "$HOME/.cargo/bin" ] && pathprepend "$HOME/.cargo/bin" PATH
-
-#: }}}
-
-#: lua {{{
-
-[ -d "$HOME/.luarocks/bin" ] && pathprepend "$HOME/.luarocks/bin" PATH
-
-#: }}}
-
-#: unity {{{
-
-[ -d "$HOME/.dotnet/tools" ] && pathprepend "$HOME/.dotnet/tools" PATH
-[ -d "/usr/local/share/dotnet" ] && pathprepend "/usr/local/share/dotnet" PATH
-
-if [ "$(uname 2> /dev/null)" != "Linux" ]; then
-  [ -d "/Library/Frameworks/Mono.framework/Versions/Current/Commands" ] && pathprepend "/Library/Frameworks/Mono.framework/Versions/Current/Commands" PATH
-fi
-
-#: }}}
-
-#: misc {{{
-
-[ -d "$HOME/istio-1.5.1/bin" ] && pathprepend "$HOME/istio-1.5.1/bin" PATH
-
-#: }}}
-
 
 #: }}}
 #: Profile {{{
@@ -250,17 +185,4 @@ if [[ "$PROFILE_STARTUP" == true ]]; then
     unsetopt xtrace
     exec 2>&3 3>&-
 fi
-#: }}}
-#: Background Procs {{{
-
-# TODO: look into background stuff, eg https://redis.io/docs/getting-started/installation/install-redis-on-mac-os/
-# we are in a kitty session
-# if [[ ! -z $KITTY_PID ]]; then
-#   # no startup scripts have run
-#   if [[ -z "$STARTUP_SCRIPTS_RUN"  ]]; then
-#     export STARTUP_SCRIPTS_RUN=true
-#     # toggle kitty theme to light/dark based on MacOS theme
-#     (exec nohup dark-notify -c 'kitty-toggle-theme' > /dev/null) 2>/dev/null &
-#   fi
-# fi
 #: }}}
