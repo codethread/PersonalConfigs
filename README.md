@@ -44,14 +44,18 @@ Download [homebrew](https://brew.sh/)
 
 This is a package manager for mac, and stores executables in `brew --prefix`
 
+    # update PATH
+    ~/PersonalConfigs/.local/bin/envy
+
     # this takes a long time, so grab a ☕️
-    cd ~/PersonalConfigs && brew bundle
+    brew bundle
 
     # link directories
     dotty setup
 
-    # ensure MacOS apps can see path
-    path-gui
+    # update PATH
+    envy
+    
     # Reboot
     # if Alfred already ran `clear Application cache` in advanced
 
@@ -63,16 +67,10 @@ ensure `dotty` is installed_
     # run antiup to set up plugins
     antiup
 
-# Terminal Fonts
-
-follow instructions in
-
-    cd ~/PersonalConfigs/_colors+fonts
-    cat xterm-256color-italic.terminfo
-
 # Logseq notes
 
 Once installed and setup, symlink the settings from dropbox
+Unless on work machine and not using plugins
 
 ```sh
 rm -rf ~/.logseq
