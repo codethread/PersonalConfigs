@@ -78,6 +78,14 @@ fi
 #: }}}
 #: Homebrew {{{
 
+  if [ -d "/usr/local/bin" ]; then
+    export BREW_PATH="/usr/local"
+  fi
+
+  if [ -d "/opt/homebrew/bin" ]; then
+    export BREW_PATH="/opt/homebrew"
+  fi
+
     pathprepend "$BREW_PATH/bin" PATH
     pathprepend "$BREW_PATH/sbin" PATH
 
