@@ -1,7 +1,6 @@
 require 'codethread'
 require 'xstate'
 require 'dotty'
-require 'qmk'
 
 -- Playing around with oxi vim
 -- vim.cmd([[

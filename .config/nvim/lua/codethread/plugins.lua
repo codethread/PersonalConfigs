@@ -67,13 +67,14 @@ safe_load('packer', function(packer)
 			-- use 'windwp/nvim-autopairs' -- Autopairs, integrates with both cmp and treesitter
 			use 'wellle/targets.vim'
 			use { 'junegunn/vim-easy-align', tag = '2.*' }
-			-- use { 'kylechui/nvim-surround', tag = 'v1.*' }
+			use { 'kylechui/nvim-surround', tag = 'v1.*' }
 			use { 'smjonas/live-command.nvim', tag = '1.*' } -- Text editing in Neovim with immediate visual feedback: view the effects of any command on your buffer contents live. Preview macros, the :norm command & more!
 			use { 'windwp/nvim-spectre', run = 'brew install gnu-sed' } -- find/replace
 			use 'tpope/vim-abolish' -- string  Coercion
 			--[[                    Want to turn fooBar into foo_bar? Press crs (coerce to snake_case). MixedCase
                                     (crm), camelCase (crc), snake_case (crs), UPPER_CASE (cru), dash-case (cr-),
                                     dot.case (cr.), space case (cr<space>), and Title Case (crt) are all just 3 keystrokes away. --]]
+			use '~/dev/projects/qmk.nvim'
 
 			-- navigation
 			use 'tpope/vim-projectionist'
