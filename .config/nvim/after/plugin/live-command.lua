@@ -1,8 +1,8 @@
 require('live-command').setup {
 	defaults = {
-		inline_highlighting = false,
+		-- inline_highlighting = false,
 	},
-	break_undo = false,
+	-- break_undo = false,
 	commands = {
 		Norm = {
 			-- :%Norm 0f{ciwlook mum, no hands!
@@ -11,7 +11,9 @@ require('live-command').setup {
 		Reg = {
 			-- This will transform ":5Reg a" into ":norm 5@a", running a captured macro with a preview
 			cmd = 'norm',
-			args = function(opts) return (opts.count == -1 and '' or opts.count) .. '@' .. opts.args end,
+			args = function(opts)
+				return (opts.count == -1 and '' or opts.count) .. '@' .. opts.args
+			end,
 			range = '',
 		},
 		S = {
@@ -19,7 +21,7 @@ require('live-command').setup {
 			-- :S/result{,s} can also be used as just a search
 			cmd = 'Subvert',
 		},
-		GG = {
+		G = {
 			cmd = 'g',
 		},
 	},

@@ -45,39 +45,46 @@ safe_load('packer', function(packer)
 				requires = { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' },
 			}
 			use 'nvim-telescope/telescope-ui-select.nvim'
+			use 'LukasPietzschmann/telescope-tabs'
 
+			--------------------------
 			-- lore friendly improvements
+			--------------------------
 			use 'AckslD/nvim-neoclip.lua'
-			use 'ThePrimeagen/harpoon'
 			use 'famiu/bufdelete.nvim' -- delete buffer
 			use 'goolord/alpha-nvim'
 			use 'jghauser/mkdir.nvim'
-			use 'kevinhwang91/nvim-bqf' -- mainly just like 'o' to close lists
 			use 'mbbill/undotree'
 			use 'norcalli/nvim-colorizer.lua'
 			use 'szw/vim-maximizer'
 			use 'tpope/vim-eunuch' -- unix helpers, :Rename, :Delete
 			use 'tpope/vim-obsession'
-			use 'tpope/vim-projectionist'
-			use 'tpope/vim-rsi' -- readline movement, e.g C-f is forward char
-			use 'windwp/nvim-autopairs' -- Autopairs, integrates with both cmp and treesitter
 			use 'xorid/swap-split.nvim'
+			use { 'phaazon/hop.nvim', tag = 'v2.*' }
+
+			-- editing
+			use 'tpope/vim-rsi' -- readline movement, e.g C-f is forward char
+			-- use 'windwp/nvim-autopairs' -- Autopairs, integrates with both cmp and treesitter
+			use 'wellle/targets.vim'
+			use { 'junegunn/vim-easy-align', tag = '2.*' }
+			-- use { 'kylechui/nvim-surround', tag = 'v1.*' }
+			use { 'smjonas/live-command.nvim', tag = '1.*' } -- Text editing in Neovim with immediate visual feedback: view the effects of any command on your buffer contents live. Preview macros, the :norm command & more!
+			use { 'windwp/nvim-spectre', run = 'brew install gnu-sed' } -- find/replace
+			use 'tpope/vim-abolish' -- string  Coercion
+			--[[                    Want to turn fooBar into foo_bar? Press crs (coerce to snake_case). MixedCase
+                                    (crm), camelCase (crc), snake_case (crs), UPPER_CASE (cru), dash-case (cr-),
+                                    dot.case (cr.), space case (cr<space>), and Title Case (crt) are all just 3 keystrokes away. --]]
+
+			-- navigation
+			use 'tpope/vim-projectionist'
+			use 'ThePrimeagen/harpoon'
+			use 'kevinhwang91/nvim-bqf' -- mainly just like 'o' to close lists
 			use { 'bennypowers/nvim-regexplainer', requires = 'MunifTanjim/nui.nvim' }
 			use { 'ellisonleao/glow.nvim', run = 'brew install glow' }
-			use { 'junegunn/vim-easy-align', tag = '2.*' }
 			use { 'kyazdani42/nvim-tree.lua', requires = 'gabebw/vim-github-link-opener' }
-			use { 'kylechui/nvim-surround', tag = 'v1.*' }
 			use { 'lukas-reineke/indent-blankline.nvim', tag = 'v2.*' }
-			use { 'phaazon/hop.nvim', tag = 'v2.*' }
 			use { 'rcarriga/nvim-notify', tag = 'v3.*' }
-			use { 'smjonas/live-command.nvim', tag = '1.*' } -- Text editing in Neovim with immediate visual feedback: view the effects of any command on your buffer contents live. Preview macros, the :norm command & more!
 			use { 'wakatime/vim-wakatime', tag = '9.*' }
-			use { 'windwp/nvim-spectre', run = 'brew install gnu-sed' } -- find/replace
-			-- string  Coercion
-			-- Want to turn fooBar into foo_bar? Press crs (coerce to snake_case). MixedCase
-			-- (crm), camelCase (crc), snake_case (crs), UPPER_CASE (cru), dash-case (cr-),
-			-- dot.case (cr.), space case (cr<space>), and Title Case (crt) are all just 3 keystrokes away.
-			use 'tpope/vim-abolish'
 
 			-- key bindings
 			use 'folke/which-key.nvim'
@@ -137,10 +144,10 @@ safe_load('packer', function(packer)
 			use { 'akinsho/toggleterm.nvim', tag = 'v2.*' }
 			use 'christoomey/vim-tmux-navigator'
 
-			if PACKER_BOOTSTRAP then require('packer').sync() end
+			if PACKER_BOOTSTRAP then packer.sync() end
 		end,
 		config = {
-			max_jobs = 20,
+			max_jobs = 20, -- adapt by machine
 			-- log = { level = 'info'},
 		},
 	}
