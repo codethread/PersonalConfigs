@@ -44,6 +44,11 @@ Download [homebrew](https://brew.sh/)
 
 This is a package manager for mac, and stores executables in `brew --prefix`
 
+    # check where brew is installed to and replace `/opt/homebrew` accordingly
+    # add various envs without clobbering PATH
+    mkdir -p ~/config/cold-brew
+    /opt/homebrew/bin/brew shellenv | sed 's/export PATH.*//' > ~/.config/cold-brew/shellenv
+
     # update PATH
     ~/PersonalConfigs/.local/bin/envy
 

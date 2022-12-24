@@ -78,16 +78,8 @@ fi
 #: }}}
 #: Homebrew {{{
 
-  if [ -d "/usr/local/bin" ]; then
-    export BREW_PATH="/usr/local"
-  fi
-
-  if [ -d "/opt/homebrew/bin" ]; then
-    export BREW_PATH="/opt/homebrew"
-  fi
-
-    pathprepend "$BREW_PATH/bin" PATH
-    pathprepend "$BREW_PATH/sbin" PATH
+    pathprepend "$HOMEBREW_PREFIX/bin" PATH
+    pathprepend "$HOMEBREW_PREFIX/sbin" PATH
 
   # use gnu coreutils instead of mac, e.g sed
   # this actually messed with a lot of packages that expected the defaults
@@ -98,7 +90,7 @@ fi
 #: }}}
 #: node {{{
 
-[ -d "$VOLTA_HOME/bin" ] && pathprepend "$VOLTA_HOME/bin" PATH
+[ -d "$VOLTA_HOME/bin" ] && pathprepend "$VOLTA_HOME/bin" PATH && echo "volta added"
 
 #: }}}
 #: Golang {{{
@@ -152,6 +144,8 @@ echo $PATH | tr -s ':' '\n'
 mkdir -p "$HOME/.config/envy"
 # backup old version
 cat /etc/paths > "$HOME/.config/envy/$(date +%s)"
-sudo echo $PATH > /etc/paths
+# write to new path
+echo ""
+echo $PATH | sudo tee /etc/paths
 
 #: }}}

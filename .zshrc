@@ -10,8 +10,6 @@
 #: Linux only {{{
 
 if [ "$(uname 2> /dev/null)" = "Linux" ]; then
-  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-
   # remap capslock to ctrl
   gsettings set org.gnome.desktop.input-sources xkb-options "['ctrl:nocaps']"
 fi
@@ -62,24 +60,21 @@ SAVEHIST=$HISTSIZE
 
 eval "$(starship init zsh)"
 
+# add completions to this folder with format _example
+[ -d ~/tooling/zsh/completions ] || mkdir -p ~/tooling/zsh/completions
+fpath+=( ~/tooling/zsh/completions )
 ssource ~/.zsh_plugins.sh
 ssource "$HOME/.aliases.zsh" # TODO: move?
 ssource ~/.private
 
 #: }}}
 #: Homebrew {{{
-  if [ -d "/usr/local/bin" ]; then
-    export BREW_PATH="/usr/local"
-  fi
 
-  if [ -d "/opt/homebrew/bin" ]; then
-    export BREW_PATH="/opt/homebrew"
-  fi
+ssource ~/.config/cold-brew/shellenv
 
 # ssource ~/.fzf.zsh
-[[ $- == *i* ]] && source "$BREW_PATH/opt/fzf/shell/completion.zsh" 2> /dev/null
-source "$BREW_PATH/opt/fzf/shell/key-bindings.zsh"
-
+[[ $- == *i* ]] && source "$HOMEBREW_PREFIX/opt/fzf/shell/completion.zsh" 2> /dev/null
+source "$HOMEBREW_PREFIX/opt/fzf/shell/key-bindings.zsh"
 
 export HOMEBREW_BUNDLE_FILE="~/PersonalConfigs/.config/cold-brew/Brewfile.work.conf"
 [[ $(whoami) == "adam" ]] && export HOMEBREW_BUNDLE_FILE="~/PersonalConfigs/.config/cold-brew/Brewfile.macbook.conf"
@@ -110,6 +105,22 @@ export FZF_DEFAULT_COMMAND='fd --type f'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # quickest way to cd around
 export FZF_ALT_C_COMMAND="fd --hidden --type d --exclude '{Library,Music,Applications,Pictures,Unity,VirtualBox VMs,WebstormProjects,Tools,node_modules,.git}' . ${HOME}"
+
+#: }}}
+#: TMUX {{{
+
+# TODO: make these machine specific
+export TMUX_SESSION_PROJ_1="~/PersonalConfigs"
+# export TMUX_SESSION_PROJ_2="~/dev/cold-brew"
+export TMUX_SESSION_PROJ_2="~/work/deals-light-ui"
+export TMUX_SESSION_PROJ_3=""
+export TMUX_SESSION_PROJ_4=""
+export TMUX_SESSION_PROJ_5=""
+export TMUX_SESSION_PROJ_6=""
+export TMUX_SESSION_PROJ_7=""
+export TMUX_SESSION_PROJ_8=""
+export TMUX_SESSION_PROJ_9=""
+export TMUX_SESSION_PROJ_0="~/dev/qmk_firmware/keyboards/preonic/keymaps/codethread"
 
 #: }}}
 #: Language specific {{{
