@@ -16,12 +16,12 @@ if [ \"$re_initialized\" -eq \"1\" ]; then
 else
   # omit the check for new functions since we updated today
   compinit -C
-fi" | sed ':a $!{N; ba}; s/\n/\\n/g')
+fi" | gsed ':a $!{N; ba}; s/\n/\\n/g')
 
 # sort -s -k1.1,1.1 sorts on first letter only and preserves order
 antibody bundle < ~/.zsh_plugins.txt \
     | sort -s -k1.1,1.1 \
-    | sed "0,/source/s//\n$compinit_check\n\nsource/" \
+    | gsed "0,/source/s//\n$compinit_check\n\nsource/" \
         > ~/.zsh_plugins.sh || exit 1
 
 echo "make sure to run compinit"
