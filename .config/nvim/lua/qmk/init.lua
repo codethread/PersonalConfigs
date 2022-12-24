@@ -104,6 +104,8 @@ local function format_layout(layout)
 	return output
 end
 
+function print_layout(layout) vim.pretty_print(layout) end
+
 local function format_qmk_keymaps(buf)
 	local bufnr = buf or vim.api.nvim_get_current_buf()
 	local parser = ts.get_parser(bufnr, 'c')
@@ -126,8 +128,8 @@ local function format_qmk_keymaps(buf)
 			end
 
 			vim.api.nvim_buf_set_lines(bufnr, start + 1, final, false, format_layout(layout))
-			-- TODO
-			-- vim.api.nvim_buf_set_lines(bufnr, start + 1, start + 1, false, print_layout(layout))
+			-- print_layout(layout)
+			-- vim.api.nvim_buf_set_lines(bufnr, start + 1, final, false, print_layout(layout))
 		end
 	end
 end
@@ -140,3 +142,5 @@ vim.api.nvim_create_autocmd('BufWritePre', {
 	pattern = '*keymap.c',
 	callback = function() format_qmk_keymaps() end,
 })
+
+format_qmk_keymaps(95)
