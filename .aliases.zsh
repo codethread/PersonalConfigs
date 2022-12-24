@@ -113,8 +113,9 @@ alias gfuck='git fetch origin; git reset --hard origin ${gBranch}'
 alias gignore="git rm -r --cached .; git add .; git commit -m '.gitignore is now working'"
 alias gkill="git branch | grep -v \"master\" | xargs git branch -D"
 alias gl="git log --oneline main..HEAD"
-alias grr="git rebase -i HEAD~\`git log --oneline main..HEAD | wc -l\`"
-alias gmm="git checkout main && git pull && git checkout - && git rebase main"
+alias gld="git log --oneline develop..HEAD"
+alias grr="git rebase -i HEAD~\"$(gld | wc -l | xargs)\""
+alias gmm="git checkout develop && git pull && git checkout - && git rebase develop"
 alias gnah="git reset --hard; git clean -df"
 alias gnuke="git clean -dfX"
 alias gr='git rebase -i HEAD~$1'
@@ -136,16 +137,6 @@ alias muxa="mux spages; mux exc;"
 alias kmux="kill_tmux_session"
 
 ##############################################
-# SKY
+# work
 ##############################################
-alias uni="unicorn_build"
-alias cdi="cd ~/sky/id-idris"
-
-#---------------------------------------------#
-# OTHER
-# -------------------------------------------#
-alias cs="slack chat send -tx '@Waldorf akamai delete cache https://static.skyassets.com/content-api/v1/mobile-service-hub/app' -ch 'C7Y53DL90'"
-
-alias poco="watch -n0.2 slack chat send -tx 'PCOO?' -ch 'D35J9H880'"
-
-alias jisql="rlwrap java -cp $HOME/jisql/target/jisql-jar-with-dependencies.jar:$HOME/jdbc/ojdbc8-12.2.0.1.jar com.xigole.util.sql.Jisql -driver oraclethin -c \; "
+alias nvm="volta pin node@14 && volta pin yarn@1.22.4"
