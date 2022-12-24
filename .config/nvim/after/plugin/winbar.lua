@@ -38,5 +38,6 @@ winbar.setup {
 		'toggleterm',
 		'qf',
 		'harpoon',
+		'glowpreview',
 	},
 }
