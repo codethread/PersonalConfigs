@@ -105,17 +105,17 @@ alias gob=go1.18beta1
 #---------------------------------------------#
 # GIT
 # -------------------------------------------#
-alias gBranch='git rev-parse --abbrev-ref HEAD'
+alias -g gbranch='git rev-parse --abbrev-ref HEAD'
+alias -g gtrunk="git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'"
 alias gclean="git clean -dfX"
 alias gcp="git cherry-pick"
 alias gst="git status -s"
-alias gfuck='git fetch origin; git reset --hard origin ${gBranch}'
+alias gfuck='git fetch origin; git reset --hard origin $(gbranch)'
 alias gignore="git rm -r --cached .; git add .; git commit -m '.gitignore is now working'"
-alias gkill="git branch | grep -v \"master\" | xargs git branch -D"
-alias gl="git log --oneline main..HEAD"
-alias gld="git log --oneline develop..HEAD"
-alias grr="git rebase -i HEAD~\"$(gld | wc -l | xargs)\""
-alias gmm="git checkout develop && git pull && git checkout - && git rebase develop"
+alias gkill='git branch | grep -v "$( gtrunk )" | xargs git branch -D'
+alias gl='git log --oneline $( gtrunk )..HEAD'
+alias grr="gl | wc -l | rargs -p '\\s*(.*)\\s*' git rebase -i HEAD~{1}"
+alias gmm='git checkout $( gtrunk ) && git pull && git checkout - && git rebase $( gtrunk )'
 alias gnah="git reset --hard; git clean -df"
 alias gnuke="git clean -dfX"
 alias gr='git rebase -i HEAD~$1'
