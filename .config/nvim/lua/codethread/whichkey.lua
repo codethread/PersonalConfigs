@@ -273,6 +273,14 @@ local mappings = {
 			'Inlay Hints',
 		},
 	},
+
+	u = {
+		name = 'Utils',
+		f = {
+			"mbggVG=='b",
+			'format buffer',
+		},
+	},
 }
 
 which_key.setup(setup)
