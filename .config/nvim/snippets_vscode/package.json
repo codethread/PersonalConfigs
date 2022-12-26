@@ -30,6 +30,14 @@
       {
         "language": "lua",
         "path": "./lua.json"
+      },
+      {
+        "language": [
+          "sh",
+          "bash",
+          "zsh"
+        ],
+        "path": "./sh.json"
       }
     ]
   }

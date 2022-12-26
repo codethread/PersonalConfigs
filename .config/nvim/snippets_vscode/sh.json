@@ -1,0 +1,22 @@
+{
+  "machine": {
+    "prefix": "machine",
+    "body": [
+      "if [[ -n \"${CT_IS_MINI}\" ]]; then",
+      "\t$1",
+      "elif [[ -n \"${CT_IS_LAPTOP}\" ]]; then",
+      "\t$2",
+      "else",
+      "\t$3",
+      "fi"
+    ]
+  },
+  "is linux": {
+    "prefix": "islinux",
+    "body": ["if [[ -n \"\\${CT_IS_LINUX}\" ]]; then", "\t$1", "fi"]
+  },
+  "is mac": {
+    "prefix": "ismac",
+    "body": ["if [[ -n \"\\${CT_IS_MAC}\" ]]; then", "\t$1", "fi"]
+  }
+}
