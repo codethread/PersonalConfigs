@@ -54,32 +54,16 @@ pathappend () {
     export $var="${value:+${value}:}${1}"
 }
 #: }}}
-
-#: Mac only {{{
-
-if [ "$(uname 2> /dev/null)" != "Linux" ]; then
-  [ -d "/usr/local/opt/python/libexec/bin" ] && pathprepend "/usr/local/opt/python/libexec/bin" PATH
-fi
-
-#: }}}
-#: Linux only {{{
-
-if [ "$(uname 2> /dev/null)" = "Linux" ]; then
-  [ -d "/opt/X12/bin" ] && pathprepend "/opt/X12/bin" PATH
-  [ -d "/opt/local/bin" ] && pathprepend "/opt/local/bin" PATH
-fi
-
-#: }}}
 #: Personal shared {{{
 
-[ -d "$HOME/.local/bin" ] && pathprepend "$HOME/.local/bin" PATH
+pathprepend "$HOME/.local/bin" PATH
 [ -d "$HOME/.emacs.d/bin" ] && pathprepend "$HOME/.emacs.d/bin" PATH
 
 #: }}}
 #: Homebrew {{{
 
-    pathprepend "$HOMEBREW_PREFIX/bin" PATH
-    pathprepend "$HOMEBREW_PREFIX/sbin" PATH
+pathprepend "$HOMEBREW_PREFIX/bin" PATH
+pathprepend "$HOMEBREW_PREFIX/sbin" PATH
 
   # use gnu coreutils instead of mac, e.g sed
   # this actually messed with a lot of packages that expected the defaults
@@ -88,27 +72,13 @@ fi
   # pathprepend "$BREW_PATH/opt/gnu-tar/libexec/gnubin" PATH
 
 #: }}}
-#: node {{{
 
-[ -d "$VOLTA_HOME/bin" ] && pathprepend "$VOLTA_HOME/bin" PATH && echo "volta added"
+pathprepend "$VOLTA_HOME/bin" PATH
+pathprepend "$GOBIN" PATH
+pathprepend "/usr/local/go/bin" PATH
+pathprepend "$HOME/.cargo/bin" PATH
+pathprepend "$HOME/.luarocks/bin" PATH
 
-#: }}}
-#: Golang {{{
-
-[ -d "$GOBIN" ] && pathprepend "$GOBIN" PATH
-[ -d "/usr/local/go/bin" ] && pathprepend "/usr/local/go/bin" PATH
-
-#: }}}
-#: rust {{{
-
-[ -d "$HOME/.cargo/bin" ] && pathprepend "$HOME/.cargo/bin" PATH
-
-#: }}}
-#: lua {{{
-
-[ -d "$HOME/.luarocks/bin" ] && pathprepend "$HOME/.luarocks/bin" PATH
-
-#: }}}
 #: misc {{{
 
 [ -d "$HOME/istio-1.5.1/bin" ] && pathprepend "$HOME/istio-1.5.1/bin" PATH
@@ -119,7 +89,7 @@ fi
 [ -d "$HOME/.dotnet/tools" ] && pathprepend "$HOME/.dotnet/tools" PATH
 [ -d "/usr/local/share/dotnet" ] && pathprepend "/usr/local/share/dotnet" PATH
 
-if [ "$(uname 2> /dev/null)" != "Linux" ]; then
+if [[ -n "${CT_IS_MAC}" ]]; then
   [ -d "/Library/Frameworks/Mono.framework/Versions/Current/Commands" ] && pathprepend "/Library/Frameworks/Mono.framework/Versions/Current/Commands" PATH
 fi
 
