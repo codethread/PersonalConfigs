@@ -7,15 +7,36 @@
 # this has some tips on speeding up zsh
 # https://htr3n.github.io/2018/07/faster-zsh/
 
-#: Linux only {{{
+#: VARS {{{
 
-if [ "$(uname 2> /dev/null)" = "Linux" ]; then
-  # remap capslock to ctrl
-  gsettings set org.gnome.desktop.input-sources xkb-options "['ctrl:nocaps']"
+OS="$(uname)"
+if [[ "${OS}" == "Linux" ]]; then
+    CT_IS_LINUX=1
+elif [[ "${OS}" == "Darwin" ]]; then
+    CT_IS_MAC=1
+
+    if [[ $(/usr/bin/uname -m) == "arm64" ]]; then 
+        CT_IS_ARM=1
+    else 
+        CT_IS_ARM=0
+    fi
+else
+    abort "why you no OS?"
+fi
+
+CT="$(whoami)"
+if [[ "${CT}" == "adam" ]]; then
+    CT_IS_LAPTOP=1
+    CT_IS_WORK=0
+elif [[ "${CT}" == "codethread" ]]; then
+    CT_IS_MINI=1
+    CT_IS_WORK=0
+else
+    CT_IS_WORK=1
 fi
 
 #: }}}
-#: ZSH settings {{{
+#: Key Bindings {{{
 
 bindkey -e # emacs key bindings
 
@@ -28,9 +49,14 @@ zstyle ':completion:*' menu selecto
 
 # fix for navigation keys in IDEA terminal
 if [[ "$TERMINAL_EMULATOR" == "JetBrains-JediTerm" ]]; then
-  bindkey "∫" backward-word # Option-b
-  bindkey "ƒ" forward-word  # Option-f
-  bindkey "∂" delete-word   # Option-d
+    bindkey "∫" backward-word # Option-b
+    bindkey "ƒ" forward-word  # Option-f
+    bindkey "∂" delete-word   # Option-d
+fi
+
+if [[ -n "${CT_IS_LINUX}" ]]; then
+    # remap capslock to ctrl
+    gsettings set org.gnome.desktop.input-sources xkb-options "['ctrl:nocaps']"
 fi
 
 #: }}}
@@ -45,7 +71,7 @@ setopt HIST_FIND_NO_DUPS         # Don't show dups when using history command
 setopt HIST_IGNORE_SPACE         # Don't add commands starting with 'space' (good for credentials)
 setopt HIST_REDUCE_BLANKS        # less blanks
 
-HISTFILE=$HOME/.zsh_history
+HISTFILE="$ZDOTDIR/.zsh_history"
 HISTSIZE=999999999
 SAVEHIST=$HISTSIZE
 
@@ -61,24 +87,27 @@ SAVEHIST=$HISTSIZE
 eval "$(starship init zsh)"
 
 # add completions to this folder with format _example
-[ -d ~/tooling/zsh/completions ] || mkdir -p ~/tooling/zsh/completions
-fpath+=( ~/tooling/zsh/completions )
-ssource ~/.zsh_plugins.sh
-ssource "$HOME/.aliases.zsh" # TODO: move?
+mkdir -p "$ZDOTDIR/completions"
+fpath+=( "$ZDOTDIR/completions" )
+ssource "$ZDOTDIR/.zsh_plugins.sh"
+ssource "$ZDOTDIR/.aliases.zsh"
 ssource ~/.private
 
 #: }}}
 #: Homebrew {{{
 
+# ??? hard code this and add to PATH ??
+# export HOMEBREW_PREFIX="/opt/homebrew";
+
 ssource ~/.config/cold-brew/shellenv
 
-# ssource ~/.fzf.zsh
-[[ $- == *i* ]] && source "$HOMEBREW_PREFIX/opt/fzf/shell/completion.zsh" 2> /dev/null
-source "$HOMEBREW_PREFIX/opt/fzf/shell/key-bindings.zsh"
-
-export HOMEBREW_BUNDLE_FILE="~/PersonalConfigs/.config/cold-brew/Brewfile.work.conf"
-[[ $(whoami) == "adam" ]] && export HOMEBREW_BUNDLE_FILE="~/PersonalConfigs/.config/cold-brew/Brewfile.macbook.conf"
-[[ $(whoami) == "codethread" ]] && export HOMEBREW_BUNDLE_FILE="~/PersonalConfigs/.config/cold-brew/Brewfile.mini.conf"
+if [[ -n "${CT_IS_MINI}" ]]; then
+    export HOMEBREW_BUNDLE_FILE="~/PersonalConfigs/.config/cold-brew/Brewfile.mini.conf"
+elif [[ -n "${CT_IS_LAPTOP}" ]]; then
+    export HOMEBREW_BUNDLE_FILE="~/PersonalConfigs/.config/cold-brew/Brewfile.macbook.conf"
+else
+    export HOMEBREW_BUNDLE_FILE="~/PersonalConfigs/.config/cold-brew/Brewfile.work.conf"
+fi
 
 #: }}}
 #: General {{{
@@ -106,21 +135,30 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # quickest way to cd around
 export FZF_ALT_C_COMMAND="fd --hidden --type d --exclude '{Library,Music,Applications,Pictures,Unity,VirtualBox VMs,WebstormProjects,Tools,node_modules,.git}' . ${HOME}"
 
+
+# ssource ~/.fzf.zsh
+# [[ $- == *i* ]] && source "$HOMEBREW_PREFIX/opt/fzf/shell/completion.zsh" 2> /dev/null
+# source "$HOMEBREW_PREFIX/opt/fzf/shell/key-bindings.zsh"
 #: }}}
 #: TMUX {{{
 
 # TODO: make these machine specific
 export TMUX_SESSION_PROJ_1="~/PersonalConfigs"
-# export TMUX_SESSION_PROJ_2="~/dev/cold-brew"
-export TMUX_SESSION_PROJ_2="~/work/deals-light-ui"
-export TMUX_SESSION_PROJ_3=""
-export TMUX_SESSION_PROJ_4=""
-export TMUX_SESSION_PROJ_5=""
-export TMUX_SESSION_PROJ_6=""
-export TMUX_SESSION_PROJ_7=""
-export TMUX_SESSION_PROJ_8=""
-export TMUX_SESSION_PROJ_9=""
-export TMUX_SESSION_PROJ_0="~/dev/qmk_firmware/keyboards/preonic/keymaps/codethread"
+
+if [[ $(whoami) == "adam" ]] || [[ $(whoami) == "codethread" ]] ; then
+    export TMUX_SESSION_PROJ_2="~/dev/projects/cold-brew"
+    export TMUX_SESSION_PROJ_3="~/dev/projects/qmk.nvim"
+    export TMUX_SESSION_PROJ_4=""
+    export TMUX_SESSION_PROJ_5=""
+    export TMUX_SESSION_PROJ_6=""
+    export TMUX_SESSION_PROJ_7=""
+    export TMUX_SESSION_PROJ_8=""
+    export TMUX_SESSION_PROJ_9=""
+else
+    export TMUX_SESSION_PROJ_2="~/work/deals-light-ui"
+    export TMUX_SESSION_PROJ_3=""
+fi
+export TMUX_SESSION_PROJ_0="~/dev/projects/qmk_firmware/keyboards/preonic/keymaps/codethread"
 
 #: }}}
 #: Language specific {{{
@@ -159,9 +197,9 @@ export GO111MODULE=on
 #: gcloud {{{
 
 gcloud() {
-  ssource "$HOME/google-cloud-sdk/completion.zsh.inc"
-  # The next line updates PATH for the Google Cloud SDK.
-  ssource "$HOME/google-cloud-sdk/path.zsh.inc"
+    ssource "$HOME/google-cloud-sdk/completion.zsh.inc"
+    # The next line updates PATH for the Google Cloud SDK.
+    ssource "$HOME/google-cloud-sdk/path.zsh.inc"
 }
 
 #: }}}
@@ -171,8 +209,8 @@ gcloud() {
 # ssource '/usr/local/Cellar/jenv/0.5.3/libexec/libexec/../completions/jenv.zsh'
 # https://github.com/jenv/jenv/issues/148 speed up ideas
 jenvy() {
-  # brew install rlwrap if this fails
-  eval "$(jenv init -)"
+    # brew install rlwrap if this fails
+    eval "$(jenv init -)"
 }
 
 #: }}}
@@ -180,8 +218,8 @@ jenvy() {
 #: ruby {{{
 
 rbenv() {
-  eval "$(command rbenv init -)"
-  rbenv "$@"
+    eval "$(command rbenv init -)"
+    rbenv "$@"
 }
 
 #: }}}

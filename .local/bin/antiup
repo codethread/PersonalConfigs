@@ -19,9 +19,9 @@ else
 fi" | gsed ':a $!{N; ba}; s/\n/\\n/g')
 
 # sort -s -k1.1,1.1 sorts on first letter only and preserves order
-antibody bundle < ~/.zsh_plugins.txt \
+antibody bundle < "$ZDOTDIR/.zsh_plugins.txt" \
     | sort -s -k1.1,1.1 \
     | gsed "0,/source/s//\n$compinit_check\n\nsource/" \
-        > ~/.zsh_plugins.sh || exit 1
+        > "$ZDOTDIR/.zsh_plugins.sh" || exit 1
 
 echo "make sure to run compinit"
