@@ -2,14 +2,13 @@
 # EDITOR-ish
 # -------------------------------------------#
 alias v="nvim"
-alias zz="nvim ~/.zshrc"
-alias zp="nvim ~/.zprofile"
-alias vv="cd ~/PersonalConfigs/.config/nvim; nvim ./init.lua" # open vim config
+alias zz="nvim ${ZDOTDIR}/.zshrc"
+alias vv="cd ${DOTFILES}/.config/nvim; nvim ./init.lua" # open vim config
 alias aa="nvim ~/.aliases.zsh" # open aliases
 # see https://github.com/wbthomason/packer.nvim/issues/180 for MACOSX_DEPLOYMENT_TARGET=10.15
 alias nvim-boot="MACOSX_DEPLOYMENT_TARGET=10.15 nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'"
 
-alias zr="source ~/.zshrc"
+alias zr="source ${ZDOTDIR}/.zshrc"
 alias vo="nvim \$(fzf)"
 alias als="eval \$(cat ~/.aliases.zsh | grep \"^alias.\+=\\\"\" | fzf -i --header='[run:]' | sed -E \"s:alias.*\\\"(.*)\\\":\\1:\" )"
 

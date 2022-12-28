@@ -1,7 +1,12 @@
+# vim:fileencoding=utf-8:foldmethod=marker:foldlevel=0
+
 # loaded first by by all shells including emacs during command execution
+
+export DOTFILES="${HOME}/PersonalConfigs"
+#: Profile {{{
+
 # enable this and zshrc `zprof` for profiling
 # zmodload zsh/zprof
-HISTSIZE=999999999
 
 PROFILE_STARTUP=false
 if [[ "$PROFILE_STARTUP" == true ]]; then
@@ -10,6 +15,9 @@ if [[ "$PROFILE_STARTUP" == true ]]; then
     exec 3>&2 2>$HOME/tmp/startlog.$$
     setopt xtrace prompt_subst
 fi
+
+#: }}}
+#: Helpers {{{
 
 # Usage: ssource filename
 ssource () {
@@ -43,11 +51,76 @@ function git_current_branch() {
 
 ######## end of steal
 
-# Ensure that a non-login, non-interactive shell has a defined environment.
-# https://github.com/sorin-ionescu/prezto/blob/master/runcoms/zshenv
-if [[ ( "$SHLVL" -eq 1 && ! -o LOGIN ) && -s "${ZDOTDIR:-$HOME}/.zprofile" ]]; then
-  source "${ZDOTDIR:-$HOME}/.zprofile"
-fi
-
 # https://blog.patshead.com/2011/04/improve-your-oh-my-zsh-startup-time-maybe.html
 skip_global_compinit=1
+
+#: }}}
+#: VARS {{{
+
+OS="$(uname)"
+if [[ "${OS}" == "Linux" ]]; then
+    export CT_IS_LINUX=1
+elif [[ "${OS}" == "Darwin" ]]; then
+    export CT_IS_MAC=1
+
+    if [[ $(/usr/bin/uname -m) == "arm64" ]]; then 
+        export CT_IS_ARM=1
+    else 
+        export CT_IS_ARM=0
+    fi
+else
+    abort "why you no OS?"
+fi
+
+CT="$(whoami)"
+if [[ "${CT}" == "adam" ]]; then
+    export CT_IS_LAPTOP=1
+    export CT_IS_WORK=0
+elif [[ "${CT}" == "codethread" ]]; then
+    export CT_IS_MINI=1
+    export CT_IS_WORK=0
+else
+    export CT_IS_WORK=1
+fi
+
+#: }}}
+#: Dotty {{{
+
+export DOTTY_DIR="${HOME}/PersonalConfigs"
+
+#: }}}
+#: Homebrew {{{
+
+# hard code HOMEBREW path as fallback on new machine
+if [[ -n "${CT_IS_MAC}" ]]; then
+    [[ -n "${CT_IS_ARM}" ]] && export HOMEBREW_PREFIX="/opt/homebrew" || export HOMEBREW_PREFIX="/usr/local";
+else
+    export HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew";
+fi
+ssource "${ZDOTDIR}/shellenv.zsh"
+
+#: }}}
+#: Language specific {{{
+
+#: node {{{
+
+export VOLTA_HOME="$HOME/.volta"
+export HUSKY=0 # I don't need my hand holding, thanks
+
+#: }}}
+
+#: Golang {{{
+
+export GOPATH=$HOME/go
+export GOBIN=$GOPATH/bin
+export GO111MODULE=on
+
+#: }}}
+
+#: haskell {{{
+
+# source ~/.ghcup/env
+
+#: }}}
+
+#: }}}

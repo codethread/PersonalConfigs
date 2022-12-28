@@ -56,7 +56,7 @@ local node = Term:new { cmd = 'node', hidden = true, close_on_exit = true }
 
 local format_dotfiles = Term:new {
 	cmd = "stylua --glob '**/*.lua' -- .config/nvim",
-	dir = '~/PersonalConfigs',
+	dir = os.getenv 'DOTFILES',
 	close_on_exit = true,
 	direction = 'horizontal',
 }

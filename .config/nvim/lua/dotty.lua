@@ -1,6 +1,6 @@
 local Job = require 'plenary.job'
 
-local in_dotfiles = vim.endswith(vim.fn.getcwd(), 'PersonalConfigs')
+local in_dotfiles = vim.endswith(vim.fn.getcwd(), os.getenv 'DOTFILES')
 
 ---notify at info level
 ---@param msg string
@@ -25,7 +25,7 @@ if in_dotfiles then
 		vim.api.nvim_create_autocmd({ 'BufWritePost', 'BufFilePost', 'BufWipeout', 'VimLeavePre' }, {
 			desc = 'Run dotty when saving and deleting buffers',
 			group = vim.api.nvim_create_augroup('Dotty', {}),
-			pattern = '*/PersonalConfigs/*',
+			pattern = os.getenv 'DOTFILES' .. '/*',
 			callback = function(opts)
 				if opts.file == nil then return end
 

@@ -1,5 +1,5 @@
 # vim:fileencoding=utf-8:foldmethod=marker:foldlevel=0
-#
+
 # Only read by interactive shells
 # i.e only put in stuff that helps with typing commands etc
 # https://blog.flowblok.id.au/2013-02/shell-startup-scripts.html
@@ -7,35 +7,6 @@
 # this has some tips on speeding up zsh
 # https://htr3n.github.io/2018/07/faster-zsh/
 
-#: VARS {{{
-
-OS="$(uname)"
-if [[ "${OS}" == "Linux" ]]; then
-    CT_IS_LINUX=1
-elif [[ "${OS}" == "Darwin" ]]; then
-    CT_IS_MAC=1
-
-    if [[ $(/usr/bin/uname -m) == "arm64" ]]; then 
-        CT_IS_ARM=1
-    else 
-        CT_IS_ARM=0
-    fi
-else
-    abort "why you no OS?"
-fi
-
-CT="$(whoami)"
-if [[ "${CT}" == "adam" ]]; then
-    CT_IS_LAPTOP=1
-    CT_IS_WORK=0
-elif [[ "${CT}" == "codethread" ]]; then
-    CT_IS_MINI=1
-    CT_IS_WORK=0
-else
-    CT_IS_WORK=1
-fi
-
-#: }}}
 #: Key Bindings {{{
 
 bindkey -e # emacs key bindings
@@ -87,26 +58,22 @@ SAVEHIST=$HISTSIZE
 eval "$(starship init zsh)"
 
 # add completions to this folder with format _example
+# don't forget to run compinit after
 mkdir -p "$ZDOTDIR/completions"
 fpath+=( "$ZDOTDIR/completions" )
-ssource "$ZDOTDIR/.zsh_plugins.sh"
+ssource "$ZDOTDIR/.zsh_plugins.zsh"
 ssource "$ZDOTDIR/.aliases.zsh"
 ssource ~/.private
 
 #: }}}
 #: Homebrew {{{
 
-# ??? hard code this and add to PATH ??
-# export HOMEBREW_PREFIX="/opt/homebrew";
-
-ssource ~/.config/cold-brew/shellenv
-
 if [[ -n "${CT_IS_MINI}" ]]; then
-    export HOMEBREW_BUNDLE_FILE="~/PersonalConfigs/.config/cold-brew/Brewfile.mini.conf"
+    export HOMEBREW_BUNDLE_FILE="${DOTFILES}/.config/cold-brew/Brewfile.mini.conf"
 elif [[ -n "${CT_IS_LAPTOP}" ]]; then
-    export HOMEBREW_BUNDLE_FILE="~/PersonalConfigs/.config/cold-brew/Brewfile.macbook.conf"
+    export HOMEBREW_BUNDLE_FILE="${DOTFILES}/.config/cold-brew/Brewfile.macbook.conf"
 else
-    export HOMEBREW_BUNDLE_FILE="~/PersonalConfigs/.config/cold-brew/Brewfile.work.conf"
+    export HOMEBREW_BUNDLE_FILE="${DOTFILES}/.config/cold-brew/Brewfile.work.conf"
 fi
 
 #: }}}
@@ -142,10 +109,13 @@ export FZF_ALT_C_COMMAND="fd --hidden --type d --exclude '{Library,Music,Applica
 #: }}}
 #: TMUX {{{
 
-# TODO: make these machine specific
-export TMUX_SESSION_PROJ_1="~/PersonalConfigs"
+export TMUX_SESSION_PROJ_1="${DOTFILES}"
+export TMUX_SESSION_PROJ_0="~/dev/projects/qmk_firmware/keyboards/preonic/keymaps/codethread"
 
-if [[ $(whoami) == "adam" ]] || [[ $(whoami) == "codethread" ]] ; then
+if [[ -n "${CT_IS_WORK}" ]]; then
+    export TMUX_SESSION_PROJ_2="~/work/deals-light-ui"
+    export TMUX_SESSION_PROJ_3=""
+else
     export TMUX_SESSION_PROJ_2="~/dev/projects/cold-brew"
     export TMUX_SESSION_PROJ_3="~/dev/projects/qmk.nvim"
     export TMUX_SESSION_PROJ_4=""
@@ -154,35 +124,10 @@ if [[ $(whoami) == "adam" ]] || [[ $(whoami) == "codethread" ]] ; then
     export TMUX_SESSION_PROJ_7=""
     export TMUX_SESSION_PROJ_8=""
     export TMUX_SESSION_PROJ_9=""
-else
-    export TMUX_SESSION_PROJ_2="~/work/deals-light-ui"
-    export TMUX_SESSION_PROJ_3=""
 fi
-export TMUX_SESSION_PROJ_0="~/dev/projects/qmk_firmware/keyboards/preonic/keymaps/codethread"
 
 #: }}}
 #: Language specific {{{
-
-#: node {{{
-
-export VOLTA_HOME="$HOME/.volta"
-export HUSKY=0 # I don't need my hand holding, thanks
-
-#: }}}
-
-#: Golang {{{
-
-export GOPATH=$HOME/go
-export GOBIN=$GOPATH/bin
-export GO111MODULE=on
-
-#: }}}
-
-#: haskell {{{
-
-# source ~/.ghcup/env
-
-#: }}}
 
 #: kubernetes {{{
 
