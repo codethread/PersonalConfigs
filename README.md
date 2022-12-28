@@ -1,4 +1,13 @@
-> A scientist measures our lives in the ways we develop and expand our knowledge through myriad variations. Nothing can take its place. It’s our very soul... There is no such thing as perfect in this world. The average person admires perfection and seeks to obtain it. But what’s the point of achieving perfection? There is none. Nothing. Not a single thing. I spit on perfection! If something is perfect, then there is nothing left. There is no room for imagination. No place left for that person to gain additional knowledge or abilities... It is our job to create things more wonderful than anything before them, but never to obtain perfection. ― Kurotsuchi Mayuri
+> We measure our lives in the ways we develop and expand our knowledge 
+> through myriad variations. Nothing can take its place. It’s our very soul... 
+>
+> There is no such thing as perfect in this world ... If something
+> is perfect, then there is nothing left. There is no room for imagination.
+>
+> It is our job to create things more wonderful than anything before them, but
+> never to obtain perfection.
+>
+> ― Kurotsuchi Mayuri
 
 ```
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/codethread/PersonalConfigs/main/_boot/boot.sh)"
