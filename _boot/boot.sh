@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 
-if [[ -z "${DOTFILES}" ]]; then
-    echo "ಥ╭╮ಥ please set env var DOTFILES for project location"
-    exit 1
-fi 
+export DOTFILES="${HOME}/PersonalConfigs";
 
 cd || exit 1
 
