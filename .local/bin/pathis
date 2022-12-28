@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-
-echo "$PATH" | tr -s ":" "\n" > ~/.pathis
-
-# /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
-
