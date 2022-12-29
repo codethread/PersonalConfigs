@@ -39,4 +39,9 @@ function M.autocmd(events, opts)
 	})
 end
 
+function M.file_exits(path)
+	local p = vim.fs.normalize(path)
+	return vim.fn.isdirectory(p) == 1
+end
+
 return M

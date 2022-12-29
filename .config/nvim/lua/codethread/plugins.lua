@@ -7,21 +7,24 @@
 -- stuff is stored at ~/.local/share/nvim
 -- cache lives in ~/.cache/nvim/packer
 
--- Bootstrap Packer
-require 'codethread.packer'
+-- Bootstrap Packer, don't move this from the top
+local p = require 'codethread.packer'
+local packer_bootstrap = p.ensure_packer()
 local safe_load = require('codethread.utils').safe_load
 
 safe_load('packer', function(packer)
 	packer.startup {
-
 		function(use)
+			local use_local = p.use_local_partial(use)
+			local use_rocks = packer.use_rocks
+
 			-- Packer can manage itself
 			use 'wbthomason/packer.nvim'
 
 			-- rocks
 			-- if this hangs, check python is available and https://github.com/wbthomason/packer.nvim/issues/180
 			-- https://lunarmodules.github.io/Penlight/classes/pl.List.html
-			packer.use_rocks 'penlight'
+			use_rocks 'penlight'
 
 			-- Things required early
 			use 'nvim-lua/plenary.nvim'
@@ -41,7 +44,7 @@ safe_load('packer', function(packer)
 			-- telescope
 			use {
 				'nvim-telescope/telescope.nvim',
-				tag = '0.1.*',
+				tag = '0.1.x',
 				requires = { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' },
 			}
 			use 'nvim-telescope/telescope-ui-select.nvim'
@@ -74,7 +77,7 @@ safe_load('packer', function(packer)
 			--[[                    Want to turn fooBar into foo_bar? Press crs (coerce to snake_case). MixedCase
                                     (crm), camelCase (crc), snake_case (crs), UPPER_CASE (cru), dash-case (cr-),
                                     dot.case (cr.), space case (cr<space>), and Title Case (crt) are all just 3 keystrokes away. --]]
-			use '~/dev/projects/qmk.nvim'
+			use_local '~/dev/projects/qmk.nvim'
 
 			-- navigation
 			use 'tpope/vim-projectionist'
@@ -145,7 +148,7 @@ safe_load('packer', function(packer)
 			use { 'akinsho/toggleterm.nvim', tag = 'v2.*' }
 			use 'christoomey/vim-tmux-navigator'
 
-			if PACKER_BOOTSTRAP then packer.sync() end
+			if packer_bootstrap then packer.sync() end
 		end,
 		config = {
 			max_jobs = 20, -- adapt by machine
