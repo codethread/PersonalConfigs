@@ -2,7 +2,15 @@
 
 # loaded first by by all shells including emacs during command execution
 
+#: General {{{
+
 export DOTFILES="${HOME}/PersonalConfigs"
+export EDITOR='nvim'
+export MANPAGER="/bin/sh -c \"col -b | nvim -c 'set ft=man ts=8 nomod nolist nonu' -\""
+export MANWIDTH=80
+export WAKATIME_HOME="$HOME/.config/wakatime"
+
+#: }}}
 #: Profile {{{
 
 # enable this and zshrc `zprof` for profiling
@@ -82,11 +90,6 @@ elif [[ "${CT}" == "codethread" ]]; then
 else
     export CT_IS_WORK=1
 fi
-
-#: }}}
-#: Dotty {{{
-
-export DOTTY_DIR="${HOME}/PersonalConfigs"
 
 #: }}}
 #: Homebrew {{{
