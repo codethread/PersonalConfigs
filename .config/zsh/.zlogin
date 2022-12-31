@@ -78,8 +78,9 @@ pathappend () {
 }
 
 #: }}}
-#: Homebrew {{{
+#: PATH {{{
 
+# Brew 
 pathprepend "$HOMEBREW_PREFIX/bin" PATH
 pathprepend "$HOMEBREW_PREFIX/sbin" PATH
 
@@ -89,30 +90,36 @@ pathprepend "$HOMEBREW_PREFIX/sbin" PATH
 # pathprepend "$BREW_PATH/opt/gnu-sed/libexec/gnubin" PATH
 # pathprepend "$BREW_PATH/opt/gnu-tar/libexec/gnubin" PATH
 
-#: }}}
-
+# personal
 pathprepend "$HOME/.local/bin" PATH
 
+# emacs
 pathprepend "$HOME/.emacs.d/bin" PATH
 
+# node.js
 pathprepend "$VOLTA_HOME/bin" PATH
 
+# go
 pathprepend "$GOBIN" PATH
 pathprepend "/usr/local/go/bin" PATH
 
+# rust
 pathprepend "$HOME/.cargo/bin" PATH
 
+# lua
 pathprepend "$HOME/.luarocks/bin" PATH
 
+# k8
 pathprepend "$HOME/istio-1.5.1/bin" PATH
 
+# ruby
 pathprepend "$HOME/.rbenv/shims" PATH
 
+# java
 pathprepend "$HOME/.jenv/bin" PATH
 pathprepend "$HOME/.jenv/shims" PATH
 
-#: unity {{{
-
+# unity
 pathprepend "$HOME/.dotnet/tools" PATH
 pathprepend "/usr/local/share/dotnet" PATH
 
