@@ -60,7 +60,7 @@ function M.setup_flumpy()
 					},
 				},
 			},
-			lualine_c = { { 'diagnostics' } },
+			lualine_c = { { 'lsp_progress', 'diagnostics' } },
 			lualine_x = {},
 			lualine_y = {
 				'filetype',

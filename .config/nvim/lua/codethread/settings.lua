@@ -37,7 +37,10 @@ set.signcolumn = 'yes'
 set.completeopt = 'menuone,noselect,preview'
 -- always keep some space around the window
 set.scrolloff = 8
+
 set.hlsearch = false -- don't keep / highlights after searching
+vim.o.smartcase = true
+
 set.showmode = false -- We don't need to see things like -- INSERT -- anymore
 
 -- can use abolish-grep with this

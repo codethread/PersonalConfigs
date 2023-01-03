@@ -37,7 +37,23 @@ winbar.setup {
 		'spectre_panel',
 		'toggleterm',
 		'qf',
+
 		'harpoon',
-		'glowpreview',
+
+		-- dapui
+		'dapui_config',
+		'dapui_watches',
+		'dapui_stacks',
+		'dapui_breakpoints',
+		'dapui_scopes',
+		'dapui_config',
+		'dapui_console',
+		'dapui_hover',
+		'dapui_repl',
+		'dapui_controls',
+		'dapui_state',
+
+		-- dap
+		'dap-repl',
 	},
 }

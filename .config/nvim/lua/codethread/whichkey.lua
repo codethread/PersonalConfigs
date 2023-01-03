@@ -23,7 +23,7 @@ local setup = {
 			windows = true, -- default bindings on <c-w>
 			nav = true, -- misc bindings to work with windows
 			z = true, -- bindings for fold, spelling and others prefixed with z
-			g = true, -- bindings for prefixed with g
+			g = false, -- bindings for prefixed with g
 		},
 	},
 	-- add operators that will trigger motion and text object completion
@@ -89,6 +89,7 @@ local opts = {
 -- map <C-F> :%s/
 -- map <C-P> :Files<CR>
 -- map \ :GrepFzf<CR>
+local dap = require 'dap'
 
 local mappings = {
 	['<leader>'] = { '<cmd>Telescope find_files shorten_path=false<cr>', 'Files' },
@@ -140,6 +141,19 @@ local mappings = {
 			'Prev Diagnostic',
 		},
 		q = { '<cmd>lua vim.diagnostic.setloclist()<cr>', 'Quickfix' },
+	},
+
+	d = {
+		name = 'Debug',
+		D = { function() dap.clear_breakpoints() end, 'clear all breakpoints' },
+		d = { function() dap.toggle_breakpoint() end, 'toggle' },
+		l = { function() dap.list_breakpoints() end, 'list' },
+		r = { function() dap.run_last() end, 'run last' },
+		s = {
+			function() require('codethread.lsp.dap').debug_hydra:activate() end,
+			'🐉 Start',
+		},
+		x = { function() dap.terminate() end, 'terminate' },
 	},
 
 	f = {
@@ -219,7 +233,7 @@ local mappings = {
 	},
 
 	['m'] = {
-		function() require('codethread.movement').mover_hydra:activate() end,
+		function() require('codethread.lsp.dap').mover_hydra:activate() end,
 		'🐉 Mover',
 	},
 

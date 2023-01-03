@@ -37,7 +37,6 @@ local servers = {
 	'tailwindcss',
 }
 
-require('mason').setup()
 require('mason-lspconfig').setup {
 	ensure_installed = servers,
 }

@@ -73,6 +73,13 @@ local function setup_tokyo()
 					fg = c.bg_dark,
 				}
 
+				-- hydra
+				hl.HydraRed = { fg = '#FF5733' }
+				hl.HydraBlue = { fg = '#5EBCF6' }
+				hl.HydraAmaranth = { fg = '#ff1757' }
+				hl.HydraTeal = { fg = '#00a1a1' }
+				hl.HydraPink = { fg = '#ff55de' }
+
 				-- autocomplete
 				-- TODO: get these from theme
 				hl.PmenuSel = { bg = '#282C34', fg = 'NONE' }

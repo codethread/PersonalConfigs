@@ -4,6 +4,9 @@ if not status_ok then
 	return
 end
 
+require('mason').setup()
+
 require 'codethread.lsp.setup'
 require('codethread.lsp.diagnostics').setup()
 require 'codethread.lsp.null-ls'
+require 'codethread.lsp.dap'

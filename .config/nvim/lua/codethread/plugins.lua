@@ -109,6 +109,8 @@ safe_load('packer', function(packer)
 					'williamboman/mason-lspconfig.nvim',
 				},
 			}
+
+			use 'arkav/lualine-lsp-progress'
 			use 'SmiteshP/nvim-navic'
 			use 'b0o/schemastore.nvim'
 			use 'gbrlsnchs/telescope-lsp-handlers.nvim'
@@ -116,6 +118,16 @@ safe_load('packer', function(packer)
 			use 'simrat39/symbols-outline.nvim' -- TODO: didn't even realise i had this
 			use 'jose-elias-alvarez/typescript.nvim'
 			use 'https://git.sr.ht/~whynothugo/lsp_lines.nvim'
+
+			-- dap
+			use {
+				'mfussenegger/nvim-dap',
+				requires = {
+					'theHamsta/nvim-dap-virtual-text',
+					'rcarriga/nvim-dap-ui',
+					{ 'jay-babu/mason-nvim-dap.nvim', requires = { 'williamboman/mason.nvim' } },
+				},
+			}
 
 			-- completion
 			use {
@@ -143,6 +155,17 @@ safe_load('packer', function(packer)
 			use 'milisims/nvim-luaref'
 			use 'nanotee/luv-vimdocs'
 			use 'folke/neodev.nvim'
+
+			-- langs
+			use {
+				'LhKipp/nvim-nu',
+				run = ':TSInstall nu',
+				config = function()
+					require('nu').setup {
+						complete_cmd_names = true,
+					}
+				end,
+			}
 
 			-- terminal
 			use { 'akinsho/toggleterm.nvim', tag = 'v2.*' }
