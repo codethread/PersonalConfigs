@@ -122,6 +122,7 @@ alias gundo="git reset --soft HEAD~1 && git restore --staged ."
 alias gwip="git add . && git commit -nm 'wip'"
 alias ghub="gh repo view --web"
 alias bdiff="git diff --name-only --relative --diff-filter=d | xargs bat --diff"
+alias gpopular="git log --format=format: --name-only --since=12.month | egrep -v '^$' | sort | uniq -c | sort -nr | head -50"
 
 #---------------------------------------------#
 # OS

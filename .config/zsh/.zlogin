@@ -84,12 +84,6 @@ pathappend () {
 pathprepend "$HOMEBREW_PREFIX/bin" PATH
 pathprepend "$HOMEBREW_PREFIX/sbin" PATH
 
-# use gnu coreutils instead of mac, e.g sed
-# this actually messed with a lot of packages that expected the defaults
-# pathprepend "$BREW_PATH/opt/coreutils/libexec/gnubin" PATH
-# pathprepend "$BREW_PATH/opt/gnu-sed/libexec/gnubin" PATH
-# pathprepend "$BREW_PATH/opt/gnu-tar/libexec/gnubin" PATH
-
 # personal
 pathprepend "$HOME/.local/bin" PATH
 
