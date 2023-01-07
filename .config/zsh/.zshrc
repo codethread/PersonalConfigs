@@ -58,6 +58,7 @@ SAVEHIST=$HISTSIZE
 eval "$(starship init zsh)"
 
 # add completions to this folder with format _example
+# e.g dotty completion zsh > "${ZDOTDIR}/completions/_dotty"
 # don't forget to run compinit after
 mkdir -p "$ZDOTDIR/completions"
 fpath+=( "$ZDOTDIR/completions" )
