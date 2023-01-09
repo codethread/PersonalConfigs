@@ -1,8 +1,5 @@
 local u = require 'codethread.utils'
-local nmap_buf = function(lhs, rhs, opts)
-	u.nmap(lhs, rhs, vim.tbl_extend('force', { buffer = 0 }, opts or {}))
-end
-
+local nmap = u.nmap
 local command = u.command
 
 local M = {}
@@ -63,12 +60,12 @@ function M.on_attach(client, bufnr)
 		})
 	end
 
-	nmap_buf('gD', function() vim.lsp.buf.declaration() end)
-	nmap_buf('gd', function() vim.lsp.buf.definition() end)
-	nmap_buf('K', function() vim.lsp.buf.hover() end, { desc = 'lsp hover' })
-	nmap_buf('gi', function() vim.lsp.buf.implementation() end)
-	nmap_buf('gh', function() vim.lsp.buf.signature_help() end)
-	nmap_buf('gr', function() vim.lsp.buf.references() end)
+	nmap('gD', function() vim.lsp.buf.declaration() end)
+	nmap('gd', function() vim.lsp.buf.definition() end)
+	nmap('K', function() vim.lsp.buf.hover() end, { desc = 'lsp hover' })
+	nmap('gi', function() vim.lsp.buf.implementation() end)
+	nmap('gh', function() vim.lsp.buf.signature_help() end)
+	nmap('gr', function() vim.lsp.buf.references() end)
 
 	command('format the buffer with LSP', 'Format', function() vim.lsp.buf.formatting() end)
 end

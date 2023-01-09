@@ -144,16 +144,16 @@ local mappings = {
 	},
 
 	d = {
-		name = 'Debug',
-		D = { function() dap.clear_breakpoints() end, 'clear all breakpoints' },
-		d = { function() dap.toggle_breakpoint() end, 'toggle' },
-		l = { function() dap.list_breakpoints() end, 'list' },
-		r = { function() dap.run_last() end, 'run last' },
-		s = {
-			function() require('codethread.lsp.dap').debug_hydra:activate() end,
-			'🐉 Start',
-		},
-		x = { function() dap.terminate() end, 'terminate' },
+		function()
+			-- TODO: potentiall save all buffers first
+			local dap = require 'dap'
+			if dap.session() then
+				require('codethread.lsp.dap').debug_running_hydra:activate()
+			else
+				require('codethread.lsp.dap').debug_hydra:activate()
+			end
+		end,
+		'🐉 Debug',
 	},
 
 	f = {
@@ -299,3 +299,32 @@ local mappings = {
 
 which_key.setup(setup)
 which_key.register(mappings, opts)
+
+which_key.register({
+	d = {
+		function()
+			local selection = vim.ct.get_visual_selection()
+			local ft = vim.ct.ft()
+			if ft == 'lua' then
+				-- obviously could do way more with treesitter
+				local vars = vim.split(selection, ',', { trimempty = true })
+				local printf = 'P({ '
+				for _, v in pairs(vars) do
+					printf = printf .. ' ' .. v .. ' = ' .. v .. ', '
+				end
+				printf = printf .. ' })'
+				local row = vim.ct.current_pos()
+				vim.api.nvim_buf_set_lines(0, row, row, false, { printf })
+				vim.notify(printf)
+			end
+		end,
+		'printf debug',
+	},
+}, {
+	mode = 'v', -- NORMAL mode
+	prefix = '<leader>',
+	buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
+	silent = true, -- use `silent` when creating keymaps
+	noremap = true, -- use `noremap` when creating keymaps
+	nowait = true, -- use `nowait` when creating keymaps
+})

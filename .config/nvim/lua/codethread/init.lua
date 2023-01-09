@@ -1,7 +1,8 @@
 local og_req = require
 local require = function(lib)
-	local ok = pcall(og_req, lib)
-	if not ok then vim.notify('could not load ' .. lib) end
+	local ok, err = pcall(og_req, lib)
+	if not ok then vim.notify('could not load ' .. lib .. '\n' .. err) end
+	return ok
 end
 
 require 'codethread.settings'

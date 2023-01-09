@@ -25,6 +25,8 @@ vim.g.maplocalleader = ','
 -- Escape
 imap('jk', '<ESC>')
 
+nmap('ZQ', '<cmd>qa!<cr>') -- default is q!
+
 nmap('<M-s>', '<cmd>w<cr>') -- alt or cmd on macos (terminal dependent, works with kitty)
 nmap('<C-q>', function()
 	for _, win in ipairs(vim.api.nvim_tabpage_list_wins(vim.api.nvim_get_current_tabpage())) do

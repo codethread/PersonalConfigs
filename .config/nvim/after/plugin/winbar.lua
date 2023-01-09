@@ -55,5 +55,6 @@ winbar.setup {
 
 		-- dap
 		'dap-repl',
+		'dap-hover',
 	},
 }

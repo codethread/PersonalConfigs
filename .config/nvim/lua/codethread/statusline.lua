@@ -16,16 +16,23 @@ local mode_maps = {
 }
 
 local function mode_map(str)
+	local hydra_status_ok, hydra = pcall(require, 'hydra.statusline')
+	if not hydra_status_ok then
+		if mode_maps[str] == nil then return str end
+		return mode_maps[str]
+	end
+
+	if hydra.is_active() then return hydra.get_name() end
 	if mode_maps[str] == nil then return str end
 	return mode_maps[str]
 end
 
--- enable global status line
-
--- bar at top per window
--- TODO: only for certain filetypes
--- vim.api.nvim_set_option_value('winbar', '%=%m %f', { scope = 'local' })
--- vim.api.nvim_set_option_value('winbar', '%=%m %f', {})
+local function mode_color(section)
+	local errs, hydra, theme = U.requires { 'hydra.statusline', 'codethread.themes' }
+	if not errs then
+		if hydra.is_active() then return { bg = theme.colors().red } end
+	end
+end
 
 local M = {}
 
@@ -46,6 +53,7 @@ function M.setup_flumpy()
 					icons_enabled = true,
 					separator = { left = ' ', right = '' },
 					fmt = mode_map,
+					color = mode_color,
 				},
 			},
 			lualine_b = {
@@ -71,33 +79,9 @@ function M.setup_flumpy()
 					'location',
 					separator = { right = '', left = '' },
 					left_padding = 2,
+					color = mode_color,
 				},
 			},
-		},
-		inactive_sections = {
-			lualine_a = {},
-			lualine_b = {},
-			lualine_c = {
-				{
-					'filename',
-					path = 1, -- relative path
-					shorting_target = 40, -- leave at least 40 characters in line
-					separator = { left = ' ' },
-					-- right_padding = 2,
-					symbols = {
-						modified = '  ',
-						readonly = ' ',
-					},
-				},
-			},
-			lualine_x = {
-				{
-					'location',
-					-- separator = { right = "" },
-				},
-			},
-			lualine_y = {},
-			lualine_z = {},
 		},
 		tabline = {
 			lualine_a = {
@@ -107,8 +91,19 @@ function M.setup_flumpy()
 					max_length = vim.o.columns / 2,
 					mode = 2, -- tab name and number
 					separator = { left = ' ', right = '' },
-					color = { fg = 'red' },
 					-- right_padding = 2,
+					tabs_color = {
+						active = mode_color,
+						inactive = 'lualine_a_inactive',
+					},
+					fmt = function(name, context)
+						-- Show + if buffer is modified in tab
+						local buflist = vim.fn.tabpagebuflist(context.tabnr)
+						local winnr = vim.fn.tabpagewinnr(context.tabnr)
+						local bufnr = buflist[winnr]
+						local mod = vim.fn.getbufvar(bufnr, '&mod')
+						return name .. (mod == 1 and '  ' or '')
+					end,
 				},
 			},
 			lualine_b = {
@@ -125,6 +120,7 @@ function M.setup_flumpy()
 			lualine_z = {
 				{
 					'branch',
+					color = mode_color,
 					separator = { right = ' ', left = '' },
 					-- left_padding = 2,
 				},
