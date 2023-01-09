@@ -38,6 +38,13 @@
   "workbench.editor.openPositioning": "last",
   "workbench.startupEditor": "newUntitledFile",
   "workbench.editor.labelFormat": "short",
+  "stylelint.validate": ["css", "scss",
+				"javascript",
+"javascriptreact",
+"typescript",
+"typescriptreact",
+
+],
   // "workbench.colorCustomizations": {
   //   "editorWarning.foreground": "#ff0",
   //   "editorInfo.foreground": "#00f"

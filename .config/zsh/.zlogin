@@ -120,6 +120,10 @@ pathprepend "$HOME/.jenv/shims" PATH
 pathprepend "$HOME/.dotnet/tools" PATH
 pathprepend "/usr/local/share/dotnet" PATH
 
+# ruby for gem install on m1 mac
+pathprepend "/opt/homebrew/opt/ruby/bin" PATH
+pathprepend "/opt/homebrew/lib/ruby/gems/3.1.0/bin" PATH
+
 if [[ -n "${CT_IS_MAC}" ]]; then
     pathprepend "/Library/Frameworks/Mono.framework/Versions/Current/Commands" PATH
 fi

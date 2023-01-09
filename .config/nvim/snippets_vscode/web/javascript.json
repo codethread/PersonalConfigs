@@ -31,5 +31,11 @@
       "}"
     ],
     "description": "Create Simple Function component"
+  },
+  "styled component": {
+    "scope": "javascript,javascriptreact,typescript,typescriptreact",
+    "prefix": "st",
+    "body": ["\\${({ theme }) => theme$1}"],
+    "description": "Insert embeded theme in styled component"
   }
 }

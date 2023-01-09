@@ -58,14 +58,9 @@ function M.setup_flumpy()
 			},
 			lualine_b = {
 				{
-					'filename',
-					path = 1, -- relative path
-					show_filename_only = false, -- can show full path with global status line
-					shorting_target = 0, -- don't shorten the component as I'm using global status line
-					symbols = {
-						modified = '  ',
-						readonly = ' ',
-					},
+					'branch',
+					separator = { right = ' ', left = '' },
+					-- left_padding = 2,
 				},
 			},
 			lualine_c = { { 'lsp_progress', 'diagnostics' } },
@@ -117,14 +112,13 @@ function M.setup_flumpy()
 				"%{ObsessionStatus('', '')} ",
 			},
 			lualine_y = { 'diff' },
-			lualine_z = {
-				{
-					'branch',
-					color = mode_color,
-					separator = { right = ' ', left = '' },
-					-- left_padding = 2,
-				},
-			},
+			-- lualine_z = {
+			-- 	{
+			-- 		'branch',
+			-- 		separator = { right = ' ', left = '' },
+			-- 		-- left_padding = 2,
+			-- 	},
+			-- },
 		},
 		extensions = {
 			'quickfix',

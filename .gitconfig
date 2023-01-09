@@ -1,6 +1,6 @@
 [user]
-	email = adamhalldesigns@gmail.com
-	name = Adam Hall
+	email = adam.hall@perkbox.com
+	name = adam.hall
 [core]
 	excludesfile = ~/.gitignore_global
 	editor = nvim
@@ -32,3 +32,10 @@
 [rerere]
 	enabled = true
 
+[url "ssh://git@git.perkbox.io/"]
+	insteadOf = https://git.perkbox.io/
+[url "https://github.com/"]
+	insteadOf = git://github.com/
+
+[worktree]
+    guessRemote = true

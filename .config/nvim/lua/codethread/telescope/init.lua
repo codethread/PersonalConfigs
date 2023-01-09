@@ -165,6 +165,6 @@ safe_load('telescope', function(telescope)
 		},
 	}
 	telescope.load_extension 'notify'
-
 	telescope.load_extension 'ui-select'
+	telescope.load_extension 'git_worktree'
 end)

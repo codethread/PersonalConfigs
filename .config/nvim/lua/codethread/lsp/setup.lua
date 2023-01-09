@@ -64,4 +64,5 @@ require('typescript').setup {
 			require('codethread.lsp.settings.shared').on_attach(client, bufnr)
 		end,
 	},
+	-- root_dir = require('lspconfig.util').root_pattern 'yarn.lock',
 }

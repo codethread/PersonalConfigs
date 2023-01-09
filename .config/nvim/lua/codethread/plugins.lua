@@ -65,6 +65,7 @@ safe_load('packer', function(packer)
 			use 'tpope/vim-obsession'
 			use 'xorid/swap-split.nvim'
 			use { 'phaazon/hop.nvim', tag = 'v2.*' }
+			use { 'shortcuts/no-neck-pain.nvim', tag = '*' }
 
 			-- editing
 			use 'tpope/vim-rsi' -- readline movement, e.g C-f is forward char
@@ -88,6 +89,24 @@ safe_load('packer', function(packer)
 			use { 'lukas-reineke/indent-blankline.nvim', tag = 'v2.*' }
 			use { 'rcarriga/nvim-notify', tag = 'v3.*' }
 			use { 'wakatime/vim-wakatime', tag = '9.*' }
+			use {
+				'folke/twilight.nvim',
+				config = function()
+					-- TODO: steal code and adjust to highlight blocks in js
+					require('twilight').setup {
+						expand = {
+							'function',
+							'method',
+							'table',
+							'if_statement',
+							'lexical_declaration',
+						},
+						-- your configuration comes here
+						-- or leave it empty to use the default settings
+						-- refer to the configuration section below
+					}
+				end,
+			}
 
 			-- key bindings
 			use 'folke/which-key.nvim'
@@ -153,6 +172,7 @@ safe_load('packer', function(packer)
 			-- git
 			use { 'TimUntersberger/neogit', requires = { 'sindrets/diffview.nvim' } }
 			use 'lewis6991/gitsigns.nvim'
+			use 'ThePrimeagen/git-worktree.nvim'
 
 			-- help for lua, TODO need to make this work
 			-- use 'wsdjeg/luarefvim'
