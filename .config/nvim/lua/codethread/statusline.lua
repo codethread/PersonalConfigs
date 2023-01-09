@@ -55,12 +55,22 @@ function M.setup_flumpy()
 					fmt = mode_map,
 					color = mode_color,
 				},
-			},
-			lualine_b = {
 				{
 					'branch',
 					separator = { right = ' ', left = '' },
 					-- left_padding = 2,
+				},
+			},
+			lualine_b = {
+				{
+					'filename',
+					path = 0,
+					show_filename_only = false,
+					shorting_target = 0,
+					symbols = {
+						modified = '  ',
+						readonly = ' ',
+					},
 				},
 			},
 			lualine_c = { { 'lsp_progress', 'diagnostics' } },
@@ -91,14 +101,14 @@ function M.setup_flumpy()
 						active = mode_color,
 						inactive = 'lualine_a_inactive',
 					},
-					fmt = function(name, context)
-						-- Show + if buffer is modified in tab
-						local buflist = vim.fn.tabpagebuflist(context.tabnr)
-						local winnr = vim.fn.tabpagewinnr(context.tabnr)
-						local bufnr = buflist[winnr]
-						local mod = vim.fn.getbufvar(bufnr, '&mod')
-						return name .. (mod == 1 and '  ' or '')
-					end,
+					-- fmt = function(name, context)
+					-- 	-- Show + if buffer is modified in tab
+					-- 	local buflist = vim.fn.tabpagebuflist(context.tabnr)
+					-- 	local winnr = vim.fn.tabpagewinnr(context.tabnr)
+					-- 	local bufnr = buflist[winnr]
+					-- 	local mod = vim.fn.getbufvar(bufnr, '&mod')
+					-- 	return name .. (mod == 1 and '  ' or '')
+					-- end,
 				},
 			},
 			lualine_b = {
