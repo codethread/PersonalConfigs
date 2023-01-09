@@ -20,6 +20,7 @@ null_ls.setup {
 		diagnostics.luacheck,
 		-- rust
 		formatting.rustfmt,
+
 		-- js/ts
 		formatting.prettierd.with {
 			filetypes = {
@@ -41,7 +42,25 @@ null_ls.setup {
 				'svelte',
 			},
 		},
-		diagnostics.stylelint,
+		diagnostics.stylelint.with {
+			filetypes = {
+				'scss',
+				'less',
+				'css',
+				'sass',
+				'javascript',
+				'javascriptreact',
+				'typescript',
+				'typescriptreact',
+			},
+			args = {
+				'--formatter',
+				'json',
+				'--stdin-filename',
+				'$FILENAME',
+				'--config=packages/irati/web/.stylelintrc',
+			},
+		},
 
 		-- shell
 		diagnostics.shellcheck,
