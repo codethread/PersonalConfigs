@@ -42,25 +42,25 @@ null_ls.setup {
 				'svelte',
 			},
 		},
-		diagnostics.stylelint.with {
-			filetypes = {
-				'scss',
-				'less',
-				'css',
-				'sass',
-				'javascript',
-				'javascriptreact',
-				'typescript',
-				'typescriptreact',
-			},
-			args = {
-				'--formatter',
-				'json',
-				'--stdin-filename',
-				'$FILENAME',
-				'--config=packages/irati/web/.stylelintrc',
-			},
-		},
+		-- diagnostics.stylelint.with {
+		-- 	filetypes = {
+		-- 		'scss',
+		-- 		'less',
+		-- 		'css',
+		-- 		'sass',
+		-- 		'javascript',
+		-- 		'javascriptreact',
+		-- 		'typescript',
+		-- 		'typescriptreact',
+		-- 	},
+		-- 	args = {
+		-- 		'--formatter',
+		-- 		'json',
+		-- 		'--stdin-filename',
+		-- 		'$FILENAME',
+		-- 		'--config=packages/irati/web/.stylelintrc',
+		-- 	},
+		-- },
 
 		-- shell
 		diagnostics.shellcheck,
