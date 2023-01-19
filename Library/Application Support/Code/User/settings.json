@@ -217,7 +217,7 @@
   "[svelte]": {
     "editor.defaultFormatter": "svelte.svelte-vscode"
   },
-  "files.autoSave": "onFocusChange",
+  // "files.autoSave": "onFocusChange",
   "files.associations": {
     ".eslintrc": "jsonc",
     "*.css": "tailwindcss"
