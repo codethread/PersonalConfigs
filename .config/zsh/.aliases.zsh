@@ -109,7 +109,7 @@ alias -g gtrunk="git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remote
 alias gclean="git clean -dfX"
 alias gcp="git cherry-pick"
 alias gst="git status -s"
-alias gfuck='git fetch origin; git reset --hard origin $(gbranch)'
+alias gfuck='git fetch origin; git reset --hard origin/$(gbranch)'
 alias gignore="git rm -r --cached .; git add .; git commit -m '.gitignore is now working'"
 alias gkill='git branch | grep -v "$( gtrunk )" | xargs git branch -D'
 alias gl='git log --oneline $( gtrunk )..HEAD'
@@ -125,6 +125,8 @@ alias ghub="gh repo view --web"
 alias bdiff="git diff --name-only --relative --diff-filter=d | xargs bat --diff"
 alias gpopular="git log --format=format: --name-only --since=12.month | egrep -v '^$' | sort | uniq -c | sort -nr | head -50"
 alias gbranch-mine="git for-each-ref --format=' %(authorname) %09 %(refname)' --sort=authorname | grep 'adam.hall'"
+alias gconflict="git diff --name-only --diff-filter=U --relative"
+alias gcache-clear="git rev-parse --show-toplevel | rargs rm -rf {0}/.git/rr-cache" # https://stackoverflow.com/questions/18500016/undo-a-git-rerere-resolution-that-was-done-in-a-rebase
 
 # worktree
 alias gw="git worktree"
