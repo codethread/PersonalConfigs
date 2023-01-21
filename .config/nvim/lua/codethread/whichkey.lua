@@ -148,9 +148,9 @@ local mappings = {
 			-- TODO: potentiall save all buffers first
 			local dap = require 'dap'
 			if dap.session() then
-				require('codethread.lsp.dap').debug_running_hydra:activate()
+				require('codethread.lsp.dap-hydra').debug_running_hydra:activate()
 			else
-				require('codethread.lsp.dap').debug_hydra:activate()
+				require('codethread.lsp.dap-hydra').debug_hydra:activate()
 			end
 		end,
 		'🐉 Debug',
