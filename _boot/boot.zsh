@@ -18,7 +18,7 @@ echo "( ◕ ◡ ◕ ) running dotty"
 dotty setup
 
 echo "( ◕ ◡ ◕ ) setting up path for everyone"
-envy
+"${DOTFILES}/.local/bin/envy"
 
 # load correct envs to get the ZDOTDIR
 source "${DOTFILES}/.zshenv"
@@ -27,4 +27,4 @@ echo "( ◕ ◡ ◕ ) setting brewshell env"
 brew shellenv | sed 's/export PATH.*//' > "${ZDOTDIR}/shellenv.zsh"
 
 echo "( ◕ ◡ ◕ ) running antiup to install zsh plugins"
-antiup
+"${DOTFILES}/.local/bin/antiup"
