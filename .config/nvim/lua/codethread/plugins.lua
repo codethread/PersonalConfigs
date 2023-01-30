@@ -143,6 +143,10 @@ safe_load('packer', function(packer)
 				},
 			}
 			use {
+				'github/copilot.vim',
+				requires = 'hrsh7th/cmp-copilot',
+			}
+			use {
 				'saadparwaiz1/cmp_luasnip',
 				requires = { 'L3MON4D3/LuaSnip', 'rafamadriz/friendly-snippets' },
 			}

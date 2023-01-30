@@ -44,30 +44,30 @@ cmp.setup {
 		['<C-u>'] = cmp.mapping.scroll_docs(-4),
 		['<C-d>'] = cmp.mapping.scroll_docs(4),
 
-		['<Tab>'] = cmp.mapping(function(fallback)
-			if ls.expandable() then
-				ls.expand()
-			elseif ls.expand_or_jumpable() then
-				ls.expand_or_jump()
-			else
-				fallback()
-			end
-		end, {
-			'i',
-			's',
-		}),
-		['<S-Tab>'] = cmp.mapping(function(fallback)
-			if cmp.visible() then
-				cmp.select_prev_item()
-			elseif ls.jumpable(-1) then
-				ls.jump(-1)
-			else
-				fallback()
-			end
-		end, {
-			'i',
-			's',
-		}),
+		-- ['<Tab>'] = cmp.mapping(function(fallback)
+		-- 	if ls.expandable() then
+		-- 		ls.expand()
+		-- 	elseif ls.expand_or_jumpable() then
+		-- 		ls.expand_or_jump()
+		-- 	else
+		-- 		fallback()
+		-- 	end
+		-- end, {
+		-- 	'i',
+		-- 	's',
+		-- }),
+		-- ['<S-Tab>'] = cmp.mapping(function(fallback)
+		-- 	if cmp.visible() then
+		-- 		cmp.select_prev_item()
+		-- 	elseif ls.jumpable(-1) then
+		-- 		ls.jump(-1)
+		-- 	else
+		-- 		fallback()
+		-- 	end
+		-- end, {
+		-- 	'i',
+		-- 	's',
+		-- }),
 	},
 	formatting = {
 		fields = { 'kind', 'abbr', 'menu' },
@@ -86,6 +86,7 @@ cmp.setup {
 
 	sources = {
 		{ name = 'nvim_lsp' },
+		{ name = 'nvim_lsp_signature_help' },
 	},
 	completion = {
 		keyword_length = 2,
@@ -124,3 +125,4 @@ imap('<C-Space>', function() complete 'nvim_lsp' end)
 imap('<C-x><C-s>', function() complete 'luasnip' end)
 imap('<C-x><C-n>', function() complete 'buffer' end)
 imap('<C-x><C-f>', function() complete 'path' end)
+imap('<C-x><C-x>', function() complete 'copilot' end)
