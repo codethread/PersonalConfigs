@@ -109,6 +109,9 @@ pathprepend "$HOME/istio-1.5.1/bin" PATH
 # ruby
 pathprepend "$HOME/.rbenv/shims" PATH
 
+# haskell
+pathprepend "$HOME/.ghcup/bin" PATH
+
 # java
 pathprepend "$HOME/.jenv/bin" PATH
 pathprepend "$HOME/.jenv/shims" PATH

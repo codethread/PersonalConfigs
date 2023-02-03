@@ -80,11 +80,9 @@ safe_load('packer', function(packer)
 			use_local '~/dev/projects/qmk.nvim'
 
 			-- navigation
-			use 'tpope/vim-projectionist'
 			use 'ThePrimeagen/harpoon'
 			use 'kevinhwang91/nvim-bqf' -- mainly just like 'o' to close lists
 			use { 'bennypowers/nvim-regexplainer', requires = 'MunifTanjim/nui.nvim' }
-			use { 'ellisonleao/glow.nvim', run = 'brew install glow' }
 			use { 'kyazdani42/nvim-tree.lua', requires = 'gabebw/vim-github-link-opener' }
 			use { 'lukas-reineke/indent-blankline.nvim', tag = 'v2.*' }
 			use { 'rcarriga/nvim-notify', tag = 'v3.*' }
