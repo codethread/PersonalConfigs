@@ -40,3 +40,10 @@ vim.api.nvim_create_autocmd('BufReadPost', {
 		if mark[1] > 0 and mark[1] <= lcount then pcall(vim.api.nvim_win_set_cursor, 0, mark) end
 	end,
 })
+
+vim.api.nvim_create_autocmd('BufEnter', {
+	desc = 'project level',
+	group = vim.api.nvim_create_augroup('Copilot', {}),
+	pattern = os.getenv 'HOME' .. '/dev/projects/generated/*',
+	callback = function() vim.cmd [[let b:copilot_enabled = v:false]] end,
+})
