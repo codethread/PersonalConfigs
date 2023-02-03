@@ -168,8 +168,16 @@ local mappings = {
 		name = 'Test',
 		j = {
 			function()
-				local jest = require 'jester'
-				jest.run_last { path_to_jest = './node_modules/bin/jest' }
+				local ft = vim.ct.ft()
+				if ft == 'lua' then
+					require('plenary.test_harness').test_directory(vim.fn.expand '%:p')
+					-- also PlenaryTestFile
+				elseif ft == 'javascript' then
+					local jest = require 'jester'
+					jest.run_last { path_to_jest = './node_modules/bin/jest' }
+				else
+					print('no setup for filetype: ' .. ft)
+				end
 			end,
 			'file',
 		},

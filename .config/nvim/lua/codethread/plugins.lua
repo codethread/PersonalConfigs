@@ -25,6 +25,7 @@ safe_load('packer', function(packer)
 			-- if this hangs, check python is available and https://github.com/wbthomason/packer.nvim/issues/180
 			-- https://lunarmodules.github.io/Penlight/classes/pl.List.html
 			use_rocks 'penlight'
+			use_rocks 'matcher_combinators'
 
 			-- Things required early
 			use 'nvim-lua/plenary.nvim'

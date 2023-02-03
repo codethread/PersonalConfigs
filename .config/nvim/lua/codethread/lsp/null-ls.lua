@@ -17,6 +17,7 @@ null_ls.setup {
 	sources = {
 		-- lua
 		formatting.stylua,
+		diagnostics.luacheck,
 		-- rust
 		formatting.rustfmt,
 		-- js/ts
