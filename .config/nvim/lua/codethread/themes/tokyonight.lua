@@ -122,6 +122,8 @@ local function setup_tokyo()
 				hl.CmpItemKindInterface = { fg = '#D8EEEB', bg = '#58B5A8' }
 				hl.CmpItemKindColor = { fg = '#D8EEEB', bg = '#58B5A8' }
 				hl.CmpItemKindTypeParameter = { fg = '#D8EEEB', bg = '#58B5A8' }
+
+				hl.CmpItemKindCopilot = { fg = '#D8EEEB', bg = '#58B5A8' }
 			end,
 		}
 

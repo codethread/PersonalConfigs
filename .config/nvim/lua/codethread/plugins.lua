@@ -158,11 +158,24 @@ safe_load('packer', function(packer)
 					'hrsh7th/cmp-nvim-lsp',
 					'hrsh7th/cmp-nvim-lsp-signature-help',
 					'onsails/lspkind.nvim',
+					{
+						'zbirenbaum/copilot-cmp',
+						after = { 'copilot.lua' },
+						config = function() require('copilot_cmp').setup() end,
+						requires = {
+							-- Because the copilot server takes some time to start up, it is recommend that you lazy load copilot
+							'zbirenbaum/copilot.lua',
+							cmd = 'Copilot',
+							event = 'InsertEnter',
+							config = function()
+								require('copilot').setup {
+									suggestion = { enabled = false },
+									panel = { enabled = false },
+								}
+							end,
+						},
+					},
 				},
-			}
-			use {
-				'github/copilot.vim',
-				requires = 'hrsh7th/cmp-copilot',
 			}
 			use {
 				'saadparwaiz1/cmp_luasnip',
@@ -172,7 +185,7 @@ safe_load('packer', function(packer)
 			-- git
 			use { 'TimUntersberger/neogit', requires = { 'sindrets/diffview.nvim' } }
 			use 'lewis6991/gitsigns.nvim'
-			use 'ThePrimeagen/git-worktree.nvim'
+			-- use 'ThePrimeagen/git-worktree.nvim'
 
 			-- help for lua, TODO need to make this work
 			-- use 'wsdjeg/luarefvim'
