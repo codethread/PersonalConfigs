@@ -1,12 +1,12 @@
 {
   "editor.scrollBeyondLastLine": false,
   "editor.cursorStyle": "block",
-  "editor.fontFamily": "'IBM Plex Mono', 'FiraCode Nerd Font','Roboto Mono', Menlo, Monaco, 'Courier New', monospace",
+  "editor.fontFamily": "'FiraCode Nerd Font','Roboto Mono', Menlo, Monaco, 'Courier New', monospace",
   "editor.fontLigatures": true,
   "editor.cursorBlinking": "blink",
   "editor.dragAndDrop": true,
   "explorer.confirmDragAndDrop": true,
-  "editor.fontSize": 12,
+  "editor.fontSize": 13,
   "editor.fontWeight": "500",
   "editor.formatOnType": true,
   "editor.minimap.enabled": false,
@@ -61,7 +61,6 @@
     "**/CVS": true,
     "**/.DS_Store": true
   },
-  "workbench.iconTheme": "vscode-icons",
   "javascript.updateImportsOnFileMove.enabled": "always",
   "javascript.validate.enable": false,
   //////// VIM
@@ -107,15 +106,10 @@
       "commands": ["workbench.action.closeActiveEditor"]
     },
     {
-      "before": ["<leader>", "n"],
+      "before": ["<leader>", "o", "d"],
       "when": "editorFocus",
-      "commands": ["workbench.view.explorer"]
+      "commands": ["workbench.files.action.showActiveFileInExplorer"]
     },
-    // {
-    //   "before": ["<leader>", "n"],
-    //   "when": "!editorFocus",
-    //   "commands": ["workbench.action.focusActiveEditorGroup"]
-    // },
     {
       "before": ["<leader>", "<leader>"],
       "commands": ["workbench.action.quickOpen"]
@@ -145,6 +139,17 @@
       "commands": ["editor.action.formatDocument"]
     },
     {
+      "before": ["<leader>", "r", "r"],
+      "commands": ["editor.action.refactor"],
+      "when": "editorHasCodeActionsProvider && editorTextFocus && !editorReadonly"
+    },
+    {
+      "before": ["leader", "l", "a"],
+      "commands": ["editor.action.quickFix"],
+      "when": "editorHasCodeActionsProvider && editorTextFocus && !editorReadonly"
+    },
+    // windows
+    {
       "before": ["<leader>", "w", "k"],
       "commands": ["workbench.action.closeEditorsInGroup"]
     },
@@ -155,7 +160,11 @@
     {
       "before": ["<leader>", "w", "w"],
       "commands": ["workbench.action.splitEditor"]
-    }
+    },
+    {
+      "before": ["K"],
+      "commands": ["editor.action.showHover"]
+    },
   ],
   "vsicons.dontShowNewVersionMessage": true,
   "problems.decorations.enabled": false,
@@ -180,6 +189,8 @@
     "cursor": "pointer",
     "isWholeLine": false
   },
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[json]": {
     "editor.defaultFormatter": "vscode.json-language-features"
   },
@@ -222,9 +233,8 @@
     ".eslintrc": "jsonc",
     "*.css": "tailwindcss"
   },
-  "editor.formatOnSave": true,
   "svelte.enable-ts-plugin": true,
-  "workbench.colorTheme": "Tokyo Night Storm",
+  "workbench.colorTheme": "Nord",
   "editor.guides.indentation": true,
   "editor.quickSuggestions": {
     "other": "on",
@@ -240,5 +250,8 @@
     "tsconfig.json": "tsconfig.*.json",
     "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml"
   },
-  "editor.inlineSuggest.enabled": true
+  "editor.inlineSuggest.enabled": true,
+  "workbench.iconTheme": "material-icon-theme",
+  "editor.lineHeight": 1.8,
+  "explorer.autoReveal": false
 }
