@@ -95,6 +95,7 @@ cmp.setup {
 		{ name = 'nvim_lsp' },
 		{ name = 'copilot' },
 		{ name = 'nvim_lsp_signature_help' },
+		{ name = 'luasnip' },
 	},
 	completion = {
 		keyword_length = 2,
