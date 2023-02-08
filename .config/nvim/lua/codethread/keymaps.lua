@@ -93,7 +93,10 @@ inoremap <silent><C-Y> <C-o>:MaximizerToggle<CR>
 " MAPS ON COMMANDS I DONT LIKE
 " map <C-B>
 " map <C-G>
-" map <C-Q>
-" map <C-Y>
+" map <C-Q> - done
+" map <C-Y> - done
 " map <C-P>
+" nmap L
+" nmap H
+" nmap M
 ]]

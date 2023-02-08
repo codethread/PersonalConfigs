@@ -1,6 +1,6 @@
 {
-  "require": {
-    "prefix": "req",
+  "pcall": {
+    "prefix": "pc",
     "body": [
       "local ${1:package}_status_ok, ${1} = pcall(require, '$1')",
       "if not $1_status_ok then",
@@ -9,13 +9,32 @@
       "end"
     ]
   },
-  "safe load": {
-    "prefix": "sl",
+  "safe load old": {
+    "prefix": "slo",
     "body": [
       "local safe_load = require('codethread.utils').safe_load",
       "safe_load('${1:package}', function ($1)",
       "\t$2",
       "end)"
+    ]
+  },
+  "safe load": {
+    "prefix": "sl",
+    "body": [
+      "local require = require('codethread.utils').require",
+      "local ${1}, ok = require '${2}'",
+      "if not ok then return end",
+      "",
+      "$3"
+    ]
+  },
+  "require": {
+    "prefix": "req",
+    "body": [
+      "local ${1}, ok = require '${2}'",
+      "if not ok then return end",
+      "",
+      "$3"
     ]
   }
 }

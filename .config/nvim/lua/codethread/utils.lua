@@ -30,7 +30,8 @@ function M.safe_load(lib, fn)
 	return fn(loaded_lib)
 end
 
----call pcall on multiple modules, returning
+---call pcall on multiple modules
+---good to use @module on the return for types
 ---@param lib_tbl string[]
 ---@return string[]
 ---@return any ...
@@ -65,6 +66,33 @@ function M.requires(lib_tbl)
 	end
 end
 
+local init_buf = vim.api.nvim_create_buf(false, true)
+vim.api.nvim_buf_set_name(init_buf, 'init')
+vim.api.nvim_create_user_command('OpenInitBuffer', 'buffer init', {})
+
+local failed_modules = require('plenary.collections.py_list').new {}
+
+---
+---Loads the given module, using pcall, returns any value returned by the given module(`true` when `nil`) plus ok boolean
+---
+---The name is kept the same to kep sumneko_lua happy and give module types
+---
+---[View documents](http://www.lua.org/manual/5.1/manual.html#pdf-require)
+---
+---@param modname string
+---@return unknown, boolean
+function M.require(modname)
+	local ok, err = pcall(require, modname)
+	if not ok then failed_modules:push(err) end
+	local msg = ('info: ' .. (ok and 'loaded' or 'failed to load') .. ' ' .. modname)
+	vim.api.nvim_buf_set_lines(init_buf, -1, -1, false, { msg })
+	return err, ok
+end
+
+function M.get_failed_modules()
+	if #failed_modules ~= 0 then print(#failed_modules, 'module(s) failed to load') end
+end
+
 function M.autocmd(events, opts)
 	vim.api.nvim_clear_autocmds { group = opts.group, buffer = opts.buffer }
 	vim.api.nvim_create_autocmd(events, {
@@ -78,5 +106,16 @@ function M.file_exits(path)
 	local p = vim.fs.normalize(path)
 	return vim.fn.isdirectory(p) == 1
 end
+
+function M.telescope_hook(extension)
+	vim.api.nvim_create_autocmd('User', {
+		desc = 'setup telescope plugin for ' .. extension,
+		group = vim.api.nvim_create_augroup('MyTelescope', {}),
+		pattern = { 'TelescopeLoaded' },
+		callback = function() require('telescope').load_extension(extension) end,
+	})
+end
+
+function M.log(...) print('info: ', ...) end
 
 return M

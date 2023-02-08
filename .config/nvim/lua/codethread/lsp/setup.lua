@@ -9,6 +9,8 @@ if not lspconfig_status_ok then
 	return
 end
 
+U.telescope_hook 'lsp_handlers'
+
 -- Add additional capabilities supported by nvim-cmp
 -- local capabilities = vim.lsp.protocol.make_client_capabilities()
 local capabilities = cmp_nvim_lsp.default_capabilities()

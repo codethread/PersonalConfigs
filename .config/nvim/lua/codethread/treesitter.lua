@@ -1,8 +1,6 @@
-local status_ok, configs = pcall(require, 'nvim-treesitter.configs')
-if not status_ok then
-	print 'could not load treesitter'
-	return
-end
+local require = require('codethread.utils').require
+local configs, ok = require 'nvim-treesitter.configs'
+if not ok then return end
 
 configs.setup {
 	ensure_installed = {

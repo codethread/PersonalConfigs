@@ -1,5 +1,7 @@
-local U = require 'codethread.utils'
-local wt = require 'git-worktree'
+local require = require('codethread.utils').require
+local wt, ok = require 'git-worktree'
+if not ok then return end
+print 'git-worktree loaded'
 
 wt.setup {}
 
@@ -20,3 +22,5 @@ wt.on_tree_change(function(op, meta)
 		end
 	end
 end)
+
+U.telescope_hook 'git_worktree'

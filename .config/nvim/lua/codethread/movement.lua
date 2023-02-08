@@ -52,7 +52,7 @@ if not hydra_ok then
 	return
 end
 
-local function cmd(command) return table.concat { '<Cmd>', command, '<CR>' } end
+local cmd = vim.ct.cmd
 
 local mover_hint = [[
  Params:

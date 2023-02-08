@@ -40,4 +40,14 @@ function vim.ct.current_pos()
 	return c[1], c[2]
 end
 
+function vim.ct.write_file(file, content)
+	local log_file_path = 'file'
+	local log_file = io.open(log_file_path, 'a')
+	io.output(log_file)
+	io.write(content .. '\n')
+	io.close(log_file)
+end
+
+function vim.ct.cmd(command) return '<Cmd>' .. command .. '<CR>' end
+
 U = require 'codethread.utils'

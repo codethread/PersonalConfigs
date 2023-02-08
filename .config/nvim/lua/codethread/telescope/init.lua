@@ -23,10 +23,6 @@ safe_load('telescope', function(telescope)
 	local t_themes = require 'telescope.themes'
 	local my_themes = require 'codethread.telescope.themes'
 
-	telescope.load_extension 'lsp_handlers'
-	telescope.load_extension 'neoclip'
-	telescope.load_extension 'harpoon'
-
 	telescope.setup {
 		-- defaults = themes.get_ivy {
 		-- defaults = my_themes.bottom {
@@ -164,7 +160,8 @@ safe_load('telescope', function(telescope)
 			},
 		},
 	}
-	telescope.load_extension 'notify'
+
+	-- vim.defer_fn(function() vim.cmd [[doautocmd User TelescopeLoaded]] end, 100)
+	vim.cmd [[doautocmd User TelescopeLoaded]]
 	telescope.load_extension 'ui-select'
-	telescope.load_extension 'git_worktree'
 end)

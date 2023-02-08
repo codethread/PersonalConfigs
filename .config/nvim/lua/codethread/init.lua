@@ -1,10 +1,4 @@
-local og_req = require
-local require = function(lib)
-	local ok, err = pcall(og_req, lib)
-	if not ok then vim.notify('could not load ' .. lib .. '\n' .. err) end
-	return ok
-end
-
+local require = require('codethread.utils').require
 require 'codethread.settings'
 require 'codethread.keymaps'
 require 'codethread.globals'
@@ -21,3 +15,5 @@ require 'codethread.lsp'
 require 'codethread.treesitter'
 require 'codethread.dashboard'
 require 'codethread.alt'
+
+vim.defer_fn(U.get_failed_modules, 100)

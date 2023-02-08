@@ -192,7 +192,11 @@ safe_load('packer', function(packer)
 			-- use 'rafcamlet/nvim-luapad'
 			use 'milisims/nvim-luaref'
 			use 'nanotee/luv-vimdocs'
-			use 'folke/neodev.nvim'
+			use {
+				'folke/neodev.nvim',
+				-- TODO: bit of hack here, should probably just set it up properly
+				run = 'rm -rf types/nightly',
+			}
 
 			-- langs
 			use {
