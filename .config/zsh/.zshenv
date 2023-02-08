@@ -70,6 +70,7 @@ if [[ "${OS}" == "Linux" ]]; then
     export CT_IS_LINUX=1
 elif [[ "${OS}" == "Darwin" ]]; then
     export CT_IS_MAC=1
+    export CT_IS_LINUX=0
 
     if [[ $(/usr/bin/uname -m) == "arm64" ]]; then 
         export CT_IS_ARM=1
@@ -85,11 +86,22 @@ if [[ "${CT}" == "adam" ]]; then
     export CT_IS_LAPTOP=1
     export CT_IS_WORK=0
 elif [[ "${CT}" == "codethread" ]]; then
+    export CT_IS_LAPTOP=0
     export CT_IS_MINI=1
     export CT_IS_WORK=0
 else
     export CT_IS_WORK=1
 fi
+
+
+function ct() {
+    echo "CT_IS_MAC: ${CT_IS_MAC}"
+    echo "CT_IS_ARM: ${CT_IS_ARM}"
+    echo "CT_IS_LINUX: ${CT_IS_LINUX}"
+    echo "CT_IS_LAPTOP: ${CT_IS_LAPTOP}"
+    echo "CT_IS_MINI: ${CT_IS_MINI}"
+    echo "CT_IS_WORK: ${CT_IS_WORK}"
+}
 
 #: }}}
 #: Homebrew {{{

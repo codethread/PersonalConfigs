@@ -25,7 +25,7 @@ if [[ "$TERMINAL_EMULATOR" == "JetBrains-JediTerm" ]]; then
     bindkey "∂" delete-word   # Option-d
 fi
 
-if [[ -n "${CT_IS_LINUX}" ]]; then
+if [ $CT_IS_LINUX -eq 1 ]; then
     # remap capslock to ctrl
     gsettings set org.gnome.desktop.input-sources xkb-options "['ctrl:nocaps']"
 fi
@@ -98,7 +98,10 @@ export FZF_ALT_C_COMMAND="fd --hidden --type d --exclude '{Library,Music,Applica
 export TMUX_SESSION_PROJ_1="${DOTFILES}"
 export TMUX_SESSION_PROJ_0="~/dev/projects/qmk_firmware/keyboards/preonic/keymaps/codethread"
 
-if [[ ! -n "${CT_IS_WORK}" ]]; then
+if [ $CT_IS_WORK -eq 1 ]; then
+    export TMUX_SESSION_PROJ_2="~/work/deals-light-ui"
+    export TMUX_SESSION_PROJ_3=""
+else
     export TMUX_SESSION_PROJ_2="~/dev/projects/cold-brew"
     export TMUX_SESSION_PROJ_3="~/dev/projects/qmk.nvim"
     export TMUX_SESSION_PROJ_4=""
