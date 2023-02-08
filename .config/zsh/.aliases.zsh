@@ -148,3 +148,4 @@ alias kmux="kill_tmux_session"
 # work
 ##############################################
 alias nvm="volta pin node@14 && volta pin yarn@1.22.4"
+alias react-native-clean="git pull && gclean && yarn && yarn install:app && yarn run-ios --simulator \"iPhone SE (3rd generation)\""
