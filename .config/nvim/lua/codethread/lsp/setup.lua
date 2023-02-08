@@ -9,8 +9,6 @@ if not lspconfig_status_ok then
 	return
 end
 
-U.telescope_hook 'lsp_handlers'
-
 -- Add additional capabilities supported by nvim-cmp
 -- local capabilities = vim.lsp.protocol.make_client_capabilities()
 local capabilities = cmp_nvim_lsp.default_capabilities()
@@ -55,16 +53,7 @@ for _, lsp in ipairs(servers) do
 	end
 end
 
-require('typescript').setup {
-	disable_commands = false, -- prevent the plugin from creating Vim commands
-	debug = false, -- enable debug logging for commands
-	go_to_source_definition = {
-		fallback = true, -- fall back to standard LSP definition on failure
-	},
-	server = { -- pass options to lspconfig's setup method
-		on_attach = function(client, bufnr)
-			require('codethread.lsp.settings.shared').on_attach(client, bufnr)
-		end,
-	},
-	-- root_dir = require('lspconfig.util').root_pattern 'yarn.lock',
-}
+require 'codethread.lsp.settings.typescript'
+require 'codethread.lsp.settings.haskell'
+
+U.telescope_hook 'lsp_handlers'

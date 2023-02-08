@@ -209,6 +209,8 @@ safe_load('packer', function(packer)
 				end,
 			}
 
+			use { 'mrcjkb/haskell-tools.nvim', branch = '1.x.x' }
+
 			-- terminal
 			use { 'akinsho/toggleterm.nvim', tag = 'v2.*' }
 			use 'christoomey/vim-tmux-navigator'
