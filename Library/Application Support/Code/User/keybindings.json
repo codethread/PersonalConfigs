@@ -1,72 +1,71 @@
 // Place your key bindings in this file to override the defaultsauto[]
 [
-    // global
-    {
-        "key": "ctrl+\\",
-        "command": "workbench.action.terminal.toggleTerminal"
-    },
-    {
-        "key": "ctrl+`",
-        "command": "-workbench.action.terminal.toggleTerminal"
-    },
+  // global
+  {
+    "key": "ctrl+\\",
+    "command": "workbench.action.terminal.toggleTerminal"
+  },
+  {
+    "key": "ctrl+`",
+    "command": "-workbench.action.terminal.toggleTerminal"
+  },
 
-    // windows
-    { "key": "ctrl+h", "command": "workbench.action.navigateLeft" },
-    { "key": "ctrl+l", "command": "workbench.action.navigateRight" },
-    { "key": "ctrl+k", "command": "workbench.action.navigateUp" },
-    { "key": "ctrl+j", "command": "workbench.action.navigateDown" },
+  // windows
+  { "key": "ctrl+h", "command": "workbench.action.navigateLeft" },
+  { "key": "ctrl+l", "command": "workbench.action.navigateRight" },
+  { "key": "ctrl+k", "command": "workbench.action.navigateUp" },
+  { "key": "ctrl+j", "command": "workbench.action.navigateDown" },
 
-    // { "key": "ctrl+w shift+h", "command": "workbench.action.moveEditorToLeftGroup" },
-    // { "key": "ctrl+w shift+l", "command": "workbench.action.moveEditorToRightGroup" },
+  // { "key": "ctrl+w shift+l", "command": "workbench.action.moveEditorToRightGroup" },
+  { "key": "ctrl+y", "command": "workbench.action.toggleCenteredLayout" },
 
-    // selection
-    {
-        "key": "ctrl+j",
-        "command": "selectNextSuggestion",
-        "when": "editorTextFocus && suggestWidgetMultipleSuggestions && suggestWidgetVisible"
-    },
-    {
-        "key": "ctrl+k",
-        "command": "selectPrevSuggestion",
-        "when": "editorTextFocus && suggestWidgetMultipleSuggestions && suggestWidgetVisible"
-    },
-    {
-        "key": "ctrl+l",
-        "command": "acceptSelectedSuggestion",
-        "when": "editorTextFocus && suggestWidgetMultipleSuggestions && suggestWidgetVisible"
-    },
-    {
-        "key": "ctrl+j",
-        "command": "workbench.action.quickOpenNavigateNext",
-        "when": "inQuickOpen"
-    },
-    {
-        "key": "ctrl+k",
-        "command": "workbench.action.quickOpenNavigatePrevious",
-        "when": "inQuickOpen"
-    },
+  // selection
+  {
+    "key": "ctrl+j",
+    "command": "selectNextSuggestion",
+    "when": "editorTextFocus && suggestWidgetMultipleSuggestions && suggestWidgetVisible"
+  },
+  {
+    "key": "ctrl+k",
+    "command": "selectPrevSuggestion",
+    "when": "editorTextFocus && suggestWidgetMultipleSuggestions && suggestWidgetVisible"
+  },
+  {
+    "key": "ctrl+l",
+    "command": "acceptSelectedSuggestion",
+    "when": "editorTextFocus && suggestWidgetMultipleSuggestions && suggestWidgetVisible"
+  },
+  {
+    "key": "ctrl+j",
+    "command": "workbench.action.quickOpenNavigateNext",
+    "when": "inQuickOpen"
+  },
+  {
+    "key": "ctrl+k",
+    "command": "workbench.action.quickOpenNavigatePrevious",
+    "when": "inQuickOpen"
+  },
 
-    // file tree
-    {
-        "key": "ctrl+n",
-        "when": "editorTextFocus",
-        "command": "workbench.files.action.focusFilesExplorer",
-    },
-    {
-        "key": "ctrl+n",
-        "when": "!editorTextFocus",
-        // "when": "filesExplorerFocus",
-        "command": "workbench.action.focusActiveEditorGroup",
-    },
-    {
-        "key": "tab",
-        "when": "filesExplorerFocus",
-        "command": "filesExplorer.openFilePreserveFocus"
-    },
-    {
-        "key": "enter",
-        "when": "filesExplorerFocus",
-        "command": "list.select"
-    }
-
+  // file tree
+  {
+    "key": "ctrl+n",
+    "when": "editorTextFocus",
+    "command": "workbench.files.action.focusFilesExplorer"
+  },
+  {
+    "key": "ctrl+n",
+    "when": "!editorTextFocus",
+    // "when": "filesExplorerFocus",
+    "command": "workbench.action.focusActiveEditorGroup"
+  },
+  {
+    "key": "tab",
+    "when": "filesExplorerFocus",
+    "command": "filesExplorer.openFilePreserveFocus"
+  },
+  {
+    "key": "enter",
+    "when": "filesExplorerFocus",
+    "command": "list.select"
+  }
 ]
