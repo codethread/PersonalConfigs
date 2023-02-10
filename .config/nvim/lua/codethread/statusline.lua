@@ -1,9 +1,10 @@
-local navic = require 'nvim-navic'
-local status_ok, lualine = pcall(require, 'lualine')
-if not status_ok then
-	print 'could not load lualine'
-	return
-end
+local require = require('codethread.utils').require
+
+local navic, n_ok = require 'nvim-navic'
+local lualine, s_ok = require 'lualine'
+local th, t_ok = require 'codethread.themes'
+if not n_ok or not s_ok or not t_ok then return end
+local on_change = th.on_change
 
 local mode_maps = {
 	['NORMAL'] = '',
@@ -27,21 +28,24 @@ local function mode_map(str)
 	return mode_maps[str]
 end
 
-local function mode_color(section)
-	local errs, hydra, theme = U.requires { 'hydra.statusline', 'codethread.themes' }
-	if not errs then
-		if hydra.is_active() then return { bg = theme.colors().red } end
+---@param theme ColorScheme
+---@return function(section: string): nil
+local function mode_color_hof(theme)
+	return function()
+		local hydra, ok = require 'hydra.statusline'
+		if not ok then return end
+
+		if hydra.is_active() then return { bg = theme.red } end
 	end
 end
 
-local M = {}
+on_change(function(_, colors)
+	local mode_color = mode_color_hof(colors)
 
-function M.setup_flumpy()
 	lualine.setup {
 		options = {
 			icons_enabled = true,
-			-- theme = require('codethread.themes').lualine,
-			theme = 'tokyonight',
+			theme = th.lualine,
 			disabled_filetypes = {},
 			section_separators = { right = '', left = '' },
 			component_separators = { left = '|', right = '|' },
@@ -136,6 +140,4 @@ function M.setup_flumpy()
 			'fugitive',
 		},
 	}
-end
-
-return M
+end)

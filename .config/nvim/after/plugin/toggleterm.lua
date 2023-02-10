@@ -1,42 +1,44 @@
 local status_ok, toggleterm = pcall(require, 'toggleterm')
 if not status_ok then return end
 
-local theme = require('codethread.themes.nord').colors()
+local on_change = require('codethread.themes').on_change
 
-toggleterm.setup {
-	-- size can be a number or function which is passed the current terminal
-	size = function(term)
-		if term.direction == 'horizontal' then
-			return 15
-		elseif term.direction == 'vertical' then
-			return vim.o.columns * 0.4
-		end
-	end,
-	open_mapping = [[<C-\>]],
-	hide_numbers = true, -- hide the number column in toggleterm buffers
-	start_in_insert = true,
-	insert_mappings = true, -- whether or not the open mapping applies in insert mode
-	terminal_mappings = true, -- whether or not the open mapping applies in the opened terminals
-	persist_size = true,
-	direction = 'horizontal',
-	close_on_exit = false, -- close the terminal window when the process exits
-	highlights = {
-		Normal = {
-			guibg = theme.dark,
+on_change(function(mode, colors)
+	toggleterm.setup {
+		-- size can be a number or function which is passed the current terminal
+		size = function(term)
+			if term.direction == 'horizontal' then
+				return 15
+			elseif term.direction == 'vertical' then
+				return vim.o.columns * 0.4
+			end
+		end,
+		open_mapping = [[<C-\>]],
+		hide_numbers = true, -- hide the number column in toggleterm buffers
+		start_in_insert = true,
+		insert_mappings = true, -- whether or not the open mapping applies in insert mode
+		terminal_mappings = true, -- whether or not the open mapping applies in the opened terminals
+		persist_size = true,
+		direction = 'horizontal',
+		close_on_exit = false, -- close the terminal window when the process exits
+		highlights = {
+			Normal = {
+				guibg = colors.dark,
+			},
+			NormalFloat = {
+				link = 'NormalDark',
+			},
+			FloatBorder = {
+				guifg = colors.dark,
+				guibg = colors.dark,
+			},
 		},
-		NormalFloat = {
-			link = 'NormalDark',
+		float_opts = {
+			border = 'single',
+			winblend = 3,
 		},
-		FloatBorder = {
-			guifg = theme.dark,
-			guibg = theme.dark,
-		},
-	},
-	float_opts = {
-		border = 'single',
-		winblend = 3,
-	},
-}
+	}
+end)
 
 function _G.set_terminal_keymaps()
 	local opts = { noremap = true }
