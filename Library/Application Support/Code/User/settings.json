@@ -133,14 +133,20 @@
   "vim.leader": "<space>",
   "vim.insertModeKeyBindings": [{ "before": ["j", "k"], "after": ["<Esc>"] }],
   "vim.normalModeKeyBindingsNonRecursive": [
-    {
-      "before": ["s"],
-      "commands": ["extension.aceJump"]
-    },
+    // global
     {
       "before": ["<leader>", ";"],
       "commands": ["workbench.action.showCommands"]
     },
+    {
+      "before": ["<leader>", "<leader>"],
+      "commands": ["workbench.action.quickOpen"]
+    },
+    {
+      "before": ["s"],
+      "commands": ["extension.aceJump"]
+    },
+    // buffers
     {
       "before": ["<leader>", "b", "l"],
       // "commands": ["workbench.action.showAllEditors"]
@@ -150,15 +156,13 @@
       "before": ["<leader>", "b", "k"],
       "commands": ["workbench.action.closeActiveEditor"]
     },
+    // open
     {
       "before": ["<leader>", "o", "d"],
       "when": "editorFocus",
       "commands": ["workbench.files.action.showActiveFileInExplorer"]
     },
-    {
-      "before": ["<leader>", "<leader>"],
-      "commands": ["workbench.action.quickOpen"]
-    },
+    // errors
     {
       "before": ["<leader>", "e", "f"],
       "commands": ["eslint.executeAutofix"]
@@ -175,23 +179,15 @@
       "before": ["<leader>", "e", "l"],
       "commands": ["workbench.action.showErrorsWarnings"]
     },
+    // files
     {
       "before": ["<leader>", "f", "r"],
       "commands": ["fileutils.renameFile"]
     },
+    // utils
     {
       "before": ["<leader>", "u", "f"],
       "commands": ["editor.action.formatDocument"]
-    },
-    {
-      "before": ["<leader>", "r", "r"],
-      "commands": ["editor.action.refactor"],
-      "when": "editorHasCodeActionsProvider && editorTextFocus && !editorReadonly"
-    },
-    {
-      "before": ["leader", "l", "a"],
-      "commands": ["editor.action.quickFix"],
-      "when": "editorHasCodeActionsProvider && editorTextFocus && !editorReadonly"
     },
     // windows
     {
@@ -218,9 +214,29 @@
       "before": ["<leader>", "w", "w"],
       "commands": ["workbench.action.splitEditor"]
     },
+    // lsp
+    {
+      "before": ["leader", "l", "a"],
+      "commands": ["editor.action.quickFix"],
+      "when": "editorHasCodeActionsProvider && editorTextFocus && !editorReadonly"
+    },
     {
       "before": ["K"],
       "commands": ["editor.action.showHover"]
+    },
+    {
+      "before": ["<leader>", "r", "r"],
+      "commands": ["editor.action.refactor"],
+      "when": "editorHasCodeActionsProvider && editorTextFocus && !editorReadonly"
+    },
+    // marks
+    {
+      "before": ["m", "a"],
+      "commands": ["bookmarks.toggle"]
+    },
+    {
+      "before": ["m", "l"],
+      "commands": ["bookmarks.listFromAllFiles"]
     }
   ]
 }
