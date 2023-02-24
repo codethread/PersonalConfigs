@@ -95,33 +95,7 @@ export FZF_ALT_C_COMMAND="fd --hidden --type d --exclude '{Library,Music,Applica
 #: }}}
 #: TMUX {{{
 
-export TMUX_SESSION_PROJ_1="${DOTFILES}"
-export TMUX_SESSION_PROJ_0="~/dev/projects/qmk_firmware/keyboards/preonic/keymaps/codethread"
-
-if [ $CT_IS_WORK -eq 1 ]; then
-    export TMUX_SESSION_PROJ_2="~/work/deals-light-ui"
-    export TMUX_SESSION_PROJ_3=""
-else
-    export TMUX_SESSION_PROJ_2="~/dev/projects/cold-brew"
-    export TMUX_SESSION_PROJ_3="~/dev/projects/qmk.nvim"
-    export TMUX_SESSION_PROJ_4=""
-    export TMUX_SESSION_PROJ_5=""
-    export TMUX_SESSION_PROJ_6=""
-    export TMUX_SESSION_PROJ_7=""
-    export TMUX_SESSION_PROJ_8=""
-    export TMUX_SESSION_PROJ_9=""
-fi
-
-alias cd0="cd ${TMUX_SESSION_PROJ_0}"
-alias cd1="cd ${TMUX_SESSION_PROJ_1}"
-alias cd2="cd ${TMUX_SESSION_PROJ_2}"
-alias cd3="cd ${TMUX_SESSION_PROJ_3}"
-alias cd4="cd ${TMUX_SESSION_PROJ_4}"
-alias cd5="cd ${TMUX_SESSION_PROJ_5}"
-alias cd6="cd ${TMUX_SESSION_PROJ_6}"
-alias cd7="cd ${TMUX_SESSION_PROJ_7}"
-alias cd8="cd ${TMUX_SESSION_PROJ_8}"
-alias cd9="cd ${TMUX_SESSION_PROJ_9}"
+source "${ZDOTDIR}/tmux_projects"
 
 #: }}}
 #: Language specific {{{
