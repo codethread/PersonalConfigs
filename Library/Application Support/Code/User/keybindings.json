@@ -1,4 +1,8 @@
 // Place your key bindings in this file to override the defaultsauto[]
+// https://code.visualstudio.com/api/references/when-clause-contexts
+// https://code.visualstudio.com/docs/getstarted/keybindings
+// https://code.visualstudio.com/api/references/commands
+// https://code.visualstudio.com/docs/getstarted/keybindings#_keyboard-shortcuts-reference
 [
   // global
   {

@@ -37,7 +37,13 @@
     "node_modules/": true
   },
   "files.insertFinalNewline": true,
-  "files.associations": { ".eslintrc": "jsonc", "*.css": "tailwindcss" },
+  "files.associations": {
+    ".eslintrc": "jsonc",
+    "*.css": "tailwindcss",
+
+    "*.xml": "html",
+    "*.svg": "html"
+  },
 
   "git.confirmSync": false,
   "git.enableSmartCommit": true,
@@ -69,15 +75,31 @@
   "workbench.editor.labelFormat": "short",
   "workbench.editor.openPositioning": "last",
   "workbench.editor.showTabs": false,
+  "workbench.editor.enablePreviewFromQuickOpen": false,
+  /** this is the default, but I can't decide if I like this or not */
+  "workbench.editor.revealIfOpen": false,
   "workbench.fontAliasing": "auto",
   "workbench.iconTheme": "material-icon-theme",
   "workbench.startupEditor": "newUntitledFile",
-  "workbench.editor.enablePreviewFromQuickOpen": false,
 
   // ---------------------------------------------------------------------------------
   // PLUGINS
   // ---------------------------------------------------------------------------------
   "xstate.nestTypegenFiles": false,
+
+  "colorize.languages": [
+    "css",
+    "sass",
+    "scss",
+    "less",
+    "postcss",
+    "sss",
+    "stylus",
+    "xml",
+    "svg",
+    "typescriptreact",
+    "typescript"
+  ],
 
   "stylelint.validate": [
     "css",
@@ -156,6 +178,10 @@
       "before": ["<leader>", "b", "k"],
       "commands": ["workbench.action.closeActiveEditor"]
     },
+    {
+      "before": ["<leader>", "b", "u"],
+      "commands": ["unsaved-files.show"]
+    },
     // open
     {
       "before": ["<leader>", "o", "d"],
@@ -221,6 +247,16 @@
       "when": "editorHasCodeActionsProvider && editorTextFocus && !editorReadonly"
     },
     {
+      "before": ["leader", "l", "r"],
+      "commands": ["editor.action.rename"]
+    },
+    {
+      "before": ["g", "r"],
+      "commands": ["editor.action.goToReferences"]
+      // typescript.findAllFileReferences
+    },
+
+    {
       "before": ["K"],
       "commands": ["editor.action.showHover"]
     },
@@ -238,5 +274,12 @@
       "before": ["m", "l"],
       "commands": ["bookmarks.listFromAllFiles"]
     }
-  ]
+  ],
+  "extensions.ignoreRecommendations": true,
+  "github.copilot.enable": {
+    "*": true,
+    "yaml": false,
+    "plaintext": false,
+    "markdown": true
+  }
 }
