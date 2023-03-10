@@ -122,7 +122,6 @@ alias gr='git rebase -i HEAD~$1'
 alias gundo="git reset --soft HEAD~1 && git restore --staged ."
 alias gpop="gundo && gnah"
 alias gwip="git add . && git commit -nm 'wip'"
-alias ghub="gh repo view --web"
 alias bdiff="git diff --name-only --relative --diff-filter=d | xargs bat --diff"
 alias gpopular="git log --format=format: --name-only --since=12.month | egrep -v '^$' | sort | uniq -c | sort -nr | head -50"
 alias gbranch-mine="git for-each-ref --format=' %(authorname) %09 %(refname)' --sort=authorname | grep 'adam.hall'"
@@ -131,6 +130,15 @@ alias gcache-clear="git rev-parse --show-toplevel | rargs rm -rf {0}/.git/rr-cac
 
 # worktree
 alias gw="git worktree"
+
+#---------------------------------------------#
+# GITHUB
+#---------------------------------------------#
+alias ghub="gh repo view --web"
+#---------------------------------------------#
+# GITLAB
+#---------------------------------------------#
+alias lab-open='open https://git.perkbox.io/app/deals-light-ui/-/tree/$(gbranch)'
 
 #---------------------------------------------#
 # OS
