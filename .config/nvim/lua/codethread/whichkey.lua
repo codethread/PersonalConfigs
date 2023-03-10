@@ -100,6 +100,7 @@ local mappings = {
 	-- ["F"] = { cmd'Telescope live_grep theme=ivy', "Find Text" },
 	-- ["P"] = { cmd'lua require('telescope').extensions.projects.projects()', "Projects" },
 
+	-- buffers, buffer
 	b = {
 		name = 'Buffers',
 		b = { [[<C-^>]], 'Toggle' },
@@ -272,10 +273,13 @@ local mappings = {
 		w = { cmd 'Telescope grep_string', 'Word' },
 	},
 
+	-- open, Open, openers, Openers
 	o = {
 		name = 'Open',
 		d = { cmd 'NvimTreeFindFile', 'File Tree' },
 		i = { cmd 'OpenInitBuffer', 'Open init buffer' },
+		-- if you can't beat 'em
+		c = { cmd 'silent !code %', 'VSCode' },
 	},
 
 	t = {
@@ -284,7 +288,7 @@ local mappings = {
 		t = { cmd 'ToggleTerm direction=float', 'Float' },
 		h = { cmd 'ToggleTerm size=10 direction=horizontal', 'Horizontal' },
 		v = { cmd 'ToggleTerm size=80 direction=vertical', 'Vertical' },
-		r = { '<cmd>TermExec cmd="eslint_d restart"', 'Vertical' },
+		r = { cmd 'TermExec cmd="eslint_d restart"', 'Vertical' },
 	},
 
 	T = {
