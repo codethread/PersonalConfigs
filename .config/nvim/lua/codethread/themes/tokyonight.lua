@@ -29,19 +29,20 @@ local function setup_tokyo(mode)
 		},
 
 		on_highlights = function(hl, c)
-			hl.TSKeywordReturn = {
-				fg = c.orange,
-			}
-			hl.LineNr = {
-				fg = c.green2,
-			}
-			hl['@variable'] = {
-				-- fix highlights in embeddedLanguages, i think by default this falls through to lower specificty selectors, and because these are embedded, that falls to 'string', so everything goes green
-				fg = c.fg,
-			}
-			hl.CursorLineNr = {
-				fg = c.green1,
-			}
+			hl.LineNr = { fg = c.green2 }
+			-- fix highlights in embeddedLanguages, i think by default this falls through to lower specificty selectors, and because these are embedded, that falls to 'string', so everything goes green
+			hl['@variable'] = { fg = c.fg }
+
+			hl['@variable.builtin'] = { fg = c.teal, bold = true }
+			hl['@keyword.return'] = { fg = c.red }
+			hl['@keyword.bang'] = { fg = c.red, bold = true, underline = true }
+
+			-- js stuff
+			hl['@arrow_function.const'] = { underline = true }
+			hl['@keyword.export'] = { fg = c.red }
+			hl['@keyword.default'] = { fg = c.red, bold = true }
+
+			hl.CursorLineNr = { fg = c.green1 }
 
 			-- borderless telescope
 			local prompt = '#2d3149'
