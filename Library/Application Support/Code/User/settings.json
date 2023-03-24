@@ -1,4 +1,7 @@
 {
+  "breadcrumbs.filePath": "on",
+  "breadcrumbs.symbolPath": "off",
+
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "editor.cursorBlinking": "phase",
@@ -12,6 +15,7 @@
   "editor.guides.indentation": true,
   "editor.inlineSuggest.enabled": true,
   "editor.lineHeight": 1.8,
+  "editor.lineNumbers": "relative",
   "editor.minimap.enabled": false,
   "editor.quickSuggestions": {
     "other": "on",
@@ -27,6 +31,7 @@
   "explorer.confirmDragAndDrop": true,
   "explorer.openEditors.visible": 0,
 
+  "files.autoSave": "onWindowChange",
   "files.exclude": {
     ".history/": true,
     ".idea/": true,
@@ -70,7 +75,9 @@
   "window.title": "${rootName}${separator}${activeEditorMedium}",
   "window.titleBarStyle": "custom",
 
-  "workbench.colorTheme": "Nord",
+  "workbench.activityBar.visible": false,
+  "workbench.statusBar.visible": true,
+  "workbench.colorTheme": "Tokyo Night Storm",
   "workbench.editor.enablePreview": false,
   "workbench.editor.labelFormat": "short",
   "workbench.editor.openPositioning": "last",
@@ -281,5 +288,7 @@
     "yaml": false,
     "plaintext": false,
     "markdown": true
-  }
+  },
+  "git.openRepositoryInParentFolders": "always",
+  "editor.foldingImportsByDefault": true
 }

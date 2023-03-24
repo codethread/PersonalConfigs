@@ -13,6 +13,11 @@
     "key": "ctrl+`",
     "command": "-workbench.action.terminal.toggleTerminal"
   },
+  // {
+  //   "key": "cmd+B",
+  //   "command": "workbench.action.toggleSidebarVisibility"
+  //   // workbench.action.toggleAuxiliaryBar
+  // },
 
   // windows
   { "key": "ctrl+h", "command": "workbench.action.navigateLeft" },
