@@ -6,7 +6,7 @@ source "$ZDOTDIR/tmux_projects"
 # if nothing is passed, use fzf to select a directory
 # or if a number is passed as an argument, use the appropriate project
 if [ $# -eq 0 ]; then
-	selected=$(fd --max-depth=1 --type=d . ~/dev ~/dev/projects ~/dev/learn ~/dev/vendor ~/ ~/work ~/.local/share/nvim/site/pack/packer/start | fzf-tmux)
+	selected=$(fd --max-depth=1 --type=d . ~/dev ~/dev/projects ~/dev/learn ~/dev/vendor ~/ ~/work ~/.local/share/nvim/site/pack/packer/start ~/.local/share/nvim/site/pack/packer/opt | fzf-tmux)
 elif [[ $1 -eq 0 ]]; then
 	selected=${TMUX_SESSION_PROJ_0}
 elif [[ $1 -eq 1 ]]; then
