@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# reload tmux.conf <C-a R> to update projects
 
 export TMUX_SESSION_PROJ_0="${HOME}/dev/projects/qmk_firmware/keyboards/preonic/keymaps/codethread"
 export TMUX_SESSION_PROJ_1="${DOTFILES}"
