@@ -2,8 +2,14 @@ local utils = require 'codethread.utils'
 local nmap = utils.nmap
 
 local require = require('codethread.utils').require
-local _, ok = require 'harpoon'
+local harpoon, ok = require 'harpoon'
 if not ok then return end
+
+harpoon.setup {
+    menu = {
+        width = vim.api.nvim_win_get_width(0) - 4
+    }
+}
 
 function _G.harpoon_keybinds()
 	-- nmap('J', function() require('harpoon.mark').n end)
