@@ -64,6 +64,7 @@ safe_load('packer', function(packer)
 			use 'tpope/vim-eunuch' -- unix helpers, :Rename, :Delete
 			use 'tpope/vim-obsession'
 			use 'xorid/swap-split.nvim'
+			use 'DanilaMihailov/beacon.nvim'
 			use { 'phaazon/hop.nvim', tag = 'v2.*' }
 			use { 'shortcuts/no-neck-pain.nvim', tag = '*' }
 

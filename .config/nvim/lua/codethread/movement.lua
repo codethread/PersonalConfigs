@@ -52,7 +52,7 @@ if not hydra_ok then
 	return
 end
 
-local cmd = vim.ct.cmd
+local cmd = U.cmd
 
 local mover_hint = [[
  Params:

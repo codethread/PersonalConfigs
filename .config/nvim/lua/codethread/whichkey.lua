@@ -1,5 +1,5 @@
 -- :checkhealth which_key
-local cmd = vim.ct.cmd
+local cmd = U.cmd
 local require = require('codethread.utils').require
 local which_key, ok = require 'which-key'
 if not ok then return end
@@ -169,7 +169,13 @@ local mappings = {
 			function()
 				local ft = vim.ct.ft()
 				if ft == 'lua' then
-					require('plenary.test_harness').test_directory(vim.fn.expand '%:p')
+					vim.cmd 'w'
+					-- require('plenary.test_harness').test_directory(vim.fn.expand '%:p')
+					require('plenary.test_harness').test_directory(
+						vim.fn.expand '%:p',
+						-- if writing lua tests, I'll follow the same setup as https://github.com/m00qek/plugin-template.nvim
+						{ minimal_init = 'test/spec.vim' }
+					)
 					-- also PlenaryTestFile
 				elseif ft == 'javascript' then
 					local jest = require 'jester'
@@ -240,13 +246,14 @@ local mappings = {
 	},
 
 	['m'] = {
-		function() require('codethread.lsp.dap').mover_hydra:activate() end,
+		function() require('codethread.movement').mover_hydra:activate() end,
 		'🐉 Mover',
 	},
 
 	w = {
 		name = 'Window',
 		N = { cmd 'tabnew', 'New Tab' },
+		k = { cmd 'close', 'Close' },
 		l = { function() require('telescope-tabs').list_tabs() end, 'List Tabs' }, -- TODO: put through telescope
 		n = { cmd 'tabNext', 'Next Tab' }, -- TODO: put through telescope
 		p = { cmd 'tabprevious', 'Previous Tab' }, -- TODO: put through telescope

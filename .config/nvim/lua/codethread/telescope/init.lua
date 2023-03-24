@@ -50,6 +50,7 @@ safe_load('telescope', function(telescope)
 			file_ignore_patterns = {
 				'^.git/',
 				'^.yarn/',
+				'/vendor/',
 			},
 			vimgrep_arguments = {
 				'rg',
@@ -147,6 +148,9 @@ safe_load('telescope', function(telescope)
 			},
 			live_grep = {
 				hidden = true,
+			},
+			diagnostics = {
+				path_display = 'hidden',
 			},
 		},
 		extensions = {

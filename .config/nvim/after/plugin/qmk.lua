@@ -4,16 +4,11 @@ if not ok then return end
 
 qmk.setup {
 	name = 'LAYOUT_preonic_grid',
-	auto_format_pattern = '*keymap.c',
-	comment_preview = {
-		position = 'top',
-	},
-	spacing = 8,
 	layout = {
-		'| x x x x x x | | x x x x x x',
-		'| x x x x x x | | x x x x x x',
-		'| x x x x x x | | x x x x x x',
-		'| x x x x x x | | x x x x x x',
-		'| x x x x x x | | x x x x x x',
+		'_ x x x x x x _ x x x x x x',
+		'_ x x x x x x _ x x x x x x',
+		'_ x x x x x x _ x x x x x x',
+		'_ x x x x x x _ x x x x x x',
+		'_ x x x x x x _ x x x x x x',
 	},
 }

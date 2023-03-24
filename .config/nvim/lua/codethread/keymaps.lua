@@ -91,7 +91,7 @@ vnoremap <silent><C-Y> :MaximizerToggle<CR>gv
 inoremap <silent><C-Y> <C-o>:MaximizerToggle<CR>
 
 " MAPS ON COMMANDS I DONT LIKE
-" map <C-B>
+" map <C-B> - done
 " map <C-G>
 " map <C-Q> - done
 " map <C-Y> - done

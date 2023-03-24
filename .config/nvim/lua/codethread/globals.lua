@@ -48,6 +48,4 @@ function vim.ct.write_file(file, content)
 	io.close(log_file)
 end
 
-function vim.ct.cmd(command) return '<Cmd>' .. command .. '<CR>' end
-
 U = require 'codethread.utils'

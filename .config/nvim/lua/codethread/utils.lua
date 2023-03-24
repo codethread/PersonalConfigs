@@ -118,4 +118,6 @@ end
 
 function M.log(...) print('info: ', ...) end
 
+function M.cmd(command) return '<Cmd>' .. command .. '<CR>' end
+
 return M
