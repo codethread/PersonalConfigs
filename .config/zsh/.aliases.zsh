@@ -128,6 +128,20 @@ alias gbranch-mine="git for-each-ref --format=' %(authorname) %09 %(refname)' --
 alias gconflict="git diff --name-only --diff-filter=U --relative"
 alias gcache-clear="git rev-parse --show-toplevel | rargs rm -rf {0}/.git/rr-cache" # https://stackoverflow.com/questions/18500016/undo-a-git-rerere-resolution-that-was-done-in-a-rebase
 
+# create a new branch from trunk
+gnew() {
+    if [ $# -eq 0 ]
+    then
+        echo "No arguments supplied"
+    else
+        echo "Creating branch $1"
+        git fetch origin $(gtrunk):$(gtrunk);
+        git checkout -b "$1" $(gtrunk)
+        # don't want to push to gtrunk
+        git branch --unset-upstream
+    fi
+}
+
 # worktree
 alias gw="git worktree"
 

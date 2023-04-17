@@ -19,6 +19,7 @@ set timeoutlen=1000
 nmap gh :action QuickJavaDoc<CR>
 nmap gi :action QuickImplementations<CR>
 nmap gH :action QuickTypeDefinition<CR>
+nmap gr :action FindUsages<CR>
 
 imap § #
 
