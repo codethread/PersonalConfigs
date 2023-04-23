@@ -34,8 +34,9 @@ local M = {
 		local dark_notify, ok = require 'dark_notify'
 		if not ok then
 			-- start up with initial theme, doesn't really matter, but if dark notify doesn't work, we won't get a theme
-			local initial = get_initial()
-			opts[initial]()
+			local mode = get_initial()
+			local colors = opts[mode]()
+			vim.defer_fn(function() events.emit('ColorScheme', mode, colors) end, 500)
 			return
 		end
 
