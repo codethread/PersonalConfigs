@@ -6,9 +6,9 @@ local harpoon, ok = require 'harpoon'
 if not ok then return end
 
 harpoon.setup {
-    menu = {
-        width = vim.api.nvim_win_get_width(0) - 4
-    }
+	menu = {
+		width = vim.api.nvim_win_get_width(0) - 4,
+	},
 }
 
 function _G.harpoon_keybinds()
@@ -16,6 +16,8 @@ function _G.harpoon_keybinds()
 end
 
 -- remapping all the marks commands because marks suck
+-- but keeping it under 'M' just in case
+nmap('M', 'm')
 nmap('ma', function() require('harpoon.mark').add_file() end)
 nmap('mf', '<cmd>Telescope harpoon marks<cr>')
 nmap('ml', function() require('harpoon.ui').toggle_quick_menu() end)
