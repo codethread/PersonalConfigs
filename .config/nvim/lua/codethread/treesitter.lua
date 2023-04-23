@@ -210,6 +210,7 @@ configs.setup {
 
 local ft_to_parser = require('nvim-treesitter.parsers').filetype_to_parsername
 ft_to_parser.json = 'jsonc'
+ft_to_parser.keymap = 'dts'
 
 require('treesitter-context').setup {
 	max_lines = 2, -- How many lines the window should span. Values <= 0 mean no limit.
