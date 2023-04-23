@@ -180,6 +180,8 @@ local mappings = {
 				elseif ft == 'javascript' then
 					local jest = require 'jester'
 					jest.run_last { path_to_jest = './node_modules/bin/jest' }
+				elseif ft == 'go' then
+					vim.cmd.GoTestFunc()
 				else
 					print('no setup for filetype: ' .. ft)
 				end

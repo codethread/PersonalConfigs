@@ -212,6 +212,13 @@ safe_load('packer', function(packer)
 				end,
 			}
 
+			use {
+				'ray-x/go.nvim',
+				requires = {
+					'ray-x/guihua.lua', -- floating popups
+				},
+			}
+
 			use { 'mrcjkb/haskell-tools.nvim', branch = '1.x.x' }
 
 			-- (l(i(s(p))))

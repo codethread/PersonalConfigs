@@ -5,6 +5,9 @@ local heuristics = {
 		implementation = '.lua',
 		test = '_spec.lua',
 	},
+	['go'] = {
+		handler = function() require('go.alternate').switch(false, '') end,
+	},
 }
 
 -- local alt_map = {
@@ -18,13 +21,7 @@ local M = {}
 
 -- get the alternate file based on heuristic
 function M.alt_file()
-	local file = vim.fn.expand '%:p'
-	-- get the current file relative to the cwd
-	local file_relative = vim.fn.fnamemodify(file, ':~:.')
-	-- get the current filetype
 	local filetype = vim.bo.filetype
-	-- get the current filename
-	local filename_only = vim.fn.expand '%:t'
 
 	-- get the heuristic for the current filetype
 	local heuristic = heuristics[filetype]
@@ -32,6 +29,13 @@ function M.alt_file()
 		print('No heuristic for filetype: ' .. filetype)
 		return
 	end
+
+	if heuristic.handler then return heuristic.handler() end
+
+	local file = vim.fn.expand '%:p'
+	-- get the current file relative to the cwd
+	local file_relative = vim.fn.fnamemodify(file, ':~:.')
+	local filename_only = vim.fn.expand '%:t'
 
 	-- get most specific heuristic
 	local best_heuristic = nil
