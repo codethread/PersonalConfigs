@@ -114,15 +114,15 @@ else
 fi
 ssource "${ZDOTDIR}/shellenv.zsh"
 
-# temp
-export HOMEBREW_BUNDLE_FILE="${DOTFILES}/.config/cold-brew/Brewfile.min.conf"
-#if [[ -n "${CT_IS_MINI}" ]]; then
-#    export HOMEBREW_BUNDLE_FILE="${DOTFILES}/.config/cold-brew/Brewfile.mini.conf"
-#elif [[ -n "${CT_IS_LAPTOP}" ]]; then
-#    export HOMEBREW_BUNDLE_FILE="${DOTFILES}/.config/cold-brew/Brewfile.macbook.conf"
-#else
-#    export HOMEBREW_BUNDLE_FILE="${DOTFILES}/.config/cold-brew/Brewfile.work.conf"
-#fi
+if [[ -n "${CT_IS_MINI}" ]]; then
+    export HOMEBREW_BUNDLE_FILE="${DOTFILES}/.config/cold-brew/Brewfile.mini.conf"
+elif [[ -n "${CT_IS_LAPTOP}" ]]; then
+    export HOMEBREW_BUNDLE_FILE="${DOTFILES}/.config/cold-brew/Brewfile.macbook.conf"
+elif [[ -n "${CT_IS_WORK}" ]]; then
+    export HOMEBREW_BUNDLE_FILE="${DOTFILES}/.config/cold-brew/Brewfile.work.conf"
+else
+    export HOMEBREW_BUNDLE_FILE="${DOTFILES}/.config/cold-brew/Brewfile.basic.conf"
+fi
 
 #: }}}
 #: Language specific {{{
