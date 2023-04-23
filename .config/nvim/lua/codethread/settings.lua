@@ -22,7 +22,17 @@ set.softtabstop = 2 -- Set the behavior of tab
 set.smarttab = true -- Makes tabbing smarter will realize you have 2 vs 4
 set.expandtab = true -- Converts tabs to spaces
 
--- set.laststatus = 0 -- Always display the status line
+-- if wanting to show white space in some way
+set.listchars = {
+	tab = '» ',
+	eol = '¬',
+	space = '␣',
+	extends = '>',
+	precedes = '<',
+	trail = '~',
+}
+-- :set list
+
 set.relativenumber = true
 set.number = true -- Line numbers
 set.cursorline = true -- Enable highlighting of the current line

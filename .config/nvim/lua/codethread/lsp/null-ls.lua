@@ -77,5 +77,10 @@ null_ls.setup {
 
 		-- go
 		formatting.gofmt,
+
+		-- lisp
+		formatting.joker.with {
+			filetypes = { 'clojure' },
+		},
 	},
 }

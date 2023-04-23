@@ -214,6 +214,10 @@ safe_load('packer', function(packer)
 
 			use { 'mrcjkb/haskell-tools.nvim', branch = '1.x.x' }
 
+			-- (l(i(s(p))))
+			use 'Olical/conjure'
+			use 'gpanders/nvim-parinfer'
+
 			-- terminal
 			use { 'akinsho/toggleterm.nvim', tag = 'v2.*' }
 			use 'christoomey/vim-tmux-navigator'

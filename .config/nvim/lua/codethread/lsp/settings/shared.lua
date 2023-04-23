@@ -25,20 +25,18 @@ function M.on_attach(client, bufnr)
 	-- get capabilities
 	-- lua =vim.lsp.get_active_clients()[1].server_capabilities
 
-	if client.supports_method 'textDocument/formatting' then
-		u.autocmd('BufWritePre', {
-			group = augroup,
-			buffer = bufnr,
-			fn = function(opts)
-				if vim.endswith(opts.file, 'keymap.c') then return end
-				vim.lsp.buf.format {
-					-- this is straight from the docs and needs refining for servers i actually want to use
-					filter = function(c) return c.name == 'null-ls' end,
-					bufnr = bufnr,
-				}
-			end,
-		})
-	end
+	u.autocmd('BufWritePre', {
+		group = augroup,
+		buffer = bufnr,
+		fn = function(opts)
+			if vim.endswith(opts.file, 'keymap.c') then return end
+			vim.lsp.buf.format {
+				-- this is straight from the docs and needs refining for servers i actually want to use
+				filter = function(c) return c.name == 'null-ls' end,
+				bufnr = bufnr,
+			}
+		end,
+	})
 
 	if client.server_capabilities.documentSymbolProvider then
 		require('codethread.utils').safe_load(
@@ -67,7 +65,11 @@ function M.on_attach(client, bufnr)
 	nmap('gh', function() vim.lsp.buf.signature_help() end)
 	nmap('gr', function() vim.lsp.buf.references() end)
 
-	command('format the buffer with LSP', 'Format', function() vim.lsp.buf.formatting() end)
+	command(
+		'format the buffer with LSP',
+		'Format',
+		function() vim.lsp.buf.format { async = true } end
+	)
 end
 
 return M
