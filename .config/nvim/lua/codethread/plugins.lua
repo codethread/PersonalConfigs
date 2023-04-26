@@ -172,7 +172,7 @@ safe_load('packer', function(packer)
 							config = function()
 								require('copilot').setup {
 									copilot_node_command = vim.fn.expand '$HOME'
-										.. '/.volta/tools/image/node/18.15.0/bin/node',
+										.. '/.volta/tools/image/node/18.16.0/bin/node',
 									suggestion = { enabled = false },
 									panel = { enabled = false },
 								}
