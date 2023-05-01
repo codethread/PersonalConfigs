@@ -20,7 +20,8 @@ local nmap = utils.nmap
 -- use space as the leader key
 map('', '<Space>', '<Nop>')
 vim.g.mapleader = ' '
-vim.g.maplocalleader = ','
+map('', 'L', '<Nop>')
+vim.g.maplocalleader = 'L'
 
 -- Escape
 imap('jk', '<ESC>')
@@ -57,21 +58,25 @@ nnoremap  <leader>Y "+yg_
 nnoremap  <leader>y "+y
 nnoremap  <leader>yy "+yy
 
-" center on scroll
-" kind of prefer just using scroll off
-" nnoremap <C-d> <C-d>zz
-" nnoremap <C-u> <C-u>zz
-
 " Paste from clipboard
 nnoremap <leader>v "+p
 nnoremap <leader>v "+P
 vnoremap <leader>v "+p
 vnoremap <leader>v "+P
 
+" center on scroll
+" kind of prefer just using scroll off
+" nnoremap <C-d> <C-d>zz
+" nnoremap <C-u> <C-u>zz
+
 " keep cursor centered (removed some while using scrolloff)
 " nnoremap n nzzzv
 " nnoremap N Nzzzv
 nnoremap J mzJ`z
+
+" don't changed jumplist with paragraph jumps :help jumplist
+nnoremap <silent> } :<C-u>execute "keepjumps norm! " . v:count1 . "}"<CR>
+nnoremap <silent> { :<C-u>execute "keepjumps norm! " . v:count1 . "{"<CR>
 
 " add undo break points on key stroke to make undo more granular
 inoremap , ,<c-g>u
@@ -96,7 +101,7 @@ inoremap <silent><C-Y> <C-o>:MaximizerToggle<CR>
 " map <C-Q> - done
 " map <C-Y> - done
 " map <C-P>
-" nmap L
+" nmap L - done, local leader
 " nmap H
-" nmap M
+" nmap M - done, using markers
 ]]
