@@ -65,7 +65,7 @@ safe_load('packer', function(packer)
 			use 'tpope/vim-obsession'
 			use 'xorid/swap-split.nvim'
 			use 'DanilaMihailov/beacon.nvim'
-			use { 'phaazon/hop.nvim', tag = 'v2.*' }
+			use { 'ggandor/leap.nvim', requires = { 'tpope/vim-repeat' } }
 			use { 'shortcuts/no-neck-pain.nvim', tag = '*' }
 
 			-- editing
