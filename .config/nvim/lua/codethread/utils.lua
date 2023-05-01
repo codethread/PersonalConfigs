@@ -94,9 +94,13 @@ function M.get_failed_modules()
 end
 
 function M.autocmd(events, opts)
-	vim.api.nvim_clear_autocmds { group = opts.group, buffer = opts.buffer }
+	local group = opts.group or vim.api.nvim_create_augroup('codethread', {
+		clear = false,
+	})
+	if opts.group then vim.api.nvim_clear_autocmds { group = group, buffer = opts.buffer } end
 	vim.api.nvim_create_autocmd(events, {
-		group = opts.group,
+		pattern = opts.pattern,
+		group = group,
 		buffer = opts.buffer,
 		callback = opts.fn,
 	})
