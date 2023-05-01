@@ -1,9 +1,8 @@
-local status_ok, toggleterm = pcall(require, 'toggleterm')
-if not status_ok then return end
+local require = require('codethread.utils').require
+local toggleterm, ok = require 'toggleterm'
+if not ok then return end
 
-local on_change = require('codethread.themes').on_change
-
-on_change(function(mode, colors)
+require('codethread.themes').on_change(function(_, colors)
 	toggleterm.setup {
 		-- size can be a number or function which is passed the current terminal
 		size = function(term)
@@ -55,6 +54,8 @@ vim.cmd 'autocmd! TermOpen term://* lua set_terminal_keymaps()'
 
 local Term = require('toggleterm.terminal').Terminal
 local node = Term:new { cmd = 'node', hidden = true, close_on_exit = true }
+local go_run =
+	Term:new { cmd = 'go run .', hidden = true, close_on_exit = false, direction = 'vertical' }
 
 local format_dotfiles = Term:new {
 	cmd = "stylua --glob '**/*.lua' -- .config/nvim",
@@ -64,5 +65,15 @@ local format_dotfiles = Term:new {
 }
 
 function _NODE_TOGGLE() node:toggle() end
+
+U.wk('go', {
+	r = {
+		function()
+			vim.cmd.wa()
+			go_run:toggle()
+		end,
+		'GoRun',
+	},
+})
 
 function _FORMAT_DOTFILES() format_dotfiles:toggle() end

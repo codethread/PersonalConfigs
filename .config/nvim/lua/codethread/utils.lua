@@ -124,4 +124,30 @@ function M.log(...) print('info: ', ...) end
 
 function M.cmd(command) return '<Cmd>' .. command .. '<CR>' end
 
+---Set up a whichkey shorcuts for local leader for a given language
+function M.wk(filetype, mapping, options)
+	local wk, ok = M.require 'which-key'
+	if type(filetype) ~= 'string' then
+		error 'wk is intended for filetype local mappings, pass a filetype'
+	end
+	if ok then
+		U.autocmd('FileType', {
+			pattern = filetype,
+			fn = function(opts)
+				wk.register(
+					mapping,
+					vim.tbl_deep_extend('force', {
+						mode = 'n', -- NORMAL mode
+						prefix = '<localleader>',
+						buffer = opts.buf, -- Global mappings. Specify a buffer number for buffer local mappings
+						silent = true, -- use `silent` when creating keymaps
+						noremap = true, -- use `noremap` when creating keymaps
+						nowait = true, -- use `nowait` when creating keymaps
+					}, options or {})
+				)
+			end,
+		})
+	end
+end
+
 return M
