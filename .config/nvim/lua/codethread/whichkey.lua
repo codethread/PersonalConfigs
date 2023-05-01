@@ -52,6 +52,10 @@ local mappings = {
 	-- ["F"] = { cmd'Telescope live_grep theme=ivy', "Find Text" },
 	-- ["P"] = { cmd'lua require('telescope').extensions.projects.projects()', "Projects" },
 
+	a = {
+		cmd 'AerialToggle! left',
+	},
+
 	-- buffers, buffer
 	b = {
 		name = 'Buffers',
@@ -232,6 +236,7 @@ local mappings = {
 		C = { cmd 'Telescope commands', 'Commands' },
 		p = { cmd 'Telescope live_grep', 'Live Grep' },
 		w = { cmd 'Telescope grep_string', 'Word' },
+		o = { cmd 'Telescope aerial', 'Symbol' },
 	},
 
 	-- open, Open, openers, Openers

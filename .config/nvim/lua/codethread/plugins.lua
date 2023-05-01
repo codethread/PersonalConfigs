@@ -83,6 +83,7 @@ safe_load('packer', function(packer)
 			use_local '~/dev/projects/qmk.nvim'
 
 			-- navigation
+			use 'stevearc/aerial.nvim'
 			use 'ThePrimeagen/harpoon'
 			use 'kevinhwang91/nvim-bqf' -- mainly just like 'o' to close lists
 			use { 'bennypowers/nvim-regexplainer', requires = 'MunifTanjim/nui.nvim' }
@@ -135,7 +136,6 @@ safe_load('packer', function(packer)
 			use 'b0o/schemastore.nvim'
 			use 'gbrlsnchs/telescope-lsp-handlers.nvim'
 			use 'jose-elias-alvarez/null-ls.nvim'
-			use 'simrat39/symbols-outline.nvim' -- TODO: didn't even realise i had this
 			use 'jose-elias-alvarez/typescript.nvim'
 			use 'https://git.sr.ht/~whynothugo/lsp_lines.nvim'
 
