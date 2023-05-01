@@ -111,17 +111,6 @@ function M.file_exits(path)
 	return vim.fn.isdirectory(p) == 1
 end
 
-function M.telescope_hook(extension)
-	vim.api.nvim_create_autocmd('User', {
-		desc = 'setup telescope plugin for ' .. extension,
-		group = vim.api.nvim_create_augroup('MyTelescope', {}),
-		pattern = { 'TelescopeLoaded' },
-		callback = function() require('telescope').load_extension(extension) end,
-	})
-end
-
-function M.log(...) print('info: ', ...) end
-
 function M.cmd(command) return '<Cmd>' .. command .. '<CR>' end
 
 ---Set up a whichkey shorcuts for local leader for a given language
