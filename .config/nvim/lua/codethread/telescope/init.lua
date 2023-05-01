@@ -1,4 +1,6 @@
-local safe_load = require('codethread.utils').safe_load
+local require = require('codethread.utils').require
+local telescope, ok = require 'telescope'
+if not ok then return nil, false end
 
 local function ts_word()
 	-- local winnr = vim.fn.winnr '#'
@@ -17,155 +19,153 @@ end
 
 vim.api.nvim_create_user_command('TSWord', function() print(ts_word()) end, {})
 
-safe_load('telescope', function(telescope)
-	local actions = require 'telescope.actions'
-	local action_layout = require 'telescope.actions.layout'
-	local t_themes = require 'telescope.themes'
-	local my_themes = require 'codethread.telescope.themes'
+local actions = require 'telescope.actions'
+local action_layout = require 'telescope.actions.layout'
+local t_themes = require 'telescope.themes'
+local my_themes = require 'codethread.telescope.themes'
 
-	telescope.setup {
-		-- defaults = themes.get_ivy {
-		-- defaults = my_themes.bottom {
-		defaults = {
-			-- defaults = t_themes.get_dropdown {
-			prompt_prefix = '   ',
-			selection_caret = '  ',
-			entry_prefix = '  ',
-			initial_mode = 'insert',
-			path_display = { 'truncate' },
-			-- winblend = 0,
-			-- borderchars = { '─', '│', '─', '│', '╭', '╮', '╯', '╰' },
-			color_devicons = true,
-			cycle_layout_list = {
-				'horizontal',
-				-- 'vertical',
-				'center',
-				-- 'cursor',
-				-- 'flex',
-				-- 'bottom_pane',
-				my_themes.bottom {},
+telescope.setup {
+	-- defaults = themes.get_ivy {
+	-- defaults = my_themes.bottom {
+	defaults = {
+		-- defaults = t_themes.get_dropdown {
+		prompt_prefix = '   ',
+		selection_caret = '  ',
+		entry_prefix = '  ',
+		initial_mode = 'insert',
+		path_display = { 'truncate' },
+		-- winblend = 0,
+		-- borderchars = { '─', '│', '─', '│', '╭', '╮', '╯', '╰' },
+		color_devicons = true,
+		cycle_layout_list = {
+			'horizontal',
+			-- 'vertical',
+			'center',
+			-- 'cursor',
+			-- 'flex',
+			-- 'bottom_pane',
+			my_themes.bottom {},
+		},
+		-- layout_strategy = 'horizontal',
+		-- me
+		file_ignore_patterns = {
+			'^.git/',
+			'^.yarn/',
+			'/vendor/',
+		},
+		vimgrep_arguments = {
+			'rg',
+			'--color=never',
+			'--no-heading',
+			'--with-filename',
+			'--line-number',
+			'--column',
+			'--smart-case',
+			'--hidden',
+		},
+		-- border = true,
+		-- borderchars = { '─', '│', '─', '│', '┌', '┐', '┘', '└' },
+		-- prompt = { "─", "│", " ", "│", "┌", "┐", "│", "│" },
+		-- results = { "─", "│", "─", "│", "├", "┤", "┘", "└" },
+		-- preview = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
+
+		mappings = {
+			i = {
+				['<C-n>'] = actions.cycle_history_next,
+				['<C-p>'] = actions.cycle_history_prev,
+
+				['<C-j>'] = actions.move_selection_next,
+				['<C-k>'] = actions.move_selection_previous,
+
+				['<C-c>'] = actions.close,
+
+				['<Down>'] = actions.move_selection_next,
+				['<Up>'] = actions.move_selection_previous,
+
+				['<CR>'] = actions.select_default,
+				['<C-x>'] = actions.select_horizontal,
+				['<C-v>'] = actions.select_vertical,
+				['<C-t>'] = actions.select_tab,
+
+				['<C-u>'] = actions.preview_scrolling_up,
+				['<C-d>'] = actions.preview_scrolling_down,
+
+				['<PageUp>'] = actions.results_scrolling_up,
+				['<PageDown>'] = actions.results_scrolling_down,
+
+				['<Tab>'] = actions.toggle_selection + actions.move_selection_worse,
+				['<S-Tab>'] = actions.toggle_selection + actions.move_selection_better,
+				['<C-q>'] = actions.send_to_qflist + actions.open_qflist,
+				['<M-q>'] = actions.send_selected_to_qflist + actions.open_qflist,
+				['<C-l>'] = actions.complete_tag,
+				['<C-_>'] = actions.which_key, -- keys from pressing <C-/>
+				['<M-p>'] = action_layout.toggle_preview,
 			},
-			-- layout_strategy = 'horizontal',
-			-- me
-			file_ignore_patterns = {
-				'^.git/',
-				'^.yarn/',
-				'/vendor/',
-			},
-			vimgrep_arguments = {
-				'rg',
-				'--color=never',
-				'--no-heading',
-				'--with-filename',
-				'--line-number',
-				'--column',
-				'--smart-case',
-				'--hidden',
-			},
-			-- border = true,
-			-- borderchars = { '─', '│', '─', '│', '┌', '┐', '┘', '└' },
-			-- prompt = { "─", "│", " ", "│", "┌", "┐", "│", "│" },
-			-- results = { "─", "│", "─", "│", "├", "┤", "┘", "└" },
-			-- preview = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
 
-			mappings = {
-				i = {
-					['<C-n>'] = actions.cycle_history_next,
-					['<C-p>'] = actions.cycle_history_prev,
+			n = {
+				['<esc>'] = actions.close,
+				['<CR>'] = actions.select_default,
+				['<C-x>'] = actions.select_horizontal,
+				['<C-v>'] = actions.select_vertical,
+				['<C-t>'] = actions.select_tab,
 
-					['<C-j>'] = actions.move_selection_next,
-					['<C-k>'] = actions.move_selection_previous,
+				['<Tab>'] = actions.toggle_selection + actions.move_selection_worse,
+				['<S-Tab>'] = actions.toggle_selection + actions.move_selection_better,
+				['<C-q>'] = actions.send_to_qflist + actions.open_qflist,
+				['<M-q>'] = actions.send_selected_to_qflist + actions.open_qflist,
 
-					['<C-c>'] = actions.close,
+				['j'] = actions.move_selection_next,
+				['k'] = actions.move_selection_previous,
+				['H'] = actions.move_to_top,
+				['M'] = actions.move_to_middle,
+				['L'] = actions.move_to_bottom,
 
-					['<Down>'] = actions.move_selection_next,
-					['<Up>'] = actions.move_selection_previous,
+				['<Down>'] = actions.move_selection_next,
+				['<Up>'] = actions.move_selection_previous,
+				['gg'] = actions.move_to_top,
+				['G'] = actions.move_to_bottom,
 
-					['<CR>'] = actions.select_default,
-					['<C-x>'] = actions.select_horizontal,
-					['<C-v>'] = actions.select_vertical,
-					['<C-t>'] = actions.select_tab,
+				['<C-u>'] = actions.preview_scrolling_up,
+				['<C-d>'] = actions.preview_scrolling_down,
 
-					['<C-u>'] = actions.preview_scrolling_up,
-					['<C-d>'] = actions.preview_scrolling_down,
+				['<PageUp>'] = actions.results_scrolling_up,
+				['<PageDown>'] = actions.results_scrolling_down,
 
-					['<PageUp>'] = actions.results_scrolling_up,
-					['<PageDown>'] = actions.results_scrolling_down,
+				['?'] = actions.which_key,
+				['<M-p>'] = action_layout.toggle_preview,
 
-					['<Tab>'] = actions.toggle_selection + actions.move_selection_worse,
-					['<S-Tab>'] = actions.toggle_selection + actions.move_selection_better,
-					['<C-q>'] = actions.send_to_qflist + actions.open_qflist,
-					['<M-q>'] = actions.send_selected_to_qflist + actions.open_qflist,
-					['<C-l>'] = actions.complete_tag,
-					['<C-_>'] = actions.which_key, -- keys from pressing <C-/>
-					['<M-p>'] = action_layout.toggle_preview,
-				},
+				['D'] = actions.delete_buffer, -- only for buffers, see if better way todo
+				['>'] = action_layout.cycle_layout_next,
+				[']'] = actions.cycle_previewers_next,
 
-				n = {
-					['<esc>'] = actions.close,
-					['<CR>'] = actions.select_default,
-					['<C-x>'] = actions.select_horizontal,
-					['<C-v>'] = actions.select_vertical,
-					['<C-t>'] = actions.select_tab,
-
-					['<Tab>'] = actions.toggle_selection + actions.move_selection_worse,
-					['<S-Tab>'] = actions.toggle_selection + actions.move_selection_better,
-					['<C-q>'] = actions.send_to_qflist + actions.open_qflist,
-					['<M-q>'] = actions.send_selected_to_qflist + actions.open_qflist,
-
-					['j'] = actions.move_selection_next,
-					['k'] = actions.move_selection_previous,
-					['H'] = actions.move_to_top,
-					['M'] = actions.move_to_middle,
-					['L'] = actions.move_to_bottom,
-
-					['<Down>'] = actions.move_selection_next,
-					['<Up>'] = actions.move_selection_previous,
-					['gg'] = actions.move_to_top,
-					['G'] = actions.move_to_bottom,
-
-					['<C-u>'] = actions.preview_scrolling_up,
-					['<C-d>'] = actions.preview_scrolling_down,
-
-					['<PageUp>'] = actions.results_scrolling_up,
-					['<PageDown>'] = actions.results_scrolling_down,
-
-					['?'] = actions.which_key,
-					['<M-p>'] = action_layout.toggle_preview,
-
-					['D'] = actions.delete_buffer, -- only for buffers, see if better way todo
-					['>'] = action_layout.cycle_layout_next,
-					[']'] = actions.cycle_previewers_next,
-
-					['C-1'] = action_layout.toggle_prompt_position,
-				},
+				['C-1'] = action_layout.toggle_prompt_position,
 			},
 		},
-		pickers = {
-			find_files = {
-				hidden = true,
-				find_command = { 'fd', '--type', 'f', '--strip-cwd-prefix' },
-			},
-			live_grep = {
-				hidden = true,
-			},
-			diagnostics = {
-				path_display = 'hidden',
+	},
+	pickers = {
+		find_files = {
+			hidden = true,
+			find_command = { 'fd', '--type', 'f', '--strip-cwd-prefix' },
+		},
+		live_grep = {
+			hidden = true,
+		},
+		diagnostics = {
+			path_display = 'hidden',
+		},
+	},
+	extensions = {
+		lsp_handlers = {
+			code_action = {
+				telescope = require('telescope.themes').get_cursor {},
 			},
 		},
-		extensions = {
-			lsp_handlers = {
-				code_action = {
-					telescope = require('telescope.themes').get_cursor {},
-				},
-			},
-			['ui-select'] = {
-				t_themes.get_ivy {},
-			},
+		['ui-select'] = {
+			t_themes.get_ivy {},
 		},
-	}
+	},
+}
 
-	-- vim.defer_fn(function() vim.cmd [[doautocmd User TelescopeLoaded]] end, 100)
-	vim.cmd [[doautocmd User TelescopeLoaded]]
-	telescope.load_extension 'ui-select'
-end)
+telescope.load_extension 'ui-select'
+
+return telescope

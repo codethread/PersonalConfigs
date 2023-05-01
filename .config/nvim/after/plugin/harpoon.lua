@@ -3,7 +3,8 @@ local nmap = utils.nmap
 
 local require = require('codethread.utils').require
 local harpoon, ok = require 'harpoon'
-if not ok then return end
+local telescope, ok_2 = require 'codethread.telescope'
+if not ok or not ok_2 then return end
 
 harpoon.setup {
 	menu = {
@@ -38,4 +39,5 @@ vim.cmd [[
                 au FileType harpoon lua harpoon_keybinds()
             augroup end
         ]]
-U.telescope_hook 'harpoon'
+
+telescope.load_extension 'harpoon'

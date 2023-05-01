@@ -1,6 +1,7 @@
 local require = require('codethread.utils').require
 local notify, ok = require 'notify'
-if not ok then return end
+local telescope, ok_2 = require 'codethread.telescope'
+if not ok or not ok_2 then return end
 
 notify.setup {
 	background_colour = '#000000',
@@ -17,6 +18,7 @@ local banned_messages = {
 	'No information available',
 	'warning: multiple different client offset_encodings detected for buffer, this is not supported yet',
 }
+
 vim.notify = function(msg, ...)
 	for _, banned in ipairs(banned_messages) do
 		if msg == banned then return end
@@ -25,4 +27,4 @@ vim.notify = function(msg, ...)
 	notify(msg, ...)
 end
 
-U.telescope_hook 'notify'
+telescope.load_extension 'notify'
