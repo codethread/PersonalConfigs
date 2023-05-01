@@ -57,7 +57,6 @@ safe_load('packer', function(packer)
 			--------------------------
 			use 'AckslD/nvim-neoclip.lua'
 			use 'famiu/bufdelete.nvim' -- delete buffer
-			use 'goolord/alpha-nvim'
 			use 'jghauser/mkdir.nvim'
 			use 'mbbill/undotree'
 			use 'norcalli/nvim-colorizer.lua'
@@ -88,6 +87,7 @@ safe_load('packer', function(packer)
 			use 'kevinhwang91/nvim-bqf' -- mainly just like 'o' to close lists
 			use { 'bennypowers/nvim-regexplainer', requires = 'MunifTanjim/nui.nvim' }
 			use { 'kyazdani42/nvim-tree.lua', requires = 'gabebw/vim-github-link-opener' }
+			use { 'stevearc/oil.nvim' }
 			use { 'lukas-reineke/indent-blankline.nvim', tag = 'v2.*' }
 			use { 'rcarriga/nvim-notify', tag = 'v3.*' }
 			use { 'wakatime/vim-wakatime', tag = '9.*' }

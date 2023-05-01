@@ -285,7 +285,7 @@ local mappings = {
 	-- open, Open, openers, Openers
 	o = {
 		name = 'Open',
-		d = { cmd 'NvimTreeFindFile', 'File Tree' },
+		d = { cmd 'Oil', 'File Tree' },
 		i = { cmd 'OpenInitBuffer', 'Open init buffer' },
 		-- if you can't beat 'em
 		c = { cmd 'silent !code %', 'VSCode' },

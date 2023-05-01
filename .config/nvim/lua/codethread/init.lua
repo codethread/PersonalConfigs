@@ -13,7 +13,6 @@ require 'codethread.git'
 require 'codethread.whichkey'
 require 'codethread.lsp'
 require 'codethread.treesitter'
-require 'codethread.dashboard'
 require 'codethread.alt'
 
 vim.defer_fn(U.get_failed_modules, 100)
