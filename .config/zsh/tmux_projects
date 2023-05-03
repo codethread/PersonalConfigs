@@ -20,7 +20,7 @@ if [ $CT_IS_WORK -eq 1 ]; then
     export TMUX_SESSION_PROJ_6="${HOME}/work/fe-package-inspector"
     export TMUX_SESSION_PROJ_7="${HOME}/work/tagger"
 else
-    export TMUX_SESSION_PROJ_2="${HOME}/dev/learn/go-refresh"
+    export TMUX_SESSION_PROJ_2="${HOME}/dev/learn/gophercises"
     export TMUX_SESSION_PROJ_3="${HOME}/dev/projects/cold-brew"
     export TMUX_SESSION_PROJ_4="${HOME}/dev/projects/qmk.nvim"
 fi
