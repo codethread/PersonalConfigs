@@ -10,3 +10,22 @@ vim.api.nvim_create_autocmd('BufWritePre', {
 	callback = function() require('go.format').goimport() end,
 	group = format_sync_grp,
 })
+
+-- TODO make safe
+local Term = require('toggleterm.terminal').Terminal
+
+local go_run =
+	Term:new { cmd = 'go run .', hidden = true, close_on_exit = false, direction = 'vertical' }
+
+local cmd = U.cmd
+
+U.wk('go', {
+	r = {
+		function()
+			vim.cmd.wa()
+			go_run:toggle()
+		end,
+		'GoRun',
+	},
+	e = { cmd 'GoIfErr', 'err' },
+})

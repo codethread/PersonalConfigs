@@ -30,6 +30,7 @@ local setup = {
 	ignore_missing = true, -- enable this to hide mappings for which you didn't specify a label
 	hidden = { '<silent>', cmd '', '<Cmd>', '', 'call', 'lua', '^:', '^ ' }, -- hide mapping boilerplate
 }
+which_key.setup(setup)
 
 -- " MAPS ON COMMANDS I DONT LIKE
 -- " map <C-B>
@@ -39,7 +40,6 @@ local setup = {
 -- map <C-F> :%s/
 -- map <C-P> :Files<CR>
 -- map \ :GrepFzf<CR>
-local dap = require 'dap'
 
 local mappings = {
 	['<leader>'] = { cmd 'Telescope find_files shorten_path=false', 'Files' },
@@ -274,7 +274,6 @@ local mappings = {
 	},
 }
 
-which_key.setup(setup)
 which_key.register(mappings, {
 	mode = 'n', -- NORMAL mode
 	prefix = '<leader>',
@@ -312,3 +311,5 @@ which_key.register({
 	noremap = true, -- use `noremap` when creating keymaps
 	nowait = true, -- use `nowait` when creating keymaps
 })
+
+return which_key

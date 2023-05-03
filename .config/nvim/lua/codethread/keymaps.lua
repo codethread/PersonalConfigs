@@ -20,8 +20,8 @@ local nmap = utils.nmap
 -- use space as the leader key
 map('', '<Space>', '<Nop>')
 vim.g.mapleader = ' '
-map('', 'L', '<Nop>')
-vim.g.maplocalleader = 'L'
+map('', ',', '<Nop>')
+vim.g.maplocalleader = ','
 
 -- Escape
 imap('jk', '<ESC>')

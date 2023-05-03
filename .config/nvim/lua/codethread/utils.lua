@@ -115,7 +115,7 @@ function M.cmd(command) return '<Cmd>' .. command .. '<CR>' end
 
 ---Set up a whichkey shorcuts for local leader for a given language
 function M.wk(filetype, mapping, options)
-	local wk, ok = M.require 'which-key'
+	local wk, ok = M.require 'codethread.whichkey'
 	if type(filetype) ~= 'string' then
 		error 'wk is intended for filetype local mappings, pass a filetype'
 	end

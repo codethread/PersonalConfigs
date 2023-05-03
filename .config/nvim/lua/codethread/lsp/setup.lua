@@ -56,4 +56,4 @@ end
 require 'codethread.lsp.settings.typescript'
 require 'codethread.lsp.settings.haskell'
 
-U.telescope_hook 'lsp_handlers'
+require('codethread.telescope').load_extension 'lsp_handlers'
