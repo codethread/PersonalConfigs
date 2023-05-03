@@ -37,7 +37,8 @@ alias grep='grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}'
 
 alias ls='ls -pGF --color=auto'
 # alias l='ls -lah'
-alias l='exa -lah'
+alias l='exa -lah --icons'
+alias lt='exa -1ah --tree'
 
 alias pathis='echo $PATH | tr -s ":" "\n"'
 alias portsinuse="lsof -i -p | grep -i 'listen'"
