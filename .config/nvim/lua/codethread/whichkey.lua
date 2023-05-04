@@ -54,6 +54,7 @@ local mappings = {
 
 	a = {
 		cmd 'AerialToggle! left',
+		'AerialToggle',
 	},
 
 	-- buffers, buffer
