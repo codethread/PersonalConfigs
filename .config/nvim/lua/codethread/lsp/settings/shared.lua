@@ -45,18 +45,19 @@ function M.on_attach(client, bufnr)
 		)
 	end
 
-	if client.server_capabilities.documentHighlightProvider then
-		vim.api.nvim_clear_autocmds { group = higroup, buffer = bufnr }
-		vim.api.nvim_create_autocmd(
-			'CursorHold',
-			{ group = higroup, buffer = bufnr, callback = highlight_symbol }
-		)
-		vim.api.nvim_create_autocmd('CursorMoved', {
-			group = higroup,
-			buffer = bufnr,
-			callback = function() vim.lsp.buf.clear_references() end,
-		})
-	end
+	-- TODO move to a toggle function
+	-- if client.server_capabilities.documentHighlightProvider then
+	-- 	vim.api.nvim_clear_autocmds { group = higroup, buffer = bufnr }
+	-- 	vim.api.nvim_create_autocmd(
+	-- 		'CursorHold',
+	-- 		{ group = higroup, buffer = bufnr, callback = highlight_symbol }
+	-- 	)
+	-- 	vim.api.nvim_create_autocmd('CursorMoved', {
+	-- 		group = higroup,
+	-- 		buffer = bufnr,
+	-- 		callback = function() vim.lsp.buf.clear_references() end,
+	-- 	})
+	-- end
 
 	nmap('gD', function() vim.lsp.buf.declaration() end)
 	nmap('gd', function() vim.lsp.buf.definition() end)
