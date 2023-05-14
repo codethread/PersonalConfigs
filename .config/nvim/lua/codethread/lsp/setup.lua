@@ -31,7 +31,6 @@ local servers = {
 	'gopls',
 	'html',
 	'jsonls',
-	'rust_analyzer',
 	'lua_ls',
 	'svelte',
 	'tailwindcss',
@@ -55,5 +54,6 @@ end
 
 require 'codethread.lsp.settings.typescript'
 require 'codethread.lsp.settings.haskell'
+require 'codethread.lsp.settings.rust'
 
 require('codethread.telescope').load_extension 'lsp_handlers'

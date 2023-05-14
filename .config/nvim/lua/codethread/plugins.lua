@@ -213,12 +213,9 @@ safe_load('packer', function(packer)
 				end,
 			}
 
-			use {
-				'ray-x/go.nvim',
-				requires = {
-					'ray-x/guihua.lua', -- floating popups
-				},
-			}
+			use { 'ray-x/go.nvim', requires = { 'ray-x/guihua.lua' } }
+
+			use { 'simrat39/rust-tools.nvim' }
 
 			use { 'mrcjkb/haskell-tools.nvim', branch = '1.x.x' }
 

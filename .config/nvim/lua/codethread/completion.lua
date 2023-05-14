@@ -10,6 +10,7 @@ local lspkind = require 'lspkind'
 lspkind.init {
 	symbol_map = {
 		Copilot = '',
+		TypeParameter = '',
 	},
 }
 
@@ -84,8 +85,10 @@ cmp.setup {
 				vim_item
 			)
 			local strings = vim.split(kind.kind, '%s', { trimempty = true })
-			kind.kind = ' ' .. strings[1] .. ' '
-			kind.menu = '    (' .. strings[2] .. ')'
+			local a = strings[1] or 'OOF'
+			local b = strings[2] or 'YEP'
+			kind.kind = ' ' .. a .. ' '
+			kind.menu = '    (' .. b .. ')'
 
 			return kind
 		end,
