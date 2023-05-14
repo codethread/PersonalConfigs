@@ -43,7 +43,7 @@ cmp.setup {
 			ls.lsp_expand(args.body) -- For `luasnip` users.
 		end,
 	},
-	mapping = cmp.mapping.preset.insert {
+	mapping = {
 		['<C-k>'] = cmp.mapping.select_prev_item(),
 		['<C-j>'] = cmp.mapping.select_next_item(),
 		['<C-l>'] = cmp.mapping.confirm { select = true }, -- select grabs first item if none were selected
@@ -80,10 +80,8 @@ cmp.setup {
 	formatting = {
 		fields = { 'kind', 'abbr', 'menu' },
 		format = function(entry, vim_item)
-			local kind = require('lspkind').cmp_format { mode = 'symbol_text', maxwidth = 50 }(
-				entry,
-				vim_item
-			)
+			local kind =
+				require('lspkind').cmp_format { mode = 'symbol_text', maxwidth = 50 }(entry, vim_item)
 			local strings = vim.split(kind.kind, '%s', { trimempty = true })
 			local a = strings[1] or 'OOF'
 			local b = strings[2] or 'YEP'
@@ -121,7 +119,7 @@ cmp.setup.cmdline(':', {
 	},
 })
 
-cmp.setup.cmdline('/', {
+cmp.setup.cmdline({ '/', '?' }, {
 	mapping = cmp.mapping.preset.cmdline(),
 	sources = {
 		{ name = 'buffer' },
@@ -133,7 +131,46 @@ cmp.setup.cmdline('/', {
 
 local function complete(name) cmp.complete { config = { sources = { { name = name } } } } end
 
-imap('<C-Space>', function() complete 'nvim_lsp' end)
-imap('<C-x><C-s>', function() complete 'luasnip' end)
-imap('<C-x><C-n>', function() complete 'buffer' end)
+imap(
+	'<C-Space>',
+	function()
+		cmp.complete {
+			config = {
+				sources = {
+					{ name = 'nvim_lsp' },
+					{ name = 'copilot' },
+				},
+			},
+		}
+	end,
+	{
+		desc = 'Cmp',
+	}
+)
+
+imap('<C-p>', function() complete 'luasnip' end)
 imap('<C-x><C-f>', function() complete 'path' end)
+
+imap('<C-n>', function()
+	cmp.complete {
+		config = {
+			sources = {
+				{
+					name = 'buffer',
+					option = {
+						get_bufnrs = function()
+							-- source from all visible buffers
+							local bufs = {}
+							for _, win in ipairs(vim.api.nvim_list_wins()) do
+								bufs[vim.api.nvim_win_get_buf(win)] = true
+							end
+							return vim.tbl_keys(bufs)
+						end,
+					},
+				},
+			},
+		},
+	}
+end, {
+	desc = 'Buffer completion',
+})
