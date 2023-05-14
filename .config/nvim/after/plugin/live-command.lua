@@ -11,9 +11,7 @@ require('live-command').setup {
 		Reg = {
 			-- This will transform ":5Reg a" into ":norm 5@a", running a captured macro with a preview
 			cmd = 'norm',
-			args = function(opts)
-				return (opts.count == -1 and '' or opts.count) .. '@' .. opts.args
-			end,
+			args = function(opts) return (opts.count == -1 and '' or opts.count) .. '@' .. opts.args end,
 			range = '',
 		},
 		S = {
