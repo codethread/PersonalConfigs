@@ -65,14 +65,14 @@ fpath+=( "$ZDOTDIR/completions" )
 ssource "$ZDOTDIR/.zsh_plugins.zsh"
 ssource "$ZDOTDIR/.aliases.zsh"
 ssource ~/.private
+ssource ~/gdrive/grpcurls.zsh
 
 #: }}}
 #: General {{{
 
 # set up colors for ls, fd, tree etc https://github.com/sharkdp/vivid
-export LS_COLORS="$(vivid generate ayu)"
-export JQ_COLORS="1;30:0;31:0;32:0;35:0;33:1;35:1;35"
-export BAT_THEME="Coldark-Cold"
+export LS_COLORS="$(vivid generate dracula)"
+export JQ_COLORS="1;30:0;31:0;32:0;35:0;33:1;35:1;35"	# export JQ_COLORS="1;30:0;31:0;32:0;35:0;33:1;35:1;35"
 
 #: }}}
 #: Emacs {{{
@@ -83,7 +83,7 @@ export LSP_USE_PLISTS=true
 #: }}}
 #: FZF {{{
 
-export FZF_DEFAULT_COMMAND='fd --type f'
+export FZF_DEFAULT_COMMAND="fd --type f --hidden --exclude '{.git}'"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # quickest way to cd around
 export FZF_ALT_C_COMMAND="fd --hidden --type d --exclude '{Library,Music,Applications,Pictures,Unity,VirtualBox VMs,WebstormProjects,Tools,node_modules,.git}' . ${HOME}"

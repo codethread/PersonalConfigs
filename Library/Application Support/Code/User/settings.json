@@ -2,15 +2,16 @@
   "breadcrumbs.filePath": "on",
   "breadcrumbs.symbolPath": "off",
 
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": true,
   "editor.cursorBlinking": "phase",
   "editor.cursorStyle": "block",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.dragAndDrop": true,
+  "editor.foldingImportsByDefault": true,
   "editor.fontFamily": "'FiraCode Nerd Font','Roboto Mono', Menlo, Monaco, 'Courier New', monospace",
   "editor.fontLigatures": true,
   "editor.fontSize": 13,
   "editor.fontWeight": "500",
+  "editor.formatOnSave": true,
   "editor.formatOnType": true,
   "editor.guides.indentation": true,
   "editor.inlineSuggest.enabled": true,
@@ -52,6 +53,7 @@
 
   "git.confirmSync": false,
   "git.enableSmartCommit": true,
+  "git.openRepositoryInParentFolders": "always",
 
   "problems.decorations.enabled": false,
 
@@ -77,7 +79,7 @@
 
   "workbench.activityBar.visible": false,
   "workbench.statusBar.visible": true,
-  "workbench.colorTheme": "Tokyo Night Storm",
+  "workbench.colorTheme": "Rosé Pine Moon (no italics)",
   "workbench.editor.enablePreview": false,
   "workbench.editor.labelFormat": "short",
   "workbench.editor.openPositioning": "last",
@@ -86,12 +88,14 @@
   /** this is the default, but I can't decide if I like this or not */
   "workbench.editor.revealIfOpen": false,
   "workbench.fontAliasing": "auto",
-  "workbench.iconTheme": "material-icon-theme",
+  "workbench.iconTheme": "rose-pine-icons",
   "workbench.startupEditor": "newUntitledFile",
 
   // ---------------------------------------------------------------------------------
   // PLUGINS
   // ---------------------------------------------------------------------------------
+  "extensions.ignoreRecommendations": true,
+
   "xstate.nestTypegenFiles": false,
 
   "colorize.languages": [
@@ -148,6 +152,18 @@
     // "editor.defaultFormatter": "vscode.html-language-features"
   },
 
+  "rust-analyzer.inlayHints.parameterHints.enable": false,
+  "rust-analyzer.inlayHints.closingBraceHints.enable": false,
+  "rust-analyzer.inlayHints.renderColons": false,
+  "rust-analyzer.inlayHints.typeHints.enable": false,
+  "rust-analyzer.inlayHints.chainingHints.enable": false,
+
+  "github.copilot.enable": {
+    "*": true,
+    "yaml": false,
+    "plaintext": false,
+    "markdown": true
+  }
   // ---------------------------------------------------------------------------------
   // VIM
   // ---------------------------------------------------------------------------------
@@ -281,15 +297,5 @@
       "before": ["m", "l"],
       "commands": ["bookmarks.listFromAllFiles"]
     }
-  ],
-  "extensions.ignoreRecommendations": true,
-  "github.copilot.enable": {
-    "*": true,
-    "plaintext": true,
-    "markdown": true,
-    "scminput": false,
-    "yaml": false
-  },
-  "git.openRepositoryInParentFolders": "always",
-  "editor.foldingImportsByDefault": true
+  ]
 }

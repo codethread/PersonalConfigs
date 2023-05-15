@@ -1,0 +1,119 @@
+return {
+	{
+		'neovim/nvim-lspconfig',
+		--TODO can be per file?
+		event = { 'BufReadPre', 'BufNewFile' },
+		dependencies = {
+			{ 'folke/neoconf.nvim', cmd = 'Neoconf', config = true },
+			{ 'folke/neodev.nvim', opts = { experimental = { pathStrict = true } } },
+
+			-- use 'b0o/schemastore.nvim'
+			'williamboman/mason.nvim',
+			'williamboman/mason-lspconfig.nvim',
+			'hrsh7th/nvim-cmp',
+			'hrsh7th/cmp-nvim-lsp',
+		},
+		---@class PluginLspOpts
+		opts = {
+			-- options for vim.diagnostic.config()
+			diagnostics = {},
+
+			-- LSP Server Settings
+			---@type lspconfig.options
+			servers = {
+				jsonls = {},
+				eslint = {
+					settings = {
+						run = 'onSave',
+					},
+				},
+				lua_ls = {
+					settings = {
+						Lua = {
+							workspace = {
+								checkThirdParty = false,
+							},
+							completion = {
+								callSnippet = 'Replace',
+							},
+						},
+					},
+				},
+			},
+			setup = {},
+		},
+		config = function(_, opts)
+			U.lsp_attach('*', function(_, buf)
+				U.keys(buf, {
+					{ 'gD', function() vim.lsp.buf.declaration() end, 'declaration' },
+					{ 'gd', function() vim.lsp.buf.definition() end, 'definition' },
+					{ 'K', function() vim.lsp.buf.hover() end, 'hover' },
+					{ 'gi', function() vim.lsp.buf.implementation() end, 'implementation' },
+					{ 'gh', function() vim.lsp.buf.signature_help() end, 'signature_help' },
+					{ 'gr', function() vim.lsp.buf.references() end, 'references' },
+				}, { prefix = '', unique = false })
+			end)
+
+			local augroup = vim.api.nvim_create_augroup('LspFormatting', {})
+			U.lsp_attach('*', function(client, bufnr)
+				if client.supports_method 'textDocument/formatting' then
+					local function format()
+						local map = {
+							-- lua = 'lua_ls',
+						}
+						local formatter = map[U.ft()] or 'null-ls'
+						vim.print('formating with buffer: ' .. bufnr .. ' ' .. formatter)
+
+						vim.lsp.buf.format { bufnr = bufnr, name = formatter }
+					end
+
+					vim.api.nvim_buf_create_user_command(bufnr, 'Format', format, {})
+					vim.api.nvim_clear_autocmds { group = augroup, buffer = bufnr }
+					vim.api.nvim_create_autocmd('BufWritePre', {
+						group = augroup,
+						buffer = bufnr,
+						callback = format,
+					})
+				end
+			end)
+
+			vim.diagnostic.config(vim.deepcopy(opts.diagnostics))
+
+			local servers = opts.servers
+
+			local function setup(server)
+				local server_opts = vim.tbl_deep_extend('force', {
+					capabilities = vim.deepcopy(require 'plugins.lsp.capabilities'(opts.capabilities)),
+				}, servers[server] or {})
+
+				if opts.setup[server] then
+					if opts.setup[server](server, server_opts) then return end
+				elseif opts.setup['*'] then
+					if opts.setup['*'](server, server_opts) then return end
+				end
+				require('lspconfig')[server].setup(server_opts)
+			end
+
+			-- get all the servers that are available thourgh mason-lspconfig
+			local mlsp = require 'mason-lspconfig'
+			local all_mslp_servers =
+				vim.tbl_keys(require('mason-lspconfig.mappings.server').lspconfig_to_package)
+
+			local ensure_installed = {} ---@type string[]
+			for server, server_opts in pairs(servers) do
+				if server_opts then
+					server_opts = server_opts == true and {} or server_opts
+					-- run manual setup if mason=false or if this is a server that cannot be installed with mason-lspconfig
+					if server_opts.mason == false or not vim.tbl_contains(all_mslp_servers, server) then
+						setup(server)
+					else
+						ensure_installed[#ensure_installed + 1] = server
+					end
+				end
+			end
+
+			mlsp.setup { ensure_installed = ensure_installed }
+			mlsp.setup_handlers { setup }
+		end,
+	},
+}
