@@ -97,6 +97,8 @@ alias dcdn='docker-compose down'
 alias dick="docker ps | grep '[a-z0-9]' | awk '{ print $1 }' | xargs docker kill"
 alias dc="docker-compose config --services | fzf --multi | tr '\n' ' ' | xargs docker-compose up"
 
+alias k8='kubectl'
+
 #---------------------------------------------#
 # GOLANG
 # -------------------------------------------#
@@ -172,3 +174,5 @@ alias kmux="kill_tmux_session"
 ##############################################
 alias nvm="volta pin node@14 && volta pin yarn@1.22.4"
 alias react-native-clean="git pull && gclean && yarn && yarn install:app && yarn run-ios --simulator \"iPhone SE (3rd generation)\""
+alias po="p login aws all-accounts --role SSO-Developer"
+alias docker="podman"

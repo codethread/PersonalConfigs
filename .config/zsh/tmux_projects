@@ -13,12 +13,7 @@ export TMUX_SESSION_PROJ_8="${HOME}/"
 export TMUX_SESSION_PROJ_9="${HOME}/"
 
 if [ $CT_IS_WORK -eq 1 ]; then
-    export TMUX_SESSION_PROJ_2="${HOME}/work/deals-light-ui"
-    export TMUX_SESSION_PROJ_3="${HOME}/work/fe-graph"
-    export TMUX_SESSION_PROJ_4="${HOME}/work/fe-review"
-    export TMUX_SESSION_PROJ_5="${HOME}/work/fe-native"
-    export TMUX_SESSION_PROJ_6="${HOME}/work/fe-package-inspector"
-    export TMUX_SESSION_PROJ_7="${HOME}/work/tagger"
+    source "${HOME}/.work_tmux_projects"
 else
     export TMUX_SESSION_PROJ_2="${HOME}/dev/learn/gophercises"
     export TMUX_SESSION_PROJ_3="${HOME}/dev/projects/cold-brew"
