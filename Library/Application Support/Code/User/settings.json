@@ -285,9 +285,10 @@
   "extensions.ignoreRecommendations": true,
   "github.copilot.enable": {
     "*": true,
-    "yaml": false,
-    "plaintext": false,
-    "markdown": true
+    "plaintext": true,
+    "markdown": true,
+    "scminput": false,
+    "yaml": false
   },
   "git.openRepositoryInParentFolders": "always",
   "editor.foldingImportsByDefault": true
