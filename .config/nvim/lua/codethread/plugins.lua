@@ -137,7 +137,6 @@ safe_load('packer', function(packer)
 			use 'gbrlsnchs/telescope-lsp-handlers.nvim'
 			use 'jose-elias-alvarez/null-ls.nvim'
 			use 'jose-elias-alvarez/typescript.nvim'
-			use 'https://git.sr.ht/~whynothugo/lsp_lines.nvim'
 
 			-- dap
 			use {
@@ -218,6 +217,8 @@ safe_load('packer', function(packer)
 			use { 'simrat39/rust-tools.nvim' }
 
 			use { 'mrcjkb/haskell-tools.nvim', branch = '1.x.x' }
+
+			use { 'simrat39/rust-tools.nvim' }
 
 			-- (l(i(s(p))))
 			use 'Olical/conjure'

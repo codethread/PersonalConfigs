@@ -13,7 +13,6 @@ local diagnostics = null_ls.builtins.diagnostics
 local code_actions = null_ls.builtins.code_actions
 
 null_ls.setup {
-	debug = false,
 	sources = {
 		-- lua
 		formatting.stylua,
@@ -73,7 +72,12 @@ null_ls.setup {
 		-- code_actions.eslint_d,
 
 		-- c/c++
-		formatting.clang_format,
+		formatting.clang_format.with {
+			filetypes = { 'c', 'cpp' },
+		},
+
+		-- protobuf
+		formatting.buf,
 
 		-- go
 		formatting.gofmt,
