@@ -163,8 +163,9 @@ alias lab-open='open https://git.perkbox.io/app/deals-light-ui/-/tree/$(gbranch)
 alias mac-dark-toggle="osascript -e 'tell app \"System Events\" to tell appearance preferences to set dark mode to not dark mode'"
 
 #---------------------------------------------#
-# TMUXINATOR
+# TMUX
 # -------------------------------------------#
+alias tmux-delete-resurrect="rm ~/.local/share/tmux/resurrect/*"
 alias mux="tmuxinator"
 alias muxa="mux spages; mux exc;"
 alias kmux="kill_tmux_session"
