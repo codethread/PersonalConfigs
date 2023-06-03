@@ -9,6 +9,7 @@ export EDITOR='nvim'
 export MANPAGER="/bin/sh -c \"col -b | nvim -c 'set ft=man ts=8 nomod nolist nonu' -\""
 export MANWIDTH=80
 export WAKATIME_HOME="$HOME/.config/wakatime"
+export LESSHISTFILE="-" # no .lesshst
 
 #: }}}
 #: Profile {{{
