@@ -1,0 +1,8 @@
+{
+  "sleep": {
+    "prefix": "sleep",
+    "body": [
+      "tokio::time::sleep(std::time::Duration::from_millis($1)).await;"
+    ]
+  }
+}

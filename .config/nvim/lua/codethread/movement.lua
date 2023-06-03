@@ -4,8 +4,6 @@ if not hydra_ok then
 	return
 end
 
-local cmd = U.cmd
-
 local mover_hint = [[
  Params:
  move: ← _h_ → _l_
@@ -20,10 +18,10 @@ local mover_hydra = Hydra {
 		invoke_on_body = true,
 	},
 	heads = {
-		{ 'j', cmd 'TSTextobjectGotoNextStart @parameter.inner' },
-		{ 'k', cmd 'TSTextobjectGotoPreviousStart @parameter.inner' },
-		{ 'h', cmd 'TSTextobjectSwapPrevious @parameter.inner' },
-		{ 'l', cmd 'TSTextobjectSwapNext @parameter.inner' },
+		{ 'j', Cmd 'TSTextobjectGotoNextStart @parameter.inner' },
+		{ 'k', Cmd 'TSTextobjectGotoPreviousStart @parameter.inner' },
+		{ 'h', Cmd 'TSTextobjectSwapPrevious @parameter.inner' },
+		{ 'l', Cmd 'TSTextobjectSwapNext @parameter.inner' },
 	},
 }
 
@@ -47,10 +45,10 @@ local tab_hydra = Hydra {
 	},
 	heads = {
 		{ 'j', nil, { exit = true } },
-		{ 'x', cmd 'tabclose' },
+		{ 'x', Cmd 'tabclose' },
 		{ 'h', 'gT' },
 		{ 'l', 'gt' },
-		{ 'n', cmd 'tabnew', { exit = true } },
+		{ 'n', Cmd 'tabnew', { exit = true } },
 	},
 }
 
