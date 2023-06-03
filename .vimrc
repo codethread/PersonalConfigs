@@ -21,6 +21,7 @@ set sps=best,10             " spell only shows top 10 results
 set tabstop=2               " number of visual spaces per TAB
 set wildmenu                " visual autocomplete for command menu
 set equalalways             " window size changes automatically
+set viminfofile=NONE        " don't create a .viminfo file
 
 set dictionary="/usr/dict/words"
 set foldnestmax=3

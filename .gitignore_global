@@ -2,6 +2,7 @@
 .nenv
 .DS_Store
 .idea/
+.run/
 .history/
 .scratchpads/
 .log/
