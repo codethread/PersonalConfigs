@@ -1,0 +1,65 @@
+return U.flatten {
+	require 'plugins.lang.go',
+	require 'plugins.lang.typescript',
+	require 'plugins.lang.rust',
+
+	{
+		{
+			'LhKipp/nvim-nu',
+			ft = 'nu',
+			-- run = ':TSInstall nu',
+			opts = {
+				complete_cmd_names = true,
+			},
+		},
+
+		{ 'mrcjkb/haskell-tools.nvim', version = '1.x.x' },
+
+		-- help for lua, TODO need to make this work
+		-- U.tools_null { 'stylua', 'luacheck' },
+		-- use 'wsdjeg/luarefvim'
+		-- use 'rafcamlet/nvim-luapad'
+		'milisims/nvim-luaref',
+
+		-- (l(i(s(p))))
+		{
+			'Olical/conjure',
+			ft = {
+				'clojure',
+				'fennel',
+				'janet',
+				'hy',
+				'julia',
+				'racket',
+				'scheme',
+				'lisp',
+			},
+			init = function()
+				vim.g['conjure#mapping#doc_word'] = false
+				vim.g['conjure#extract#tree_sitter#enabled'] = true
+				vim.cmd [[
+				  " rust and lua removed
+					let g:conjure#filetypes = [ 'clojure', 'fennel', 'janet', 'hy', 'julia', 'racket', 'scheme', 'lisp' ]
+					let g:conjure#filetype#rust = v:false
+				]]
+			end,
+		},
+
+		{
+			'gpanders/nvim-parinfer',
+			cmd = 'ParinferOn',
+			init = function()
+				vim.api.nvim_create_autocmd('FileType', {
+					pattern = { 'clojure', 'query' },
+					group = vim.api.nvim_create_augroup('Parinfer', {}),
+					callback = function()
+						vim.api.nvim_buf_set_option(0, 'formatexpr', 'ParinferGetExpr()')
+						vim.api.nvim_buf_set_option(0, 'formatprg', 'Parinfer')
+						vim.cmd [[ParinferOn]]
+					end,
+				})
+				vim.g.parinfer_force_balance = true
+			end,
+		},
+	},
+}

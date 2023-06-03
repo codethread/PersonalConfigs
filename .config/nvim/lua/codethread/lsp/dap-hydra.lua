@@ -46,9 +46,21 @@ local debug_actions_hydra = Hydra {
 	},
 	heads = list_concat {
 		{
-			{ '<Tab>', function() running_hydra[1]:activate() end, { desc = 'back', exit = true } },
-			{ '.', function() require('dap').run_last() end, { desc = 'repeat last' } },
-			{ 'x', function() require('dap').terminate() end, { exit = true, desc = 'terminate' } },
+			{
+				'<Tab>',
+				function() running_hydra[1]:activate() end,
+				{ desc = 'back', exit = true },
+			},
+			{
+				'.',
+				function() require('dap').run_last() end,
+				{ desc = 'repeat last' },
+			},
+			{
+				'x',
+				function() require('dap').terminate() end,
+				{ exit = true, desc = 'terminate' },
+			},
 			{
 				'c',
 				function() require('dap').clear_breakpoints() end,
@@ -113,14 +125,42 @@ local debug_running_hydra = Hydra {
 	heads = list_concat {
 		debug_shared,
 		{
-			{ '<Up>', function() require('dap').step_back() end, { desc = 'step_back' } },
-			{ '<Down>', function() require('dap').step_over() end, { desc = 'step_over' } },
-			{ '<Left>', function() require('dap').step_out() end, { desc = 'step_out' } },
-			{ '<Right>', function() require('dap').step_into() end, { desc = 'step_into' } },
+			{
+				'<Up>',
+				function() require('dap').step_back() end,
+				{ desc = 'step_back' },
+			},
+			{
+				'<Down>',
+				function() require('dap').step_over() end,
+				{ desc = 'step_over' },
+			},
+			{
+				'<Left>',
+				function() require('dap').step_out() end,
+				{ desc = 'step_out' },
+			},
+			{
+				'<Right>',
+				function() require('dap').step_into() end,
+				{ desc = 'step_into' },
+			},
 
-			{ '<S-Down>', function() require('dap').down() end, { desc = 'down' } },
-			{ '<S-Up>', function() require('dap').up() end, { desc = 'up' } },
-			{ '<S-Right>', function() require('dap').continue() end, { desc = 'continue' } },
+			{
+				'<S-Down>',
+				function() require('dap').down() end,
+				{ desc = 'down' },
+			},
+			{
+				'<S-Up>',
+				function() require('dap').up() end,
+				{ desc = 'up' },
+			},
+			{
+				'<S-Right>',
+				function() require('dap').continue() end,
+				{ desc = 'continue' },
+			},
 			{
 				'<S-Left>',
 				function() require('dap').toggle_breakpoint() end,
@@ -179,7 +219,11 @@ local debug_hydra = Hydra {
 				function() require('dap').toggle_breakpoint() end,
 				{ desc = 'toggle_breakpoint' },
 			},
-			{ '.', function() require('dap').run_last() end, { desc = 'run_last' } },
+			{
+				'.',
+				function() require('dap').run_last() end,
+				{ desc = 'run_last' },
+			},
 			{
 				'l',
 				function()
