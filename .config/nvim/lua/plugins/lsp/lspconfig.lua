@@ -86,6 +86,9 @@ return {
 					capabilities = vim.deepcopy(require 'plugins.lsp.capabilities'(opts.capabilities)),
 				}, servers[server] or {})
 
+				-- disable snippets in autocomplete
+				server_opts.capabilities.textDocument.completion.completionItem.snippetSupport = false
+
 				if opts.setup[server] then
 					if opts.setup[server](server, server_opts) then return end
 				elseif opts.setup['*'] then

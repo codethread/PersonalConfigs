@@ -79,7 +79,6 @@
 
   "workbench.activityBar.visible": false,
   "workbench.statusBar.visible": true,
-  "workbench.colorTheme": "Rosé Pine Moon (no italics)",
   "workbench.editor.enablePreview": false,
   "workbench.editor.labelFormat": "short",
   "workbench.editor.openPositioning": "last",
@@ -157,13 +156,14 @@
   "rust-analyzer.inlayHints.renderColons": false,
   "rust-analyzer.inlayHints.typeHints.enable": false,
   "rust-analyzer.inlayHints.chainingHints.enable": false,
+  "rust-analyzer.check.extraArgs": ["--target-dir", "target/check"],
 
   "github.copilot.enable": {
     "*": true,
     "yaml": false,
     "plaintext": false,
     "markdown": true
-  }
+  },
   // ---------------------------------------------------------------------------------
   // VIM
   // ---------------------------------------------------------------------------------
@@ -297,5 +297,6 @@
       "before": ["m", "l"],
       "commands": ["bookmarks.listFromAllFiles"]
     }
-  ]
+  ],
+  "workbench.colorTheme": "Rosé Pine Moon"
 }

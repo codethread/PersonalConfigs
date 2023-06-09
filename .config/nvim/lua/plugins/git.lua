@@ -13,6 +13,10 @@ return {
 	{
 		'sindrets/diffview.nvim',
 		lazy = true,
+		cmd = {
+			'DiffviewFileHistory',
+			'DiffviewOpen',
+		},
 		config = function()
 			local actions = require 'diffview.actions'
 

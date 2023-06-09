@@ -105,7 +105,7 @@ return {
 						},
 					},
 
-					file_ignore_patterns = { '^.git/', '^.yarn/', '/vendor/' },
+					file_ignore_patterns = { '^.git/', '^.yarn/', '/vendor/', '%.lock' },
 					vimgrep_arguments = {
 						'rg',
 						'--color=never',

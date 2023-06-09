@@ -40,10 +40,12 @@ return {
 					settings = {
 						['rust-analyzer'] = {
 							cargo = { allFeatures = true },
-							-- checkOnSave = {
-							-- 	command = 'cargo clippy',
-							-- 	extraArgs = { '--no-deps' },
-							-- },
+							check = {
+								extraArgs = {
+									'--target-dir',
+									'target/check',
+								},
+							},
 						},
 					},
 				},
