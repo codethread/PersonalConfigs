@@ -7,7 +7,7 @@ return {
 			config = function()
 				require('luasnip.loaders.from_vscode').lazy_load {
 					'~/.config/nvim/snippets_vscode',
-					'~/.local/share/nvim/site/pack/packer/start/friendly-snippets',
+					'~/.local/share/nvim/lazy/friendly-snippets',
 				}
 			end,
 		},
@@ -23,15 +23,6 @@ return {
 				},
 			}
 		end,
-		keys = {
-			{
-				'<tab>',
-				function() return require('luasnip').jumpable(1) and '<Plug>luasnip-jump-next' or '<tab>' end,
-				mode = 'i',
-			},
-			{ '<tab>', function() require('luasnip').jump(1) end, mode = 's' },
-			{ '<s-tab>', function() require('luasnip').jump(-1) end, mode = { 'i', 's' } },
-		},
 	},
 
 	-- cmp and friends
@@ -65,6 +56,7 @@ return {
 		},
 		config = function()
 			local cmp = require 'cmp'
+			local ls = require 'luasnip'
 			cmp.setup {
 				-- performance.max_view_entries
 				window = {
@@ -87,6 +79,31 @@ return {
 					-- ['<C-Space>'] = cmp.mapping.complete_common_string(),
 					['<C-u>'] = cmp.mapping.scroll_docs(-4),
 					['<C-d>'] = cmp.mapping.scroll_docs(4),
+
+					['<Tab>'] = cmp.mapping(function(fallback)
+						if ls.expandable() then
+							ls.expand()
+						elseif ls.expand_or_jumpable() then
+							ls.expand_or_jump()
+						else
+							fallback()
+						end
+					end, {
+						'i',
+						's',
+					}),
+					['<S-Tab>'] = cmp.mapping(function(fallback)
+						if cmp.visible() then
+							cmp.select_prev_item()
+						elseif ls.jumpable(-1) then
+							ls.jump(-1)
+						else
+							fallback()
+						end
+					end, {
+						'i',
+						's',
+					}),
 				},
 				completion = {
 					completeopt = 'menu,menuone,noinsert',

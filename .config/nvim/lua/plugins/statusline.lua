@@ -51,14 +51,14 @@ return {
 						end
 					end)
 				end,
-				-- opts = function()
-				-- 	return {
-				-- 		separator = ' ',
-				-- 		highlight = true,
-				-- 		depth_limit = 5,
-				-- 		icons = require('lspkind').symbol_map,
-				-- 	}
-				-- end,
+				opts = function()
+					return {
+						-- separator = ' ',
+						highlight = true,
+						depth_limit = 5,
+						-- icons = require('lspkind').symbol_map,
+					}
+				end,
 			},
 		},
 		event = 'VeryLazy',
