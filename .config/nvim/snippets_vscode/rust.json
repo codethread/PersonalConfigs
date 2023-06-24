@@ -4,5 +4,12 @@
     "body": [
       "tokio::time::sleep(std::time::Duration::from_millis($1)).await;"
     ]
+  },
+  "mockTrait": {
+    "prefix": "mockTrait",
+    "body": [
+      "#[cfg_attr(test, mockall::automock)]",
+      "#[async_trait::async_trait]"
+    ]
   }
 }
