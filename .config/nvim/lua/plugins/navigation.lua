@@ -8,6 +8,9 @@ vim.cmd [[
 	nnoremap N Nzzzv
 	nnoremap J mzJ`z
 
+	nnoremap < :cprevious<CR>
+	nnoremap > :cnext<CR>
+
 	" don't changed jumplist with paragraph jumps :help jumplist
 	" nnoremap <silent> } :<C-u>execute "keepjumps norm! " . v:count1 . "}"<CR>
 	" nnoremap <silent> { :<C-u>execute "keepjumps norm! " . v:count1 . "{"<CR>
@@ -40,8 +43,9 @@ return {
 		'stevearc/aerial.nvim',
 		keys = {
 			{ '<leader>a', Cmd 'AerialToggle! left', desc = 'Aerial' },
-			{ '{', Cmd 'AerialPrev', desc = 'AerialPrev' },
-			{ '}', Cmd 'AerialNex', desc = 'AerialNext' },
+			-- these are reversed for my keyboard as I have them over j & k
+			{ '}', Cmd 'AerialPrev', desc = 'AerialPrev' },
+			{ '{', Cmd 'AerialNex', desc = 'AerialNext' },
 		},
 		opts = {
 			layout = {

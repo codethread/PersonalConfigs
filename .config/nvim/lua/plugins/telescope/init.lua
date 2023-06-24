@@ -105,7 +105,10 @@ return {
 						},
 					},
 
-					file_ignore_patterns = { '^.git/', '^.yarn/', '/vendor/', '%.lock' },
+					file_ignore_patterns = vim.list_extend(
+						{ '^.git/', '^.yarn/', '/vendor/', '%.lock' },
+						U.project('~/work/deals-light-ui', { '^e2e', '^ios', '^android' })
+					),
 					vimgrep_arguments = {
 						'rg',
 						'--color=never',

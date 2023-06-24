@@ -46,4 +46,8 @@ return {
 			{ '<leader>Gm', Cmd 'Bufferize messages', 'messages' },
 		},
 	},
+
+	{
+		'kevinhwang91/nvim-bqf',
+	},
 }

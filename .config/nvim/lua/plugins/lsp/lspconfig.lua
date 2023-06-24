@@ -54,7 +54,8 @@ return {
 				}, { prefix = '', unique = false })
 			end)
 
-			local augroup = vim.api.nvim_create_augroup('LspFormatting', {})
+			local augroup = U.augroups.lsp_formatting
+
 			U.lsp_attach('*', function(client, bufnr)
 				if client.supports_method 'textDocument/formatting' then
 					local function format()

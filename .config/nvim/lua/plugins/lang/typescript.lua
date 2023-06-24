@@ -31,23 +31,34 @@ return {
 			},
 			setup = {
 				tsserver = function(_, opts)
-					U.lsp_attach(function(client, buffer)
-						if client.name == 'tsserver' then
-							vim.keymap.set(
-								'n',
-								'<leader>co',
-								'<cmd>TypescriptOrganizeImports<CR>',
-								{ buffer = buffer, desc = 'Organize Imports' }
-							)
-							vim.keymap.set(
-								'n',
-								'<leader>cR',
-								'<cmd>TypescriptRenameFile<CR>',
-								{ desc = 'Rename File', buffer = buffer }
-							)
-							-- map <leader>ll yiwoconsole.log('\n<C-r>0:', <C-r>0);<C-[>k
-							-- map <leader>ld :%s/.*console.log.*\n//g<CR>
-						end
+					U.lsp_attach('tsserver', function(client, buffer)
+						local augroup = U.augroups.lsp_formatting
+						vim.api.nvim_clear_autocmds { group = augroup, buffer = buffer }
+						vim.api.nvim_create_autocmd('BufWritePre', {
+							group = augroup,
+							buffer = buffer,
+							callback = function()
+								local ts = require('typescript').actions
+								ts.removeUnused { sync = true }
+								-- ts.addMissingImports({ sync = true })
+								ts.organizeImports { sync = true }
+								vim.cmd [[Format]]
+							end,
+						})
+						vim.keymap.set(
+							'n',
+							'<leader>co',
+							'<cmd>TypescriptOrganizeImports<CR>',
+							{ buffer = buffer, desc = 'Organize Imports' }
+						)
+						vim.keymap.set(
+							'n',
+							'<leader>cR',
+							'<cmd>TypescriptRenameFile<CR>',
+							{ desc = 'Rename File', buffer = buffer }
+						)
+						-- map <leader>ll yiwoconsole.log('\n<C-r>0:', <C-r>0);<C-[>k
+						-- map <leader>ld :%s/.*console.log.*\n//g<CR>
 					end)
 					require('typescript').setup { server = opts }
 					return true

@@ -99,6 +99,7 @@ return {
 	{
 		'kevinhwang91/nvim-ufo',
 		dependencies = { 'kevinhwang91/promise-async', 'nvim-treesitter/nvim-treesitter' },
+		event = { 'BufReadPre', 'BufNewFile' },
 		version = 'v1.*',
 		init = function()
 			vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
@@ -171,6 +172,7 @@ return {
 			end,
 		},
 	},
+
 	{
 		{
 			'goolord/alpha-nvim',

@@ -7,10 +7,13 @@ function M.lsp_attach(client, on_attach)
 		callback = function(args)
 			local buffer = args.buf
 			local current_client = vim.lsp.get_client_by_id(args.data.client_id)
-			if client == '*' or client == current_client then on_attach(current_client, buffer) end
+			if client == '*' or client == current_client.name then on_attach(current_client, buffer) end
 		end,
 	})
 end
+
+M.augroups = {}
+M.augroups.lsp_formatting = vim.api.nvim_create_augroup('LspFormatting', {})
 
 function M.highlights(hls)
 	return {
@@ -84,6 +87,14 @@ function M.flatten(specss)
 		end
 	end
 	return collection
+end
+
+function M.project(path, settings)
+	if vim.fn.getcwd() == vim.fn.expand(path) then
+		return settings
+	else
+		return {}
+	end
 end
 
 -----------------------------------------------------------------------------------
