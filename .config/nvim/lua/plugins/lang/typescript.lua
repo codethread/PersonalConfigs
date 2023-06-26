@@ -45,18 +45,6 @@ return {
 								vim.cmd [[Format]]
 							end,
 						})
-						vim.keymap.set(
-							'n',
-							'<leader>co',
-							'<cmd>TypescriptOrganizeImports<CR>',
-							{ buffer = buffer, desc = 'Organize Imports' }
-						)
-						vim.keymap.set(
-							'n',
-							'<leader>cR',
-							'<cmd>TypescriptRenameFile<CR>',
-							{ desc = 'Rename File', buffer = buffer }
-						)
 						-- map <leader>ll yiwoconsole.log('\n<C-r>0:', <C-r>0);<C-[>k
 						-- map <leader>ld :%s/.*console.log.*\n//g<CR>
 					end)
