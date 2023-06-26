@@ -112,4 +112,26 @@ return {
 			)
 		end,
 	},
+
+	{
+		'codethread/qmk.nvim',
+		ft = { 'c' },
+		config = function()
+			---@type qmk.UserConfig
+			local conf = {
+				name = 'LAYOUT_preonic_grid',
+				comment_preview = {
+					keymap_overrides = {},
+				},
+				layout = {
+					'_ x x x x x x _ x x x x x x',
+					'_ x x x x x x _ x x x x x x',
+					'_ x x x x x x _ x x x x x x',
+					'_ x x x x x x _ x x x x x x',
+					'_ x x x x x x _ x x x x x x',
+				},
+			}
+			require('qmk').setup(conf)
+		end,
+	},
 }

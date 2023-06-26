@@ -16,6 +16,11 @@ require('lazy').setup {
 	spec = {
 		{ import = 'plugins' },
 	},
+	dev = {
+		path = '~/dev/projects',
+		patterns = { 'codethread' },
+		fallback = true,
+	},
 }
 
 -- load all my stuff that isn't a plugin

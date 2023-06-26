@@ -94,7 +94,9 @@ return {
 					-- code_actions.eslint_d,
 
 					-- c/c++
-					formatting.clang_format,
+					formatting.clang_format.with {
+						filetypes = { 'c', 'cpp' },
+					},
 
 					-- go
 					formatting.gofmt,

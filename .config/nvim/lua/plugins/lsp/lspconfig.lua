@@ -58,7 +58,8 @@ return {
 
 			U.lsp_attach('*', function(client, bufnr)
 				if client.supports_method 'textDocument/formatting' then
-					local function format()
+					local function format(auopts)
+						if vim.endswith(auopts.file, 'keymap.c') then return end
 						local map = {
 							-- lua = 'lua_ls',
 						}
