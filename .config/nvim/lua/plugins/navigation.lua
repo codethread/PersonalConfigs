@@ -106,10 +106,40 @@ return {
 		end,
 	},
 
+	-- {
+	-- 	'ggandor/leap.nvim',
+	-- 	dependencies = { 'tpope/vim-repeat' },
+	-- 	event = 'VeryLazy',
+	-- 	config = function() require('leap').add_default_mappings() end,
+	-- },
+
 	{
-		'ggandor/leap.nvim',
-		dependencies = { 'tpope/vim-repeat' },
+		'folke/flash.nvim',
 		event = 'VeryLazy',
-		config = function() require('leap').add_default_mappings() end,
+		---@type Flash.Config
+		opts = {},
+		keys = {
+			{
+				's',
+				mode = { 'n', 'x', 'o' },
+				function()
+					-- default options: exact mode, multi window, all directions, with a backdrop
+					require('flash').jump()
+				end,
+				desc = 'Flash',
+			},
+			{
+				'S',
+				mode = { 'n', 'o', 'x' },
+				function() require('flash').treesitter() end,
+				desc = 'Flash Treesitter',
+			},
+			{
+				'r',
+				mode = 'o',
+				function() require('flash').remote() end,
+				desc = 'Remote Flash',
+			},
+		},
 	},
 }
