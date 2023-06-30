@@ -42,6 +42,7 @@ return {
 					name = 'Buffers',
 					b = { [[<C-^>]], 'Toggle' },
 					l = { Cmd 'Telescope buffers', 'list' },
+					r = { Cmd 'Telescope oldfiles', 'recent' },
 					k = { Cmd 'Bdelete', 'kill' },
 					s = { Cmd 'w', 'Save' },
 				},

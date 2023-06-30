@@ -16,7 +16,6 @@ return {
 		},
 		keys = {
 			{ '<leader><leader>', '<cmd>Telescope find_files<cr>', desc = 'Files' },
-			{ '<leader>bl', '<cmd>Telescope buffers<cr>', desc = 'Buffers' },
 		},
 		config = function(_, opts)
 			local telescope = require 'telescope'
@@ -107,7 +106,10 @@ return {
 
 					file_ignore_patterns = vim.list_extend(
 						{ '^.git/', '^.yarn/', '/vendor/', '%.lock' },
-						U.project('~/work/deals-light-ui', { '^e2e', '^ios', '^android' })
+						U.project(
+							'~/work/deals-light-ui',
+							{ '^e2e', '^ios', '^android', 'packages/irati/irati/braze/services/sdk' }
+						)
 					),
 					vimgrep_arguments = {
 						'rg',

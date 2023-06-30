@@ -63,6 +63,9 @@ return {
 			{ '<leader>od', '<cmd>Oil<cr>', desc = 'Oil' },
 		},
 		opts = {
+			view_options = {
+				show_hidden = true,
+			},
 			columns = {
 				'icon', -- charming but as these can be edited, its annoying
 				-- 'permissions',

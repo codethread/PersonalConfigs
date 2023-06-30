@@ -11,7 +11,6 @@ return {
 			-- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/diagnostics
 			local diagnostics = null_ls.builtins.diagnostics
 			local code_actions = null_ls.builtins.code_actions
-			local augroup = vim.api.nvim_create_augroup('LspFormatting', {})
 
 			return {
 				root_dir = require('null-ls.utils').root_pattern(
