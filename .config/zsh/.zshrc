@@ -65,7 +65,11 @@ fpath+=( "$ZDOTDIR/completions" )
 ssource "$ZDOTDIR/.zsh_plugins.zsh"
 ssource "$ZDOTDIR/.aliases.zsh"
 ssource ~/.private
-ssource ~/gdrive/grpcurls.zsh
+
+if [ $CT_IS_WORK -eq 1 ]; then
+  source ~/gdrive/aliases.zsh
+  source ~/gdrive/grpcurls.zsh
+fi
 
 #: }}}
 #: General {{{

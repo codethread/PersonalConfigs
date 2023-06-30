@@ -1,6 +1,6 @@
 [user]
-	email = adam.hall@perkbox.com
-	name = adam.hall
+	email = adamhalldesigns@gmail.com
+	name = codethread
 [core]
 	excludesfile = ~/.gitignore_global
 	editor = nvim
@@ -24,7 +24,7 @@
 	process = git-lfs filter-process
 	required = true
 [github]
-	user = AHDesigns
+	user = codethread
 [diff "image"]
 	command = ~/.tooling/git-diff-image/git_diff_image
 [init]
@@ -32,10 +32,8 @@
 [rerere]
 	enabled = true
 
-[url "ssh://git@git.perkbox.io/"]
-	insteadOf = https://git.perkbox.io/
-[url "https://github.com/"]
-	insteadOf = git://github.com/
-
 [worktree]
     guessRemote = true
+
+[includeIf "gitdir:~/work/"] # job needs, like workspace/* so all included projects
+    path = .gitconfig_perkbox

@@ -8,7 +8,7 @@ ssource "${ZDOTDIR}/tmux_projects"
 if [ $# -eq 0 ]; then
 	selected=$(fd --max-depth=1 --type=d . \
         ~/dev ~/dev/exercism ~/dev/projects ~/dev/learn ~/dev/vendor \
-        ~/ ~/work ~/work/services ~/work/lambdas \
+        ~/ ~/work ~/work/services ~/work/lambdas ~/work/utilities \
         ~/.local/share/nvim/lazy ~/.local/share/nvim/mason/packages | fzf-tmux)
 elif [[ $1 -eq 0 ]]; then
 	selected=${TMUX_SESSION_PROJ_0}
