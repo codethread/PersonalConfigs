@@ -22,6 +22,9 @@ return {
 			---@type lspconfig.options
 			servers = {
 				jsonls = {},
+				clangd = {
+					filetypes = { 'c', 'cpp', 'objc', 'objcpp', 'cuda' },
+				},
 				eslint = {
 					settings = {
 						run = 'onSave',
@@ -59,7 +62,6 @@ return {
 			U.lsp_attach('*', function(client, bufnr)
 				if client.supports_method 'textDocument/formatting' then
 					local function format()
-						if vim.endswith(vim.fn.expand '%', 'keymap.c') then return end
 						local map = {
 							-- lua = 'lua_ls',
 						}
