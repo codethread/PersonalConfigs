@@ -1,6 +1,6 @@
 return {
 	{
-		'TimUntersberger/neogit',
+		'NeogitOrg/neogit',
 		lazy = true,
 		dependencies = { 'sindrets/diffview.nvim' },
 		opts = {
