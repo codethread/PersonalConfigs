@@ -86,12 +86,22 @@ return {
 		lazy = false,
 		opts = {
 			variant = 'moon',
+			-- calls to nvim_set_hl()
 			highlight_groups = {
 				NonText = { fg = 'base' }, -- end ~
 				ColorColumn = { bg = 'rose' },
 				-- Blend colours against the "base" background
 				CursorLine = { bg = 'foam', blend = 10 },
 				StatusLine = { fg = 'foam', bg = 'foam', blend = 10 },
+
+				['@keyword.bang'] = { fg = 'love', underline = true },
+				['@keyword.return'] = { fg = 'iris', undercurl = true },
+
+				-- js stuff
+				['@arrow_function.const'] = { underline = true },
+				['@keyword.export'] = { fg = 'love' },
+				['@keyword.default'] = { fg = 'love', bold = true },
+				-- ['@variable'] = { fg = c.fg }
 			},
 		},
 	},
@@ -113,7 +123,7 @@ return {
 			-- vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]] -- add nice fold icons
 		end,
 		keys = {
-			{ 'zR', function() require('ufo').openAllFolds() end,               desc = 'open all folds' },
+			{ 'zR', function() require('ufo').openAllFolds() end, desc = 'open all folds' },
 			{
 				'zM',
 				function() require('ufo').closeAllFolds() end,

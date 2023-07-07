@@ -29,6 +29,9 @@ return {
 				-- fix highlights in embeddedLanguages, i think by default this falls through to lower specificty selectors, and because these are embedded, that falls to 'string', so everything goes green
 				hl['@variable'] = { fg = c.fg }
 
+				-- rust/cargo
+				hl['@table.package'] = { fg = c.red }
+
 				hl['@variable.builtin'] = { fg = c.teal, bold = true }
 				hl['@keyword.return'] = { fg = c.red }
 				hl['@keyword.bang'] = { fg = c.red, bold = true, underline = true }
