@@ -38,10 +38,10 @@ return {
 							group = augroup,
 							buffer = buffer,
 							callback = function()
-								local ts = require('typescript').actions
+								-- local ts = require('typescript').actions
 								-- ts.removeUnused { sync = true }
 								-- ts.addMissingImports({ sync = true })
-								ts.organizeImports { sync = true }
+								-- ts.organizeImports { sync = true }
 								vim.cmd [[Format]]
 							end,
 						})
