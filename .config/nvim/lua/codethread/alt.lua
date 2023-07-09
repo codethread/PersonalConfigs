@@ -1,4 +1,5 @@
 local Job = require 'plenary.job'
+-- TODO: can likely swap for https://github.com/rgroli/other.nvim
 
 local heuristics = {
 	['lua'] = {
