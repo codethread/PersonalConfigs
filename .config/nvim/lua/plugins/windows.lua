@@ -1,9 +1,7 @@
 return {
 	{ 'xorid/swap-split.nvim', cmd = 'SwapSplit' },
 
-	{ 'shortcuts/no-neck-pain.nvim', version = '*' ,
-		cmd={'NoNeckPain'}
-	},
+	{ 'shortcuts/no-neck-pain.nvim', version = '*', cmd = { 'NoNeckPain' } },
 
 	{
 		'szw/vim-maximizer',
