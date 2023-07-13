@@ -45,6 +45,7 @@ return {
 					r = { Cmd 'Telescope oldfiles', 'recent' },
 					k = { Cmd 'Bdelete', 'kill' },
 					s = { Cmd 'w', 'Save' },
+					u = { function() require('codethread.pickers').unsaved() end, 'Unsaved' },
 				},
 
 				e = { name = 'Errors' },
@@ -168,7 +169,10 @@ return {
 					name = 'Search',
 					b = { Cmd 'Telescope git_branches', 'Checkout branch' },
 					c = { Cmd 'Telescope colorscheme', 'Colorscheme' },
-					f = { Cmd 'Telescope current_buffer_fuzzy_find theme=ivy previewer=false', 'Buffer' },
+					f = {
+						Cmd 'Telescope current_buffer_fuzzy_find theme=ivy previewer=false',
+						'Buffer',
+					},
 					h = { Cmd 'Telescope help_tags', 'Find Help' },
 					M = { Cmd 'Telescope man_pages', 'Man Pages' },
 					r = { Cmd 'Telescope oldfiles', 'Open Recent File' },

@@ -107,6 +107,11 @@ return {
 				},
 				section_separators = { right = '', left = '' },
 				component_separators = { left = '|', right = '|' },
+				refresh = {
+					statusline = 10000,
+					tabline = 10000,
+					winbar = 10000,
+				},
 			},
 			sections = {
 				lualine_a = {
@@ -140,14 +145,17 @@ return {
 					{
 						function() return require('nvim-navic').get_location() end,
 						cond = function()
-							return package.loaded['nvim-navic'] and require('nvim-navic').is_available()
+							return package.loaded['nvim-navic']
+								and require('nvim-navic').is_available()
 						end,
 					},
 				},
 				lualine_x = {
 					{
 						function() return '  ' .. require('dap').status() end,
-						cond = function() return package.loaded['dap'] and require('dap').status() ~= '' end,
+						cond = function()
+							return package.loaded['dap'] and require('dap').status() ~= ''
+						end,
 						-- color = Util.fg("Debug"),
 					},
 					{
@@ -216,6 +224,20 @@ return {
 				},
 				lualine_x = {
 					"%{ObsessionStatus('', '')} ",
+				},
+				lualine_z = {
+					{
+						function()
+							for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+								local is_modified = vim.api.nvim_buf_get_option(buf, 'modified')
+								local cur = vim.api.nvim_get_current_buf()
+								if is_modified and cur ~= buf then
+									return 'Unsaved buffers' -- any message or icon
+								end
+							end
+							return ''
+						end,
+					},
 				},
 			},
 			extensions = {
