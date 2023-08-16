@@ -48,6 +48,21 @@ return {
 	},
 
 	{
+		-- better quickfix
 		'kevinhwang91/nvim-bqf',
+		init = function()
+			-- vim.cmd [[
+			-- 	nnoremap < :cprevious<CR>
+			-- 	nnoremap > :cnext<CR>
+			-- ]]
+			--
+			-- U.keys('quickfix', {
+			-- 	{
+			-- 		'>', function ()
+			-- 			require('qf.')
+			-- 		end
+			-- 	}
+			-- })
+		end,
 	},
 }

@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
 
+ssource () {
+  if [ -r "$1" ]; then
+    . "$1"
+  fi
+}
+
 # borrowed with love from https://github.com/ThePrimeagen/.dotfiles/blob/62eb982a12d75abbdeb6d679504382365456d75c/bin/.local/scripts/tmux-sessionizer
-. "${ZDOTDIR}/tmux_projects"
+ssource "${ZDOTDIR}/tmux_projects"
 
 projects=(
   ~/dev ~/dev/exercism ~/dev/projects ~/dev/learn ~/dev/vendor

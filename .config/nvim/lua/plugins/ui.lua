@@ -129,7 +129,11 @@ return {
 				function() require('ufo').closeAllFolds() end,
 				desc = 'close all folds',
 			},
-			{ 'zp', function() require('ufo').peekFoldedLinesUnderCursor() end, desc = 'peak lines' },
+			{
+				'zp',
+				function() require('ufo').peekFoldedLinesUnderCursor() end,
+				desc = 'peak lines',
+			},
 			{
 				'-',
 				'zc',

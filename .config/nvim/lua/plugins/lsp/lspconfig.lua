@@ -1,5 +1,15 @@
 return {
 	{
+		'j-hui/fidget.nvim',
+		tag = 'legacy',
+		opts = {
+			text = {
+				spinner = 'dots_pulse',
+			},
+		},
+	},
+
+	{
 		'neovim/nvim-lspconfig',
 		--TODO can be per file?
 		event = { 'BufReadPre', 'BufNewFile' },

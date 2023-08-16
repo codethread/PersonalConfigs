@@ -8,30 +8,31 @@ vim.cmd [[
 	nnoremap N Nzzzv
 	nnoremap J mzJ`z
 
-	nnoremap < :cprevious<CR>
-	nnoremap > :cnext<CR>
-
 	" don't changed jumplist with paragraph jumps :help jumplist
 	" nnoremap <silent> } :<C-u>execute "keepjumps norm! " . v:count1 . "}"<CR>
 	" nnoremap <silent> { :<C-u>execute "keepjumps norm! " . v:count1 . "{"<CR>
 ]]
 
+local harp = {
+	{ 'ma', function() require('harpoon.mark').add_file() end, desc = 'harpoon.mark' },
+	{ 'mf', '<cmd>Telescope harpoon marks<cr>', desc = '<cmd>Telescope harpoon marks<cr>' },
+	{ 'ml', function() require('harpoon.ui').toggle_quick_menu() end, desc = 'harpoon.ui' },
+	{ 'mk', function() require('harpoon.ui').nav_next() end, desc = 'harpoon.ui' },
+	{ 'mj', function() require('harpoon.ui').nav_prev() end, desc = 'harpoon.ui' },
+	{ 'mt', function() require('harpoon.term').gotoTerminal(1) end, desc = 'harpoon.term' },
+}
+for n = 1, 9, 1 do
+	table.insert(
+		harp,
+		{ 'm' .. n, function() require('harpoon.ui').nav_file(n) end, desc = 'harpoon.' .. n }
+	)
+end
+
 return {
 	{
 		'ThePrimeagen/harpoon',
 		init = function() vim.keymap.set('n', 'M', 'm') end,
-		keys = {
-			{ 'ma', function() require('harpoon.mark').add_file() end, desc = 'harpoon.mark' },
-			{ 'mf', '<cmd>Telescope harpoon marks<cr>', desc = '<cmd>Telescope harpoon marks<cr>' },
-			{ 'ml', function() require('harpoon.ui').toggle_quick_menu() end, desc = 'harpoon.ui' },
-			{ 'mn', function() require('harpoon.ui').nav_next() end, desc = 'harpoon.ui' },
-			{ 'mp', function() require('harpoon.ui').nav_prev() end, desc = 'harpoon.ui' },
-			{ 'mt', function() require('harpoon.term').gotoTerminal(1) end, desc = 'harpoon.term' },
-			{ 'm1', function() require('harpoon.ui').nav_file(1) end, desc = 'harpoon.ui' },
-			{ 'm2', function() require('harpoon.ui').nav_file(2) end, desc = 'harpoon.ui' },
-			{ 'm3', function() require('harpoon.ui').nav_file(3) end, desc = 'harpoon.ui' },
-			{ 'm4', function() require('harpoon.ui').nav_file(4) end, desc = 'harpoon.ui' },
-		},
+		keys = harp,
 		opts = {
 			menu = {
 				width = vim.api.nvim_win_get_width(0) - 4,
@@ -52,6 +53,25 @@ return {
 				min_width = 25,
 				default_direction = 'prefer_left',
 			},
+			-- backends = {
+			-- 	-- ['_'] = { 'lsp', 'treesitter' },
+			-- 	['_'] = { 'lsp' },
+			-- 	-- ['_'] = { 'treesitter' },
+			-- 	python = { 'treesitter' },
+			-- 	rust = { 'lsp' },
+			-- },
+			-- filter_kind = {
+			-- 	'Class',
+			-- 	'Constructor',
+			-- 	'Enum',
+			-- 	'Function',
+			-- 	'Interface',
+			-- 	'Module',
+			-- 	'Method',
+			-- 	'Struct',
+			-- 	-- default end
+			-- 	'Constant', -- want this for js, will update other things later
+			-- },
 		},
 	},
 
@@ -95,7 +115,11 @@ return {
 		},
 		init = function()
 			U.keys('oil', {
-				{ 'c', function() require('oil.actions').copy_entry_path.callback() end, 'copy filepath' },
+				{
+					'c',
+					function() require('oil.actions').copy_entry_path.callback() end,
+					'copy filepath',
+				},
 				{ 'r', function() require('oil.actions').refresh.callback() end, 'refresh' },
 				{ 't', function() require('oil.actions').select_tab.callback() end, 'open in tab' },
 				{
@@ -103,7 +127,11 @@ return {
 					function() require('oil.actions').select_vsplit.callback() end,
 					'open in vertical',
 				},
-				{ 's', function() require('oil.actions').select_split.callback() end, 'open in split' },
+				{
+					's',
+					function() require('oil.actions').select_split.callback() end,
+					'open in split',
+				},
 				{ '.', function() require('oil.actions').tcd.callback() end, 'make dir PWD' },
 			})
 		end,
