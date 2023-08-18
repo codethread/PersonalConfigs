@@ -181,7 +181,9 @@ return {
 					C = { Cmd 'Telescope commands', 'Commands' },
 					p = { Cmd 'Telescope live_grep', 'Live Grep' },
 					w = { Cmd 'Telescope grep_string', 'Word' },
-					o = { Cmd 'Telescope aerial', 'Symbol' },
+					l = { Cmd 'Telescope lsp_document_symbols', 'Symbol' },
+					L = { ':Telescope lsp_workspace_symbols query=', 'Global Symbols' },
+					s = { Cmd 'Spectre', 'Spectre' },
 				},
 
 				-- open, Open, openers, Openers

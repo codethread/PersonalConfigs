@@ -22,9 +22,9 @@ return {
 			---@type lspconfig.options
 			servers = {
 				jsonls = {},
-				clangd = {
-					filetypes = { 'c', 'cpp', 'objc', 'objcpp', 'cuda' },
-				},
+				-- clangd = {
+				-- 	filetypes = { 'c', 'cpp', 'objc', 'objcpp', 'cuda' },
+				-- },
 				eslint = {
 					settings = {
 						run = 'onSave',
@@ -87,16 +87,17 @@ return {
 
 			local function setup(server)
 				local server_opts = vim.tbl_deep_extend('force', {
-					capabilities = vim.deepcopy(require 'plugins.lsp.capabilities'(opts.capabilities)),
+					capabilities = vim.deepcopy(
+						require 'plugins.lsp.capabilities'(opts.capabilities)
+					),
 				}, servers[server] or {})
 
 				-- disable snippets in autocomplete
-				server_opts.capabilities.textDocument.completion.completionItem.snippetSupport = false
+				server_opts.capabilities.textDocument.completion.completionItem.snippetSupport =
+					false
 
-				if opts.setup[server] then
-					if opts.setup[server](server, server_opts) then return end
-				elseif opts.setup['*'] then
-					if opts.setup['*'](server, server_opts) then return end
+				if opts.setup[server] then if opts.setup[server](server, server_opts) then return end
+				elseif opts.setup['*'] then if opts.setup['*'](server, server_opts) then return end
 				end
 				require('lspconfig')[server].setup(server_opts)
 			end
@@ -111,7 +112,9 @@ return {
 				if server_opts then
 					server_opts = server_opts == true and {} or server_opts
 					-- run manual setup if mason=false or if this is a server that cannot be installed with mason-lspconfig
-					if server_opts.mason == false or not vim.tbl_contains(all_mslp_servers, server) then
+					if
+						server_opts.mason == false or not vim.tbl_contains(all_mslp_servers, server)
+					then
 						setup(server)
 					else
 						ensure_installed[#ensure_installed + 1] = server

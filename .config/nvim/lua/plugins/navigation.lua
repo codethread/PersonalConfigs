@@ -95,7 +95,11 @@ return {
 		},
 		init = function()
 			U.keys('oil', {
-				{ 'c', function() require('oil.actions').copy_entry_path.callback() end, 'copy filepath' },
+				{
+					'c',
+					function() require('oil.actions').copy_entry_path.callback() end,
+					'copy filepath',
+				},
 				{ 'r', function() require('oil.actions').refresh.callback() end, 'refresh' },
 				{ 't', function() require('oil.actions').select_tab.callback() end, 'open in tab' },
 				{
@@ -103,18 +107,15 @@ return {
 					function() require('oil.actions').select_vsplit.callback() end,
 					'open in vertical',
 				},
-				{ 's', function() require('oil.actions').select_split.callback() end, 'open in split' },
+				{
+					's',
+					function() require('oil.actions').select_split.callback() end,
+					'open in split',
+				},
 				{ '.', function() require('oil.actions').tcd.callback() end, 'make dir PWD' },
 			})
 		end,
 	},
-
-	-- {
-	-- 	'ggandor/leap.nvim',
-	-- 	dependencies = { 'tpope/vim-repeat' },
-	-- 	event = 'VeryLazy',
-	-- 	config = function() require('leap').add_default_mappings() end,
-	-- },
 
 	{
 		'folke/flash.nvim',
@@ -142,6 +143,18 @@ return {
 				mode = 'o',
 				function() require('flash').remote() end,
 				desc = 'Remote Flash',
+			},
+			{
+				'R',
+				mode = { 'o', 'x' },
+				function() require('flash').treesitter_search() end,
+				desc = 'Treesitter Search',
+			},
+			{
+				'<c-s>',
+				mode = { 'c' },
+				function() require('flash').toggle() end,
+				desc = 'Toggle Flash Search',
 			},
 		},
 	},

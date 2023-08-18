@@ -129,7 +129,11 @@ return {
 				function() require('ufo').closeAllFolds() end,
 				desc = 'close all folds',
 			},
-			{ 'zp', function() require('ufo').peekFoldedLinesUnderCursor() end, desc = 'peak lines' },
+			{
+				'zp',
+				function() require('ufo').peekFoldedLinesUnderCursor() end,
+				desc = 'peak lines',
+			},
 			{
 				'-',
 				'zc',
@@ -186,7 +190,10 @@ return {
 	{
 		'goolord/alpha-nvim',
 		dependencies = { 'nvim-tree/nvim-web-devicons' },
-		config = function() require('alpha').setup(require('alpha.themes.startify').config) end,
+		opts = function()
+			local config = require('alpha.themes.startify').config
+			return config
+		end,
 	},
 
 	{
