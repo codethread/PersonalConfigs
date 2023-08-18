@@ -29,14 +29,6 @@ end
 
 return {
 	{
-		'j-hui/fidget.nvim',
-		opts = {
-			text = {
-				spinner = 'dots_pulse',
-			},
-		},
-	},
-	{
 		'nvim-lualine/lualine.nvim',
 		dependencies = {
 			-- 'arkav/lualine-lsp-progress',

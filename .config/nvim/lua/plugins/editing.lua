@@ -49,7 +49,9 @@ return {
 				Reg = {
 					-- This will transform ":5Reg a" into ":norm 5@a", running a captured macro with a preview
 					cmd = 'norm',
-					args = function(opts) return (opts.count == -1 and '' or opts.count) .. '@' .. opts.args end,
+					args = function(opts)
+						return (opts.count == -1 and '' or opts.count) .. '@' .. opts.args
+					end,
 					range = '',
 				},
 				S = {
@@ -88,7 +90,9 @@ return {
 						'numToStr/Comment.nvim',
 						opts = function()
 							return {
-								pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
+								pre_hook = require(
+									'ts_context_commentstring.integrations.comment_nvim'
+								).create_pre_hook(),
 							}
 						end,
 					},
@@ -116,13 +120,11 @@ return {
 	{
 		'codethread/qmk.nvim',
 		ft = { 'c' },
+		branch = 'inline-config',
 		config = function()
 			---@type qmk.UserConfig
 			local conf = {
 				name = 'LAYOUT_preonic_grid',
-				comment_preview = {
-					keymap_overrides = {},
-				},
 				layout = {
 					'_ x x x x x x _ x x x x x x',
 					'_ x x x x x x _ x x x x x x',
@@ -134,4 +136,7 @@ return {
 			require('qmk').setup(conf)
 		end,
 	},
+
+	-- { 'mzlogin/vim-markdown-toc', cmd = { 'GenTocGitLab', 'GenTocGFM' } },
+	{ 'mzlogin/vim-markdown-toc' },
 }
