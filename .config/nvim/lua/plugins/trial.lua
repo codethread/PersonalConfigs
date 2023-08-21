@@ -23,9 +23,7 @@ return {
 	'nvim-lua/popup.nvim',
 	'DanilaMihailov/beacon.nvim',
 
-	--        use 'kevinhwang91/nvim-bqf' -- mainly just like 'o' to close lists
 	-- use { 'bennypowers/nvim-regexplainer', requires = 'MunifTanjim/nui.nvim' }
-	-- use 'fgheng/winbar.nvim'
 	{
 		'windwp/nvim-autopairs',
 		event = 'InsertEnter',
