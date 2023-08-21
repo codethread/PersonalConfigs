@@ -14,5 +14,5 @@ if [[ -n "${CT_IS_MAC}" ]]; then
     echo ""
     echo $PATH | sudo tee /etc/paths
 else
-    echo "does nout on linux"
+    echo "does nowt on linux"
 fi

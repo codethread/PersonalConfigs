@@ -1,0 +1,155 @@
+#!/usr/bin/env node
+const { join, relative } = require("path");
+const { existsSync, appendFileSync } = require("fs");
+const { shell } = require("./shared/shell");
+
+const editors = ["vim", "nvim", "emacs", "emacsclient"];
+
+/**
+ * Opens a filepath in the current vim instance, when passed as first argument to script
+ *
+ * Coupled heavily to my tumux workflow at this point.
+ *
+ * If run from a pane, tmux will used the PWD of that pane, allowing for monorepo structures.
+ *
+ * If run from vim, tmux will try to find a pane with the last active pane (i.e a test command was run, and then I navigated back to vim)
+ */
+async function main() {
+  const home = getHome();
+
+  const { file, line } = getChosenPath();
+
+  //log({ file, line });
+
+  const panes = await getPanes();
+
+  const isActivePaneEditor = Boolean(
+    panes.find((p) => p.active && editors.includes(p.cmd))
+  );
+
+  //log({ isActivePaneEditor });
+
+  const filePWD = isActivePaneEditor
+    ? lastPanePWD(panes)
+    : activePanePWD(panes);
+
+  const editorPWD = getEditorPWD(panes);
+
+  const diff = relative(editorPWD, filePWD);
+
+  const path = file.startsWith(home) ? file : join(editorPWD, diff, file);
+
+  if (!existsSync(path)) {
+    throw new Error(`path is not valid: ${path}`);
+  }
+
+  // await shell(
+  //   `tmux display-message -d 0 "${file} ${diff} ${line} ${path}"`
+  // );
+  //
+  // return;
+
+  await shell(
+    `tmux send-keys -t 1 :e ${
+      line ? `Space +${line} Space` : "Space"
+    } ${path} Enter`
+  );
+
+  await shell(`tmux select-pane -t 1`);
+}
+main().catch((e) => {
+  //log(e.message);
+  shell(`tmux display-message -d 0 "${e.message}"`);
+});
+
+// --------------------------------------------------------------------
+// --------------------------------------------------------------------
+// --------------------------------------------------------------------
+/**
+ * A list of tmux panes
+ * @typedef {Array<{ cmd: string; active: boolean; lastActive: boolean; currentPath: string; }>} Panes
+ */
+
+/**
+ *
+ * @returns {Promise<Panes>}
+ */
+async function getPanes() {
+  let { stdout: panesString } = await shell(
+    `tmux list-panes -F "#{pane_current_command} #{pane_active} #{pane_last} #{pane_current_path}"`
+  );
+
+  const panes = panesString
+    .trim()
+    .split("\n")
+    .map((p) => {
+      const [cmd, active, lastActive, currentPath] = p.split(" ");
+      return {
+        cmd,
+        active: active === "1",
+        lastActive: lastActive === "1",
+        currentPath,
+      };
+    });
+  return panes;
+}
+
+/**
+ * @param {Panes} panes
+ */
+function lastPanePWD(panes) {
+  const lastPane = panes.find((p) => p.lastActive);
+  if (!lastPane) {
+    throw new Error("no last tmux pane available");
+  }
+  return lastPane.currentPath;
+}
+
+/**
+ * @param {Panes} panes
+ */
+function activePanePWD(panes) {
+  const activePane = panes.find((p) => p.active);
+  if (!activePane) {
+    throw new Error("no active tmux pane available");
+  }
+  return activePane.currentPath;
+}
+
+/**
+ * @param {Panes} panes
+ */
+function getEditorPWD(panes) {
+  const activePane = panes.find((p) => editors.includes(p.cmd));
+  if (!activePane) {
+    throw new Error("no editor pane found");
+  }
+  return activePane.currentPath;
+}
+
+function getChosenPath() {
+  //log(process.argv[2]);
+  const chosenFile = (process.argv[2] || "").trim().replace("│", ""); // don't grab the tmux border char please
+
+  let [file, line, col] = chosenFile.split(":");
+
+  return { file, line, col };
+}
+
+function getHome() {
+  const home = process.env.HOME;
+  if (!home) {
+    throw new Error("no HOME found");
+  }
+  return home;
+}
+
+/**
+ * @param {string} msg message to log to file
+ */
+function log(msg) {
+  appendFileSync(
+    join(__dirname, "my-tmp-log.txt"),
+    (typeof msg === "string" ? msg : JSON.stringify(msg)) + "\n\n"
+  );
+}
