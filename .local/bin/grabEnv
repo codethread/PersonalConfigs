@@ -1,5 +1,0 @@
-#!/bin/bash
-
-find .env > /dev/null || { echo 'run in root of project'; exit 1; }
-
-grep "$1" .env | sed -E "s/$1=(.*)/\1/"
