@@ -123,7 +123,6 @@ alias gnah="git reset --hard; git clean -df"
 alias gnuke="git clean -dfX"
 alias gr='git rebase -i HEAD~$1'
 alias gundo="git reset --soft HEAD~1 && git restore --staged ."
-alias gpop="gundo && gnah"
 alias gwip="git add . && git commit -nm 'wip'"
 alias bdiff="git diff --name-only --relative --diff-filter=d | xargs bat --diff"
 alias gpopular="git log --format=format: --name-only --since=12.month | egrep -v '^$' | sort | uniq -c | sort -nr | head -50"
@@ -149,15 +148,6 @@ gnew() {
 alias gw="git worktree"
 
 #---------------------------------------------#
-# GITHUB
-#---------------------------------------------#
-alias ghub="gh repo view --web"
-#---------------------------------------------#
-# GITLAB
-#---------------------------------------------#
-alias lab-open='open https://git.perkbox.io/app/deals-light-ui/-/tree/$(gbranch)'
-
-#---------------------------------------------#
 # OS
 #---------------------------------------------#
 alias mac-dark-toggle="osascript -e 'tell app \"System Events\" to tell appearance preferences to set dark mode to not dark mode'"
@@ -166,9 +156,6 @@ alias mac-dark-toggle="osascript -e 'tell app \"System Events\" to tell appearan
 # TMUX
 # -------------------------------------------#
 alias tmux-delete-resurrect="rm ~/.local/share/tmux/resurrect/*"
-alias mux="tmuxinator"
-alias muxa="mux spages; mux exc;"
-alias kmux="kill_tmux_session"
 
 ##############################################
 # work

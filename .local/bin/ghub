@@ -1,0 +1,18 @@
+#!/usr/bin/env node
+const { shell } = require("./shared/shell");
+
+async function main() {
+  const { stdout, stderr } = await shell("git remote -v");
+  if (stderr) throw stderr;
+  const remote = stdout.split("\n")[0].split("\t")[1].split(" ")[0];
+
+  if (remote.startsWith("git@github")) {
+    const [, repo] = remote.split(":");
+    await shell(`open https://github.com/${repo}`);
+  } else {
+    console.log(`remote not supported: ${remote}`);
+    // alias lab-open='open https://git.perkbox.io/app/deals-light-ui/-/tree/$(gbranch)'
+  }
+}
+
+main().catch(console.error);
