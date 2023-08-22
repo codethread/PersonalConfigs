@@ -13,4 +13,6 @@
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/codethread/PersonalConfigs/main/_boot/boot.sh)"
 ```
 
-![](https://user-images.githubusercontent.com/10004500/209826468-419808b7-d758-4df8-b0ca-4df36474a7c7.gif)
+<p align="center">
+  <img width="460" src="https://64.media.tumblr.com/9f3abf18b67d35111b2b314463093517/tumblr_n8bzxpd3Kn1qzbqw1o1_400.gif">
+</p>
