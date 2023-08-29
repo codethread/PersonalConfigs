@@ -149,4 +149,12 @@ export GO111MODULE=on
 
 #: }}}
 
+#: rust {{{
+
+if [[ -n "${CT_IS_WORK}" ]]; then
+  export RUSTFLAGS="-C link-arg=-fuse-ld=/opt/homebrew/opt/llvm/bin/ld64.lld"
+fi
+
+#: }}}
+
 #: }}}
