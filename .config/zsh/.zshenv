@@ -125,6 +125,12 @@ else
     export HOMEBREW_BUNDLE_FILE="${DOTFILES}/.config/cold-brew/Brewfile.basic.conf"
 fi
 
+if [[ -n "${CT_IS_WORK}" ]]; then
+  export DOTTY="${HOME}/PersonalConfigs:${HOME}"
+else
+  export DOTTY="${HOME}/PersonalConfigs:${HOME}:${HOME}/gdrive/dots:${HOME}"
+fi
+
 #: }}}
 #: Language specific {{{
 
