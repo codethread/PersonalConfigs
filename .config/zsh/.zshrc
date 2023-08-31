@@ -31,25 +31,6 @@ if [ $CT_IS_LINUX -eq 1 ]; then
 fi
 
 #: }}}
-#: ZSH History {{{
-
-# see https://zsh.sourceforge.io/Doc/Release/Options.html#History for more info
-setopt INC_APPEND_HISTORY        # Write to the history file immediately, not when the shell exits.
-setopt SHARE_HISTORY             # Share history between all sessions.
-setopt HIST_IGNORE_DUPS          # Don't record an entry that was just recorded again.
-setopt HIST_IGNORE_ALL_DUPS      # Remove old duplicate commands
-setopt HIST_FIND_NO_DUPS         # Don't show dups when using history command
-setopt HIST_IGNORE_SPACE         # Don't add commands starting with 'space' (good for credentials)
-setopt HIST_REDUCE_BLANKS        # less blanks
-
-HISTFILE="$ZDOTDIR/.zsh_history"
-HISTSIZE=999999999
-SAVEHIST=$HISTSIZE
-
-# using autin for a bit as history is always getting trimed for me
-eval "$(atuin init zsh --disable-up-arrow)"
-
-#: }}}
 #: Prompt {{{
 
 # Prompt https://scriptingosx.com/2019/07/moving-to-zsh-06-customizing-the-zsh-prompt/
@@ -148,6 +129,25 @@ rbenv() {
 }
 
 #: }}}
+
+#: }}}
+#: ZSH History {{{
+
+# see https://zsh.sourceforge.io/Doc/Release/Options.html#History for more info
+setopt INC_APPEND_HISTORY        # Write to the history file immediately, not when the shell exits.
+setopt SHARE_HISTORY             # Share history between all sessions.
+setopt HIST_IGNORE_DUPS          # Don't record an entry that was just recorded again.
+setopt HIST_IGNORE_ALL_DUPS      # Remove old duplicate commands
+setopt HIST_FIND_NO_DUPS         # Don't show dups when using history command
+setopt HIST_IGNORE_SPACE         # Don't add commands starting with 'space' (good for credentials)
+setopt HIST_REDUCE_BLANKS        # less blanks
+
+HISTFILE="$ZDOTDIR/.zsh_history"
+HISTSIZE=999999999
+SAVEHIST=$HISTSIZE
+
+# using autin for a bit as history is always getting trimed for me
+eval "$(atuin init zsh --disable-up-arrow)"
 
 #: }}}
 #: Profile {{{
