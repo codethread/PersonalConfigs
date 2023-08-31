@@ -3,8 +3,7 @@
 # mafredri/zsh-async
 
 robbyrussell/oh-my-zsh path:plugins/git
-robbyrussell/oh-my-zsh path:plugins/colored-man-pages
-robbyrussell/oh-my-zsh path:plugins/tmuxinator kind:fpath
+
 
 # rust
 robbyrussell/oh-my-zsh path:plugins/rust kind:fpath

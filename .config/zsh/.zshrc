@@ -46,8 +46,11 @@ HISTFILE="$ZDOTDIR/.zsh_history"
 HISTSIZE=999999999
 SAVEHIST=$HISTSIZE
 
+# using autin for a bit as history is always getting trimed for me
+eval "$(atuin init zsh --disable-up-arrow)"
+
 #: }}}
-#: Terminal specific envs and aliases {{{
+#: Prompt {{{
 
 # Prompt https://scriptingosx.com/2019/07/moving-to-zsh-06-customizing-the-zsh-prompt/
 # NEWLINE=$'\n' # couldn't get the newline to behave without this
@@ -56,6 +59,9 @@ SAVEHIST=$HISTSIZE
 # RPROMPT='%F{blue}%*'
 
 eval "$(starship init zsh)"
+
+#: }}}
+#: Terminal specific envs and aliases {{{
 
 # add completions to this folder with format _example
 # e.g dotty completion zsh > "${ZDOTDIR}/completions/_dotty"
