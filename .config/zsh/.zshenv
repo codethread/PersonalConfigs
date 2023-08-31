@@ -4,7 +4,6 @@
 
 #: General {{{
 
-export DOTFILES="${HOME}/PersonalConfigs"
 export EDITOR='nvim'
 export MANPAGER="/bin/sh -c \"col -b | nvim -c 'set ft=man ts=8 nomod nolist nonu' -\""
 export MANWIDTH=80
@@ -125,10 +124,12 @@ else
     export HOMEBREW_BUNDLE_FILE="${DOTFILES}/.config/cold-brew/Brewfile.basic.conf"
 fi
 
+export DOTFILES="${HOME}/PersonalConfigs"
+
 if [[ -n "${CT_IS_WORK}" ]]; then
-  export DOTTY="${HOME}/PersonalConfigs:${HOME}"
+  export DOTTY="${HOME}/PersonalConfigs:${HOME}:${HOME}/workfiles:${HOME}"
 else
-  export DOTTY="${HOME}/PersonalConfigs:${HOME}:${HOME}/gdrive/dots:${HOME}"
+  export DOTTY="${HOME}/PersonalConfigs:${HOME}"
 fi
 
 #: }}}

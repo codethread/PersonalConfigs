@@ -1,0 +1,69 @@
+#!/usr/bin/env node
+const { assert } = require("console");
+const { shell } = require("./shared/shell");
+
+async function main() {
+  const token = process.env.GITLAB_TOKEN;
+
+  assert(
+    Boolean(token),
+    "env 'GITLAB_TOKEN' is required, see https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html for more"
+  );
+
+  const [remoteStr, branch] = await Promise.all([
+    shell("git remote -v").then(returnOrErr),
+    shell("git rev-parse --abbrev-ref HEAD").then(returnOrErr),
+  ]);
+
+  const remote = remoteStr.split("\n")[0].split("\t")[1].split(" ")[0];
+
+  if (!remote.startsWith("git@git.perkbox.io")) {
+    throw new Error(`remote not supported: ${remote}`);
+  }
+
+  const [, repo] = remote.split(":");
+  const repoName = repo.replace(".git", "");
+  const body = {
+    query: `query MRsBranch {
+  project(fullPath: "${repoName}") {
+    name
+    mergeRequests(state: opened, sourceBranches: "${branch}") {
+      count
+      nodes {
+        title
+        webUrl
+      }
+    }
+  }
+}`,
+  };
+
+  const d = await fetch("https://git.perkbox.io/api/graphql", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${process.env.GITLAB_TOKEN}`,
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(body),
+  })
+    .then((d) => d.json())
+    .then(({ data, errors }) => {
+      if (errors) throw errors;
+      return data;
+    });
+
+  d?.project?.mergeRequests?.nodes.forEach(({ webUrl }) =>
+    shell(`open ${webUrl}`)
+  );
+}
+
+function returnOrErr({ stderr, stdout }) {
+  if (stderr) throw stderr;
+  return stdout;
+}
+
+main().catch((e) => {
+  console.log("FAILED\n\n");
+  console.error(e);
+  process.exit(1);
+});

@@ -73,8 +73,7 @@ ssource "$ZDOTDIR/.aliases.zsh"
 ssource ~/.private
 
 if [ $CT_IS_WORK -eq 1 ]; then
-  source ~/gdrive/aliases.zsh
-  source ~/gdrive/grpcurls.zsh
+  source ~/.config/zsh/work/work.zsh
 fi
 
 #: }}}

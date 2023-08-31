@@ -2,17 +2,31 @@
 const { shell } = require("./shared/shell");
 
 async function main() {
-  const { stdout, stderr } = await shell("git remote -v");
-  if (stderr) throw stderr;
-  const remote = stdout.split("\n")[0].split("\t")[1].split(" ")[0];
+  const [remoteStr, branch] = await Promise.all([
+    shell("git remote -v").then(returnOrErr),
+    shell("git rev-parse --abbrev-ref HEAD").then(returnOrErr),
+  ]);
+
+  const remote = remoteStr.split("\n")[0].split("\t")[1].split(" ")[0];
 
   if (remote.startsWith("git@github")) {
     const [, repo] = remote.split(":");
     await shell(`open https://github.com/${repo}`);
+  } else if (remote.startsWith("git@git.perkbox.io")) {
+    const [, repo] = remote.split(":");
+    await shell(
+      `open https://git.perkbox.io/${repo.replace(".git", "")}/-/tree/${branch}`
+    );
   } else {
     console.log(`remote not supported: ${remote}`);
+
     // alias lab-open='open https://git.perkbox.io/app/deals-light-ui/-/tree/$(gbranch)'
   }
+}
+
+function returnOrErr({ stderr, stdout }) {
+  if (stderr) throw stderr;
+  return stdout;
 }
 
 main().catch(console.error);
