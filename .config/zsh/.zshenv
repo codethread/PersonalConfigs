@@ -126,7 +126,7 @@ fi
 
 export DOTFILES="${HOME}/PersonalConfigs"
 
-if [[ -n "${CT_IS_WORK}" ]]; then
+if [ "${CT_IS_WORK}" -eq 1 ]; then
   export DOTTY="${HOME}/PersonalConfigs:${HOME}:${HOME}/workfiles:${HOME}"
 else
   export DOTTY="${HOME}/PersonalConfigs:${HOME}"
@@ -158,7 +158,7 @@ export GO111MODULE=on
 
 #: rust {{{
 
-if [[ -n "${CT_IS_WORK}" ]]; then
+if [ "${CT_IS_WORK}" -eq 1 ]; then
   export RUSTFLAGS="-C link-arg=-fuse-ld=/opt/homebrew/opt/llvm/bin/ld64.lld"
 fi
 
