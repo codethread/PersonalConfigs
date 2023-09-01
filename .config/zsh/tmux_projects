@@ -15,9 +15,10 @@ export TMUX_SESSION_PROJ_9="${HOME}/"
 if [ $CT_IS_WORK -eq 1 ]; then
 	ssource "${HOME}/.config/tmux/work_tmux_projects"
 else
-	export TMUX_SESSION_PROJ_2="${HOME}/dev/learn/rust-playground"
-	export TMUX_SESSION_PROJ_3="${HOME}/dev/projects/cold-brew"
-	export TMUX_SESSION_PROJ_4="${HOME}/dev/projects/qmk.nvim"
+  export TMUX_SESSION_PROJ_2="${HOME}/dev/projects/qmk.nvim"
+  export TMUX_SESSION_PROJ_3="${HOME}/dev/projects/tstl-prelude"
+  export TMUX_SESSION_PROJ_4="${HOME}/dev/learn/rust-playground"
+  export TMUX_SESSION_PROJ_5="${HOME}/dev/projects/cold-brew"
 fi
 
 tmux-echo() {
