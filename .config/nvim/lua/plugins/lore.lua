@@ -37,7 +37,9 @@ return {
 		end,
 	},
 
-	{ 'wakatime/vim-wakatime', event = { 'BufReadPre', 'BufNewFile' }, version = '9.*' },
+	os.getenv 'WAKATIME_HOME'
+			and { 'wakatime/vim-wakatime', event = { 'BufReadPre', 'BufNewFile' }, version = '9.*' }
+		or {},
 
 	{
 		'AndrewRadev/bufferize.vim',
