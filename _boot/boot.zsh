@@ -1,8 +1,5 @@
 #!/usr/bin/env zsh
 
-# non-interactive script so we need to grab anything from here
-source "${ZDOTDIR}/.zlogin"
-
 # install homebrew
 if command -v brew > /dev/null 2>&1; then
     echo "( ◕ ◡ ◕ ) brew installed, skipping install"
