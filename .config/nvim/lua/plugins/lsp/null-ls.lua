@@ -1,5 +1,6 @@
 return {
 	{
+		-- TODO: auto install formatters and shell things
 		'jose-elias-alvarez/null-ls.nvim',
 		event = { 'BufReadPre', 'BufNewFile' },
 		dependencies = { 'mason.nvim' },
@@ -85,6 +86,7 @@ return {
 					-- shell
 					diagnostics.shellcheck,
 					code_actions.shellcheck,
+					formatting.shfmt,
 
 					-- using eslint lsp instead
 					-- diagnostics.eslint_d.with({
