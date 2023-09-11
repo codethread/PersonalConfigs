@@ -37,3 +37,6 @@
 
 [includeIf "gitdir:~/work/"] # job needs, like workspace/* so all included projects
     path = .gitconfig_perkbox
+
+[includeIf "gitdir:~/workfiles/"] # job needs, like workspace/* so all included projects
+    path = .gitconfig_perkbox
