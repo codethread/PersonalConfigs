@@ -140,8 +140,23 @@ return {
 	{
 		'folke/flash.nvim',
 		event = 'VeryLazy',
+		dependencies = {
+			U.highlights {
+				FlashLabel = { bg = 'surface', fg = 'white' },
+			},
+		},
 		---@type Flash.Config
-		opts = {},
+		opts = {
+			label = {
+				exclude = 'zxc',
+			},
+			modes = {
+				char = {
+					-- can set to false, but can actually just use f/F r t/T to repeat motions, in case of overshooting
+					multi_line = true,
+				},
+			},
+		},
 		keys = {
 			{
 				's',
