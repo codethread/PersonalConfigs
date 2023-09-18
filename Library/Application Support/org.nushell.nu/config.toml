@@ -1,6 +1,0 @@
-path = ["/Users/adh23/.volta/bin", "/Users/adh23/.cargo/bin", "/Users/adh23/.jenv/shims", "/Users/adh23/bin", "/Users/adh23/.bin", "/usr/local/opt/coreutils/libexec/gnubin", "/usr/local/opt/python/libexec/bin", "/usr/local/opt/gnu-sed/libexec/gnubin", "/usr/local/bin", "/usr/bin", "/bin", "/usr/sbin", "/sbin", "/usr/local/go/bin", "/Users/adh23/sky/skymobile-service/dev-tools/bin", "/Users/adh23/.fzf/bin"]
-prompt = "starship prompt"
-startup = [
-  "source fzf.nu",
-  "alias h = fzf-history",
-]

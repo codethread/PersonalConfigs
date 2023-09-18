@@ -1,0 +1,10 @@
+#!/usr/bin/env nu
+
+# ^/opt/homebrew/bin/tmux display-message -d 0 $"($env.PATH)"
+
+let myname = (ls -a **/* | where name !~ ".git/" | get name | input list --multi)
+# # let myname = (ls -a **/* | where name !~ ".git/" | get name | input list --fuzzy)
+# # let myname = (ls -a **/* | where name !~ ".git/" | get name | to text | fzf --multi)
+#
+echo $"my name is ($myname)"
+#
