@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-
-tmux new-window "yarn start"
-tmux split-window "yarn graph"
