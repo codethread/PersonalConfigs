@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-const { shell } = require("./shared/shell");
 
 async function main() {
   const [remoteStr, branch] = await Promise.all([
@@ -8,19 +7,17 @@ async function main() {
   ]);
 
   const remote = remoteStr.split("\n")[0].split("\t")[1].split(" ")[0];
+  const { domain, repo } = /^git@(?<domain>.*):(?<repo>.*).git$/.exec(
+    remote
+  ).groups;
 
-  if (remote.startsWith("git@github")) {
-    const [, repo] = remote.split(":");
-    await shell(`open https://github.com/${repo}`);
-  } else if (remote.startsWith("git@git.perkbox.io")) {
-    const [, repo] = remote.split(":");
-    await shell(
-      `open https://git.perkbox.io/${repo.replace(".git", "")}/-/tree/${branch}`
-    );
+  if (domain === "github.com") {
+    await shell(`open https://${domain}/${repo}`);
+  } else if (domain.startsWith("git.")) {
+    // gitlab
+    await shell(`open https://${domain}/${repo}/-/tree/${branch}`);
   } else {
-    console.log(`remote not supported: ${remote}`);
-
-    // alias lab-open='open https://git.perkbox.io/app/deals-light-ui/-/tree/$(gbranch)'
+    console.log(`remote not supported: ${remote} (expected github or gitlab)`);
   }
 }
 
@@ -30,3 +27,45 @@ function returnOrErr({ stderr, stdout }) {
 }
 
 main().catch(console.error);
+
+/**
+ * @param {string} cmd
+ *
+ * @returns {Promise<{ stdout: string; stderr: string }>}
+ */
+async function shell(cmd) {
+  const { spawn } = require("child_process");
+  return new Promise((resolve, reject) => {
+    const [exe, ...args] = cmd.split(" ");
+    const spawned = spawn(exe, args, { shell: true });
+
+    let stdout = "";
+    let stderr = "";
+
+    spawned.stdout.on("data", (data) => {
+      const str = data.toString();
+      stdout += str;
+    });
+
+    spawned.stderr.on("data", (data) => {
+      const str = data.toString();
+      stderr += str;
+    });
+
+    spawned.on("close", (code) => {
+      if (code === 0) {
+        resolve({ stdout: stdout.trim(), stderr });
+      } else {
+        reject(
+          new Error(
+            `spawned process ${cmd} exited with code ${code}, stderr ${stderr}`
+          )
+        );
+      }
+    });
+
+    spawned.on("error", (e) => {
+      reject(new Error(e.message));
+    });
+  });
+}
