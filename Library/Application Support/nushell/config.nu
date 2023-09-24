@@ -10,11 +10,16 @@ use alias.nu *
 
 my_theme
 
+const privates = ("~/.privates.nu" | path expand)
+const workp = ("~/.work.nu" | path expand)
+
+source (if ($workp | path exists) { $workp } else { "empty.nu" })
+source (if ($privates | path exists) { $privates } else { "empty.nu" })
+
 # For more information on defining custom themes, see
 # https://www.nushell.sh/book/coloring_and_theming.html
 # And here is the theme collection
 # https://github.com/nushell/nu_scripts/tree/main/themes
-
 
 
 # External completer example

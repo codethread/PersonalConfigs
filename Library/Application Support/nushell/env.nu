@@ -115,10 +115,3 @@ $env.NU_PLUGIN_DIRS = [
 
 # keep this at the end
 $env.PATH = ($env.PATH  | uniq)
-
-const empty = ($nu.default-config-dir | path join "empty.nu")
-const privates = ("~/.privates.nu" | path expand)
-const workp = ("~/.work.nu" | path expand)
-
-source (if ($privates | path exists) { $privates } else { $empty })
-source (if ($workp | path exists) { $workp } else { $empty })
