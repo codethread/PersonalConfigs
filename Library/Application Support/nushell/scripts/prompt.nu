@@ -59,7 +59,7 @@ def create_left_prompt [] {
 # $env.PROMPT_INDICATOR_VI_NORMAL = {|| "> " }
 # $env.PROMPT_MULTILINE_INDICATOR = {|| "::: " }
 
-export def-env my_theme [] {
+export-env {
   $env.STARSHIP_SHELL = "nu"
   $env.PROMPT_COMMAND = { || create_left_prompt }
   $env.PROMPT_COMMAND_RIGHT = ""
