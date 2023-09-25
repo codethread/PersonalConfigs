@@ -1,4 +1,4 @@
-const keybindings = [
+export const keybindings = [
     {
         name: completion_menu
         modifier: none
@@ -14,7 +14,7 @@ const keybindings = [
     {
         name: history_menu
         modifier: none
-        keycode: f3
+        keycode: f4
         mode: [emacs, vi_insert, vi_normal]
         event: { send: menu name: history_menu }
     }
@@ -462,7 +462,3 @@ const keybindings = [
         event: {edit: capitalizechar}
     }
 ]
-
-export-env {
-  $env.config = ($env.config | insert keybindings $keybindings)
-}

@@ -1,4 +1,4 @@
-const menus = [
+export const menus = [
     # Configuration for default nushell menus
     # Note the lack of source parameter
     {
@@ -69,7 +69,3 @@ const menus = [
         }
     }
 ]
-
-export-env {
-  $env.config = ($env.config | insert menus $menus)
-}

@@ -5,6 +5,7 @@ return {
 		cmd = 'ToggleTerm',
 		opts = {
 			-- size can be a number or function which is passed the current terminal
+			shell = 'nu',
 			size = function(term)
 				if term.direction == 'horizontal' then
 					return 15

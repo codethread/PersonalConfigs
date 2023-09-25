@@ -1,6 +1,6 @@
 local set = vim.opt
 
-set.shell = 'zsh' -- nushell isn't quite there... or I don't know how to set it up
+set.shell = 'zsh' -- better for compatibilty
 vim.opt.laststatus = 3
 set.termguicolors = true -- adds more colors
 set.hidden = true -- Required to keep multiple buffers open multiple buffers
