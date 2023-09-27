@@ -1,4 +1,3 @@
-
 def git_current_branch [] {
     (gstat).branch
 }
@@ -11,11 +10,6 @@ def git_main_branch [] {
         | first
         | str replace 'HEAD .*?[：: ](.+)' '$1'
 }
-
-#
-# Aliases
-# (sorted alphabetically)
-#
 
 export alias ga = git add
 export alias gaa = git add --all
@@ -57,10 +51,12 @@ export alias gcf = git config --list
 export alias gcl = git clone --recurse-submodules
 # export alias gclean = git clean -dfX
 export alias gclean = git clean --interactive -d
+
 export def gpristine [] {
     git reset --hard
     git clean -d --force -x
 }
+
 export alias gcm = git checkout (git_main_branch)
 export alias gcmsg = git commit --message
 export alias gco = git checkout
@@ -152,7 +148,7 @@ export alias grs = git restore
 export alias grset = git remote set-url
 export alias grss = git restore --source
 export alias grst = git restore --staged
-export alias grt = cd (git rev-parse --show-toplevel or echo .)
+export alias grt = cd (git rev-parse --show-toplevel)
 export alias gru = git reset --
 export alias grup = git remote update
 export alias grv = git remote --verbose
@@ -205,8 +201,17 @@ export alias gamscp = git am --show-current-patch
 
 
 export def gfuck [] {
-
+  git fetch origin
+  git reset --hard $"origin/(git_current_branch)"
 }
-export def gnah [] {
 
+export def gnah [] {
+  git reset --hard
+  git clean -df
+}
+
+export def gnew [name: string] {
+  git fetch origin $"(git_main_branch):(git_main_branch)"
+  git checkout -b $name (git_main_branch)
+  git branch --unset-upstream
 }
