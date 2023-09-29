@@ -7,9 +7,13 @@ export use node.nu *
 
 export alias als = scope aliases
 
-def nuopen [arg, --raw (-r)] { if $raw { open -r $arg } else { open $arg } }
+export def nuopen [arg, --raw (-r)] { if $raw { open -r $arg } else { open $arg } }
 
-alias open = ^open
+export alias open = ^open
+
+export def nup [arg] { prev $arg }
+
+export alias p = ^p
 
 export def plugs [] {  
   help commands | where command_type == "plugin"
@@ -45,7 +49,7 @@ export def pathis [] {
 #---------------------------------------------#
 
 export alias mac-dark-toggle = osascript -e 'tell app "System Events" to tell appearance preferences to set dark mode to not dark mode'
-alias l = ls -a
+export alias l = ls -a
 export alias finder = open -a 'Finder' .
 export alias ports = lsof -i tcp:3000
 
@@ -86,3 +90,15 @@ export alias ktt-light = kitty +kitten themes --reload-in=all Tokyo Night Day
 # -------------------------------------------#
 export alias tmux-delete-resurrect = rm -f ~/.local/share/tmux/resurrect
 
+export def tmux-echo [] { $env | transpose name value | where name =~ "TMUX_SESSION" }
+
+export alias cd0 = cd $env.TMUX_SESSION_PROJ_0
+export alias cd1 = cd $env.TMUX_SESSION_PROJ_1
+export alias cd2 = cd $env.TMUX_SESSION_PROJ_2
+export alias cd3 = cd $env.TMUX_SESSION_PROJ_3
+export alias cd4 = cd $env.TMUX_SESSION_PROJ_4
+export alias cd5 = cd $env.TMUX_SESSION_PROJ_5
+export alias cd6 = cd $env.TMUX_SESSION_PROJ_6
+export alias cd7 = cd $env.TMUX_SESSION_PROJ_7
+export alias cd8 = cd $env.TMUX_SESSION_PROJ_8
+export alias cd9 = cd $env.TMUX_SESSION_PROJ_9

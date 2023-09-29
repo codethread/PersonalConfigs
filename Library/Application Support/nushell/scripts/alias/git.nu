@@ -3,12 +3,7 @@ def git_current_branch [] {
 }
 
 def git_main_branch [] {
-    git remote show origin
-        | lines
-        | str trim
-        | find --regex 'HEAD .*?[：: ].+'
-        | first
-        | str replace 'HEAD .*?[：: ](.+)' '$1'
+  git symbolic-ref refs/remotes/origin/HEAD | str trim | split row "/" | last
 }
 
 export alias ga = git add
@@ -211,7 +206,10 @@ export def gnah [] {
 }
 
 export def gnew [name: string] {
-  git fetch origin $"(git_main_branch):(git_main_branch)"
-  git checkout -b $name (git_main_branch)
-  git branch --unset-upstream
+  let trunk = (git_main_branch)
+  print $"fetching ($trunk)"
+  let target = $"($trunk):($trunk)"
+  git fetch origin $target
+  git checkout -b $name $trunk
+  git branch --unset-upstream err+out> /dev/null
 }
