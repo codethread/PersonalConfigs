@@ -1,0 +1,77 @@
+#!/usr/bin/env nu --login
+
+# get the latest projects
+source-env tmux-projects.nu
+
+let project = [
+    ~/dev ~/dev/exercism ~/dev/projects ~/dev/learn ~/dev/vendor
+    ~/work ~/work/services ~/work/lambdas ~/work/utilities
+    ~/.local/share/nvim/lazy ~/.local/share/nvim/mason/packages
+] 
+
+def main [x?: int] {
+  let project = if ($x != null) {
+    $x | into string | get-project-num $in
+  } else {
+    get-project
+  }
+
+  if ($project | is-empty) {
+    exit 0
+  }
+
+  let $session = ($project | path basename)
+  let $sessions = (get-sessions)
+
+  # check if tmux is not running
+  if (pgrep tmux | is-empty) {
+    tmux new-session -s $session -c $project
+  }
+
+  $env
+    | transpose name value 
+    | where name =~ "TMUX_SESSION" 
+    | echo $in
+
+  exit 0
+
+  if ($session in $sessions) {
+    tmux switch-client -t $session
+  } else {
+    tmux new-session -d -s $session -c $project
+    tmux switch-client -t $session
+  }
+}
+
+def get-project [] {
+  $project 
+    | path expand 
+    | filter { || $in | path exists } 
+    | each { |d| ls $d } 
+    | flatten 
+    | where type == 'dir' 
+    | get name 
+    | str join "\n" 
+    | fzf-tmux
+    | str trim
+}
+
+def get-sessions [] {
+  tmux list-session 
+    | lines 
+    | parse "{name}:{rest}"
+    | get name
+}
+
+def get-project-num [proj: string] { 
+  $env
+    | transpose name value 
+    | where name =~ "TMUX_SESSION" 
+    | echo $in
+    | find $"PROJ_($proj)"
+    | first 
+    | get value
+
+}
+
+def nud [] { let val = $in; print $val; $val }

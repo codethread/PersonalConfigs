@@ -104,6 +104,7 @@ $env.ENV_CONVERSIONS = {
 # Directories to search for scripts when calling source or use
 $env.NU_LIB_DIRS = [
     ($nu.default-config-dir | path join 'scripts') # add <nushell-config-dir>/scripts
+    ('~/workfiles/nu' | path expand)
     (home 'dev/vendor/nu_scripts/sourced')
 ]
 

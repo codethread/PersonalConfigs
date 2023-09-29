@@ -9,6 +9,8 @@ const workp = ("~/.work.nu" | path expand)
 source (if ($workp | path exists) { $workp } else { "empty.nu" })
 source (if ($privates | path exists) { $privates } else { "empty.nu" })
 
+source tmux-projects.nu
+
 $env.config = {
     keybindings: $keybindings
     menus: $menus
@@ -92,7 +94,7 @@ $env.config = {
         case_sensitive: false # set to true to enable case-sensitive completions
         quick: true    # set this to false to prevent auto-selecting completions when only one remains
         partial: true    # set this to false to prevent partial filling of the prompt
-        algorithm: "prefix"    # prefix or fuzzy
+        algorithm: "fuzzy"
         external: {
             enable: true # set to false to prevent nushell looking into $env.PATH to find more suggestions, `false` recommended for WSL users as this look up may be very slow
             max_results: 100 # setting it lower can improve completion performance at the cost of omitting some options
@@ -133,7 +135,4 @@ $env.config = {
     }
 }
 
-# source '~/dev/vendor/nu_scripts/sourced/typeof.nu'
-# use typeof.nu
-
-register nu_plugin_gstat
+source ~/.local/share/atuin/init.nu
