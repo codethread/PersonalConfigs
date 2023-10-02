@@ -1,5 +1,6 @@
 export use git.nu *
 export use node.nu *
+export use tmux.nu *
 
 #---------------------------------------------#
 # nushell
@@ -84,21 +85,3 @@ export alias brewdeps = brew deps --graph --installed
 export alias ktt = kitty +kitten themes
 export alias ktt-dark = kitty +kitten themes --reload-in=all Tokyo Night Storm
 export alias ktt-light = kitty +kitten themes --reload-in=all Tokyo Night Day
-
-#---------------------------------------------#
-# TMUX
-# -------------------------------------------#
-export alias tmux-delete-resurrect = rm -f ~/.local/share/tmux/resurrect
-
-export def tmux-echo [] { $env | transpose name value | where name =~ "TMUX_SESSION" }
-
-export alias cd0 = cd $env.TMUX_SESSION_PROJ_0
-export alias cd1 = cd $env.TMUX_SESSION_PROJ_1
-export alias cd2 = cd $env.TMUX_SESSION_PROJ_2
-export alias cd3 = cd $env.TMUX_SESSION_PROJ_3
-export alias cd4 = cd $env.TMUX_SESSION_PROJ_4
-export alias cd5 = cd $env.TMUX_SESSION_PROJ_5
-export alias cd6 = cd $env.TMUX_SESSION_PROJ_6
-export alias cd7 = cd $env.TMUX_SESSION_PROJ_7
-export alias cd8 = cd $env.TMUX_SESSION_PROJ_8
-export alias cd9 = cd $env.TMUX_SESSION_PROJ_9

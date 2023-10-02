@@ -1,0 +1,23 @@
+{
+  base: [
+    [key, name];
+    [ P0, "~/dev/projects/qmk_firmware/keyboards/preonic/keymaps/codethread"]
+  ]
+  personal: [ 
+    [key, name];
+    [ P2, "~/dev/projects/qmk.nvim", ]
+    [ P3, "~/dev/projects/tstl-prelude", ]
+    [ P4, "~/dev/learn/rust-playground", ]
+    [ P5, "~/dev/projects/cold-brew", ]
+  ],
+  work: [ 
+    [key, name];
+    [ P2 , "~/work/deals-light-ui", ]
+    [ P3 , "~/work/services/reporting-app", ]
+    [ P4 , "~/work/inspect-my-package", ]
+    [ P5 , "~/work/fe-review", ]
+
+    [ P8 , "~/workfiles", ]
+    [ P9 , "~/work/services/protobuf", ]
+  ]
+}

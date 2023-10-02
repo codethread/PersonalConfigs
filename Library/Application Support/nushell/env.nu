@@ -9,8 +9,8 @@ def path-prepend [p: string] {
 
 $env.PATH = ($env.PATH | split row (char esep))
 
-$env.CT_IS_WORK = (whoami) == "adam.hall"
-$env.CT_IS_HOME = (whoami) == "codethread"
+$env.CT_IS_WORK = ((whoami) == "adam.hall")
+$env.CT_IS_HOME = ((whoami) == "codethread")
 $env.CT_USER = match (whoami) {
   "adam.hall" => "work", 
   "codethread" => "home",

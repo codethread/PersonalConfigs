@@ -9,8 +9,6 @@ const workp = ("~/.work.nu" | path expand)
 source (if ($workp | path exists) { $workp } else { "empty.nu" })
 source (if ($privates | path exists) { $privates } else { "empty.nu" })
 
-source tmux-projects.nu
-
 $env.config = {
     keybindings: $keybindings
     menus: $menus

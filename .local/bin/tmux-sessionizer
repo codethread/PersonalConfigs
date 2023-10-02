@@ -1,73 +1,72 @@
-#!/usr/bin/env bash
+#!/usr/bin/env nu
 
-ssource() {
-	if [ -r "$1" ]; then
-		. "$1"
-	fi
+let project = [
+    ~/dev ~/dev/exercism ~/dev/projects ~/dev/learn ~/dev/vendor
+    ~/work ~/work/services ~/work/lambdas ~/work/utilities
+    ~/.local/share/nvim/lazy ~/.local/share/nvim/mason/packages
+] 
+
+def main [x?: int] {
+  let project = if ($x != null) {
+    $x | into string | get-project-num $in
+  } else {
+    user-get-project
+  }
+
+  if ($project | is-empty) {
+    print "no project selected"
+    exit 0
+  }
+
+  let $session = ($project | path basename)
+  let $sessions = (get-sessions)
+
+  # check if tmux is not running
+  if (pgrep tmux | is-empty) {
+    tmux new-session -s $session -c $project
+  }
+
+  if ($session in $sessions) {
+    tmux switch-client -t $session
+  } else {
+    tmux new-session -d -s $session -c $project
+    tmux switch-client -t $session
+  }
 }
 
-# borrowed with love from https://github.com/ThePrimeagen/.dotfiles/blob/62eb982a12d75abbdeb6d679504382365456d75c/bin/.local/scripts/tmux-sessionizer
-ssource "${DOTFILES}/.config/tmux/projects"
+############################################################################
 
-projects=(
-	~/dev ~/dev/exercism ~/dev/projects ~/dev/learn ~/dev/vendor
-	~/work ~/work/services ~/work/lambdas ~/work/utilities
-	~/.local/share/nvim/lazy ~/.local/share/nvim/mason/packages
-)
+def user-get-project [] {
+  $project 
+    | path expand 
+    | filter { || $in | path exists } 
+    | each { |d| ls $d } 
+    | flatten 
+    | where type == 'dir' 
+    | get name 
+    | str join "\n" 
+    | fzf-tmux
+    | str trim
+}
 
-to_use=(~/)
+def get-sessions [] {
+  tmux list-session 
+    | lines 
+    | parse "{name}:{rest}"
+    | get name
+}
 
-for project in "${projects[@]}"; do
-	if [ -d "${project}" ]; then
-		to_use+=("${project}")
-	fi
-done
+def get-project-num [proj: string] {
+  get-projects 
+  | where key == $"P($proj)"
+  | if ($in | is-empty) { null } else ($in | first | $in.name)
+}
 
-# if nothing is passed, use fzf to select a directory
-# or if a number is passed as an argument, use the appropriate project
-if [ $# -eq 0 ]; then
-	selected=$(fd --max-depth=1 --type=d . "${to_use[@]}" | fzf-tmux)
-elif [[ $1 -eq 0 ]]; then
-	selected=${TMUX_SESSION_PROJ_0}
-elif [[ $1 -eq 1 ]]; then
-	selected=${TMUX_SESSION_PROJ_1}
-elif [[ $1 -eq 2 ]]; then
-	selected=${TMUX_SESSION_PROJ_2}
-elif [[ $1 -eq 3 ]]; then
-	selected=${TMUX_SESSION_PROJ_3}
-elif [[ $1 -eq 4 ]]; then
-	selected=${TMUX_SESSION_PROJ_4}
-elif [[ $1 -eq 5 ]]; then
-	selected=${TMUX_SESSION_PROJ_5}
-elif [[ $1 -eq 6 ]]; then
-	selected=${TMUX_SESSION_PROJ_6}
-elif [[ $1 -eq 7 ]]; then
-	selected=${TMUX_SESSION_PROJ_7}
-elif [[ $1 -eq 8 ]]; then
-	selected=${TMUX_SESSION_PROJ_8}
-elif [[ $1 -eq 9 ]]; then
-	selected=${TMUX_SESSION_PROJ_9}
-fi
+def get-projects [] {
+  let projects = (open ~/.local/data/tmux.nuon)
+  let base = [[key,name]; [P1, ($env.DOTFILES)]] | append $projects.base 
 
-# if no directory was selected, exit
-if [[ -z $selected ]]; then
-	exit 0
-fi
+  $base ++ (if ($env.CT_USER == work) { $projects.work } else { $projects.personal })
+}
 
-# get the name of the selected directory
-selected_name=$(basename "$selected" | tr . _)
-
-# check if tmux is running
-tmux_running=$(pgrep tmux)
-
-# if tmux is not running, start a new session
-if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
-	tmux new-session -s $selected_name -c $selected
-	exit 0
-fi
-
-if ! tmux has-session -t=$selected_name 2>/dev/null; then
-	tmux new-session -ds $selected_name -c $selected
-fi
-
-tmux switch-client -t $selected_name
+def nud [] { let val = $in; print $val; $val }
