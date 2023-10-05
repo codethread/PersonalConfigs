@@ -1,1 +1,2 @@
 .ideavimrc linguist-language=Vim-Script
+.tmux.conf linguist-language=tmux
