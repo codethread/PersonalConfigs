@@ -52,7 +52,12 @@ export def gpristine [] {
     git clean -d --force -x
 }
 
-export alias gcm = git checkout (git_main_branch)
+# export alias gcm = git checkout (git_main_branch)
+export def gcm [...words: string] {
+  let msg = ($words | str join " ")
+  print $msg
+  git commit --message $"($msg)"
+}
 export alias gcmsg = git commit --message
 export alias gco = git checkout
 export alias gcor = git checkout --recurse-submodules
@@ -207,9 +212,19 @@ export def gnah [] {
 
 export def gnew [name: string] {
   let trunk = (git_main_branch)
-  print $"fetching ($trunk)"
   let target = $"($trunk):($trunk)"
-  git fetch origin $target
+  if ($trunk == (git_current_branch)) {
+    print $"pulling ($trunk)"
+    git pull
+  } else {
+    print $"fetching ($target)"
+    git fetch origin $target
+  }
   git checkout -b $name $trunk
   git branch --unset-upstream err+out> /dev/null
+}
+
+export def gls [] {
+  let line = (git log --oneline --decorate --color=always --format="%C(yellow)[%h] %C(magenta)%<(15)(%an)%C(auto): %s" | fzf --ansi --no-sort --reverse --tiebreak=index)
+  print $line
 }
