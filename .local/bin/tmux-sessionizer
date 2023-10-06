@@ -23,13 +23,13 @@ def main [x?: int] {
 
   # check if tmux is not running
   if (pgrep tmux | is-empty) {
-    tmux new-session -s $session -c $project
+    tmux new-session -s $session -c ($project | path expand)
   }
 
   if ($session in $sessions) {
     tmux switch-client -t $session
   } else {
-    tmux new-session -d -s $session -c $project
+    tmux new-session -d -s $session -c ($project | path expand)
     tmux switch-client -t $session
   }
 }
