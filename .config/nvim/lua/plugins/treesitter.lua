@@ -24,6 +24,9 @@ return {
 				additional_vim_regex_highlighting = false,
 			},
 			indent = { enable = true },
+			matchup = {
+				enable = true,
+			},
             -- stylua: ignore
             ensure_installed = vim.tbl_flatten {
                 -- scripting
@@ -60,6 +63,17 @@ return {
 			require('nvim-treesitter.configs').setup(opts)
 			vim.treesitter.language.register('jsonc', 'json')
 			vim.treesitter.language.register('dts', 'keymap')
+
+			local parser_config = require('nvim-treesitter.parsers').get_parser_configs()
+
+			parser_config.nu = {
+				install_info = {
+					url = 'https://github.com/nushell/tree-sitter-nu',
+					files = { 'src/parser.c' },
+					branch = 'main',
+				},
+				filetype = 'nu',
+			}
 		end,
 	},
 	{

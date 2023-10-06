@@ -98,7 +98,7 @@ return {
 				['@keyword.return'] = { fg = 'iris', undercurl = true },
 
 				-- js stuff
-				['@arrow_function.const'] = { underline = true },
+				-- ['@arrow_function.const'] = { undercurl = true },
 				['@keyword.export'] = { fg = 'love' },
 				['@keyword.default'] = { fg = 'love', bold = true },
 				-- ['@variable'] = { fg = c.fg }

@@ -139,4 +139,6 @@ return {
 
 	-- { 'mzlogin/vim-markdown-toc', cmd = { 'GenTocGitLab', 'GenTocGFM' } },
 	{ 'mzlogin/vim-markdown-toc' },
+
+	{ 'andymass/vim-matchup' },
 }

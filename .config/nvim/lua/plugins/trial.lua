@@ -4,7 +4,21 @@ return {
 	'tpope/vim-eunuch', -- unix helpers, :Rename, :Delete
 	'tpope/vim-obsession',
 	'wellle/targets.vim',
-	{ 'windwp/nvim-spectre', build = 'brew install gnu-sed', cmd = 'Spectre' }, -- find/replace
+	{
+		'windwp/nvim-spectre',
+		build = 'brew install gnu-sed',
+		cmd = 'Spectre',
+		opts = {
+			default = {
+				find = {
+					options = {
+						'ignore-case',
+						'hidden',
+					},
+				},
+			},
+		},
+	}, -- find/replace
 	{
 		-- TODO not working??
 		'telescope.nvim',

@@ -4,14 +4,28 @@ return U.flatten {
 	require 'plugins.lang.rust',
 
 	{
-		{
-			'LhKipp/nvim-nu',
-			ft = 'nu',
-			-- run = ':TSInstall nu',
-			opts = {
-				complete_cmd_names = true,
-			},
-		},
+		-- https://github.com/nushell/tree-sitter-nu/blob/main/installation/neovim.md
+		-- {
+		-- 	'LhKipp/nvim-nu',
+		-- 	ft = 'nu',
+		-- 	init = function()
+		-- 		-- TODO after ts
+		-- 		local parser_config = require('nvim-treesitter.parsers').get_parser_configs()
+		--
+		-- 		parser_config.nu = {
+		-- 			install_info = {
+		-- 				url = 'https://github.com/nushell/tree-sitter-nu',
+		-- 				files = { 'src/parser.c' },
+		-- 				branch = 'main',
+		-- 			},
+		-- 			filetype = 'nu',
+		-- 		}
+		-- 	end,
+		-- 	-- run = ':TSInstall nu',
+		-- 	opts = {
+		-- 		complete_cmd_names = true,
+		-- 	},
+		-- },
 
 		{ 'mrcjkb/haskell-tools.nvim', version = '1.x.x' },
 
