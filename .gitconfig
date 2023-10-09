@@ -36,7 +36,7 @@
     guessRemote = true
 
 [includeIf "gitdir:~/work/"] # job needs, like workspace/* so all included projects
-    path = .gitconfig_perkbox
+    path = ~/work/.gitconfig
 
 [includeIf "gitdir:~/workfiles/"] # job needs, like workspace/* so all included projects
-    path = .gitconfig_perkbox
+    path = ~/work/.gitconfig
