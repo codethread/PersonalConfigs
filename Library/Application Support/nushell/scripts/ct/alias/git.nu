@@ -228,3 +228,8 @@ export def gls [] {
   let line = (git log --oneline --decorate --color=always --format="%C(yellow)[%h] %C(magenta)%<(15)(%an)%C(auto): %s" | fzf --ansi --no-sort --reverse --tiebreak=index)
   print $line
 }
+
+export def gundo [] {
+  git reset --soft HEAD~1 
+  git restore --staged .
+}

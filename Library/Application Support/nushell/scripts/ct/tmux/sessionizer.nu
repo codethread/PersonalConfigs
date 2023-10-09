@@ -1,4 +1,4 @@
-use ct/core [nuopen clog]
+use ct/core *
 use ct/tmux/utils.nu to-session
 
 export def main [
@@ -52,6 +52,7 @@ export def main [
 
 def user-get-project [] {
   let project_dirs = [
+      ~/
       ~/dev ~/dev/exercism ~/dev/projects ~/dev/learn ~/dev/vendor
       ~/work ~/work/services ~/work/lambdas ~/work/utilities
       ~/.local/share/nvim/lazy ~/.local/share/nvim/mason/packages
@@ -83,13 +84,14 @@ def get-project-num [proj: string] {
 }
 
 def get-projects [] {
-  clog "reading projects from disk"
-  let projects = (nuopen ~/.local/data/tmux.nuon)
-  clog "projects:" $projects
+  clog "reading projects from disk:"
+  let data = ("~/.local/data/tmux.nuon" | path expand)
+  clog $data
+  let projects = (nuopen $data)
+  clog "projects:" ($projects | table --expand)
   let base = [[key,name]; [P1, ($env.DOTFILES)]] | append $projects.base 
-  let is_work = try { $env.CT_IS_WORK } catch { false }
 
-  let output = ($base ++ (if ($is_work) { $projects.work } else { $projects.personal }))
+  let output = ($base ++ (if (is_work) { $projects.work } else { $projects.personal }))
   clog "output:" $output
   $output
 }

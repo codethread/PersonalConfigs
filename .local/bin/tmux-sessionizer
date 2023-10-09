@@ -1,4 +1,4 @@
-#!/usr/bin/env nu --login
+#!/usr/bin/env nu
 
 use ct/tmux
 

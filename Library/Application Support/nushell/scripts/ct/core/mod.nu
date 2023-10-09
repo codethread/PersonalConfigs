@@ -1,12 +1,8 @@
-export alias als = scope aliases
-
-export def nuopen [arg, --raw (-r)] { if $raw { open -r $arg } else { open $arg } }
-
-export alias open = ^open
+export def nuopen [arg, --raw (-r)] { 
+  if $raw { open -r $arg } else { open $arg } 
+}
 
 export def nup [arg] { prev $arg }
-
-export alias p = ^p
 
 export def plugs [] {  
   help commands | where command_type == "plugin"
@@ -29,4 +25,12 @@ export def clog [...args] {
       $args | each { print $in }
     }
   }
+}
+
+export def is_work [] {
+  (whoami) == 'adam.hall'
+}
+
+export def is_home [] {
+  (whoami) == 'codethread'
 }
