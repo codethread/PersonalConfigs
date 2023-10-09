@@ -11,13 +11,11 @@ $env.PATH = ($env.PATH | split row (char esep))
 
 $env.CT_LOG = false
 
-$env.CT_IS_WORK = (whoami) == "adam.hall"
-$env.CT_IS_HOME = (whoami) == "codethread"
-$env.CT_USER = match (whoami) {
+$env.CT_USER = (match (whoami) {
   "adam.hall" => "work", 
   "codethread" => "home",
   _ => "unknown", 
-}
+})
 
 # HOMEBREW
 $env.PATH = (path-prepend "/opt/homebrew/sbin")
@@ -44,16 +42,15 @@ $env.PATH = (path-prepend "~/.cargo/bin")
 
 $env.DOTFILES = (home PersonalConfigs)
 
-$env.DOTTY = (if $env.CT_IS_WORK {
-    ["~/PersonalConfigs" $nu.home-path "~/workfiles" $nu.home-path] 
-  } else {
-    ["~/PersonalConfigs" $nu.home-path]
-  }
-    | path expand | str join ":")
+$env.DOTTY = (match $env.CT_USER {
+  "work" => ["~/PersonalConfigs" $nu.home-path "~/workfiles" $nu.home-path],
+  _      => ["~/PersonalConfigs" $nu.home-path],
+  } | path expand | str join ":")
 
-if $env.CT_IS_WORK {
-  $env.RUSTFLAGS = "-C link-arg=-fuse-ld=/opt/homebrew/opt/llvm/bin/ld64.lld"
-}
+$env.RUSTFLAGS = (match $env.CT_USER {
+  "work" => "-C link-arg=-fuse-ld=/opt/homebrew/opt/llvm/bin/ld64.lld"
+  _ => ""
+})
 
 $env.EDITOR = "nvim"
 $env.SHELL = (which nu | first | get path)

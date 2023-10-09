@@ -1,3 +1,3 @@
-export alias open = ^open
-export alias p = ^p
-export alias als = scope aliases
+alias open = ^open
+alias p = ^p
+alias als = scope aliases
