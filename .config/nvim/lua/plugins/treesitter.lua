@@ -1,3 +1,5 @@
+vim.filetype.add { extension = { nu = 'nu' } }
+
 return {
 	{
 		'nvim-treesitter/nvim-treesitter',
@@ -74,6 +76,7 @@ return {
 				},
 				filetype = 'nu',
 			}
+			vim.treesitter.language.register('nu', 'nu')
 		end,
 	},
 	{
