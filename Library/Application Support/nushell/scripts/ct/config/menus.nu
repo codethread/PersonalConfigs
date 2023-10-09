@@ -19,7 +19,7 @@ export const menus = [
     }
     {
         name: history_menu
-        only_buffer_difference: true
+        only_buffer_difference: false
         marker: "? "
         type: {
             layout: list
