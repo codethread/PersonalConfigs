@@ -298,5 +298,9 @@
       "commands": ["bookmarks.listFromAllFiles"]
     }
   ],
-  "workbench.colorTheme": "Rosé Pine Moon"
+  "workbench.colorTheme": "Rosé Pine Moon",
+  "nushellLanguageServer.includeDirs": [
+    "~/PersonalConfigs/Library/Application Support/nushell/scripts"
+  ],
+  "nushellLanguageServer.hints.showInferredTypes": false
 }
