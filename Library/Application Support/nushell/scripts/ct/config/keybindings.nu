@@ -461,4 +461,14 @@ export const keybindings = [
         mode: emacs
         event: {edit: capitalizechar}
     }
+    {
+        name: reload_config
+        modifier: alt
+        keycode: char_x
+        mode: emacs
+        event: {
+          send: executehostcommand
+          cmd: "exec nu"
+        }
+    }
 ]

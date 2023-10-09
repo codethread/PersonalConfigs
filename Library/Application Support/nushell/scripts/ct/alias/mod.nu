@@ -3,28 +3,6 @@ export use node.nu *
 export use tmux.nu *
 
 #---------------------------------------------#
-# nushell
-# -------------------------------------------#
-
-export alias als = scope aliases
-
-export def nuopen [arg, --raw (-r)] { if $raw { open -r $arg } else { open $arg } }
-
-export alias open = ^open
-
-export def nup [arg] { prev $arg }
-
-export alias p = ^p
-
-export def plugs [] {  
-  help commands | where command_type == "plugin"
-}
-
-export def cmds [] {  
-  help commands | where command_type == "custom" | reject params
-}
-
-#---------------------------------------------#
 # EDITOR-ish
 # -------------------------------------------#
 
@@ -36,14 +14,6 @@ export alias nvim-boot = MACOSX_DEPLOYMENT_TARGET=10.15 nvim --headless -c 'auto
 # rg --json hi | lines | each {|| from json } | where type == 'match' | get data
 
 export alias vo = ls
-
-#---------------------------------------------#
-# HELPERS
-# -------------------------------------------#
-
-export def pathis [] {
-  $env.PATH
-}
 
 #---------------------------------------------#
 # SEARCH
@@ -61,7 +31,7 @@ export def pj [...deps: string] {
 
 export alias mac-dark-toggle = osascript -e 'tell app "System Events" to tell appearance preferences to set dark mode to not dark mode'
 export alias l = ls -a
-export alias finder = open -a 'Finder' .
+export alias finder = ^open -a 'Finder' .
 export alias ports = lsof -i tcp:3000
 
 export def alert [] {

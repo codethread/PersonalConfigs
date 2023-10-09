@@ -1,72 +1,7 @@
-#!/usr/bin/env nu
+#!/usr/bin/env nu --login
 
-let project = [
-    ~/dev ~/dev/exercism ~/dev/projects ~/dev/learn ~/dev/vendor
-    ~/work ~/work/services ~/work/lambdas ~/work/utilities
-    ~/.local/share/nvim/lazy ~/.local/share/nvim/mason/packages
-] 
+use ct/tmux
 
 def main [x?: int] {
-  let project = if ($x != null) {
-    $x | into string | get-project-num $in
-  } else {
-    user-get-project
-  }
-
-  if ($project | is-empty) {
-    print "no project selected"
-    exit 0
-  }
-
-  let $session = ($project | path basename)
-  let $sessions = (get-sessions)
-
-  # check if tmux is not running
-  if (pgrep tmux | is-empty) {
-    tmux new-session -s $session -c ($project | path expand)
-  }
-
-  if ($session in $sessions) {
-    tmux switch-client -t $session
-  } else {
-    tmux new-session -d -s $session -c ($project | path expand)
-    tmux switch-client -t $session
-  }
+   tmux sessionizer $x
 }
-
-############################################################################
-
-def user-get-project [] {
-  $project 
-    | path expand 
-    | filter { || $in | path exists } 
-    | each { |d| ls $d } 
-    | flatten 
-    | where type == 'dir' 
-    | get name 
-    | str join "\n" 
-    | fzf-tmux
-    | str trim
-}
-
-def get-sessions [] {
-  tmux list-session 
-    | lines 
-    | parse "{name}:{rest}"
-    | get name
-}
-
-def get-project-num [proj: string] {
-  get-projects 
-  | where key == $"P($proj)"
-  | if ($in | is-empty) { null } else ($in | first | $in.name)
-}
-
-def get-projects [] {
-  let projects = (open ~/.local/data/tmux.nuon)
-  let base = [[key,name]; [P1, ($env.DOTFILES)]] | append $projects.base 
-
-  $base ++ (if ($env.CT_USER == work) { $projects.work } else { $projects.personal })
-}
-
-def nud [] { let val = $in; print $val; $val }

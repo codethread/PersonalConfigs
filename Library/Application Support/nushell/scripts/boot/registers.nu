@@ -4,4 +4,5 @@
 export def main [] {
  register nu_plugin_gstat
  register nu_plugin_query
+ register nu_plugin_highlight
 }

@@ -1,7 +1,10 @@
-use themes.nu themes
-use config/prompt.nu
-use config [keybindings menus]
-use alias *
+use ct/config/prompt.nu
+use ct/themes.nu themes
+use ct/config [keybindings menus]
+use ct/core *
+use ct/alias *
+
+use ct/tmux
 
 const privates = ("~/.privates.nu" | path expand)
 const workp = ("~/.work.nu" | path expand)

@@ -9,36 +9,38 @@ def path-prepend [p: string] {
 
 $env.PATH = ($env.PATH | split row (char esep))
 
+$env.CT_LOG = false
+
 $env.CT_IS_WORK = ((whoami) == "adam.hall")
 $env.CT_IS_HOME = ((whoami) == "codethread")
 $env.CT_USER = match (whoami) {
   "adam.hall" => "work", 
   "codethread" => "home",
   _ => "unknown", 
-} # XXX: "
+}
 
 # HOMEBREW
-$env.PATH = (path-prepend '/opt/homebrew/sbin')
-$env.PATH = (path-prepend '/opt/homebrew/bin')
+$env.PATH = (path-prepend "/opt/homebrew/sbin")
+$env.PATH = (path-prepend "/opt/homebrew/bin")
 
 $env.HOMEBREW_BUNDLE_FILE = match $env.CT_USER {
-  "home" => '~/.config/cold-brew/Brewfile.mini.conf',
-  "work" => '~/.config/cold-brew/Brewfile.work.conf',
-  _ => '~/.config/cold-brew/Brewfile.basic.conf',
-} # XXX: "
+  "home" => "~/.config/cold-brew/Brewfile.mini.conf",
+  "work" => "~/.config/cold-brew/Brewfile.work.conf",
+  _ => "~/.config/cold-brew/Brewfile.basic.conf",
+}
 
-$env.HOMEBREW_CELLAR = '/opt/homebrew/Cellar'
-$env.HOMEBREW_PREFIX = '/opt/homebrew'
-$env.HOMEBREW_REPOSITORY = '/opt/homebrew'
+$env.HOMEBREW_CELLAR = "/opt/homebrew/Cellar"
+$env.HOMEBREW_PREFIX = "/opt/homebrew"
+$env.HOMEBREW_REPOSITORY = "/opt/homebrew"
 # not sure if these matter?
-# $env.INFOPATH = '/opt/homebrew/share/info:'
-# $env.MANPATH = ([$env.MANPATH '/opt/homebrew/share/man:'] | str join)
+# $env.INFOPATH = "/opt/homebrew/share/info:"
+# $env.MANPATH = ([$env.MANPATH "/opt/homebrew/share/man:"] | str join)
 
-$env.PATH = (path-prepend '~/.luarocks/bin')
+$env.PATH = (path-prepend "~/.luarocks/bin")
 
-$env.PATH = (path-prepend '~/.local/bin')
+$env.PATH = (path-prepend "~/.local/bin")
 
-$env.PATH = (path-prepend '~/.cargo/bin')
+$env.PATH = (path-prepend "~/.cargo/bin")
 
 $env.DOTFILES = (home PersonalConfigs)
 
@@ -53,15 +55,15 @@ if $env.CT_IS_WORK {
   $env.RUSTFLAGS = "-C link-arg=-fuse-ld=/opt/homebrew/opt/llvm/bin/ld64.lld"
 }
 
-$env.EDITOR = 'nvim'
+$env.EDITOR = "nvim"
 $env.SHELL = (which nu | first | get path)
-$env.MANPAGER = "/bin/sh -c \"col -b | nvim -c 'set ft=man ts=8 nomod nolist nonu' -\"" # XXX: treesitter issue "
+$env.MANPAGER = "/bin/sh -c \"col -b | nvim -c 'set ft=man ts=8 nomod nolist nonu' -\""
 $env.MANWIDTH = 80
-$env.LESSHISTFILE = '-' # no .lesshst
+$env.LESSHISTFILE = "-" # no .lesshst
 
 # EMACS
-$env.LSP_USE_PLISTS = 'true'
-$env.PATH = (path-prepend '~/.emacs.d/bin')
+$env.LSP_USE_PLISTS = "true"
+$env.PATH = (path-prepend "~/.emacs.d/bin")
 
 # FZF
 $env.FZF_ALT_C_COMMAND = "fd --hidden --type d --exclude '{Library,Music,Applications,Pictures,Unity,VirtualBox VMs,WebstormProjects,Tools,node_modules,.git}' . ~"
@@ -69,22 +71,22 @@ $env.FZF_CTRL_T_COMMAND = "fd --type f --hidden --exclude '{.git}'"
 $env.FZF_DEFAULT_COMMAND = "fd --type f --hidden --exclude '{.git}'"
 
 # GO
-$env.PATH = (path-prepend 'go/bin')
-$env.GOBIN = (home 'go/bin')
-$env.GOPATH = (home 'go')
+$env.PATH = (path-prepend "go/bin")
+$env.GOBIN = (home "go/bin")
+$env.GOPATH = (home "go")
 
 # JAVASCRIPT / NODE
-$env.PATH = (path-prepend '.volta/bin')
-$env.VOLTA_HOME = (home '.volta')
-$env.HUSKY = '0' # don't hold my hand
+$env.PATH = (path-prepend ".volta/bin")
+$env.VOLTA_HOME = (home ".volta")
+$env.HUSKY = "0" # don"t hold my hand
 
 # # ruby for gem install on m1 mac
 # pathprepend "/opt/homebrew/opt/ruby/bin" PATH
 # pathprepend "/opt/homebrew/lib/ruby/gems/3.1.0/bin" PATH
 
-$env.WAKATIME_HOME = ($nu.home-path | path join '.config/wakatime')
+$env.WAKATIME_HOME = ($nu.home-path | path join ".config/wakatime")
 
-$env.ZDOTDIR = ($nu.home-path | path join '.config/zsh')
+$env.ZDOTDIR = ($nu.home-path | path join ".config/zsh")
 
 # Specifies how environment variables are:
 # - converted from a string to a value on Nushell startup (from_string)
@@ -103,15 +105,15 @@ $env.ENV_CONVERSIONS = {
 
 # Directories to search for scripts when calling source or use
 $env.NU_LIB_DIRS = [
-    ($nu.default-config-dir | path join 'scripts') # add <nushell-config-dir>/scripts
-    ('~/workfiles/nu' | path expand)
-    (home 'dev/vendor/nu_scripts/sourced')
+    ($nu.default-config-dir | path join "scripts")
+    ("~/workfiles/nu" | path expand)
+    ("~/dev/vendor/nu_scripts/sourced" | path expand)
 ]
 
 # Directories to search for plugin binaries when calling register
 $env.NU_PLUGIN_DIRS = [
-   (home '.cargo/bin')
-    # ($nu.default-config-dir | path join 'plugins') # add <nushell-config-dir>/plugins
+   (home ".cargo/bin")
+    # ($nu.default-config-dir | path join "plugins") # add <nushell-config-dir>/plugins
 ]
 
 # keep this at the end
