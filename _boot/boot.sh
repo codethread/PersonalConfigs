@@ -1,20 +1,23 @@
 #!/usr/bin/env bash
 
-export DOTFILES="${HOME}/PersonalConfigs";
+export DOTFILES="${HOME}/PersonalConfigs"
 
 cd || exit 1
 
 # clone dotfiles
 if [ ! -d "${DOTFILES}" ]; then
-    git clone git@github.com:codethread/PersonalConfigs.git "${DOTFILES}"
+	echo "( ◕ ◡ ◕ ) Cloning dotfiles"
+	git clone git@github.com:codethread/PersonalConfigs.git "${DOTFILES}"
 else
-    echo "( ◕ ◡ ◕ ) dotfiles present, skipping clone"
+	echo "( ◕ ◡ ◕ ) Dotfiles present, skipping clone"
 fi
 
-# temporary location set for nested zsh shell
-export ZDOTDIR="${DOTFILES}/.config/zsh"
+echo "( ◕ ◡ ◕ ) Installing nushell"
+"${DOTFILES}/.local/bin/install-nushell"
 
-# start shell with path and envs from config
-zsh "${DOTFILES}/_boot/boot.zsh"
+~/nu/nu \
+	--env-config "${DOTFILES}/Library/Application Support/nushell/env.nu" \
+	--config "${DOTFILES}/Library/Application Support/nushell/config.nu" \
+	--commands "\$env | transpose | first"
 
 echo "( ◕ ◡ ◕ ) complete, open new shell"
