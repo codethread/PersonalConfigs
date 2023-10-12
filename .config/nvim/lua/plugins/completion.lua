@@ -27,6 +27,19 @@ return {
 
 	-- cmp and friends
 	{
+		'onsails/lspkind.nvim',
+		lazy = true,
+		config = function()
+			local lspkind = require 'lspkind'
+			lspkind.init {
+				symbol_map = {
+					Copilot = '',
+					TypeParameter = '',
+				},
+			}
+		end,
+	},
+	{
 		'hrsh7th/nvim-cmp',
 		version = false, -- last release is way too old
 		event = 'InsertEnter',
@@ -39,18 +52,6 @@ return {
 			{
 				'saadparwaiz1/cmp_luasnip',
 				dependencies = 'L3MON4D3/LuaSnip',
-			},
-			{
-				'onsails/lspkind.nvim',
-				config = function()
-					local lspkind = require 'lspkind'
-					lspkind.init {
-						symbol_map = {
-							Copilot = '',
-							TypeParameter = '',
-						},
-					}
-				end,
 			},
 			'zbirenbaum/copilot-cmp',
 		},
@@ -117,8 +118,10 @@ return {
 				formatting = {
 					fields = { 'kind', 'abbr', 'menu' },
 					format = function(entry, vim_item)
-						local kind =
-							require('lspkind').cmp_format { mode = 'symbol_text', maxwidth = 50 }(entry, vim_item)
+						local kind = require('lspkind').cmp_format {
+							mode = 'symbol_text',
+							maxwidth = 50,
+						}(entry, vim_item)
 						local strings = vim.split(kind.kind, '%s', { trimempty = true })
 						local a = strings[1] or 'OOF'
 						local b = strings[2] or 'YEP'
@@ -202,32 +205,5 @@ return {
 				}
 			end, 'Buffer completion')
 		end,
-	},
-
-	{
-		'zbirenbaum/copilot-cmp',
-		config = true,
-		cmd = 'Copilot',
-		event = 'InsertEnter',
-		dependencies = {
-			{
-				-- Because the copilot server takes some time to start up, it is recommend that you lazy load copilot
-				'zbirenbaum/copilot.lua',
-				opts = {
-					copilot_node_command = vim.fn.expand '$HOME'
-						.. '/.volta/tools/image/node/18.16.0/bin/node',
-					suggestion = { enabled = false },
-					panel = { enabled = false },
-				},
-				init = function()
-					vim.api.nvim_create_autocmd('BufEnter', {
-						desc = 'project level',
-						group = vim.api.nvim_create_augroup('Copilot', {}),
-						pattern = os.getenv 'HOME' .. '/dev/projects/generated/*',
-						callback = function() vim.cmd [[let b:copilot_enabled = v:false]] end,
-					})
-				end,
-			},
-		},
 	},
 }

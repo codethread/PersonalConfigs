@@ -120,7 +120,7 @@ return {
 	{
 		'codethread/qmk.nvim',
 		ft = { 'c' },
-		branch = 'inline-config',
+		-- branch = 'inline-config',
 		config = function()
 			---@type qmk.UserConfig
 			local conf = {
