@@ -72,3 +72,6 @@ t:*
 .metals/
 .bloop/
 project/metals.sbt
+
+# neovim
+scratch.lua
