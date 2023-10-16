@@ -52,10 +52,18 @@ return U.flatten {
 				vim.g['conjure#mapping#doc_word'] = false
 				vim.g['conjure#extract#tree_sitter#enabled'] = true
 				vim.cmd [[
+				  "" lua require('plugins.lang.nushell')
 				  " rust and lua removed
+					"" let g:conjure#filetypes = [ 'clojure', 'fennel', 'janet', 'hy', 'julia', 'racket', 'scheme', 'lisp', "nu" ]
 					let g:conjure#filetypes = [ 'clojure', 'fennel', 'janet', 'hy', 'julia', 'racket', 'scheme', 'lisp' ]
 					let g:conjure#filetype#rust = v:false
+					" let g:conjure#filetype#nu = 'plugins.lang.nushell'
+
 				]]
+			end,
+			config = function(_, opts)
+				require('conjure.main').main()
+				require('conjure.mapping')['on-filetype']()
 			end,
 		},
 

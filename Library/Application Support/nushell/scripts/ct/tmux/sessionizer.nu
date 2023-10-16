@@ -7,7 +7,7 @@ export def main [
 ] {
   if ($log == true) { $env.CT_LOG = true }
 
-  clog { project_id: $x }
+  { project_id: $x } | clog "args"
 
   let project = if ($x != null) {
     clog $"getting project ($x)"

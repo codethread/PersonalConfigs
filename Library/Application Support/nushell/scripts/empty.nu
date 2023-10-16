@@ -3,3 +3,7 @@
 # const empty = ($nu.default-config-dir | path join "empty.nu")
 # const privates = ("~/.privates.nu" | path expand)
 # source (if ($privates | path exists) { $privates } else { $empty })
+
+def foo [] {
+  print hey
+}

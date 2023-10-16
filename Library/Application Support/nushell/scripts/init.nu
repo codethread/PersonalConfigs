@@ -5,6 +5,7 @@ use ct/core *
 use ct/alias *
 
 use ct/tmux
+use ct/brew
 
 $env.config = {
     keybindings: $keybindings

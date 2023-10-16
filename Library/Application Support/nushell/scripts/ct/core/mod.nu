@@ -12,19 +12,31 @@ export def cmds [] {
   help commands | where command_type == "custom" | reject params
 }
 
-export def nud [] { let val = $in; print $val; $val }
+export def nud [] { 
+  let val = $in; 
+  print $val; 
+  $val 
+}
 
 export def pathis [] {
   $env.PATH
 }
 
+export def is-not-empty [] {
+  is-empty | not $in
+}
+
 # logger: print arguments
-export def clog [...args] {
+export def clog [title = "log" ...args] {
+  let val = $in; 
   try {
     if ($env.CT_LOG) {
+      print $"---- ($title) -----"
       $args | each { print $in }
+      print $val
     }
   }
+  $val
 }
 
 export def is_work [] {
@@ -34,3 +46,4 @@ export def is_work [] {
 export def is_home [] {
   (whoami) == 'codethread'
 }
+
