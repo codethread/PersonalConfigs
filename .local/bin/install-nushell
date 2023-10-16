@@ -155,6 +155,9 @@ install_version() {
 
 	if [ "$?" == 0 ]; then
 		info 'Finished' "installation. nu available at $install_dir/nu/nu."
+		local nu_bin="$install_dir/nu/nu"
+		local version="$($nu_bin --version)"
+		info "Test" "version: $version"
 	fi
 }
 
@@ -211,6 +214,14 @@ install_from_file() {
 	# extract the files to the specified directory
 	tar -xf "$archive" -C "$install_dir"
 	# rename the full name to something shorter
+
+	local nu_bin="$install_dir/nu/nu"
+
+	# remove old
+	if [[ -x "$nu_bin" ]]; then
+		rm "$nu_bin"
+	fi
+
 	mv "$install_dir/$dir_name" "$install_dir/nu"
 }
 

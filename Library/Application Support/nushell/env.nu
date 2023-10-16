@@ -22,7 +22,7 @@ $env.PATH = (path-prepend "/opt/homebrew/sbin")
 $env.PATH = (path-prepend "/opt/homebrew/bin")
 
 $env.HOMEBREW_BUNDLE_FILE = match $env.CT_USER {
-  "home" => "~/.config/cold-brew/Brewfile.mini.conf",
+  "home" => "~/.config/cold-brew/Brewfile.home.conf",
   "work" => "~/.config/cold-brew/Brewfile.work.conf",
   _ => "~/.config/cold-brew/Brewfile.basic.conf",
 }
@@ -53,7 +53,7 @@ $env.RUSTFLAGS = (match $env.CT_USER {
 })
 
 $env.EDITOR = "nvim"
-$env.SHELL = (which nu | first | get path)
+$env.SHELL = ("~/nu/nu" | path expand)
 $env.MANPAGER = "/bin/sh -c \"col -b | nvim -c 'set ft=man ts=8 nomod nolist nonu' -\""
 $env.MANWIDTH = 80
 $env.LESSHISTFILE = "-" # no .lesshst
@@ -103,6 +103,7 @@ $env.ENV_CONVERSIONS = {
 # Directories to search for scripts when calling source or use
 $env.NU_LIB_DIRS = [
     ($nu.default-config-dir | path join "scripts")
+    ("~/dev/projects/nudes" | path expand)
     ("~/workfiles/nu" | path expand)
     ("~/dev/vendor/nu_scripts/sourced" | path expand)
 ]
@@ -114,4 +115,5 @@ $env.NU_PLUGIN_DIRS = [
 ]
 
 # keep this at the end
+$env.PATH = (path-prepend "~/nu")
 $env.PATH = ($env.PATH  | uniq)

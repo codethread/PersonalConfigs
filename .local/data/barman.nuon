@@ -1,0 +1,114 @@
+{
+  menus:   {
+    home: [
+      core,
+      demo
+    ],
+    work: [
+      core,
+      docker
+    ],
+    simple: [
+      core
+    ]
+  }
+  cocktails:   {
+    core: [
+      fd,
+      rg,
+      alfred,
+      codethread/dotty,
+      codethread/dotty
+    ],
+    docker: [
+      podman
+    ],
+    demo: [
+  
+    ]
+  }
+  drinks: [
+    [ name, type, flags ];
+    [ 1password, cask, null ]
+    [ ahd-playgrounds/rusty-bins, tap, null ]
+    [ ahd-playgrounds/rusty-bins/rusty-bins, brew, null ]
+    [ alfred, cask, null ]
+    [ antibody, brew, null ]
+    [ atuin, brew, null ]
+    [ bash, brew, null ]
+    [ bat, brew, null ]
+    [ codethread/dotty, tap, null ]
+    [ codethread/dotty/dotty, brew, null ]
+    [ cormacrelf/tap, tap, null ]
+    [ cormacrelf/tap/dark-notify, brew, null ]
+    [ d12frosted/emacs-plus, tap, null ]
+    [ discord, cask, null ]
+    [ dozer, cask, null ]
+    [ dust, brew, null ]
+    [ entr, brew, null ]
+    [ exa, brew, null ]
+    [ exercism, brew, null ]
+    [ fd, brew, null ]
+    [ font-blex-mono-nerd-font, cask, null ]
+    [ font-fira-code-nerd-font, cask, null ]
+    [ font-hack-nerd-font, cask, null ]
+    [ fzf, brew, null ]
+    [ gawk, brew, null ]
+    [ getantibody/tap, tap, null ]
+    [ gitjournal/tap, tap, null ]
+    [ gitjournal/tap/git-auto-sync, brew, null ]
+    [ gnu-sed, brew, null ]
+    [ gnu-tar, brew, null ]
+    [ gnutls, brew, null ]
+    [ go, brew, null ]
+    [ google-chrome, cask, null ]
+    [ goreleaser/tap, tap, null ]
+    [ homebrew/bundle, tap, null ]
+    [ homebrew/cask-fonts, tap, null ]
+    [ htop, brew, null ]
+    [ jandedobbeleer/oh-my-posh, tap, null ]
+    [ jandedobbeleer/oh-my-posh/oh-my-posh, brew, null ]
+    [ jc, brew, null ]
+    [ jq, brew, null ]
+    [ just, brew, null ]
+    [ kitty, cask, null ]
+    [ libevent, brew, null ]
+    [ libgit2, brew, null ]
+    [ libssh2, brew, null ]
+    [ logseq, cask, null ]
+    [ luarocks, brew, null ]
+    [ neovim, brew, null ]
+    [ openssl@1.1, brew, null ]
+    [ osx-cross/arm, tap, null ]
+    [ osx-cross/avr, tap, null ]
+    [ oven-sh/bun, tap, null ]
+    [ oven-sh/bun/bun, brew, null ]
+    [ p11-kit, brew, null ]
+    [ pillow, brew, null ]
+    [ podman, brew, null ]
+    [ procs, brew, null ]
+    [ python@3.10, brew, null ]
+    [ python@3.11, brew, null ]
+    [ qmk/qmk, tap, null ]
+    [ qmk/qmk/qmk, brew, null ]
+    [ rargs, brew, null ]
+    [ reattach-to-user-namespace, brew, null ]
+    [ rg, brew, null ]
+    [ ripgrep, brew, null ]
+    [ rsteube/tap, tap, null ]
+    [ rsteube/tap/carapace, brew, null ]
+    [ spotify, cask, null ]
+    [ starship, brew, null ]
+    [ stylua, brew, null ]
+    [ tcl-tk, brew, null ]
+    [ tmux, brew, null ]
+    [ todoist, cask, null ]
+    [ unbound, brew, null ]
+    [ vivid, brew, null ]
+    [ volta, brew, null ]
+    [ wakatime-cli, brew, null ]
+    [ watch, brew, null ]
+    [ whatsapp, cask, null ]
+    [ codethread/dotty, tap, null ]
+  ]
+}
