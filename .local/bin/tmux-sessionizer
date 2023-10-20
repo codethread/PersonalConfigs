@@ -1,7 +1,0 @@
-#!/usr/bin/env nu
-
-use ct/tmux
-
-def main [x?: int] {
-   tmux sessionizer $x
-}
