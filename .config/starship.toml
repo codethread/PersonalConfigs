@@ -1,4 +1,5 @@
 command_timeout = 750
+add_newline = false
 
 [aws]
 symbol = "  "
