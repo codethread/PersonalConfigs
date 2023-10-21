@@ -2,15 +2,11 @@
   menus:   {
     home: [
       core,
-      demo
     ],
     work: [
       core,
       docker
     ],
-    simple: [
-      core
-    ]
   }
   cocktails:   {
     core: [
@@ -23,9 +19,6 @@
     docker: [
       podman
     ],
-    demo: [
-  
-    ]
   }
   drinks: [
     [ name, type, flags ];
@@ -109,6 +102,6 @@
     [ wakatime-cli, brew, null ]
     [ watch, brew, null ]
     [ whatsapp, cask, null ]
-    [ codethread/dotty, tap, null ]
+    [ wget, brew, null ]
   ]
 }
