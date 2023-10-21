@@ -1,4 +1,10 @@
 {
+  dirs: [
+    ~/
+    ~/dev ~/dev/exercism ~/dev/projects ~/dev/learn ~/dev/vendor
+    ~/work ~/work/services ~/work/lambdas ~/work/utilities
+    ~/.local/share/nvim/lazy ~/.local/share/nvim/mason/packages
+  ]
   base: [
     [key, name];
     [ P0, "~/dev/projects/qmk_firmware/keyboards/preonic/keymaps/codethread"]
@@ -6,7 +12,7 @@
   personal: [ 
     [key, name];
     [ P2, "~/dev/projects/qmk.nvim", ]
-    [ P3, "~/dev/projects/tstl-prelude", ]
+    [ P3, "~/dev/projects/nudes", ]
     [ P4, "~/dev/learn/rust-playground", ]
     [ P5, "~/dev/projects/cold-brew", ]
   ],
