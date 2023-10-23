@@ -21,11 +21,7 @@ $env.CT_USER = (match (whoami) {
 $env.PATH = (path-prepend "/opt/homebrew/sbin")
 $env.PATH = (path-prepend "/opt/homebrew/bin")
 
-$env.HOMEBREW_BUNDLE_FILE = match $env.CT_USER {
-  "home" => "~/.config/cold-brew/Brewfile.home.conf",
-  "work" => "~/.config/cold-brew/Brewfile.work.conf",
-  _ => "~/.config/cold-brew/Brewfile.basic.conf",
-}
+$env.HOMEBREW_BUNDLE_FILE = ("~/.local/data/Brewfile.conf" | path expand)
 
 $env.HOMEBREW_CELLAR = "/opt/homebrew/Cellar"
 $env.HOMEBREW_PREFIX = "/opt/homebrew"
@@ -101,7 +97,7 @@ $env.ENV_CONVERSIONS = {
 }
 
 # Directories to search for scripts when calling source or use
-$env.NU_LIB_DIRS = [
+const NU_LIB_DIRS = [
     ($nu.default-config-dir | path join "scripts")
     ("~/dev/projects/nudes" | path expand)
     ("~/workfiles/nu" | path expand)

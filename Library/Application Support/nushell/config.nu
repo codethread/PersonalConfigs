@@ -1,5 +1,6 @@
 $env.config = {
   show_banner: false,
+  keybindings: [], # needed for atuin to not blow up
 }
 
 const has_nudes = ("~/dev/projects/nudes" | path expand | path exists)

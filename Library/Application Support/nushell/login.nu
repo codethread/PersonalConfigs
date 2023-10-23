@@ -2,10 +2,6 @@ alias open = ^open
 alias p = ^p
 alias als = scope aliases
 
-$env.config = {
-  keybindings: [], # needed for atuin to not blow up
-}
-
 const has_nudes = ("~/dev/projects/nudes" | path expand | path exists)
 
 const atuin = ("~/.local/share/atuin/init.nu" | path expand)
