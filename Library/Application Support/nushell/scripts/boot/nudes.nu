@@ -1,4 +1,4 @@
-const nudes_repo = "https://github.com/codethread/nudes"
+const nudes_repo = "git@github.com:codethread/nudes.git"
 const install_dir = "~/dev/projects/nudes"
 
 print $"(ansi yellow)No nudes detected(ansi reset)!
