@@ -11,22 +11,25 @@
       temp
     ],
     work: [
+      work,
       core,
       node,
       mac,
       nu,
-      docker
+      docker,
+      aws
     ]
   }
   cocktails:   {
     core: [
-      fd,
-      rg,
+      "1password",
+      atuin,
       bat,
       codethread/homebrew-dotty,
+      codethread/homebrew-dotty,
+      dotty
       dotty,
-      atuin,
-      "1password",
+      fd,
       font-fira-code-nerd-font,
       fzf,
       go,
@@ -35,14 +38,18 @@
       kitty,
       logseq,
       neovim,
+      rg,
       starship,
       stylua,
       tmux,
+      tokei,
       wakatime-cli,
-      watch
+      watch,
     ],
     node: [
-      volta
+      volta,
+      watchman,
+      pnpm
     ],
     keyboard: [
       qmk/qmk,
@@ -56,8 +63,29 @@
       discord,
       whatsapp
     ],
+    work: [
+      "k6",
+      google-drive
+      grpcui,
+      grpcurl,
+      joemiller/taps,
+      joemiller/taps/vault-token-helper,
+      protoc-gen-go,
+      protoc-gen-go-grpc,
+      thanos,
+      vault,
+      visual-studio-code,
+      zoom,
+    ],
     docker: [
-      podman
+      podman-desktop
+    ],
+    ruby: [
+      ruby
+    ],
+    aws: [
+      weaveworks/tap,
+      weaveworks/tap/eksctl
     ],
     lua: [
       entr,
@@ -67,18 +95,24 @@
       rsteube/tap,
       rsteube/tap/carapace
     ],
+    rust: [
+      rustup-init
+    ],
     zsh: [
-      exa,
-      getantibody/tap,
       antibody,
       dust,
+      exa,
       gawk,
+      getantibody/tap,
       gnu-sed,
       gnu-tar,
       gnutls,
       htop,
       rargs,
-      vivid
+      shellcheck,
+      tree,
+      vivid,
+      zsh-autosuggestions
     ],
     temp: [
       "iterm2"
@@ -89,10 +123,12 @@
     [ 1password, cask, null ]
     [ alfred, cask, null ]
     [ antibody, brew, null ]
+    [ aspell, brew, null ]
     [ atuin, brew, null ]
+    [ awscli, brew, null ]
     [ bat, brew, null ]
-    [ codethread/homebrew-dotty, tap, null ]
-    [ dotty, brew, null ]
+    [ cocoapods, brew, null ]
+    [ coreutils, brew, null ]
     [ d12frosted/emacs-plus, tap, null ]
     [ discord, cask, null ]
     [ dozer, cask, null ]
@@ -114,19 +150,34 @@
     [ gnutls, brew, null ]
     [ go, brew, null ]
     [ google-chrome, cask, null ]
+    [ google-drive, cask, null ]
     [ goreleaser/tap, tap, null ]
+    [ grpcui, brew, null ]
+    [ grpcurl, brew, null ]
     [ homebrew/bundle, tap, null ]
     [ homebrew/cask-fonts, tap, null ]
     [ htop, brew, null ]
-    [ jc, brew, null ]
+    [ iterm2, cask, null ]
+    [ joemiller/taps, tap, null ]
+    [ joemiller/taps/vault-token-helper, brew, null ]
     [ jq, brew, null ]
+    [ k6, brew, null ]
     [ kitty, cask, null ]
     [ logseq, cask, null ]
     [ luarocks, brew, null ]
+    [ mkcert, brew, null ]
+    [ mysql, brew, null ]
     [ neovim, brew, null ]
-    [ podman, brew, null ]
+    [ osx-cross/arm, tap, null ]
+    [ osx-cross/avr, tap, null ]
+    [ pnpm, brew, null ]
+    [ podman-desktop, cask, null ]
     [ procs, brew, null ]
+    [ protoc-gen-go, brew, null ]
+    [ protoc-gen-go-grpc, brew, null ]
+    [ python@3.10, brew, null ]
     [ python@3.11, brew, null ]
+    [ python@3.9, brew, null ]
     [ qmk/qmk, tap, null ]
     [ qmk/qmk/qmk, brew, null ]
     [ rargs, brew, null ]
@@ -135,19 +186,30 @@
     [ ripgrep, brew, null ]
     [ rsteube/tap, tap, null ]
     [ rsteube/tap/carapace, brew, null ]
+    [ ruby, brew, null ]
+    [ rustup-init, brew, null ]
+    [ shellcheck, brew, null ]
     [ spotify, cask, null ]
     [ starship, brew, null ]
     [ stylua, brew, null ]
-    [ tcl-tk, brew, null ]
+    [ thanos, brew, null ]
     [ tmux, brew, null ]
-    [ todoist, cask, null ]
-    [ unbound, brew, null ]
+    [ tokei, brew, null ]
+    [ tree, brew, null ]
+    [ vault, brew, null ]
+    [ visual-studio-code, cask, null ]
     [ vivid, brew, null ]
     [ volta, brew, null ]
     [ wakatime-cli, brew, null ]
     [ watch, brew, null ]
-    [ whatsapp, cask, null ]
+    [ watchman, brew, null ]
+    [ weaveworks/tap, tap, null ]
+    [ weaveworks/tap/eksctl, brew, null ]
     [ wget, brew, null ]
-    [ iterm2, cask, null ]
+    [ whatsapp, cask, null ]
+    [ zoom, cask, null ]
+    [ zsh-autosuggestions, brew, null ]
+    [ codethread/homebrew-dotty, tap, null ]
+    [ dotty, brew, null ]
   ]
 }
