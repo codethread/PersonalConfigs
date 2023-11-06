@@ -7,7 +7,9 @@
   ]
   base: [
     [key, name];
-    [ P0, "~/dev/projects/qmk_firmware/keyboards/preonic/keymaps/codethread"]
+    [ P0, "~/dev/projects/nudes"]
+    [ Px, "~/dev/projects/qmk_firmware/keyboards/preonic/keymaps/codethread"]
+    [ Px, "~/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents"]
   ]
   personal: [ 
     [key, name];
