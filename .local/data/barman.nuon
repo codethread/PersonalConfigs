@@ -17,7 +17,8 @@
       mac,
       nu,
       docker,
-      aws
+      aws,
+      rust
     ]
   }
   cocktails:   {
@@ -27,7 +28,7 @@
       bat,
       codethread/homebrew-dotty,
       codethread/homebrew-dotty,
-      dotty
+      dotty,
       dotty,
       fd,
       font-fira-code-nerd-font,
@@ -44,7 +45,7 @@
       tmux,
       tokei,
       wakatime-cli,
-      watch,
+      watch
     ],
     node: [
       volta,
@@ -65,7 +66,7 @@
     ],
     work: [
       "k6",
-      google-drive
+      google-drive,
       grpcui,
       grpcurl,
       joemiller/taps,
@@ -85,7 +86,8 @@
     ],
     aws: [
       weaveworks/tap,
-      weaveworks/tap/eksctl
+      weaveworks/tap/eksctl,
+      awscli
     ],
     lua: [
       entr,

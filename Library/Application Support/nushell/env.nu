@@ -43,10 +43,10 @@ $env.DOTTY = (match $env.CT_USER {
   _      => ["~/PersonalConfigs" $nu.home-path],
   } | path expand | str join ":")
 
-$env.RUSTFLAGS = (match $env.CT_USER {
-  "work" => "-C link-arg=-fuse-ld=/opt/homebrew/opt/llvm/bin/ld64.lld"
-  _ => ""
-})
+# $env.RUSTFLAGS = (match $env.CT_USER {
+#   "work" => "-C link-arg=-fuse-ld=/opt/homebrew/opt/llvm/bin/ld64.lld"
+#   _ => ""
+# })
 
 $env.EDITOR = "nvim"
 $env.SHELL = ("~/nu/nu" | path expand)
