@@ -17,6 +17,7 @@
     [ P3, "~/dev/projects/nudes", ]
     [ P4, "~/dev/learn/rust-playground", ]
     [ P5, "~/dev/projects/cold-brew", ]
+    [ P9, `~/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents` ]
   ],
   work: [ 
     [key, name];
