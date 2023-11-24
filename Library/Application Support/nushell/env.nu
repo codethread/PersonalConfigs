@@ -36,6 +36,10 @@ $env.PATH = (path-prepend "~/.local/bin")
 
 $env.PATH = (path-prepend "~/.cargo/bin")
 
+# ruby for gem install on m1 mac for react native
+$env.PATH = (path-prepend "/opt/homebrew/opt/ruby@3.1/bin")
+$env.PATH = (path-prepend "/opt/homebrew/lib/ruby/gems/3.1.0/bin")
+
 $env.DOTFILES = (home PersonalConfigs)
 
 $env.DOTTY = (match $env.CT_USER {

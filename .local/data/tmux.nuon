@@ -22,7 +22,7 @@
   work: [ 
     [key, name];
     [ P2 , "~/work/deals-light-ui", ]
-    [ P3 , "~/work/services/reporting-app", ]
+    [ P3 , "~/work/fe-native", ]
     [ P4 , "~/work/inspect-my-package", ]
     [ P5 , "~/work/fe-review", ]
 

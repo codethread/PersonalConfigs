@@ -18,7 +18,8 @@
       nu,
       docker,
       aws,
-      rust
+      rust,
+      react-native
     ]
   }
   cocktails:   {
@@ -45,7 +46,8 @@
       tmux,
       tokei,
       wakatime-cli,
-      watch
+      watch,
+      gsed
     ],
     node: [
       volta,
@@ -77,12 +79,16 @@
       vault,
       visual-studio-code,
       zoom,
+      ical-buddy,
+      podman,
+      glab
     ],
     docker: [
       podman-desktop
     ],
-    ruby: [
-      ruby
+    react-native: [
+      rbenv,
+      "ruby@3.1"
     ],
     aws: [
       weaveworks/tap,
@@ -188,7 +194,6 @@
     [ ripgrep, brew, null ]
     [ rsteube/tap, tap, null ]
     [ rsteube/tap/carapace, brew, null ]
-    [ ruby, brew, null ]
     [ rustup-init, brew, null ]
     [ shellcheck, brew, null ]
     [ spotify, cask, null ]
@@ -213,5 +218,11 @@
     [ zsh-autosuggestions, brew, null ]
     [ codethread/homebrew-dotty, tap, null ]
     [ dotty, brew, null ]
+    [ ical-buddy, brew, null ]
+    [ gsed, brew, null ]
+    [ podman, brew, null ]
+    [ rbenv, brew, null ]
+    [ ruby@3.1, brew, null ]
+    [ glab, brew, null ]
   ]
 }
