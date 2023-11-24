@@ -1,0 +1,7 @@
+[
+  [ name,      type, flags, cocktails ];
+  [ 1password, cask, null, null  ]
+  [ alfred,    cask, null, [foo bar] ]
+  [ antibody,  brew, null, [foo] ]
+  [ antibody,  brew, null, [baz] ]
+]
