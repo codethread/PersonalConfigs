@@ -76,13 +76,11 @@
   "window.restoreWindows": "all",
   "window.title": "${rootName}${separator}${activeEditorMedium}",
   "window.titleBarStyle": "custom",
-
-  "workbench.activityBar.visible": false,
   "workbench.statusBar.visible": true,
   "workbench.editor.enablePreview": false,
   "workbench.editor.labelFormat": "short",
   "workbench.editor.openPositioning": "last",
-  "workbench.editor.showTabs": false,
+  "workbench.editor.showTabs": "single",
   "workbench.editor.enablePreviewFromQuickOpen": false,
   /** this is the default, but I can't decide if I like this or not */
   "workbench.editor.revealIfOpen": false,
@@ -302,5 +300,6 @@
   "nushellLanguageServer.includeDirs": [
     "~/PersonalConfigs/Library/Application Support/nushell/scripts"
   ],
-  "nushellLanguageServer.hints.showInferredTypes": false
+  "nushellLanguageServer.hints.showInferredTypes": false,
+  "workbench.activityBar.location": "hidden"
 }

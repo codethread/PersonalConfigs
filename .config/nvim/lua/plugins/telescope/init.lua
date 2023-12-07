@@ -13,6 +13,10 @@ return {
 				TelescopeSelection = { fg = 'text', bg = 'surface' },
 				TelescopeSelectionCaret = { fg = 'rose', bg = 'rose' },
 			},
+			{
+				'nvim-telescope/telescope-live-grep-args.nvim',
+				version = '^1.0.0',
+			},
 		},
 		keys = {
 			{ '<leader><leader>', '<cmd>Telescope find_files<cr>', desc = 'Files' },
@@ -142,6 +146,8 @@ return {
 			})
 
 			telescope.setup(options)
+
+			telescope.load_extension 'live_grep_args'
 
 			-- WIP
 			--[[ local function ts_word()

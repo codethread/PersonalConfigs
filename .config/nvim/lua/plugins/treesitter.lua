@@ -32,23 +32,21 @@ return {
             -- stylua: ignore
             ensure_installed = vim.tbl_flatten {
                 -- scripting
-                { 'awk',     'bash',    'jq',       'python' },
-                -- lang
-                { 'c',       'rust',    'go',       'gomod',           'scala', 'haskell', },
-                -- misc
-                { 'comment', 'todotxt', 'markdown', 'markdown_inline', 'query', 'regex', },
-                --web
-                { 'css', 'scss', 'html', 'jsdoc', 'javascript', 'typescript',
-                    'tsx',
-                    'graphql', },
-                -- webish
-                { 'embedded_template', 'http',       'prisma',        'proto',    'svelte' },
-                -- config
-                { 'dockerfile',        'json',       'json5',         'jsonc',    'make',  'toml', 'yaml', },
-                -- git
-                { 'diff',              'git_rebase', 'gitattributes', 'gitcommit' },
-                -- vim
-                { 'vim',               'vimdoc',     'lua',           'luadoc',   'luap', },
+				{ 'awk','bash','jq','python' },
+				-- lang
+				{ 'c','rust','go','gomod','scala','haskell' },
+				-- misc
+				{ 'comment','todotxt','markdown','markdown_inline','query','regex' },
+				--web
+				{ 'css','scss','html','jsdoc','javascript','typescript','tsx','graphql' },
+				-- webish
+				{ 'embedded_template','http','prisma','proto','svelte' },
+				-- config
+				{ 'dockerfile','json','json5','jsonc','make','toml','yaml' },
+				-- git
+				{ 'diff','git_rebase','gitattributes','gitcommit' },
+				-- vim
+				{ 'vim','vimdoc','lua','luadoc','luap' },
             },
 		},
 		---@param opts TSConfig
@@ -123,6 +121,7 @@ return {
 		opts = {
 			autotag = {
 				enable = true,
+				enable_close_on_slash = false, -- till https://github.com/aca/emmet-ls/issues/69 is resolved
 			},
 		},
 	},

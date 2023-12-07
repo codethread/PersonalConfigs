@@ -37,15 +37,8 @@ return {
 				['/'] = { Cmd 'Telescope search_history', '/ [hist]' },
 				['q'] = { Cmd 'w | luafile %', 'Reload Luafile' },
 
-				-- buffers, buffer
 				b = {
-					name = 'Buffers',
-					b = { [[<C-^>]], 'Toggle' },
-					l = { Cmd 'Telescope buffers', 'list' },
-					r = { Cmd 'Telescope oldfiles', 'recent' },
-					k = { Cmd 'Bdelete', 'kill' },
-					s = { Cmd 'w', 'Save' },
-					u = { function() require('codethread.pickers').unsaved() end, 'Unsaved' },
+					name = '...',
 				},
 
 				e = { name = 'Errors' },
@@ -63,9 +56,15 @@ return {
 				--   '🐉 Debug',
 				-- },
 
+				-- files, buffers, buffer
 				f = {
-					name = 'Fold?',
-					f = { 'za', 'toggle' },
+					name = 'Buffer',
+					b = { [[<C-^>]], 'Toggle' },
+					l = { Cmd 'Telescope buffers', 'list' },
+					r = { Cmd 'Telescope oldfiles', 'recent' },
+					k = { Cmd 'Bdelete', 'kill' },
+					s = { Cmd 'w', 'Save' },
+					u = { function() require('codethread.pickers').unsaved() end, 'Unsaved' },
 				},
 
 				j = {
@@ -180,8 +179,13 @@ return {
 					R = { Cmd 'Telescope registers', 'Registers' },
 					k = { Cmd 'Telescope keymaps', 'Keymaps' },
 					C = { Cmd 'Telescope commands', 'Commands' },
-					p = { Cmd 'Telescope live_grep', 'Live Grep' },
-					w = { Cmd 'Telescope grep_string', 'Word' },
+					p = { Cmd 'Telescope live_grep_args', 'Live Grep' },
+					w = {
+						function()
+							require('telescope-live-grep-args.shortcuts').grep_word_under_cursor()
+						end,
+						'Word',
+					},
 					l = { Cmd 'Telescope lsp_document_symbols', 'Symbol' },
 					L = { ':Telescope lsp_workspace_symbols query=', 'Global Symbols' },
 					s = { Cmd 'Spectre', 'Spectre' },
@@ -220,6 +224,22 @@ return {
 			wk.setup(opts)
 			wk.register(opts.defaults, {
 				mode = 'n', -- NORMAL mode
+				prefix = '<leader>',
+				buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
+				silent = true, -- use `silent` when creating keymaps
+				noremap = true, -- use `noremap` when creating keymaps
+				nowait = true, -- use `nowait` when creating keymaps
+			})
+
+			wk.register({
+				s = {
+					function()
+						require('telescope-live-grep-args.shortcuts').grep_visual_selection()
+					end,
+					'search',
+				},
+			}, {
+				mode = 'v',
 				prefix = '<leader>',
 				buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
 				silent = true, -- use `silent` when creating keymaps

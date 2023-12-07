@@ -1,4 +1,6 @@
 return {
+	'DanilaMihailov/beacon.nvim',
+	'farmergreg/vim-lastplace',
 
 	{
 		'famiu/bufdelete.nvim',
@@ -38,9 +40,12 @@ return {
 		end,
 	},
 
-	os.getenv 'WAKATIME_HOME'
-			and { 'wakatime/vim-wakatime', event = { 'BufReadPre', 'BufNewFile' }, version = '9.*' }
-		or {},
+	{
+		'wakatime/vim-wakatime',
+		cond = os.getenv 'WAKATIME_HOME',
+		event = { 'BufReadPre', 'BufNewFile' },
+		version = '9.*',
+	},
 
 	{
 		'AndrewRadev/bufferize.vim',
@@ -51,21 +56,67 @@ return {
 	},
 
 	{
-		-- better quickfix
-		'kevinhwang91/nvim-bqf',
-		init = function()
-			-- vim.cmd [[
-			-- 	nnoremap < :cprevious<CR>
-			-- 	nnoremap > :cnext<CR>
-			-- ]]
-			--
-			-- U.keys('quickfix', {
-			-- 	{
-			-- 		'>', function ()
-			-- 			require('qf.')
-			-- 		end
-			-- 	}
-			-- })
+		-- store clipboard for easy recall
+		'telescope.nvim',
+		dependencies = {
+			'AckslD/nvim-neoclip.lua',
+			keys = {
+				{ '<leader>sy', Cmd 'Telescope neoclip', desc = 'Neoclip' },
+			},
+			config = function()
+				require('neoclip').setup()
+				require('telescope').load_extension 'neoclip'
+			end,
+		},
+	},
+
+	{ -- find/replace
+		'windwp/nvim-spectre',
+		build = 'brew install gnu-sed',
+		cmd = 'Spectre',
+		opts = {
+			default = {
+				find = {
+					options = {
+						'ignore-case',
+						'hidden',
+					},
+				},
+			},
+		},
+	},
+
+	{
+		'windwp/nvim-autopairs',
+		event = 'InsertEnter',
+		config = function()
+			local _, npairs = pcall(require, 'nvim-autopairs')
+			npairs.setup {
+				check_ts = true,
+				ts_config = {
+					lua = { 'string', 'source' },
+					javascript = { 'string', 'template_string' },
+					java = false,
+				},
+				disable_filetype = { 'TelescopePrompt', 'spectre_panel' },
+				disable_in_macro = true,
+				fast_wrap = {
+					map = '<M-e>',
+					chars = { '{', '[', '(', '"', "'" },
+					pattern = string.gsub([[ [%'%"%)%>%]%)%}%,] ]], '%s+', ''),
+					offset = 0, -- Offset from pattern match
+					end_key = '$',
+					keys = 'qwertyuiopzxcvbnmasdfghjkl',
+					check_comma = true,
+					highlight = 'PmenuSel',
+					highlight_grey = 'LineNr',
+				},
+			}
+
+			local cmp_autopairs = require 'nvim-autopairs.completion.cmp'
+			local cmp_status_ok, cmp = pcall(require, 'cmp')
+			if not cmp_status_ok then return end
+			cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done { map_char = { tex = '' } })
 		end,
 	},
 }

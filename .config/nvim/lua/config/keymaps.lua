@@ -17,16 +17,6 @@ U.keymap('n', 'ZQ', '<cmd>qa!<cr>') -- default is q!
 
 U.keymap('n', '<M-s>', '<cmd>w<cr>') -- alt or cmd on macos (terminal dependent, works with kitty)
 
-U.keymap('n', '<C-q>', function()
-	for _, win in ipairs(vim.api.nvim_tabpage_list_wins(vim.api.nvim_get_current_tabpage())) do
-		if vim.fn.getwinvar(win, '&syntax') == 'qf' then
-			vim.cmd.cclose()
-			return
-		end
-	end
-	vim.cmd.copen()
-end, 'toggle quickfix')
-
 local function is_github_link(w)
 	local bits = vim.split(w, '/')
 	return #bits == 2
