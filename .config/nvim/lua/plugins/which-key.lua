@@ -71,9 +71,9 @@ return {
 					name = 'Test',
 					j = {
 						function()
-							local ft = vim.ct.ft()
+							local ft = U.ft()
 							if ft == 'lua' then
-								vim.Cmd 'w'
+								vim.cmd 'w'
 								-- require('plenary.test_harness').test_directory(vim.fn.expand '%:p')
 								require('plenary.test_harness').test_directory(
 									vim.fn.expand '%:p',
@@ -85,7 +85,8 @@ return {
 								local jest = require 'jester'
 								jest.run_last { path_to_jest = './node_modules/bin/jest' }
 							elseif ft == 'go' then
-								vim.Cmd.GoTestFunc()
+								-- vim.Cmd.GoTestFunc()
+								vim.cmd.GoTestSubCase()
 							else
 								print('no setup for filetype: ' .. ft)
 							end

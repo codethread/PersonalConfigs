@@ -49,6 +49,13 @@ return {
 						-- map <leader>ld :%s/.*console.log.*\n//g<CR>
 					end)
 					require('typescript').setup { server = opts }
+					U.keys('typescript', {
+						{
+							'cc',
+							Cmd '%g/console/norm dd',
+							'Clear logs',
+						},
+					})
 					return true
 				end,
 			},

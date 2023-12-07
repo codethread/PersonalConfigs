@@ -22,10 +22,11 @@
   work: [ 
     [key, name];
     [ P2 , "~/work/deals-light-ui", ]
-    [ P3 , "~/work/fe-native", ]
-    [ P4 , "~/work/inspect-my-package", ]
-    [ P5 , "~/work/fe-review", ]
+    [ P3 , "~/work/fe-review", ]
+    [ P4 , "~/work/services/flexi-points-app", ]
+    [ P5 , "~/work/fe-native", ]
 
+    [ P7 , "~/work/inspect-my-package", ]
     [ P8 , "~/workfiles", ]
     [ P9 , "~/work/services/protobuf", ]
   ]
