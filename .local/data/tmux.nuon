@@ -14,7 +14,7 @@
   personal: [ 
     [key, name];
     [ P2, "~/dev/projects/qmk.nvim", ]
-    [ P3, "~/dev/projects/pomo-electron", ]
+    [ P3, "~/dev/projects/pomo-tauri", ]
     [ P4, "~/dev/learn/rust-playground", ]
     [ P5, "~/dev/projects/cold-brew", ]
     [ P9, `~/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents` ]
