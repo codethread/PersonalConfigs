@@ -110,13 +110,18 @@ return {
 
 					-- these are lua patterns
 					file_ignore_patterns = U.flatten {
-						{ '^.git/', '^.yarn/', '/vendor/', '%.lock' },
-						U.project('~/work/deals-light-ui', {
-							'^e2e',
-							'^ios',
-							'^android',
-							'packages/irati/irati/braze/services/sdk',
-						}),
+						{
+							-- '^.git/',
+							-- '^.yarn/',
+							-- '/vendor/',
+							-- '%.lock',
+						},
+						-- U.project('~/work/deals-light-ui', {
+						-- 	'^e2e',
+						-- 	'^ios',
+						-- 	'^android',
+						-- 	'packages/irati/irati/braze/services/sdk',
+						-- }),
 						U.project('~/dev/projects/qmk.nvim', { 'lua/qmk/lib/' }),
 					},
 					vimgrep_arguments = {
@@ -132,9 +137,16 @@ return {
 				},
 				pickers = {
 					find_files = {
-						hidden = true,
-						-- TODO: rg is actually faster at finding files!
-						find_command = { 'fd', '--type', 'f', '--strip-cwd-prefix' },
+						-- hidden = true,
+						-- find_command = { 'fd', '--type', 'f', '--strip-cwd-prefix' },
+						-- rg is actually faster at finding files!
+						find_command = {
+							'rg',
+							'--hidden',
+							'--glob',
+							'!.git',
+							'--files',
+						},
 					},
 					live_grep = {
 						hidden = true,
