@@ -38,6 +38,7 @@ return {
 				init = function()
 					-- vim.g.navic_silence = true
 					U.lsp_attach('*', function(client, buffer)
+						if client.name == 'tsserver' then return end
 						if client.server_capabilities.documentSymbolProvider then
 							require('nvim-navic').attach(client, buffer)
 						end

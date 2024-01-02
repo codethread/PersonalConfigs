@@ -2,6 +2,7 @@ return {
 	-- U.tools_null { 'prettierd' },
 	{
 		'neovim/nvim-lspconfig',
+		enabled = false, -- deprecate in favour of typescript-tools
 		dependencies = { 'jose-elias-alvarez/typescript.nvim' },
 		opts = {
 			-- make sure mason installs the server

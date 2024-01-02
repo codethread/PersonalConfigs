@@ -1,6 +1,7 @@
 return U.flatten {
 	require 'plugins.lang.go',
-	require 'plugins.lang.typescript',
+	-- require 'plugins.lang.typescript',
+	require 'plugins.lang.typescript-tools',
 	require 'plugins.lang.rust',
 
 	{
