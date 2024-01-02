@@ -4,6 +4,7 @@
     ~/dev ~/dev/exercism ~/dev/projects ~/dev/learn ~/dev/vendor
     ~/work ~/work/services ~/work/lambdas ~/work/utilities
     ~/.local/share/nvim/lazy ~/.local/share/nvim/mason/packages
+    `~/Library/Mobile Documents/com~apple~CloudDocs/Books/The_DynamoDB_Book_-_Plus_Package/Code examples`
   ]
   base: [
     [key, name];

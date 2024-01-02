@@ -1,0 +1,13 @@
+#!/usr/bin/env nu
+
+# if nushell runs (maybe background) when a `config.nu` doesn't exist, then it will create a default one. This puts things back
+
+let conf = ($nu.config-path)
+let ev = ($nu.env-path)
+
+print $"removing ($conf)"
+print $"removing ($ev)"
+
+zsh -c $"rm '($conf)' && rm '($ev)'"
+
+/opt/homebrew/bin/dotty setup

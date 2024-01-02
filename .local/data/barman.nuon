@@ -93,7 +93,9 @@
     aws: [
       weaveworks/tap,
       weaveworks/tap/eksctl,
-      awscli
+      awscli,
+      cargo-lambda/cargo-lambda,
+      cargo-lambda
     ],
     lua: [
       entr,
@@ -224,5 +226,7 @@
     [ rbenv, brew, null ]
     [ ruby@3.1, brew, null ]
     [ glab, brew, null ]
+    [ cargo-lambda/cargo-lambda, tap, null ]
+    [ cargo-lambda, brew, null ]
   ]
 }

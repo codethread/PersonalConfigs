@@ -2,8 +2,7 @@
 
 # This is the bootstrap Unix installer for nushell adapted from `https://get.volta.sh`.
 # Its responsibility is to query the system to determine what OS the system
-# has, fetch and install the appropriate build of nushell, and modify the user's
-# profile.
+# has, fetch and install the appropriate build of nushell
 
 get_latest_release() {
 	curl --silent https://api.github.com/repos/nushell/nushell/releases/latest | awk -F\" '/tag_name/{print $(NF-1)}'
