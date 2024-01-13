@@ -19,7 +19,8 @@
       docker,
       aws,
       rust,
-      react-native
+      react-native,
+      obsidian
     ]
   }
   cocktails:   {
@@ -47,7 +48,8 @@
       tokei,
       wakatime-cli,
       watch,
-      gsed
+      gsed,
+      tree
     ],
     node: [
       volta,
@@ -81,7 +83,8 @@
       zoom,
       ical-buddy,
       podman,
-      glab
+      glab,
+      obs
     ],
     docker: [
       podman-desktop
@@ -126,6 +129,9 @@
     ],
     temp: [
       "iterm2"
+    ],
+    obsidian: [
+      pngpaste
     ]
   }
   drinks: [
@@ -228,5 +234,7 @@
     [ glab, brew, null ]
     [ cargo-lambda/cargo-lambda, tap, null ]
     [ cargo-lambda, brew, null ]
+    [ pngpaste, brew, null ]
+    [ obs, cask, null ]
   ]
 }
