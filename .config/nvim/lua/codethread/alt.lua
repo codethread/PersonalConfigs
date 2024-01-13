@@ -9,6 +9,10 @@ local heuristics = {
 	['go'] = {
 		handler = function() require('go.alternate').switch(false, '') end,
 	},
+	['typescriptreact'] = {
+		implementation = '.tsx',
+		test = '.spec.tsx',
+	},
 }
 
 -- local alt_map = {

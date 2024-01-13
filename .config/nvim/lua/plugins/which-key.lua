@@ -61,6 +61,7 @@ return {
 					name = 'Buffer',
 					b = { [[<C-^>]], 'Toggle' },
 					l = { Cmd 'Telescope buffers', 'list' },
+					f = { function() require('codethread.split').split() end, 'Split last' },
 					r = { Cmd 'Telescope oldfiles', 'recent' },
 					k = { Cmd 'Bdelete', 'kill' },
 					s = { Cmd 'w', 'Save' },

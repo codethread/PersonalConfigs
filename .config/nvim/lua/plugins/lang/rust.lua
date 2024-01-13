@@ -18,20 +18,32 @@ return {
 
 				rt.inlay_hints.enable()
 
-				vim.api.nvim_create_autocmd({ 'BufWritePost', 'BufEnter', 'CursorHold', 'InsertLeave' }, {
-					buffer = bufnr,
-					callback = function() vim.lsp.codelens.refresh() end,
-				})
+				vim.api.nvim_create_autocmd(
+					{ 'BufWritePost', 'BufEnter', 'CursorHold', 'InsertLeave' },
+					{
+						buffer = bufnr,
+						callback = function() vim.lsp.codelens.refresh() end,
+					}
+				)
 			end)
 
 			U.keys('rust', {
 				{ 'h', Lua "require('rust-tools').hover_actions.hover_actions()", 'hover actions' },
-				{ 'a', Lua "require('rust-tools').code_action_group.code_action_group()", 'code actions' },
+				{
+					'a',
+					Lua "require('rust-tools').code_action_group.code_action_group()",
+					'code actions',
+				},
 				{ 'l', function() vim.lsp.codelens.run() end, 'Code Lens' },
 				{ 'e', Cmd 'RustRunnables', 'Runnables' },
 				{ 'd', Cmd 'RustDebuggables', 'Runnables' },
 				{ 't', Cmd 'Cargo test', 'Cargo test' },
 				{ 'R', Cmd 'Cargo run', 'Cargo run' },
+				{
+					'cc',
+					Cmd '%g/println/norm dd',
+					'Clear logs',
+				},
 			})
 		end,
 		opts = {
@@ -60,7 +72,10 @@ return {
 						},
 						server = opts,
 						dap = {
-							adapter = require('rust-tools.dap').get_codelldb_adapter(codelldb_path, liblldb_path),
+							adapter = require('rust-tools.dap').get_codelldb_adapter(
+								codelldb_path,
+								liblldb_path
+							),
 						},
 					}
 
@@ -87,7 +102,11 @@ return {
 						{ 'p', Lua "require'crates'.show_popup()", 'Show Popup' },
 						{ 'i', Lua "require'crates'.show_crate_popup()", 'Show Info' },
 						{ 'f', Lua "require'crates'.show_features_popup()", 'Show Features' },
-						{ 'd', Lua "require'crates'.show_dependencies_popup()", 'Show Dependencies' },
+						{
+							'd',
+							Lua "require'crates'.show_dependencies_popup()",
+							'Show Dependencies',
+						},
 					})
 				end,
 			})
