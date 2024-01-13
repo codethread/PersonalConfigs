@@ -82,11 +82,14 @@ return {
 	{
 		'rose-pine/neovim',
 		name = 'rose-pine',
+		version = 'v2.*',
 		priority = 1000,
 		lazy = false,
 		opts = {
 			variant = 'moon',
 			-- calls to nvim_set_hl()
+			dim_inactive_windows = true,
+			-- extend_background_behind_borders = true,
 			highlight_groups = {
 				NonText = { fg = 'base' }, -- end ~
 				ColorColumn = { bg = 'rose' },

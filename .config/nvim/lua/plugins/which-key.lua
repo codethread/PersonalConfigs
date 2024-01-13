@@ -192,6 +192,11 @@ return {
 					s = { Cmd 'Spectre', 'Spectre' },
 				},
 
+				n = {
+					name = 'notes',
+					n = { Cmd 'ObsidianToday', 'Notes' },
+				},
+
 				-- open, Open, openers, Openers
 				o = {
 					name = 'Open',

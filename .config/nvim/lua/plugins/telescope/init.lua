@@ -111,8 +111,8 @@ return {
 					-- these are lua patterns
 					file_ignore_patterns = U.flatten {
 						{
-							-- '^.git/',
-							-- '^.yarn/',
+							'^.git/',
+							'^.yarn/',
 							-- '/vendor/',
 							-- '%.lock',
 						},
@@ -150,6 +150,10 @@ return {
 					},
 					live_grep = {
 						hidden = true,
+						glob_pattern = '!.git',
+					},
+					live_grep_args = {
+						glob_pattern = '!.git',
 					},
 					diagnostics = {
 						path_display = 'hidden',

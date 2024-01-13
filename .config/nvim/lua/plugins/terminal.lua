@@ -3,41 +3,45 @@ return {
 		'akinsho/toggleterm.nvim',
 		version = 'v2.*',
 		cmd = 'ToggleTerm',
-		opts = {
-			-- size can be a number or function which is passed the current terminal
-			shell = 'nu',
-			size = function(term)
-				if term.direction == 'horizontal' then
-					return 15
-				elseif term.direction == 'vertical' then
-					return vim.o.columns * 0.4
-				end
-			end,
-			open_mapping = [[<C-\>]],
-			hide_numbers = true, -- hide the number column in toggleterm buffers
-			start_in_insert = true,
-			insert_mappings = true, -- whether or not the open mapping applies in insert mode
-			terminal_mappings = true, -- whether or not the open mapping applies in the opened terminals
-			persist_size = true,
-			direction = 'horizontal',
-			close_on_exit = false, -- close the terminal window when the process exits
-			highlights = {
-				-- Normal = {
-				--   guibg = colors.dark,
+		opts = function()
+			local highlights = require 'rose-pine.plugins.toggleterm'
+			return {
+				-- size can be a number or function which is passed the current terminal
+				shell = '/Users/adam.hall/nu/nu',
+				size = function(term)
+					if term.direction == 'horizontal' then
+						return 15
+					elseif term.direction == 'vertical' then
+						return vim.o.columns * 0.4
+					end
+				end,
+				open_mapping = [[<C-\>]],
+				hide_numbers = true, -- hide the number column in toggleterm buffers
+				start_in_insert = true,
+				insert_mappings = true, -- whether or not the open mapping applies in insert mode
+				terminal_mappings = true, -- whether or not the open mapping applies in the opened terminals
+				persist_size = true,
+				direction = 'horizontal',
+				close_on_exit = false, -- close the terminal window when the process exits
+				highlights = highlights,
+				-- 		{
+				-- 	 Normal = {
+				-- 	   guibg = colors.dark,
+				-- 	 },
+				-- 	 NormalFloat = {
+				-- 	   link = 'NormalDark',
+				-- 	 },
+				-- 	 FloatBorder = {
+				-- 	   guifg = colors.dark,
+				-- 	   guibg = colors.dark,
+				-- 	 },
 				-- },
-				-- NormalFloat = {
-				--   link = 'NormalDark',
-				-- },
-				-- FloatBorder = {
-				--   guifg = colors.dark,
-				--   guibg = colors.dark,
-				-- },
-			},
-			float_opts = {
-				border = 'single',
-				winblend = 3,
-			},
-		},
+				float_opts = {
+					border = 'single',
+					winblend = 3,
+				},
+			}
+		end,
 		init = function()
 			function _G.set_terminal_keymaps()
 				local opts = { noremap = true }

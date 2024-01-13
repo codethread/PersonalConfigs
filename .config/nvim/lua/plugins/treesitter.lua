@@ -38,7 +38,7 @@ return {
 				-- misc
 				{ 'comment','todotxt','markdown','markdown_inline','query','regex' },
 				--web
-				{ 'css','scss','html','jsdoc','javascript','typescript','tsx','graphql' },
+				{ 'css','scss','html','jsdoc','javascript','typescript','tsx','graphql', 'styled' },
 				-- webish
 				{ 'embedded_template','http','prisma','proto','svelte' },
 				-- config
