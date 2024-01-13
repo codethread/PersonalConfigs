@@ -8,7 +8,6 @@
       mac,
       keyboard,
       node,
-      temp
     ],
     work: [
       work,
@@ -126,9 +125,6 @@
       tree,
       vivid,
       zsh-autosuggestions
-    ],
-    temp: [
-      "iterm2"
     ],
     obsidian: [
       pngpaste
