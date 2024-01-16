@@ -7,7 +7,7 @@
       social,
       mac,
       keyboard,
-      node,
+      node
     ],
     work: [
       work,
@@ -127,7 +127,8 @@
       zsh-autosuggestions
     ],
     obsidian: [
-      pngpaste
+      pngpaste,
+      obsidian
     ]
   }
   drinks: [
@@ -232,5 +233,6 @@
     [ cargo-lambda, brew, null ]
     [ pngpaste, brew, null ]
     [ obs, cask, null ]
+    [ obsidian, cask, null ]
   ]
 }

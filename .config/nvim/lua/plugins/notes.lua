@@ -18,19 +18,25 @@ return {
 	},
 	init = function()
 		-- set.conceallevel = 0 -- So that I can see `` in markdown files
-		vim.opt.set.conceallevel = 2 -- while trying obsidian
+		vim.opt.conceallevel = 2 -- while trying obsidian
 	end,
 	cmd = { 'ObsidianWorkspace', 'ObsidianToday' },
 	opts = {
 		workspaces = {
-			-- {
-			-- 	name = 'personal',
-			-- 	path = '~/vaults/personal',
-			-- },
+			{
+				name = 'personal',
+				path = '~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Test',
+			},
 			{
 				name = 'work',
 				path = '~/gdrive/perks',
 			},
+		},
+
+		notes_subdir = 'notes',
+		daily_notes = {
+			-- Optional, if you keep daily notes in a separate directory.
+			folder = 'journal',
 		},
 
 		-- Optional, customize how names/IDs for new notes are created.
