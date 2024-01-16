@@ -1,4 +1,4 @@
-; extends
+;; extends
 
 ; so much signficance for such a small char
 "!" @keyword.bang
