@@ -196,6 +196,7 @@ return {
 				n = {
 					name = 'notes',
 					n = { Cmd 'ObsidianToday', 'Notes' },
+					f = { Cmd 'ObsidianQuickSwitch', 'Find' },
 				},
 
 				-- open, Open, openers, Openers
@@ -223,6 +224,7 @@ return {
 				u = {
 					name = 'Utils',
 					f = { "mbggVG=='b", 'format buffer' },
+					y = { Cmd 'let @*=@%', 'save filename' },
 				},
 			},
 		},
