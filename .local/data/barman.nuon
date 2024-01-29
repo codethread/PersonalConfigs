@@ -128,7 +128,8 @@
     ],
     obsidian: [
       pngpaste,
-      obsidian
+      obsidian,
+      yt-dlp
     ]
   }
   drinks: [
@@ -234,5 +235,6 @@
     [ pngpaste, brew, null ]
     [ obs, cask, null ]
     [ obsidian, cask, null ]
+    [ yt-dlp, brew, null ]
   ]
 }

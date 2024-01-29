@@ -63,7 +63,8 @@ return {
 				disabled_filetypes = {
 					statusline = { 'dashboard', 'alpha' },
 					winbar = {
-						'oil',
+						-- 'oil',
+						'no-neck-pain',
 						'help',
 						'startify',
 						'dashboard',

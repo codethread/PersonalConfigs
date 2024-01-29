@@ -77,6 +77,7 @@ return {
 
 	{
 		'stevearc/oil.nvim',
+		dependencies = { 'nvim-tree/nvim-web-devicons' },
 		-- TODO need? 'jghauser/mkdir.nvim'
 		keys = {
 			{ '<C-n>', '<cmd>Oil --float<cr>', desc = 'Oil' },
@@ -94,6 +95,8 @@ return {
 			},
 			skip_confirm_for_simple_edits = true,
 			use_default_keymaps = true,
+			--TODO watch this, see how it goes
+			lsp_rename_autosave = true,
 			keymaps = {
 				['g?'] = 'actions.show_help',
 				['<CR>'] = 'actions.select',

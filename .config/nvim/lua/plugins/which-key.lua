@@ -195,8 +195,17 @@ return {
 
 				n = {
 					name = 'notes',
-					n = { Cmd 'ObsidianToday', 'Notes' },
-					f = { Cmd 'ObsidianQuickSwitch', 'Find' },
+					a = { Cmd 'ObsidianNew', 'New' },
+					i = { Cmd 'ObsidianTemplate', 'Template' },
+					n = { Cmd 'ObsidianQuickSwitch', 'Find' },
+					o = { Cmd 'ObsidianOpen', 'Open' },
+					b = { Cmd 'ObsidianBacklinks', 'Backlinks' },
+					s = { Cmd 'ObsidianSearch', 'Search' },
+					t = { Cmd 'ObsidianToday', 'Today' },
+					['1'] = {
+						Cmd 'e ~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Test/notes/project/neovim/nvim ideas.md',
+						'nvim ideas.md',
+					},
 				},
 
 				-- open, Open, openers, Openers
