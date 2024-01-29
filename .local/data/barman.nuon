@@ -19,7 +19,8 @@
       aws,
       rust,
       react-native,
-      obsidian
+      obsidian,
+      neovim-build
     ]
   }
   cocktails:   {
@@ -130,6 +131,13 @@
       pngpaste,
       obsidian,
       yt-dlp
+      emacs-plus
+    ],
+    neovim-build: [
+      ninja,
+      cmake,
+      gettext,
+      curl
     ]
   }
   drinks: [
@@ -236,5 +244,10 @@
     [ obs, cask, null ]
     [ obsidian, cask, null ]
     [ yt-dlp, brew, null ]
+    [ ninja, brew, null ]
+    [ cmake, brew, null ]
+    [ gettext, brew, null ]
+    [ curl, brew, null ]
+    [ emacs-plus, brew, null ]
   ]
 }

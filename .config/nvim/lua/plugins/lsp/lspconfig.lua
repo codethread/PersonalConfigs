@@ -59,7 +59,11 @@ return {
 			U.lsp_attach('*', function(_, buf)
 				U.keys(buf, {
 					{ 'gD', function() vim.lsp.buf.declaration() end, 'declaration' },
-					{ 'gd', function() vim.lsp.buf.definition() end, 'definition' },
+					{
+						'gd',
+						function() vim.lsp.buf.definition { reuse_win = true } end,
+						'definition',
+					},
 					{ 'K', function() vim.lsp.buf.hover() end, 'hover' },
 					{ 'gi', function() vim.lsp.buf.implementation() end, 'implementation' },
 					{ 'gh', function() vim.lsp.buf.signature_help() end, 'signature_help' },

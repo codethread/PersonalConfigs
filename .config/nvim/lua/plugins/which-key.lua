@@ -139,6 +139,7 @@ return {
 						Cmd 'lua vim.lsp.buf.code_action()',
 						'Code Action',
 					},
+					d = { Cmd 'lua vim.lsp.buf.declaration({ reuse_win = true })', 'Declaration' },
 					i = { Cmd 'LspInfo', 'Info' },
 					I = { Cmd 'LspInstallInfo', 'Installer Info' },
 					l = { Cmd 'lua vim.lsp.codelens.run()', 'CodeLens Action' },
@@ -251,10 +252,17 @@ return {
 
 			wk.register({
 				s = {
-					function()
-						require('telescope-live-grep-args.shortcuts').grep_visual_selection()
-					end,
-					'search',
+					name = 'Search',
+					s = {
+						function()
+							require('telescope-live-grep-args.shortcuts').grep_visual_selection()
+						end,
+						'live',
+					},
+					r = {
+						function() require('spectre').open_visual { select_word = true } end,
+						'find-replace',
+					},
 				},
 			}, {
 				mode = 'v',
