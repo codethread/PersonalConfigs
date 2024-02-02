@@ -74,3 +74,6 @@ project/metals.sbt
 
 # neovim
 scratch.lua
+
+# nu
+scratch.nu
