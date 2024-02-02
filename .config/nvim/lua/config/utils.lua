@@ -7,7 +7,9 @@ function M.lsp_attach(client, on_attach)
 		callback = function(args)
 			local buffer = args.buf
 			local current_client = vim.lsp.get_client_by_id(args.data.client_id)
-			if client == '*' or client == current_client.name then on_attach(current_client, buffer) end
+			if client == '*' or client == current_client.name then
+				on_attach(current_client, buffer)
+			end
 		end,
 	})
 end
@@ -95,6 +97,15 @@ function M.project(path, settings)
 	else
 		return {}
 	end
+end
+
+---pattern match on home or work
+---@generic A : any
+---@param match { work?: A, home?: A }
+---@return A
+function M.machine(match)
+	local user = os.getenv 'CT_USER'
+	return match[user] or {}
 end
 
 -----------------------------------------------------------------------------------

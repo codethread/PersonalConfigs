@@ -95,7 +95,7 @@ return {
 			},
 			skip_confirm_for_simple_edits = true,
 			use_default_keymaps = true,
-			--TODO watch this, see how it goes
+			--watch out for this during refactors
 			lsp_rename_autosave = true,
 			keymaps = {
 				['g?'] = 'actions.show_help',

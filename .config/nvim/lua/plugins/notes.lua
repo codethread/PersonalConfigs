@@ -23,13 +23,16 @@ return {
 	end,
 	opts = {
 		workspaces = {
-			{
-				name = 'personal',
-				path = '~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Test',
-			},
-			{
-				name = 'work',
-				path = '~/gdrive/perks',
+			U.machine {
+				work = {
+					name = 'work',
+					path = '~/gdrive/perks',
+				},
+				home = {
+
+					name = 'personal',
+					path = '~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Test',
+				},
 			},
 		},
 
