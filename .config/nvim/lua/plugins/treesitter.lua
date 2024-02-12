@@ -104,7 +104,25 @@ return {
 						-- ['if'] = '@custom-field.inner',
 					},
 				},
-				swap = { enable = true },
+				swap = {
+					enable = true,
+					swap_next = {
+						['<leader>}'] = '@parameter.outer',
+						-- ['<leader>}'] = '@conditional.inner',
+					},
+					swap_previous = {
+						['<leader>{'] = '@parameter.outer',
+					},
+				},
+				lsp_interop = {
+					enable = true,
+					border = 'none',
+					floating_preview_opts = {},
+					peek_definition_code = {
+						['<leader>lp'] = '@function.outer', -- TODO: YUMMY
+						['<leader>lP'] = '@class.outer', -- not sure how these differ?
+					},
+				},
 			},
 		},
 	},
