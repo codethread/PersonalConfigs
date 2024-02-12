@@ -29,9 +29,8 @@ return {
 					path = '~/gdrive/perks',
 				},
 				home = {
-
 					name = 'personal',
-					path = '~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Test',
+					path = '~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Notes',
 				},
 			},
 		},
@@ -44,7 +43,13 @@ return {
 		},
 
 		completion = {
+			min_chars = 1,
+
 			new_notes_location = 'notes_subdir',
+			-- if using nested folders, these are likely desirable, and the note path prevents incorrect paths
+			-- does make renames harder
+			-- prepend_note_id = false,
+			-- prepend_note_path = true,
 		},
 
 		-- open notes split if there isn't already a split
