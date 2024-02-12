@@ -5,6 +5,7 @@
     ~/work ~/work/services ~/work/lambdas ~/work/utilities
     ~/.local/share/nvim/lazy ~/.local/share/nvim/mason/packages
     `~/Library/Mobile Documents/com~apple~CloudDocs/Books/The_DynamoDB_Book_-_Plus_Package/Code examples`
+    `~/Library/Mobile Documents/iCloud~md~obsidian/Documents`
   ]
   base: [
     [key, name];
@@ -18,6 +19,7 @@
     [ P3, "~/dev/projects/pomo-tauri", ]
     [ P4, "~/dev/learn/rust-playground", ]
     [ P5, "~/dev/projects/cold-brew", ]
+    [ P8, "~/dev/projects/qmk_firmware/keyboards/preonic/keymaps/codethread"]
     [ P9, `~/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents` ]
   ],
   work: [ 
