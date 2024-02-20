@@ -105,7 +105,6 @@ $env.ENV_CONVERSIONS = {
 # Directories to search for scripts when calling source or use
 const NU_LIB_DIRS = [
     ($nu.default-config-dir | path join "scripts")
-    ("~/dev/projects/nudes" | path expand)
     ("~/workfiles/nu" | path expand)
     ("~/dev/vendor/nu_scripts/sourced" | path expand)
 ]
