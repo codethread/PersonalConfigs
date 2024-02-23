@@ -92,14 +92,16 @@ return {
 						['if'] = '@function.inner',
 						['ac'] = '@class.outer',
 						['ic'] = '@class.inner',
-						['ai'] = '@call.outer', -- i for 'invocation'
-						['ii'] = '@call.inner',
+						-- ['ai'] = '@call.outer', -- i for 'invocation'
+						-- ['ii'] = '@call.inner',
 						['aa'] = '@parameter.outer',
 						['ia'] = '@parameter.inner',
 
 						['ab'] = '@conditional.outer', -- b for 'branch'
 						['ib'] = '@conditional.inner',
 
+						['ai'] = '@import.outer',
+						['ii'] = '@import.inner',
 						-- af = '@custom-field.outer',
 						-- ['if'] = '@custom-field.inner',
 					},

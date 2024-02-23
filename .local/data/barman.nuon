@@ -49,7 +49,8 @@
       wakatime-cli,
       watch,
       gsed,
-      tree
+      tree,
+      sd
     ],
     node: [
       volta,
@@ -130,7 +131,7 @@
     obsidian: [
       pngpaste,
       obsidian,
-      yt-dlp
+      yt-dlp,
       emacs-plus
     ],
     neovim-build: [
@@ -249,5 +250,6 @@
     [ gettext, brew, null ]
     [ curl, brew, null ]
     [ emacs-plus, brew, null ]
+    [ sd, brew, null ]
   ]
 }

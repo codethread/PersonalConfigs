@@ -38,6 +38,8 @@ $env.PATH = (path-prepend "~/.cargo/bin")
 
 $env.PATH = (path-prepend "~/neovim/bin")
 
+$env.PATH = (path-prepend "~/Library/Android/sdk/platform-tools")
+
 # ruby for gem install on m1 mac for react native
 $env.PATH = (path-prepend "/opt/homebrew/opt/ruby@3.1/bin")
 $env.PATH = (path-prepend "/opt/homebrew/lib/ruby/gems/3.1.0/bin")

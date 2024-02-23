@@ -63,6 +63,7 @@ return {
 					l = { Cmd 'Telescope buffers', 'list' },
 					f = { function() require('codethread.split').split() end, 'Split last' },
 					r = { Cmd 'Telescope oldfiles', 'recent' },
+					R = { Cmd 'e!', 'reload' },
 					k = { Cmd 'Bdelete', 'kill' },
 					s = { Cmd 'w', 'Save' },
 					u = { function() require('codethread.pickers').unsaved() end, 'Unsaved' },
@@ -99,7 +100,10 @@ return {
 				g = {
 					name = 'Git',
 					R = {
-						function() require('gitsigns').reset_buffer() end,
+						function()
+							require('gitsigns').reset_buffer()
+							vim.cmd [[noa w]]
+						end,
 						'Reset Buffer',
 					},
 					b = { Cmd 'Telescope git_branches', 'Checkout branch' },
@@ -108,7 +112,7 @@ return {
 					g = { function() require('neogit').open {} end, 'Status' },
 					j = { function() require('gitsigns').next_hunk() end, 'Next Hunk' },
 					k = { function() require('gitsigns').prev_hunk() end, 'Prev Hunk' },
-					h = { Cmd 'DiffviewFileHistory %', 'File History' },
+					h = { Cmd 'DiffviewFileHistory % --no-merges', 'File History' },
 					l = { function() require('gitsigns').blame_line() end, 'Blame' },
 					o = { Cmd 'Telescope git_status', 'Open changed file' },
 					p = { function() require('gitsigns').preview_hunk() end, 'Preview Hunk' },

@@ -9,9 +9,13 @@ local heuristics = {
 	['go'] = {
 		handler = function() require('go.alternate').switch(false, '') end,
 	},
+	['typescript'] = {
+		implementation = '.ts',
+		test = '.test.ts',
+	},
 	['typescriptreact'] = {
 		implementation = '.tsx',
-		test = '.spec.tsx',
+		test = '.test.tsx',
 	},
 }
 
