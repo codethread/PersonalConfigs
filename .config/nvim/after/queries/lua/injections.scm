@@ -17,3 +17,12 @@
                  (string)
                   (string (string_content) @injection.context)))
                          (#set! injection.language "query"))
+
+((function_call
+     name: (dot_index_expression
+             table: (_)
+             field: (identifier) @_id (#eq? @_id "nush"))
+     arguments: (arguments 
+                  (string
+                    content: (_) @injection.context)))
+     (#set! injection.language "nu"))

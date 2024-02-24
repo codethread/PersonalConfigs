@@ -65,7 +65,23 @@ return {
 					r = { Cmd 'Telescope oldfiles', 'recent' },
 					R = { Cmd 'e!', 'reload' },
 					k = { Cmd 'Bdelete', 'kill' },
-					s = { Cmd 'w', 'Save' },
+					s = {
+						function()
+							local ft = U.ft()
+							if ft == 'oil' then
+								require('oil').save(nil, function(err)
+									if err then
+										vim.notify(err, vim.log.levels.ERROR, { title = 'Dotty' })
+									else
+										require('codethread.dotty').dotty_link:start()
+									end
+								end)
+							else
+								vim.cmd.w()
+							end
+						end,
+						'Save',
+					},
 					u = { function() require('codethread.pickers').unsaved() end, 'Unsaved' },
 				},
 

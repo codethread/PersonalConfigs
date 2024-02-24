@@ -193,4 +193,9 @@ function M.autocmd(events, opts)
 	})
 end
 
+---generate a string for nushell
+---@param block string
+---@return string
+function M.nush(block) return "nush '" .. block:gsub('\n', '; ') .. "'" end
+
 return M
