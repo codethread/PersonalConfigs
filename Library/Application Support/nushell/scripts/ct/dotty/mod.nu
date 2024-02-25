@@ -5,8 +5,9 @@ use config.nu
 export def link [
   --no-cache(-c)
   --force(-f)
+  --stdout
 ] {
-  config load
+  let res = config load
   | par-each { |proj| get-project-files-to-link $proj $no_cache  }
   | assert-no-conflicts $force
   | par-each {|proj| 
@@ -29,7 +30,25 @@ export def link [
     | select name created deleted
   }
   | filter {|r| ($r.created | is-not-empty) or ($r.deleted | is-not-empty) }
-  | table --collapse --flatten
+  if ($stdout) {
+    $'Created:
+  ($res.created | select file | to text)
+Deleted:
+  ($res.deleted | to text)'
+  } else {
+    $res | table --collapse --flatten
+  }
+}
+
+export def is-cwd [
+  --exit # returns an exit code rather than true/false
+] {
+  let proj = config load | where from == $env.PWD
+  match ([$exit, ($proj | is-empty)]) {
+    [true, true] => { exit 1 },
+    [true, false] => { exit 0 }
+    [_, $is_cwd] => { not $is_cwd }
+  }
 }
 
 # TODO: noticed some old files lingering.

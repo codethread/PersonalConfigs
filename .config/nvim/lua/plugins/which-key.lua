@@ -73,7 +73,7 @@ return {
 									if err then
 										vim.notify(err, vim.log.levels.ERROR, { title = 'Dotty' })
 									else
-										require('codethread.dotty').dotty_link:start()
+										require('codethread.dotty').dotty_link()
 									end
 								end)
 							else
