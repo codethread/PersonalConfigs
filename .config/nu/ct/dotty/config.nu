@@ -6,7 +6,7 @@ export def load [] {
       [name, from, to, excludes];
       [test, (dir ~/test), (dir ~/test-out), []]
       [dots, (dir ~/PersonalConfigs), (dir ~), ["**/README.md"]]
-      [work, (dir ~/workfiles), (dir ~), []]
+      [work, (dir ~/workfiles), (dir ~), ["**/README.md"]]
     ]
 
     $config 

@@ -6,5 +6,5 @@
 # this command also seems to wrap output with `|` characters
 def main [...cmd] {
   let cmd = $cmd | str join " "
-  nu -l --config '~/PersonalConfigs/Library/Application Support/nushell/config_scripts.nu' -c $'($cmd)'
+  nu -l --env-config '~/PersonalConfigs/Library/Application Support/nushell/env.nu' --config '~/PersonalConfigs/.config/nu/config_scripts.nu' -c $'($cmd)'
 }
