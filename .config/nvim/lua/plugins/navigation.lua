@@ -1,38 +1,7 @@
-vim.cmd [[
-	" center on scroll
-	nnoremap <C-d> <C-d>zz
-	nnoremap <C-u> <C-u>zz
-
-	" keep cursor centered
-	nnoremap n nzzzv
-	nnoremap N Nzzzv
-	nnoremap J mzJ`z
-
-	" don't changed jumplist with paragraph jumps :help jumplist
-	" nnoremap <silent> } :<C-u>execute "keepjumps norm! " . v:count1 . "}"<CR>
-	" nnoremap <silent> { :<C-u>execute "keepjumps norm! " . v:count1 . "{"<CR>
-]]
-
-local harp = {
-	{ 'ma', function() require('harpoon.mark').add_file() end, desc = 'harpoon.mark' },
-	{ 'mf', '<cmd>Telescope harpoon marks<cr>', desc = '<cmd>Telescope harpoon marks<cr>' },
-	{ 'ml', function() require('harpoon.ui').toggle_quick_menu() end, desc = 'harpoon.ui' },
-	{ 'mk', function() require('harpoon.ui').nav_next() end, desc = 'harpoon.ui' },
-	{ 'mj', function() require('harpoon.ui').nav_prev() end, desc = 'harpoon.ui' },
-	{ 'mt', function() require('harpoon.term').gotoTerminal(1) end, desc = 'harpoon.term' },
-}
-for n = 1, 9, 1 do
-	table.insert(
-		harp,
-		{ 'm' .. n, function() require('harpoon.ui').nav_file(n) end, desc = 'harpoon.' .. n }
-	)
-end
-
 return {
 	{
 		'ThePrimeagen/harpoon',
-		init = function() vim.keymap.set('n', 'M', 'm') end,
-		keys = harp,
+		lazy = true,
 		opts = {
 			menu = {
 				width = vim.api.nvim_win_get_width(0) - 4,
@@ -42,12 +11,7 @@ return {
 
 	{
 		'stevearc/aerial.nvim',
-		keys = {
-			{ '<leader>a', Cmd 'AerialToggle! left', desc = 'Aerial' },
-			-- these are reversed for my keyboard as I have them over j & k
-			{ '}', Cmd 'AerialPrev', desc = 'AerialPrev' },
-			{ '{', Cmd 'AerialNex', desc = 'AerialNext' },
-		},
+		cmd = { 'AerialToggle', 'AerialNext', 'AerialPrev' },
 		opts = {
 			layout = {
 				min_width = 25,
@@ -78,11 +42,7 @@ return {
 	{
 		'stevearc/oil.nvim',
 		dependencies = { 'nvim-tree/nvim-web-devicons' },
-		-- TODO need? 'jghauser/mkdir.nvim'
-		keys = {
-			{ '<C-n>', '<cmd>Oil --float<cr>', desc = 'Oil' },
-			{ '<leader>od', '<cmd>Oil<cr>', desc = 'Oil' },
-		},
+		cmd = 'Oil',
 		opts = {
 			view_options = {
 				show_hidden = true,

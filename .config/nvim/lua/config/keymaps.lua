@@ -13,7 +13,7 @@ vim.g.maplocalleader = ','
 -- Escape
 U.keymap('i', 'jk', '<ESC>')
 
-U.keymap('n', 'ZQ', '<cmd>qa!<cr>') -- default is q!
+U.keymap('n', 'ZQ', '<cmd>qa!<cr>', 'Quit no save') -- default is q!
 
 U.keymap('n', '<M-s>', '<cmd>w<cr>') -- alt or cmd on macos (terminal dependent, works with kitty)
 

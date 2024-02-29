@@ -50,24 +50,16 @@ return {
 	{
 		'AndrewRadev/bufferize.vim',
 		cmd = 'Bufferize',
-		keys = {
-			{ '<leader>Gm', Cmd 'Bufferize messages', 'messages' },
-		},
 	},
 
 	{
 		-- store clipboard for easy recall
-		'telescope.nvim',
-		dependencies = {
-			'AckslD/nvim-neoclip.lua',
-			keys = {
-				{ '<leader>sy', Cmd 'Telescope neoclip', desc = 'Neoclip' },
-			},
-			config = function()
-				require('neoclip').setup()
-				require('telescope').load_extension 'neoclip'
-			end,
-		},
+		'AckslD/nvim-neoclip.lua',
+		event = 'TextYankPost',
+		config = function()
+			require('neoclip').setup()
+			require('telescope').load_extension 'neoclip'
+		end,
 	},
 
 	{ -- find/replace

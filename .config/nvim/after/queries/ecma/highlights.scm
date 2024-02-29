@@ -10,5 +10,5 @@
         value: (arrow_function "=>" @arrow_function.arrow)))
 
 ; highlight arrow functions
-(export_statement "export" @keyword.export (set! "priority" 105))
-(export_statement "export" @keyword.export (set! "priority" 105) "default" @keyword.default)
+; (export_statement "export" @keyword.export (set! "priority" 105))
+; (export_statement "export" @keyword.export (set! "priority" 105) "default" @keyword.default)

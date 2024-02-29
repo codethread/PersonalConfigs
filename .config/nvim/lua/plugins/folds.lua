@@ -2,55 +2,29 @@ return {
 	{
 		'kevinhwang91/nvim-ufo',
 		dependencies = { 'kevinhwang91/promise-async', 'nvim-treesitter/nvim-treesitter' },
-		lazy = false,
-		-- event = { 'BufReadPre', 'BufNewFile' },
 		version = 'v1.*',
 		init = function()
 			vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
 			vim.o.foldlevelstart = 99
 			vim.o.foldenable = true
 
-			-- hide foldcolumn
+			-- hide foldcolumn, can be enabled with foldcolumn = 1. This is a list in the left gutter, it's not useful for me
 			vim.o.foldcolumn = '0'
-			-- or show with
-			-- vim.o.foldcolumn = '1'
 			-- vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]] -- add nice fold icons
 		end,
-		keys = {
-			{ 'zR', function() require('ufo').openAllFolds() end, desc = 'open all folds' },
-			{
-				'zM',
-				function() require('ufo').closeAllFolds() end,
-				desc = 'close all folds',
-			},
-			{
-				'zp',
-				function() require('ufo').peekFoldedLinesUnderCursor() end,
-				desc = 'peak lines',
-			},
-			{
-				'-',
-				'zc',
-				desc = 'open fold under cursor',
-			},
-			{
-				'=',
-				'zo',
-				desc = 'close fold under cursor',
-			},
-			{
-				'_',
-				'zC',
-				desc = 'close all folds under cursor',
-			},
-			{
-				'+',
-				'zO',
-				desc = 'open all folds under cursor',
-			},
-		},
 		opts = {
-			provider_selector = function() return { 'treesitter', 'indent' } end,
+			close_fold_kinds = { 'imports', 'comment' },
+			provider_selector = function(_, filetype)
+				local ftMap = {
+					vim = 'indent',
+					typescriptreact = 'lsp',
+					typescript = 'lsp',
+					rust = 'lsp',
+					git = '',
+				}
+
+				return ftMap[filetype] or { 'treesitter', 'indent' }
+			end,
 			fold_virt_text_handler = function(virtText, lnum, endLnum, width, truncate)
 				local newVirtText = {}
 				local suffix = ('  %d '):format(endLnum - lnum)

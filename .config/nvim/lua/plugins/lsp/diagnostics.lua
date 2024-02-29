@@ -25,27 +25,9 @@ local function format(diagnostic)
 	return string.format('%s [%s]', diagnostic.message, diagnostic.source)
 end
 
-local diagnostics_active = true
-local function toggle_diagnostic()
-	diagnostics_active = not diagnostics_active
-	if diagnostics_active then
-		vim.diagnostic.show()
-	else
-		vim.diagnostic.hide()
-	end
-end
-
 return {
 	{
 		'neovim/nvim-lspconfig',
-		keys = {
-			{ '<leader>eh', toggle_diagnostic, desc = 'Toggle Diagnostics' },
-			{ '<leader>el', Cmd 'Telescope diagnostics theme=ivy bufnr=0', desc = 'Document Diagnostics' },
-			{ '<leader>eL', Cmd 'Telescope diagnostics', desc = 'Workspace Diagnostics' },
-			{ '<leader>en', Cmd 'lua vim.diagnostic.goto_next()', desc = 'Next Diagnostic' },
-			{ '<leader>ep', Cmd 'lua vim.diagnostic.goto_prev()', desc = 'Prev Diagnostic' },
-			{ '<leader>eq', Cmd 'lua vim.diagnostic.setloclist()', desc = 'Quickfix' },
-		},
 		opts = function(_, opts)
 			return vim.tbl_deep_extend('force', opts, {
 				diagnostics = {

@@ -18,9 +18,6 @@ return {
 				version = '^1.0.0',
 			},
 		},
-		keys = {
-			{ '<leader><leader>', '<cmd>Telescope find_files<cr>', desc = 'Files' },
-		},
 		config = function(_, opts)
 			local telescope = require 'telescope'
 			local actions = require 'telescope.actions'
