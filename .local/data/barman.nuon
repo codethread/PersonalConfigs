@@ -7,7 +7,8 @@
       social,
       mac,
       keyboard,
-      node
+      node,
+      neovim-build
     ],
     work: [
       work,
@@ -25,36 +26,20 @@
   }
   cocktails:   {
     core: [
-      "1password",
       atuin,
-      bat,
-      codethread/homebrew-dotty,
-      codethread/homebrew-dotty,
-      dotty,
-      dotty,
       fd,
       font-fira-code-nerd-font,
       fzf,
-      go,
-      google-chrome,
-      jq,
-      kitty,
-      logseq,
       neovim,
       rg,
       starship,
       stylua,
       tmux,
-      tokei,
       wakatime-cli,
-      watch,
-      gsed,
-      tree,
       sd
     ],
     node: [
       volta,
-      watchman,
       pnpm
     ],
     keyboard: [
@@ -62,6 +47,9 @@
       qmk/qmk/qmk
     ],
     mac: [
+      "1password",
+      google-chrome,
+      kitty,
       alfred,
       dozer
     ],
@@ -70,6 +58,8 @@
       whatsapp
     ],
     work: [
+      tokei,
+      jq,
       "k6",
       google-drive,
       grpcui,
@@ -83,11 +73,9 @@
       visual-studio-code,
       zoom,
       ical-buddy,
-      podman,
       glab,
-      obs
-    ],
-    docker: [
+      obs,
+      podman,
       podman-desktop
     ],
     react-native: [
