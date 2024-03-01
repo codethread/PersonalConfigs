@@ -13,7 +13,7 @@ return {
 			-- vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]] -- add nice fold icons
 		end,
 		opts = {
-			close_fold_kinds = { 'imports', 'comment' },
+			close_fold_kinds = { 'imports' },
 			provider_selector = function(_, filetype)
 				local ftMap = {
 					vim = 'indent',
