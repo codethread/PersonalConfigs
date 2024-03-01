@@ -10,6 +10,12 @@ return {
 	},
 
 	{
+		'b0o/SchemaStore.nvim',
+		lazy = true,
+		version = false, -- last release is way too old
+	},
+
+	{
 		'neovim/nvim-lspconfig',
 		--TODO can be per file?
 		event = { 'BufReadPre', 'BufNewFile' },
@@ -17,7 +23,6 @@ return {
 			{ 'folke/neoconf.nvim', cmd = 'Neoconf', config = true },
 			{ 'folke/neodev.nvim', opts = { experimental = { pathStrict = true } } },
 
-			-- use 'b0o/schemastore.nvim'
 			'williamboman/mason.nvim',
 			'williamboman/mason-lspconfig.nvim',
 			'hrsh7th/nvim-cmp',
@@ -31,7 +36,24 @@ return {
 			-- LSP Server Settings
 			---@type lspconfig.options
 			servers = {
-				jsonls = {},
+				jsonls = {
+					-- lazy-load schemastore when needed
+					on_new_config = function(new_config)
+						new_config.settings.json.schemas = new_config.settings.json.schemas or {}
+						vim.list_extend(
+							new_config.settings.json.schemas,
+							require('schemastore').json.schemas()
+						)
+					end,
+					settings = {
+						json = {
+							format = {
+								enable = true,
+							},
+							validate = { enable = true },
+						},
+					},
+				},
 				-- clangd = {
 				-- 	filetypes = { 'c', 'cpp', 'objc', 'objcpp', 'cuda' },
 				-- },
@@ -117,8 +139,9 @@ return {
 				}, servers[server] or {})
 
 				-- disable snippets in autocomplete
+				-- TODO this is needed as true for JSONls, but if annoying will conditionally disable
 				server_opts.capabilities.textDocument.completion.completionItem.snippetSupport =
-					false
+					true
 
 				if opts.setup[server] then
 					if opts.setup[server](server, server_opts) then return end

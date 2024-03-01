@@ -29,24 +29,22 @@ return {
 	{
 		'neovim/nvim-lspconfig',
 		opts = function(_, opts)
-			return vim.tbl_deep_extend('force', opts, {
-				diagnostics = {
-					severity_sort = true,
-					signs = { active = set_signs() },
-					underline = true,
-					update_in_insert = false,
-					virtual_text = { spacing = 4, source = 'if_many', prefix = '●' },
-					float = {
-						focusable = false,
-						style = 'minimal',
-						border = 'solid', -- see :h nvim_open_win()
-						source = 'always',
-						header = '',
-						prefix = '',
-						format = format,
-					},
+			opts.diagnostics = {
+				severity_sort = true,
+				signs = { active = set_signs() },
+				underline = true,
+				update_in_insert = false,
+				virtual_text = { spacing = 4, source = 'if_many', prefix = '●' },
+				float = {
+					focusable = false,
+					style = 'minimal',
+					border = 'solid', -- see :h nvim_open_win()
+					source = 'always',
+					header = '',
+					prefix = '',
+					format = format,
 				},
-			})
+			}
 		end,
 	},
 }
