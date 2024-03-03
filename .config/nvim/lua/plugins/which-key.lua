@@ -18,7 +18,7 @@ return {
 					},
 				},
 			}
-			wk.register(require 'plugins.keymaps.leader', {
+			wk.register(require 'codethread.keymaps.leader', {
 				mode = 'n', -- NORMAL mode
 				prefix = '<leader>',
 				buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
@@ -27,7 +27,7 @@ return {
 				nowait = true, -- use `nowait` when creating keymaps
 			})
 
-			wk.register(require 'plugins.keymaps.normal', {
+			wk.register(require 'codethread.keymaps.normal', {
 				mode = 'n', -- NORMAL mode
 				buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
 				silent = true, -- use `silent` when creating keymaps
