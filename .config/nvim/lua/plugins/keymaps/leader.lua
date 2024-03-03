@@ -1,12 +1,6 @@
-local diagnostics_active = true
-local function toggle_diagnostic()
-	diagnostics_active = not diagnostics_active
-	if diagnostics_active then
-		vim.diagnostic.show()
-	else
-		vim.diagnostic.hide()
-	end
-end
+-- TIPS
+-- to see raw key
+-- go to insert mode, type <C-v> then type, and that key will be shown
 
 return {
 	['<leader>'] = { Cmd 'Telescope find_files', 'Files' },
@@ -26,7 +20,7 @@ return {
 
 	e = {
 		name = 'Errors',
-		h = { toggle_diagnostic, 'Toggle Diagnostics' },
+		h = { function() require('codethread.fns').toggle_diagnostic() end, 'Toggle Diagnostics' },
 		l = { Cmd 'Telescope diagnostics theme=ivy bufnr=0', 'Document Diagnostics' },
 		L = { Cmd 'Telescope diagnostics', 'Workspace Diagnostics' },
 		n = { Cmd 'lua vim.diagnostic.goto_next()', 'Next Diagnostic' },
@@ -57,20 +51,7 @@ return {
 		R = { Cmd 'e!', 'reload' },
 		k = { Cmd 'Bdelete', 'kill' },
 		s = {
-			function()
-				local ft = U.ft()
-				if ft == 'oil' then
-					require('oil').save(nil, function(err)
-						if err then
-							vim.notify(err, vim.log.levels.ERROR, { title = 'Dotty' })
-						else
-							require('codethread.dotty').dotty_link()
-						end
-					end)
-				else
-					vim.cmd.w()
-				end
-			end,
+			function() require('codethread.fns').save_buffer() end,
 			'Save',
 		},
 		u = { function() require('codethread.pickers').unsaved() end, 'Unsaved' },
@@ -79,27 +60,7 @@ return {
 	j = {
 		name = 'Test',
 		j = {
-			function()
-				local ft = U.ft()
-				if ft == 'lua' then
-					vim.cmd 'w'
-					-- require('plenary.test_harness').test_directory(vim.fn.expand '%:p')
-					require('plenary.test_harness').test_directory(
-						vim.fn.expand '%:p',
-						-- if writing lua tests, I'll follow the same setup as https://github.com/m00qek/plugin-template.nvim
-						{ minimal_init = 'test/spec.vim' }
-					)
-					-- also PlenaryTestFile
-				elseif ft == 'javascript' then
-					local jest = require 'jester'
-					jest.run_last { path_to_jest = './node_modules/bin/jest' }
-				elseif ft == 'go' then
-					-- vim.Cmd.GoTestFunc()
-					vim.cmd.GoTestSubCase()
-				else
-					print('no setup for filetype: ' .. ft)
-				end
-			end,
+			function() require('codethread.fns').test_current_file() end,
 			'file',
 		},
 	},
@@ -233,6 +194,7 @@ return {
 		-- if you can't beat 'em
 		c = { Cmd 'silent !code %', 'VSCode' },
 		d = { Cmd 'Oil', 'Dir' },
+		n = { function() require('codethread.fns').open_next_file() end, 'Open next file' },
 	},
 
 	t = {

@@ -135,13 +135,36 @@ return {
 				},
 			}
 			cmp.setup.cmdline(':', {
-				mapping = cmp.mapping.preset.cmdline(),
+				mapping = cmp.mapping.preset.cmdline {
+					['<C-l>'] = {
+						c = function() cmp.complete() end,
+					},
+					['<C-j>'] = {
+						c = function()
+							if cmp.visible() then
+								cmp.select_next_item()
+							else
+								cmp.complete()
+							end
+						end,
+					},
+					['<C-k>'] = {
+						c = function()
+							if cmp.visible() then
+								cmp.select_prev_item()
+							else
+								cmp.complete()
+							end
+						end,
+					},
+				},
 				sources = cmp.config.sources({
 					{ name = 'path' },
 				}, {
 					{ name = 'cmdline' },
 				}),
 				completion = {
+					completeopt = 'menu,menuone,noselect',
 					keyword_length = 1,
 				},
 				confirm_opts = {

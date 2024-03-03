@@ -1,3 +1,11 @@
+-- use space as the leader key
+vim.keymap.set('', '<Space>', '<Nop>')
+vim.g.mapleader = ' '
+
+-- use comma as the localleader key
+vim.keymap.set('', ',', '<Nop>')
+vim.g.maplocalleader = ','
+
 -- config that is always defined
 require 'config'
 -- disabled vim builtins

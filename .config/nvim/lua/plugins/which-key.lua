@@ -1,23 +1,23 @@
+-- Escape
+U.keymap('i', 'jk', '<ESC>')
+U.keymap('i', 'jj', '<c-w>')
+
 return {
 	{
 		'folke/which-key.nvim',
 		lazy = false,
 		priority = 100,
-		---@type Options
-		opts = {
-			plugins = {
-				presets = {
-					operators = false,
-					motions = false,
-					text_objects = false,
-				},
-			},
-			-- ignore_missing = true, -- enable this to hide mappings for which you didn't specify a label
-			-- hidden = { '<silent>', '<Cmd>', '', 'call', 'lua', '^:', '^ ' }, -- hide mapping boilerplate
-		},
-		config = function(_, opts)
+		config = function()
 			local wk = require 'which-key'
-			wk.setup(opts)
+			wk.setup {
+				plugins = {
+					presets = {
+						operators = false,
+						motions = false,
+						text_objects = false,
+					},
+				},
+			}
 			wk.register(require 'plugins.keymaps.leader', {
 				mode = 'n', -- NORMAL mode
 				prefix = '<leader>',

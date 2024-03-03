@@ -1,3 +1,5 @@
+-- U.keymap('n', '<M-s>', '<cmd>w<cr>') -- alt or cmd on macos (terminal dependent, works with kitty)
+
 return {
 	-- don't changed jumplist with paragraph jumps :help jumplist
 	-- nnoremap <silent> } :<C-u>execute "keepjumps norm! " . v:count1 . "}"<CR>
@@ -10,6 +12,37 @@ return {
 	['='] = { 'zo', 'close fold under cursor' },
 	['_'] = { 'zC', 'close all folds under cursor' },
 	['+'] = { 'zO', 'open all folds under cursor' },
+
+	g = {
+		name = 'stuff',
+		-- replace missing gx with netrw gone
+		x = {
+			function()
+				local file = vim.fn.expand '<cfile>'
+				local Job = require 'plenary.job'
+
+				local function is_github_link(w)
+					local bits = vim.split(w, '/')
+					return #bits == 2
+				end
+
+				if vim.startswith(file, 'http') then
+					Job:new({
+						command = 'open',
+						args = { file },
+					}):sync()
+				elseif is_github_link(file) then
+					Job:new({
+						command = 'open',
+						args = { 'https://github.com/' .. file },
+					}):sync()
+				else
+					print('not a link: ' .. file)
+				end
+			end,
+			'Go to link',
+		},
+	},
 
 	-- keep cursor centered
 	n = { 'nzzzv', 'Center next' },
@@ -45,6 +78,11 @@ return {
 		-- M = { function() require('ufo').closeAllFolds() end, 'close all folds' },
 		-- r = { function() require('ufo').openFoldsExceptKinds() end, 'descrease fold' },
 		-- m = { function() require('ufo').closeFoldsWith() end, 'increase fold' },
+	},
+
+	Z = {
+		name = 'misc',
+		Q = { '<cmd>qa!<cr>', 'Quit no save' }, -- default is q!
 	},
 
 	['<C-n>'] = { Cmd 'Oil --float', 'Oil' },
