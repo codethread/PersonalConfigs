@@ -28,7 +28,6 @@
     core: [
       atuin,
       fd,
-      font-fira-code-nerd-font,
       fzf,
       neovim,
       rg,
@@ -36,7 +35,7 @@
       stylua,
       tmux,
       wakatime-cli,
-      sd
+      sd,
     ],
     node: [
       volta,
@@ -51,7 +50,10 @@
       google-chrome,
       kitty,
       alfred,
-      dozer
+      dozer,
+      font-iosevka,
+      font-fira-code-nerd-font,
+      font-symbols-only-nerd-font
     ],
     social: [
       discord,
@@ -148,9 +150,6 @@
     [ exa, brew, null ]
     [ exercism, brew, null ]
     [ fd, brew, null ]
-    [ font-blex-mono-nerd-font, cask, null ]
-    [ font-fira-code-nerd-font, cask, null ]
-    [ font-hack-nerd-font, cask, null ]
     [ fzf, brew, null ]
     [ gawk, brew, null ]
     [ getantibody/tap, tap, null ]
@@ -239,5 +238,8 @@
     [ curl, brew, null ]
     [ emacs-plus, brew, null ]
     [ sd, brew, null ]
+    [ font-symbols-only-nerd-font, brew, null ]
+    [ font-fira-code-nerd-font, brew, null ]
+    [ font-iosevka, brew, null ]
   ]
 }
