@@ -1,6 +1,7 @@
 local set = vim.opt
 
-set.shell = 'zsh' -- better for compatibilty
+-- set.shell = 'zsh' -- better for compatibilty
+set.shell = vim.fn.expand '~' .. '/nu/nu'
 set.termguicolors = true -- adds more colors
 set.hidden = true -- Required to keep multiple buffers open multiple buffers
 set.encoding = 'utf-8' -- The encoding displayed

@@ -80,7 +80,7 @@ return {
 		g = { function() require('neogit').open {} end, 'Status' },
 		j = { function() require('gitsigns').next_hunk() end, 'Next Hunk' },
 		k = { function() require('gitsigns').prev_hunk() end, 'Prev Hunk' },
-		h = { Cmd 'DiffviewFileHistory % --no-merges', 'File History' },
+		h = { function() require('codethread.fns').toggle_file_history() end, 'File History' },
 		l = { function() require('gitsigns').blame_line() end, 'Blame' },
 		o = { Cmd 'Telescope git_status', 'Open changed file' },
 		p = { function() require('gitsigns').preview_hunk() end, 'Preview Hunk' },

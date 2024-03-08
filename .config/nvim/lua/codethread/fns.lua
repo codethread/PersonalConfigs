@@ -78,4 +78,13 @@ function M.test_current_file()
 	end
 end
 
+function M.toggle_file_history()
+	local is_diff = vim.startswith(vim.fn.expand '%', 'diffview://')
+	if is_diff then
+		vim.cmd [[DiffviewClose]]
+	else
+		vim.cmd [[DiffviewFileHistory % --no-merges]]
+	end
+end
+
 return M

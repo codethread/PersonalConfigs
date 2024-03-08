@@ -164,7 +164,7 @@ return {
 					{ name = 'cmdline' },
 				}),
 				completion = {
-					completeopt = 'menu,menuone,noselect',
+					-- completeopt = 'menu,menuone,noselect',
 					keyword_length = 1,
 				},
 				confirm_opts = {

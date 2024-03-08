@@ -6,6 +6,13 @@ end, {})
 
 return {
 	{
+		'folke/todo-comments.nvim',
+		event = 'VimEnter',
+		dependencies = { 'nvim-lua/plenary.nvim' },
+		opts = { signs = false },
+	},
+
+	{
 		'rcarriga/nvim-notify',
 		version = 'v3.*',
 		config = function()
@@ -82,11 +89,13 @@ return {
 	{
 		'rose-pine/neovim',
 		name = 'rose-pine',
-		version = 'v2.*',
+		version = 'v3.*',
 		priority = 1000,
 		lazy = false,
 		opts = {
 			variant = 'moon',
+			styles = { italic = false, transparency = false },
+
 			-- calls to nvim_set_hl()
 			dim_inactive_windows = true,
 			-- extend_background_behind_borders = true,
@@ -97,6 +106,8 @@ return {
 				CursorLine = { bg = 'foam', blend = 10 },
 				StatusLine = { fg = 'foam', bg = 'foam', blend = 10 },
 
+				['@variable'] = { italic = false },
+
 				['@keyword.bang'] = { fg = 'love', underline = true },
 				['@keyword.return'] = { fg = 'iris', undercurl = true },
 
@@ -105,6 +116,20 @@ return {
 				['@keyword.export'] = { fg = 'love' },
 				['@keyword.default'] = { fg = 'love', bold = true },
 				-- ['@variable'] = { fg = c.fg }
+
+				['@markup'] = { fg = 'rose' },
+				['@markup.italic'] = { italic = true },
+
+				-- italic, I prefer to do these myself and disable it globally
+				['@text.emphasis'] = { italic = true },
+
+				Comment = { italic = true },
+
+				htmlItalic = { italic = true },
+
+				mkdCode = { italic = true },
+
+				-- @markup.italic.markdown_inline
 			},
 		},
 	},
