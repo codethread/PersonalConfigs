@@ -204,6 +204,9 @@ export def gnah [] {
 }
 
 export def gnew [name: string] {
+  if ($name | split chars | length) > 52 { 
+    error { msg: "branch name can't exceed 52 chars!", label: { text: "branch", span: (metadata $name).span } } 
+  }
   let trunk = (git_main_branch)
   let target = $"($trunk):($trunk)"
   if ($trunk == (git_current_branch)) {
