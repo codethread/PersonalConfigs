@@ -7,6 +7,7 @@ set.hidden = true -- Required to keep multiple buffers open multiple buffers
 set.encoding = 'utf-8' -- The encoding displayed
 set.pumheight = 10 -- Makes popup menu smaller
 set.fileencoding = 'utf-8' -- The encoding written to file
+set.spellfile = vim.fn.expand '~' .. '/.config/.en.utf-8.add'
 set.ruler = true -- Show the cursor position all the time
 set.laststatus = 3
 set.wrap = false -- Display long lines as just one line

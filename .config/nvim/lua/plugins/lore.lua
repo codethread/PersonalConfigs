@@ -42,7 +42,7 @@ return {
 
 	{
 		'wakatime/vim-wakatime',
-		cond = os.getenv 'WAKATIME_HOME',
+		cond = os.getenv 'WAKATIME_HOME' ~= nil,
 		event = { 'BufReadPre', 'BufNewFile' },
 		version = '9.*',
 	},
