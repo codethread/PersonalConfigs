@@ -17,7 +17,7 @@ def path-prepend [p: string] {
 
 $env.DOTFILES = (home PersonalConfigs)
 $env.EDITOR = "nvim"
-$env.SHELL = ("~/nu/nu" | path expand)
+$env.SHELL = '~/.local/bin/nu'
 $env.MANPAGER = "/bin/sh -c \"col -b | nvim -c 'set ft=man ts=8 nomod nolist nonu' -\""
 $env.MANWIDTH = 80
 $env.LESSHISTFILE = "-" # no .lesshst
@@ -63,7 +63,7 @@ $env.FZF_DEFAULT_COMMAND = "fd --type f --hidden --exclude '{.git}'"
 #: }}}
 #: go {{{
 
-$env.PATH = (path-prepend "go/bin")
+$env.PATH = (path-prepend "~/go/bin")
 $env.GOBIN = (home "go/bin")
 $env.GOPATH = (home "go")
 
@@ -77,7 +77,7 @@ $env.PATH = (path-prepend "~/Library/Android/sdk/platform-tools")
 $env.PATH = (path-prepend "/opt/homebrew/opt/ruby@3.1/bin")
 $env.PATH = (path-prepend "/opt/homebrew/lib/ruby/gems/3.1.0/bin")
 
-$env.PATH = (path-prepend ".volta/bin")
+$env.PATH = (path-prepend "~/.volta/bin")
 $env.VOLTA_HOME = (home ".volta")
 $env.HUSKY = "0" # don"t hold my hand
 
@@ -128,5 +128,4 @@ $env.NU_PLUGIN_DIRS = [(home ".cargo/bin")]
 
 # keep this at the end
 $env.PATH = (path-prepend "~/.local/bin")
-$env.PATH = (path-prepend "~/nu")
 $env.PATH = ($env.PATH  | uniq)

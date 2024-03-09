@@ -7,7 +7,6 @@ return {
 			local highlights = require 'rose-pine.plugins.toggleterm'
 			return {
 				-- size can be a number or function which is passed the current terminal
-				shell = '/Users/adam.hall/nu/nu',
 				size = function(term)
 					if term.direction == 'horizontal' then
 						return 15
