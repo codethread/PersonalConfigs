@@ -4,8 +4,14 @@ export def load [] {
 
     let config = [
       [name, from, to, excludes];
-      [test, (dir ~/test), (dir ~/test-out), []]
-      [dots, (dir ~/PersonalConfigs), (dir ~), ["**/README.md"]]
+      [dots, (dir ~/PersonalConfigs), (dir ~), 
+        [
+          "**/README.md",
+          "**/.luacheckrc"
+          "**/.stylua.toml"
+          "**/.gitignore"
+        ]
+      ]
       [work, (dir ~/workfiles), (dir ~), ["**/README.md"]]
     ]
 

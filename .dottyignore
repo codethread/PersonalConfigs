@@ -1,6 +1,0 @@
-^.git$
-^_.*
-.gitignore$
-README
-^.dottyignore$
-^.luacheckrc$

@@ -229,9 +229,6 @@ pathappend () {
 pathprepend "$HOMEBREW_PREFIX/bin" PATH
 pathprepend "$HOMEBREW_PREFIX/sbin" PATH
 
-# personal
-pathprepend "$HOME/.local/bin" PATH
-
 # emacs
 pathprepend "$HOME/.emacs.d/bin" PATH
 
@@ -269,7 +266,11 @@ pathprepend "/usr/local/share/dotnet" PATH
 pathprepend "/opt/homebrew/opt/ruby/bin" PATH
 pathprepend "/opt/homebrew/lib/ruby/gems/3.1.0/bin" PATH
 
+# personal
+pathprepend "$HOME/.local/bin" PATH
+
 pathprepend "$HOME/nu" PATH
+
 
 if [[ -n "${CT_IS_MAC}" ]]; then
     pathprepend "/Library/Frameworks/Mono.framework/Versions/Current/Commands" PATH
