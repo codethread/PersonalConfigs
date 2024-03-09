@@ -174,13 +174,22 @@ return {
 
 	n = {
 		name = 'notes',
-		a = { Cmd 'ObsidianNew', 'New' },
+		a = {
+			name = 'add',
+			a = { Cmd 'ObsidianNew', 'New' },
+			t = { function() require('codethread.fns').create_markdown_toc() end, 'ToC' },
+		},
+		b = { Cmd 'ObsidianBacklinks', 'Backlinks' },
 		i = { Cmd 'ObsidianTemplate', 'Template' },
 		n = { Cmd 'ObsidianQuickSwitch', 'Find' },
 		o = { Cmd 'ObsidianOpen', 'Open' },
-		b = { Cmd 'ObsidianBacklinks', 'Backlinks' },
 		s = { Cmd 'ObsidianSearch', 'Search' },
-		t = { Cmd 'ObsidianToday', 'Today' },
+		t = { Cmd 'ObsidianTags', 'Tags' },
+		['0'] = { Cmd 'ObsidianToday', 'Today' },
+		['9'] = {
+			Cmd 'e ~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Test/notes/project/neovim/nvim ideas.md',
+			'nvim ideas.md',
+		},
 		['1'] = {
 			Cmd 'e ~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Test/notes/project/neovim/nvim ideas.md',
 			'nvim ideas.md',

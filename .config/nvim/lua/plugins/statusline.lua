@@ -58,7 +58,7 @@ return {
 		opts = function()
 			return {
 				options = {
-					theme = 'auto',
+					theme = 'rose-pine-alt',
 					icons_enabled = true,
 					globalstatus = true,
 					disabled_filetypes = {
@@ -199,7 +199,7 @@ return {
 					},
 				},
 				tabline = {
-					lualine_b = {
+					lualine_a = {
 						{
 							'tabs',
 							max_length = vim.o.columns / 2,

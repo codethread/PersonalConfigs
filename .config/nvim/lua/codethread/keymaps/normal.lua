@@ -1,4 +1,6 @@
 -- U.keymap('n', '<M-s>', '<cmd>w<cr>') -- alt or cmd on macos (terminal dependent, works with kitty)
+-- expose original functionality of marks under 'M'
+vim.keymap.set('n', 'M', 'm')
 
 return {
 	-- don't changed jumplist with paragraph jumps :help jumplist
@@ -49,7 +51,6 @@ return {
 	N = { 'Nzzzv', 'Center prev' },
 	J = { 'mzJ`z', 'Center join' },
 
-	M = 'm', -- expose original functionality of marks under 'M'
 	m = {
 		-- overrides marks, these get lost by most formatters
 		-- making them pretty much useless

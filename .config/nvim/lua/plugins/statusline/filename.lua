@@ -37,7 +37,7 @@ local function filename_and_parent(path, sep)
 	end
 end
 
-local notes = require('plugins.notes').opts.workspaces[1].path
+local notes = require('plugins.notes')[2].opts.workspaces[1].path
 
 M.update_status = function()
 	local path_separator = '/'

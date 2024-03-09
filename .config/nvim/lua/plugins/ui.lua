@@ -95,10 +95,16 @@ return {
 		opts = {
 			variant = 'moon',
 			styles = { italic = false, transparency = false },
-
+			enable = {
+				terminal = true,
+				-- Improve compatibility for previous versions of Neovim
+				legacy_highlights = false,
+				-- Handle deprecated options automatically
+				migrations = false,
+			},
 			-- calls to nvim_set_hl()
 			dim_inactive_windows = true,
-			-- extend_background_behind_borders = true,
+			extend_background_behind_borders = true,
 			highlight_groups = {
 				NonText = { fg = 'base' }, -- end ~
 				ColorColumn = { bg = 'rose' },
@@ -115,21 +121,19 @@ return {
 				-- ['@arrow_function.const'] = { undercurl = true },
 				['@keyword.export'] = { fg = 'love' },
 				['@keyword.default'] = { fg = 'love', bold = true },
-				-- ['@variable'] = { fg = c.fg }
-
+				
+        -- markdown
+				-- @markup.italic.markdown_inline
 				['@markup'] = { fg = 'rose' },
 				['@markup.italic'] = { italic = true },
+				['@markup.heading.1'] = { fg = 'rose', underline = true },
+				['@markup.heading.2'] = { fg = 'gold', bold = true },
 
 				-- italic, I prefer to do these myself and disable it globally
 				['@text.emphasis'] = { italic = true },
-
 				Comment = { italic = true },
-
 				htmlItalic = { italic = true },
-
 				mkdCode = { italic = true },
-
-				-- @markup.italic.markdown_inline
 			},
 		},
 	},
