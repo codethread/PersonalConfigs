@@ -15,9 +15,9 @@ fi
 echo "( ◕ ◡ ◕ ) Installing nushell"
 "${DOTFILES}/.local/bin/install-nushell"
 
-~/nu/nu \
+~/.local/bin/nu \
 	--env-config "${DOTFILES}/Library/Application Support/nushell/env.nu" \
 	--config "${DOTFILES}/Library/Application Support/nushell/config.nu" \
-	--commands "\$env | transpose | first"
+	--commands "dotty link; print 'Files linked'"
 
 echo "( ◕ ◡ ◕ ) complete, open new shell"
