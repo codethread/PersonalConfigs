@@ -10,6 +10,7 @@ return {
 	['{'] = { Cmd 'AerialPrev', 'next' },
 	['}'] = { Cmd 'AerialNex', 'prev' },
 
+	-- NOTE: these map to plus minus on a keyboard, but might change them for my preonic
 	['-'] = { 'zc', 'open fold under cursor' },
 	['='] = { 'zo', 'close fold under cursor' },
 	['_'] = { 'zC', 'close all folds under cursor' },
@@ -75,8 +76,8 @@ return {
 
 	z = {
 		name = 'misc',
-		-- R = { function() require('ufo').openAllFolds() end, 'open all folds' },
-		-- M = { function() require('ufo').closeAllFolds() end, 'close all folds' },
+		R = { function() require('ufo').openAllFolds() end, 'open all folds' },
+		M = { function() require('ufo').closeAllFolds() end, 'close all folds' },
 		-- r = { function() require('ufo').openFoldsExceptKinds() end, 'descrease fold' },
 		-- m = { function() require('ufo').closeFoldsWith() end, 'increase fold' },
 	},

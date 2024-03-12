@@ -121,13 +121,13 @@ return {
 				-- ['@arrow_function.const'] = { undercurl = true },
 				['@keyword.export'] = { fg = 'love' },
 				['@keyword.default'] = { fg = 'love', bold = true },
-				
-        -- markdown
+
+				-- markdown
 				-- @markup.italic.markdown_inline
 				['@markup'] = { fg = 'rose' },
 				['@markup.italic'] = { italic = true },
-				['@markup.heading.1'] = { fg = 'rose', underline = true },
-				['@markup.heading.2'] = { fg = 'gold', bold = true },
+				['@markup.heading.1'] = { fg = 'gold', underline = true },
+				['@markup.heading.2'] = { fg = 'rose', bold = true },
 
 				-- italic, I prefer to do these myself and disable it globally
 				['@text.emphasis'] = { italic = true },

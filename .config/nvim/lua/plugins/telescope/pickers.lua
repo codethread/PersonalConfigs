@@ -20,6 +20,7 @@ local function unsaved(opts)
 	end
 
 	-- TODO: grab the diff using lua and push it into a buffer
+	--
 	-- local my_preview = previewers.new_termopen_previewer {
 	-- 	get_command = function(entry, status)
 	-- 		vim.print(entry)
