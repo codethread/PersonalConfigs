@@ -6,6 +6,8 @@ use ct/core *
 
 source ct/alias/mod.nu
 
+alias open = ^open
+
 use ct/tmux
 use ct/brew
 use ct/kitty
