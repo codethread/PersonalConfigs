@@ -1,3 +1,5 @@
+local cwd = vim.fn.expand '~' .. '/Library/Mobile Documents/iCloud~md~obsidian/Documents/Notes'
+
 local Job = require 'plenary.job'
 
 local M = {}
@@ -25,6 +27,7 @@ end
 local add = Job:new {
 	command = 'git',
 	args = { 'add', '.' },
+	cwd = cwd,
 	on_exit = function(_, code)
 		if code ~= 0 then warn 'Add failed' end
 	end,
@@ -34,6 +37,7 @@ local add = Job:new {
 local commit = Job:new {
 	command = 'git',
 	args = { 'commit', '-m', os.date() },
+	cwd = cwd,
 	on_exit = function(_, code)
 		if code ~= 0 then warn 'Add failed' end
 	end,
@@ -42,6 +46,7 @@ local commit = Job:new {
 local push = Job:new {
 	command = 'git',
 	args = { 'push' },
+	cwd = cwd,
 	on_exit = function(_, code)
 		if code == 0 then
 			info 'Updated Remote'
@@ -63,7 +68,7 @@ end
 
 --- @param opts ct.StatusOpts Options
 function M.status(opts)
-	vim.system({ 'git', 'status', '--short' }, { text = true }, function(out)
+	vim.system({ 'git', 'status', '--short' }, { text = true, cwd = cwd }, function(out)
 		if out.code ~= 0 then
 			warn 'Could not get git status'
 		elseif not out.stdout or out.stdout == '' then
@@ -79,6 +84,7 @@ local timer = vim.loop.new_timer()
 local pull_and_start = Job:new {
 	command = 'git',
 	args = { 'pull' },
+	cwd = cwd,
 	on_exit = function(_, code)
 		if code == 0 then
 			info 'Up to date!'
@@ -89,6 +95,9 @@ local pull_and_start = Job:new {
 		end
 	end,
 }
+
+--- This will set up a timer running at 5 minute intervals to git and push any changes
+--- TODO: it will benifit from keeping track of open note files and stopping when all are closed
 function M.init()
 	info 'Updating'
 
