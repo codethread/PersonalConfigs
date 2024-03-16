@@ -137,6 +137,18 @@ return {
 					'_ x x x x x x _ x x x x x x',
 					'_ x x x x x x _ x x x x x x',
 				},
+				comment_preview = {
+					keymap_overrides = {
+						KC_LSFT = '󰘶',
+						KC_LALT = '⎇',
+						KC_LCTL = '^',
+						KC_LGUI = '󰘳',
+						LSFT_T = '󰘶',
+						LALT_T = '⎇',
+						LCTL_T = '^',
+						LGUI_T = '󰘳',
+					},
+				},
 			}
 			require('qmk').setup(conf)
 		end,
