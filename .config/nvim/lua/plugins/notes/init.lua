@@ -84,12 +84,8 @@ return {
 				end
 				return out
 			end,
-
 			callbacks = {
-				pre_write_note = function()
-					vim.cmd [[execute "normal gg/---/e+1\<CR>n"]]
-					vim.cmd [[GenTocGitLab]]
-				end,
+				post_setup = function() require('plugins.notes.backup').init() end,
 			},
 		},
 	},

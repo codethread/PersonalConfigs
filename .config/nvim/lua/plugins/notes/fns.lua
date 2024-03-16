@@ -20,4 +20,12 @@ function M.create_markdown_toc()
 	vim.cmd [[silent execute "norm 'zzz"]]
 end
 
+function M.rename()
+	vim.ui.input({ prompt = 'New file name: ' }, function(choice)
+		if not choice or choice == '' then return end
+		vim.notify(choice)
+		-- r = { Cmd 'ObsidianRename'}
+	end)
+end
+
 return M
