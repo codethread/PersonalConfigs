@@ -86,7 +86,10 @@ export alias gga = git gui citool --amend
 
 export alias ghh = git help
 
-export alias gignore = git update-index --assume-unchanged
+# export alias gignore = git update-index --assume-unchanged
+export def gignore [] {
+  git rm -r --cached .; git add .; git commit -m '.gitignore is now working'
+}
 
 export def grb [] {
   let count = (git log --oneline $"(git_main_branch)..HEAD" | lines | length)
