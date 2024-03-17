@@ -71,6 +71,18 @@ return {
 							completion = {
 								callSnippet = 'Replace',
 							},
+							diagnostics = {
+								globals = {
+									'vim',
+									'K',
+									'U',
+									'Cmd',
+									'Lua',
+									'Term',
+									'async',
+									'await',
+								},
+							},
 						},
 					},
 				},
