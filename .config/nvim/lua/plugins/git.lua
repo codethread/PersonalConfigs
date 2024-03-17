@@ -3,10 +3,24 @@ return {
 		'NeogitOrg/neogit',
 		lazy = true,
 		dependencies = { 'sindrets/diffview.nvim' },
+		init = function()
+			vim.api.nvim_create_autocmd('User', {
+				pattern = 'NeogitPushComplete',
+				group = vim.api.nvim_create_augroup('MyCustomNeogitEvents', { clear = true }),
+				callback = function() require('neogit').close() end,
+			})
+		end,
+		---@class NeogitConfig
 		opts = {
 			disable_commit_confirmation = true,
 			integrations = {
+				telescope = true,
 				diffview = true,
+			},
+			graph_style = 'unicode',
+			console_timeout = U.machine {
+				home = 2000,
+				work = 5000,
 			},
 		},
 	},
