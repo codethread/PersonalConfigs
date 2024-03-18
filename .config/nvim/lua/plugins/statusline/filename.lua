@@ -82,19 +82,20 @@ M.update_status = function()
 end
 
 ---show the current file name and the parent directory (if available)
----TODO add unsaved
 M.filename_winbar = function()
-	-- 	symbols = {
-	-- 		modified = '  ',
-	-- 		readonly = ' ',
-	-- 	},
+	local symbols = {
+		modified = '  ',
+		readonly = ' ',
+	}
+
 	local ft = U.ft()
 	local pwd = vim.fn.getcwd()
-	if ft == 'oil' then return vim.fn.expand('%'):gsub('oil://' .. pwd .. '/', '') end
+	local modified = vim.bo[0].modified and symbols.modified or ''
+	if ft == 'oil' then return vim.fn.expand('%'):gsub('oil://' .. pwd .. '/', '') .. modified end
 	local paths = vim.split(vim.fn.expand('%'):gsub(pwd, ''), '/')
-	if #paths == 1 then return paths[1] end
-	if #paths == 2 then return paths[#paths - 1] .. '/' .. paths[#paths] end
-	return ':/' .. paths[#paths - 1] .. '/' .. paths[#paths]
+	if #paths == 1 then return paths[1] .. modified end
+	if #paths == 2 then return paths[#paths - 1] .. '/' .. paths[#paths] .. modified end
+	return '.../' .. paths[#paths - 1] .. '/' .. paths[#paths] .. modified
 end
 
 return M

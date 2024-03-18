@@ -1,6 +1,6 @@
 local mode_maps = {
-	['NORMAL'] = '',
-	['INSERT'] = '',
+	['INSERT'] = '',
+	['NORMAL'] = '',
 	['VISUAL'] = '',
 	['V-BLOCK'] = '',
 	['V-LINE'] = '',
@@ -166,13 +166,13 @@ return {
 				},
 				winbar = {
 					lualine_c = {
-						{ 'diagnostics' },
+						{ 'diagnostics', separator = { right = '' } },
 						{ require('plugins.statusline.filename').filename_winbar },
 					},
 				},
 				inactive_winbar = {
 					lualine_c = {
-						{ 'diagnostics' },
+						{ 'diagnostics', separator = { right = '' } },
 						{ require('plugins.statusline.filename').filename_winbar },
 					},
 				},
