@@ -17,7 +17,7 @@ def path-prepend [p: string] {
 
 $env.DOTFILES = (home PersonalConfigs)
 $env.EDITOR = "nvim"
-$env.SHELL = '~/.local/bin/nu'
+$env.SHELL = ('~/.local/bin/nu' | path expand)
 $env.MANPAGER = "/bin/sh -c \"col -b | nvim -c 'set ft=man ts=8 nomod nolist nonu' -\""
 $env.MANWIDTH = 80
 $env.LESSHISTFILE = "-" # no .lesshst
