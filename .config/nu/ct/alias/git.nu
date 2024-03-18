@@ -1,5 +1,6 @@
 export def git_current_branch [] {
-    (gstat).branch
+    # (gstat).branch
+    git rev-parse --abbrev-ref HEAD
 }
 
 export def git_main_branch [] {
