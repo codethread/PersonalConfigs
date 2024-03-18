@@ -64,7 +64,6 @@ return {
 					disabled_filetypes = {
 						statusline = { 'dashboard', 'alpha' },
 						winbar = {
-							-- 'oil',
 							'no-neck-pain',
 							'help',
 							'startify',
@@ -124,22 +123,11 @@ return {
 							separator = { right = ' ', left = '' },
 							-- left_padding = 2,
 						},
-						-- {
-						-- 	'filename',
-						-- 	path = 1,
-						-- 	show_filename_only = false,
-						-- 	shorting_target = 0,
-						-- 	symbols = {
-						-- 		modified = '  ',
-						-- 		readonly = ' ',
-						-- 	},
-						-- },
 						{
 							require('plugins.statusline.filename').update_status,
 						},
 					},
 					lualine_c = {
-						'diagnostics',
 						{
 							function() return require('nvim-navic').get_location() end,
 							cond = function()
@@ -178,24 +166,14 @@ return {
 				},
 				winbar = {
 					lualine_c = {
-						{
-							'filename',
-							path = 0,
-							show_filename_only = false,
-							shorting_target = 0,
-							symbols = nil,
-						},
+						{ 'diagnostics' },
+						{ require('plugins.statusline.filename').filename_winbar },
 					},
 				},
 				inactive_winbar = {
 					lualine_c = {
-						{
-							'filename',
-							path = 0,
-							show_filename_only = false,
-							shorting_target = 0,
-							symbols = nil,
-						},
+						{ 'diagnostics' },
+						{ require('plugins.statusline.filename').filename_winbar },
 					},
 				},
 				tabline = {
