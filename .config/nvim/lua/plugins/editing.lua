@@ -125,6 +125,7 @@ return {
 
 	{
 		'codethread/qmk.nvim',
+		lazy = true,
 		init = function()
 			local group = vim.api.nvim_create_augroup('MyQMK', {})
 
