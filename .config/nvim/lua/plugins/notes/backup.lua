@@ -40,9 +40,7 @@ local function cmd_push()
 		args = { 'push' },
 		cwd = M.cwd,
 		on_exit = function(j, code)
-			if code == 0 then
-				info 'Updated Remote'
-			else
+			if code ~= 0 then
 				vim.print(j:stderr_result())
 				warn 'Push failed'
 			end

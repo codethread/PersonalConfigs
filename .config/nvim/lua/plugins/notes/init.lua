@@ -83,6 +83,26 @@ return {
 			callbacks = {
 				post_setup = function() require('plugins.notes.backup').init() end,
 			},
+
+			ui = {
+				hl_groups = {
+					ObsidianHighlightText = {
+						bg = require('rose-pine.palette').rose,
+						fg = require('rose-pine.palette').base,
+					},
+				},
+			},
 		},
+	},
+	{
+		'lukas-reineke/headlines.nvim',
+		dependencies = {
+			'nvim-treesitter/nvim-treesitter',
+			U.highlights {
+				Headline = { bg = 'surface' },
+				CodeBlock = { bg = 'surface' },
+			},
+		},
+		config = true, -- or `opts = {}`
 	},
 }
