@@ -6,7 +6,7 @@
      name: (identifier) @_id (#eq? @_id "parse_query")
      arguments: (arguments
                  (string)
-                 (string (string_content) @injection.context)))
+                 (string (string_content) @injection.content)))
      (#set! injection.language "query"))
 
 
@@ -15,7 +15,7 @@
              field: (identifier) @_id (#eq? @_id "parse_query"))
      arguments: (arguments
                  (string)
-                  (string (string_content) @injection.context)))
+                  (string (string_content) @injection.content)))
                          (#set! injection.language "query"))
 
 ((function_call
@@ -24,5 +24,5 @@
              field: (identifier) @_id (#eq? @_id "nush"))
      arguments: (arguments 
                   (string
-                    content: (_) @injection.context)))
+                    content: (_) @injection.content)))
      (#set! injection.language "nu"))

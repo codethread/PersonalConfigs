@@ -193,9 +193,13 @@ function M.autocmd(events, opts)
 	})
 end
 
----generate a string for nushell
----@param block string
----@return string
-function M.nush(block) return "nush '" .. block:gsub('\n', '; ') .. "'" end
+--- Run a nushell command using `vim.system`
+--- @param nu_block string
+--- @param opts vim.SystemOpts? Options
+--- @param on_exit? fun(out: vim.SystemCompleted) Called when subprocess exits. When provided, the command runs async
+--- @return vim.SystemObj
+function M.nush(nu_block, opts, on_exit) return vim.system({ 'nush', nu_block }, opts, on_exit) end
+
+-- function M.nush(nu_block) return "nush '" .. nu_block:gsub('\n', '; ') .. "'" end
 
 return M
