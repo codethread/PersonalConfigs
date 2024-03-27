@@ -5,8 +5,8 @@ return {
 		version = '*', -- recommended, use latest release instead of latest commit
 		lazy = true,
 		event = {
-			'BufReadPre ' .. require('plugins.notes.backup').cwd .. '/*',
-			'BufNewFile ' .. require('plugins.notes.backup').cwd .. '/*',
+			'BufReadPre ' .. require('plugins.notes.constants').cwd .. '/*',
+			'BufNewFile ' .. require('plugins.notes.constants').cwd .. '/*',
 		},
 		dependencies = { 'nvim-lua/plenary.nvim' },
 		cmd = { 'ObsidianWorkspace', 'ObsidianToday', 'ObsidianQuickSwitch' },
@@ -35,7 +35,8 @@ return {
 				template = 'daily.md',
 			},
 
-			new_notes_location = 'notes_subdir',
+			-- new_notes_location = 'notes_subdir',
+			new_notes_location = 'current_dir', --inline with PARA
 
 			completion = {
 				min_chars = 1,
@@ -82,10 +83,34 @@ return {
 			end,
 			callbacks = {
 				post_setup = function() require('plugins.notes.backup').init() end,
+
+				-- Runs right before writing the buffer for a note.
+				---@param _ obsidian.Client
+				---@param note obsidian.Note
+				pre_write_note = function(_, note)
+					local fname = note:fname()
+					require('plugins.notes.fns').check_name_clash { fname }
+				end,
 			},
 
+			picker = {
+				mappings = { new = '<C-n>' },
+			},
 			ui = {
 				hl_groups = {
+					-- The options are passed directly to `vim.api.nvim_set_hl()`. See `:help nvim_set_hl`.
+					ObsidianTodo = { bold = true, fg = '#f78c6c' },
+					ObsidianDone = { bold = true, fg = '#89ddff' },
+					ObsidianRightArrow = { bold = true, fg = '#f78c6c' },
+					ObsidianTilde = { bold = true, fg = '#ff5370' },
+					ObsidianBullet = { bold = true, fg = '#89ddff' },
+					ObsidianRefText = { underline = true, fg = '#c792ea' },
+					ObsidianExtLinkIcon = { fg = '#c792ea' },
+					ObsidianTag = { italic = true, fg = '#89ddff' },
+					ObsidianBlockID = { italic = true, fg = '#89ddff' },
+					-- ObsidianHighlightText = { bg = "#75662e" },
+
+					-- NOTE: shouldn't need all the others, but they don't get merged
 					ObsidianHighlightText = {
 						bg = require('rose-pine.palette').rose,
 						fg = require('rose-pine.palette').base,
@@ -96,6 +121,7 @@ return {
 	},
 	{
 		'lukas-reineke/headlines.nvim',
+		ft = 'markdown',
 		dependencies = {
 			'nvim-treesitter/nvim-treesitter',
 			U.highlights {

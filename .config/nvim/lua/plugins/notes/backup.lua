@@ -1,8 +1,7 @@
 local Job = require 'plenary.job'
+local cwd = require('plugins.notes.constants').cwd
 
 local M = {}
-
-M.cwd = vim.fn.expand '~' .. '/Library/Mobile Documents/iCloud~md~obsidian/Documents/Notes'
 
 ---notify at info level
 ---@param msg string
@@ -22,7 +21,7 @@ local function cmd_pull()
 	return Job:new {
 		command = 'git',
 		args = { 'pull' },
-		cwd = M.cwd,
+		cwd = cwd,
 		on_exit = function(j, code)
 			if code == 0 then
 				info 'Up to date!'
@@ -38,7 +37,7 @@ local function cmd_push()
 	return Job:new {
 		command = 'git',
 		args = { 'push' },
-		cwd = M.cwd,
+		cwd = cwd,
 		on_exit = function(j, code)
 			if code ~= 0 then
 				vim.print(j:stderr_result())
@@ -56,10 +55,10 @@ local function cmd_commit(msg)
 		-- NOTE: this relies on global git alias
 		-- git config --global alias.add-commit '!git add -A && git commit'
 		args = { 'add-commit', '-m', msg or os.date() },
-		cwd = M.cwd,
+		cwd = cwd,
 		on_exit = function(j, code)
 			if code ~= 0 then
-				vim.print(j:stderr_result())
+				vim.print(vim.inspect(j:stderr_result()))
 				warn 'Add failed'
 			end
 		end,
@@ -68,7 +67,7 @@ end
 
 --- @param opts ct.StatusOpts Options
 function M.status(opts)
-	vim.system({ 'git', 'status', '--short' }, { text = true, cwd = M.cwd }, function(out)
+	vim.system({ 'git', 'status', '--short' }, { text = true, cwd = cwd }, function(out)
 		if out.code ~= 0 then
 			vim.print(out.stderr)
 			warn 'Could not get git status'
@@ -83,13 +82,17 @@ end
 ---@param msg? string
 ---@param current_file? string # if passed will check whether the current file is part of a workspace, used for other plugins calling this function that may not know
 function M.update_and_push(msg, current_file)
-	if current_file and (not vim.startswith(current_file, M.cwd)) then return end
-	local commit = cmd_commit(msg)
-	local push = cmd_push()
+	if current_file and (not vim.startswith(current_file, cwd)) then return end
+	M.status {
+		on_dirty = function()
+			local commit = cmd_commit(msg)
+			local push = cmd_push()
 
-	commit:and_then_on_success(push)
+			commit:and_then_on_success(push)
 
-	commit:start()
+			commit:start()
+		end,
+	}
 end
 
 function M.init()
@@ -97,9 +100,9 @@ function M.init()
 
 	vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
 		group = vim.api.nvim_create_augroup('ct_obsidian_save', { clear = true }),
-		pattern = M.cwd .. '/*',
+		pattern = cwd .. '/*',
 		callback = function(opts)
-			local new_file = opts.file:gsub(M.cwd .. '/', '')
+			local new_file = opts.file:gsub(cwd .. '/', '')
 			M.update_and_push(new_file)
 		end,
 	})

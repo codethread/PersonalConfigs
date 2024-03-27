@@ -1,3 +1,4 @@
+local constants = require 'plugins.notes.constants'
 local M = {}
 
 ---Open the given note file
@@ -26,6 +27,30 @@ function M.rename()
 		vim.notify(choice)
 		-- r = { Cmd 'ObsidianRename'}
 	end)
+end
+
+---Check async that no duplicate file names have been created
+---@param files string[]
+function M.check_name_clash(files)
+	U.nush(
+		[[
+	fd --extension=md --type=f -E 'assets' -E excalidraw
+	| lines
+	| path parse
+	| uniq-by --repeated stem | get stem
+	| if (($in | length) > 0) {
+	  error make --unspanned { msg: $"The following files are duplicated\n($in | to text)" }
+	}
+]],
+		{ cwd = constants.cwd },
+		function(out)
+			if out.code ~= 0 then
+				vim.notify(out.stderr, vim.log.levels.ERROR, {
+					title = 'ct.Obsidian',
+				})
+			end
+		end
+	)
 end
 
 return M
