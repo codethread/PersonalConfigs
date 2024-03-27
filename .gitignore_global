@@ -73,7 +73,7 @@ t:*
 project/metals.sbt
 
 # neovim
-scratch.lua
+**/scratch.lua
 
 # nu
 scratch.nu

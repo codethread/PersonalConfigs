@@ -1,5 +1,5 @@
 return {
 	-- Things required early
 	{ 'nvim-lua/plenary.nvim', lazy = true },
-	{ 'kevinhwang91/promise-async', lazy = true },
+	{ 'nvim-neotest/nvim-nio', lazy = true },
 }

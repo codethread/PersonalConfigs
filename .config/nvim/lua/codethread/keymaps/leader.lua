@@ -11,6 +11,10 @@ return {
 	[':'] = { Cmd 'Telescope command_history', 'M-x [hist]' },
 	['/'] = { Cmd 'Telescope search_history', '/ [hist]' },
 	['q'] = { Cmd 'w | luafile %', 'Reload Luafile' },
+	[','] = {
+		function() require('plugins.telescope.pickers').workspace_symbols {} end,
+		'Workspace Symbols',
+	},
 
 	a = { Cmd 'AerialToggle! left', 'Aerial' },
 
