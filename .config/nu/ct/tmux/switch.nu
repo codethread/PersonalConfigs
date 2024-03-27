@@ -15,7 +15,7 @@ export def main [] {
 
   let target = (echo $sessions
   | str join "\n"
-  | fzf-tmux -p --preview $"($env.HOME)/.tmux/plugins/tmux-fzf/scripts/.preview {}" --preview-window ":follow")
+  | fzf-tmux -p -w 80% -h 70% --preview $"($env.HOME)/.tmux/plugins/tmux-fzf/scripts/.preview {}" --preview-window "right,70%,follow,border-left")
 
   if ($target | is-empty) { return }
   tmux switch-client -t $target
