@@ -4,7 +4,7 @@ function M.jump()
 	local word = vim.fn.expand '<cword>'
 
 	-- NOTE: nushell specific right now
-	local search_term = '(def|local) ' .. word
+	local search_term = '(def|let) ' .. word
 	local glob = '.config/nu/**/*.nu'
 
 	-- so fast sync is fine
@@ -19,20 +19,23 @@ function M.jump()
 
 	local lines = vim.split(vim.trim(stdout), '\n', {})
 
-	-- .config/nu/ct/tmux/projects.nu:1:8:export def get-projects [] {
 	if #lines == 1 then
-		local parts = vim.split(lines[1], ':')
-		if #parts == 2 then
-			vim.cmd.e(parts[1])
-		elseif #parts == 3 then
-			vim.cmd.e(parts[1] .. '|:' .. parts[2])
-		elseif #parts == 4 then
-			vim.cmd.e(parts[1])
-			local keyword = vim.split(parts[4], ' ')[2]
-			vim.api.nvim_win_set_cursor(0, { tonumber(parts[2]), tonumber(parts[3]) + #keyword })
+		local path, lnum, _col, match = unpack(vim.split(lines[1], ':'))
+
+		if not match or match == '' then
+			vim.notify('result not vimgrep format', vim.log.levels.ERROR)
+			vim.print(lines[1])
+			return
 		end
+
+		local col = string.find(match, word, 1, true) - 1
+		if not col then error('could not find def in match: ' .. match .. ', word: ' .. word) end
+		vim.cmd.e(path)
+		vim.api.nvim_win_set_cursor(0, { tonumber(lnum), tonumber(col) })
+		vim.cmd [[norm zz]]
 	end
-	vim.cmd [[norm zz]]
 end
+
+function M.reload() require('plenary.reload').reload_module 'codethread.dumbjump' end
 
 return M
