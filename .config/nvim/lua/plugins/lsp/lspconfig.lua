@@ -54,6 +54,14 @@ return {
 						},
 					},
 				},
+				nushell = {
+					cmd = {
+						'nu',
+						'--lsp',
+						-- BUG: doesn't actually work yet: https://github.com/nushell/nushell/issues/5655
+						'--include-path=' .. vim.fn.expand '~/PersonalConfigs/.config/nu',
+					},
+				},
 				-- clangd = {
 				-- 	filetypes = { 'c', 'cpp', 'objc', 'objcpp', 'cuda' },
 				-- },
@@ -90,29 +98,31 @@ return {
 			setup = {},
 		},
 		config = function(_, opts)
-			U.lsp_attach('*', function(_, buf)
-				U.keys(buf, {
-					{ 'gD', function() vim.lsp.buf.declaration() end, 'declaration' },
-					{
-						'gd',
-						function() vim.lsp.buf.definition { reuse_win = true } end,
-						'definition',
-					},
-					{
-						'K',
-						function()
-							local winid = require('ufo').peekFoldedLinesUnderCursor()
-							if not winid then
-								-- choose one of coc.nvim and nvim lsp
-								vim.lsp.buf.hover()
-							end
-						end,
-						'hover',
-					},
-					{ 'gi', function() vim.lsp.buf.implementation() end, 'implementation' },
-					{ 'gh', function() vim.lsp.buf.signature_help() end, 'signature_help' },
-					{ 'gr', function() vim.lsp.buf.references() end, 'references' },
-				}, { prefix = '', unique = false })
+			U.lsp_attach('*', function(client, buf)
+				if not vim.list_contains({ 'nushell' }, client.name) then
+					U.keys(buf, {
+						{ 'gD', function() vim.lsp.buf.declaration() end, 'declaration' },
+						{
+							'gd',
+							function() vim.lsp.buf.definition { reuse_win = true } end,
+							'definition',
+						},
+						{
+							'K',
+							function()
+								local winid = require('ufo').peekFoldedLinesUnderCursor()
+								if not winid then
+									-- choose one of coc.nvim and nvim lsp
+									vim.lsp.buf.hover()
+								end
+							end,
+							'hover',
+						},
+						{ 'gi', function() vim.lsp.buf.implementation() end, 'implementation' },
+						{ 'gh', function() vim.lsp.buf.signature_help() end, 'signature_help' },
+						{ 'gr', function() vim.lsp.buf.references() end, 'references' },
+					}, { prefix = '', unique = false })
+				end
 			end)
 
 			local augroup = U.augroups.lsp_formatting
