@@ -111,9 +111,15 @@ return {
 		---@type Flash.Config
 		opts = {
 			label = {
-				exclude = 'zxc',
+				exclude = 'xb',
+			},
+			search = {
+				multi_window = false,
 			},
 			modes = {
+				search = {
+					enabled = false, -- i do like this but it's annoying on large files
+				},
 				char = {
 					-- can set to false, but can actually just use f/F r t/T to repeat motions, in case of overshooting
 					multi_line = true,
@@ -133,7 +139,8 @@ return {
 			{
 				'S',
 				mode = { 'n', 'o', 'x' },
-				function() require('flash').treesitter() end,
+				-- function() require('flash').treesitter() end,
+				function() require('flash').jump { search = { multi_window = true } } end,
 				desc = 'Flash Treesitter',
 			},
 			{

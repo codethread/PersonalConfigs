@@ -53,4 +53,12 @@ function M.check_name_clash(files)
 	)
 end
 
+-- yank from the current table (between pipes)
+-- relies on using registers for now, could always be more fancy
+-- with lua and treesitter another day
+function M.table_swap_down() vim.cmd [[noau norm "tyi|j"yyi|ci|tkci|yjF|wlh]] end
+function M.table_swap_up() vim.cmd [[noau norm "tyi|k"yyi|ci|tjci|ykF|wlh]] end
+function M.table_swap_left() vim.cmd [[noau norm "tyi|2T|"yyi|ci|t2t|ci|y2T|wlh]] end
+function M.table_swap_right() vim.cmd [[noau norm "tyi|2t|"yyi|ci|t2T|ci|yf|wlh]] end
+
 return M

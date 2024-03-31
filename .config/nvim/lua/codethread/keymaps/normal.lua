@@ -7,8 +7,8 @@ return {
 	-- nnoremap <silent> } :<C-u>execute "keepjumps norm! " . v:count1 . "}"<CR>
 	-- nnoremap <silent> { :<C-u>execute "keepjumps norm! " . v:count1 . "{"<CR>
 	-- these are for my keyboard as I have them over j & k
-	['{'] = { Cmd 'AerialPrev', 'next' },
-	['}'] = { Cmd 'AerialNex', 'prev' },
+	['}'] = { Cmd 'AerialPrev', 'next' },
+	['{'] = { Cmd 'AerialNex', 'prev' },
 
 	-- NOTE: these map to plus minus on a keyboard, but might change them for my preonic
 	['-'] = { 'zc', 'open fold under cursor' },

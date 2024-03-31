@@ -33,6 +33,18 @@ return {
 			setup = {
 				tsserver = function(_, opts)
 					U.lsp_attach('tsserver', function(client, buffer)
+						U.keys(buffer, {
+							{
+								'cc',
+								Cmd '%g/console/norm dd',
+								'Clear logs',
+							},
+							{
+								's',
+								function() require('swap-ternary').swap() end,
+								'Swap ternary',
+							},
+						})
 						local augroup = U.augroups.lsp_formatting
 						vim.api.nvim_clear_autocmds { group = augroup, buffer = buffer }
 						vim.api.nvim_create_autocmd('BufWritePre', {
@@ -50,13 +62,6 @@ return {
 						-- map <leader>ld :%s/.*console.log.*\n//g<CR>
 					end)
 					require('typescript').setup { server = opts }
-					U.keys('typescript', {
-						{
-							'cc',
-							Cmd '%g/console/norm dd',
-							'Clear logs',
-						},
-					})
 					return true
 				end,
 			},

@@ -186,8 +186,5 @@ return {
 
 	{ 'xlboy/swap-ternary.nvim' }, -- seems over engineered but works
 
-	-- { 'mzlogin/vim-markdown-toc', cmd = { 'GenTocGitLab', 'GenTocGFM' } },
-	{ 'mzlogin/vim-markdown-toc' },
-
 	{ 'andymass/vim-matchup' },
 }

@@ -1,5 +1,10 @@
 return {
-	{ 'mzlogin/vim-markdown-toc' },
+	{
+		'mzlogin/vim-markdown-toc',
+		init = function()
+			vim.cmd [[let g:vmt_auto_update_on_save = 0]]
+		end,
+	},
 	{
 		'epwalsh/obsidian.nvim',
 		version = '*', -- recommended, use latest release instead of latest commit
@@ -13,6 +18,13 @@ return {
 		init = function()
 			-- set.conceallevel = 0 -- So that I can see `` in markdown files
 			vim.opt.conceallevel = 2 -- while trying obsidian
+			-- stylua: ignore
+			U.keys('markdown', {
+				{ 'j', function() require('plugins.notes.fns').table_swap_down() end, 'Table ⬇', },
+				{ 'k', function() require('plugins.notes.fns').table_swap_up() end, 'Table ⬆' },
+				{ 'h', function() require('plugins.notes.fns').table_swap_left() end, 'Table ⇽' },
+				{ 'l', function() require('plugins.notes.fns').table_swap_right() end, 'Table ⇾', },
+			})
 		end,
 		opts = {
 			workspaces = {
