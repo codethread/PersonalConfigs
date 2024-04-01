@@ -1,9 +1,7 @@
 return {
 	{
 		'mzlogin/vim-markdown-toc',
-		init = function()
-			vim.cmd [[let g:vmt_auto_update_on_save = 0]]
-		end,
+		init = function() vim.cmd [[let g:vmt_auto_update_on_save = 0]] end,
 	},
 	{
 		'epwalsh/obsidian.nvim',
@@ -69,30 +67,12 @@ return {
 				},
 			},
 
-			-- Optional, customize how wiki links are formatted.
-			---@param opts {path: string, label: string, id: string|?}
-			---@return string
-			wiki_link_func = function(opts) return string.format('[[%s]]', opts.label) end,
-
-			-- not into zettlcrapsten so a title is fine. Maybe should remove bad chars though or panic
-			note_id_func = function(title) return title end,
-
-			-- Optional, alternatively you can customize the frontmatter data.
-			note_frontmatter_func = function(note)
-				-- TODO seems to include the title in the alias
-				-- docs to obsidian.Note
-				-- ~/.local/share/nvim/lazy/obsidian.nvim/doc/obsidian_api.txt:349
-				-- This is equivalent to the default frontmatter function.
-				local out = { id = note.id, aliases = note.aliases, tags = note.tags }
-				-- `note.metadata` contains any manually added fields in the frontmatter.
-				-- So here we just make sure those fields are kept in the frontmatter.
-				if note.metadata ~= nil and not vim.tbl_isempty(note.metadata) then
-					for k, v in pairs(note.metadata) do
-						out[k] = v
-					end
-				end
-				return out
+			wiki_link_func = function(opts)
+				return require('plugins.notes.fns').wiki_link_func(opts)
 			end,
+
+			disable_frontmatter = true,
+
 			callbacks = {
 				post_setup = function() require('plugins.notes.backup').init() end,
 

@@ -61,4 +61,27 @@ function M.table_swap_up() vim.cmd [[noau norm "tyi|k"yyi|ci|tjci|ykF|wlh]]
 function M.table_swap_left() vim.cmd [[noau norm "tyi|2T|"yyi|ci|t2t|ci|y2T|wlh]] end
 function M.table_swap_right() vim.cmd [[noau norm "tyi|2t|"yyi|ci|t2T|ci|yf|wlh]] end
 
+--- Lifted from the original but tweaks the anchor to be compatible with the app
+---@param opts { path: string, label: string, id: string|integer|?, anchor: obsidian.note.HeaderAnchor|?, block: obsidian.note.Block|? }
+---@return string
+function M.wiki_link_func(opts)
+	local anchor = ''
+	local header = ''
+	if opts.anchor then
+		anchor = string.format('#%s', opts.anchor.header)
+		header = string.format(' ❯ %s', opts.anchor.header)
+	elseif opts.block then
+		anchor = '#' .. opts.block.id
+		header = '#' .. opts.block.id
+	end
+
+	if opts.id == nil then
+		return string.format('[[%s%s]]', opts.label, anchor)
+	elseif opts.label ~= opts.id then
+		return string.format('[[%s%s|%s%s]]', opts.id, anchor, opts.label, header)
+	else
+		return string.format('[[%s%s]]', opts.id, anchor)
+	end
+end
+
 return M
