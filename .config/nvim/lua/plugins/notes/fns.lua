@@ -65,22 +65,22 @@ function M.table_swap_right() vim.cmd [[noau norm "tyi|2t|"yyi|ci|t2T|ci|yf|
 ---@param opts { path: string, label: string, id: string|integer|?, anchor: obsidian.note.HeaderAnchor|?, block: obsidian.note.Block|? }
 ---@return string
 function M.wiki_link_func(opts)
-	local anchor = ''
 	local header = ''
+	local formatted_header = ''
+	local name = opts.id or opts.label
+
 	if opts.anchor then
-		anchor = string.format('#%s', opts.anchor.header)
-		header = string.format(' ❯ %s', opts.anchor.header)
+		header = string.format('#%s', opts.anchor.header)
+		formatted_header = string.format(' ❯ %s', opts.anchor.header)
 	elseif opts.block then
-		anchor = '#' .. opts.block.id
 		header = '#' .. opts.block.id
+		formatted_header = '#' .. opts.block.id
 	end
 
-	if opts.id == nil then
-		return string.format('[[%s%s]]', opts.label, anchor)
-	elseif opts.label ~= opts.id then
-		return string.format('[[%s%s|%s%s]]', opts.id, anchor, opts.label, header)
+	if header == '' then
+		return string.format('[[%s]]', name)
 	else
-		return string.format('[[%s%s]]', opts.id, anchor)
+		return string.format('[[%s%s|%s%s]]', name, header, name, formatted_header)
 	end
 end
 
