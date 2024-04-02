@@ -1,6 +1,6 @@
 use ct/core *
-use cache.nu [load-cache, save-cache, delete-cache]
-use config.nu 
+export use cache.nu [load-cache, save-cache, delete-cache]
+export use config.nu 
 
 export def link [
   --no-cache(-c)

@@ -151,4 +151,22 @@ return {
 		'stevearc/dressing.nvim',
 		opts = {},
 	},
+
+	-- {
+	-- 	'folke/zen-mode.nvim',
+	-- 	---@class ZenOptions
+	-- 	opts = {
+	-- 		window = {
+	-- 			backdrop = 1, -- don't dim
+	-- 			width = 1, -- 100%
+	-- 		},
+	-- 		plugins = {
+	-- 			tmux = { enabled = true },
+	-- 			kitty = {
+	-- 				enabled = true,
+	-- 				font = '+4', -- font size increment
+	-- 			},
+	-- 		},
+	-- 	},
+	-- },
 }

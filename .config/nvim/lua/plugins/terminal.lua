@@ -14,6 +14,7 @@ return {
 						return vim.o.columns * 0.4
 					end
 				end,
+				shell = 'nu',
 				open_mapping = [[<M-t>]],
 				hide_numbers = true, -- hide the number column in toggleterm buffers
 				start_in_insert = true,

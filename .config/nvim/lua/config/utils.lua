@@ -134,7 +134,7 @@ function M.keymap(mode, lhs, rhs, opts)
 end
 
 ---Create local bindings for a buffer or filetype (currently backed by which-key)
----@param filetype string | number either a number for a buffer or a string for a filetype, if the latter, an autocmd will be created
+---@param filetype number | string | string[] either a number for a buffer or a string for a filetype, if the latter, an autocmd will be created
 ---@param mapping (string | fun())[][]
 ---@param opts? table
 function M.keys(filetype, mapping, opts)
@@ -150,12 +150,26 @@ function M.keys(filetype, mapping, opts)
 		prefix = '<localleader>',
 	}
 
-	if type(filetype) == 'string' then
+	if type(filetype) == 'string' or type(filetype) == 'table' then
+		if type(filetype) == 'table' then
+			for _, ft in ipairs(filetype) do
+				if type(ft) ~= 'string' then
+					vim.notify(
+						'filetypes should be strings when passed as arrays, got' .. vim.inspect(ft),
+						vim.log.levels.ERROR
+					)
+					return
+				end
+			end
+		end
 		vim.api.nvim_create_autocmd('FileType', {
 			pattern = filetype,
 			callback = function(ops)
 				local ok, wk = pcall(require, 'which-key')
-				if not ok then error 'needs which key' end
+				if not ok then
+					vim.notify('needs which key', vim.log.levels.ERROR)
+					return
+				end
 
 				wk.register(
 					bindings,
@@ -165,14 +179,20 @@ function M.keys(filetype, mapping, opts)
 		})
 	elseif type(filetype) == 'number' then
 		local ok, wk = pcall(require, 'which-key')
-		if not ok then error 'needs which key' end
+		if not ok then
+			vim.notify('needs which key', vim.log.levels.ERROR)
+			return
+		end
 
 		wk.register(
 			bindings,
 			vim.tbl_deep_extend('force', base_options, { buffer = filetype }, opts or {})
 		)
 	else
-		error 'keys is intended for filetype local mappings, pass a filetype or a bufnr'
+		vim.notify(
+			'keys is intended for filetype local mappings, pass a filetype or a bufnr',
+			vim.log.levels.ERROR
+		)
 	end
 end
 

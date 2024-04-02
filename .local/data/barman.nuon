@@ -35,7 +35,7 @@
       stylua,
       tmux,
       wakatime-cli,
-      sd,
+      sd
     ],
     node: [
       volta,
@@ -82,7 +82,10 @@
     ],
     react-native: [
       rbenv,
-      "ruby@3.1"
+      "ruby@3.1",
+      flipper,
+      facebook/fb,
+      idb-companion
     ],
     aws: [
       weaveworks/tap,
@@ -241,5 +244,8 @@
     [ font-symbols-only-nerd-font, brew, null ]
     [ font-fira-code-nerd-font, brew, null ]
     [ font-iosevka, brew, null ]
+    [ flipper, cask, null ]
+    [ facebook/fb, tap, null ]
+    [ idb-companion, brew, null ]
   ]
 }

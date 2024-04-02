@@ -1,6 +1,7 @@
 use git.nu *
 use node.nu *
 use tmux.nu *
+use work.nu *
 
 #---------------------------------------------#
 # EDITOR-ish
