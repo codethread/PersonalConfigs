@@ -297,9 +297,8 @@
     }
   ],
   "workbench.colorTheme": "Rosé Pine Moon",
+  "workbench.activityBar.location": "hidden",
   "nushellLanguageServer.includeDirs": [
-    "~/PersonalConfigs/Library/Application Support/nushell/scripts"
-  ],
-  "nushellLanguageServer.hints.showInferredTypes": false,
-  "workbench.activityBar.location": "hidden"
+    "~/PersonalConfigs/.config/nu"
+  ]
 }
