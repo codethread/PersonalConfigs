@@ -10,7 +10,6 @@ alias open = ^open
 
 use ct/tmux
 use ct/brew
-use ct/kitty
 use ct/dotty
 
 $env.config = {
