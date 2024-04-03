@@ -62,12 +62,18 @@ function M.table_swap_left() vim.cmd [[noau norm "tyi|2T|"yyi|ci|t2t|ci|y2T|
 function M.table_swap_right() vim.cmd [[noau norm "tyi|2t|"yyi|ci|t2T|ci|yf|wlh]] end
 
 --- Lifted from the original but tweaks the anchor to be compatible with the app
+---
+--- NOTE: this has the drawback of not creating links as id|alias which breaks obsidian
+--- origianlly set up so i could write a lowercase name for an uppercase file, but I should
+--- probably fix this
+---
 ---@param opts { path: string, label: string, id: string|integer|?, anchor: obsidian.note.HeaderAnchor|?, block: obsidian.note.Block|? }
 ---@return string
 function M.wiki_link_func(opts)
 	local header = ''
 	local formatted_header = ''
-	local name = opts.id or opts.label
+	-- local name = opts.id or opts.label
+	local name = opts.label
 
 	if opts.anchor then
 		header = string.format('#%s', opts.anchor.header)

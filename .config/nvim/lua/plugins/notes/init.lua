@@ -71,6 +71,9 @@ return {
 				return require('plugins.notes.fns').wiki_link_func(opts)
 			end,
 
+			-- this prevents new files having silly names
+			note_id_func = function(title) return title end,
+
 			disable_frontmatter = true,
 
 			callbacks = {
