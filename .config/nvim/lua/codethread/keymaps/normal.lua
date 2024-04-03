@@ -92,4 +92,16 @@ return {
 	-- center on scroll
 	['<C-u>'] = { '<C-u>zz', 'Center Up' },
 	['<C-d>'] = { '<C-d>zz', 'Center Up' },
+	['<C-q>'] = {
+		function()
+			for _, win in ipairs(vim.api.nvim_tabpage_list_wins(vim.api.nvim_get_current_tabpage())) do
+				if vim.fn.getwinvar(win, '&syntax') == 'qf' then
+					vim.cmd.cclose()
+					return
+				end
+			end
+			vim.cmd.copen()
+		end,
+		'Toggle quickfix',
+	},
 }
