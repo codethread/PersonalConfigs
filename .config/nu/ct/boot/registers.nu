@@ -1,8 +1,15 @@
-# bit clunky as you have to cargo install first, so doing this on demand
-# use registers
-# registers
+# register all various plugins, should only be needed once per update
 export def main [] {
- register nu_plugin_gstat
- register nu_plugin_query
- register nu_plugin_highlight
+  handle nu_plugin_gstat
+  handle nu_plugin_query
+  # don't realy need this
+  # handle nu_plugin_highlight
+ 
+  # version also lists plugins
+  nu -l -c "version"
+}
+
+def handle [$name] {
+  cargo install $name
+  nu -l -c $"register ($name)"
 }

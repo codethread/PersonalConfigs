@@ -1,3 +1,4 @@
+use ct/boot/registers.nu
 use ct/config/prompt.nu
 use ct/themes.nu themes
 use ct/config [keybindings menus]
