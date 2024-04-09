@@ -1,0 +1,46 @@
+#!/usr/bin/env nu
+
+# brew updrade and init atuin
+def main [] {
+  install-atuin
+
+  print $"(ansi green)Setting up shell script(ansi reset)"
+
+  mkdir ~/.local/share/atuin/
+  # atuin init nu --disable-up-arrow | save -f ~/.local/share/atuin/init.nu
+  atuin init nu | save -f ~/.local/share/atuin/init.nu
+
+  print $"(ansi green)Good to go!(ansi reset)"
+}
+
+def install-atuin [] {
+  print $"(ansi green)\( ◕ ◡ ◕ \)(ansi reset)"
+
+  let atuin_dir = "~/dev/vendor/atuin/atuin" | path expand
+  let bin = "~/.cargo/bin/atuin" | path expand
+
+  if ($atuin_dir | path exists | $in == false) {
+    print $"(ansi green)Cloning atuin(ansi reset)"
+    git clone git@github.com:atuinsh/atuin.git $atuin_dir
+    cd $atuin_dir
+  } else {
+    cd $atuin_dir
+    print $"(ansi green)Updating atuin(ansi reset)"
+    git pull
+  }
+
+  print $"(ansi green)Building atuin(ansi reset)"
+
+  cargo install --path .
+
+  print $'(ansi green)installed to(ansi reset) "($bin)"'
+
+  if (which atuin | is-empty) {
+    print $"(ansi yellow)WARNING:(ansi reset) atuin is not in your PATH"
+    print $"(ansi green)atuin --version(ansi reset)"
+    ^$bin --version
+  } else {
+    atuin --version
+  }
+}
+

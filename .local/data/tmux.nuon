@@ -2,35 +2,34 @@
   dirs: [
     ~/
     ~/dev ~/dev/exercism ~/dev/projects ~/dev/learn ~/dev/vendor
-    ~/work ~/work/services ~/work/lambdas ~/work/utilities ~/work/infrastructure
+    ~/work ~/work/services ~/work/lambdas ~/work/utilities ~/work/infrastructure ~/work/libraries
     ~/.local/share/nvim/lazy ~/.local/share/nvim/mason/packages
     `~/Library/Mobile Documents/com~apple~CloudDocs/Books/The_DynamoDB_Book_-_Plus_Package/Code examples`
     `~/Library/Mobile Documents/iCloud~md~obsidian/Documents`
   ]
   base: [
-    [key, name];
-    [ P0, "~/dev/projects/qmk_firmware/keyboards/preonic/keymaps/codethread"]
-    [ Px, "~/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents"]
+    [key , name];
+    [ P0 , "~/dev/projects/qmk_firmware/keyboards/preonic/keymaps/codethread"]
   ]
   personal: [ 
-    [key, name];
-    [ P2, "~/dev/projects/qmk.nvim", ]
-    [ P3, "~/dev/projects/pomo-tauri", ]
-    [ P4, "~/dev/learn/rust-playground", ]
-    [ P5, "~/dev/projects/cold-brew", ]
+    [key , name];
+    [ P2 , "~/dev/projects/qmk.nvim", ]
+    [ P3 , "~/dev/projects/pomo-tauri", ]
+    [ P4 , "~/dev/learn/rust-playground", ]
+    [ P5 , "~/dev/projects/cold-brew", ]
 
-    [ P9, "~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Notes"]
+    [ P9 , "~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Notes"]
   ],
   work: [ 
-    [key, name];
+    [key , name];
     [ P2 , "~/work/deals-light-ui", ]
     [ P3 , "~/work/fe-review", ]
     [ P4 , "~/work/services/flexi-points-app", ]
     [ P5 , "~/work/fe-native", ]
 
 
-    [ P6, "~/dev/projects/gboard", ]
-    [ P7 , "~/work/inspect-my-package", ]
+    [ P6 , "~/dev/projects/gboard", ]
+    [ P7 , "~/work/libraries/inspect-my-package", ]
     [ P8 , "~/workfiles", ]
     [ P9 , "~/work/services/protobuf", ]
   ]
