@@ -127,6 +127,12 @@ return {
 		'codethread/qmk.nvim',
 		lazy = true,
 		init = function()
+			vim.filetype.add {
+				extension = {
+					keymap = 'dts',
+				},
+			}
+
 			local group = vim.api.nvim_create_augroup('MyQMK', {})
 
 			vim.api.nvim_create_autocmd('BufEnter', {
@@ -171,6 +177,7 @@ return {
 						name = 'hi',
 						variant = 'zmk',
 						auto_format_pattern = '*/dao.keymap',
+						comment_preview = { position = 'none' },
 						layout = {
 							'_ x x x x x x _ x x x x x x',
 							'_ x x x x x x _ x x x x x x',
