@@ -76,17 +76,24 @@
   "window.restoreWindows": "all",
   "window.title": "${rootName}${separator}${activeEditorMedium}",
   "window.titleBarStyle": "custom",
+
+  "workbench.activityBar.location": "hidden",
+  "workbench.colorTheme": "Rosé Pine Moon",
+  "workbench.fontAliasing": "auto",
+  "workbench.iconTheme": "rose-pine-icons",
+  "workbench.startupEditor": "newUntitledFile",
   "workbench.statusBar.visible": true,
+
   "workbench.editor.enablePreview": false,
   "workbench.editor.labelFormat": "short",
   "workbench.editor.openPositioning": "last",
   "workbench.editor.showTabs": "single",
   "workbench.editor.enablePreviewFromQuickOpen": false,
+  "workbench.editor.customLabels.patterns": {
+    "**/index.*": "/${dirname}/${filename}.${extname}"
+  },
   /** this is the default, but I can't decide if I like this or not */
   "workbench.editor.revealIfOpen": false,
-  "workbench.fontAliasing": "auto",
-  "workbench.iconTheme": "rose-pine-icons",
-  "workbench.startupEditor": "newUntitledFile",
 
   // ---------------------------------------------------------------------------------
   // PLUGINS
@@ -94,6 +101,8 @@
   "extensions.ignoreRecommendations": true,
 
   "xstate.nestTypegenFiles": false,
+
+  "nushellLanguageServer.includeDirs": ["~/PersonalConfigs/.config/nu"],
 
   "colorize.languages": [
     "css",
@@ -295,10 +304,5 @@
       "before": ["m", "l"],
       "commands": ["bookmarks.listFromAllFiles"]
     }
-  ],
-  "workbench.colorTheme": "Rosé Pine Moon",
-  "workbench.activityBar.location": "hidden",
-  "nushellLanguageServer.includeDirs": [
-    "~/PersonalConfigs/.config/nu"
   ]
 }
