@@ -3,6 +3,26 @@ local cwd = require('plugins.notes.constants').cwd
 
 local M = {}
 
+local timer_h
+
+local function schedule(callback)
+	if timer_h then
+		timer_h:stop()
+		timer_h:close()
+	end
+	timer_h = vim.loop.new_timer()
+	timer_h:start(
+		1000 * 60 * 3, -- 3 mins
+		0,
+		function()
+			timer_h:stop()
+			timer_h:close()
+			vim.schedule(callback)
+			timer_h = nil
+		end
+	)
+end
+
 ---notify at info level
 ---@param msg string
 local function info(msg)
@@ -83,27 +103,46 @@ end
 ---@param current_file? string # if passed will check whether the current file is part of a workspace, used for other plugins calling this function that may not know
 function M.update_and_push(msg, current_file)
 	if current_file and (not vim.startswith(current_file, cwd)) then return end
-	M.status {
-		on_dirty = function()
-			local commit = cmd_commit(msg)
-			local push = cmd_push()
+	schedule(function()
+		M.status {
+			on_dirty = function()
+				local commit = cmd_commit(msg)
+				local push = cmd_push()
 
-			commit:and_then_on_success(push)
+				commit:and_then_on_success(push)
 
-			commit:start()
-		end,
-	}
+				commit:start()
+			end,
+		}
+	end)
 end
 
 function M.init()
 	info 'Updating'
 
+	local group = vim.api.nvim_create_augroup('ct_obsidian_save', { clear = true })
 	vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
-		group = vim.api.nvim_create_augroup('ct_obsidian_save', { clear = true }),
+		group = group,
 		pattern = cwd .. '/*',
 		callback = function(opts)
 			local new_file = opts.file:gsub(cwd .. '/', '')
 			M.update_and_push(new_file)
+		end,
+	})
+
+	vim.api.nvim_create_autocmd({ 'VimLeavePre' }, {
+		group = group,
+		callback = function()
+			M.status {
+				on_dirty = function()
+					local commit = cmd_commit()
+					local push = cmd_push()
+
+					commit:and_then_on_success(push)
+
+					commit:start()
+				end,
+			}
 		end,
 	})
 
