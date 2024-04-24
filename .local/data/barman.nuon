@@ -26,7 +26,6 @@
   }
   cocktails:   {
     core: [
-      atuin,
       fd,
       fzf,
       neovim,

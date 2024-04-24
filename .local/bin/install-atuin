@@ -31,6 +31,8 @@ def install-atuin [] {
 
   print $"(ansi green)Building atuin(ansi reset)"
 
+  cd crates/atuin
+
   cargo install --path .
 
   print $'(ansi green)installed to(ansi reset) "($bin)"'
