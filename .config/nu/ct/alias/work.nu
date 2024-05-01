@@ -19,7 +19,7 @@ export def release [] {
   print $"(ansi green)log copied to clipboard(ansi reset)"
 
   git merge develop
-  git push
+  # git push
 
   print $"(ansi green)log copied to clipboard(ansi reset)"
 
