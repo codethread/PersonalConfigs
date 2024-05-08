@@ -153,7 +153,7 @@ return {
 					lualine_y = {
 						'filetype',
 						'progress',
-						'filesize',
+						-- 'filesize',
 					},
 					lualine_z = {
 						{
