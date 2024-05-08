@@ -97,6 +97,10 @@ export def grb [] {
   git rebase -i $"HEAD~($count)"
 }
 
+export def git_branch_diff [] {
+  git rev-list --left-right --count $"(git_main_branch)...HEAD" | parse --regex '(?<behind>\w+).+(?<ahead>\w+)' | first
+}
+
 export alias gl = git log --oneline $"(git_main_branch)..HEAD"
 export alias glg = git log --stat
 export alias glgp = git log --stat --patch
