@@ -5,6 +5,7 @@ return {
 	'tpope/vim-obsession',
 	'wellle/targets.vim',
 	'nvim-lua/popup.nvim',
+	'ThePrimeagen/vim-be-good',
 
 	-- use { 'bennypowers/nvim-regexplainer', requires = 'MunifTanjim/nui.nvim' }
 }

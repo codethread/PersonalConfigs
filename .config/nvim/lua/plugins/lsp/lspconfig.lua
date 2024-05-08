@@ -94,6 +94,21 @@ return {
 						},
 					},
 				},
+				tailwindcss = {
+					-- TODO: turn this off based on project, probably needs to look for the tailwind config
+					settings = {
+						tailwindCSS = {
+							experimental = {
+								classRegex = {
+									{
+										'tv\\((([^()]*|\\([^()]*\\))*)\\)',
+										'["\'`]([^"\'`]*).*?["\'`]',
+									},
+								},
+							},
+						},
+					},
+				},
 			},
 			setup = {},
 		},

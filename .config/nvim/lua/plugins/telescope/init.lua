@@ -113,12 +113,6 @@ return {
 							-- '/vendor/',
 							-- '%.lock',
 						},
-						-- U.project('~/work/deals-light-ui', {
-						-- 	'^e2e',
-						-- 	'^ios',
-						-- 	'^android',
-						-- 	'packages/irati/irati/braze/services/sdk',
-						-- }),
 						U.project('~/dev/projects/qmk.nvim', { 'lua/qmk/lib/' }),
 					},
 					vimgrep_arguments = {

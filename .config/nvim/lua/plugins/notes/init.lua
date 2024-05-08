@@ -1,3 +1,5 @@
+local constants = require 'plugins.notes.constants'
+
 return {
 	{
 		'mzlogin/vim-markdown-toc',
@@ -8,8 +10,8 @@ return {
 		version = '*', -- recommended, use latest release instead of latest commit
 		lazy = true,
 		event = {
-			'BufReadPre ' .. require('plugins.notes.constants').cwd .. '/*',
-			'BufNewFile ' .. require('plugins.notes.constants').cwd .. '/*',
+			'BufReadPre ' .. constants.pattern,
+			'BufNewFile ' .. constants.pattern,
 		},
 		dependencies = { 'nvim-lua/plenary.nvim' },
 		cmd = { 'ObsidianWorkspace', 'ObsidianToday', 'ObsidianQuickSwitch' },
@@ -33,7 +35,7 @@ return {
 					},
 					home = {
 						name = 'personal',
-						path = '~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Notes',
+						path = constants.cwd,
 					},
 				},
 			},

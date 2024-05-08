@@ -44,6 +44,7 @@ return {
 		dependencies = { 'nvim-tree/nvim-web-devicons' },
 		cmd = 'Oil',
 		opts = {
+			default_file_explorer = true,
 			view_options = {
 				show_hidden = true,
 			},
@@ -55,8 +56,12 @@ return {
 			},
 			skip_confirm_for_simple_edits = true,
 			use_default_keymaps = true,
-			--watch out for this during refactors
-			lsp_rename_autosave = true,
+			lsp_file_methods = {
+				-- Set to true to autosave buffers that are updated with LSP willRenameFiles
+				-- Set to "unmodified" to only save unmodified buffers
+				-- NOTE: watch out for this during refactors
+				autosave_changes = true,
+			},
 			keymaps = {
 				['g?'] = 'actions.show_help',
 				['<CR>'] = 'actions.select',
