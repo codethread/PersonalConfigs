@@ -29,6 +29,11 @@ $env.CT_USER = (match (whoami) {
   _ => "unknown", 
 })
 
+$env.CT_NOTES = (match $env.CT_USER {
+  "home" => ('~/Library/Mobile Documents/com~apple~CloudDocs/Documents/Notes' | path expand),
+  _ => null
+})
+
 $env.WAKATIME_HOME = ($nu.home-path | path join ".config/wakatime")
 $env.ZDOTDIR = ($nu.home-path | path join ".config/zsh")
 
