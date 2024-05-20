@@ -1,11 +1,15 @@
+vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
+
 return {
 	-- snippets
 	{
 		'L3MON4D3/LuaSnip',
 		version = 'v2.*',
 		dependencies = 'rafamadriz/friendly-snippets',
+		build = 'make install_jsregexp',
 		config = function()
-			require('luasnip').setup {
+			local ls = require 'luasnip'
+			ls.setup {
 				history = true,
 				delete_check_events = 'TextChanged',
 			}
@@ -15,6 +19,16 @@ return {
 					'~/.local/share/nvim/lazy/friendly-snippets',
 				},
 			}
+
+			vim.keymap.set({ 'i', 's' }, '<Tab>', function() ls.expand() end, { silent = true })
+			vim.keymap.set({ 'i', 's' }, '<C-n>', function() ls.jump(1) end, { silent = true })
+			vim.keymap.set({ 'i', 's' }, '<C-p>', function()
+				if ls.jumpable(-1) then ls.jump(-1) end
+			end, { silent = true })
+
+			-- vim.keymap.set({ 'i', 's' }, '<C-E>', function()
+			-- 	if ls.choice_active() then ls.change_choice(1) end
+			-- end, { silent = true })
 		end,
 	},
 
@@ -50,17 +64,7 @@ return {
 		},
 		config = function()
 			local cmp = require 'cmp'
-			local ls = require 'luasnip'
 			cmp.setup {
-				-- performance.max_view_entries
-				window = {
-					completion = {
-						winhighlight = 'Normal:Pmenu,FloatBorder:Pmenu,Search:None',
-						col_offset = -3,
-						side_padding = 0,
-					},
-					documentation = cmp.config.window.bordered(),
-				},
 				snippet = {
 					expand = function(args) require('luasnip').lsp_expand(args.body) end,
 				},
@@ -70,37 +74,10 @@ return {
 					['<C-l>'] = cmp.mapping.confirm { select = true }, -- select grabs first item if none were selected
 					['<Esc>'] = cmp.mapping.abort(),
 					['<C-c>'] = cmp.mapping.abort(),
-					-- ['<C-Space>'] = cmp.mapping.complete_common_string(),
 					['<C-u>'] = cmp.mapping.scroll_docs(-4),
 					['<C-d>'] = cmp.mapping.scroll_docs(4),
-
-					['<Tab>'] = cmp.mapping(function(fallback)
-						if ls.expandable() then
-							ls.expand()
-						elseif ls.expand_or_jumpable() then
-							ls.expand_or_jump()
-						else
-							fallback()
-						end
-					end, {
-						'i',
-						's',
-					}),
-					['<S-Tab>'] = cmp.mapping(function(fallback)
-						if cmp.visible() then
-							cmp.select_prev_item()
-						elseif ls.jumpable(-1) then
-							ls.jump(-1)
-						else
-							fallback()
-						end
-					end, {
-						'i',
-						's',
-					}),
 				},
 				completion = {
-					completeopt = 'menu,menuone,noinsert',
 					keyword_length = 2,
 					-- keyword_length = 1000,
 				},
@@ -134,37 +111,28 @@ return {
 					select = false,
 				},
 			}
-			cmp.setup.cmdline(':', {
-				mapping = cmp.mapping.preset.cmdline {
-					['<C-l>'] = {
-						c = function() cmp.complete() end,
-					},
-					['<C-j>'] = {
-						c = function()
-							if cmp.visible() then
-								cmp.select_next_item()
-							else
-								cmp.complete()
-							end
-						end,
-					},
-					['<C-k>'] = {
-						c = function()
-							if cmp.visible() then
-								cmp.select_prev_item()
-							else
-								cmp.complete()
-							end
-						end,
-					},
+
+			local completion_mapping = cmp.mapping.preset.cmdline {
+				['<C-l>'] = {
+					-- select grabs first item if none were selected
+					c = function() cmp.confirm { select = true } end,
 				},
+				['<C-j>'] = {
+					c = function() cmp.select_next_item() end,
+				},
+				['<C-k>'] = {
+					c = function() cmp.select_prev_item() end,
+				},
+			}
+
+			cmp.setup.cmdline(':', {
+				mapping = completion_mapping,
 				sources = cmp.config.sources({
 					{ name = 'path' },
 				}, {
 					{ name = 'cmdline' },
 				}),
 				completion = {
-					-- completeopt = 'menu,menuone,noselect',
 					keyword_length = 1,
 				},
 				confirm_opts = {
@@ -174,7 +142,7 @@ return {
 			})
 
 			cmp.setup.cmdline({ '/', '?' }, {
-				mapping = cmp.mapping.preset.cmdline(),
+				mapping = completion_mapping,
 				sources = {
 					{ name = 'buffer' },
 				},
@@ -194,12 +162,13 @@ return {
 				end
 			end
 
-			U.keymap('i', '<C-Space>', complete { 'nvim_lsp', 'copilot' }, 'Cmp')
+			U.keymap('i', '<C-Space>', complete { 'nvim_lsp' }, 'Cmp')
 
-			U.keymap('i', '<C-p>', complete 'luasnip')
+			U.keymap('i', '<C-x><C-p>', complete 'luasnip')
+
 			U.keymap('i', '<C-x><C-f>', complete 'path')
 
-			U.keymap('i', '<C-n>', function()
+			U.keymap('i', '<C-x><C-b>', function()
 				cmp.complete {
 					config = {
 						sources = {
