@@ -1,6 +1,7 @@
 return {
 	{
 		'pmizio/typescript-tools.nvim',
+		enabled = false, -- just not ready for prime time yet
 		ft = { 'typescriptreact', 'typescript', 'javascript', 'javascriptreact' },
 		dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
 		opts = {
