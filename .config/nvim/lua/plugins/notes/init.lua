@@ -31,7 +31,7 @@ return {
 				U.machine {
 					work = {
 						name = 'work',
-						path = '~/gdrive/perks',
+						path = constants.cwd,
 					},
 					home = {
 						name = 'personal',

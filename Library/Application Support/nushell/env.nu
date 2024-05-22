@@ -30,8 +30,8 @@ $env.CT_USER = (match (whoami) {
 })
 
 $env.CT_NOTES = (match $env.CT_USER {
-  "home" => ('~/Library/Mobile Documents/com~apple~CloudDocs/Documents/Notes' | path expand),
-  _ => null
+  "work" => ('~/gdrive/perks' | path expand),
+  _ => ('~/Library/Mobile Documents/com~apple~CloudDocs/Documents/Notes' | path expand),
 })
 
 $env.WAKATIME_HOME = ($nu.home-path | path join ".config/wakatime")
