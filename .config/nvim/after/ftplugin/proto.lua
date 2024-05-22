@@ -1,4 +1,4 @@
-vim.opt.iskeyword:append { '.' }
+vim.opt_local.iskeyword:append { '.' }
 
 --- protobuf defs are namespaced like foo.bar.baz.Message
 --- here we split out the . separated domain from the message
