@@ -78,6 +78,7 @@ return {
 		name = 'misc',
 		R = { function() require('ufo').openAllFolds() end, 'open all folds' },
 		M = { function() require('ufo').closeAllFolds() end, 'close all folds' },
+		p = { function() require('ufo').peekFoldedLinesUnderCursor() end, 'peak fold' },
 		-- r = { function() require('ufo').openFoldsExceptKinds() end, 'descrease fold' },
 		-- m = { function() require('ufo').closeFoldsWith() end, 'increase fold' },
 	},
