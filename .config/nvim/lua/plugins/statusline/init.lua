@@ -48,17 +48,47 @@ return {
 					return {
 						-- separator = ' ',
 						highlight = true,
-						depth_limit = 5,
-						-- icons = require('lspkind').symbol_map,
+						-- depth_limit = 5,
+						-- icons =	require('lspkind').symbol_map,
+						icons = {
+							File = '  ',
+							Module = '  ',
+							Namespace = '  ',
+							Package = '  ',
+							Class = '  ',
+							Method = '  ',
+							Property = '  ',
+							Field = '  ',
+							Constructor = '  ',
+							Enum = '  ',
+							Interface = '  ',
+							Function = '  ',
+							Variable = '  ',
+							Constant = '  ',
+							String = '  ',
+							Number = '  ',
+							Boolean = '  ',
+							Array = '  ',
+							Object = '  ',
+							Key = '  ',
+							Null = '  ',
+							EnumMember = '  ',
+							Struct = '  ',
+							Event = '  ',
+							Operator = '  ',
+							TypeParameter = '  ',
+						},
 					}
 				end,
 			},
 		},
 		event = 'VeryLazy',
 		opts = function()
+			local theme = require 'lualine.themes.rose-pine-alt'
+			theme.normal.c.gui = 'none'
 			return {
 				options = {
-					theme = 'rose-pine-alt',
+					theme = theme,
 					icons_enabled = true,
 					globalstatus = true,
 					disabled_filetypes = {
@@ -128,13 +158,13 @@ return {
 						},
 					},
 					lualine_c = {
-						{
-							function() return require('nvim-navic').get_location() end,
-							cond = function()
-								return package.loaded['nvim-navic']
-									and require('nvim-navic').is_available()
-							end,
-						},
+						-- {
+						-- 	function() return require('nvim-navic').get_location() end,
+						-- 	cond = function()
+						-- 		return package.loaded['nvim-navic']
+						-- 			and require('nvim-navic').is_available()
+						-- 	end,
+						-- },
 					},
 					lualine_x = {
 						{
@@ -168,6 +198,13 @@ return {
 					lualine_c = {
 						{ 'diagnostics', separator = { right = '' } },
 						{ require('plugins.statusline.filename').filename_winbar },
+						{
+							function() return require('nvim-navic').get_location() end,
+							cond = function()
+								return package.loaded['nvim-navic']
+									and require('nvim-navic').is_available()
+							end,
+						},
 					},
 				},
 				inactive_winbar = {
