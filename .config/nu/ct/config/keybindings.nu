@@ -529,7 +529,7 @@ export const keybindings = [
       event: {
           send: executehostcommand
           cmd: "commandline -a (
-              rg --files-with-matches .
+              rg --files-with-matches --hidden .
               | lines
               | input list --fuzzy
                   $'Please choose a (ansi magenta)file(ansi reset) to (ansi cyan_underline)insert(ansi reset):'
