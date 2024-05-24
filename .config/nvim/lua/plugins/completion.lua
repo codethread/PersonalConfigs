@@ -40,8 +40,32 @@ return {
 			local lspkind = require 'lspkind'
 			lspkind.init {
 				symbol_map = {
-					Copilot = '',
-					TypeParameter = '',
+					Copilot = ' ',
+					Text = '󰉿 ',
+					Method = '󰆧 ',
+					Function = '󰊕 ',
+					Constructor = ' ',
+					Field = '󰜢 ',
+					Variable = '󰀫 ',
+					Class = '󰠱 ',
+					Interface = ' ',
+					Module = ' ',
+					Property = '󰜢 ',
+					Unit = '󰑭 ',
+					Value = '󰎠 ',
+					Enum = ' ',
+					Keyword = '󰌋 ',
+					Snippet = ' ',
+					Color = '󰏘 ',
+					File = '󰈙 ',
+					Reference = '󰈇 ',
+					Folder = '󰉋 ',
+					EnumMember = ' ',
+					Constant = '󰏿 ',
+					Struct = '󰙅 ',
+					Event = ' ',
+					Operator = '󰆕 ',
+					TypeParameter = ' ',
 				},
 			}
 		end,
@@ -93,11 +117,13 @@ return {
 							maxwidth = 50,
 						}(entry, vim_item)
 						local strings = vim.split(kind.kind, '%s', { trimempty = true })
-						local a = strings[1] or 'OOF'
-						local b = strings[2] or 'YEP'
-						kind.kind = ' ' .. a .. ' '
-						kind.menu = '    (' .. b .. ')'
-
+						kind.kind = ' ' .. (strings[1] or '') .. ' '
+						local m = strings[2]
+						if m == '' then
+							kind.menu = ''
+						else
+							kind.menu = '    (' .. (strings[2] or '') .. ')'
+						end
 						return kind
 					end,
 				},

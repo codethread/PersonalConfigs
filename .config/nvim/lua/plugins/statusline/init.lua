@@ -34,11 +34,14 @@ return {
 			-- 'arkav/lualine-lsp-progress',
 			{
 				'SmiteshP/nvim-navic',
+				dependencies = {
+					'onsails/lspkind.nvim',
+				},
 				lazy = true,
 				init = function()
 					-- vim.g.navic_silence = true
 					U.lsp_attach('*', function(client, buffer)
-						if client.name == 'tsserver' then return end
+						-- if client.name == 'tsserver' then return end
 						if client.server_capabilities.documentSymbolProvider then
 							require('nvim-navic').attach(client, buffer)
 						end
@@ -49,35 +52,7 @@ return {
 						-- separator = ' ',
 						highlight = true,
 						-- depth_limit = 5,
-						-- icons =	require('lspkind').symbol_map,
-						icons = {
-							File = '  ',
-							Module = '  ',
-							Namespace = '  ',
-							Package = '  ',
-							Class = '  ',
-							Method = '  ',
-							Property = '  ',
-							Field = '  ',
-							Constructor = '  ',
-							Enum = '  ',
-							Interface = '  ',
-							Function = '  ',
-							Variable = '  ',
-							Constant = '  ',
-							String = '  ',
-							Number = '  ',
-							Boolean = '  ',
-							Array = '  ',
-							Object = '  ',
-							Key = '  ',
-							Null = '  ',
-							EnumMember = '  ',
-							Struct = '  ',
-							Event = '  ',
-							Operator = '  ',
-							TypeParameter = '  ',
-						},
+						icons = require('lspkind').symbol_map,
 					}
 				end,
 			},
