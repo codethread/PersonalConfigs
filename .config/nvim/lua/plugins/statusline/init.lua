@@ -211,9 +211,6 @@ return {
 							-- end,
 						},
 					},
-					lualine_x = {
-						"%{ObsessionStatus('', '')} ",
-					},
 					lualine_z = {
 						{
 							function()

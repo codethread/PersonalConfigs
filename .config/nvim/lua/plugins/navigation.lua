@@ -1,4 +1,6 @@
 return {
+	{ 'andymass/vim-matchup' },
+
 	{
 		'ThePrimeagen/harpoon',
 		lazy = true,

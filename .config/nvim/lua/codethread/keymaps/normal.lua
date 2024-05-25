@@ -2,6 +2,9 @@
 -- expose original functionality of marks under 'M'
 vim.keymap.set('n', 'M', 'm')
 
+U.keymap('i', 'jk', '<ESC>')
+U.keymap('i', 'jj', '<c-w>')
+
 return {
 	-- don't changed jumplist with paragraph jumps :help jumplist
 	-- nnoremap <silent> } :<C-u>execute "keepjumps norm! " . v:count1 . "}"<CR>

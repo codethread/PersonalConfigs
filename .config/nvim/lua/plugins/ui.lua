@@ -5,6 +5,8 @@ vim.api.nvim_create_user_command('DebugSpacing', function()
 end, {})
 
 return {
+	'DanilaMihailov/beacon.nvim',
+
 	{
 		'folke/todo-comments.nvim',
 		event = 'VimEnter',
@@ -21,7 +23,7 @@ return {
 			notify.setup {
 				-- background_colour = '#000000',
 				max_width = 100,
-				stages = 'slide',
+				stages = 'fade_in_slide_out',
 				timeout = 500,
 			}
 
@@ -151,22 +153,4 @@ return {
 		'stevearc/dressing.nvim',
 		opts = {},
 	},
-
-	-- {
-	-- 	'folke/zen-mode.nvim',
-	-- 	---@class ZenOptions
-	-- 	opts = {
-	-- 		window = {
-	-- 			backdrop = 1, -- don't dim
-	-- 			width = 1, -- 100%
-	-- 		},
-	-- 		plugins = {
-	-- 			tmux = { enabled = true },
-	-- 			kitty = {
-	-- 				enabled = true,
-	-- 				font = '+4', -- font size increment
-	-- 			},
-	-- 		},
-	-- 	},
-	-- },
 }
