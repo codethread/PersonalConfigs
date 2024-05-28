@@ -9,6 +9,7 @@ return {
 		'epwalsh/obsidian.nvim',
 		version = '*', -- recommended, use latest release instead of latest commit
 		lazy = true,
+		cond = constants.has_notes,
 		event = {
 			'BufReadPre ' .. constants.pattern,
 			'BufNewFile ' .. constants.pattern,
@@ -40,15 +41,15 @@ return {
 				},
 			},
 
-			notes_subdir = 'notes',
+			notes_subdir = 'inbox',
 
 			daily_notes = {
 				folder = 'journal',
 				template = 'daily.md',
 			},
 
-			-- new_notes_location = 'notes_subdir',
-			new_notes_location = 'current_dir', --inline with PARA
+			new_notes_location = 'notes_subdir',
+			-- new_notes_location = 'current_dir', --inline with PARA
 
 			completion = {
 				min_chars = 1,
@@ -69,9 +70,9 @@ return {
 				},
 			},
 
-			wiki_link_func = function(opts)
-				return require('plugins.notes.fns').wiki_link_func(opts)
-			end,
+			-- wiki_link_func = function(opts)
+			-- 	return require('plugins.notes.fns').wiki_link_func(opts)
+			-- end,
 
 			-- this prevents new files having silly names
 			note_id_func = function(title) return title end,

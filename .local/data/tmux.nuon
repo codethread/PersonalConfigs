@@ -18,7 +18,7 @@
     [ P4 , "~/dev/learn/rust-playground", ]
     [ P5 , "~/dev/projects/cold-brew", ]
 
-    [ P9 , "~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Notes"]
+    [ P9 , "~/Library/Mobile Documents/com~apple~CloudDocs/Documents/Notes"]
   ],
   work: [ 
     [key , name];
