@@ -53,7 +53,7 @@ return {
 		f = { function() require('codethread.split').split() end, 'Split last' },
 		r = { Cmd 'Telescope oldfiles', 'recent' },
 		R = { Cmd 'e!', 'reload' },
-		k = { Cmd 'Bdelete', 'kill' },
+		k = { function() require('mini.bufremove').delete() end, 'kill' },
 		s = {
 			function() require('codethread.fns').save_buffer() end,
 			'Save',

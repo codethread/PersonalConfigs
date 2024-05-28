@@ -29,7 +29,6 @@ return {
 	{ 'tpope/vim-rsi', event = { 'InsertEnter', 'CmdlineEnter' } }, -- readline movement, e.g C-f is forward char
 
 	{
-		-- TODO: replace with https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-surround.md
 		'kylechui/nvim-surround',
 		version = 'v1.*',
 		event = 'VeryLazy',

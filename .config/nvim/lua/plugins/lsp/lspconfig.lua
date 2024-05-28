@@ -1,10 +1,13 @@
 return {
 	{
 		'j-hui/fidget.nvim',
-		tag = 'legacy',
+		-- tag = 'legacy',
 		opts = {
-			text = {
-				spinner = 'dots_pulse',
+			progress = {
+				ignore = { 'null-ls' },
+				display = {
+					done_icon = '✓',
+				},
 			},
 		},
 	},

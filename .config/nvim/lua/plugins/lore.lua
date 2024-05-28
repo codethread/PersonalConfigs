@@ -2,11 +2,7 @@ return {
 	'farmergreg/vim-lastplace',
 	'anuvyklack/hydra.nvim',
 
-	{
-		-- TODO: replace with https://github.com/echasnovski/mini.nvim/blob/main/doc/mini-bufremove.txt
-		'famiu/bufdelete.nvim',
-		cmd = 'Bdelete',
-	},
+	{ 'echasnovski/mini.bufremove', version = '*', lazy = true },
 
 	{
 		'mbbill/undotree',
