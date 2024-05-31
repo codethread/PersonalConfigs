@@ -5,6 +5,19 @@ return {
 		'mzlogin/vim-markdown-toc',
 		init = function() vim.cmd [[let g:vmt_auto_update_on_save = 0]] end,
 	},
+
+	{
+		'iamcco/markdown-preview.nvim',
+		cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },
+		build = 'sh -c "cd app yarn install"',
+		init = function()
+			vim.g.mkdp_browser = 'firefox'
+			vim.g.mkdp_filetypes = { 'markdown' }
+			vim.g.mkdp_refresh_slow = 1 -- too much jumping around, refresh on save or insert leave
+		end,
+		ft = { 'markdown' },
+	},
+
 	{
 		'epwalsh/obsidian.nvim',
 		version = '*', -- recommended, use latest release instead of latest commit

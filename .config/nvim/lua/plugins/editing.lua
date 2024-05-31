@@ -92,4 +92,10 @@ return {
 	},
 
 	{ 'xlboy/swap-ternary.nvim' }, -- seems over engineered but works
+
+	{
+		'folke/ts-comments.nvim',
+		opts = {},
+		event = 'VeryLazy',
+	},
 }

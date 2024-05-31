@@ -37,7 +37,10 @@ local function filename_and_parent(path, sep)
 	end
 end
 
-local notes = require('plugins.notes')[2].opts.workspaces[1].path
+local notes = vim.tbl_filter(
+	function(i) return i[1] == 'epwalsh/obsidian.nvim' end,
+	require 'plugins.notes'
+)[1].opts.workspaces[1].path
 
 M.update_status = function()
 	local path_separator = '/'
