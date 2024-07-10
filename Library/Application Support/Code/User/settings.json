@@ -304,5 +304,6 @@
       "before": ["m", "l"],
       "commands": ["bookmarks.listFromAllFiles"]
     }
-  ]
+  ],
+  "prisma.showPrismaDataPlatformNotification": false
 }

@@ -54,4 +54,7 @@ return {
 		event = { 'BufReadPre', 'BufNewFile' },
 		opts = {},
 	},
+	{
+		'tpope/vim-fugitive',
+	},
 }

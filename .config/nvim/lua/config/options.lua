@@ -72,3 +72,15 @@ vim.cmd [[
 ]]
 
 -- au! BufWritePost $MYVIMRC source %      " auto source when writing to init.vm alternatively you can run :source $MYVIMRC
+
+vim.filetype.add {
+	pattern = {
+		['.*'] = {
+			function(_, bufnr)
+				local content = vim.api.nvim_buf_get_lines(bufnr, 0, 1, false)[1] or ''
+				if vim.regex([[^#!.*bun]]):match_str(content) ~= nil then return 'typescript' end
+			end,
+			{ priority = -math.huge },
+		},
+	},
+}

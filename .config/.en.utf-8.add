@@ -89,3 +89,8 @@ Perkbox
 unstyled
 uuid
 apis
+fetchPolicy
+apollo
+JSDoc
+ESLint
+Recurse

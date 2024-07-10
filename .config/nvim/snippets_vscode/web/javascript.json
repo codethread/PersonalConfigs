@@ -37,5 +37,11 @@
     "prefix": "st",
     "body": ["\\${({ theme }) => theme$1}"],
     "description": "Insert embeded theme in styled component"
+  },
+  "React Native border": {
+    "scope": "typescriptreact",
+    "prefix": "rnbor",
+    "body": ["borderColor: 'coral', borderStyle:'dotted', borderWidth: 1"],
+    "description": "Add debug border to a component style"
   }
 }
