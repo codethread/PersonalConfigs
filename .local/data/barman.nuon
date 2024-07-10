@@ -34,7 +34,9 @@
       stylua,
       tmux,
       wakatime-cli,
-      sd
+      sd,
+      oven-sh/bun,
+      bun
     ],
     node: [
       volta,
@@ -246,5 +248,7 @@
     [ flipper, cask, null ]
     [ facebook/fb, tap, null ]
     [ idb-companion, brew, null ]
+    [ oven-sh/bun, tap, null ]
+    [ bun, brew, null ]
   ]
 }

@@ -7,6 +7,11 @@ export def git_main_branch [] {
   git symbolic-ref refs/remotes/origin/HEAD | str trim | split row "/" | last
 }
 
+# login with glab cli
+export def glogin [] {
+ $env.CLI_GITLAB_TOKEN | glab auth login --stdin --hostname git.perkbox.io
+}
+
 export alias ga = git add
 export alias gaa = git add --all
 export alias gapa = git add --patch
@@ -243,4 +248,24 @@ export def gls [] {
 export def gundo [] {
   git reset --soft HEAD~1 
   git restore --staged .
+}
+
+export def gchanged [
+  branch?: string
+  --commit # just list for the current commit
+] {
+  match [$commit, $branch] {
+    [true, _] => { git diff --name-only --diff-filter=d },
+    [_, $b] if $b != null => { git diff --name-only --diff-filter=d $"($b)..HEAD" },
+    _ => { git diff --name-only --diff-filter=d $"origin/(git_main_branch)..HEAD" },
+
+  }
+}
+
+export def git_reset_files [...files: string] {
+  $files | each {|f| 
+    let c = $"git checkout origin/develop ($f)"
+    print $c
+    zsh -c $c
+  }
 }

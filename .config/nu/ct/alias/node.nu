@@ -1,3 +1,5 @@
+use git.nu [gchanged]
+
 export def npc [] {
   rm -rf ./node_modules 
     npm cache clear
@@ -28,8 +30,8 @@ export def pjs [...deps: string] {
     | move package --before name
 }
 
-export def prettier-changed [] {
-  git diff --name-only --diff-filter=d 
+export def prettier-changed [--commit branch: string] {
+  gchanged --commit=$commit
   | lines 
   | par-each { node_modules/.bin/prettier --write $in }
 }
@@ -41,6 +43,13 @@ export def rn-nuke [] {
     pod install 
     cd .. 
     yarn run-ios --reset-cache
+}
+
+# print out the list of yarn workspace names
+# useful in v1 where the commands are a bit shit
+export def yarn-workspaces [] {
+  # we have to skip the `yarn` output at the begging and end before we can parse
+  yarn workspaces info | lines | skip 1 | drop 1 | to text | from json | columns
 }
 
 ##############################################

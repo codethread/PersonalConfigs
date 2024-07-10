@@ -1,3 +1,5 @@
+use git.nu [gmm]
+
 export def rg-phrase [
   text: string,
   --app # defaults to web
@@ -8,26 +10,57 @@ export def rg-phrase [
 }
 
 export def release [] {
-  print $"(ansi green)starting release(ansi reset)"
+  msg starting release
 
+  msg Update master
   git checkout master
   git pull
-  git fetch origin develop:develop
+
+  msg Update develop
+  git checkout develop
+  git pull
+
+  git checkout master
 
   let log = git log --oneline --no-merges origin/master..origin/develop --pretty=format:"[%h] %<(15)(%an):  %s"
-
-  print $"(ansi green)log copied to clipboard(ansi reset)"
 
   git merge develop
   # git push
 
-  print $"(ansi green)log copied to clipboard(ansi reset)"
+  let slackMsg = $":rocket: releasing develop\n```\n($log)\n```"
+  print $slackMsg
 
-  print $log
+  $slackMsg | pbcopy
+
   print ""
-  let log = git log --oneline --no-merges origin/master..origin/develop --pretty=format:"[%h] %<(15)(%an):  %s"
-  print $":rocket: releasing develop\n```\n($log)\n```"
+  print $"(ansi green)log copied to clipboard(ansi reset)"
 
   ^open https://git.perkbox.io/app/deals-light-ui/-/pipelines?page=1&scope=all&ref=master
   ^open https://app.slack.com/client/T02GD9LBZ/C1ZH7ME48
+}
+
+def msg [...msg: string] {
+  print $"(ansi green)($msg | str join ' ')(ansi reset)"
+}
+
+# checkout an empty branch, handy for worktrees
+export def nah [
+  --update # update the ct-nah branches to latest develop
+] {
+  let name = $"ct-nah-($env.PWD | path basename)"
+
+  if $update {
+    git checkout $name
+    gmm
+    return
+  }
+
+  let exit_code = git rev-parse --verify $name | complete | get exit_code | into int
+
+  if ($exit_code == 0) {
+    git checkout $name
+  } else {
+    git checkout develop
+    git checkout -b $name
+  }
 }
