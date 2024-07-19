@@ -91,4 +91,14 @@ function M.toggle_file_history()
 	end
 end
 
+function M.align_by(char)
+	local txt = U.get_visual_selection()
+	local lines = vim.split(txt, '\n', { trimempty = true })
+	for _, line in ipairs(lines) do
+		print(line)
+	end
+end
+
+vim.api.nvim_create_user_command('Testy', M.align_by, {})
+
 return M

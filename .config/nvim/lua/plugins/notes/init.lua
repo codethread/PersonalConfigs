@@ -1,5 +1,11 @@
 local constants = require 'plugins.notes.constants'
 
+vim.filetype.add {
+	extension = {
+		dataview = 'mysql',
+	},
+}
+
 return {
 	{
 		'mzlogin/vim-markdown-toc',

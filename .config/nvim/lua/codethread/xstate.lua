@@ -26,14 +26,16 @@ local machine_notifications = {
 local function machine_save()
 	local file = vim.fn.expand '%'
 
-	machine_notifications.info = vim.notify('Saving...', 'info', {
+	local n = vim.notify('Saving...', 'info', {
 		title = 'Xstate cli',
 		hide_from_history = true,
 		timeout = 1500,
 		on_close = function() machine_notifications.info = nil end,
-	}).id
+	})
 
-	vim.fn.jobstart({ 'yarn', 'xstate', 'typegen', file }, {
+	if n and n.id then machine_notifications.info = n.id end
+
+	vim.fn.jobstart({ 'pnpm', 'xstate', 'typegen', file }, {
 		env = {
 			NODE_ENV = 'production', -- workaround for warning
 		},

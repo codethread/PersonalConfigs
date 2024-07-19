@@ -237,5 +237,6 @@ return {
 		f = { "mbggVG=='b", 'format buffer' },
 		y = { Cmd 'let @*=@%', 'save filename' },
 		s = { '1z=', 'autocorrect' },
+		c = { 'vip:EasyAlign *,<CR>', 'format csv' },
 	},
 }

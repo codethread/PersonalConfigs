@@ -19,6 +19,8 @@ return {
 	},
 
 	{
+		-- when looking for lsp capabilities for supports_method use spec (example is a pinned version, use latest):
+		-- https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#languageFeatures
 		'neovim/nvim-lspconfig',
 		--TODO can be per file?
 		event = { 'BufReadPre', 'BufNewFile' },
@@ -117,6 +119,9 @@ return {
 		},
 		config = function(_, opts)
 			U.lsp_attach('*', function(client, buf)
+				-- NOTE: uncomment to see
+				-- vim.print(client.server_capabilities)
+
 				if not vim.list_contains({ 'nushell' }, client.name) then
 					U.keys(buf, {
 						{ 'gD', function() vim.lsp.buf.declaration() end, 'declaration' },

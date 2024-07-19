@@ -83,4 +83,7 @@ vim.filetype.add {
 			{ priority = -math.huge },
 		},
 	},
+	extension = {
+		nuon = 'nu',
+	},
 }

@@ -13,18 +13,19 @@ return {
 		dependencies = { 'simrat39/rust-tools.nvim', 'rust-lang/rust.vim', 'nvim-dap' },
 		ft = 'rust',
 		init = function()
-			U.lsp_attach('rust_analyzer', function(_, bufnr)
-				local rt = require 'rust-tools'
+			U.lsp_attach('rust_analyzer', function(client, bufnr)
+				if client.supports_method 'textDocument/codeLens' then
+					local rt = require 'rust-tools'
+					rt.inlay_hints.enable()
 
-				rt.inlay_hints.enable()
-
-				vim.api.nvim_create_autocmd(
-					{ 'BufWritePost', 'BufEnter', 'CursorHold', 'InsertLeave' },
-					{
-						buffer = bufnr,
-						callback = function() vim.lsp.codelens.refresh() end,
-					}
-				)
+					vim.api.nvim_create_autocmd(
+						{ 'BufWritePost', 'BufEnter', 'CursorHold', 'InsertLeave' },
+						{
+							buffer = bufnr,
+							callback = function() vim.lsp.codelens.refresh() end,
+						}
+					)
+				end
 			end)
 
 			U.keys('rust', {
