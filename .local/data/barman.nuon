@@ -79,7 +79,8 @@
       glab,
       obs,
       podman,
-      podman-desktop
+      podman-desktop,
+      ast-grep
     ],
     react-native: [
       rbenv,
@@ -250,5 +251,6 @@
     [ idb-companion, brew, null ]
     [ oven-sh/bun, tap, null ]
     [ bun, brew, null ]
+    [ ast-grep, brew, null ]
   ]
 }
