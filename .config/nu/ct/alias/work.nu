@@ -22,7 +22,7 @@ export def release [] {
 
   git checkout master
 
-  let log = git log --oneline --no-merges origin/master..origin/develop --pretty=format:"[%h] %<(15)(%an):  %s"
+  let log = git log --oneline --no-merges origin/master..origin/develop --pretty=format:"[%h] %<(16)(%an):  %s"
 
   git merge develop
   # git push

@@ -86,6 +86,8 @@ $env.PATH = (path-prepend "~/.volta/bin")
 $env.VOLTA_HOME = (home ".volta")
 $env.HUSKY = "0" # don"t hold my hand
 
+$env.PATH = (path-prepend "~/.bun/bin")
+
 #: }}}
 #: rust {{{
 
