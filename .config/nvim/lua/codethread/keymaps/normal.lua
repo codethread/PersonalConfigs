@@ -21,6 +21,7 @@ return {
 
 	g = {
 		name = 'stuff',
+		a = { Cmd 'Other', 'alt file' },
 		-- replace missing gx with netrw gone
 		x = {
 			function()

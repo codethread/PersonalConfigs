@@ -2,6 +2,22 @@ return {
 	{ 'andymass/vim-matchup' },
 
 	{
+		'rgroli/other.nvim',
+		cmd = 'Other',
+		opts = {
+			mappings = {
+				{
+					{
+						pattern = '/src/app/(.*)/.*.ts$',
+						target = '/src/app/%1/%1.component.html',
+						context = 'component', -- optional
+					},
+				},
+			},
+		},
+	},
+
+	{
 		'ThePrimeagen/harpoon',
 		lazy = true,
 		opts = {
