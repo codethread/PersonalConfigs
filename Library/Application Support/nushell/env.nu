@@ -37,6 +37,10 @@ $env.CT_NOTES = (match $env.CT_USER {
 $env.WAKATIME_HOME = ($nu.home-path | path join ".config/wakatime")
 $env.ZDOTDIR = ($nu.home-path | path join ".config/zsh")
 
+$env.PATH = (path-prepend "/Applications/Visual Studio Code.app/Contents/Resources/app/bin")
+
+$env.PATH = (path-prepend "/opt/podman/bin")
+
 #: }}}
 #: homebrew {{{
 

@@ -44,7 +44,11 @@
     ],
     keyboard: [
       qmk/qmk,
-      qmk/qmk/qmk
+      qmk/qmk/qmk,
+      arm-none-eabi-gcc,
+      avr-gcc,
+      "avr-gcc@8",
+      qmk-toolbox
     ],
     mac: [
       "1password",
@@ -252,5 +256,9 @@
     [ oven-sh/bun, tap, null ]
     [ bun, brew, null ]
     [ ast-grep, brew, null ]
+    [ arm-none-eabi-gcc, brew, null ]
+    [ avr-gcc, brew, null ]
+    [ avr-gcc@8, brew, null ]
+    [ qmk-toolbox, brew, null ]
   ]
 }

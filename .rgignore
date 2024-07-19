@@ -1,2 +1,3 @@
 *.lock.json
 bun.lockb
+Cargo.lock
