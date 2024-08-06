@@ -19,7 +19,7 @@ show_help = false
 dialect = "uk"
 
 ## enable or disable automatic sync
-# auto_sync = true
+auto_sync = false
 
 ## enable or disable automatic update checks
 # this slows down startup
