@@ -12,6 +12,7 @@ alias open = ^open
 use ct/tmux
 use ct/brew
 use ct/dotty
+use ct/purge.nu
 
 $env.config = {
   show_banner: false,
