@@ -178,34 +178,35 @@ return {
 
 	n = {
 		name = 'notes',
-		a = {
-			name = 'add',
-			a = { Cmd 'ObsidianNew', 'New' },
-			t = { function() require('plugins.notes.fns').create_markdown_toc() end, 'ToC' },
-		},
-		b = { Cmd 'ObsidianBacklinks', 'Backlinks' },
-		i = { Cmd 'ObsidianTemplate', 'Template' },
-		l = { Cmd 'ObsidianLinks', 'Links' },
-		n = { Cmd 'ObsidianQuickSwitch', 'Find' },
-		o = {
-			name = 'open',
-			o = { Cmd 'ObsidianOpen', 'Obsidian' },
-			t = { Cmd 'ObsidianToday', 'Today' },
-			h = { function() require('plugins.notes.fns').notes_path_to '!home.md' end, 'Home' },
-			p = {
-				function() require('plugins.notes.fns').notes_path_to '!projects.md' end,
-				'Projects',
-			},
-			q = { function() require('plugins.notes.fns').notes_path_to 'dump.md' end, 'Dump' },
-		},
-		q = {
-			--- TODO: make this more like an input simpilar to emacs
-			function() require('plugins.notes.fns').notes_path_to 'dump.md' end,
-			'quick capture',
-		},
-		r = { function() require('plugins.notes.fns').rename() end, 'Rename' },
-		s = { Cmd 'ObsidianSearch', 'Search' },
-		t = { Cmd 'ObsidianTags', 'Tags' },
+		n = { Cmd 'vsplit brain.md', 'open' },
+		-- a = {
+		-- 	name = 'add',
+		-- 	a = { Cmd 'ObsidianNew', 'New' },
+		-- 	t = { function() require('plugins.notes.fns').create_markdown_toc() end, 'ToC' },
+		-- },
+		-- b = { Cmd 'ObsidianBacklinks', 'Backlinks' },
+		-- i = { Cmd 'ObsidianTemplate', 'Template' },
+		-- l = { Cmd 'ObsidianLinks', 'Links' },
+		-- n = { Cmd 'ObsidianQuickSwitch', 'Find' },
+		-- o = {
+		-- 	name = 'open',
+		-- 	o = { Cmd 'ObsidianOpen', 'Obsidian' },
+		-- 	t = { Cmd 'ObsidianToday', 'Today' },
+		-- 	h = { function() require('plugins.notes.fns').notes_path_to '!home.md' end, 'Home' },
+		-- 	p = {
+		-- 		function() require('plugins.notes.fns').notes_path_to '!projects.md' end,
+		-- 		'Projects',
+		-- 	},
+		-- 	q = { function() require('plugins.notes.fns').notes_path_to 'dump.md' end, 'Dump' },
+		-- },
+		-- q = {
+		-- 	--- TODO: make this more like an input simpilar to emacs
+		-- 	function() require('plugins.notes.fns').notes_path_to 'dump.md' end,
+		-- 	'quick capture',
+		-- },
+		-- r = { function() require('plugins.notes.fns').rename() end, 'Rename' },
+		-- s = { Cmd 'ObsidianSearch', 'Search' },
+		-- t = { Cmd 'ObsidianTags', 'Tags' },
 	},
 
 	-- open, Open, openers, Openers
