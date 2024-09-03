@@ -466,10 +466,14 @@ export const keybindings = [
         modifier: alt
         keycode: char_x
         mode: emacs
-        event: {
-          send: executehostcommand
-          cmd: "exec nu"
-        }
+        event: [
+          # {
+          #   send: executehostcommand
+          #   cmd: "exec nu"
+          # }
+          { edit: clear }
+          { send: executehostcommand cmd: $"source '($nu.env-path)'; source '($nu.config-path)'; source '($nu.loginshell-path)'" }
+        ]
     }
     {
       name: fuzzy_module

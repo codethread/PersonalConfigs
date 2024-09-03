@@ -1,4 +1,4 @@
-use git.nu [gchanged]
+use ct/git [gchanged]
 
 export def npc [] {
   rm -rf ./node_modules 

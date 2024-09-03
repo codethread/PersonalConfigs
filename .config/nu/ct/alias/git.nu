@@ -1,16 +1,4 @@
-export def git_current_branch [] {
-    # (gstat).branch
-    git rev-parse --abbrev-ref HEAD
-}
-
-export def git_main_branch [] {
-  git symbolic-ref refs/remotes/origin/HEAD | str trim | split row "/" | last
-}
-
-# login with glab cli
-export def glogin [] {
- $env.CLI_GITLAB_TOKEN | glab auth login --stdin --hostname git.perkbox.io
-}
+use ct/git [git_current_branch git_main_branch]
 
 export alias ga = git add
 export alias gaa = git add --all
@@ -53,17 +41,6 @@ export alias gcl = git clone --recurse-submodules
 export alias gnuke = git clean -dfX
 # export alias gclean = git clean --interactive -d
 
-export def gpristine [] {
-    git reset --hard
-    git clean -d --force -x
-}
-
-# export alias gcm = git checkout (git_main_branch)
-export def gcm [...words: string] {
-  let msg = ($words | str join " ")
-  print $msg
-  git commit --message $"($msg)"
-}
 export alias gcmsg = git commit --message
 export alias gco = git checkout
 export alias gcor = git checkout --recurse-submodules
@@ -93,20 +70,8 @@ export alias gfo = git fetch origin
 export alias ghh = git help
 
 # export alias gignore = git update-index --assume-unchanged
-export def gignore [] {
-  git rm -r --cached .; git add .; git commit -m '.gitignore is now working'
-}
 
-export def grb [] {
-  let count = (git log --oneline $"(git_main_branch)..HEAD" | lines | length)
-  git rebase -i $"HEAD~($count)"
-}
-
-export def git_branch_diff [] {
-  git rev-list --left-right --count $"(git_main_branch)...HEAD" | parse --regex '(?<behind>\w+).+(?<ahead>\w+)' | first
-}
-
-export alias gl = git log --oneline $"(git_main_branch)..HEAD"
+export alias gll = git log --oneline $"(git_main_branch)..HEAD"
 export alias glg = git log --stat
 export alias glgp = git log --stat --patch
 export alias glgg = git log --graph
@@ -120,10 +85,6 @@ export alias gm = git merge
 export alias gmtl = git mergetool --no-prompt
 export alias gmtlvim = git mergetool --no-prompt --tool=vimdiff
 export alias gma = git merge --abort
-export def gmom [] {
-    let main = (git_main_branch)
-    git merge $"origin/($main)"
-}
 export alias gconflict = git diff --name-only --diff-filter-U
 
 export alias gp = git push
@@ -131,17 +92,10 @@ export alias gpd = git push --dry-run
 export alias gpf = git push --force-with-lease
 export alias gpf! = git push --force
 export alias gpl = git pull
-export def gpoat [] {
-    git push origin --all; git push origin --tags
-}
 export alias gpr = git pull --rebase
 export alias gpu = git push upstream
 export alias gpv = git push --verbose
 
-export def groh [] {
-  git fetch origin
-  git reset $"origin/$(git_current_branch)" --hard
-}
 export alias grm = git rm
 export alias grmc = git rm --cached
 export alias grmv = git remote rename
@@ -176,9 +130,6 @@ export alias gsw = git switch
 export alias gswc = git switch --create
 
 export alias gts = git tag --sign
-export def gtv [] {
-    git tag | lines | sort
-}
 export alias glum = git pull upstream (git_main_branch)
 
 export alias gunignore = git update-index --no-assume-unchanged
@@ -201,71 +152,3 @@ export alias gams = git am --skip
 export alias gama = git am --abort
 export alias gamscp = git am --show-current-patch
 
-export def gfuck [] {
-  git fetch origin
-  git reset --hard $"origin/(git_current_branch)"
-}
-
-export def gwip [msg = "wip"] {
-  git add .;
-  git commit -nm $msg;
-}
-
-export def gnah [] {
-  git reset --hard
-  git clean -df
-}
-
-export def gnew [name: string] {
-  if ($name | split chars | length) > 52 { 
-    error { msg: "branch name can't exceed 52 chars!", label: { text: "branch", span: (metadata $name).span } } 
-  }
-  let trunk = (git_main_branch)
-  let target = $"($trunk):($trunk)"
-  if ($trunk == (git_current_branch)) {
-    print $"pulling ($trunk)"
-    git pull
-  } else {
-    print $"fetching ($target)"
-    git fetch origin $target
-  }
-  git checkout -b $name $trunk
-  git branch --unset-upstream err+out> /dev/null
-}
-
-export def gmm [] {
-    let main = (git_main_branch)
-    git fetch origin $"($main):($main)"
-    git rebase $main
-}
-
-
-export def gls [] {
-  let line = (git log --oneline --decorate --color=always --format="%C(yellow)[%h] %C(magenta)%<(15)(%an)%C(auto): %s" | fzf --ansi --no-sort --reverse --tiebreak=index)
-  print $line
-}
-
-export def gundo [] {
-  git reset --soft HEAD~1 
-  git restore --staged .
-}
-
-export def gchanged [
-  branch?: string
-  --commit # just list for the current commit
-] {
-  match [$commit, $branch] {
-    [true, _] => { git diff --name-only --diff-filter=d },
-    [_, $b] if $b != null => { git diff --name-only --diff-filter=d $"($b)..HEAD" },
-    _ => { git diff --name-only --diff-filter=d $"origin/(git_main_branch)..HEAD" },
-
-  }
-}
-
-export def git_reset_files [...files: string] {
-  $files | each {|f| 
-    let c = $"git checkout origin/develop ($f)"
-    print $c
-    zsh -c $c
-  }
-}

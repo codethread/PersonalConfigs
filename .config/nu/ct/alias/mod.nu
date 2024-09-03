@@ -76,3 +76,13 @@ alias ktt-light = kitty +kitten themes --reload-in=all Tokyo Night Day
 # KITTY
 # -------------------------------------------#
 alias loggy = cd `~/Library/Mobile Documents/iCloud~com~logseq~logseq/`
+
+#---------------------------------------------#
+# 1password
+# -------------------------------------------#
+alias op-goog-token-info = op item get "cli google token"
+alias op-goog-token = op read op://perkbox/s46wd4f6paab7ao5cghok3pyy4/credential
+
+alias op-p-auth-info = op item get "perkbox auth header"
+alias op-p-auth-get = op read op://perkbox/jtipu4uwq4psxptikwmd7xxt3u/credential
+alias op-p-auth-set = op item edit jtipu4uwq4psxptikwmd7xxt3u $'credential=(pbpaste)'

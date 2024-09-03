@@ -1,15 +1,14 @@
 use ct/boot
-use ct/config/prompt.nu
 use ct/themes.nu themes
-use ct/config [keybindings menus]
+use ct/config/prompt.nu
+use ct/config [keybindings menus hooks]
 use ct/core *
 # use ct/ical
-
-source ct/alias/mod.nu
 
 alias open = ^open
 
 use ct/tmux
+use ct/git *
 use ct/brew
 use ct/dotty
 use ct/purge.nu
@@ -137,17 +136,7 @@ $env.config = ($env.config | upsert completions ($env.config.completions | merge
     # }
 }))
 
-$env.config = ($env.config | upsert hooks ({
-    pre_prompt: [{ null }] # run before the prompt is shown
-    pre_execution: [{ null }] # run before the repl input is run
-    env_change: {
-        PWD: [{|before, after| null }] # run if the PWD environment is different since the last repl input
-    }
-    display_output: "if (term size).columns >= 100 { table -e } else { table }" # run to display the output of a pipeline
-    command_not_found: { null } # return an error message when a command is not found
-  } 
-  | merge $env.config.hooks
-))
+$env.config = ($env.config | upsert hooks ($env.config.hooks | merge (hooks)))
 
 const workp = ("~/.work.nu" | path expand)
 source (if ($workp | path exists) { $workp } else { "empty.nu" })

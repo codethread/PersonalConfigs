@@ -1,4 +1,4 @@
-use git.nu [gmm]
+use ct/git [gmm]
 
 export def rg-phrase [
   text: string,
@@ -9,22 +9,24 @@ export def rg-phrase [
   rg -g $glob --no-ignore $text
 }
 
-export def release [] {
-  msg starting release
+export def release [--skip] {
+  if $skip == false {
+    msg starting release
 
-  msg Update master
-  git checkout master
-  git pull
+    msg Update master
+    git checkout master
+    git pull
 
-  msg Update develop
-  git checkout develop
-  git pull
+    msg Update develop
+    git checkout develop
+    git pull
 
-  git checkout master
+    git checkout master
+
+    git merge develop
+  }
 
   let log = git log --oneline --no-merges origin/master..origin/develop --pretty=format:"[%h] %<(16)(%an):  %s"
-
-  git merge develop
   # git push
 
   let slackMsg = $":rocket: releasing develop\n```\n($log)\n```"

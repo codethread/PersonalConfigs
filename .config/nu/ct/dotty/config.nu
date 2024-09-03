@@ -13,6 +13,9 @@ export def load [] {
         ]
       ]
       [work, (dir ~/workfiles), (dir ~), ["**/README.md"]]
+
+      # as a bit of a hack, can reference git dirs directly
+      [deals, (dir ~/workfiles/work/deals-light-ui/_git), (dir ~/work/deals-light-ui/.git), ["**/README.md"]]
     ]
 
     $config 

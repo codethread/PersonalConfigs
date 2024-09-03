@@ -1,3 +1,5 @@
+source ct/alias/mod.nu
+
 alias p = ^p
 alias als = scope aliases
 

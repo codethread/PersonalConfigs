@@ -36,7 +36,9 @@
       wakatime-cli,
       sd,
       oven-sh/bun,
-      bun
+      bun,
+      "1password-cli",
+      terminal-notifier
     ],
     node: [
       volta,
@@ -58,7 +60,8 @@
       dozer,
       font-iosevka,
       font-fira-code-nerd-font,
-      font-symbols-only-nerd-font
+      font-symbols-only-nerd-font,
+      keith/formulae/reminders-cli
     ],
     social: [
       discord,
@@ -260,5 +263,8 @@
     [ avr-gcc, brew, null ]
     [ avr-gcc@8, brew, null ]
     [ qmk-toolbox, brew, null ]
+    [ 1password-cli, brew, null ]
+    [ terminal-notifier, brew, null ]
+    [ keith/formulae/reminders-cli, brew, null ]
   ]
 }
