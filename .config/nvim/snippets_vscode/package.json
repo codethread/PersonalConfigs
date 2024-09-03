@@ -8,24 +8,32 @@
     "snippets": [
       {
         "language": [
-          "plaintext",
-          "markdown",
-          "tex",
-          "html",
-          "global",
-          "all"
-        ],
-        "path": "./snippets/global.json"
-      },
-      {
-        "language": [
           "javascript",
           "javascriptreact",
           "typescript",
-          "typescriptreact",
-          "svelte"
+          "typescriptreact"
         ],
         "path": "./web/javascript.json"
+      },
+      {
+        "language": [
+          "typescript",
+          "typescriptreact"
+        ],
+        "path": "./web/xstate.json"
+      },
+      {
+        "language": [
+          "typescript"
+        ],
+        "path": "./web/effect.json"
+      },
+      {
+        "language": [
+          "javascriptreact",
+          "typescriptreact"
+        ],
+        "path": "./web/react.json"
       },
       {
         "language": "lua",

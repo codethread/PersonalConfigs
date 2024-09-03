@@ -1,0 +1,37 @@
+{
+  "React component TS": {
+    "prefix": "rc",
+    "body": [
+      "interface I${1:Foo} { ${2} }",
+      "function Foo({${3}}: IFoo): JSX.Element {",
+      "  return (",
+      "    <div>",
+      "      ${4:hello}",
+      "    </div>",
+      "  )",
+      "}"
+    ],
+    "description": "Create Simple Function component"
+  },
+  "styled component": {
+    "prefix": "st",
+    "body": ["\\${({ theme }) => theme$1}"],
+    "description": "Insert embeded theme in styled component"
+  },
+  "React Native border": {
+    "prefix": "rnbor",
+    "body": ["borderColor: 'coral', borderStyle:'dotted', borderWidth: 1"],
+    "description": "Add debug border to a component style"
+  },
+
+  "useEffect": {
+    "prefix": "ue",
+    "body": ["React.useEffect(()=>{ $0; return ()=> { $1 }},[$2])"]
+  },
+  "useEffect log unmount": {
+    "prefix": "uel",
+    "body": [
+      "React.useEffect(()=>{ console.log('codethread mount $1'); return ()=> { console.log('codethread unmount $1') }},[])"
+    ]
+  }
+}

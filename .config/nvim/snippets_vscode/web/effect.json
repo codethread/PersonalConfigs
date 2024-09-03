@@ -1,0 +1,26 @@
+{
+  "Gen Function $": {
+    "scope": "typescript,typescriptreact",
+    "prefix": "gg",
+    "body": ["function* (_) {\n\t$0\n}"],
+    "description": "Generator function with _ input"
+  },
+  "Gen Function $ (wrapped)": {
+    "scope": "typescript,typescriptreact",
+    "prefix": "egg",
+    "body": ["Effect.gen(function* (_) {\n\t$0\n})"],
+    "description": "Generator function with _ input"
+  },
+  "Gen Yield $": {
+    "scope": "typescript,typescriptreact",
+    "prefix": "yy",
+    "body": ["yield* _($0)"],
+    "description": "Yield generator calling _()"
+  },
+  "Gen Yield $ (const)": {
+    "scope": "typescript,typescriptreact",
+    "prefix": "cyy",
+    "body": ["const $1 = yield* _($0)"],
+    "description": "Yield generator calling _()"
+  }
+}
