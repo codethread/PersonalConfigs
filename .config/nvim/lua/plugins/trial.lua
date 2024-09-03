@@ -4,10 +4,12 @@ return {
 	{
 		'OXY2DEV/markview.nvim',
 		lazy = false, -- Recommended
-		enabled = false, -- this is sexy, play with later
+		enabled = true, -- this is sexy, play with later
 		-- ft = "markdown" -- If you decide to lazy-load anyway
 		config = function()
-			require('markview').setup {
+			local presets = require 'markview.presets'
+			local mm = require 'markview'
+			mm.setup {
 				modes = { 'n', 'i', 'no', 'c' }, -- Change these modes
 				-- to what you need
 
@@ -20,6 +22,19 @@ return {
 						vim.wo[win].conceallevel = 2
 						vim.wo[win].concealcursor = 'nc'
 					end,
+				},
+
+				-- ui
+				list_items = {
+					marker_minus = {
+						text = '•',
+					},
+					marker_plus = {
+						text = '',
+					},
+					marker_star = {
+						text = '',
+					},
 				},
 			}
 		end,

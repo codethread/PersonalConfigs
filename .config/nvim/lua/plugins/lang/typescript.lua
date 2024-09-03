@@ -3,7 +3,10 @@ return {
 	{
 		'neovim/nvim-lspconfig',
 		-- enabled = false, -- deprecate in favour of typescript-tools
-		dependencies = { 'jose-elias-alvarez/typescript.nvim' },
+		dependencies = {
+			'jose-elias-alvarez/typescript.nvim',
+			'marilari88/twoslash-queries.nvim',
+		},
 		opts = {
 			-- make sure mason installs the server
 			servers = {
@@ -33,6 +36,8 @@ return {
 			setup = {
 				tsserver = function(_, opts)
 					U.lsp_attach('tsserver', function(client, buffer)
+						require('twoslash-queries').attach(client, buffer)
+
 						U.keys(buffer, {
 							{
 								'cc',
@@ -44,19 +49,34 @@ return {
 								function() require('swap-ternary').swap() end,
 								'Swap ternary',
 							},
+							{
+								'a',
+								function()
+									require('typescript').actions.addMissingImports { sync = true }
+								end,
+								'add missing imports',
+							},
+							{
+								'o',
+								function()
+									require('typescript').actions.organizeImports { sync = true }
+								end,
+								'organise imports',
+							},
+							{
+								',',
+								function()
+									require('typescript').actions.removeUnused { sync = true }
+								end,
+								'Remove unused',
+							},
 						})
 						local augroup = U.augroups.lsp_formatting
 						vim.api.nvim_clear_autocmds { group = augroup, buffer = buffer }
 						vim.api.nvim_create_autocmd('BufWritePre', {
 							group = augroup,
 							buffer = buffer,
-							callback = function()
-								local ts = require('typescript').actions
-								ts.removeUnused { sync = true }
-								-- ts.addMissingImports({ sync = true })
-								-- ts.organizeImports { sync = true }
-								vim.cmd [[Format]]
-							end,
+							callback = function() vim.cmd [[Format]] end,
 						})
 						-- map <leader>ll yiwoconsole.log('\n<C-r>0:', <C-r>0);<C-[>k
 						-- map <leader>ld :%s/.*console.log.*\n//g<CR>
@@ -67,4 +87,5 @@ return {
 			},
 		},
 	},
+	{},
 }

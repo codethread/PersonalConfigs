@@ -239,5 +239,16 @@ return {
 		y = { Cmd 'let @*=@%', 'save filename' },
 		s = { '1z=', 'autocorrect' },
 		c = { 'vip:EasyAlign *,<CR>', 'format csv' },
+		r = {
+			function()
+				require('luasnip.loaders.from_vscode').load {
+					paths = {
+						'~/.config/nvim/snippets_vscode',
+						'~/.local/share/nvim/lazy/friendly-snippets',
+					},
+				}
+			end,
+			'reload snippets',
+		},
 	},
 }

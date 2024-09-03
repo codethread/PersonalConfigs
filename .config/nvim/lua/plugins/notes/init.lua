@@ -28,6 +28,7 @@ return {
 		'epwalsh/obsidian.nvim',
 		version = '*', -- recommended, use latest release instead of latest commit
 		lazy = true,
+		enabled = false, -- taking a step back from the world
 		cond = constants.has_notes,
 		event = {
 			'BufReadPre ' .. constants.pattern,
@@ -146,6 +147,6 @@ return {
 				CodeBlock = { bg = 'surface' },
 			},
 		},
-		config = true, -- or `opts = {}`
+		config = false, -- or `opts = {}`
 	},
 }
