@@ -17,6 +17,7 @@ def path-prepend [p: string] {
 
 $env.DOTFILES = (home PersonalConfigs)
 $env.EDITOR = "nvim"
+# $env.VISUAL = "code --wait"
 $env.SHELL = ('~/.local/bin/nu' | path expand)
 $env.MANPAGER = "/bin/sh -c \"col -b | nvim -c 'set ft=man ts=8 nomod nolist nonu' -\""
 $env.MANWIDTH = 80
@@ -40,6 +41,8 @@ $env.ZDOTDIR = ($nu.home-path | path join ".config/zsh")
 $env.PATH = (path-prepend "/Applications/Visual Studio Code.app/Contents/Resources/app/bin")
 
 $env.PATH = (path-prepend "/opt/podman/bin")
+
+$env.PATH = (path-prepend "~/.local/share/nvim/mason/bin")
 
 #: }}}
 #: homebrew {{{

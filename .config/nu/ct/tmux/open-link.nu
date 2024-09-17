@@ -19,9 +19,14 @@ export def main [...path] {
   let diff = $editorPWD | path relative-to $filePWD
 
   match ($chosen | split row ":") {
-    [$file, $line, ..] => {
+    [$file, $line, $col] => {
       let path = [$editorPWD $diff $file] | path join
-      tmux send-keys -t 1 :e Space +$line Space $path Enter
+      tmux send-keys -t 1 :e Space `+call\` Space $"cursor\(($line),($col)\)" Space $path Enter
+    },
+    [$file, $line] => {
+      let path = [$editorPWD $diff $file] | path join
+      # tmux send-keys -t 1 :e Space +$line Space $path Enter
+      tmux send-keys -t 1 :e Space $"+($line)" Space $path Enter
     },
     [$file] => {
       let path = [$editorPWD $diff $file] | path join
