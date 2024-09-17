@@ -222,4 +222,15 @@ function M.nush(nu_block, opts, on_exit) return vim.system({ 'nush', nu_block },
 
 -- function M.nush(nu_block) return "nush '" .. nu_block:gsub('\n', '; ') .. "'" end
 
+---Get a deeply nested field from table `t`
+---@param t table
+---@param ... string keys to dig into table
+---@return any | nil
+function M.dig(t, ...)
+	for _, k in ipairs { ... } do
+		t = t[k]
+		if not t then return nil end
+	end
+	return t
+end
 return M
