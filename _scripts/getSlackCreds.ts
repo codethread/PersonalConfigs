@@ -1,4 +1,4 @@
-import puppeteer from "npm:puppeteer-core@^23";
+import puppeteer from "puppeteer-core";
 import process from "node:process";
 import tty from "node:tty";
 import { getArgs } from "./cli.ts";
