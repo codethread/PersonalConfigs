@@ -18,5 +18,18 @@
     "prefix": "cld",
     "body": ["console.debug('codethread', $0)"],
     "description": "create console log for easy filtering"
+  },
+  "comment block": {
+    "prefix": "cbb",
+    "body": [
+      "//*****************************************************************************//",
+      "// $0",
+      "//*****************************************************************************//"
+    ]
+  },
+  "styled component": {
+    "prefix": "st",
+    "body": ["\\${({ theme }) => theme$1}"],
+    "description": "Insert embeded theme in styled component"
   }
 }

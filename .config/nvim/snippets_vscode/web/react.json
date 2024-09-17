@@ -13,11 +13,6 @@
     ],
     "description": "Create Simple Function component"
   },
-  "styled component": {
-    "prefix": "st",
-    "body": ["\\${({ theme }) => theme$1}"],
-    "description": "Insert embeded theme in styled component"
-  },
   "React Native border": {
     "prefix": "rnbor",
     "body": ["borderColor: 'coral', borderStyle:'dotted', borderWidth: 1"],
