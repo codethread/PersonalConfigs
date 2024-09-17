@@ -7,6 +7,7 @@ let wasOk = true;
 let browser: puppeteer.Browser;
 let page: puppeteer.Page;
 
+// b
 (async () => {
   const isRunningTerminal = !isScript();
   const log = isRunningTerminal ? console.log : () => {};
