@@ -1,4 +1,4 @@
-import puppeteer from "puppeteer-core";
+import puppeteer from "npm:puppeteer-core@^23";
 import process from "node:process";
 import tty from "node:tty";
 import { getArgs } from "./cli.ts";
@@ -7,7 +7,6 @@ let wasOk = true;
 let browser: puppeteer.Browser;
 let page: puppeteer.Page;
 
-// b
 (async () => {
   const isRunningTerminal = !isScript();
   const log = isRunningTerminal ? console.log : () => {};
