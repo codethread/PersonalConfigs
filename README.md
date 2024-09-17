@@ -22,12 +22,22 @@
 
 The [scripts](./_scripts) folder contains [Deno](https://deno.com/) scripts[^1] which can be run without dependencies as long as you have Deno installed, e.g `brew install deno`
 
+> [!tip]
+> I recommend aliasing these commands with whatever flags you need locally
+
 ### [getSlackCreds](./_scripts/getSlackCreds.ts)
 
 Get credentials to run slack cli based tools
 
 ```sh
-deno run --allow-read --allow-env https://raw.githubusercontent.com/codethread/PersonalConfigs/main/_scripts/getSlackCreds.ts --help
+deno run --reload="https://raw.githubusercontent.com/codethread" \
+    https://raw.githubusercontent.com/codethread/PersonalConfigs/main/_scripts/getSlackCreds.ts --help
 ```
+
+> [!note]
+> ```sh
+> deno run --reload="https://raw.githubusercontent.com/codethread" <script> [...args]
+> ```
+> will run `<script>` at the specified url, however it will also cache it, so `reload` will always load the latest code hosted in this repo (without downloading all the deps again
 
 [^1]: Deno's secure by default runtime makes it an excellent scripting platform, combined with it's declaritve dependencies mean a script can list all dependencies without consumers needing to care. Only downside is you'll need a lot of --allow-\* flags... unless you are balls to the walls and just pass `--allow-all`, though I recommend against this!
