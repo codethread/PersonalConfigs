@@ -44,6 +44,6 @@ $ deno run \\
     })
     .env(false)
     .locale("en")
-    .version("1.0.1")
+    .version("1.0.2")
     .parse();
 }
