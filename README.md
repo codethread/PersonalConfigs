@@ -22,9 +22,9 @@
 
 The [scripts](./_scripts) folder contains [Deno](https://deno.com/) scripts[^1] which can be run without dependencies as long as you have Deno installed, e.g `brew install deno`
 
-### [getSlackToken](./_scripts/getSlackToken.ts)
+### [getSlackCreds](./_scripts/getSlackCreds.ts)
 
-Get creds to run slack cli
+Get credentials to run slack cli based tools
 
 ```sh
 deno run --allow-read --allow-env https://raw.githubusercontent.com/codethread/PersonalConfigs/main/_scripts/getSlackCreds.ts --help
