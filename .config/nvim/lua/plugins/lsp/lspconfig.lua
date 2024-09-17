@@ -26,7 +26,22 @@ return {
 		event = { 'BufReadPre', 'BufNewFile' },
 		dependencies = {
 			{ 'folke/neoconf.nvim', cmd = 'Neoconf', config = true },
-			{ 'folke/neodev.nvim', opts = { experimental = { pathStrict = true } } },
+			{
+				'folke/lazydev.nvim',
+				ft = 'lua', -- only load on lua files
+				opts = {
+					library = {
+						-- See the configuration section for more details
+						-- Load luvit types when the `vim.uv` word is found
+						{ path = 'luvit-meta/library', words = { 'vim%.uv' } },
+					},
+					-- disable when a .luarc.json file is found
+					enabled = function(root_dir)
+						return not vim.uv.fs_stat(root_dir .. '/.luarc.json')
+					end,
+				},
+			},
+			{ 'Bilal2453/luvit-meta', lazy = true },
 
 			'williamboman/mason.nvim',
 			'williamboman/mason-lspconfig.nvim',
@@ -140,6 +155,7 @@ return {
 					local function format()
 						local map = {
 							-- lua = 'lua_ls',
+							gleam = 'gleam',
 						}
 						local formatter = map[U.ft()] or 'null-ls'
 						vim.print('formating with buffer: ' .. bufnr .. ' ' .. formatter)

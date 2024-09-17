@@ -14,7 +14,7 @@ return {
 			vim.api.nvim_create_autocmd('BufEnter', {
 				desc = 'Format qmk keymap',
 				group = group,
-				pattern = '*/codethread/keymap.c',
+				pattern = '*/preonic/keymaps/codethread/keymap.c',
 				callback = function()
 					---@type qmk.UserConfig
 					local conf = {
@@ -46,7 +46,7 @@ return {
 			vim.api.nvim_create_autocmd('BufEnter', {
 				desc = 'Format zmk keymap',
 				group = group,
-				pattern = '*/codethread/keymap.c',
+				pattern = 'nope',
 				callback = function()
 					---@type qmk.UserConfig
 					local zmk_conf = {
@@ -68,7 +68,7 @@ return {
 			vim.api.nvim_create_autocmd('BufEnter', {
 				desc = 'Format nuphy keymap',
 				group = group,
-				pattern = '*/default/keymap.c',
+				pattern = '*/nuphy/halo75v2/ansi/keymaps/codethread/keymap.c',
 				callback = function()
 					---@type qmk.UserConfig
 					local conf = {

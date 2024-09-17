@@ -30,7 +30,7 @@ return {
                 -- scripting
 				{ 'awk','bash','jq','python' },
 				-- lang
-				{ 'c','rust','go','gomod','scala','haskell' },
+				{ 'c','rust','go','gomod','scala','haskell', 'gleam' },
 				-- misc
 				{ 'comment','todotxt','markdown','markdown_inline','query','regex' },
 				--web

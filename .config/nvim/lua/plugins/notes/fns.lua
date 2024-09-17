@@ -34,7 +34,7 @@ end
 function M.check_name_clash(files)
 	U.nush(
 		[[
-	fd --extension=md --type=f -E 'assets' -E excalidraw
+	fd --extension=md --type=f -E 'assets' -E excalidraw -E templates
 	| lines
 	| path parse
 	| uniq-by --repeated stem | get stem

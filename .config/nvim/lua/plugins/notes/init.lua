@@ -3,6 +3,7 @@ local constants = require 'plugins.notes.constants'
 vim.filetype.add {
 	extension = {
 		dataview = 'mysql',
+		dataviewjs = 'javascript',
 	},
 }
 
@@ -139,6 +140,7 @@ return {
 	},
 	{
 		'lukas-reineke/headlines.nvim',
+		enabled = false,
 		ft = 'markdown',
 		dependencies = {
 			'nvim-treesitter/nvim-treesitter',

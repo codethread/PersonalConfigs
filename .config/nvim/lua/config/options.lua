@@ -15,7 +15,7 @@ set.splitbelow = true -- Horizontal splits will automatically be below
 set.splitright = true -- Vertical splits will automatically be to the right
 -- set.splitkeep = 'screen'
 
-set.tabstop = 2 -- Insert X spaces for a tab
+set.tabstop = 4 -- Insert X spaces for a tab
 set.shiftwidth = 0 -- Indent to whatever tabstop is
 set.smartindent = true -- Makes indenting smart
 set.autoindent = true -- Good auto indent
