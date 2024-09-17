@@ -38,7 +38,8 @@
       oven-sh/bun,
       bun,
       "1password-cli",
-      terminal-notifier
+      terminal-notifier,
+      deno
     ],
     node: [
       volta,
@@ -61,7 +62,8 @@
       font-iosevka,
       font-fira-code-nerd-font,
       font-symbols-only-nerd-font,
-      keith/formulae/reminders-cli
+      keith/formulae/reminders-cli,
+      jordanbaird-ice
     ],
     social: [
       discord,
@@ -266,5 +268,7 @@
     [ 1password-cli, brew, null ]
     [ terminal-notifier, brew, null ]
     [ keith/formulae/reminders-cli, brew, null ]
+    [ jordanbaird-ice, brew, null ]
+    [ deno, brew, null ]
   ]
 }
