@@ -86,3 +86,36 @@ alias op-goog-token = op read op://perkbox/s46wd4f6paab7ao5cghok3pyy4/credential
 alias op-p-auth-info = op item get "perkbox auth header"
 alias op-p-auth-get = op read op://perkbox/jtipu4uwq4psxptikwmd7xxt3u/credential
 alias op-p-auth-set = op item edit jtipu4uwq4psxptikwmd7xxt3u $'credential=(pbpaste)'
+
+alias op-goog-auth-get = op item get "Perkbox Gmail"
+alias op-goog-auth = op read op://perkbox/4ajg7mmj6j23yvkq6kfai52pru/password
+
+# get slack credentials
+export def slacky [] {
+  hide-all {
+    (deno run 
+      --allow-env 
+      --allow-read 
+      --allow-write=/var/folders 
+      --allow-net=127.0.0.1 
+      --allow-run="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+      ~/PersonalConfigs/_scripts/getSlackCreds.ts
+      --email adam.hall@perkbox.com 
+      --password=(op-goog-auth)
+      --domain https://perkbox.slack.com)
+  } | from json
+}
+
+# run a closure and hide nearly all environment variables
+export def hide-all [closure: closure] {
+  let allow = [TMUX TERM SHELL PWD USER XPC PATH HOME]
+  let hidden = ($env 
+    | transpose name value 
+    | filter {|e| 
+      $allow | any {|s| $e.name starts-with $s } | $in == false
+    }
+    | get name)
+
+  hide-env ...$hidden
+  do $closure
+}

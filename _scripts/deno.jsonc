@@ -1,3 +1,6 @@
 {
+  "tasks": {
+    "dev": "deno run --watch --allow-env ./tmp.ts",
+  },
   // don't put imports in here or it breaks remote execution
 }
