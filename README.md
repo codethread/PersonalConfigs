@@ -20,8 +20,14 @@
 
 ## Scripts
 
-The \_scripts folder contains [Deno](https://deno.com/) scripts which can be run without dependencies as long as you have Deno installed, e.g `brew install deno`
+The [scripts](./_scripts) folder contains [Deno](https://deno.com/) scripts[^1] which can be run without dependencies as long as you have Deno installed, e.g `brew install deno`
 
-| script                                       | use                        | help                                                                                                                                   |
-| -------------------------------------------- | -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| [getSlackToken](./_scripts/getSlackToken.ts) | Get creds to run slack cli | `deno run --allow-read --allow-env https://raw.githubusercontent.com/codethread/PersonalConfigs/main/_scripts/getSlackCreds.ts --help` |
+### [getSlackToken](./_scripts/getSlackToken.ts)
+
+Get creds to run slack cli
+
+```sh
+deno run --allow-read --allow-env https://raw.githubusercontent.com/codethread/PersonalConfigs/main/_scripts/getSlackCreds.ts --help
+```
+
+[^1]: Deno's secure by default runtime makes it an excellent scripting platform, combined with it's declaritve dependencies mean a script can list all dependencies without consumers needing to care. Only downside is you'll need a lot of --allow-\* flags... unless you are balls to the walls and just pass `--allow-all`, though I recommend against this!
