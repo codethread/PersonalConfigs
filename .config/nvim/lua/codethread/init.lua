@@ -7,6 +7,7 @@ local pomo = require 'codethread.pomo'
 
 local is_work = U.machine {
 	work = true,
+	home = false,
 }
 
 if is_work then pomo.setup() end
