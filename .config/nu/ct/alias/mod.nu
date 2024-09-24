@@ -21,9 +21,9 @@ alias vo = ls
 # -------------------------------------------#
 
 def pj [...deps: string] {
-  let search = ($deps | str join "|" | $"\"\(($in)\)\"")
-  print $search
-  rg --glob "**/package.json" $search
+    let search = ($deps | str join "|" | $"\"\(($in)\)\"")
+    print $search
+    rg --glob "**/package.json" $search
 }
 
 #---------------------------------------------#
@@ -36,13 +36,13 @@ alias finder = ^open -a 'Finder' .
 alias ports = lsof -i tcp:3000
 
 def alert [msg = "Task Finished"] {
-  osascript -e $'display notification "($msg)" with title "CMD"'
-  afplay /System/Library/Sounds/Glass.aiff
+    osascript -e $'display notification "($msg)" with title "CMD"'
+    afplay /System/Library/Sounds/Glass.aiff
 }
 
 # I always forget
 def symlink [original: path, symbolic: path] {
-  ln -s $original $symbolic
+    ln -s $original $symbolic
 }
 
 #---------------------------------------------#
@@ -58,8 +58,8 @@ alias bbx = brew bundle cleanup
 alias bbi = brew bundle install
 
 def brewclean [] {
-  brew cleanup
-  brew autoremove
+    brew cleanup
+    brew autoremove
 }
 
 alias brewdeps = brew deps --graph --installed
@@ -92,30 +92,34 @@ alias op-goog-auth = op read op://perkbox/4ajg7mmj6j23yvkq6kfai52pru/password
 
 # get slack credentials
 export def slacky [] {
-  hide-all {
-    (deno run 
-      --allow-env 
-      --allow-read 
-      --allow-write=/var/folders 
-      --allow-net=127.0.0.1 
-      --allow-run="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-      ~/PersonalConfigs/_scripts/getSlackCreds.ts
-      --email adam.hall@perkbox.com 
-      --password=(op-goog-auth)
-      --domain https://perkbox.slack.com)
-  } | from json
+    let target = "~/.local/share/slacky" | path expand
+    mkdir $target
+    let p = op-goog-auth
+    hide-all {
+        (deno run 
+            --allow-env 
+            --allow-read 
+            --allow-write=/var/folders 
+            --allow-net=127.0.0.1 
+            --allow-run="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+            ~/PersonalConfigs/_scripts/getSlackCreds.ts
+            --email adam.hall@perkbox.com 
+            --password $p
+            --domain https://perkbox.slack.com)
+    } | from json 
+    | save ([$target slack.nuon] | path join)
 }
 
 # run a closure and hide nearly all environment variables
 export def hide-all [closure: closure] {
-  let allow = [TMUX TERM SHELL PWD USER XPC PATH HOME]
-  let hidden = ($env 
-    | transpose name value 
-    | filter {|e| 
-      $allow | any {|s| $e.name starts-with $s } | $in == false
-    }
-    | get name)
+    let allow = [TMUX TERM SHELL PWD USER XPC PATH HOME]
+    let hidden = ($env 
+        | transpose name value 
+        | filter {|e| 
+            $allow | any {|s| $e.name starts-with $s } | $in == false
+        }
+        | get name)
 
-  hide-env ...$hidden
-  do $closure
+    hide-env ...$hidden
+    do $closure
 }

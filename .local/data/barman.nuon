@@ -114,7 +114,8 @@
       rsteube/tap/carapace
     ],
     rust: [
-      rustup-init
+      rustup-init,
+      rustup
     ],
     zsh: [
       antibody,
@@ -270,5 +271,6 @@
     [ keith/formulae/reminders-cli, brew, null ]
     [ jordanbaird-ice, brew, null ]
     [ deno, brew, null ]
+    [ rustup, brew, null ]
   ]
 }

@@ -11,5 +11,5 @@ export def main [] {
 
 def handle [$name] {
   cargo install $name
-  nu -l -c $"register ($name)"
+  nu -l -c $"plugin add ($name)"
 }
