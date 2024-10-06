@@ -30,7 +30,7 @@
 
                 environment.variables = {
                     EDITOR = "nvim";
-                    # SHELL = "${pkgs.nushell}/bin/nu";
+                    SHELL = "${pkgs.nushell}/bin/nu";
                     # no .lesshst
                     LESSHISTFILE = "-"; 
 
@@ -51,6 +51,7 @@
                     nh = "man configuration.nix";
                     # open help in gui (useful for reference)
                     nhh = "darwin-help";
+                    nt = "echo hi";
                 };
 
 
