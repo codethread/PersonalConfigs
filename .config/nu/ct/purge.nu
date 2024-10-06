@@ -1,5 +1,10 @@
 # Search through projects, find the largest and present them ina fuzzy finder
 # to be purged. At this point a git clean is run
+#
+# TODO: 
+# - would be charming to get the output
+# - add some flags for actually deleting
+# - show size in fuzzy if possible
 export def main [] {
   let purged = dirs 
   | path expand
