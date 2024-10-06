@@ -30,7 +30,6 @@
 
                 environment.variables = {
                     EDITOR = "nvim";
-                    SHELL = "${pkgs.nushell}/bin/nu";
                     # no .lesshst
                     LESSHISTFILE = "-"; 
 
@@ -51,7 +50,6 @@
                     nh = "man configuration.nix";
                     # open help in gui (useful for reference)
                     nhh = "darwin-help";
-                    nt = "echo hi";
                 };
 
 
@@ -64,8 +62,14 @@
 
                 # Create /etc/zshrc that loads the nix-darwin environment.
                 programs = {
-                    zsh = {
-                        enable = true;
+                    # zsh = {
+                    #     enable = true;
+                    # };
+                };
+
+                users.users = {
+                    codethread = {
+                        shell = pkgs.nushell;
                     };
                 };
 
