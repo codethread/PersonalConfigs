@@ -16,6 +16,8 @@ let page: puppeteer.Page;
   }
 
   const { domain, email, password, browserPath } = await getArgs();
+  console.log({ domain, email });
+  return;
 
   if (!/^https:\/\/\w+.slack.\w+$/.test(domain))
     throw new Error("domain should be a full url like https://foo.slack.com");
