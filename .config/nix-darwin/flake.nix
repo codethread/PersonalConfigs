@@ -47,7 +47,7 @@
                     # nix edit
                     ne = "nvim ~/.config/nix-darwin/flake.nix";
                     # reload
-                    nn = "darwin-rebuild switch --flake ~/.config/nix-darwin";
+                    nn = "darwin-rebuild switch --flake ~/PersonalConfigs/.config/nix-darwin";
                     # nix help
                     nh = "man configuration.nix";
                     # open help in gui (useful for reference)
