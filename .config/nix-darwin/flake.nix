@@ -30,8 +30,7 @@
 
                 environment.variables = {
                     EDITOR = "nvim";
-                    # SHELL = <pkgs.nushell>;
-                    SHELL = "${pkgs.nushell}/bin/nu";
+                    # SHELL = "${pkgs.nushell}/bin/nu";
                     # no .lesshst
                     LESSHISTFILE = "-"; 
 
@@ -45,7 +44,7 @@
                 # these will only work for zsh
                 environment.shellAliases = {
                     # nix edit
-                    ne = "nvim ~/.config/nix-darwin/flake.nix";
+                    ne = "nvim ~/PersonalConfigs/.config/nix-darwin/flake.nix";
                     # reload
                     nn = "darwin-rebuild switch --flake ~/PersonalConfigs/.config/nix-darwin";
                     # nix help
