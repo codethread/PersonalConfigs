@@ -76,15 +76,19 @@ local function setup_autocmds()
 	})
 end
 
-Job:new({
-	command = 'nush',
-	args = { [[use ct/dotty; dotty is-cwd --exit]] },
-	on_exit = function(_, code)
-		if code == 0 then
-			in_dotfiles = true
-			vim.schedule(setup_autocmds)
-		end
-	end,
-}):start()
+if vim.fn.executable 'nush' == 1 then
+	Job:new({
+		command = 'nush',
+		args = { [[use ct/dotty; dotty is-cwd --exit]] },
+		on_exit = function(_, code)
+			if code == 0 then
+				in_dotfiles = true
+				vim.schedule(setup_autocmds)
+			end
+		end,
+	}):start()
+else
+	vim.notify('nush not present in PATH for dotty', vim.log.levels.WARN)
+end
 
 return M
