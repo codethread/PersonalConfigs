@@ -73,7 +73,7 @@
                     };
                 };
 
-                system.activationScripts."nu-shell".text = "chsh -s ${pkgs.nushell}/bin/nu";
+                system.activationScripts."nu-shell".text = "chsh -s ${pkgs.nushell}";
 
                 # Set Git commit hash for darwin-version.
                 system.configurationRevision = self.rev or self.dirtyRev or null;
