@@ -181,9 +181,9 @@
           system.activationScripts.script.text = ''
             #!/usr/bin/env bash
 
-            export DOTFILES="$HOME/PersonalConfigs"
+            export DOTFILES="/Users/codethread/PersonalConfigs"
 
-            if [ -d  "$HOME/.config/nushell" ]; then
+            if [ -d  "/Users/codethread/.config/nushell" ]; then
               echo "( ◕ ◡ ◕ ) Files linked"
             else
               echo "( ◕ ◡ ◕ ) Linking Files"
