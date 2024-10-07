@@ -178,20 +178,19 @@
             # brews = [ "google-chrome"];
           };
 
-          # system.activationScripts.enabled = false;
-          # system.activationScripts.script.text = ''
-          #   export DOTFILES="/Users/codethread/PersonalConfigs"
-          #
-          #   if [ -d  "/Users/codethread/.config/nushell" ]; then
-          #     echo "( ◕ ◡ ◕ ) Files linked"
-          #   else
-          #     echo "( ◕ ◡ ◕ ) Linking Files"
-          #     nu \
-          #       --env-config "$DOTFILES/.config/nushell/env.nu" \
-          #       --config "$DOTFILES/.config/nushell/config.nu" \
-          #       --commands "dotty link; print 'Files linked'"
-          #   fi
-          # '';
+          system.activationScripts.script.text = ''
+            export DOTFILES="/Users/codethread/PersonalConfigs"
+
+            if [ -d  "/Users/codethread/.config/nushell" ]; then
+              echo "( ◕ ◡ ◕ ) Files linked"
+            else
+              echo "( ◕ ◡ ◕ ) Linking Files"
+              nu \
+                --env-config "$DOTFILES/.config/nushell/env.nu" \
+                --config "$DOTFILES/.config/nushell/config.nu" \
+                --commands "dotty link; print 'Files linked'"
+            fi
+          '';
         };
     in
     {
