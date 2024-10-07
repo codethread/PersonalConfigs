@@ -94,9 +94,9 @@
                 system.keyboard.enableKeyMapping = true;
                 system.keyboard.remapCapsLockToEscape = true;
 
-                  fonts.fontDir.enable = true; # will remove other fonts!
+                # fonts.fontDir.enable = true; # will remove other fonts!, only on linux
                 # https://github.com/NixOS/nixpkgs/blob/master/pkgs/data/fonts/nerdfonts/shas.nix
-  fonts.fonts = [ (pkgs.nerdfonts.override { fonts = [ "CascadiaCode" ]; }) ];
+                fonts.packages = [ (pkgs.nerdfonts.override { fonts = [ "CascadiaCode" ]; }) ];
 
                 # allow sudo touch in tmux too
                 environment.etc."pam.d/sudo_local" = {
