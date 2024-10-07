@@ -35,7 +35,7 @@
                     EDITOR = "nvim";
                     # no .lesshst
                     LESSHISTFILE = "-"; 
-                    XDG_CONFIG_HOME = "$HOME/.config"
+                    XDG_CONFIG_HOME = "$HOME/.config";
                 };
 
                 environment.systemPath = [
