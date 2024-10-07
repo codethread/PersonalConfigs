@@ -132,7 +132,7 @@
                     onActivation.cleanup = "zap";
                     # masApps = { magnet };
                     casks = [ "raycast" "whatsapp" "kitty" "alfred" ];
-                    brews = [ "google-chrome"]
+                    brews = [ "google-chrome"];
                 };
             };
         in
