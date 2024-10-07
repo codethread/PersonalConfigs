@@ -178,7 +178,7 @@
             # brews = [ "google-chrome"];
           };
 
-          system.activationScripts.script.text = ''
+          system.activationScripts.dotty.text = ''
             export DOTFILES="/Users/codethread/PersonalConfigs"
 
             if [ -d  "/Users/codethread/.config/nushell" ]; then
