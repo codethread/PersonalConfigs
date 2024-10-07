@@ -32,6 +32,8 @@
                         pkgs.ripgrep
                         pkgs.starship
                         pkgs.coreutils #mac
+
+                        pkgs.nixfmt-rfc-style
                     ];
 
                 environment.pathsToLink = [ "/Applications" ];
@@ -142,10 +144,10 @@
                     enable = true;
                     caskArgs.no_quarantine = true;
                     global.brewfile = true;
-                    onActivation.cleanup = "uninstall";
-
+                    onActivation.cleanup = "uninstall"; # TODO: zap sounds more fun
                     masApps = { 
                         "vimari" = 1480933944;
+                        # TODO: finish these
                     };
                     casks = [ 
                         "google-chrome" 
