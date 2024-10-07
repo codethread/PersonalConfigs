@@ -1,4 +1,7 @@
 {
+    # NOTE: helpful links
+    # - https://nix.dev/manual/nix/2.18/language/
+
     description = "Example Darwin system flake";
 
     inputs = {
@@ -32,7 +35,7 @@
                     EDITOR = "nvim";
                     # no .lesshst
                     LESSHISTFILE = "-"; 
-
+                    XDG_CONFIG_HOME = "$HOME/.config"
                 };
 
                 environment.systemPath = [
@@ -59,11 +62,16 @@
                 # Necessary for using flakes on this system.
                 nix.settings.experimental-features = "nix-command flakes";
 
-                # Create /etc/zshrc that loads the nix-darwin environment.
                 programs = {
-                     zsh = {
-                         enable = true; # don't remove this on mac
-                     };
+                    # Create /etc/zshrc that loads the nix-darwin environment.
+                    zsh = {
+                        # NOTE: for now keeping with zsh over nushell, as nix
+                        # does quite a bit of setup for things like paths and
+                        # config files. Beyond my powers at this point. If this
+                        # is removed, the zsh* files get removed entirely and
+                        # then nix isn't in the path at all
+                        enable = true; # don't remove this on mac
+                    };
                 };
 
                 # Set Git commit hash for darwin-version.
