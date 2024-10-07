@@ -181,7 +181,7 @@
           system.activationScripts.link-files.text = ''
             #!/usr/bin/env nu
 
-            print hey!
+            [1 2 3] | save ~/tt.t
           '';
         };
     in
