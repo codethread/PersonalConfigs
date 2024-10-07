@@ -1,5 +1,6 @@
 # vim:fileencoding=utf-8:foldmethod=marker:foldlevel=0
 
+print "LOad"
 $env.PATH = ($env.PATH | split row (char esep))
 
 #: fns {{{
@@ -18,7 +19,6 @@ def path-prepend [p: string] {
 $env.DOTFILES = (home PersonalConfigs)
 $env.EDITOR = "nvim"
 # $env.VISUAL = "code --wait"
-$env.SHELL = ('~/.local/bin/nu' | path expand)
 $env.MANPAGER = "/bin/sh -c \"col -b | nvim -c 'set ft=man ts=8 nomod nolist nonu' -\""
 $env.MANWIDTH = 80
 $env.LESSHISTFILE = "-" # no .lesshst
@@ -50,7 +50,7 @@ $env.PATH = (path-prepend "~/.local/share/nvim/mason/bin")
 $env.PATH = (path-prepend "/opt/homebrew/sbin")
 $env.PATH = (path-prepend "/opt/homebrew/bin")
 
-$env.HOMEBREW_BUNDLE_FILE = ("~/.local/data/Brewfile.conf" | path expand)
+# $env.HOMEBREW_BUNDLE_FILE = ("~/.local/data/Brewfile.conf" | path expand)
 
 $env.HOMEBREW_CELLAR = "/opt/homebrew/Cellar"
 $env.HOMEBREW_PREFIX = "/opt/homebrew"

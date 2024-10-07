@@ -1,3 +1,4 @@
 *.lock.json
 bun.lockb
 Cargo.lock
+flake.lock
