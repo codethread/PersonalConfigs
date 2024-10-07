@@ -39,7 +39,7 @@
                 };
 
                 environment.systemPath = [
-                    "/Users/codethread/.local/bin"
+                    "$HOME/.local/bin"
                 ];
 
                 # these will only work for zsh
@@ -125,6 +125,15 @@
                     # - anything fun?
                 };
 
+                homebrew = {
+                    enable = true;
+                    caskArgs.no_quarantine = true;
+                    global.brewfile = true;
+                    onActivation.cleanup = "zap";
+                    # masApps = { magnet };
+                    casks = [ "raycast" "whatsapp" "kitty" "alfred" ];
+                    brews = [ "google-chrome"]
+                };
             };
         in
             {
