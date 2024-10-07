@@ -32,6 +32,7 @@
           environment.systemPackages = [
             pkgs.vim
             # neovim-nightly-overlay.packages.${pkgs.system}.default
+            pkgs.neovim
             pkgs.nushell
             pkgs.tmux
             pkgs.fd
