@@ -178,7 +178,11 @@
             # brews = [ "google-chrome"];
           };
 
-          system.activationScripts.link-files.text = "nu -l -i -c \"print hey\"";
+          system.activationScripts.link-files.text = ''
+            #!/usr/bin/env nu
+
+            print hey!
+          '';
         };
     in
     {
