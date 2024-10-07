@@ -181,7 +181,17 @@
           system.activationScripts.script.text = ''
             #!/usr/bin/env bash
 
-            nu -l -c "dotty link"
+            export DOTFILES="$HOME/PersonalConfigs"
+
+            if [ -d  "$HOME/.config/nushell" ]; then
+              echo "( ◕ ◡ ◕ ) Files linked"
+            else
+              echo "( ◕ ◡ ◕ ) Linking Files"
+              nu \
+                --env-config "$DOTFILES/.config/nushell/env.nu" \
+                --config "$DOTFILES/.config/nushell/config.nu" \
+                --commands "dotty link; print 'Files linked'"
+            fi
           '';
         };
     in
