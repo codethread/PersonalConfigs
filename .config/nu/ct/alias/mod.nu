@@ -78,6 +78,24 @@ alias ktt-light = kitty +kitten themes --reload-in=all Tokyo Night Day
 alias loggy = cd `~/Library/Mobile Documents/iCloud~com~logseq~logseq/`
 
 #---------------------------------------------#
+# NIX
+# -------------------------------------------#
+
+alias ne = nvim ~/PersonalConfigs/.config/nix-darwin/flake.nix
+
+# reload
+def nn [] {
+    ga ~/PersonalConfigs/.config/nix-darwin;
+    gc -m 'nix: update';
+    darwin-rebuild switch --flake ~/PersonalConfigs/.config/nix-darwin;
+}
+
+# nix help
+alias nh = man configuration.nix
+# open help in gui (useful for reference)
+alias nhh = darwin-help
+
+#---------------------------------------------#
 # 1password
 # -------------------------------------------#
 alias op-goog-token-info = op item get "cli google token"

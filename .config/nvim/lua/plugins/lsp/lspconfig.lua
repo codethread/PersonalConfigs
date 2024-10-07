@@ -90,6 +90,16 @@ return {
 						run = 'onSave',
 					},
 				},
+				nil_ls = {
+					settings = {
+						['nil'] = {
+							testSetting = 42,
+							formatting = {
+								command = { 'nixfmt' },
+							},
+						},
+					},
+				},
 				lua_ls = {
 					settings = {
 						Lua = {
@@ -133,7 +143,8 @@ return {
 						{
 							'K',
 							function()
-								local winid = require('ufo').peekFoldedLinesUnderCursor()
+								local hasufo = pcall(require, 'ufo')
+								local winid = hasufo and require('ufo').peekFoldedLinesUnderCursor()
 								if not winid then
 									-- choose one of coc.nvim and nvim lsp
 									vim.lsp.buf.hover()
@@ -156,6 +167,7 @@ return {
 						local map = {
 							-- lua = 'lua_ls',
 							gleam = 'gleam',
+							nix = 'nil_ls',
 						}
 						local formatter = map[U.ft()] or 'null-ls'
 						vim.print('formating with buffer: ' .. bufnr .. ' ' .. formatter)

@@ -28,6 +28,7 @@
           environment.systemPackages = [
 
             # core
+            pkgs.git
             pkgs.vim
             pkgs.neovim
             pkgs.nushell
@@ -178,16 +179,8 @@
             # brews = [ "google-chrome"];
           };
 
-          system.activationScripts.dotty.text = ''
-            export DOTFILES="/Users/codethread/PersonalConfigs"
-
-            if [ -d  "/Users/codethread/.config/nushell" ]; then
-              echo "( ◕ ◡ ◕ ) Files linked"
-            else
-              echo "( ◕ ◡ ◕ ) Linking Files"
-              nu --env-config "$DOTFILES/.config/nushell/env.nu" --config "$DOTFILES/.config/nushell/config.nu" --commands "dotty link; print 'Files linked'"
-            fi
-          '';
+          # NOTE: don't use this, it clashes with what is already created by nix-darwin
+          # system.activationScripts.scripts.text = "";
         };
     in
     {
