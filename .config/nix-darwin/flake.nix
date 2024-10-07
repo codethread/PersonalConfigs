@@ -36,26 +36,25 @@
                 };
 
                 environment.systemPath = [
-                    # "/Users/codethread/.local/bin"
+                    "/Users/codethread/.local/bin"
                 ];
 
-                # environment.shells = [ pkgs.nushell ];
                 # these will only work for zsh
                 environment.shellAliases = {
                     # nix edit
                     ne = "nvim ~/PersonalConfigs/.config/nix-darwin/flake.nix";
                     # reload
-                    nn = "darwin-rebuild switch --flake ~/PersonalConfigs/.config/nix-darwin";
+                    nn = "git add ~/PersonalConfigs/.config/nix-darwin; git commit -m 'nix: update'; darwin-rebuild switch --flake ~/PersonalConfigs/.config/nix-darwin";
                     # nix help
                     nh = "man configuration.nix";
                     # open help in gui (useful for reference)
                     nhh = "darwin-help";
+                    pathis = "echo $PATH | tr -s ':' '\n'";
                 };
 
 
                 # Auto upgrade nix package and the daemon service.
                 services.nix-daemon.enable = true;
-                # nix.package = pkgs.nix;
 
                 # Necessary for using flakes on this system.
                 nix.settings.experimental-features = "nix-command flakes";
@@ -63,17 +62,9 @@
                 # Create /etc/zshrc that loads the nix-darwin environment.
                 programs = {
                      zsh = {
-                         enable = true;
+                         enable = true; # don't remove this on mac
                      };
                 };
-
-                users.users = {
-#                     codethread = {
- #                        shell = pkgs.nushell;
-  #                   };
-                };
-
-                # system.activationScripts."nu-shell".text = "chsh -s ${pkgs.nushell}";
 
                 # Set Git commit hash for darwin-version.
                 system.configurationRevision = self.rev or self.dirtyRev or null;
