@@ -177,6 +177,7 @@ def bundle [] {
 # XXX might need to be sorted with taps first
 def "brewfile new" [] {
   clog "creating brewfile"
+  | sort-by type --reverse # by coincidence I want taps first
   | par-each { |d| $"($d.type) \"($d.name)\"" }
   | str join "\n"
   | clog "brewfile:"

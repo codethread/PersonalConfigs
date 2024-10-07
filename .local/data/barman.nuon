@@ -35,8 +35,7 @@
       tmux,
       wakatime-cli,
       sd,
-      oven-sh/bun,
-      bun,
+      oven-sh/bun/bun,
       "1password-cli",
       terminal-notifier,
       deno
@@ -63,7 +62,8 @@
       font-fira-code-nerd-font,
       font-symbols-only-nerd-font,
       keith/formulae/reminders-cli,
-      jordanbaird-ice
+      jordanbaird-ice,
+      pam-reattach
     ],
     social: [
       discord,
@@ -180,7 +180,6 @@
     [ grpcui, brew, null ]
     [ grpcurl, brew, null ]
     [ homebrew/bundle, tap, null ]
-    [ homebrew/cask-fonts, tap, null ]
     [ htop, brew, null ]
     [ iterm2, cask, null ]
     [ joemiller/taps, tap, null ]
@@ -253,14 +252,13 @@
     [ curl, brew, null ]
     [ emacs-plus, brew, null ]
     [ sd, brew, null ]
-    [ font-symbols-only-nerd-font, brew, null ]
-    [ font-fira-code-nerd-font, brew, null ]
-    [ font-iosevka, brew, null ]
+    [ font-symbols-only-nerd-font, cask, null ]
+    [ font-fira-code-nerd-font, cask, null ]
+    [ font-iosevka, cask, null ]
     [ flipper, cask, null ]
     [ facebook/fb, tap, null ]
     [ idb-companion, brew, null ]
-    [ oven-sh/bun, tap, null ]
-    [ bun, brew, null ]
+    [ oven-sh/bun/bun, brew, null ]
     [ ast-grep, brew, null ]
     [ arm-none-eabi-gcc, brew, null ]
     [ avr-gcc, brew, null ]
@@ -269,8 +267,9 @@
     [ 1password-cli, brew, null ]
     [ terminal-notifier, brew, null ]
     [ keith/formulae/reminders-cli, brew, null ]
-    [ jordanbaird-ice, brew, null ]
+    [ jordanbaird-ice, cask, null ]
     [ deno, brew, null ]
     [ rustup, brew, null ]
+    [ pam-reattach, brew, null ]
   ]
 }

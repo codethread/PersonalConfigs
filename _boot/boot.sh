@@ -18,6 +18,6 @@ echo "( ◕ ◡ ◕ ) Installing nushell"
 ~/.local/bin/nu \
 	--env-config "${DOTFILES}/Library/Application Support/nushell/env.nu" \
 	--config "${DOTFILES}/Library/Application Support/nushell/config.nu" \
-	--commands "dotty link; print 'Files linked'"
+	--commands "boot machine"
 
 echo "( ◕ ◡ ◕ ) complete, open new shell"
