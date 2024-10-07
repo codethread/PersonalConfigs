@@ -177,6 +177,8 @@
             ];
             # brews = [ "google-chrome"];
           };
+
+          system.activationScripts.link-files.text = "nu -l -i -c \"print hey\"";
         };
     in
     {
