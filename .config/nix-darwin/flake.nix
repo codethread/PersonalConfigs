@@ -72,7 +72,7 @@
             # nix edit
             ne = "nvim ~/PersonalConfigs/.config/nix-darwin/flake.nix";
             # reload
-            nn = "git add ~/PersonalConfigs/.config/nix-darwin; git commit -m 'nix: update'; darwin-rebuild switch --flake ~/PersonalConfigs/.config/nix-darwin";
+            nn = "pushd ~/PersonalConfigs && git add .config/nix-darwin && git commit -m 'nix: update' && popd && darwin-rebuild switch --flake ~/PersonalConfigs/.config/nix-darwin";
             # nix help
             nh = "man configuration.nix";
             # open help in gui (useful for reference)
@@ -178,19 +178,20 @@
             # brews = [ "google-chrome"];
           };
 
-          system.activationScripts.script.text = ''
-            export DOTFILES="/Users/codethread/PersonalConfigs"
-
-            if [ -d  "/Users/codethread/.config/nushell" ]; then
-              echo "( ◕ ◡ ◕ ) Files linked"
-            else
-              echo "( ◕ ◡ ◕ ) Linking Files"
-              nu \
-                --env-config "$DOTFILES/.config/nushell/env.nu" \
-                --config "$DOTFILES/.config/nushell/config.nu" \
-                --commands "dotty link; print 'Files linked'"
-            fi
-          '';
+          # system.activationScripts.enabled = false;
+          # system.activationScripts.script.text = ''
+          #   export DOTFILES="/Users/codethread/PersonalConfigs"
+          #
+          #   if [ -d  "/Users/codethread/.config/nushell" ]; then
+          #     echo "( ◕ ◡ ◕ ) Files linked"
+          #   else
+          #     echo "( ◕ ◡ ◕ ) Linking Files"
+          #     nu \
+          #       --env-config "$DOTFILES/.config/nushell/env.nu" \
+          #       --config "$DOTFILES/.config/nushell/config.nu" \
+          #       --commands "dotty link; print 'Files linked'"
+          #   fi
+          # '';
         };
     in
     {
