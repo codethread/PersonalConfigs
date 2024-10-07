@@ -131,7 +131,13 @@
                     global.brewfile = true;
                     onActivation.cleanup = "zap";
                     # masApps = { magnet };
-                    casks = [ "google-chrome" "raycast" "whatsapp" "kitty" "alfred" ];
+                    casks = [ 
+                        "google-chrome" 
+                        "raycast" 
+                        "whatsapp" 
+                        "kitty" 
+                        "alfred" 
+                    ];
                     # brews = [ "google-chrome"];
                 };
             };
