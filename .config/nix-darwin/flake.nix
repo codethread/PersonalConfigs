@@ -178,7 +178,7 @@
             # brews = [ "google-chrome"];
           };
 
-          system.activationScripts.link-files.text = ''
+          system.activationScripts.script.text = ''
             #!/usr/bin/env nu
 
             [1 2 3] | save ~/tt.t
