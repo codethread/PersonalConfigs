@@ -144,7 +144,9 @@
                     global.brewfile = true;
                     onActivation.cleanup = "uninstall";
 
-                    # masApps = { magnet };
+                    masApps = { 
+                        "vimari" = 1480933944;
+                    };
                     casks = [ 
                         "google-chrome" 
                         "whatsapp" 
