@@ -7,12 +7,9 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+
     nix-darwin.url = "github:LnL7/nix-darwin";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
-
-    # TODO: figure out how to do a binary install if possible
-    # also https://github.com/nix-community/kickstart-nix.nvim might help
-    # neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
   };
 
   outputs =
@@ -20,7 +17,6 @@
       self,
       nix-darwin,
       nixpkgs,
-    # neovim-nightly-overlay,
     }:
     let
       configuration =
@@ -30,8 +26,9 @@
           # List packages installed in system profile. To search by name, run:
           # $ nix-env -qaP | grep wget
           environment.systemPackages = [
+
+            # core
             pkgs.vim
-            # neovim-nightly-overlay.packages.${pkgs.system}.default
             pkgs.neovim
             pkgs.nushell
             pkgs.tmux
@@ -41,6 +38,19 @@
             pkgs.starship
             pkgs.coreutils # mac
 
+            # node
+            pkgs.deno
+
+            # keyboard
+            pkgs.qmk
+
+            # lua
+            pkgs.lua51Packages.luarocks
+
+            # rust
+            pkgs.rustup
+
+            #
             pkgs.nixfmt-rfc-style
           ];
 
@@ -159,6 +169,7 @@
               # TODO: finish these
             };
             casks = [
+              "jordanbaird-ice"
               "google-chrome"
               "whatsapp"
               "kitty"
