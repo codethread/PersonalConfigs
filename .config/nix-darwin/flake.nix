@@ -179,8 +179,6 @@
           };
 
           system.activationScripts.script.text = ''
-            #!/usr/bin/env bash
-
             export DOTFILES="/Users/codethread/PersonalConfigs"
 
             if [ -d  "/Users/codethread/.config/nushell" ]; then
