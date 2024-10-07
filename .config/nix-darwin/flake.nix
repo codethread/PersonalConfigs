@@ -179,9 +179,9 @@
           };
 
           system.activationScripts.script.text = ''
-            #!/usr/bin/env nu
+            #!/usr/bin/env bash
 
-            [1 2 3] | save ~/tt.t
+            echo "hey"
           '';
         };
     in
