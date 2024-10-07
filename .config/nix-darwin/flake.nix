@@ -129,7 +129,7 @@
                     enable = true;
                     caskArgs.no_quarantine = true;
                     global.brewfile = true;
-                    onActivation.cleanup = "zap";
+                    onActivation.cleanup = "uninstall";
                     # masApps = { magnet };
                     casks = [ 
                         "google-chrome" 
