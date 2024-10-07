@@ -39,7 +39,7 @@
                     # "/Users/codethread/.local/bin"
                 ];
 
-                environment.shells = [ pkgs.nushell ];
+                # environment.shells = [ pkgs.nushell ];
                 # these will only work for zsh
                 environment.shellAliases = {
                     # nix edit
@@ -62,18 +62,18 @@
 
                 # Create /etc/zshrc that loads the nix-darwin environment.
                 programs = {
-                    # zsh = {
-                    #     enable = true;
-                    # };
+                     zsh = {
+                         enable = true;
+                     };
                 };
 
                 users.users = {
-                    codethread = {
-                        shell = pkgs.nushell;
-                    };
+#                     codethread = {
+ #                        shell = pkgs.nushell;
+  #                   };
                 };
 
-                system.activationScripts."nu-shell".text = "chsh -s ${pkgs.nushell}";
+                # system.activationScripts."nu-shell".text = "chsh -s ${pkgs.nushell}";
 
                 # Set Git commit hash for darwin-version.
                 system.configurationRevision = self.rev or self.dirtyRev or null;
