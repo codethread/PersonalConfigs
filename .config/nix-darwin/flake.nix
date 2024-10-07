@@ -181,7 +181,7 @@
           system.activationScripts.script.text = ''
             #!/usr/bin/env bash
 
-            echo "hey"
+            nu -l -c "dotty link"
           '';
         };
     in
