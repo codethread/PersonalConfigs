@@ -147,7 +147,6 @@
                     # masApps = { magnet };
                     casks = [ 
                         "google-chrome" 
-                        "raycast" 
                         "whatsapp" 
                         "kitty" 
                         "alfred" 
