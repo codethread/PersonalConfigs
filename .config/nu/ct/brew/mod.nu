@@ -15,7 +15,7 @@ export def sync [
 ] {
   if ($log == true) { $env.CT_LOG = true }
 
-  barman open 
+  barman read 
     | barman menu get
     | brewfile new
     | match $dry_run {
@@ -35,7 +35,7 @@ export def tap [
 ] {
   if ($log == true) { $env.CT_LOG = true }
 
-  let config = barman open
+  let config = barman read
   let taps = $config | barman menu get --taps
 
   if ($name in $taps) {
@@ -63,7 +63,7 @@ export def install [
   let type = if ($cask) { $types.cask } else { $types.brew }
   clog "type" $type
 
-  barman open
+  barman read
   | barman find $formula
   | clog "found" --expand
   | match ($in) {
@@ -77,14 +77,14 @@ export def install [
 export def "bundle load" [--log] {
   if ($log == true) { $env.CT_LOG = true }
 
-  let drinks = (nuopen ($env.HOMEBREW_BUNDLE_FILE | path expand) 
+  let drinks = (open ($env.HOMEBREW_BUNDLE_FILE | path expand) 
     | lines 
     | where ($it starts-with "#" | not $in) 
     | parse '{type} "{name}"'
     | each { |l| barman drink new $l.name $l.type }
     | clog "drinks")
 
-  barman open
+  barman read
   | barman drinks add $drinks
   | barman write
 }
@@ -118,7 +118,7 @@ def install_package [
   flags: list<string>
 ] {
 
-  let config = barman open
+  let config = barman read
   let cocktail = $config | barman prompt $formula
 
   if (($cocktail | is-empty)) {

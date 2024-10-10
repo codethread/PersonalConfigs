@@ -44,7 +44,7 @@ export def is-today [ --hide-past:bool = false ]: table -> table {
 
 # List out calendars
 export def calendars []: nothing -> table {
-  nuopen $db | get Calendar | select title ROWID
+  open $db | get Calendar | select title ROWID
 }
 
 # List out all events for a given calendar
@@ -52,7 +52,7 @@ export def events [ calendar: string ]: nothing -> table {
   let calendar_id = (calendars | where title =~ $calendar | last | get ROWID)
 
 # TODO: fix the if else stuff, echo doesn't work
-  nuopen $db 
+  open $db 
   | get CalendarItem 
   | where calendar_id == $calendar_id
   # | select summary location_id description start_date end_date all_day calendar_id status invitation_status availability url last_modified hidden has_recurrences has_attendees due_date creation_date app_link conference_url

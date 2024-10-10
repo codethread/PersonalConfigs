@@ -18,7 +18,7 @@ export def pjs [...deps: string] {
 
   fd package.json
     | lines
-    | par-each {|| nuopen $in }
+    | par-each {|| open $in }
     | where {|| "dependencies" in $in }
     | par-each {|pj|
         let found = ($pj | get dependencies | transpose name version | where name =~ $search)

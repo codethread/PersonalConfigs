@@ -1,4 +1,4 @@
-use ct/core [nuopen clog is-not-empty];
+use ct/core [clog is-not-empty];
 use constants.nu [menus types];
 
 # NOTES:
@@ -16,10 +16,10 @@ export def brew_packages_path [] {
 }
 
 # Get the menu from disk
-export def open [] {
+export def read [] {
   brew_packages_path
   | clog "opening packages:"
-  | nuopen $in 
+  | open
   | clog "packages" --expand
 }
 

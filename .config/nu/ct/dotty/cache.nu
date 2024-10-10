@@ -2,7 +2,7 @@
 export def load-cache [name: string] {
   let conf = $"~/.local/data/dotty-cache-($name).nuon" | path expand
   match ($conf | path exists) {
-    true => { nuopen $conf },
+    true => { open $conf },
     false => { [] }
   }
 }

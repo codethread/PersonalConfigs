@@ -5,6 +5,7 @@ use ct/config [keybindings menus hooks]
 use ct/core *
 # use ct/ical
 
+alias open = open
 alias open = ^open
 
 use ct/tmux
@@ -52,6 +53,14 @@ let config = {
     datetime_format: {
         # normal: '%a, %d %b %Y %H:%M:%S %z'    # shows up in displays of variables or other datetime's outside of tables
         # table: '%m/%d/%y %I:%M:%S%p'          # generally shows up in tabular outputs such as ls. commenting this out will change it to the default human readable datetime format
+    }
+
+    error_style: "fancy"
+
+    display_errors: {
+        # NOTE: may need to check how this behaves for scripts and nush
+        exit_code: false # this shows a nushell error, which is annoying in repl
+        termination_signal: true
     }
 
     explore: {
@@ -112,6 +121,9 @@ let config = {
     bracketed_paste: true # enable bracketed paste, currently useless on windows
     edit_mode: emacs # emacs, vi
     render_right_prompt_on_last_line: false # true or false to enable or disable right prompt to be rendered on last line of the prompt.
+
+    use_kitty_protocol: true # who knows
+    highlight_resolved_externals: true
 }
 
 $env.config = ($env.config | merge $config)

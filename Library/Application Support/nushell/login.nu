@@ -10,13 +10,13 @@ const carapace = ("~/.cache/carapace/init.nu" | path expand)
 source (if ($carapace | path exists) { $carapace } else { "empty.nu" })
 
 def get-package-scripts [] {
-  nuopen package.json | get scripts | items { |key,_| $key }
+  open package.json | get scripts | items { |key,_| $key }
 }
 
 def get-workspace-names [--only-scripts] {
   fd package.json
   | lines
-  | par-each {|| nuopen $in }
+  | par-each {|| open $in }
   | where {|pj| match ($only_scripts) {
       true => { "scripts" in $pj },
       false => { "name" in $pj }

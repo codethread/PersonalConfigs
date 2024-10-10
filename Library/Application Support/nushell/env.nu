@@ -129,7 +129,8 @@ $env.ENV_CONVERSIONS = {
 }
 
 # Directories to search for scripts when calling source or use
-const NU_LIB_DIRS = [
+$env.NU_LIB_DIRS = [
+    $nu.default-config-dir
     ("~/PersonalConfigs/.config/nu" | path expand) 
     ("~/workfiles/nu" | path expand)
     ("~/dev/vendor/nu_scripts/sourced" | path expand)

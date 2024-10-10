@@ -1,10 +1,6 @@
 export use time.nu *
 # export use typeof.nu
 
-export def nuopen [arg, --raw (-r)] { 
-  if $raw { open -r $arg } else { open $arg } 
-}
-
 export def nup [arg] { prev $arg }
 
 export def plugs [] {  
@@ -37,7 +33,7 @@ export def clog [
 ] {
   let val = $in; 
 
-  if ($env.CT_LOG) {
+  if ($env.CT_LOG? | default false) {
     print $"---- ($title) -----"
 
     $args | each { print $in }

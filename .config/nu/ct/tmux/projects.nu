@@ -20,6 +20,6 @@ export def load-config [] {
   echo "~/.local/data/tmux.nuon" 
   | path expand
   | clog "opening config file:"
-  | nuopen $in
+  | open
   | clog "config:" --expand
 }
