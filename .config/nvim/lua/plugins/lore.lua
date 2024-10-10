@@ -65,12 +65,20 @@ return {
 		build = 'brew install gnu-sed',
 		cmd = 'Spectre',
 		opts = {
+			find_engine = {
+				rg = {
+					-- can add more options
+				},
+			},
 			default = {
 				find = {
 					options = {
 						'ignore-case',
 						'hidden',
 					},
+				},
+				replace = {
+					cmd = 'sd',
 				},
 			},
 		},
@@ -79,6 +87,7 @@ return {
 	{
 		-- TODO: replace with https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-pairs.md
 		'windwp/nvim-autopairs',
+		enabled = false,
 		event = 'InsertEnter',
 		config = function()
 			local _, npairs = pcall(require, 'nvim-autopairs')
