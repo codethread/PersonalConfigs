@@ -58,12 +58,11 @@
       kitty,
       alfred,
       dozer,
-      font-iosevka,
       font-fira-code-nerd-font,
       font-symbols-only-nerd-font,
       keith/formulae/reminders-cli,
       jordanbaird-ice,
-      pam-reattach
+      pam-reattach,
     ],
     social: [
       discord,
@@ -254,7 +253,6 @@
     [ sd, brew, null ]
     [ font-symbols-only-nerd-font, cask, null ]
     [ font-fira-code-nerd-font, cask, null ]
-    [ font-iosevka, cask, null ]
     [ flipper, cask, null ]
     [ facebook/fb, tap, null ]
     [ idb-companion, brew, null ]
