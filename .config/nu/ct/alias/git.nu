@@ -39,6 +39,7 @@ export alias gcf = git config --list
 
 export alias gcl = git clone --recurse-submodules
 export alias gnuke = git clean -dfX
+export alias guntracked = git clean -dfX --dry-run
 # export alias gclean = git clean --interactive -d
 
 export alias gcmsg = git commit --message
