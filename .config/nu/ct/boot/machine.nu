@@ -11,13 +11,21 @@ export def main [
 	print $"(ansi cyan)Linking homefiles(ansi reset)"
 	dotty link;
 
-	{ # setup some folder structures how I like them
-		print $"(ansi green)Creating dirs(ansi reset)"
-
-		mkdir -v ~/dev/vendor/ ~/dev/learn/ ~/dev/projects/
-	}
+	# setup some folder structures how I like them
+	print $"(ansi green)Creating dirs(ansi reset)"
+	mkdir -v ~/dev/vendor/ ~/dev/learn/ ~/dev/projects/
 
 	clone_tools --clean=$clean --force=$force
+
+	print $"(ansi green)Setting up touchid(ansi reset)"
+	if not ("/etc/pam.d/sudo_local" | path exists) {
+		(dedent "
+			auth       optional       /opt/homebrew/Cellar/pam-reattach/1.3/lib/pam/pam_reattach.so
+			auth       sufficient     pam_tid.so
+			" | save --force ~/.tmp)
+
+		zsh -c $"sudo mv ~/.tmp /etc/pam.d/sudo_local"
+	}
 
 	if not $skip_brew { # brew installer
 		if not ("/opt/homebrew" | path exists) {
@@ -28,18 +36,6 @@ export def main [
 
 		# custom nushell code to use a Brewfile
 		brew sync
-	}
-
-
-	{ # setup touch id on mac
-		if not ("/etc/pam.d/sudo_local") {
-			(dedent "
-				auth       optional       /opt/homebrew/Cellar/pam-reattach/1.3/lib/pam/pam_reattach.so
-				auth       sufficient     pam_tid.so
-				" | save --force ~/.tmp)
-
-			zsh -c $"sudo mv ~/.tmp /etc/pam.d/sudo_local"
-		}
 	}
 
 	print 'Files linked'
