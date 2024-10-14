@@ -139,3 +139,8 @@ export def git_squash [
   let msg = git log --reverse --format=%H $"HEAD..($branch)" | lines | first
   git commit -C $msg
 }
+
+# check for unstaged or uncommitted changes
+export def git_is_dirty [] {
+    git status --short | is-not-empty
+}
