@@ -5,8 +5,8 @@ use ct/config [keybindings menus hooks]
 use ct/core *
 # use ct/ical
 
-alias open = open
-alias open = ^open
+# alias open = open
+# alias open = ^open
 
 use ct/tmux
 use ct/git *
