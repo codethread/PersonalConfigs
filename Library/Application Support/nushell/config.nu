@@ -58,7 +58,7 @@ $env.config = {
 
 $env.config = ($env.config | upsert keybindings ($env.config.keybindings ++ $keybindings))
 
-$env.config = ($env.config | upsert menus ($env.config.menus ++ menus))
+$env.config = ($env.config | upsert menus ($env.config.menus ++ (menus)))
 
 $env.config = ($env.config | upsert hooks ($env.config.hooks | merge (hooks)))
 
