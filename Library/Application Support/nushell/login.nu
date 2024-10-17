@@ -1,6 +1,6 @@
 source ct/alias/mod.nu
 
-alias p = ^p
+# alias p = ^p
 alias als = scope aliases
 
 const atuin = ("~/.local/share/atuin/init.nu" | path expand)
