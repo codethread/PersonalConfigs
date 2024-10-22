@@ -112,7 +112,7 @@ cmd-ctrl-space = 'fullscreen'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
 # Could be anoying
-cmd-tab = 'workspace-back-and-forth'
+alt-tab = 'workspace-back-and-forth'
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
 alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 
@@ -139,11 +139,11 @@ j = 'move down'
 k = 'move up'
 l = 'move right'
 
-# shift-h = ['join-with left', 'mode main']
-shift-h = 'join-with left'
-shift-j = 'join-with down'
-shift-k = 'join-with up'
-shift-l = 'join-with right'
+# I seem to always expect to be done after a join
+shift-h = ['join-with left', 'mode main']
+shift-j = ['join-with down', 'mode main']
+shift-k = ['join-with up', 'mode main']
+shift-l = ['join-with right', 'mode main']
 
 u = ['move-node-to-workspace --focus-follows-window 1', 'mode main']
 i = ['move-node-to-workspace --focus-follows-window 2', 'mode main']
@@ -163,6 +163,9 @@ h = 'resize width -50'
 j = 'resize height +50'
 k = 'resize height -50'
 l = 'resize width +50'
+
+# TODO: this is for work mac
+equal = ['resize width 1000', 'mode main']
 
 space = 'mode main'
 esc = 'mode main'

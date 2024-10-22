@@ -88,7 +88,9 @@ def clone_tools [
 }
 
 def do_macos_things [] {
-	# more things in https://gist.github.com/scottstanfield/688909eb2cc2b3dfcea2d9e50027d212
+	# more things in 
+	# - https://gist.github.com/scottstanfield/688909eb2cc2b3dfcea2d9e50027d212
+	# - https://macos-defaults.com/dock/autohide-delay.html
 
 	# prevent opening animations
 	defaults write -g NSAutomaticWindowAnimationsEnabled -bool false
@@ -104,7 +106,8 @@ def do_macos_things [] {
 	defaults write com.apple.dock static-only -bool true
 	defaults write com.apple.dock orientation -string "left"
 	defaults write com.apple.dock tilesize -int 50
-	defaults write com.apple.dock expose-animation-duration -float 0.1
+	# seems to prevent it showing
+	defaults write com.apple.dock expose-animation-duration -float 0
 
 	# tidy
 	defaults write com.apple.screencapture location -string ([$env.HOME Pictures] | path join)
