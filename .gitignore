@@ -6,3 +6,6 @@
 .luarc.json
 brain.md
 deno.lock
+
+node_modules
+bun.lockb

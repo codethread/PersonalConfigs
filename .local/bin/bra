@@ -1,10 +1,21 @@
-#!/bin/zsh
+#!/usr/bin/env bun
 
-# https://github.com/junegunn/fzf/wiki/Examples#git
-# see branches
-# fbr - checkout git branch (including remote branches)
-local branches branch
-branches=$(git branch --all | grep -v HEAD) &&
-    branch=$(echo "$branches" |
-    fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
-    git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
+import { execSync } from 'node:child_process';
+import { $ } from 'bun'
+import { fzf } from './shared/fzf';
+
+try {
+    const branches = await $`git branch --all | grep -v HEAD`.text('utf-8')
+    const out = await fzf(branches.split('\n'), { tmux: true })
+
+    console.log(out)
+
+    // try to remove remote/<blah> if it exists
+    // const reg = /remotes\/[^/]*\//
+    // const branch = out.replace(reg, '')
+    //
+    // await $`git checkout ${branch}`
+} catch (e) {
+    console.error(e)
+    process.exit(1)
+}
