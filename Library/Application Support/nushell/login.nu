@@ -42,3 +42,10 @@ export extern "yarn workspace" [
 ] {
   ^yarn workspace $workspace
 }
+
+#---------------------------------------------#
+# AEROSPACE
+# -------------------------------------------#
+
+# CLI command to get IDs of running applications
+export extern "aerospace list-apps" [] {}
