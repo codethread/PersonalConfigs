@@ -5,7 +5,6 @@
 .config/kitty/kitty.conf.bak 
 .luarc.json
 brain.md
-deno.lock
 
 node_modules
 bun.lockb

@@ -1,0 +1,10 @@
+{
+  "name": "@ct/lib",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "index.ts",
+  "scripts": {
+    "setup": "bun link && bun link @ct/lib"
+  },
+  "dependencies": {}
+}
