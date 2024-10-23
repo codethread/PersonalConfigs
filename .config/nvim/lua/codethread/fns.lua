@@ -101,4 +101,13 @@ end
 
 vim.api.nvim_create_user_command('Testy', M.align_by, {})
 
+function M.store_to_clipboard(str)
+	if not type(str) == 'string' then
+		vim.notify 'should be string!'
+		return
+	end
+	vim.cmd([[let @*="]] .. str .. '"')
+end
+function M.copy_filepath_relative() local p = vim.fn.expand '%:p' end
+
 return M

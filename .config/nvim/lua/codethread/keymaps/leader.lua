@@ -59,6 +59,15 @@ return {
 			'Save',
 		},
 		u = { function() require('plugins.telescope.pickers').unsaved() end, 'Unsaved' },
+		y = {
+			name = 'copy path',
+			l = {
+				function() require('codethread.fns').copy_filepath_relative() end,
+				'path [gitlab]',
+			},
+			r = { Cmd 'let @*=@%', 'path [root]' },
+			y = { Cmd 'let @*=@%', 'path [relative]' },
+		},
 	},
 
 	j = {
