@@ -43,6 +43,22 @@ return {
 						command = 'open',
 						args = { 'https://github.com/' .. file },
 					}):sync()
+				elseif vim.system({ 'isPhrase', file }):wait().code == 0 then
+					-- TODO be smart if in native/web
+					vim.system({
+						'rg',
+						file,
+						'-F',
+						'--vimgrep',
+						'apps/web/app/public/locale/web/en-gb',
+					}, { text = true }, function(obj)
+						local lines = vim.split(vim.trim(obj.stdout), '\n')
+						if #lines == 1 then
+							vim.print(1)
+							local res = vim.split(lines[1], ':  ')[1]
+							vim.system { 'openInVim', res }
+						end
+					end)
 				else
 					print('not a link: ' .. file)
 				end
@@ -92,7 +108,9 @@ return {
 		Q = { '<cmd>qa!<cr>', 'Quit no save' }, -- default is q!
 	},
 
-	['<C-n>'] = { Cmd 'Oil --float', 'Oil' },
+	-- ['<C-n>'] = { Cmd 'Oil --float', 'Oil' },
+
+	['<C-n>'] = { Cmd 'Neotree reveal', 'NeoTree' },
 
 	-- center on scroll
 	['<C-u>'] = { '<C-u>zz', 'Center Up' },
