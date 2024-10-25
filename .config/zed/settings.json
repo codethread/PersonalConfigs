@@ -7,6 +7,9 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "collaboration_panel": {
+    "dock": "right"
+  },
   "telemetry": {
     "diagnostics": false,
     "metrics": false
