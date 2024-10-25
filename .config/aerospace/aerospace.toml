@@ -58,7 +58,7 @@ cmd-alt-h = [] # Disable "hide others"
 # See: https://nikitabobko.github.io/AeroSpace/commands#layout
 cmd-ctrl-t = 'layout tiles horizontal'
 cmd-ctrl-a = 'layout accordion horizontal'
-cmd-ctrl-f = 'layout floating' # handy to pop out a current frame
+cmd-ctrl-f = ['layout floating tiling', 'mode main'] # Toggle between floating and tiling layout, handy to pop out current frame
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#focus
 cmd-ctrl-h = 'focus left'
@@ -99,7 +99,6 @@ cmd-ctrl-s = 'mode split'
 [mode.service.binding]
 r = ['reload-config', 'mode main']
 esc = ['flatten-workspace-tree', 'mode main'] # reset layout
-f = ['layout floating tiling', 'mode main'] # Toggle between floating and tiling layout
 backspace = ['close-all-windows-but-current', 'mode main']
 
 # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
@@ -194,6 +193,12 @@ run = 'move-node-to-workspace 3'
 # if.app-name-regex-substring = '.'
 # if.during-aerospace-startup = true
 
+#####################################
+# Tiles Floats
+[[on-window-detected]]
+if.window-title-regex-substring='Android Emulator'
+if.during-aerospace-startup = false #set it to false explicitly 
+run = 'layout tiling'  # The callback itself
 #####################################
 # Floats
 [[on-window-detected]]
