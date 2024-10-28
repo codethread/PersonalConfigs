@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+echo "Starting sync"
+
+# Define the directory containing the files
+directory="$HOME/sync"
+
+LOGDIR="$HOME/.local/state/com.codethread.syncengine"
+mkdir "$LOGDIR"
+
+# Loop over each file in the directory
+for file in "$directory"/*; do
+	# Define the log file name based on the input file name
+	logfile="$LOGDIR/${file##*/}.log" # Extract the filename without the path
+
+	# Run your command on each file (for example, cat or any command you want)
+	gitwatch -r origin -R "$file" >"$logfile" 2>&1 &
+
+	# Optional: Print the command being run (for logging/debugging purposes)
+	echo "Running syncengine on $file and logging to $logfile"
+done
+
+file="$HOME/Library/Mobile Documents/com~apple~CloudDocs/Documents/Notes"
+if [ -d "$file" ]; then
+	logfile="$LOGDIR/notes.log"
+	gitwatch -r origin -R "$file" >"$logfile" 2>&1 &
+	echo "Running syncengine on $file and logging to $logfile"
+fi
+
+# Optional: Wait for all background processes to finish if needed
+wait

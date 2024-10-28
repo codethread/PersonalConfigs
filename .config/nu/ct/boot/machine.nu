@@ -40,6 +40,8 @@ export def main [
 
 	do_macos_things
 
+	setup_background_items
+
 	print 'Files linked'
 }
 
@@ -54,6 +56,7 @@ def clone_tools [
 	let tools = [
 		[git,                                   dir,          install];
 		[git@github.com:nushell/nu_scripts.git, ~/dev/vendor, {||}]
+		[git@github.com:gitwatch/gitwatch.git, ~/dev/vendor, {|| ln -f -s ~/dev/vendor/gitwatch/gitwatch.sh ~/.local/bin/gitwatch }]
 	]
 
 	$tools | par-each { |t|
@@ -144,4 +147,41 @@ def do_macos_things [] {
 	killall Dock
 
 	print $"(ansi cyan)Done(ansi reset) some settings may require log in and out"
+}
+
+# Setup macos launchd processes as plist files
+# 
+# In short these are plist files that are managed by launchd and they are
+# written into the appropriate folder then started. Keep them simple at let the
+# content of the script do most of the heavy lifting, just use the plist to
+# manage scheduling
+#
+# handy stuff from:
+# - https://www.youtube.com/watch?v=guBV0jftT40&ab_channel=AUC_ANZ
+# - https://www.launchd.info/
+def setup_background_items [] {
+	let files = ls ~/PersonalConfigs/.config/nu/ct/boot/_LaunchAgents
+
+	$files 
+	| each {|f| 
+		let target = $f.name | split row "_" | get 1
+		let domain = $f.name | path parse | get stem
+		let target_file = [~/Library $target] | path join | path expand
+		let log_dir = ([~/ .local/state $domain] | path join | path expand)
+		
+		# $HOME doesn't seem to expand
+		let content = open $f.name 
+		| str replace --all "{{HOME}}" $env.HOME
+		| str replace --all "{{LOGFILE}}" ([$log_dir std.log] | path join)
+		| str replace --all "{{PATH}}" ($env.PATH | str join ":")
+
+		mkdir $log_dir
+		# may not have been setup so will do these in try
+		print $"(ansi cyan)Creating(ansi reset) ($target_file)"
+
+		try { launchctl unload $target_file }
+		try { rm $target_file }
+		echo $content | save $target_file --force
+		launchctl load $target_file
+	}
 }
