@@ -194,10 +194,15 @@ run = 'move-node-to-workspace 3'
 
 #####################################
 # Tiles Floats
-[[on-window-detected]]
-if.window-title-regex-substring='Android Emulator'
-if.during-aerospace-startup = false #set it to false explicitly 
-run = 'layout tiling'  # The callback itself
+
+# TODO: annoyingly this goes mental as the emulator wants to resize itself too
+# Android emulator
+
+# [[on-window-detected]]
+# if.window-title-regex-substring='Android Emulator'
+# if.during-aerospace-startup = false #set it to false explicitly 
+# run = 'layout tiling'  # The callback itself
+
 #####################################
 # Floats
 [[on-window-detected]]
