@@ -17,16 +17,5 @@
     "prefix": "rnbor",
     "body": ["borderColor: 'coral', borderStyle:'dotted', borderWidth: 1"],
     "description": "Add debug border to a component style"
-  },
-
-  "useEffect": {
-    "prefix": "ue",
-    "body": ["React.useEffect(()=>{ $0; return ()=> { $1 }},[$2])"]
-  },
-  "useEffect log unmount": {
-    "prefix": "uel",
-    "body": [
-      "React.useEffect(()=>{ console.log('codethread mount $1'); return ()=> { console.log('codethread unmount $1') }},[])"
-    ]
   }
 }

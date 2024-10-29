@@ -107,7 +107,7 @@ export def slacky [] {
 			--password $p
 			--domain https://perkbox.slack.com)
 	} | from json 
-	| save ([$target slack.nuon] | path join)
+	| save ([$target slack.json] | path join)
 }
 
 # run a closure and hide nearly all environment variables

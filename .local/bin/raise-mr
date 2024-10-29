@@ -47,15 +47,18 @@ def list-mrs [email: string] {
   $body | table --collapse | print $in
 
 
-  (http post 
+  let mr_info = ((http post 
     -t application/json 
     -H [Authorization $"Bearer ($env.CLI_GITLAB_TOKEN)"] 
     https://git.perkbox.io/api/graphql $body)
   | get data.project.mergeRequests.nodes
   | where webUrl == $fullPath
-  | first
-  | format-for-slack
-  | message-slack
+  | first)
+
+	$mr_info | format-for-slack | message-slack
+	 
+	# WIP send to teams
+	kindly $mr_info.title $mr_info.webUrl
 }
 
 def format-for-slack [] {
@@ -85,7 +88,7 @@ def message-slack [] {
 }
 
 def auth [] {
-  open `~/.local/share/slacky/slack.nuon`
+  open `~/.local/share/slacky/slack.json`
 }
 
 def parse-url [] {

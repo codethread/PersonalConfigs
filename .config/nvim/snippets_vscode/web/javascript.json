@@ -31,5 +31,15 @@
     "prefix": "st",
     "body": ["\\${({ theme }) => theme$1}"],
     "description": "Insert embeded theme in styled component"
+  },
+  "useEffect": {
+    "prefix": "ue",
+    "body": ["React.useEffect(()=>{ $0; return ()=> { $1 }},[$2])"]
+  },
+  "useEffect log unmount": {
+    "prefix": "uel",
+    "body": [
+      "React.useEffect(()=>{ console.log('codethread mount $1'); return ()=> { console.log('codethread unmount $1') }},[])"
+    ]
   }
 }
