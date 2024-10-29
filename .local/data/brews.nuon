@@ -60,6 +60,7 @@
 	mas "Key Codes", id: 414568915
 	mas "Vimari", id: 1480933944
 	mas "TickTick:To-Do List, Calendar", id: 966085870
+	mas "Dark Reader for Safari", id: 1438243180
 	',
 
 	home : '
@@ -118,8 +119,7 @@
 
 	tap "jesseduffield/lazygit"
 	brew "jesseduffield/lazygit/lazygit"
-	cask "zed"
 
-	cask "wezterm"
+	mas "Perplexity: Ask Anything", id: 6714467650
 '
 }
