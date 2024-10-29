@@ -198,5 +198,14 @@ return {
 			-- "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
 		},
 		cmd = 'Neotree',
+		setup = function()
+			require('neo-tree').setup {
+				window = {
+					mappings = {
+						['Z'] = 'expand_all_nodes',
+					},
+				},
+			}
+		end,
 	},
 }

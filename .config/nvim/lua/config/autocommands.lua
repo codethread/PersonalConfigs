@@ -57,6 +57,15 @@ vim.api.nvim_create_autocmd('FileType', {
 	end,
 })
 
+-- close some filetypes with <q>
+vim.api.nvim_create_autocmd('FileType', {
+	group = augroup 'ct/mini_disables',
+	pattern = {
+		'neo-tree',
+	},
+	callback = function(event) vim.b[event.buf].miniindentscope_disable = true end,
+})
+
 -- wrap and check for spell in text filetypes
 vim.api.nvim_create_autocmd('FileType', {
 	group = augroup 'wrap_spell',
