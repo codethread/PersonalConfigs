@@ -84,6 +84,7 @@
 	tap "cargo-lambda/cargo-lambda"
 	brew "cargo-lambda/cargo-lambda/cargo-lambda"
 
+	brew "buf" # protobuf lsp
 	brew "glab"
 	brew "grpcui"
 	brew "grpcurl"

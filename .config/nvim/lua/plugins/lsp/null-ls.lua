@@ -106,6 +106,10 @@ return {
 					formatting.joker.with {
 						filetypes = { 'clojure' },
 					},
+
+					-- proto
+					diagnostics.buf,
+					formatting.buf,
 				},
 			}
 		end,
