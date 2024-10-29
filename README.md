@@ -1,3 +1,5 @@
+[![wakatime](https://wakatime.com/badge/user/80a39c88-3ac2-4995-beab-fef12c15afd1/project/f780b3f7-f18d-4655-afd7-a76b89cafd71.svg?style=flat-square)](https://wakatime.com/badge/user/80a39c88-3ac2-4995-beab-fef12c15afd1/project/f780b3f7-f18d-4655-afd7-a76b89cafd71)
+
 > We measure our lives in the ways we develop and expand our knowledge
 > through myriad variations. Nothing can take its place. It’s our very soul...
 >
