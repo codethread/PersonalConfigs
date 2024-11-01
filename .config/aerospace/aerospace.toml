@@ -9,8 +9,6 @@ accordion-padding = 30
 # Possible values: tiles|accordion
 # NOTE: probably want to control this per monitor, this is good for laptops
 default-root-container-layout = 'accordion'
-# Possible values: horizontal|vertical|auto
-default-root-container-orientation = 'horizontal'
 
 # See https://nikitabobko.github.io/AeroSpace/guide#on-focus-changed-callbacks
 # See https://nikitabobko.github.io/AeroSpace/commands#move-mouse
@@ -18,27 +16,23 @@ on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 
 automatically-unhide-macos-hidden-apps = true
 
+[exec.env-vars]
+PATH = '${HOME}/.local/bin:/${HOME}/.bun/bin:/opt/homebrew/bin:/opt/homebrew/sbin:${PATH}'
+
 [key-mapping]
 preset = 'qwerty'
 
-# Gaps between windows (inner-*) and between monitor edges (outer-*).
-# Possible values:
-# - Constant:     gaps.outer.top = 8
-# - Per monitor:  gaps.outer.top = [{ monitor.main = 16 }, { monitor."some-pattern" = 32 }, 24]
-#                 In this example, 24 is a default value when there is no match.
-#                 Monitor pattern is the same as for 'workspace-to-monitor-force-assignment'.
-#                 See: https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
 [gaps]
-inner.horizontal = 5
-inner.vertical =   5
-outer.left =       5
-outer.bottom =     5
-outer.top =        5
-outer.right =      5
+inner.horizontal = [{ monitor."DELL U3421WE" = 15}, 5]
+inner.vertical   = [{ monitor."DELL U3421WE" = 15}, 5]
+outer.left       = [{ monitor."DELL U3421WE" = 15}, 5]
+outer.bottom     = [{ monitor."DELL U3421WE" = 15}, 5]
+outer.top        = [{ monitor."DELL U3421WE" = 15}, 5]
+outer.right      = [{ monitor."DELL U3421WE" = 15}, 5]
+
 
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
 [mode.main.binding]
-
 # All possible modifiers: cmd, alt, ctrl, shift
 # All possible keys:
 # - Letters.        a, b, c, ..., z
@@ -53,7 +47,9 @@ outer.right =      5
 
 # All possible commands: https://nikitabobko.github.io/AeroSpace/commands
 cmd-h = [] # Disable "hide application"
+cmd-m = [] # Disables "minimise application"
 cmd-alt-h = [] # Disable "hide others"
+# cmd-ctrl-f = [] # Disable "full screen"
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#layout
 cmd-ctrl-t = 'layout tiles horizontal'
@@ -61,10 +57,10 @@ cmd-ctrl-a = 'layout accordion horizontal'
 cmd-ctrl-f = ['layout floating tiling', 'mode main'] # Toggle between floating and tiling layout, handy to pop out current frame
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#focus
-cmd-ctrl-h = 'focus left'
-cmd-ctrl-j = 'focus down'
-cmd-ctrl-k = 'focus up'
-cmd-ctrl-l = 'focus right'
+cmd-ctrl-h = 'focus --boundaries-action wrap-around-the-workspace left'
+cmd-ctrl-j = 'focus --boundaries-action wrap-around-the-workspace down'
+cmd-ctrl-k = 'focus --boundaries-action wrap-around-the-workspace up'
+cmd-ctrl-l = 'focus --boundaries-action wrap-around-the-workspace right'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#resize
 cmd-ctrl-minus = 'resize smart -50'
@@ -77,72 +73,61 @@ cmd-ctrl-o = 'workspace 3'
 cmd-ctrl-p = 'workspace 4'
 
 cmd-ctrl-space = 'fullscreen'
-
-# See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
-# alt-shift-1 = 'move-node-to-workspace 1'
-# alt-shift-a = 'move-node-to-workspace A'
+cmd-ctrl-backspace= 'resize width 1000'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
 cmd-ctrl-tab = 'workspace-back-and-forth'
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
-alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
+# alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#mode
 cmd-ctrl-semicolon = 'mode service'
-cmd-ctrl-r = 'mode resize'
 cmd-ctrl-m = 'mode move'
-cmd-ctrl-s = 'mode split'
+cmd-ctrl-slash = 'exec-and-forget kindly'
+# cmd-enter = 'exec-and-forget open -n /Applications/kitty.app'
 
-# 'service' binding mode declaration.
-# See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
 [mode.service.binding]
 r = ['reload-config', 'mode main']
-esc = ['flatten-workspace-tree', 'mode main'] # reset layout
+esc = 'mode main'
+shift-r = ['flatten-workspace-tree', 'mode main'] # reset layout
 backspace = ['close-all-windows-but-current', 'mode main']
-
-# sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
-#s = ['layout sticky tiling', 'mode main']
 
 [mode.move.binding]
 # See: https://nikitabobko.github.io/AeroSpace/commands#move
-h = 'move left'
-j = 'move down'
-k = 'move up'
-l = 'move right'
+h = 'focus --boundaries-action wrap-around-the-workspace left'
+j = 'focus --boundaries-action wrap-around-the-workspace down'
+k = 'focus --boundaries-action wrap-around-the-workspace up'
+l = 'focus --boundaries-action wrap-around-the-workspace right'
+
+shift-h = 'move left'
+shift-j = 'move down'
+shift-k = 'move up'
+shift-l = 'move right'
+
+# I seem to always expect to be done after a join
+ctrl-h = 'join-with left'
+ctrl-j = 'join-with down'
+ctrl-k = 'join-with up'
+ctrl-l = 'join-with right'
 
 u = ['move-node-to-workspace --focus-follows-window 1', 'mode main']
 i = ['move-node-to-workspace --focus-follows-window 2', 'mode main']
 o = ['move-node-to-workspace --focus-follows-window 3', 'mode main']
 p = ['move-node-to-workspace --focus-follows-window 4', 'mode main']
 
-shift-u = ['move-node-to-workspace 1', 'mode main']
-shift-i = ['move-node-to-workspace 2', 'mode main']
-shift-o = ['move-node-to-workspace 3', 'mode main']
-shift-p = ['move-node-to-workspace 4', 'mode main']
+cmd-u = 'move-node-to-workspace 1'
+cmd-i = 'move-node-to-workspace 2'
+cmd-o = 'move-node-to-workspace 3'
+cmd-p = 'move-node-to-workspace 4'
 
-space = 'mode main'
-esc = 'mode main'
-
-[mode.split.binding]
-# I seem to always expect to be done after a join
-h = ['join-with left', 'mode main']
-j = ['join-with down', 'mode main']
-k = ['join-with up', 'mode main']
-l = ['join-with right', 'mode main']
-
-space = 'mode main'
-esc = 'mode main'
-
-[mode.resize.binding]
-h = 'resize width -50'
-j = 'resize height +50'
-k = 'resize height -50'
-l = 'resize width +50'
+left = 'resize width -50'
+right = 'resize height +50'
+up = 'resize height -50'
+down = 'resize width +50'
 
 # TODO: this is for work mac
-equal = ['resize width 1000', 'mode main']
+space = ['resize width 1000', 'mode main']
 
-space = 'mode main'
 esc = 'mode main'
 
 # https://nikitabobko.github.io/AeroSpace/guide#on-window-detected-callback
@@ -156,20 +141,24 @@ run = 'move-node-to-workspace 1'
 if.app-id = 'net.kovidgoyal.kitty'
 run = 'move-node-to-workspace 1'
 
-# [[on-window-detected]]
-# if.workspace = '1'
-# if.during-aerospace-startup = false
-# run = 'join-with right' # not yet supported
+[[on-window-detected]]
+if.app-id = 'net.kovidgoyal.kitty'
+run = 'move-node-to-workspace 1'
+
+[[on-window-detected]]
+if.app-id = 'com.github.wez.wezterm'
+run = 'move-node-to-workspace 1'
 
 #####################################
-# Media
+# Alt
 [[on-window-detected]]
-if.app-id = 'com.apple.Music'
+if.app-id = 'com.figma.Desktop'
 run = 'move-node-to-workspace 2'
-
-# youtube music
 [[on-window-detected]]
-if.app-id = 'com.google.Chrome.app.cinhimbnkkaeohfgghhklpknlkffjgod'
+if.app-id = 'com.TickTick.task.mac'
+run = 'move-node-to-workspace 2'
+[[on-window-detected]]
+if.app-id = 'md.obsidian'
 run = 'move-node-to-workspace 2'
 
 #####################################
@@ -182,6 +171,20 @@ run = 'move-node-to-workspace 3'
 if.app-name-regex-substring = '(Slack|Teams)'
 run = 'move-node-to-workspace 3'
 
+#####################################
+# Media
+[[on-window-detected]]
+if.app-id = 'com.apple.Music'
+run = 'move-node-to-workspace 4'
+
+# youtube music
+[[on-window-detected]]
+if.app-id = 'com.google.Chrome.app.cinhimbnkkaeohfgghhklpknlkffjgod'
+run = 'move-node-to-workspace 4'
+
+[[on-window-detected]]
+if.app-id = 'com.spotify.client'
+run = 'move-node-to-workspace 4'
 #####################################
 # Misc
 # [[on-window-detected]]
@@ -211,3 +214,4 @@ run = 'layout floating'
 [[on-window-detected]]
 if.app-id = 'com.1password.1password'
 run = 'layout floating'
+
