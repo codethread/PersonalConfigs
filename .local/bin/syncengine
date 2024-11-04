@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+# TODO: do something about notifications on errors
 echo "Starting sync"
 
 # Define the directory containing the files

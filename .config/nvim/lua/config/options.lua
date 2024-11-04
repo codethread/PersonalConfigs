@@ -85,5 +85,6 @@ vim.filetype.add {
 	},
 	extension = {
 		nuon = 'nu',
+		tmux = 'tmux',
 	},
 }
