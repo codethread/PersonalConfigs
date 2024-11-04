@@ -28,17 +28,23 @@ return {
 			{ 'folke/neoconf.nvim', cmd = 'Neoconf', config = true },
 			{
 				'folke/lazydev.nvim',
+				dependencies = {
+					{ 'gonstoll/wezterm-types', lazy = true }, -- update of below
+					-- { 'justinsgithub/wezterm-types', lazy = true },
+					{ 'Bilal2453/luvit-meta', lazy = true },
+				},
 				ft = 'lua', -- only load on lua files
 				opts = {
 					library = {
 						-- See the configuration section for more details
 						-- Load luvit types when the `vim.uv` word is found
 						{ path = 'luvit-meta/library', words = { 'vim%.uv' } },
+						{ path = 'wezterm-types', mods = { 'wezterm' } },
 					},
 					-- disable when a .luarc.json file is found
-					enabled = function(root_dir)
-						return not vim.uv.fs_stat(root_dir .. '/.luarc.json')
-					end,
+					-- enabled = function(root_dir)
+					-- 	return not vim.uv.fs_stat(root_dir .. '/.luarc.json')
+					-- end,
 				},
 			},
 			{ 'Bilal2453/luvit-meta', lazy = true },
