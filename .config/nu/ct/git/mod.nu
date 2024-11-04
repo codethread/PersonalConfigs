@@ -143,3 +143,7 @@ export def git_squash [
 export def git_is_dirty [] {
 	git status --short | is-not-empty
 }
+
+export def "git go" [] {
+	^git push --no-verify --force-with-lease
+}
