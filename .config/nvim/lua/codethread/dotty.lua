@@ -77,9 +77,12 @@ local function setup_autocmds()
 end
 
 if vim.fn.executable 'nush' == 1 then
+	local root = vim.fs.root(0, '.git')
+	if not root then return end
+
 	Job:new({
 		command = 'nush',
-		args = { [[use ct/dotty; dotty is-cwd --exit]] },
+		args = { [[use ct/dotty; dotty is-cwd ]] .. root .. [[ --exit]] },
 		on_exit = function(_, code)
 			if code == 0 then
 				in_dotfiles = true

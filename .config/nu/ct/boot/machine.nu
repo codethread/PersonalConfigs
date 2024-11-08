@@ -42,6 +42,9 @@ export def main [
 
 	setup_background_items
 
+	# setup paths and envs for gui programs like wezterm
+	envy
+
 	print 'Files linked'
 }
 
@@ -129,13 +132,12 @@ def do_macos_things [] {
 	defaults write com.apple.finder _FXSortFoldersFirst -bool true
 
 
+	# make mission control ok
+	# https://nikitabobko.github.io/AeroSpace/guide#a-note-on-mission-control
+	defaults write com.apple.dock expose-group-apps -bool true
+
 	if (which aerospace | is-not-empty) {
 		print $"(ansi green)MacOS(ansi reset) setup things for aerospace"
-
-		# make mission control ok
-		# https://nikitabobko.github.io/AeroSpace/guide#a-note-on-mission-control
-		defaults write com.apple.dock expose-group-apps -bool true
-
 
 		# disable multiple spaces (don't full screen workspace)
 		# https://nikitabobko.github.io/AeroSpace/guide#a-note-on-displays-have-separate-spaces
@@ -184,4 +186,8 @@ def setup_background_items [] {
 		echo $content | save $target_file --force
 		launchctl load $target_file
 	}
+}
+
+def aerospace_conf [] {
+
 }

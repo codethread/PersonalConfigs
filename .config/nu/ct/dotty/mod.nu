@@ -41,9 +41,11 @@ export def link [
 }
 
 export def is-cwd [
+	dir?: path # directory path to check
 	--exit # returns an exit code rather than true/false
 ] {
-	let proj = config load | where from == $env.PWD
+	let target = if ($dir | is-not-empty) { $dir } else $env.PWD
+	let proj = (config load | where from == $target)
 	match ([$exit, ($proj | is-empty)]) {
 		[true, true] => { exit 1 },
 		[true, false] => { exit 0 }

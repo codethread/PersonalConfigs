@@ -1,6 +1,7 @@
 return {
 	{
 		'j-hui/fidget.nvim',
+		lazy = true,
 		-- tag = 'legacy',
 		opts = {
 			progress = {
@@ -49,6 +50,7 @@ return {
 			},
 			{ 'Bilal2453/luvit-meta', lazy = true },
 
+			'j-hui/fidget.nvim',
 			'williamboman/mason.nvim',
 			'williamboman/mason-lspconfig.nvim',
 			'hrsh7th/nvim-cmp',
