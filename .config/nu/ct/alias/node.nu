@@ -31,7 +31,7 @@ export def pjs [...deps: string] {
 }
 
 export def prettier-changed [--commit branch: string] {
-	gchanged --commit=$commit
+	gchanged --commit=$commit $branch
 	| lines 
 	| par-each { node_modules/.bin/prettier --write $in }
 }
@@ -74,5 +74,25 @@ export def npm-nope [] {
 		mv ~/.npmrc ~/.npmrc_nope
 	} else if ('~/.npmrc_nope' | path exists) {
 		mv ~/.npmrc_nope ~/.npmrc
+	}
+}
+
+# Run unit tests watching the specified path, tests will be run at the directory level specified
+# if a file is passed, that directory of that file will be used for easy copy/paste from editor
+export def unit-test [path: path] {
+	let dir = if (($path | path type) == dir) { $path } else { $path | path dirname }
+	let target = [$dir "*.test.ts"] | str join "/"
+
+	print (dedent $"running tests with glob:
+	(ansi blue)($target)(ansi reset)")
+
+	print ""
+	watch $dir {||
+		print "--------------------------------------------------"
+		print ""
+		let output = node_modules/.bin/mocha --require tooling/testsuite --exit $target | complete
+		print $output.stderr
+		print $output.stdout
+		if $output.exit_code == 0 { print $"(ansi green)✔️ YAY(ansi reset)" } else print $"(ansi red)❌ FAIL(ansi reset)"
 	}
 }

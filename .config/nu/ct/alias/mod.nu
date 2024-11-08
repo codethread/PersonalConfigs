@@ -12,9 +12,19 @@ alias v = nvim
 
 alias nvim-boot = MACOSX_DEPLOYMENT_TARGET=10.15 nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
 
+def nvim-profile [] {
+	nvim -c "lua require('lazy').profile()"
+}
+
 # rg --json hi | lines | each {|| from json } | where type == 'match' | get data
 
 alias vo = ls
+
+#---------------------------------------------#
+# WEZTERM
+# -------------------------------------------#
+
+def wez_debug [] { ls ~/.local/share/wezterm/ | sort-by modified | last | tail -f $in.name }
 
 #---------------------------------------------#
 # SEARCH
@@ -112,7 +122,31 @@ export def slacky [] {
 
 # run a closure and hide nearly all environment variables
 export def hide-all [closure: closure] {
-	let allow = [TMUX TERM SHELL PWD USER XPC PATH HOME]
+	let allow = [TMUX
+		TERM
+		SHELL
+		PWD
+		USER
+		XPC
+		PATH
+		HOME
+		DOTFILES
+		EDITOR
+
+		CT_USER
+		CT_NOTES
+
+		WAKATIME_HOME
+
+		FZF
+
+		GOBIN
+		GOPATH
+
+		VOLTA
+		HUSKY
+	]
+
 	let hidden = ($env 
 		| transpose name value 
 		| filter {|e| 
