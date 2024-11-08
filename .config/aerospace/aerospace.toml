@@ -1,4 +1,4 @@
-start-at-login = true
+start-at-login = false
 # You can use it to add commands that run after login to macOS user session.
 # Available commands: https://nikitabobko.github.io/AeroSpace/commands
 after-login-command = []
