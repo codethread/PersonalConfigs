@@ -10,6 +10,9 @@ if [[ -n "${CT_IS_MAC}" ]]; then
     mkdir -p "$HOME/.config/envy"
     # backup old version
     cat /etc/paths > "$HOME/.config/envy/$(date +%s)"
+    cat /etc/paths > "$HOME/.config/envy/latest"
+    # TODO make this all nu
+    nu -l -c 'hide-all { $env | upsert PATH ($env.PATH | str join ":") | reject "PWD" | to json } | save (echo ~/.config/envy/envs.json | path expand) --force'
     # write to new path
     echo ""
     echo $PATH | sudo tee /etc/paths

@@ -1,0 +1,182 @@
+local wezterm = require 'wezterm' --[[@as Wezterm]]
+local act = wezterm.action
+local utils = require 'utils'
+
+-- Function to find duplicates
+local function findDuplicates(list)
+	local occurrences = {}
+	local duplicates = {}
+
+	for _, item in ipairs(list) do
+		-- Create a unique identifier for the table
+		local identifier = item.mods .. ' +  ' .. item.key
+
+		-- Count occurrences
+		if not occurrences[identifier] then
+			occurrences[identifier] = 1
+		else
+			occurrences[identifier] = occurrences[identifier] + 1
+		end
+	end
+
+	-- Collect duplicates
+	for identifier, count in pairs(occurrences) do
+		if count > 1 then table.insert(duplicates, identifier) end
+	end
+
+	return duplicates
+end
+
+local function create_keymaps(keymaps)
+	local keys = {}
+	-- Iterate over the keymaps table
+	for mods, keymap in pairs(keymaps) do
+		for key, values in pairs(keymap) do
+			local entry = {}
+
+			if type(values) == 'table' then
+				entry = values
+			else
+				-- allow passing just a function
+				entry.action = values
+			end
+
+			entry.key = key
+			entry.mods = mods
+
+			table.insert(keys, entry)
+		end
+	end
+
+	return keys
+end
+
+local M = {}
+
+---comment
+---@param config Config
+function M.apply_to_config(config)
+	local smart_splits = wezterm.plugin.require 'https://github.com/mrjones2014/smart-splits.nvim'
+
+	config.leader = { key = 'a', mods = 'CTRL', timeout_milliseconds = 1000 }
+
+	local keymaps = {
+		CMD = {
+			[','] = {
+				action = act.SwitchToWorkspace {
+					name = 'wez',
+					spawn = {
+						cwd = utils.home 'PersonalConfigs/.config/wezterm',
+						args = { utils.bin 'nvim', 'wezterm.lua' },
+					},
+				},
+			},
+		},
+		LEADER = {
+			[';'] = act.ActivateCommandPalette,
+			[' '] = {
+				action = act.TogglePaneZoomState,
+			},
+			['c'] = {
+				action = act.SpawnTab 'CurrentPaneDomain',
+			},
+			['x'] = {
+				action = act.CloseCurrentPane { confirm = true },
+			},
+			['n'] = {
+				action = act.SpawnTab 'CurrentPaneDomain',
+			},
+			['|'] = {
+				action = act.SplitHorizontal { domain = 'CurrentPaneDomain' },
+			},
+			['-'] = {
+				action = act.SplitVertical { domain = 'CurrentPaneDomain' },
+			},
+			['h'] = {
+				action = act.ActivatePaneDirection 'Left',
+			},
+			['j'] = {
+				action = act.ActivatePaneDirection 'Down',
+			},
+			['k'] = {
+				action = act.ActivatePaneDirection 'Up',
+			},
+			['l'] = {
+				action = act.ActivatePaneDirection 'Right',
+			},
+			['LeftArrow'] = {
+				action = act.AdjustPaneSize { 'Left', 5 },
+			},
+			['RightArrow'] = {
+				action = act.AdjustPaneSize { 'Right', 5 },
+			},
+			['DownArrow'] = {
+				action = act.AdjustPaneSize { 'Down', 5 },
+			},
+			['UpArrow'] = {
+				action = act.AdjustPaneSize { 'Up', 5 },
+			},
+			['{'] = {
+				action = act.RotatePanes 'CounterClockwise',
+			},
+			['}'] = {
+				action = act.RotatePanes 'Clockwise',
+			},
+			['S'] = {
+				action = act.PaneSelect {
+					mode = 'SwapWithActiveKeepFocus', -- 'SwapWithActive'
+				},
+			},
+			['b'] = {
+				action = act.PaneSelect {
+					mode = 'MoveToNewTab',
+				},
+			},
+			['['] = {
+				action = act.ActivateCopyMode,
+			},
+		},
+		['LEADER|CTRL'] = {
+			['a'] = {
+				action = act { SendString = '\x01' },
+			},
+		},
+	}
+
+	smart_splits.apply_to_config(config, {
+		-- the default config is here, if you'd like to use the default keys,
+		-- you can omit this configuration table parameter and just use
+		-- smart_splits.apply_to_config(config)
+
+		-- directional keys to use in order of: left, down, up, right
+		-- direction_keys = { 'h', 'j', 'k', 'l' },
+		-- if you want to use separate direction keys for move vs. resize, you
+		-- can also do this:
+		direction_keys = {
+			move = { 'h', 'j', 'k', 'l' },
+			resize = { 'LeftArrow', 'DownArrow', 'UpArrow', 'RightArrow' },
+		},
+		-- modifier keys to combine with direction_keys
+		modifiers = {
+			move = 'CTRL', -- modifier to use for pane movement, e.g. CTRL+h to move left
+			resize = 'META', -- modifier to use for pane resize, e.g. META+h to resize to the left
+		},
+	})
+
+	local keys = create_keymaps(keymaps)
+	if not config.keys then config.keys = {} end
+
+	-- print('Key:', config.keys)
+	for _, key in ipairs(keys) do
+		table.insert(config.keys, key)
+	end
+
+	wezterm.on('window-config-reloaded', function(window)
+		local duplicates = findDuplicates(config.keys)
+		for _, dup in ipairs(duplicates) do
+			window:toast_notification('wezterm', 'Duplicate key: ' .. dup, nil, 4000)
+		end
+	end)
+end
+
+return M
