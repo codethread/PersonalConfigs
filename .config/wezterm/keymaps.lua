@@ -34,6 +34,7 @@ local function create_keymaps(keymaps)
 		for key, values in pairs(keymap) do
 			local entry = {}
 
+			-- TODO this doesn't really work as most of the act.* create tables
 			if type(values) == 'table' then
 				entry = values
 			else
@@ -60,6 +61,7 @@ function M.apply_to_config(config)
 
 	config.leader = { key = 'a', mods = 'CTRL', timeout_milliseconds = 1000 }
 
+	-- https://wezfurlong.org/wezterm/config/keys.html#configuring-key-assignments
 	local keymaps = {
 		CMD = {
 			[','] = {
@@ -74,9 +76,21 @@ function M.apply_to_config(config)
 		},
 		LEADER = {
 			[';'] = act.ActivateCommandPalette,
+
 			[' '] = {
 				action = act.TogglePaneZoomState,
 			},
+
+			['I'] = {
+				action = wezterm.action_callback(function(win, pan)
+					win:toast_notification('wezterm', 'Updating...', nil, 4000)
+					-- print(wezterm.plugin.list()) -- will list the plugin repos.
+					wezterm.plugin.update_all()
+					win:toast_notification('wezterm', '✨ Updated', nil, 4000)
+					wezterm.reload_configuration()
+				end),
+			},
+
 			['c'] = {
 				action = act.SpawnTab 'CurrentPaneDomain',
 			},
@@ -86,12 +100,20 @@ function M.apply_to_config(config)
 			['n'] = {
 				action = act.SpawnTab 'CurrentPaneDomain',
 			},
+
 			['|'] = {
 				action = act.SplitHorizontal { domain = 'CurrentPaneDomain' },
 			},
 			['-'] = {
 				action = act.SplitVertical { domain = 'CurrentPaneDomain' },
 			},
+
+			['b'] = {
+				action = act.PaneSelect {
+					mode = 'MoveToNewTab',
+				},
+			},
+
 			['h'] = {
 				action = act.ActivatePaneDirection 'Left',
 			},
@@ -104,6 +126,7 @@ function M.apply_to_config(config)
 			['l'] = {
 				action = act.ActivatePaneDirection 'Right',
 			},
+
 			['LeftArrow'] = {
 				action = act.AdjustPaneSize { 'Left', 5 },
 			},
@@ -116,26 +139,44 @@ function M.apply_to_config(config)
 			['UpArrow'] = {
 				action = act.AdjustPaneSize { 'Up', 5 },
 			},
+
 			['{'] = {
 				action = act.RotatePanes 'CounterClockwise',
 			},
 			['}'] = {
 				action = act.RotatePanes 'Clockwise',
 			},
+
 			['S'] = {
 				action = act.PaneSelect {
 					mode = 'SwapWithActiveKeepFocus', -- 'SwapWithActive'
 				},
 			},
-			['b'] = {
-				action = act.PaneSelect {
-					mode = 'MoveToNewTab',
-				},
-			},
 			['['] = {
 				action = act.ActivateCopyMode,
 			},
+			w = {
+				-- TODO figure out how to do this in workspace
+				action = act.SwitchToWorkspace {
+					name = 'work-web',
+					-- args = { 'nush', 'work-start-work-wez' },
+					spawn = {
+						cwd = utils.home 'work/deals-light-ui',
+						args = { 'testy' },
+					},
+				},
+			},
+			f = {
+				action = require('sessions').sessionizer().show,
+			},
+			['p'] = {
+				action = require('sessions').sessionizer().show_active,
+			},
+			['Tab'] = {
+				action = require('sessions').sessionizer().switch_to_most_recent,
+			},
 		},
+
 		['LEADER|CTRL'] = {
 			['a'] = {
 				action = act { SendString = '\x01' },

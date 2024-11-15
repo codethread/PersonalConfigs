@@ -15,6 +15,10 @@ local projects = {
 	{ 9, utils.home 'work/services/protobuf' },
 }
 
+function M.sessionizer()
+	return wezterm.plugin.require 'https://github.com/mikkasendke/sessionizer.wezterm'
+end
+
 ---comment
 ---@param config Config
 function M.apply_to_config(config)
@@ -30,8 +34,12 @@ function M.apply_to_config(config)
 		})
 	end
 
-	local sessionizer = wezterm.plugin.require 'https://github.com/mikkasendke/sessionizer.wezterm'
-	sessionizer.apply_to_config(config)
+	local sessionizer = M.sessionizer()
+
+	sessionizer.apply_to_config(
+		config,
+		true -- disable default bindings
+	)
 	sessionizer.config = {
 		paths = {
 			utils.home 'dev',

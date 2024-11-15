@@ -20,6 +20,8 @@ end
 function M.apply_to_config(config)
 	config.set_environment_variables = get_envs()
 	config.default_prog = { 'nu', '-l' }
+	-- not sure if this will be annoying
+	config.exit_behavior = 'CloseOnCleanExit'
 end
 
 return M

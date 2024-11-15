@@ -1,25 +1,44 @@
 ---@diagnostic disable: missing-fields
 local wezterm = require 'wezterm' --[[@as Wezterm]]
+local theme = require 'theme'
 
 local M = {}
 
+-- It prefers the title that was set via `tab:set_title()` but falls back
+-- to the title of the active pane in that tab.
+--
+-- https://wezfurlong.org/wezterm/config/lua/window-events/format-tab-title.html
+local function format_tabs()
+	local function tab_title(tab_info)
+		local title = tab_info.tab_title
+		if title and #title > 0 then return title end
+		return tab_info.active_pane.title
+	end
+
+	wezterm.on('format-tab-title', function(tab, tabs, panes, config, hover, max_width)
+		local title = tab_title(tab)
+		if tab.is_active then
+			return {
+				-- { Background = { Color = 'blue' } },
+				{ Text = ' ' .. title .. ' ' },
+			}
+		end
+		return ' ' .. title .. ' '
+	end)
+end
+
 ---@param config Config
 function M.apply_to_config(config)
-	-- For example, changing the color scheme:
-	config.color_scheme = 'rose-pine-moon'
-
 	config.window_decorations = 'RESIZE'
-	-- config.enable_tab_bar = false
-	-- tab bar
-	-- config.underline_thickness = 2
-	config.tab_bar_at_bottom = true
-	-- config.use_fancy_tab_bar = false
 	-- config.tab_and_split_indices_are_zero_based = true
 	config.line_height = 1.5
-	config.font_size = 13.0
 	config.underline_position = -4
+	-- config.underline_thickness = 2
+
+	config.font_size = 13.0
 	config.font = wezterm.font_with_fallback {
 		{
+			-- family = 'Liga Hack',
 			family = 'FiraCode Nerd Font',
 			weight = 'Medium',
 			harfbuzz_features = {
@@ -42,9 +61,14 @@ function M.apply_to_config(config)
 		},
 	}
 
-	local theme = wezterm.plugin.require('https://github.com/neapsix/wezterm').moon
+	config.tab_bar_at_bottom = true
+	config.use_fancy_tab_bar = false
+	config.tab_max_width = 100 -- non-fancy
+	config.color_scheme = 'rose-pine-moon'
+	config.colors = theme.colors()
 	config.window_frame = theme.window_frame()
-	config.hide_tab_bar_if_only_one_tab = true
+
+	format_tabs()
 end
 
 return M
