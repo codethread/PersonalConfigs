@@ -75,6 +75,10 @@
 		brew "entr"
 		brew "luarocks"
 
+		# keyboard stuff
+		tap "qmk/qmk"
+		brew "qmk/qmk/qmk"
+
 		mas "Paprika Recipe Manager 3", id: 1303222628
 	',
 
