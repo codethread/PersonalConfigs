@@ -23,7 +23,6 @@ return {
 		-- when looking for lsp capabilities for supports_method use spec (example is a pinned version, use latest):
 		-- https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#languageFeatures
 		'neovim/nvim-lspconfig',
-		--TODO can be per file?
 		event = { 'BufReadPre', 'BufNewFile' },
 		dependencies = {
 			{ 'folke/neoconf.nvim', cmd = 'Neoconf', config = true },
@@ -87,7 +86,7 @@ return {
 						'nu',
 						'--lsp',
 						-- BUG: doesn't actually work yet: https://github.com/nushell/nushell/issues/5655
-						'--include-path=' .. vim.fn.expand '~/PersonalConfigs/.config/nu',
+						-- '--include-path=' .. vim.fn.expand '~/PersonalConfigs/.config/nu',
 					},
 				},
 				-- clangd = {
@@ -130,6 +129,10 @@ return {
 				-- NOTE: uncomment to see
 				-- vim.print(client.server_capabilities)
 
+				if client.name == 'nushell' then
+					-- TODO these are brokded
+					vim.diagnostic.enable(false)
+				end
 				if not vim.list_contains({ 'nushell' }, client.name) then
 					U.keys(buf, {
 						{ 'gD', function() vim.lsp.buf.declaration() end, 'declaration' },

@@ -10,7 +10,11 @@ end
 return {
 	{
 		'neovim/nvim-lspconfig',
-		dependencies = { 'simrat39/rust-tools.nvim', 'rust-lang/rust.vim', 'nvim-dap' },
+		dependencies = {
+			'simrat39/rust-tools.nvim',
+			'rust-lang/rust.vim',
+			-- 'nvim-dap'
+		},
 		ft = 'rust',
 		init = function()
 			U.lsp_attach('rust_analyzer', function(client, bufnr)
@@ -72,18 +76,18 @@ return {
 							hover_actions = { border = 'solid' },
 						},
 						server = opts,
-						dap = {
-							adapter = require('rust-tools.dap').get_codelldb_adapter(
-								codelldb_path,
-								liblldb_path
-							),
-						},
+						-- dap = {
+						-- 	adapter = require('rust-tools.dap').get_codelldb_adapter(
+						-- 		codelldb_path,
+						-- 		liblldb_path
+						-- 	),
+						-- },
 					}
 
 					-- the adapter inside rusttools expects rt_lldb, despite us changing it to codelldb
 					-- hopefully gets fixed but for now this works
-					local a = require('dap').adapters
-					require('dap').adapters.rt_lldb = a.codelldb
+					-- local a = require('dap').adapters
+					-- require('dap').adapters.rt_lldb = a.codelldb
 
 					return true
 				end,

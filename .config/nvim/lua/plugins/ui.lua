@@ -5,7 +5,6 @@ vim.api.nvim_create_user_command('DebugSpacing', function()
 end, {})
 
 return {
-	'DanilaMihailov/beacon.nvim',
 
 	{
 		'folke/todo-comments.nvim',
@@ -142,6 +141,7 @@ return {
 
 	{
 		'goolord/alpha-nvim',
+		enabled = false, -- charming, but undermines my lazy loading efforts
 		dependencies = { 'nvim-tree/nvim-web-devicons' },
 		opts = function()
 			local config = require('alpha.themes.startify').config
@@ -208,4 +208,11 @@ return {
 			}
 		end,
 	},
+
+	'DanilaMihailov/beacon.nvim',
+
+	-- {
+	-- 	'sphamba/smear-cursor.nvim',
+	-- 	opts = {},
+	-- },
 }

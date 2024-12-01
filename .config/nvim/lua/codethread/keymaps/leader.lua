@@ -24,11 +24,30 @@ return {
 
 	e = {
 		name = 'Errors',
-		h = { function() require('codethread.fns').toggle_diagnostic() end, 'Toggle Diagnostics' },
+		h = { function() vim.diagnostic.open_float() end, 'Hover' },
 		l = { Cmd 'Telescope diagnostics theme=ivy bufnr=0', 'Document Diagnostics' },
 		L = { Cmd 'Telescope diagnostics', 'Workspace Diagnostics' },
-		n = { Cmd 'lua vim.diagnostic.goto_next()', 'Next Diagnostic' },
-		p = { Cmd 'lua vim.diagnostic.goto_prev()', 'Prev Diagnostic' },
+		n = {
+			function()
+				vim.diagnostic.jump {
+					severity = vim.diagnostic.severity.ERROR,
+					count = 1,
+					float = true,
+				}
+			end,
+			'Next Diagnostic',
+		},
+		p = {
+			function()
+				vim.diagnostic.jump {
+					severity = vim.diagnostic.severity.ERROR,
+					count = -1,
+					float = true,
+				}
+			end,
+			'Previous Diagnostic',
+		},
+		t = { function() require('codethread.fns').toggle_diagnostic() end, 'Toggle Diagnostics' },
 		q = { Cmd 'lua vim.diagnostic.setloclist()', 'Quickfix' },
 	},
 

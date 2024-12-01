@@ -98,6 +98,7 @@ return {
 					['<C-l>'] = cmp.mapping.confirm { select = true }, -- select grabs first item if none were selected
 					['<Esc>'] = cmp.mapping.abort(),
 					['<C-c>'] = cmp.mapping.abort(),
+					['<C-e>'] = cmp.mapping.abort(),
 					['<C-u>'] = cmp.mapping.scroll_docs(-4),
 					['<C-d>'] = cmp.mapping.scroll_docs(4),
 				},
@@ -188,13 +189,16 @@ return {
 				end
 			end
 
+			-- :help ins-completion
+			-- U.keymap('i', '<C-Space>', '<C-x>')
+
 			U.keymap('i', '<C-Space>', complete { 'nvim_lsp' }, 'Cmp')
 
-			U.keymap('i', '<C-x><C-p>', complete 'luasnip')
+			U.keymap('i', '<C-p>', complete 'luasnip')
 
-			U.keymap('i', '<C-x><C-f>', complete 'path')
+			U.keymap('i', '<C-f>', complete 'path')
 
-			U.keymap('i', '<C-x><C-b>', function()
+			U.keymap('i', '<C-n>', function()
 				cmp.complete {
 					config = {
 						sources = {

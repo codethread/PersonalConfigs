@@ -3,7 +3,8 @@ return {
 	-- use { 'bennypowers/nvim-regexplainer', requires = 'MunifTanjim/nui.nvim' }
 	{
 		'OXY2DEV/markview.nvim',
-		lazy = false, -- Recommended
+		-- lazy = false, -- Recommended
+		ft = 'markdown',
 		enabled = true, -- this is sexy, play with later
 		-- ft = "markdown" -- If you decide to lazy-load anyway
 		config = function()

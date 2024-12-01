@@ -2,18 +2,22 @@ return {
 	{
 		'nvim-treesitter/nvim-treesitter',
 		version = false, -- last release is way too old and doesn't work on Windows
-		event = { 'BufReadPost', 'BufNewFile' },
+
+		event = { 'BufReadPost', 'BufNewFile', 'VeryLazy' },
+		lazy = vim.fn.argc(-1) == 0, -- load treesitter early when opening a file from the cmdline
+		init = function(plugin)
+			-- PERF: add nvim-treesitter queries to the rtp and it's custom query predicates early
+			-- This is needed because a bunch of plugins no longer `require("nvim-treesitter")`, which
+			-- no longer trigger the **nvim-treesitter** module to be loaded in time.
+			-- Luckily, the only things that those plugins need are the custom queries, which we make available
+			-- during startup.
+			require('lazy.core.loader').add_to_rtp(plugin)
+			require 'nvim-treesitter.query_predicates'
+		end,
+		cmd = { 'TSUpdateSync', 'TSUpdate', 'TSInstall' },
 		build = ':TSUpdate',
 		dependencies = {
-			{
-				'nvim-treesitter/nvim-treesitter-context',
-				opts = {
-					multiline_threshold = 1,
-					-- max_lines = 2, -- How many lines the window should span. Values <= 0 mean no limit.
-					-- trim_scope = 'inner', -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
-				},
-			},
-			{ 'nushell/tree-sitter-nu' },
+			{ 'nushell/tree-sitter-nu', build = { ':TSUpdate nu' } },
 		},
 		---@type TSConfig
 		opts = {
@@ -26,24 +30,27 @@ return {
 				enable = true,
 			},
             -- stylua: ignore
-            ensure_installed = vim.tbl_flatten {
+            ensure_installed = vim.iter({
                 -- scripting
-				{ 'awk','bash','jq','python' },
-				-- lang
-				{ 'c','rust','go','gomod','scala','haskell', 'gleam' },
-				-- misc
-				{ 'comment','todotxt','markdown','markdown_inline','query','regex' },
+				{ 'awk','bash','jq', 'nu' },
+				-- langs
+				{ 'c','rust','scala','haskell', 'gleam', 'python' },
+				{ 'go', 'gosum', 'gomod', 'gowork' },
+				-- DB
+				{ 'sql' },
 				--web
-				{ 'css','scss','html','jsdoc','javascript','typescript','tsx','graphql', 'styled' },
+				{ 'css','scss','html','jsdoc','javascript','typescript','tsx','graphql', 'svelte', 'styled' },
 				-- webish
-				{ 'embedded_template','http','prisma','proto','svelte' },
+				{ 'embedded_template','http','prisma','proto' },
 				-- config
 				{ 'dockerfile','json','json5','jsonc','make','toml','yaml' },
 				-- git
 				{ 'diff','git_rebase','gitattributes','gitcommit' },
 				-- vim
-				{ 'vim','vimdoc','lua','luadoc','luap' },
-            },
+				{ 'vim','vimdoc','lua','luadoc','luap', 'query' },
+				-- misc
+				{ 'comment','todotxt','markdown','markdown_inline','regex' },
+            }):flatten():totable(),
 		},
 		---@param opts TSConfig
 		config = function(_, opts)
@@ -61,8 +68,10 @@ return {
 			vim.treesitter.language.register('dts', 'keymap')
 		end,
 	},
+
 	{
 		'nvim-treesitter/nvim-treesitter',
+		lazy = true,
 		dependencies = 'nvim-treesitter/nvim-treesitter-textobjects',
 		opts = {
 			textobjects = {
@@ -112,21 +121,39 @@ return {
 			},
 		},
 	},
+
 	{
 		'nvim-treesitter/playground',
 		cmd = 'TSPlaygroundToggle',
 		dependencies = 'nvim-treesitter/nvim-treesitter',
 	},
+
 	{
 		'nvim-treesitter/nvim-treesitter',
 		lazy = true,
-		dependencies = 'windwp/nvim-ts-autotag', -- close <div tags, and ciw
-		---@type TSConfig
-		opts = {
-			autotag = {
-				enable = true,
-				enable_close_on_slash = false, -- till https://github.com/aca/emmet-ls/issues/69 is resolved
+		dependencies = {
+			'nvim-treesitter/nvim-treesitter-context',
+			opts = {
+				multiline_threshold = 1,
+				-- max_lines = 2, -- How many lines the window should span. Values <= 0 mean no limit.
+				-- trim_scope = 'inner', -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
 			},
 		},
 	},
+
+	{
+		'nvim-treesitter/nvim-treesitter',
+		lazy = true,
+		dependencies = {
+			'windwp/nvim-ts-autotag', -- close <div tags, and ciw
+			opts = {
+				autotag = {
+					enable = true,
+					enable_close_on_slash = false, -- till https://github.com/aca/emmet-ls/issues/69 is resolved
+				},
+			},
+		},
+	},
+
+	{ 'fei6409/log-highlight.nvim', event = 'BufRead *.log', opts = {} },
 }

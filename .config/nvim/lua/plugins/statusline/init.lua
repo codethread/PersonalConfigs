@@ -58,6 +58,15 @@ return {
 			},
 		},
 		event = 'VeryLazy',
+		init = function()
+			-- NOTE: dialed up the refresh and using this instead
+			vim.api.nvim_create_autocmd('CursorHold', {
+				callback = function() require('lualine').refresh() end,
+			})
+			vim.api.nvim_create_autocmd('BufEnter', {
+				callback = function() require('lualine').refresh() end,
+			})
+		end,
 		opts = function()
 			local theme = require 'lualine.themes.rose-pine-alt'
 			theme.normal.c.gui = 'none'
@@ -105,8 +114,10 @@ return {
 						},
 					},
 					section_separators = { right = '', left = '' },
-					component_separators = { left = '|', right = '|' },
+					-- component_separators = { left = '|', right = '|' },
+					component_separators = { left = '', right = '' },
 					refresh = {
+						-- see events in `init`
 						statusline = 10000,
 						tabline = 10000,
 						winbar = 10000,
@@ -128,6 +139,7 @@ return {
 							separator = { right = ' ', left = '' },
 							-- left_padding = 2,
 						},
+						'%=',
 						{
 							require('plugins.statusline.filename').update_status,
 						},

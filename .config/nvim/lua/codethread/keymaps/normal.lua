@@ -99,8 +99,20 @@ return {
 		R = { function() require('ufo').openAllFolds() end, 'open all folds' },
 		M = { function() require('ufo').closeAllFolds() end, 'close all folds' },
 		p = { function() require('ufo').peekFoldedLinesUnderCursor() end, 'peak fold' },
-		-- r = { function() require('ufo').openFoldsExceptKinds() end, 'descrease fold' },
-		-- m = { function() require('ufo').closeFoldsWith() end, 'increase fold' },
+		c = {
+			function() require 'ufo' end,
+			'open fold under cursor',
+		},
+		s = {
+			function()
+				if not vim.v.count then
+					vim.notify('No foldlevel given to set!', vim.log.levels.WARN)
+				else
+					require('codethread.fold').fold_setlevel(vim.v.count)
+				end
+			end,
+			'set fold level',
+		},
 	},
 
 	Z = {
