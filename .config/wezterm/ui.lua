@@ -31,7 +31,13 @@ end
 function M.apply_to_config(config)
 	config.window_decorations = 'RESIZE'
 	-- config.tab_and_split_indices_are_zero_based = true
-	config.line_height = 1.5
+	config.line_height = 1.4
+	config.window_padding = {
+		left = 2,
+		right = 2,
+		top = 2,
+		bottom = 0,
+	}
 	config.underline_position = -4
 	-- config.underline_thickness = 2
 

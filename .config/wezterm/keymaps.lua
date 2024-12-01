@@ -175,6 +175,39 @@ function M.apply_to_config(config)
 			['Tab'] = {
 				action = require('sessions').sessionizer().switch_to_most_recent,
 			},
+
+			['Backspace'] = {
+				action = act.CloseCurrentTab { confirm = false },
+			},
+
+			-- ['o'] = {
+			-- 	-- close other panes
+			-- 	action = wezterm.action_callback(function(win, pane)
+			-- 		local tab = win:active_tab()
+			-- 		for _, p in ipairs(tab:panes()) do
+			-- 			if p:pane_id() ~= pane:pane_id() then
+			-- 				p:activate()
+			-- 				win:perform_action(act.CloseCurrentPane { confirm = false }, p)
+			-- 			end
+			-- 		end
+			-- 	end),
+			-- },
+
+			['o'] = {
+				-- close other windows
+				action = wezterm.action_callback(function(win, pane)
+					local tab = win:active_tab()
+					for _, t in ipairs(pane:window():tabs()) do
+						if t:tab_id() ~= tab:tab_id() then
+							t:activate()
+							win:perform_action(
+								act.CloseCurrentTab { confirm = false },
+								t:active_pane()
+							)
+						end
+					end
+				end),
+			},
 		},
 
 		['LEADER|CTRL'] = {

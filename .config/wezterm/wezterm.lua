@@ -15,7 +15,14 @@ local sessions = require 'sessions'
 -- NOTE: debugging
 -- https://wezfurlong.org/wezterm/troubleshooting.html
 
+-- TODO: Missing tmux commands
+-- 'o': only current and close other tabs
+-- 'backspace': close tab
+-- 'tab': alt session
+
 local config = wezterm.config_builder()
+
+config.max_fps = 120
 
 settings.apply_to_config(config)
 ui.apply_to_config(config)
@@ -45,4 +52,5 @@ wezterm.on('update-right-status', function(window, _)
 	})
 end)
 
+print '____RELOADED____'
 return config
