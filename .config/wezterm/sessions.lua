@@ -3,17 +3,33 @@ local utils = require 'utils'
 
 local M = {}
 
-local projects = {
-	{ 1, utils.home 'PersonalConfigs' },
-	{ 2, utils.home 'work/deals-light-ui' },
-	{ 3, utils.home 'work/fe-review' },
-	{ 4, utils.home 'work/services/flexi-points-app' },
-	{ 5, utils.home 'work/fe-native' },
-	{ 6, utils.home 'dev/projects/git-tools' },
-	{ 7, utils.home 'work/libraries/inspect-my-package' },
-	{ 8, utils.home 'workfiles' },
-	{ 9, utils.home 'work/services/protobuf' },
-}
+local projects = utils.machine 'work'
+		and {
+			{ 0, utils.home 'dev/projects/qmk_firmware/keyboards/preonic/keymaps/codethread' },
+			{ 1, utils.home 'PersonalConfigs' },
+
+			{ 2, utils.home 'work/deals-light-ui' },
+			{ 3, utils.home 'work/fe-review' },
+			{ 4, utils.home 'work/services/flexi-points-app' },
+			{ 5, utils.home 'work/fe-native' },
+			{ 6, utils.home 'dev/projects/git-tools' },
+			{ 7, utils.home 'work/libraries/inspect-my-package' },
+			{ 8, utils.home 'workfiles' },
+			{ 9, utils.home 'work/services/protobuf' },
+		}
+	or {
+		{ 0, utils.home 'dev/projects/qmk_firmware/keyboards/preonic/keymaps/codethread' },
+		{ 1, utils.home 'PersonalConfigs' },
+
+		{ 2, utils.home 'dev/projects/git-buddy' },
+		{ 3, utils.home 'dev/projects/pomo' },
+		{ 4, utils.home 'dev/projects/qmk.nvim' },
+		{ 5, utils.home 'dev/projects/git-tools' },
+
+		{ 9, utils.home 'dev/projects/nuphy_firmware/keyboards/nuphy/halo75v2/ansi' },
+	}
+
+print(projects)
 
 function M.sessionizer()
 	return wezterm.plugin.require 'https://github.com/mikkasendke/sessionizer.wezterm'
