@@ -1,4 +1,5 @@
 use ct/dotty
+use ct/macos [macos_has_full_disk_access ]
 use ct/brew
 use ct/core [dedent is-not-empty]
 use ct/git [git_is_dirty]
@@ -8,6 +9,8 @@ export def main [
 	--clean # install fresh dirs
 	--force # clean even with uncommitted changes
 ] {
+	macos_has_full_disk_access
+
 	print $"(ansi cyan)Linking homefiles(ansi reset)"
 	dotty link;
 
@@ -38,7 +41,9 @@ export def main [
 		brew sync
 	}
 
-	do_macos_things
+	print $"(ansi green)Setting up MacOS defaults(ansi reset)"
+	macos_set_defaults
+	print $"(ansi cyan)Done(ansi reset) some settings may require log in and out"
 
 	setup_background_items
 
@@ -93,64 +98,6 @@ def clone_tools [
 	}
 }
 
-def do_macos_things [] {
-	# more things in 
-	# - https://gist.github.com/scottstanfield/688909eb2cc2b3dfcea2d9e50027d212
-	# - https://macos-defaults.com/dock/autohide-delay.html
-
-	# prevent opening animations
-	defaults write -g NSAutomaticWindowAnimationsEnabled -bool false
-
-	defaults write NSGlobalDomain AppleShowScrollBars -string "WhenScrolling"
-	defaults write NSGlobalDomain InitialKeyRepeat -int 12
-	defaults write NSGlobalDomain KeyRepeat -int 2
-	defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
-	defaults write NSGlobalDomain AppleShowAllExtensions -bool true
-
-	defaults write com.apple.dock autohide -bool true
-	defaults write com.apple.dock mru-spaces -bool false
-	defaults write com.apple.dock static-only -bool true
-	defaults write com.apple.dock orientation -string "left"
-	defaults write com.apple.dock tilesize -int 50
-	# seems to prevent it showing
-	defaults write com.apple.dock expose-animation-duration -float 0
-
-	# tidy
-	defaults write com.apple.screencapture location -string ([$env.HOME Pictures] | path join)
-
-	# finder
-	defaults write com.apple.finder AppleShowAllFiles -bool true
-	defaults write com.apple.finder FXDefaultSearchScope -string "SCcf" # this dir
-	defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
-	defaults write com.apple.finder FXPreferredViewStyle -string "Flwv" # this dir
-	defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
-	defaults write com.apple.finder ShowHardDrivesOnDesktop -bool false
-	defaults write com.apple.finder ShowRecentTags -bool false;
-	defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
-	defaults write com.apple.finder ShowStatusBar -bool true
-	defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
-	defaults write com.apple.finder _FXSortFoldersFirst -bool true
-
-
-	# make mission control ok
-	# https://nikitabobko.github.io/AeroSpace/guide#a-note-on-mission-control
-	defaults write com.apple.dock expose-group-apps -bool true
-
-	if (which aerospace | is-not-empty) {
-		print $"(ansi green)MacOS(ansi reset) setup things for aerospace"
-
-		# disable multiple spaces (don't full screen workspace)
-		# https://nikitabobko.github.io/AeroSpace/guide#a-note-on-displays-have-separate-spaces
-		defaults write com.apple.spaces spans-displays -bool true;
-	}
-
-	killall SystemUIServer
-	killall Finder
-	killall Dock
-
-	print $"(ansi cyan)Done(ansi reset) some settings may require log in and out"
-}
-
 # Setup macos launchd processes as plist files
 # 
 # In short these are plist files that are managed by launchd and they are
@@ -188,6 +135,63 @@ def setup_background_items [] {
 	}
 }
 
-def aerospace_conf [] {
+def macos_set_defaults [] {
+	# more things in 
+	# - https://gist.github.com/scottstanfield/688909eb2cc2b3dfcea2d9e50027d212
+	# - https://macos-defaults.com/dock/autohide-delay.html
+	# - https://github.com/LnL7/nix-darwin/blob/698a62c628c2ec423aa770d8ec0e1d0bcf4fca1a/modules/system/defaults-write.nix#L34
 
+	# prevent opening animations
+	defaults write -g NSAutomaticWindowAnimationsEnabled -bool false
+
+	# faster changes
+	defaults write com.apple.universalaccess reduceMotion -bool true
+
+	defaults write NSGlobalDomain AppleShowScrollBars -string "WhenScrolling"
+	defaults write NSGlobalDomain InitialKeyRepeat -int 12
+	defaults write NSGlobalDomain KeyRepeat -int 2
+	defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
+	defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+
+	defaults write com.apple.dock autohide -bool true
+	defaults write com.apple.dock mru-spaces -bool false
+	defaults write com.apple.dock static-only -bool true
+	defaults write com.apple.dock orientation -string "left"
+	defaults write com.apple.dock tilesize -int 50
+	# seems to prevent it showing
+	defaults write com.apple.dock expose-animation-duration -float 0
+
+	# tidy
+	defaults write com.apple.screencapture location -string ([$env.HOME Pictures] | path join)
+
+	# finder
+	defaults write com.apple.finder AppleShowAllFiles -bool true
+	defaults write com.apple.finder FXDefaultSearchScope -string "SCcf" # this dir
+	defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
+	defaults write com.apple.finder FXPreferredViewStyle -string "Flwv" # this dir
+	defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
+	defaults write com.apple.finder ShowHardDrivesOnDesktop -bool false
+	defaults write com.apple.finder ShowRecentTags -bool false;
+	defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
+	defaults write com.apple.finder ShowStatusBar -bool true
+	defaults write com.apple.finder _FXShowPosixPathInTitle -bool false
+	defaults write com.apple.finder _FXSortFoldersFirst -bool true
+
+
+	# make mission control ok
+	# https://nikitabobko.github.io/AeroSpace/guide#a-note-on-mission-control
+	defaults write com.apple.dock expose-group-apps -bool true
+
+	if (which aerospace | is-not-empty) {
+		print $"(ansi green)MacOS(ansi reset) setup things for aerospace"
+
+		# disable multiple spaces (don't full screen workspace)
+		# https://nikitabobko.github.io/AeroSpace/guide#a-note-on-displays-have-separate-spaces
+		defaults write com.apple.spaces spans-displays -bool true;
+	}
+
+	killall SystemUIServer
+	killall Finder
+	killall Dock
 }
+

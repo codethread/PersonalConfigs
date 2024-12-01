@@ -9,9 +9,11 @@ use ct/core *
 # alias open = ^open
 
 use ct/tmux
-use ct/git *
 use ct/brew
 use ct/dotty
+use ct/macos *
+use ct/git *
+
 use ct/purge.nu
 
 $env.config = {
