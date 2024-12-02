@@ -24,7 +24,14 @@ alias vo = ls
 # WEZTERM
 # -------------------------------------------#
 
-def wez_debug [] { ls ~/.local/share/wezterm/ | sort-by modified | last | tail -f $in.name }
+def wez_debug [--open] { 
+	let f = ls ~/.local/share/wezterm/ | sort-by modified | last 
+	if $open {
+		nvim $f.name
+	} else {
+		tail -f $f.name 
+	}
+}
 
 #---------------------------------------------#
 # SEARCH

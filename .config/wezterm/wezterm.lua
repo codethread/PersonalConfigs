@@ -22,13 +22,6 @@ local sessions = require 'sessions'
 
 local config = wezterm.config_builder()
 
-config.max_fps = 120
-
-settings.apply_to_config(config)
-ui.apply_to_config(config)
-sessions.apply_to_config(config)
-keymaps.apply_to_config(config)
-
 -- tmux status
 wezterm.on('update-right-status', function(window, _)
 	local SOLID_LEFT_ARROW = ''
@@ -51,6 +44,13 @@ wezterm.on('update-right-status', function(window, _)
 		{ Text = SOLID_LEFT_ARROW },
 	})
 end)
+
+config.max_fps = 120
+
+settings.apply_to_config(config)
+ui.apply_to_config(config)
+sessions.apply_to_config(config)
+keymaps.apply_to_config(config)
 
 print '____RELOADED____'
 return config
