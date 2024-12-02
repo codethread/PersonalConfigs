@@ -1,19 +1,48 @@
 ---@diagnostic disable: missing-fields
 local wezterm = require 'wezterm' --[[@as Wezterm]]
 local theme = require 'theme'
-local utils = require 'utils'
 
 local M = {}
+
+-- tmux status
+-- this seems to tick every two second or on key down
+wezterm.on('update-right-status', function(window, _)
+	print(window:mux_window():get_title())
+	local name = window:mux_window():get_workspace()
+	local text = '  ' .. name .. '  '
+	local SOLID_LEFT_ARROW = ''
+	local ARROW_FOREGROUND = { Foreground = { Color = theme.colors().brights[3] } }
+	local prefix = ''
+
+	if window:leader_is_active() then
+		prefix = ' ' .. utf8.char(0x1f30a) -- ocean wave
+		SOLID_LEFT_ARROW = utf8.char(0xe0b2)
+	end
+
+	if window:active_tab():tab_id() ~= 0 then
+		ARROW_FOREGROUND = { Foreground = { Color = theme.colors().brights[4] } }
+	end -- arrow color based on if tab is first pane
+
+	window:set_left_status(wezterm.format {
+		-- { Background = { Color = '#b7bdf8' } },
+		{ Text = text },
+		-- { Text = prefix },
+		-- ARROW_FOREGROUND,
+		-- { Text = SOLID_LEFT_ARROW },
+	})
+end)
 
 -- It prefers the title that was set via `tab:set_title()` but falls back
 -- to the title of the active pane in that tab.
 --
 -- https://wezfurlong.org/wezterm/config/lua/window-events/format-tab-title.html
 local function format_tabs()
+	---@param tab_info TabInformation
 	local function tab_title(tab_info)
 		local title = tab_info.tab_title
-		if title and #title > 0 then return title end
-		return tab_info.active_pane.title
+		local z = tab_info.active_pane.is_zoomed and '+ ' or ''
+		if title and #title > 0 then return title .. z end
+		return tab_info.active_pane.title .. z
 	end
 
 	wezterm.on('format-tab-title', function(tab, tabs, panes, config, hover, max_width)
@@ -28,13 +57,34 @@ local function format_tabs()
 	end)
 end
 
+---@param config Config
+--- https://wezfurlong.org/wezterm/config/appearance.html#native-fancy-tab-bar-appearance
+local function format_fancy(config)
+	-- config.show_close_tab_button_in_tabs = false
+	config.tab_bar_at_bottom = false
+	config.use_fancy_tab_bar = true
+	config.window_frame = {
+		font = config.font,
+		font_size = config.font_size,
+		active_titlebar_bg = theme.colors().background,
+		inactive_titlebar_bg = theme.colors().background,
+	}
+end
+
+---@param config Config
+local function format_non_fancy(config)
+	config.tab_bar_at_bottom = false
+	config.tab_max_width = 100 -- non-fancy
+	config.use_fancy_tab_bar = false
+end
+
 local SIZE = {
 	LARGE = 'large',
 	CRISP = 'CRISP',
 }
+
 wezterm.on('window-config-reloaded', function(window)
 	local gui = wezterm.gui
-
 	if gui then
 		local dpi = gui.screens().main.effective_dpi > 100 and SIZE.CRISP or SIZE.LARGE
 
@@ -94,10 +144,14 @@ function M.apply_to_config(config)
 	-- config.tab_and_split_indices_are_zero_based = true
 	config.line_height = 1.4
 	config.window_padding = {
-		left = 2,
-		right = 2,
-		top = 2,
+		left = 4,
+		right = 4,
+		top = 4,
 		bottom = 0,
+	}
+	config.inactive_pane_hsb = {
+		saturation = 1,
+		brightness = 0.9,
 	}
 	-- config.underline_position = -4 -- seems to mess with fonts
 	-- config.underline_thickness = 2 -- weird
@@ -112,12 +166,10 @@ function M.apply_to_config(config)
 		weight = 'Medium',
 	}
 
-	config.tab_bar_at_bottom = true
-	config.use_fancy_tab_bar = false
-	config.tab_max_width = 100 -- non-fancy
 	config.color_scheme = 'rose-pine-moon'
 	config.colors = theme.colors()
-	config.window_frame = theme.window_frame()
+	format_fancy(config)
+	-- format_non_fancy(config)
 
 	format_tabs()
 end

@@ -1,5 +1,3 @@
-local wezterm = require 'wezterm' --[[@as Wezterm]]
-
 local M = {}
 
 local palette = {
@@ -63,7 +61,7 @@ function M.colors()
 			background = palette.base,
 			active_tab = {
 				bg_color = palette.base,
-				fg_color = palette.rose,
+				fg_color = palette.iris,
 				-- "Half", "Normal" or "Bold"
 				intensity = 'Bold', -- non fancy
 			},
@@ -86,17 +84,6 @@ function M.colors()
 
 			inactive_tab_edge = palette.base, -- (Fancy tab bar only)
 		},
-	}
-end
-
--- https://wezfurlong.org/wezterm/config/appearance.html#native-fancy-tab-bar-appearance
-function M.window_frame() -- (Fancy tab bar only)
-	return {
-		-- TODO share from ui
-		font = wezterm.font { family = 'FiraCode Nerd Font', weight = 'Medium' },
-		font_size = 12.0,
-		active_titlebar_bg = palette.base,
-		inactive_titlebar_bg = palette.base,
 	}
 end
 
