@@ -28,4 +28,5 @@ sessions.apply_to_config(config)
 keymaps.apply_to_config(config)
 
 print '____RELOADED____'
+config.automatically_reload_config = false
 return config
