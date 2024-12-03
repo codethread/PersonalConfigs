@@ -1,6 +1,6 @@
 local M = {}
 
-local palette = {
+M.palette = {
 	base = '#232136',
 	overlay = '#393552',
 	muted = '#6e6a86',
@@ -15,76 +15,74 @@ local palette = {
 }
 
 local active_tab = {
-	bg_color = palette.base,
-	fg_color = palette.rose,
+	bg_color = M.palette.base,
+	fg_color = M.palette.rose,
 }
 
 local inactive_tab = {
-	bg_color = palette.base,
-	fg_color = palette.text,
+	bg_color = M.palette.base,
+	fg_color = M.palette.text,
 }
 
-function M.colors()
-	return {
-		foreground = palette.text,
-		background = palette.base,
-		cursor_bg = palette.highlight_high,
-		cursor_border = palette.highlight_high,
-		cursor_fg = palette.text,
-		selection_bg = palette.overlay,
-		selection_fg = palette.text,
+M.colors = {
+	foreground = M.palette.text,
+	background = M.palette.base,
+	cursor_bg = M.palette.highlight_high,
+	cursor_border = M.palette.highlight_high,
+	cursor_fg = M.palette.text,
+	selection_bg = M.palette.overlay,
+	selection_fg = M.palette.text,
 
-		ansi = {
-			palette.overlay,
-			palette.love,
-			palette.pine,
-			palette.gold,
-			palette.foam,
-			palette.iris,
-			palette.rose,
-			palette.text,
+	ansi = {
+		M.palette.overlay,
+		M.palette.love,
+		M.palette.pine,
+		M.palette.gold,
+		M.palette.foam,
+		M.palette.iris,
+		M.palette.rose,
+		M.palette.text,
+	},
+
+	brights = {
+		'#817c9c', -- replacement for muted,
+		M.palette.love,
+		M.palette.pine,
+		M.palette.gold,
+		M.palette.foam,
+		M.palette.iris,
+		M.palette.rose,
+		-- '#ebbcba', -- replacement for rose,
+		M.palette.text,
+	},
+
+	tab_bar = {
+		background = M.palette.base,
+		active_tab = {
+			bg_color = M.palette.base,
+			fg_color = M.palette.iris,
+			-- "Half", "Normal" or "Bold"
+			intensity = 'Bold', -- non fancy
 		},
 
-		brights = {
-			'#817c9c', -- replacement for muted,
-			palette.love,
-			palette.pine,
-			palette.gold,
-			palette.foam,
-			palette.iris,
-			palette.rose,
-			-- '#ebbcba', -- replacement for rose,
-			palette.text,
+		inactive_tab = {
+			bg_color = M.palette.base,
+			fg_color = M.palette.text,
 		},
 
-		tab_bar = {
-			background = palette.base,
-			active_tab = {
-				bg_color = palette.base,
-				fg_color = palette.iris,
-				-- "Half", "Normal" or "Bold"
-				intensity = 'Bold', -- non fancy
-			},
+		inactive_tab_hover = active_tab,
 
-			inactive_tab = {
-				bg_color = palette.base,
-				fg_color = palette.text,
-			},
-
-			inactive_tab_hover = active_tab,
-
-			-- The same options that were listed under the `active_tab` section above
-			-- effectivly hides the plus
-			new_tab = {
-				bg_color = palette.base,
-				fg_color = palette.base,
-			},
-
-			new_tab_hover = active_tab,
-
-			inactive_tab_edge = palette.base, -- (Fancy tab bar only)
+		-- The same options that were listed under the `active_tab` section above
+		-- effectivly hides the plus
+		new_tab = {
+			bg_color = M.palette.base,
+			fg_color = M.palette.base,
 		},
-	}
-end
+
+		new_tab_hover = active_tab,
+
+		inactive_tab_edge = M.palette.base, -- (Fancy tab bar only)
+	},
+}
 
 return M

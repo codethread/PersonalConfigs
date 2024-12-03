@@ -13,4 +13,12 @@ function M.machine(current)
 	return current == user
 end
 
+---@param fullPath string
+---@return string
+function M.getFilename(fullPath)
+	-- Find the last occurrence of a slash
+	local filename = fullPath:match '([^/\\]+)$'
+	return filename
+end
+
 return M

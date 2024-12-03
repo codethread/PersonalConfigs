@@ -4,31 +4,45 @@ local theme = require 'theme'
 
 local M = {}
 
--- tmux status
--- this seems to tick every two second or on key down
 wezterm.on('update-right-status', function(window, _)
-	print(window:mux_window():get_title())
 	local name = window:mux_window():get_workspace()
-	local text = '  ' .. name .. '  '
-	local SOLID_LEFT_ARROW = ''
-	local ARROW_FOREGROUND = { Foreground = { Color = theme.colors().brights[3] } }
-	local prefix = ''
-
-	if window:leader_is_active() then
-		prefix = ' ' .. utf8.char(0x1f30a) -- ocean wave
-		SOLID_LEFT_ARROW = utf8.char(0xe0b2)
-	end
-
-	if window:active_tab():tab_id() ~= 0 then
-		ARROW_FOREGROUND = { Foreground = { Color = theme.colors().brights[4] } }
-	end -- arrow color based on if tab is first pane
+	local text = wezterm.nerdfonts.md_folder_marker .. ' ' .. name .. '  '
 
 	window:set_left_status(wezterm.format {
-		-- { Background = { Color = '#b7bdf8' } },
+		{
+			Foreground = {
+				Color = window:leader_is_active() and theme.palette.iris or theme.palette.base,
+			},
+		},
+		{
+			Background = { Color = theme.palette.base },
+		},
+		{ Text = '' },
+
+		'ResetAttributes',
+		{ Attribute = { Intensity = 'Bold' } },
+		{
+			Foreground = {
+				Color = window:leader_is_active() and theme.palette.base or theme.palette.iris,
+			},
+		},
+		{
+			Background = {
+				Color = window:leader_is_active() and theme.palette.iris or theme.palette.base,
+			},
+		},
 		{ Text = text },
-		-- { Text = prefix },
-		-- ARROW_FOREGROUND,
-		-- { Text = SOLID_LEFT_ARROW },
+		'ResetAttributes',
+
+		{
+			Foreground = {
+				Color = window:leader_is_active() and theme.palette.iris or theme.palette.base,
+			},
+		},
+		{
+			Background = { Color = theme.palette.base },
+		},
+		{ Text = window:leader_is_active() and '' or '' },
 	})
 end)
 
@@ -48,12 +62,16 @@ local function format_tabs()
 	wezterm.on('format-tab-title', function(tab, tabs, panes, config, hover, max_width)
 		local title = tab_title(tab)
 		if tab.is_active then
-			return {
+			return wezterm.format {
 				-- { Background = { Color = 'blue' } },
-				{ Text = ' ' .. title .. ' ' },
+				-- { Text = ' ' .. title .. ' ' },
+				{ Attribute = { Intensity = 'Bold' } },
+				{ Text = title },
 			}
 		end
-		return ' ' .. title .. ' '
+		return wezterm.format {
+			{ Text = title },
+		}
 	end)
 end
 
@@ -66,8 +84,8 @@ local function format_fancy(config)
 	config.window_frame = {
 		font = config.font,
 		font_size = config.font_size,
-		active_titlebar_bg = theme.colors().background,
-		inactive_titlebar_bg = theme.colors().background,
+		active_titlebar_bg = theme.colors.background,
+		inactive_titlebar_bg = theme.colors.background,
 	}
 end
 
@@ -89,11 +107,8 @@ wezterm.on('window-config-reloaded', function(window)
 		local dpi = gui.screens().main.effective_dpi > 100 and SIZE.CRISP or SIZE.LARGE
 
 		local overrides = window:get_config_overrides() or {}
-		local buzz = {}
-
 		if dpi == SIZE.CRISP then
 			overrides.harfbuzz_features = {
-				table.unpack(buzz),
 				'salt=2',
 				'cv01=1',
 				'cv02=1',
@@ -107,7 +122,9 @@ wezterm.on('window-config-reloaded', function(window)
 				'+ss09',
 				'+ss07',
 			}
+			overrides.underline_position = -4
 		else
+			overrides.underline_position = nil
 			overrides.harfbuzz_features = {
 				'calt=1',
 				'clig=1',
@@ -131,10 +148,9 @@ wezterm.on('window-config-reloaded', function(window)
 		-- NOTE: probably just want to hash function changes
 		local overrides_hash = wezterm.json_encode { [dpi] = overrides }
 		if wezterm.GLOBAL.overrides_hash == overrides_hash then return end
-		wezterm.GLOBAL.overrides_hash = overrides_hash
 		print('font changes', overrides_hash)
+		wezterm.GLOBAL.overrides_hash = overrides_hash
 		window:set_config_overrides(overrides)
-		print(window:effective_config().harfbuzz_features)
 	end
 end)
 
@@ -167,7 +183,7 @@ function M.apply_to_config(config)
 	}
 
 	config.color_scheme = 'rose-pine-moon'
-	config.colors = theme.colors()
+	config.colors = theme.colors
 	format_fancy(config)
 	-- format_non_fancy(config)
 

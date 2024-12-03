@@ -5,7 +5,11 @@ local M = {}
 
 local projects = utils.machine 'work'
 		and {
-			{ 0, utils.home 'dev/projects/qmk_firmware/keyboards/preonic/keymaps/codethread' },
+			{
+				0,
+				utils.home 'dev/projects/qmk_firmware/keyboards/preonic/keymaps/codethread',
+				'preonic',
+			},
 			{ 1, utils.home 'PersonalConfigs' },
 
 			{ 2, utils.home 'work/deals-light-ui' },
@@ -18,7 +22,11 @@ local projects = utils.machine 'work'
 			{ 9, utils.home 'work/services/protobuf' },
 		}
 	or {
-		{ 0, utils.home 'dev/projects/qmk_firmware/keyboards/preonic/keymaps/codethread' },
+		{
+			0,
+			utils.home 'dev/projects/qmk_firmware/keyboards/preonic/keymaps/codethread',
+			'preonic',
+		},
 		{ 1, utils.home 'PersonalConfigs' },
 
 		{ 2, utils.home 'dev/projects/git-buddy' },
@@ -26,7 +34,7 @@ local projects = utils.machine 'work'
 		{ 4, utils.home 'dev/projects/qmk.nvim' },
 		{ 5, utils.home 'dev/projects/git-tools' },
 
-		{ 9, utils.home 'dev/projects/nuphy_firmware/keyboards/nuphy/halo75v2/ansi' },
+		{ 9, utils.home 'dev/projects/nuphy_firmware/keyboards/nuphy/halo75v2/ansi', 'nuphy' },
 	}
 
 print(projects)
@@ -44,7 +52,7 @@ function M.apply_to_config(config)
 			key = tostring(project[1]),
 			mods = 'LEADER',
 			action = wezterm.action.SwitchToWorkspace {
-				name = project[2],
+				name = project[3] or utils.getFilename(project[2]),
 				spawn = { cwd = project[2] },
 			},
 		})

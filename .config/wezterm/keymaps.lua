@@ -247,6 +247,9 @@ function M.apply_to_config(config)
 		},
 
 		['LEADER|CTRL'] = {
+			-- assumes leader is also ctrl-a
+			-- mimics tmux behaviour of sending ctrl-a if hit twice, e.g hit
+			-- ctrl-a ctrl-a to send a single ctrl-a to vim
 			['a'] = {
 				action = act { SendString = '\x01' },
 			},

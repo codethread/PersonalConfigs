@@ -15,8 +15,11 @@ local sessions = require 'sessions'
 -- NOTE: debugging
 -- https://wezfurlong.org/wezterm/troubleshooting.html
 
--- TODO: Missing tmux commands
+-- TODO: Missing:
 -- 'tab': alt session
+-- open in vim
+-- fuzzy select url from other pane (e.g to open failed tests)
+-- rename tab to something better (e.g command, not full path)
 
 local config = wezterm.config_builder()
 
@@ -28,5 +31,5 @@ sessions.apply_to_config(config)
 keymaps.apply_to_config(config)
 
 print '____RELOADED____'
-config.automatically_reload_config = false
+-- config.automatically_reload_config = false
 return config
