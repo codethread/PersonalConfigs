@@ -1,3 +1,5 @@
+use ct/core [dedent]
+
 export def main [] {
 	{
 		pre_execution: [] # run before the repl input is run
@@ -8,6 +10,7 @@ export def main [] {
 			PWD: [
 				...(wezterm_hooks),
 				...(fe-stuff),
+				...(be-stuff),
 			]
 		}
 		# display_output: "if (term size).columns >= 100 { table -e } else { table }" # run to display the output of a pipeline
@@ -21,6 +24,20 @@ const fes = [
 	~/work/fe-native
 ]
 
+const bes = [
+	~/work/lambdas
+	~/work/services
+	~/work/libraries
+]
+
+def wezterm_hooks [] {
+	[
+		{|_,after|
+			wezterm cli set-tab-title ($after | path basename)
+		}
+	]
+}
+
 def fe-stuff [] {
 	[
 		{|before, after| if (is-fe $before) { print $"(ansi yellow) FE environment unloaded(ansi reset)"}  },
@@ -32,15 +49,26 @@ def fe-stuff [] {
 	]
 }
 
+def be-stuff [] {
+	[
+		{|before, after| if (is-be $before) { print $"(ansi yellow) BE environment unloaded(ansi reset)"}  },
+		{
+			condition: {|before, after| is-be $after },
+			code: (dedent '
+				git config url."ssh://git@git.perkbox.io/".insteadOf https://git.perkbox.io/
+				git config url."https://github.com/".insteadOf git://github.com/
+				')
+		},
+		{|before, after| if (is-be $after) { print $"(ansi blue) BE environment loaded(ansi reset)"}  },
+	]
+}
+
 def is-fe [dir?: path] {
 	if ($dir |is-empty) { return false }
 	$fes | path expand | filter {|p| $dir | str starts-with $p } | is-not-empty
 }
 
-def wezterm_hooks [] {
-	[
-		{|_,after|
-			wezterm cli set-tab-title ($after | path basename)
-		}
-	]
+def is-be [dir?: path] {
+	if ($dir |is-empty) { return false }
+	$bes | path expand | filter {|p| $dir | str starts-with $p } | is-not-empty
 }
