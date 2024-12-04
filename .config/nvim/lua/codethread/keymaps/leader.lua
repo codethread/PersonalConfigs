@@ -29,8 +29,10 @@ return {
 		L = { Cmd 'Telescope diagnostics', 'Workspace Diagnostics' },
 		n = {
 			function()
+				local ft = U.ft()
 				vim.diagnostic.jump {
-					severity = vim.diagnostic.severity.ERROR,
+					severity = ft ~= 'lua' and vim.diagnostic.severity.ERROR
+						or vim.diagnostic.severity.WARN,
 					count = 1,
 					float = true,
 				}
@@ -39,8 +41,10 @@ return {
 		},
 		p = {
 			function()
+				local ft = U.ft()
 				vim.diagnostic.jump {
-					severity = vim.diagnostic.severity.ERROR,
+					severity = ft ~= 'lua' and vim.diagnostic.severity.ERROR
+						or vim.diagnostic.severity.WARN,
 					count = -1,
 					float = true,
 				}
