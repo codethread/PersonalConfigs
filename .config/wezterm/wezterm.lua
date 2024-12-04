@@ -7,6 +7,7 @@
 
 -- Pull in the wezterm API
 local wezterm = require 'wezterm' --[[@as Wezterm]]
+require 'array'
 local keymaps = require 'keymaps'
 local settings = require 'settings'
 local ui = require 'ui'

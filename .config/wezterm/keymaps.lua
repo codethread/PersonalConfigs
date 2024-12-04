@@ -2,38 +2,6 @@ local wezterm = require 'wezterm' --[[@as Wezterm]]
 local act = wezterm.action
 local utils = require 'utils'
 
-local io = require 'io'
-local os = require 'os'
-
-wezterm.on('trigger-vim-with-scrollback', function(window, pane)
-	-- Retrieve the text from the pane
-	local text = pane:get_lines_as_text(pane:get_dimensions().scrollback_rows)
-
-	-- Create a temporary file to pass to vim
-	local name = os.tmpname()
-	local f = io.open(name, 'w+')
-	f:write(text)
-	f:flush()
-	f:close()
-
-	-- Open a new window running vim and tell it to open the file
-	window:perform_action(
-		act.SpawnCommandInNewWindow {
-			args = { 'vim', name },
-		},
-		pane
-	)
-
-	-- Wait "enough" time for vim to read the file before we remove it.
-	-- The window creation and process spawn are asynchronous wrt. running
-	-- this script and are not awaitable, so we just pick a number.
-	--
-	-- Note: We don't strictly need to remove this file, but it is nice
-	-- to avoid cluttering up the temporary directory.
-	wezterm.sleep_ms(1000)
-	os.remove(name)
-end)
-
 -- Function to find duplicates
 local function findDuplicates(list)
 	local occurrences = {}
@@ -189,14 +157,43 @@ function M.apply_to_config(config)
 			},
 			w = {
 				-- TODO figure out how to do this in workspace
-				action = act.SwitchToWorkspace {
-					name = 'work-web',
-					-- args = { 'nush', 'work-start-work-wez' },
-					spawn = {
-						cwd = utils.home 'work/deals-light-ui',
-						args = { 'testy' },
-					},
-				},
+				-- action = act.SwitchToWorkspace {
+				-- 	name = 'work-web',
+				-- 	-- args = { 'nush', 'work-start-work-wez' },
+				-- 	spawn = {
+				-- 		cwd = utils.home 'work/deals-light-ui',
+				-- 		args = { 'testy' },
+				-- 	},
+				-- },
+				action = wezterm.action_callback(function(window, pane)
+					local sessions = wezterm.mux.get_workspace_names()
+
+					local sessions_of_interest = {
+						'deals-light-ui',
+						'fe-review',
+						'fe-native',
+					}
+					local choices = Array.map(
+						sessions_of_interest,
+						function(s) return { label = s } end
+					)
+
+					window:perform_action(
+						act.InputSelector {
+							fuzzy = true,
+							fuzzy_description = wezterm.format {
+								{ Attribute = { Intensity = 'Bold' } },
+								{ Foreground = { AnsiColor = 'Fuchsia' } },
+								{ Text = 'foo bar' },
+							},
+							choices = choices,
+							action = wezterm.action_callback(
+								function(window, pane, id, label) print { id = id, label = label } end
+							),
+						},
+						pane
+					)
+				end),
 			},
 			f = {
 				action = require('sessions').sessionizer().show,
@@ -210,10 +207,6 @@ function M.apply_to_config(config)
 
 			['Backspace'] = {
 				action = act.CloseCurrentTab { confirm = false },
-			},
-
-			['e'] = {
-				action = act.EmitEvent 'trigger-vim-with-scrollback',
 			},
 
 			-- ['o'] = {
