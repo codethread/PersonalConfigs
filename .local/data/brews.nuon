@@ -50,6 +50,7 @@
 		cask "jordanbaird-ice" # Menu bar manager
 		cask "kitty"
 		cask "visual-studio-code"
+		cask "spotify"
 		# cask "nikitabobko/tap/aerospace"
 
 		# Fonts
