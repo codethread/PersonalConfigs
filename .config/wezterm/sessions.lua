@@ -37,8 +37,6 @@ local projects = utils.machine 'work'
 		{ 9, utils.home 'dev/projects/nuphy_firmware/keyboards/nuphy/halo75v2/ansi', 'nuphy' },
 	}
 
-print(projects)
-
 function M.sessionizer()
 	return wezterm.plugin.require 'https://github.com/mikkasendke/sessionizer.wezterm'
 end

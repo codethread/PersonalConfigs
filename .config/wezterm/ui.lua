@@ -11,7 +11,6 @@ local M = {}
 local function format_tabs()
 	---@param tab_info TabInformation
 	local function tab_title(tab_info)
-		print(tab_info.tab_title)
 		local title = tab_info.tab_title
 		local z = tab_info.active_pane.is_zoomed and '+ ' or ''
 		if title and #title > 0 then return title .. z end
@@ -120,7 +119,7 @@ local function update_ui(window, pane)
 		-- NOTE: probably just want to hash function changes
 		local overrides_hash = wezterm.json_encode { [dpi] = overrides }
 		if wezterm.GLOBAL.overrides_hash == overrides_hash then return end
-		print('font changes', overrides_hash)
+		print('font changes', overrides)
 		wezterm.GLOBAL.overrides_hash = overrides_hash
 		window:set_config_overrides(overrides)
 	end

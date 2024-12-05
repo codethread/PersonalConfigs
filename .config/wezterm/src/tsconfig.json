@@ -4,12 +4,12 @@
     "target": "ESNext",
     "lib": ["ESNext"],
     "moduleResolution": "Node",
-    "types": ["lua-types/5.4"],
+    "types": ["lua-types/5.4", "@typescript-to-lua/language-extensions"],
     "strict": true
   },
   "tstl": {
     "luaTarget": "5.4",
-    "luaBundle": "../build/init.lua",
+    "luaBundle": "../build/build.lua",
     "luaBundleEntry": "./index.ts",
     "noResolvePaths": ["wezterm"]
   }

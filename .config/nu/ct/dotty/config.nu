@@ -12,6 +12,9 @@ export def load [] {
 				"**/.stylua.toml"
 			]
 		]
+
+		[wezterm, (dir ~/PersonalConfigs/.config/wezterm/build), (dir ~/.config/wezterm/build), []]
+
 		[work, (dir ~/workfiles), (dir ~), ["**/README.md"]]
 
 		# as a bit of a hack, can reference git dirs directly

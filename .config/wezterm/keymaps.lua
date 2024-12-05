@@ -156,44 +156,7 @@ function M.apply_to_config(config)
 				action = act.ActivateCopyMode,
 			},
 			w = {
-				-- TODO figure out how to do this in workspace
-				-- action = act.SwitchToWorkspace {
-				-- 	name = 'work-web',
-				-- 	-- args = { 'nush', 'work-start-work-wez' },
-				-- 	spawn = {
-				-- 		cwd = utils.home 'work/deals-light-ui',
-				-- 		args = { 'testy' },
-				-- 	},
-				-- },
-				action = wezterm.action_callback(function(window, pane)
-					local sessions = wezterm.mux.get_workspace_names()
-
-					local sessions_of_interest = {
-						'deals-light-ui',
-						'fe-review',
-						'fe-native',
-					}
-					local choices = Array.map(
-						sessions_of_interest,
-						function(s) return { label = s } end
-					)
-
-					window:perform_action(
-						act.InputSelector {
-							fuzzy = true,
-							fuzzy_description = wezterm.format {
-								{ Attribute = { Intensity = 'Bold' } },
-								{ Foreground = { AnsiColor = 'Fuchsia' } },
-								{ Text = 'foo bar' },
-							},
-							choices = choices,
-							action = wezterm.action_callback(
-								function(window, pane, id, label) print { id = id, label = label } end
-							),
-						},
-						pane
-					)
-				end),
+				action = require('build').runWorkProject,
 			},
 			f = {
 				action = require('sessions').sessionizer().show,

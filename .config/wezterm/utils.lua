@@ -7,6 +7,7 @@ function M.bin(b) return '/opt/homebrew/bin/' .. b end
 ---@return boolean
 function M.machine(current)
 	local user = require('settings').get_envs().CT_USER
+	print { user = user }
 	return current == user
 end
 
