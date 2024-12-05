@@ -9,5 +9,7 @@ declare module "wezterm" {
   }
 
   export function config_builder(): Config;
+  export function json_parse(str: string): unknown;
   export const action: Action;
+  export const home_dir: string;
 }
