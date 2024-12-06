@@ -7,6 +7,13 @@
 
 -- Pull in the wezterm API
 local wezterm = require 'wezterm' --[[@as Wezterm]]
+
+-- add build to package.path because it won't live inside .config dir
+package.path = package.path
+	.. ';'
+	.. wezterm.home_dir
+	.. '/PersonalConfigs/.config/wezterm/build/?.lua'
+
 local keymaps = require 'keymaps'
 local settings = require 'settings'
 local ui = require 'ui'
@@ -31,5 +38,6 @@ sessions.apply_to_config(config)
 keymaps.apply_to_config(config)
 
 print '____RELOADED____'
+
 -- config.automatically_reload_config = false
 return config

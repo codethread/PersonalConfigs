@@ -29,15 +29,15 @@ local projects = utils.machine 'work'
 		},
 		{ 1, utils.home 'PersonalConfigs' },
 
-		{ 2, utils.home 'dev/projects/git-buddy' },
-		{ 3, utils.home 'dev/projects/pomo' },
-		{ 4, utils.home 'dev/projects/qmk.nvim' },
-		{ 5, utils.home 'dev/projects/git-tools' },
+		{ 2, utils.home 'dev/projects/tstl-validate' },
+		{ 3, utils.home 'dev/projects/tstl-result' },
+		{ 4, utils.home 'dev/projects/tstl-fn' },
+		-- { 3, utils.home 'dev/projects/pomo' },
+		-- { 5, utils.home 'dev/projects/git-tools' },
 
+		{ 8, utils.home 'dev/projects/qmk.nvim' },
 		{ 9, utils.home 'dev/projects/nuphy_firmware/keyboards/nuphy/halo75v2/ansi', 'nuphy' },
 	}
-
-print(projects)
 
 function M.sessionizer()
 	return wezterm.plugin.require 'https://github.com/mikkasendke/sessionizer.wezterm'

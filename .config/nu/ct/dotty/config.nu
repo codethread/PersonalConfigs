@@ -10,8 +10,10 @@ export def load [] {
 			[
 				"**/.luacheckrc"
 				"**/.stylua.toml"
+				"**/wezterm/src/**"
 			]
 		]
+
 		[work, (dir ~/workfiles), (dir ~), ["**/README.md"]]
 
 		# as a bit of a hack, can reference git dirs directly
