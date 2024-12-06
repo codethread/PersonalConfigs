@@ -8431,7 +8431,7 @@ local runWorkProject = wezterm.action_callback(function(w, p)
     local projects = {"deals-light-ui", "fe-review", "fe-native"}
     local choices = __TS__ArrayMap(
         projects,
-        function(____, s) return {label = s} end
+        function(____, label) return {label = label} end
     )
     w:perform_action(
         act.InputSelector({
