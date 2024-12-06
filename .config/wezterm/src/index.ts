@@ -6,6 +6,7 @@ const act = wezterm.action;
 const config = wezterm.config_builder();
 Settings.applyToConfig(config);
 
+// NOTE
 // if session exists, switch to it
 // if no session run the current
 // if no session and not in appropriate term, start default (first in list)
@@ -24,7 +25,12 @@ const runWorkProject = wezterm.action_callback((w, p) => {
     return;
   }
 
-  const projects = ["deals-light-ui", "fe-review", "fe-native"] as const;
+  const projects = [
+    "deals-light-ui",
+    "fe-review",
+    "fe-native",
+    "fe-ther",
+  ] as const;
   const choices = projects.map((s) => ({ label: s }));
 
   w.perform_action(

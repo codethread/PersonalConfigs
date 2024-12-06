@@ -8428,7 +8428,7 @@ local runWorkProject = wezterm.action_callback(function(w, p)
         )
         return
     end
-    local projects = {"deals-light-ui", "fe-review", "fe-native"}
+    local projects = {"deals-light-ui", "fe-review", "fe-native", "fe-ther"}
     local choices = __TS__ArrayMap(
         projects,
         function(____, s) return {label = s} end
