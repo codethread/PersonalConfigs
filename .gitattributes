@@ -2,4 +2,4 @@
 .tmux.conf linguist-language=shell
 tmux.conf linguist-language=shell
 *.nu linguist-language=Nushell
-.config/wezterm/build/build.lua binary -diff linguist-generated=true
+.config/wezterm/build/build.lua binary -diff linguist-generated

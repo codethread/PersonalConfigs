@@ -25,12 +25,7 @@ const runWorkProject = wezterm.action_callback((w, p) => {
     return;
   }
 
-  const projects = [
-    "deals-light-ui",
-    "fe-review",
-    "fe-native",
-    "fe-ther",
-  ] as const;
+  const projects = ["deals-light-ui", "fe-review", "fe-native"] as const;
   const choices = projects.map((s) => ({ label: s }));
 
   w.perform_action(
