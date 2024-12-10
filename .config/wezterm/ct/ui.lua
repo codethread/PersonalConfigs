@@ -1,6 +1,6 @@
 ---@diagnostic disable: missing-fields
-local wezterm = require 'wezterm' --[[@as Wezterm]]
-local theme = require 'theme'
+local wezterm = require("wezterm") --[[@as Wezterm]]
+local theme = require("ct.theme")
 
 local M = {}
 
@@ -12,24 +12,26 @@ local function format_tabs()
 	---@param tab_info TabInformation
 	local function tab_title(tab_info)
 		local title = tab_info.tab_title
-		local z = tab_info.active_pane.is_zoomed and '+ ' or ''
-		if title and #title > 0 then return title .. z end
+		local z = tab_info.active_pane.is_zoomed and "+ " or ""
+		if title and #title > 0 then
+			return title .. z
+		end
 		return tab_info.active_pane.title .. z
 	end
 
-	wezterm.on('format-tab-title', function(tab, tabs, panes, config, hover, max_width)
+	wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
 		local title = tab_title(tab)
 		if tab.is_active then
-			return wezterm.format {
+			return wezterm.format({
 				-- { Background = { Color = 'blue' } },
 				-- { Text = ' ' .. title .. ' ' },
-				{ Attribute = { Intensity = 'Bold' } },
+				{ Attribute = { Intensity = "Bold" } },
 				{ Text = title },
-			}
+			})
 		end
-		return wezterm.format {
+		return wezterm.format({
 			{ Text = title },
-		}
+		})
 	end)
 end
 
@@ -56,8 +58,8 @@ local format = {
 }
 
 local SIZE = {
-	LARGE = 'large',
-	CRISP = 'CRISP',
+	LARGE = "large",
+	CRISP = "CRISP",
 }
 
 ---Update Ui elements that require screen info (only assesible in callback at
@@ -66,9 +68,9 @@ local SIZE = {
 ---@param window Window
 ---@param pane Pane
 local function update_ui(window, pane)
-	if not window:is_focused() then return end
-	print('reload: ', window:window_id())
-
+	if not window:is_focused() then
+		return
+	end
 	local gui = wezterm.gui
 	if gui then
 		local dpi = gui.screens().main.effective_dpi > 100 and SIZE.CRISP or SIZE.LARGE
@@ -78,18 +80,18 @@ local function update_ui(window, pane)
 			overrides.font_size = 14.0
 			overrides.line_height = 1.2
 			overrides.harfbuzz_features = {
-				'salt=2',
-				'cv01=1',
-				'cv02=1',
-				'cv06=1',
-				'cv14=1',
-				'+zero',
-				'+onum',
-				'+ss04',
-				'cv18=1',
-				'cv30=1',
-				'+ss09',
-				'+ss07',
+				"salt=2",
+				"cv01=1",
+				"cv02=1",
+				"cv06=1",
+				"cv14=1",
+				"+zero",
+				"+onum",
+				"+ss04",
+				"cv18=1",
+				"cv30=1",
+				"+ss09",
+				"+ss07",
 			}
 			overrides.underline_position = -4
 		else
@@ -102,24 +104,26 @@ local function update_ui(window, pane)
 				-- 'clig=0',
 				-- 'liga=0',
 
-				'salt=2',
-				'cv01=1',
-				'cv02=1',
-				'cv06=1',
-				'cv14=1',
-				'+zero',
-				'+onum',
-				'+ss04',
-				'cv18=1',
-				'cv30=1',
-				'+ss09',
-				'+ss07',
+				"salt=2",
+				"cv01=1",
+				"cv02=1",
+				"cv06=1",
+				"cv14=1",
+				"+zero",
+				"+onum",
+				"+ss04",
+				"cv18=1",
+				"cv30=1",
+				"+ss09",
+				"+ss07",
 			}
 		end
 		-- NOTE: probably just want to hash function changes
-		local overrides_hash = wezterm.json_encode { [dpi] = overrides }
-		if wezterm.GLOBAL.overrides_hash == overrides_hash then return end
-		print('font changes', overrides)
+		local overrides_hash = wezterm.json_encode({ [dpi] = overrides })
+		if wezterm.GLOBAL.overrides_hash == overrides_hash then
+			return
+		end
+		print("font changes", overrides)
 		wezterm.GLOBAL.overrides_hash = overrides_hash
 		window:set_config_overrides(overrides)
 	end
@@ -127,7 +131,7 @@ end
 
 ---@param config Config
 function M.apply_to_config(config)
-	config.window_decorations = 'RESIZE'
+	config.window_decorations = "RESIZE"
 	-- config.tab_and_split_indices_are_zero_based = true
 	config.line_height = 1
 	config.window_padding = {
@@ -145,15 +149,15 @@ function M.apply_to_config(config)
 
 	config.font_size = 14.0
 	-- wezterm ls-fonts --list-system
-	config.font = wezterm.font {
+	config.font = wezterm.font({
 		-- family = 'Liga Hack',
-		family = 'FiraCode Nerd Font',
+		family = "FiraCode Nerd Font",
 		-- family = 'FiraCode Nerd Font Mono',
 		-- family = 'FiraCode Nerd Font Propo',
-		weight = 'Medium',
-	}
+		weight = "Medium",
+	})
 
-	config.color_scheme = 'rose-pine-moon'
+	config.color_scheme = "rose-pine-moon"
 	config.colors = theme.colors
 
 	format.fancy(config)
@@ -161,13 +165,13 @@ function M.apply_to_config(config)
 	format_tabs()
 end
 
-wezterm.on('window-focus-changed', update_ui)
-wezterm.on('window-config-reloaded', update_ui)
-wezterm.on('update-right-status', function(window, _)
+wezterm.on("window-focus-changed", update_ui)
+wezterm.on("window-config-reloaded", update_ui)
+wezterm.on("update-right-status", function(window, _)
 	local name = window:mux_window():get_workspace()
-	local text = wezterm.nerdfonts.md_folder_marker .. ' ' .. name .. '  '
+	local text = wezterm.nerdfonts.md_folder_marker .. " " .. name .. "  "
 
-	window:set_left_status(wezterm.format {
+	window:set_left_status(wezterm.format({
 		{
 			Foreground = {
 				Color = window:leader_is_active() and theme.palette.iris or theme.palette.base,
@@ -176,10 +180,10 @@ wezterm.on('update-right-status', function(window, _)
 		{
 			Background = { Color = theme.palette.base },
 		},
-		{ Text = '' },
+		{ Text = "" },
 
-		'ResetAttributes',
-		{ Attribute = { Intensity = 'Bold' } },
+		"ResetAttributes",
+		{ Attribute = { Intensity = "Bold" } },
 		{
 			Foreground = {
 				Color = window:leader_is_active() and theme.palette.base or theme.palette.iris,
@@ -191,7 +195,7 @@ wezterm.on('update-right-status', function(window, _)
 			},
 		},
 		{ Text = text },
-		'ResetAttributes',
+		"ResetAttributes",
 
 		{
 			Foreground = {
@@ -201,8 +205,8 @@ wezterm.on('update-right-status', function(window, _)
 		{
 			Background = { Color = theme.palette.base },
 		},
-		{ Text = window:leader_is_active() and '' or '' },
-	})
+		{ Text = window:leader_is_active() and "" or "" },
+	}))
 end)
 
 return M

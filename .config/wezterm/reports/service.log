@@ -1,0 +1,34 @@
+[11:15:40.004][info] [#0:/Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/main.lua:68]: Lua Lsp startup, root: 	/Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec
+[11:15:40.005][info] [#0:/Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/main.lua:69]: ROOT:	/Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec
+[11:15:40.005][info] [#0:/Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/main.lua:70]: LOGPATH:	reports
+[11:15:40.005][info] [#0:/Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/main.lua:71]: METAPATH:	/Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta
+[11:15:40.005][info] [#0:/Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/main.lua:72]: VERSION:	3.13.2
+[11:15:40.038][info] [#0:script/language.lua:137]: VSC language: nil
+[11:15:40.038][info] [#0:script/language.lua:138]: LS  language: en-us
+[11:15:40.038][info] [#0:script/client.lua:657]: Client init	{
+  capabilities = {
+    textDocument = {
+      completion = {
+        completionItem = {
+          tagSupport = {
+            valueSet = { 1, 2 }
+          }
+        }
+      }
+    },
+    workspace = {
+      configuration = true
+    }
+  },
+  initializationOptions = {
+    changeConfiguration = true,
+    trustByClient = true,
+    useSemanticByRange = true,
+    viewDocument = true
+  },
+  rootUri = "file:///Users/codethread/PersonalConfigs/.config/wezterm/."
+}
+[11:15:40.038][info] [#0:script/language.lua:137]: VSC language: nil
+[11:15:40.038][info] [#0:script/language.lua:138]: LS  language: en-us
+[11:15:40.038][info] [#0:script/workspace/workspace.lua:38]: Workspace init root: 	file:///Users/codethread/PersonalConfigs/.config/wezterm/.
+[11:15:40.038][info] [#0:script/workspace/workspace.lua:42]: Log path: 	reports/file_Users_codethread_PersonalConfigs_.config_wezterm_..log
