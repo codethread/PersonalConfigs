@@ -62,10 +62,7 @@ local function get_workspace_symbols_requester(bufnr)
 
 		local locations = vim.lsp.util.symbols_to_items(res or {}, bufnr) or {}
 
-		return vim.tbl_filter(
-			function(item) return vim.startswith(item.filename, cwd) end,
-			locations
-		)
+		return vim.tbl_filter(function(item) return vim.startswith(item.filename, cwd) end, locations)
 	end
 end
 

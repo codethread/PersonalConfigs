@@ -156,9 +156,7 @@ return {
 					lualine_x = {
 						{
 							function() return '  ' .. require('dap').status() end,
-							cond = function()
-								return package.loaded['dap'] and require('dap').status() ~= ''
-							end,
+							cond = function() return package.loaded['dap'] and require('dap').status() ~= '' end,
 							-- color = Util.fg("Debug"),
 						},
 						{
@@ -188,8 +186,7 @@ return {
 						{
 							function() return require('nvim-navic').get_location() end,
 							cond = function()
-								return package.loaded['nvim-navic']
-									and require('nvim-navic').is_available()
+								return package.loaded['nvim-navic'] and require('nvim-navic').is_available()
 							end,
 						},
 					},

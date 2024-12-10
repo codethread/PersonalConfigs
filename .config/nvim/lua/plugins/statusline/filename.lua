@@ -91,7 +91,7 @@ M.filename_winbar = function()
 		readonly = ' ',
 	}
 
-	local ft = U.ft()
+	local ft = vim.bo.filetype
 	local pwd = vim.fn.getcwd()
 	local modified = vim.bo[0].modified and symbols.modified or ''
 	if ft == 'oil' then return vim.fn.expand('%'):gsub('oil://' .. pwd .. '/', '') .. modified end

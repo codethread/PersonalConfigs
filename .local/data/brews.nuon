@@ -16,6 +16,7 @@
 
 		# SHELL
 		brew "atuin"
+		brew "utf8proc", args: ["HEAD"] # needed by neovim (might change in future)
 		brew "neovim", args: ["HEAD"]
 		brew "starship"
 		brew "terminal-notifier" # Send macOS User Notifications from the command-line
@@ -37,6 +38,8 @@
 		brew "jq"
 		brew "tokei"
 		brew "tree"
+		brew "uutils-coreutils" # rust versions of core-utils, prefixed with u, e.g tail => utail
+		brew "grc"
 
 		# needed for gitwatch stuff
 		brew "coreutils"
@@ -51,7 +54,7 @@
 		cask "kitty"
 		cask "visual-studio-code"
 		cask "spotify"
-		# cask "nikitabobko/tap/aerospace"
+		cask "wezterm"
 
 		# Fonts
 		cask "font-fira-code-nerd-font"
@@ -126,6 +129,6 @@
 		brew "jesseduffield/lazygit/lazygit"
 
 		mas "Perplexity: Ask Anything", id: 6714467650
-		cask "wezterm"
+		# cask "nikitabobko/tap/aerospace"
 	'
 }

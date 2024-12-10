@@ -7,9 +7,7 @@ function M.lsp_attach(client, on_attach)
 		callback = function(args)
 			local buffer = args.buf
 			local current_client = vim.lsp.get_client_by_id(args.data.client_id)
-			if client == '*' or client == current_client.name then
-				on_attach(current_client, buffer)
-			end
+			if client == '*' or client == current_client.name then on_attach(current_client, buffer) end
 		end,
 	})
 end
@@ -69,12 +67,6 @@ function M.get_visual_selection()
 	return vim.fn.getreg 'v'
 end
 
----get filetype
-function M.ft()
-	---@diagnostic disable-next-line: undefined-field
-	return vim.api.nvim_exec([[echo &ft]], true)
-end
-
 ---@return number row, number column
 function M.current_pos()
 	local c = vim.api.nvim_win_get_cursor(0)
@@ -119,7 +111,8 @@ function M.map_args(opts)
 	return vim.tbl_extend('keep', { silent = true, noremap = true }, opts or {})
 end
 
----Create a keymap, essentially a wrapper around vim.keymap.set, however opts can also be a string, in which case it is treated as the 'desc' value
+---Create a keymap, essentially a wrapper around vim.keymap.set, however opts
+---can also be a string, in which case it is treated as the 'desc' value
 ---@param mode string | table
 ---@param lhs string
 ---@param rhs string | function

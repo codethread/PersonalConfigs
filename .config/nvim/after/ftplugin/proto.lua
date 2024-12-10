@@ -57,9 +57,9 @@ local function dumpjump()
 	else
 		local search_term = 'package ' .. package_name
 		-- first we find the file
-		stdout =
-			vim.system({ 'rg', search_term, '--hidden', '-l', '--glob', glob }, { text = true })
-				:wait().stdout
+		stdout = vim
+			.system({ 'rg', search_term, '--hidden', '-l', '--glob', glob }, { text = true })
+			:wait().stdout
 
 		local line = get_first_def(stdout)
 		if not line then
@@ -70,10 +70,8 @@ local function dumpjump()
 		-- search in file
 		search_term = '(message|enum) ' .. word .. ' \\{'
 
-		stdout = vim.system(
-			{ 'rg', search_term, '--hidden', '--vimgrep', '--glob', line },
-			{ text = true }
-		)
+		stdout = vim
+			.system({ 'rg', search_term, '--hidden', '--vimgrep', '--glob', line }, { text = true })
 			:wait().stdout
 	end
 

@@ -25,9 +25,7 @@ return {
 						-- node_path = "node",
 
 						-- Path to vscode-js-debug installation.
-						debugger_path = vim.fn.resolve(
-							vim.fn.stdpath 'data' .. '/lazy/vscode-js-debug'
-						),
+						debugger_path = vim.fn.resolve(vim.fn.stdpath 'data' .. '/lazy/vscode-js-debug'),
 
 						-- Command to use to launch the debug server. Takes precedence over "node_path" and "debugger_path"
 						-- debugger_cmd = { "js-debug-adapter" },
@@ -70,9 +68,7 @@ return {
 					local dapui = require 'dapui'
 					dapui.setup(opts)
 					dap.listeners.after.event_initialized['dapui_config'] = function() dapui.open {} end
-					dap.listeners.before.event_terminated['dapui_config'] = function()
-						dapui.close {}
-					end
+					dap.listeners.before.event_terminated['dapui_config'] = function() dapui.close {} end
 					dap.listeners.before.event_exited['dapui_config'] = function() dapui.close {} end
 				end,
 			},

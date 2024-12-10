@@ -8,9 +8,9 @@ function M.jump()
 	local glob = '.config/nu/**/*.nu'
 
 	-- so fast sync is fine
-	local stdout =
-		vim.system({ 'rg', search_term, '--hidden', '--vimgrep', '--glob', glob }, { text = true })
-			:wait().stdout
+	local stdout = vim
+		.system({ 'rg', search_term, '--hidden', '--vimgrep', '--glob', glob }, { text = true })
+		:wait().stdout
 
 	if not stdout or stdout == '' then
 		vim.notify('no definition found', vim.log.levels.ERROR)

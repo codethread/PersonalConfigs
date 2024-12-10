@@ -12,7 +12,7 @@
 bindkey -e # emacs key bindings
 
 if [[ "${terminfo[kcbt]}" != "" ]]; then
-    bindkey "${terminfo[kcbt]}" reverse-menu-complete   # [Shift-Tab] - move through the completion menu backwards
+    bindkey "${terminfo[kcbt]}" reverse-menu-complete # [Shift-Tab] - move through the completion menu backwards
 fi
 
 # highlight tab
@@ -23,11 +23,6 @@ if [[ "$TERMINAL_EMULATOR" == "JetBrains-JediTerm" ]]; then
     bindkey "∫" backward-word # Option-b
     bindkey "ƒ" forward-word  # Option-f
     bindkey "∂" delete-word   # Option-d
-fi
-
-if [ $CT_IS_LINUX -eq 1 ]; then
-    # remap capslock to ctrl
-    gsettings set org.gnome.desktop.input-sources xkb-options "['ctrl:nocaps']"
 fi
 
 #: }}}
@@ -48,21 +43,21 @@ eval "$(starship init zsh)"
 # e.g dotty completion zsh > "${ZDOTDIR}/completions/_dotty"
 # don't forget to run compinit after
 mkdir -p "$ZDOTDIR/completions"
-fpath+=( "$ZDOTDIR/completions" )
+fpath+=("$ZDOTDIR/completions")
 ssource "$ZDOTDIR/.zsh_plugins.zsh"
 ssource "$ZDOTDIR/.aliases.zsh"
 ssource ~/.private
 
 if [ $CT_IS_WORK -eq 1 ]; then
-  source ~/.config/zsh/work/work.zsh
+    source ~/.config/zsh/work/work.zsh
 fi
 
 #: }}}
 #: General {{{
 
 # set up colors for ls, fd, tree etc https://github.com/sharkdp/vivid
-export LS_COLORS="$(vivid generate dracula)"
-export JQ_COLORS="1;30:0;31:0;32:0;35:0;33:1;35:1;35"	# export JQ_COLORS="1;30:0;31:0;32:0;35:0;33:1;35:1;35"
+# export LS_COLORS="$(vivid generate dracula)"
+export JQ_COLORS="1;30:0;31:0;32:0;35:0;33:1;35:1;35" # export JQ_COLORS="1;30:0;31:0;32:0;35:0;33:1;35:1;35"
 
 #: }}}
 #: Emacs {{{
@@ -77,7 +72,6 @@ export FZF_DEFAULT_COMMAND="fd --type f --hidden --exclude '{.git}'"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # quickest way to cd around
 export FZF_ALT_C_COMMAND="fd --hidden --type d --exclude '{Library,Music,Applications,Pictures,Unity,VirtualBox VMs,WebstormProjects,Tools,node_modules,.git}' . ${HOME}"
-
 
 # ssource ~/.fzf.zsh
 # [[ $- == *i* ]] && source "$HOMEBREW_PREFIX/opt/fzf/shell/completion.zsh" 2> /dev/null
@@ -134,13 +128,13 @@ rbenv() {
 #: ZSH History {{{
 
 # see https://zsh.sourceforge.io/Doc/Release/Options.html#History for more info
-setopt INC_APPEND_HISTORY        # Write to the history file immediately, not when the shell exits.
-setopt SHARE_HISTORY             # Share history between all sessions.
-setopt HIST_IGNORE_DUPS          # Don't record an entry that was just recorded again.
-setopt HIST_IGNORE_ALL_DUPS      # Remove old duplicate commands
-setopt HIST_FIND_NO_DUPS         # Don't show dups when using history command
-setopt HIST_IGNORE_SPACE         # Don't add commands starting with 'space' (good for credentials)
-setopt HIST_REDUCE_BLANKS        # less blanks
+setopt INC_APPEND_HISTORY   # Write to the history file immediately, not when the shell exits.
+setopt SHARE_HISTORY        # Share history between all sessions.
+setopt HIST_IGNORE_DUPS     # Don't record an entry that was just recorded again.
+setopt HIST_IGNORE_ALL_DUPS # Remove old duplicate commands
+setopt HIST_FIND_NO_DUPS    # Don't show dups when using history command
+setopt HIST_IGNORE_SPACE    # Don't add commands starting with 'space' (good for credentials)
+setopt HIST_REDUCE_BLANKS   # less blanks
 
 HISTFILE="$ZDOTDIR/.zsh_history"
 HISTSIZE=999999999

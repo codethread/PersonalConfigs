@@ -39,6 +39,7 @@ return {
 	{
 		'mrjones2014/smart-splits.nvim',
 		version = '>=1.0.0',
+		lazy = false,
 		init = function()
 			-- recommended mappings
 			-- resizing splits
@@ -60,6 +61,9 @@ return {
 			-- vim.keymap.set('n', '<leader>,k', require('smart-splits').swap_buf_up)
 			-- vim.keymap.set('n', '<leader>,l', require('smart-splits').swap_buf_right)
 		end,
+		opts = {
+			log_level = 'warn',
+		},
 	},
 	{
 		'alexghergh/nvim-tmux-navigation',
