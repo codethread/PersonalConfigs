@@ -1,6 +1,7 @@
 ---JavaScript - I love it
 ---@class Str
 ---@field private value string
+---@operator call:Str
 local Str = {}
 
 ---Create String instance
@@ -8,9 +9,7 @@ local Str = {}
 ---@param value string
 ---@return Str
 function Str.new(value)
-	if type(value) ~= "string" then
-		error("value must be string,")
-	end
+	if type(value) ~= 'string' then error 'value must be string,' end
 	---@type Str
 	local newStr = { value = value }
 	local obj = setmetatable(newStr, { __index = Str })
@@ -20,21 +19,15 @@ end
 ---Does Str contain subtring
 ---@param substring string
 ---@return boolean
-function Str:contains(substring)
-	return self.value:find(substring, 1, true) ~= nil
-end
+function Str:contains(substring) return self.value:find(substring, 1, true) ~= nil end
 
 ---@param start string
 ---@return boolean
-function Str:starts_with(start)
-	return self.value:sub(1, #start) == start
-end
+function Str:starts_with(start) return self.value:sub(1, #start) == start end
 
 ---@param ending string
 ---@return boolean
-function Str:ends_with(ending)
-	return ending == "" or self.value:sub(-#ending) == ending
-end
+function Str:ends_with(ending) return ending == '' or self.value:sub(-#ending) == ending end
 
 ---Replace substring `old` with `new`
 ---@param old string
@@ -46,9 +39,7 @@ function Str:replace(old, new)
 
 	while true do
 		local start_idx, end_idx = s:find(old, search_start_idx, true)
-		if not start_idx then
-			break
-		end
+		if not start_idx then break end
 
 		local postfix = s:sub(end_idx + 1)
 		s = s:sub(1, (start_idx - 1)) .. new .. postfix
@@ -60,9 +51,7 @@ function Str:replace(old, new)
 end
 
 ---@return integer
-function Str:length()
-	return #self.value
-end
+function Str:length() return #self.value end
 
 ---Method to mimic JavaScript's String.prototype.charAt
 ---@param index number: The index of the character to retrieve
@@ -85,35 +74,23 @@ end
 ---@param start number The starting index
 ---@param stop number|nil The ending index (exclusive)
 ---@return Str A new String object containing the sliced part
-function Str:slice(start, stop)
-	return Str.new(self.value:sub(start + 1, stop and stop + 1))
-end
+function Str:slice(start, stop) return Str.new(self.value:sub(start + 1, stop and stop + 1)) end
 
 ---Method to mimic JavaScript's String.prototype.toUpperCase
 ---@return Str A new String object with all characters converted to uppercase
-function Str:to_upper_case()
-	return Str.new(self.value:upper())
-end
+function Str:to_upper_case() return Str.new(self.value:upper()) end
 
 ---Method to mimic JavaScript's String.prototype.toLowerCase
 ---@return Str A new String object with all characters converted to lowercase
-function Str:to_lower_case()
-	return Str.new(self.value:lower())
-end
+function Str:to_lower_case() return Str.new(self.value:lower()) end
 
 ---Method to mimic JavaScript's String.prototype.trim
 ---@return Str A new String object with whitespace removed from both ends
-function Str:trim()
-	return Str.new(self.value:gsub("^%s*(.-)%s*$", "%1"))
-end
+function Str:trim() return Str.new(self.value:gsub('^%s*(.-)%s*$', '%1')) end
 
-function Str:to_string()
-	return self.value
-end
+function Str:to_string() return self.value end
 
 return setmetatable({}, {
-	__call = function(_, tbl)
-		return Str.new(tbl)
-	end,
+	__call = function(_, tbl) return Str.new(tbl) end,
 	__index = Str,
 })

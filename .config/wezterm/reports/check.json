@@ -1,1 +1,36 @@
-[]
+{
+    "file:///Users/codethread/PersonalConfigs/.config/wezterm/./wezterm.lua": [
+        {
+            "code": "assign-type-mismatch",
+            "message": "Cannot assign `function` to `\"ActivateCommandPalette\"|\"ActivateCopyMode\"|\"ActivateKeyTable\"|\"ActivateLastTab\"|\"ActivatePaneByIndex\"...(+75)`.\n- `function` cannot match `\"ActivateCommandPalette\"|\"ActivateCopyMode\"|\"ActivateKeyTable\"|\"ActivateLastTab\"|\"ActivatePaneByIndex\"...(+75)`\n- `function` cannot match any subtypes in `\"ActivateCommandPalette\"|\"ActivateCopyMode\"|\"ActivateKeyTable\"|\"ActivateLastTab\"|\"ActivatePaneByIndex\"...(+75)`\n- Type `function` cannot match `\"TogglePaneZoomState\"`\n- Type `function` cannot match `\"ToggleFullScreen\"`\n- Type `function` cannot match `\"SwitchWorkspaceRelative\"`\n- Type `function` cannot match `\"SwitchToWorkspace\"`\n- Type `function` cannot match `\"StartWindowDrag\"`\n- Type `function` cannot match `\"SplitVertical\"`\n- Type `function` cannot match `\"SplitPane\"`\n- Type `function` cannot match `\"SplitHorizontal\"`\n- Type `function` cannot match `\"SpawnWindow\"`\n- Type `function` cannot match `\"SpawnTab\"`\n...(+67)\n- Type `function` cannot match `\"ActivateKeyTable\"`\n- Type `function` cannot match `\"ActivateCopyMode\"`\n- Type `function` cannot match `\"ActivateCommandPalette\"`",
+            "range": {
+                "end": {
+                    "character": 9,
+                    "line": 39
+                },
+                "start": {
+                    "character": 3,
+                    "line": 39
+                }
+            },
+            "severity": 2,
+            "source": "Lua Diagnostics."
+        },
+        {
+            "code": "assign-type-mismatch",
+            "message": "Cannot assign `Action` to `\"ActivateCommandPalette\"|\"ActivateCopyMode\"|\"ActivateKeyTable\"|\"ActivateLastTab\"|\"ActivatePaneByIndex\"...(+75)`.\n- `Action` cannot match `\"ActivateCommandPalette\"|\"ActivateCopyMode\"|\"ActivateKeyTable\"|\"ActivateLastTab\"|\"ActivatePaneByIndex\"...(+75)`\n- `Action` cannot match any subtypes in `\"ActivateCommandPalette\"|\"ActivateCopyMode\"|\"ActivateKeyTable\"|\"ActivateLastTab\"|\"ActivatePaneByIndex\"...(+75)`\n- Type `Action` cannot match `\"TogglePaneZoomState\"`\n- Type `Action` cannot match `\"ToggleFullScreen\"`\n- Type `Action` cannot match `\"SwitchWorkspaceRelative\"`\n- Type `Action` cannot match `\"SwitchToWorkspace\"`\n- Type `Action` cannot match `\"StartWindowDrag\"`\n- Type `Action` cannot match `\"SplitVertical\"`\n- Type `Action` cannot match `\"SplitPane\"`\n- Type `Action` cannot match `\"SplitHorizontal\"`\n- Type `Action` cannot match `\"SpawnWindow\"`\n- Type `Action` cannot match `\"SpawnTab\"`\n...(+67)\n- Type `Action` cannot match `\"ActivateKeyTable\"`\n- Type `Action` cannot match `\"ActivateCopyMode\"`\n- Type `Action` cannot match `\"ActivateCommandPalette\"`",
+            "range": {
+                "end": {
+                    "character": 9,
+                    "line": 44
+                },
+                "start": {
+                    "character": 3,
+                    "line": 44
+                }
+            },
+            "severity": 2,
+            "source": "Lua Diagnostics."
+        }
+    ]
+}

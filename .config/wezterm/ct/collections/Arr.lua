@@ -6,9 +6,7 @@ local Arr = {}
 ---@param list table
 ---@return Array
 function Arr.new(list)
-	if type(list) ~= "table" then
-		error("Array constructor must be called with table argument")
-	end
+	if type(list) ~= 'table' then error 'Array constructor must be called with table argument' end
 
 	local len = #list
 	local obj = setmetatable(list, Arr)
@@ -28,7 +26,7 @@ end
 ---@param ... unknown
 ---@return integer
 function Arr:push(...)
-	for _, value in ipairs({ ... }) do
+	for _, value in ipairs { ... } do
 		self[#self + 1] = value
 	end
 	return #self
@@ -37,23 +35,17 @@ end
 ---Removes and returns the last element.
 ---Mutates array
 ---@return any
-function Arr:pop()
-	return table.remove(self)
-end
+function Arr:pop() return table.remove(self) end
 
 ---Removes and returns the first element.
 ---@return any
-function Arr:shift()
-	return table.remove(self, 1)
-end
+function Arr:shift() return table.remove(self, 1) end
 
 ---Adds one element to the beginning of the array.
 ---comment
 ---@param value any
 ---@return nil
-function Arr:unshift(value)
-	table.insert(self, 1, value)
-end
+function Arr:unshift(value) table.insert(self, 1, value) end
 
 ---Concatenates another array to this one.
 ---@param other Array
@@ -69,7 +61,7 @@ end
 ---@param fn fun(any, integer, Array): any
 ---@return Array
 function Arr:map(fn)
-	local result = Arr.new({})
+	local result = Arr.new {}
 	for i = 1, #self do
 		result:push(fn(self[i], i, self))
 	end
@@ -93,11 +85,9 @@ end
 ---@param fn fun(any, integer, Array): boolean
 ---@return Array
 function Arr:filter(fn)
-	local result = Arr.new({})
+	local result = Arr.new {}
 	for i = 1, #self do
-		if fn(self[i], i, self) then
-			result:push(self[i])
-		end
+		if fn(self[i], i, self) then result:push(self[i]) end
 	end
 	return result
 end
@@ -133,16 +123,12 @@ end
 
 function Arr:find(predicate)
 	for i = 1, #self do
-		if predicate(self[i], i, self) then
-			return self[i]
-		end
+		if predicate(self[i], i, self) then return self[i] end
 	end
 	return nil
 end
 
 return setmetatable({}, {
-	__call = function(_, tbl)
-		return Arr.new(tbl)
-	end,
+	__call = function(_, tbl) return Arr.new(tbl) end,
 	__index = Arr,
 })

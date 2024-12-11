@@ -1,4 +1,3 @@
----@diagnostic disable: assign-type-mismatch
 -- NOTE: examples:
 -- https://github.com/emretuna/.dotfiles/tree/main/wezterm/.config/wezterm
 -- https://github.com/joshmedeski/dotfiles/blob/main/.config/wezterm/wezterm.lua
@@ -14,20 +13,14 @@
 -- fuzzy select url from other pane (e.g to open failed tests)
 -- rename tab to something better (e.g command, not full path)
 
-print("--|  LOADING   |--")
+print '--|  LOADING   |--'
 
-local wezterm = require("wezterm") --[[@as Wezterm]]
+local wezterm = require 'wezterm' --[[@as Wezterm]]
 
-local _, err = pcall(function()
-	require("ct.globals").setup()
-end)
-if err then
-	wezterm.log_error(err)
-end
+local _, err = pcall(function() require('ct.globals').setup() end)
+if err then wezterm.log_error(err) end
 
-local ok, config_or_err = pcall(function()
-	return require("ct.setup").setup()
-end)
+local ok, config_or_err = pcall(function() return require('ct.setup').setup() end)
 
 -- config_or_err.automatically_reload_config = false
 
@@ -36,32 +29,34 @@ if not ok then
 	local config = wezterm.config_builder()
 
 	config.max_fps = 120
-	config.leader = { key = "a", mods = "CTRL", timeout_milliseconds = 1000 }
+	config.leader = { key = 'a', mods = 'CTRL', timeout_milliseconds = 1000 }
 
 	---@diagnostic disable: missing-fields
 	config.keys = {
 		{
 
-			key = ";",
-			mods = "LEADER",
+			key = ';',
+			mods = 'LEADER',
+			---@diagnostic disable-next-line: assign-type-mismatch
 			action = wezterm.action.ActivateCommandPalette,
 		},
 		{
-			key = "I",
-			mods = "LEADER",
+			key = 'I',
+			mods = 'LEADER',
+			---@diagnostic disable-next-line: assign-type-mismatch
 			action = wezterm.action_callback(function(win)
 				-- must be set to "notification type > alerts" in macos
-				win:toast_notification("wezterm", "Updating...", nil, 4000)
+				win:toast_notification('wezterm', 'Updating...', nil, 4000)
 				print(wezterm.plugin.list()) -- will list the plugin repos.
 				wezterm.plugin.update_all()
-				win:toast_notification("wezterm", "✨ Updated", nil, 4000)
+				win:toast_notification('wezterm', '✨ Updated', nil, 4000)
 				wezterm.reload_configuration()
 			end),
 		},
 	}
-	print("--| FALLBACK LOADED |--")
+	print '--| FALLBACK LOADED |--'
 	return config
 else
-	print("--| LOADED |--")
+	print '--| LOADED |--'
 	return config_or_err
 end

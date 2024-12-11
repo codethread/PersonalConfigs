@@ -1,17 +1,17 @@
 local M = {}
 
 M.palette = {
-	base = "#232136",
-	overlay = "#393552",
-	muted = "#6e6a86",
-	text = "#e0def4",
-	love = "#eb6f92",
-	gold = "#f6c177",
-	rose = "#ea9a97",
-	pine = "#3e8fb0",
-	foam = "#9ccfd8",
-	iris = "#c4a7e7",
-	highlight_high = "#56526e",
+	base = '#232136',
+	overlay = '#393552',
+	muted = '#6e6a86',
+	text = '#e0def4',
+	love = '#eb6f92',
+	gold = '#f6c177',
+	rose = '#ea9a97',
+	pine = '#3e8fb0',
+	foam = '#9ccfd8',
+	iris = '#c4a7e7',
+	highlight_high = '#56526e',
 }
 
 local active_tab = {
@@ -45,7 +45,7 @@ M.colors = {
 	},
 
 	brights = {
-		"#817c9c", -- replacement for muted,
+		'#817c9c', -- replacement for muted,
 		M.palette.love,
 		M.palette.pine,
 		M.palette.gold,
@@ -62,7 +62,7 @@ M.colors = {
 			bg_color = M.palette.base,
 			fg_color = M.palette.iris,
 			-- "Half", "Normal" or "Bold"
-			intensity = "Bold", -- non fancy
+			intensity = 'Bold', -- non fancy
 		},
 
 		inactive_tab = {

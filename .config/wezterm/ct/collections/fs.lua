@@ -1,4 +1,4 @@
-local Str = require("ct.collections.Str")
+local Str = require 'ct.collections.Str'
 local Fs = {}
 
 local cache = {}
@@ -10,18 +10,12 @@ local cache = {}
 function Fs.readfile(file, opts)
 	opts = opts or { no_cache = false }
 	local cached = cache[file]
-	if not opts.no_cache and cached then
-		return cached
-	end
+	if not opts.no_cache and cached then return cached end
 
-	local f = io.open(file, "rb")
-	if not f then
-		return nil
-	end
-	local content = f:read("*all")
-	if type(content) ~= "string" then
-		return nil
-	end
+	local f = io.open(file, 'rb')
+	if not f then return nil end
+	local content = f:read '*all'
+	if type(content) ~= 'string' then return nil end
 	f:close()
 	local out = Str(content)
 	cache[file] = out

@@ -1,11 +1,11 @@
-[11:15:40.004][info] [#0:/Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/main.lua:68]: Lua Lsp startup, root: 	/Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec
-[11:15:40.005][info] [#0:/Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/main.lua:69]: ROOT:	/Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec
-[11:15:40.005][info] [#0:/Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/main.lua:70]: LOGPATH:	reports
-[11:15:40.005][info] [#0:/Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/main.lua:71]: METAPATH:	/Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta
-[11:15:40.005][info] [#0:/Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/main.lua:72]: VERSION:	3.13.2
-[11:15:40.038][info] [#0:script/language.lua:137]: VSC language: nil
-[11:15:40.038][info] [#0:script/language.lua:138]: LS  language: en-us
-[11:15:40.038][info] [#0:script/client.lua:657]: Client init	{
+[15:47:50.952][info] [#0:/Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/main.lua:68]: Lua Lsp startup, root: 	/Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec
+[15:47:50.952][info] [#0:/Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/main.lua:69]: ROOT:	/Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec
+[15:47:50.952][info] [#0:/Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/main.lua:70]: LOGPATH:	reports
+[15:47:50.952][info] [#0:/Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/main.lua:71]: METAPATH:	/Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta
+[15:47:50.952][info] [#0:/Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/main.lua:72]: VERSION:	3.13.2
+[15:47:50.986][info] [#0:script/language.lua:137]: VSC language: nil
+[15:47:50.986][info] [#0:script/language.lua:138]: LS  language: en-us
+[15:47:50.986][info] [#0:script/client.lua:657]: Client init	{
   capabilities = {
     textDocument = {
       completion = {
@@ -28,13 +28,17 @@
   },
   rootUri = "file:///Users/codethread/PersonalConfigs/.config/wezterm/."
 }
-[11:15:40.038][info] [#0:script/language.lua:137]: VSC language: nil
-[11:15:40.038][info] [#0:script/language.lua:138]: LS  language: en-us
-[11:15:40.038][info] [#0:script/workspace/workspace.lua:38]: Workspace init root: 	file:///Users/codethread/PersonalConfigs/.config/wezterm/.
-[11:15:40.038][info] [#0:script/workspace/workspace.lua:42]: Log path: 	reports/file_Users_codethread_PersonalConfigs_.config_wezterm_..log
-[11:15:40.038][info] [#0:script/workspace/workspace.lua:48]: Workspace create: 	file:///Users/codethread/PersonalConfigs/.config/wezterm/.
-[11:15:40.039][info] [#0:script/provider/provider.lua:35]: Load config from specified	test/wez_config.lua
-[11:15:40.039][info] [#0:script/provider/provider.lua:36]: {
+[15:47:50.986][info] [#0:script/language.lua:137]: VSC language: nil
+[15:47:50.986][info] [#0:script/language.lua:138]: LS  language: en-us
+[15:47:50.986][info] [#0:script/workspace/workspace.lua:38]: Workspace init root: 	file:///Users/codethread/PersonalConfigs/.config/wezterm/.
+[15:47:50.986][info] [#0:script/workspace/workspace.lua:42]: Log path: 	reports/file_Users_codethread_PersonalConfigs_.config_wezterm_..log
+[15:47:50.986][info] [#0:script/workspace/workspace.lua:48]: Workspace create: 	file:///Users/codethread/PersonalConfigs/.config/wezterm/.
+[15:47:50.987][warn] [#0:script/config/loader.lua:116]: No config?	nil
+[15:47:50.987][warn] [#0:script/config/loader.lua:116]: No config?	nil
+[15:47:50.988][info] [#0:script/provider/provider.lua:64]: Load config from client	fallback
+[15:47:50.988][info] [#0:script/provider/provider.lua:65]: nil
+[15:47:50.988][info] [#0:script/provider/provider.lua:35]: Load config from specified	test/wez_config.lua
+[15:47:50.988][info] [#0:script/provider/provider.lua:36]: {
   Lua = {
     completion = {
       callSnippet = "Replace"
@@ -54,271 +58,267 @@
     }
   }
 }
-[11:15:40.040][warn] [#0:script/config/loader.lua:116]: No config?	nil
-[11:15:40.040][warn] [#0:script/config/loader.lua:116]: No config?	nil
-[11:15:40.040][warn] [#0:script/config/loader.lua:116]: No config?	nil
-[11:15:40.040][info] [#0:script/provider/provider.lua:64]: Load config from client	fallback
-[11:15:40.040][info] [#0:script/provider/provider.lua:65]: nil
-[11:15:40.040][warn] [#0:script/config/loader.lua:116]: No config?	nil
-[11:15:40.040][info] [#0:script/provider/provider.lua:64]: Load config from client	fallback
-[11:15:40.040][info] [#0:script/provider/provider.lua:65]: nil
-[11:15:40.040][info] [#0:script/library.lua:212]: Init builtin library at:	file:///Users/codethread/PersonalConfigs/.config/wezterm/.
-[11:15:40.060][info] [#0:script/library.lua:212]: Init builtin library at:	nil
-[11:15:40.067][info] [#0:script/workspace/workspace.lua:324]: Preload start:	file:///Users/codethread/PersonalConfigs/.config/wezterm/.
-[11:15:40.068][info] [#0:script/workspace/workspace.lua:330]: Scan files at:	file:///Users/codethread/PersonalConfigs/.config/wezterm/.
-[11:15:40.069][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/os.lua
-[11:15:40.069][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/table.lua
-[11:15:40.069][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/debug.lua
-[11:15:40.069][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/string.lua
-[11:15:40.069][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/utf8.lua
-[11:15:40.069][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/math.lua
-[11:15:40.069][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/package.lua
-[11:15:40.069][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/basic.lua
-[11:15:40.069][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/coroutine.lua
-[11:15:40.069][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/builtin.lua
-[11:15:40.069][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/io.lua
-[11:15:40.069][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.072][info] [#0:script/workspace/workspace.lua:324]: Preload start:	<fallback>
-[11:15:40.073][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/os.lua
-[11:15:40.073][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/table.lua
-[11:15:40.073][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/debug.lua
-[11:15:40.073][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/string.lua
-[11:15:40.073][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/utf8.lua
-[11:15:40.073][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/math.lua
-[11:15:40.073][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/package.lua
-[11:15:40.073][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/basic.lua
-[11:15:40.073][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/coroutine.lua
-[11:15:40.073][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/builtin.lua
-[11:15:40.073][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/io.lua
-[11:15:40.073][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.075][info] [#0:script/workspace/workspace.lua:379]: Found 66 files at:	file:///Users/codethread/PersonalConfigs/.config/wezterm/.
-[11:15:40.075][info] [#0:script/workspace/loading.lua:160]: Load files from disk:	file:///Users/codethread/PersonalConfigs/.config/wezterm/.
-[11:15:40.075][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/init.lua , size = 22.310 KB
-[11:15:40.082][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.082][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/config/init.lua , size = 20.934 KB
-[11:15:40.086][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.086][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/config/daemon-options.lua , size = 0.632 KB
-[11:15:40.086][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.086][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/config/window-padding.lua , size = 0.963 KB
-[11:15:40.087][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.087][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/config/win32-system-backdrop.lua , size = 0.432 KB
-[11:15:40.087][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.087][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/config/background.lua , size = 2.873 KB
-[11:15:40.088][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.088][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/config/ui-key-cap-rendering.lua , size = 0.324 KB
-[11:15:40.088][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.088][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/config/quoted-dropped-files.lua , size = 0.529 KB
-[11:15:40.088][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.088][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/config/audible-bell.lua , size = 0.226 KB
-[11:15:40.089][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.089][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/config/visual-bell.lua , size = 0.889 KB
-[11:15:40.089][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.089][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/wezterm/init.lua , size = 10.067 KB
-[11:15:40.092][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.092][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/wezterm/mux/init.lua , size = 2.586 KB
-[11:15:40.093][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.093][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/wezterm/color/init.lua , size = 1.524 KB
-[11:15:40.094][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.094][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/wezterm/procinfo/init.lua , size = 0.173 KB
-[11:15:40.094][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.094][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/wezterm/time/init.lua , size = 0.576 KB
-[11:15:40.094][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.094][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/wezterm/gui/init.lua , size = 0.243 KB
-[11:15:40.094][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.095][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/wezterm/nerdfonts.lua , size = 327.719 KB
-[11:15:40.174][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.174][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/enum/copy-mode-assignment.lua , size = 0.759 KB
-[11:15:40.174][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.175][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/enum/key-assignment.lua , size = 7.309 KB
-[11:15:40.178][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.178][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/tab-information.lua , size = 0.542 KB
-[11:15:40.178][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.178][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/tls-domain-server.lua , size = 0.651 KB
-[11:15:40.179][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.179][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/local-process-info.lua , size = 1.198 KB
-[11:15:40.180][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.180][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/time.lua , size = 0.567 KB
-[11:15:40.180][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.180][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/mux-domain.lua , size = 1.866 KB
-[11:15:40.181][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.181][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/exec-domain.lua , size = 0.377 KB
-[11:15:40.181][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.181][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/pane.lua , size = 8.361 KB
-[11:15:40.183][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.183][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/url.lua , size = 0.618 KB
-[11:15:40.183][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.183][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/spawn-command.lua , size = 0.096 KB
-[11:15:40.183][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.183][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/window.lua , size = 8.009 KB
-[11:15:40.185][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.185][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/color.lua , size = 3.108 KB
-[11:15:40.186][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.186][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/pane-information.lua , size = 1.535 KB
-[11:15:40.186][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.187][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/mux-window.lua , size = 1.826 KB
-[11:15:40.187][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.187][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/ssh-domain.lua , size = 0.809 KB
-[11:15:40.188][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.188][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/tls-domain-client.lua , size = 2.096 KB
-[11:15:40.188][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.188][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/mux-tab.lua , size = 2.069 KB
-[11:15:40.189][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.189][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/wsl-domain.lua , size = 0.166 KB
-[11:15:40.189][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.189][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/events/gui.lua , size = 0.074 KB
-[11:15:40.190][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.190][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/events/window.lua , size = 0.293 KB
-[11:15:40.190][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.190][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/events/multiplexer.lua , size = 0.093 KB
-[11:15:40.190][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.190][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/wezterm.lua , size = 5.673 KB
-[11:15:40.192][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.192][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/io.lua , size = 6.566 KB
-[11:15:40.194][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/io.lua
-[11:15:40.194][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/builtin.lua , size = 0.302 KB
-[11:15:40.201][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/builtin.lua
-[11:15:40.201][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/coroutine.lua , size = 2.669 KB
-[11:15:40.202][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/coroutine.lua
-[11:15:40.202][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/basic.lua , size = 15.982 KB
-[11:15:40.207][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/basic.lua
-[11:15:40.207][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/package.lua , size = 3.050 KB
-[11:15:40.208][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/package.lua
-[11:15:40.208][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/math.lua , size = 8.825 KB
-[11:15:40.211][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/math.lua
-[11:15:40.211][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/utf8.lua , size = 2.447 KB
-[11:15:40.212][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/utf8.lua
-[11:15:40.212][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/string.lua , size = 6.547 KB
-[11:15:40.214][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/string.lua
-[11:15:40.214][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/debug.lua , size = 7.812 KB
-[11:15:40.217][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/debug.lua
-[11:15:40.217][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/table.lua , size = 4.341 KB
-[11:15:40.219][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/table.lua
-[11:15:40.219][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/os.lua , size = 5.863 KB
-[11:15:40.221][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/os.lua
-[11:15:40.221][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/PersonalConfigs/.config/wezterm/./test/wez_config.lua , size = 0.643 KB
-[11:15:40.221][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/PersonalConfigs/.config/wezterm/./test/types.lua , size = 3.683 KB
-[11:15:40.223][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/PersonalConfigs/.config/wezterm/./wezterm.lua , size = 1.803 KB
-[11:15:40.224][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/PersonalConfigs/.config/wezterm/./ct/keymaps.lua , size = 6.502 KB
-[11:15:40.227][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/PersonalConfigs/.config/wezterm/./ct/sessions.lua , size = 2.322 KB
-[11:15:40.228][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/PersonalConfigs/.config/wezterm/./ct/theme.lua , size = 1.628 KB
-[11:15:40.228][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/PersonalConfigs/.config/wezterm/./ct/fs.lua , size = 0.559 KB
-[11:15:40.229][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/PersonalConfigs/.config/wezterm/./ct/globals.lua , size = 0.439 KB
-[11:15:40.229][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/PersonalConfigs/.config/wezterm/./ct/setup.lua , size = 0.667 KB
-[11:15:40.229][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/PersonalConfigs/.config/wezterm/./ct/utils.lua , size = 0.894 KB
-[11:15:40.230][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/PersonalConfigs/.config/wezterm/./ct/ui.lua , size = 4.988 KB
-[11:15:40.231][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/PersonalConfigs/.config/wezterm/./ct/collections/Str.lua , size = 3.128 KB
-[11:15:40.233][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/PersonalConfigs/.config/wezterm/./ct/collections/Obj.lua , size = 0.376 KB
-[11:15:40.233][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/PersonalConfigs/.config/wezterm/./ct/collections/Arr.lua , size = 3.260 KB
-[11:15:40.235][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/PersonalConfigs/.config/wezterm/./debug.lua , size = 0.461 KB
-[11:15:40.235][info] [#0:script/workspace/loading.lua:172]: Loaded files takes [0.156] sec: file:///Users/codethread/PersonalConfigs/.config/wezterm/.
-[11:15:40.235][info] [#0:script/workspace/loading.lua:181]: Compile files takes [0.000] sec: file:///Users/codethread/PersonalConfigs/.config/wezterm/.
-[11:15:40.235][info] [#0:script/workspace/loading.lua:182]: Loaded finish:	file:///Users/codethread/PersonalConfigs/.config/wezterm/.
-[11:15:40.235][info] [#0:script/workspace/workspace.lua:381]: Preload finish at:	file:///Users/codethread/PersonalConfigs/.config/wezterm/.
-[11:15:40.700][info] [#0:script/workspace/workspace.lua:379]: Found 51 files at:	<fallback>
-[11:15:40.701][info] [#0:script/workspace/loading.lua:160]: Load files from disk:	<fallback>
-[11:15:40.701][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/init.lua
-[11:15:40.701][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.701][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/config/init.lua
-[11:15:40.701][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.701][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/config/daemon-options.lua
-[11:15:40.702][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.702][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/config/window-padding.lua
-[11:15:40.702][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.702][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/config/win32-system-backdrop.lua
-[11:15:40.702][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.702][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/config/background.lua
-[11:15:40.702][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.702][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/config/ui-key-cap-rendering.lua
-[11:15:40.702][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.702][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/config/quoted-dropped-files.lua
-[11:15:40.702][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.702][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/config/audible-bell.lua
-[11:15:40.702][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.702][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/config/visual-bell.lua
-[11:15:40.702][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.702][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/wezterm/init.lua
-[11:15:40.702][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.702][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/wezterm/mux/init.lua
-[11:15:40.702][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.702][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/wezterm/color/init.lua
-[11:15:40.702][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.702][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/wezterm/procinfo/init.lua
-[11:15:40.702][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.702][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/wezterm/time/init.lua
-[11:15:40.702][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.702][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/wezterm/gui/init.lua
-[11:15:40.702][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.702][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/wezterm/nerdfonts.lua
-[11:15:40.702][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.702][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/enum/copy-mode-assignment.lua
-[11:15:40.702][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.702][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/enum/key-assignment.lua
-[11:15:40.702][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.702][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/tab-information.lua
-[11:15:40.702][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.702][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/tls-domain-server.lua
-[11:15:40.702][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.702][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/local-process-info.lua
-[11:15:40.702][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.702][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/time.lua
-[11:15:40.702][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.702][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/mux-domain.lua
-[11:15:40.702][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.702][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/exec-domain.lua
-[11:15:40.702][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.702][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/pane.lua
-[11:15:40.702][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.703][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/url.lua
-[11:15:40.703][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.703][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/spawn-command.lua
-[11:15:40.703][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.703][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/window.lua
-[11:15:40.703][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.703][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/color.lua
-[11:15:40.703][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.703][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/pane-information.lua
-[11:15:40.703][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.703][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/mux-window.lua
-[11:15:40.703][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.703][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/ssh-domain.lua
-[11:15:40.703][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.703][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/tls-domain-client.lua
-[11:15:40.703][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.703][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/mux-tab.lua
-[11:15:40.703][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.703][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/wsl-domain.lua
-[11:15:40.703][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.703][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/events/gui.lua
-[11:15:40.703][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.704][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/events/window.lua
-[11:15:40.704][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.704][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/events/multiplexer.lua
-[11:15:40.704][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.704][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/wezterm.lua
-[11:15:40.704][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
-[11:15:40.704][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/io.lua
-[11:15:40.704][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/io.lua
-[11:15:40.704][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/builtin.lua
-[11:15:40.704][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/builtin.lua
-[11:15:40.704][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/coroutine.lua
-[11:15:40.704][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/coroutine.lua
-[11:15:40.704][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/basic.lua
-[11:15:40.704][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/basic.lua
-[11:15:40.704][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/package.lua
-[11:15:40.704][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/package.lua
-[11:15:40.704][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/math.lua
-[11:15:40.704][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/math.lua
-[11:15:40.704][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/utf8.lua
-[11:15:40.704][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/utf8.lua
-[11:15:40.704][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/string.lua
-[11:15:40.704][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/string.lua
-[11:15:40.704][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/debug.lua
-[11:15:40.704][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/debug.lua
-[11:15:40.704][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/table.lua
-[11:15:40.706][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/table.lua
-[11:15:40.706][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/os.lua
-[11:15:40.706][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/os.lua
-[11:15:40.706][info] [#0:script/workspace/loading.lua:172]: Loaded files takes [0.001] sec: <fallback>
-[11:15:40.706][info] [#0:script/workspace/loading.lua:181]: Compile files takes [0.000] sec: <fallback>
-[11:15:40.706][info] [#0:script/workspace/loading.lua:182]: Loaded finish:	<fallback>
-[11:15:40.706][info] [#0:script/workspace/workspace.lua:381]: Preload finish at:	<fallback>
+[15:47:50.988][info] [#0:script/library.lua:212]: Init builtin library at:	file:///Users/codethread/PersonalConfigs/.config/wezterm/.
+[15:47:51.007][info] [#0:script/library.lua:212]: Init builtin library at:	nil
+[15:47:51.014][warn] [#0:script/config/loader.lua:116]: No config?	nil
+[15:47:51.014][warn] [#0:script/config/loader.lua:116]: No config?	nil
+[15:47:51.014][info] [#0:script/provider/provider.lua:64]: Load config from client	fallback
+[15:47:51.014][info] [#0:script/provider/provider.lua:65]: nil
+[15:47:51.014][info] [#0:script/workspace/workspace.lua:324]: Preload start:	file:///Users/codethread/PersonalConfigs/.config/wezterm/.
+[15:47:51.015][info] [#0:script/workspace/workspace.lua:330]: Scan files at:	file:///Users/codethread/PersonalConfigs/.config/wezterm/.
+[15:47:51.015][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/os.lua
+[15:47:51.016][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/table.lua
+[15:47:51.016][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/debug.lua
+[15:47:51.016][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/string.lua
+[15:47:51.016][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/utf8.lua
+[15:47:51.016][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/math.lua
+[15:47:51.016][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/package.lua
+[15:47:51.016][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/basic.lua
+[15:47:51.016][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/coroutine.lua
+[15:47:51.016][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/builtin.lua
+[15:47:51.016][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/io.lua
+[15:47:51.016][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.017][info] [#0:script/workspace/workspace.lua:324]: Preload start:	<fallback>
+[15:47:51.018][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/os.lua
+[15:47:51.018][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/table.lua
+[15:47:51.018][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/debug.lua
+[15:47:51.018][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/string.lua
+[15:47:51.018][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/utf8.lua
+[15:47:51.019][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/math.lua
+[15:47:51.019][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/package.lua
+[15:47:51.019][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/basic.lua
+[15:47:51.019][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/coroutine.lua
+[15:47:51.019][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/builtin.lua
+[15:47:51.019][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/io.lua
+[15:47:51.019][info] [#0:script/workspace/workspace.lua:353]: Scan library at:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.020][info] [#0:script/workspace/workspace.lua:379]: Found 66 files at:	file:///Users/codethread/PersonalConfigs/.config/wezterm/.
+[15:47:51.020][info] [#0:script/workspace/loading.lua:160]: Load files from disk:	file:///Users/codethread/PersonalConfigs/.config/wezterm/.
+[15:47:51.020][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/init.lua , size = 22.310 KB
+[15:47:51.027][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.027][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/config/init.lua , size = 20.934 KB
+[15:47:51.031][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.031][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/config/daemon-options.lua , size = 0.632 KB
+[15:47:51.031][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.031][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/config/window-padding.lua , size = 0.963 KB
+[15:47:51.032][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.032][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/config/win32-system-backdrop.lua , size = 0.432 KB
+[15:47:51.032][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.032][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/config/background.lua , size = 2.873 KB
+[15:47:51.033][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.033][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/config/ui-key-cap-rendering.lua , size = 0.324 KB
+[15:47:51.033][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.033][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/config/quoted-dropped-files.lua , size = 0.529 KB
+[15:47:51.033][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.033][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/config/audible-bell.lua , size = 0.226 KB
+[15:47:51.033][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.034][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/config/visual-bell.lua , size = 0.889 KB
+[15:47:51.034][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.034][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/wezterm/init.lua , size = 10.067 KB
+[15:47:51.036][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.036][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/wezterm/mux/init.lua , size = 2.586 KB
+[15:47:51.038][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.038][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/wezterm/color/init.lua , size = 1.524 KB
+[15:47:51.038][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.039][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/wezterm/procinfo/init.lua , size = 0.173 KB
+[15:47:51.039][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.039][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/wezterm/time/init.lua , size = 0.576 KB
+[15:47:51.039][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.039][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/wezterm/gui/init.lua , size = 0.243 KB
+[15:47:51.039][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.040][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/wezterm/nerdfonts.lua , size = 327.719 KB
+[15:47:51.111][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.111][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/enum/copy-mode-assignment.lua , size = 0.759 KB
+[15:47:51.111][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.111][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/enum/key-assignment.lua , size = 7.309 KB
+[15:47:51.114][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.114][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/tab-information.lua , size = 0.542 KB
+[15:47:51.114][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.114][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/tls-domain-server.lua , size = 0.651 KB
+[15:47:51.114][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.114][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/local-process-info.lua , size = 1.198 KB
+[15:47:51.115][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.115][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/time.lua , size = 0.567 KB
+[15:47:51.115][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.115][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/mux-domain.lua , size = 1.866 KB
+[15:47:51.116][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.116][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/exec-domain.lua , size = 0.377 KB
+[15:47:51.116][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.116][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/pane.lua , size = 8.361 KB
+[15:47:51.118][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.118][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/url.lua , size = 0.618 KB
+[15:47:51.118][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.118][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/spawn-command.lua , size = 0.096 KB
+[15:47:51.118][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.118][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/window.lua , size = 8.009 KB
+[15:47:51.120][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.120][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/color.lua , size = 3.108 KB
+[15:47:51.121][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.121][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/pane-information.lua , size = 1.535 KB
+[15:47:51.121][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.121][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/mux-window.lua , size = 1.826 KB
+[15:47:51.122][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.122][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/ssh-domain.lua , size = 0.809 KB
+[15:47:51.122][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.122][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/tls-domain-client.lua , size = 2.096 KB
+[15:47:51.126][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.126][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/mux-tab.lua , size = 2.069 KB
+[15:47:51.127][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.127][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/wsl-domain.lua , size = 0.166 KB
+[15:47:51.127][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.127][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/events/gui.lua , size = 0.074 KB
+[15:47:51.127][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.127][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/events/window.lua , size = 0.293 KB
+[15:47:51.128][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.128][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/events/multiplexer.lua , size = 0.093 KB
+[15:47:51.128][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.128][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/wezterm.lua , size = 5.673 KB
+[15:47:51.129][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.130][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/io.lua , size = 6.566 KB
+[15:47:51.132][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/io.lua
+[15:47:51.132][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/builtin.lua , size = 0.302 KB
+[15:47:51.132][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/builtin.lua
+[15:47:51.132][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/coroutine.lua , size = 2.669 KB
+[15:47:51.133][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/coroutine.lua
+[15:47:51.133][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/basic.lua , size = 15.982 KB
+[15:47:51.137][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/basic.lua
+[15:47:51.137][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/package.lua , size = 3.050 KB
+[15:47:51.138][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/package.lua
+[15:47:51.138][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/math.lua , size = 8.825 KB
+[15:47:51.140][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/math.lua
+[15:47:51.140][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/utf8.lua , size = 2.447 KB
+[15:47:51.141][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/utf8.lua
+[15:47:51.141][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/string.lua , size = 6.547 KB
+[15:47:51.143][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/string.lua
+[15:47:51.143][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/debug.lua , size = 7.812 KB
+[15:47:51.145][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/debug.lua
+[15:47:51.145][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/table.lua , size = 4.341 KB
+[15:47:51.146][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/table.lua
+[15:47:51.146][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/os.lua , size = 5.863 KB
+[15:47:51.148][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/os.lua
+[15:47:51.148][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/PersonalConfigs/.config/wezterm/./test/wez_config.lua , size = 0.643 KB
+[15:47:51.148][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/PersonalConfigs/.config/wezterm/./test/types.lua , size = 3.683 KB
+[15:47:51.150][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/PersonalConfigs/.config/wezterm/./wezterm.lua , size = 1.752 KB
+[15:47:51.150][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/PersonalConfigs/.config/wezterm/./ct/keymaps.lua , size = 6.502 KB
+[15:47:51.153][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/PersonalConfigs/.config/wezterm/./ct/sessions.lua , size = 2.322 KB
+[15:47:51.154][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/PersonalConfigs/.config/wezterm/./ct/theme.lua , size = 1.628 KB
+[15:47:51.154][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/PersonalConfigs/.config/wezterm/./ct/fs.lua , size = 0.559 KB
+[15:47:51.155][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/PersonalConfigs/.config/wezterm/./ct/globals.lua , size = 0.439 KB
+[15:47:51.155][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/PersonalConfigs/.config/wezterm/./ct/setup.lua , size = 0.667 KB
+[15:47:51.156][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/PersonalConfigs/.config/wezterm/./ct/utils.lua , size = 0.894 KB
+[15:47:51.156][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/PersonalConfigs/.config/wezterm/./ct/ui.lua , size = 4.988 KB
+[15:47:51.158][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/PersonalConfigs/.config/wezterm/./ct/collections/Str.lua , size = 3.128 KB
+[15:47:51.159][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/PersonalConfigs/.config/wezterm/./ct/collections/Obj.lua , size = 0.376 KB
+[15:47:51.160][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/PersonalConfigs/.config/wezterm/./ct/collections/Arr.lua , size = 3.260 KB
+[15:47:51.161][info] [#0:script/workspace/loading.lua:100]: Preload file at: file:///Users/codethread/PersonalConfigs/.config/wezterm/./debug.lua , size = 0.461 KB
+[15:47:51.162][info] [#0:script/workspace/loading.lua:172]: Loaded files takes [0.137] sec: file:///Users/codethread/PersonalConfigs/.config/wezterm/.
+[15:47:51.162][info] [#0:script/workspace/loading.lua:181]: Compile files takes [0.000] sec: file:///Users/codethread/PersonalConfigs/.config/wezterm/.
+[15:47:51.162][info] [#0:script/workspace/loading.lua:182]: Loaded finish:	file:///Users/codethread/PersonalConfigs/.config/wezterm/.
+[15:47:51.162][info] [#0:script/workspace/workspace.lua:381]: Preload finish at:	file:///Users/codethread/PersonalConfigs/.config/wezterm/.
+[15:47:51.616][info] [#0:script/workspace/workspace.lua:379]: Found 51 files at:	<fallback>
+[15:47:51.616][info] [#0:script/workspace/loading.lua:160]: Load files from disk:	<fallback>
+[15:47:51.616][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/init.lua
+[15:47:51.616][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.616][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/config/init.lua
+[15:47:51.616][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.616][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/config/daemon-options.lua
+[15:47:51.616][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.616][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/config/window-padding.lua
+[15:47:51.616][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.616][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/config/win32-system-backdrop.lua
+[15:47:51.616][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.616][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/config/background.lua
+[15:47:51.616][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.616][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/config/ui-key-cap-rendering.lua
+[15:47:51.616][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.616][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/config/quoted-dropped-files.lua
+[15:47:51.616][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.616][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/config/audible-bell.lua
+[15:47:51.616][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.616][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/config/visual-bell.lua
+[15:47:51.616][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.616][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/wezterm/init.lua
+[15:47:51.616][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.616][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/wezterm/mux/init.lua
+[15:47:51.616][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.616][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/wezterm/color/init.lua
+[15:47:51.616][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.616][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/wezterm/procinfo/init.lua
+[15:47:51.616][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.616][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/wezterm/time/init.lua
+[15:47:51.616][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.616][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/wezterm/gui/init.lua
+[15:47:51.616][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.616][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/wezterm/nerdfonts.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.617][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/enum/copy-mode-assignment.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.617][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/enum/key-assignment.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.617][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/tab-information.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.617][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/tls-domain-server.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.617][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/local-process-info.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.617][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/time.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.617][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/mux-domain.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.617][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/exec-domain.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.617][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/pane.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.617][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/url.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.617][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/spawn-command.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.617][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/window.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.617][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/color.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.617][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/pane-information.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.617][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/mux-window.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.617][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/ssh-domain.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.617][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/tls-domain-client.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.617][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/mux-tab.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.617][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/objects/wsl-domain.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.617][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/events/gui.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.617][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/events/window.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.617][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/types/events/multiplexer.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.617][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/lazy/wezterm-types/wezterm.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/lazy/wezterm-types
+[15:47:51.617][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/io.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/io.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/builtin.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/builtin.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/coroutine.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/coroutine.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/basic.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/basic.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/package.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/package.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/math.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/math.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/utf8.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/utf8.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/string.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/string.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/debug.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/debug.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/table.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/table.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:88]: Skip loaded file: file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/os.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:112]: ++++As library of:	file:///Users/codethread/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua%205.4%20en-us%20utf8/os.lua
+[15:47:51.617][info] [#0:script/workspace/loading.lua:172]: Loaded files takes [0.001] sec: <fallback>
+[15:47:51.617][info] [#0:script/workspace/loading.lua:181]: Compile files takes [0.000] sec: <fallback>
+[15:47:51.617][info] [#0:script/workspace/loading.lua:182]: Loaded finish:	<fallback>
+[15:47:51.617][info] [#0:script/workspace/workspace.lua:381]: Preload finish at:	<fallback>
