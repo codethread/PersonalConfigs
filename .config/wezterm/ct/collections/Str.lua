@@ -1,7 +1,6 @@
 ---JavaScript - I love it
 ---@class Str
 ---@field private value string
----@operator call:Str
 local Str = {}
 
 ---Create String instance
@@ -90,7 +89,10 @@ function Str:trim() return Str.new(self.value:gsub('^%s*(.-)%s*$', '%1')) end
 
 function Str:to_string() return self.value end
 
-return setmetatable({}, {
+---@overload fun(tbl: string): Str
+local new = setmetatable({}, {
 	__call = function(_, tbl) return Str.new(tbl) end,
 	__index = Str,
 })
+
+return new

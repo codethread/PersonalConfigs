@@ -75,7 +75,7 @@ return {
 			print 'setup'
 			require('lint').linters_by_ft = {
 				fish = { 'fish' },
-				lua = { 'luacheck' },
+				-- lua = { 'luacheck' },
 				bash = { 'shellcheck' },
 				sh = { 'shellcheck' },
 				proto = { 'buf_lint' },

@@ -128,7 +128,10 @@ function Arr:find(predicate)
 	return nil
 end
 
-return setmetatable({}, {
+---@overload fun(tbl: unknown): Array
+local new = setmetatable({}, {
 	__call = function(_, tbl) return Arr.new(tbl) end,
 	__index = Arr,
 })
+
+return new

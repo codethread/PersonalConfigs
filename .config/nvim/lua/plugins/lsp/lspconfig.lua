@@ -35,18 +35,25 @@ return {
 				},
 				ft = 'lua', -- only load on lua files
 				opts = {
+					---@module "lazydev"
+					---@type lazydev.Library.spec[]
 					library = {
-						-- '/opt/homebrew/share/lua/5.4', -- luarocks wezterm
+						'/opt/homebrew/share/lua/5.4', -- luarocks wezterm
 						-- See the configuration section for more details
 						-- Load luvit types when the `vim.uv` word is found
 						{ path = 'luvit-meta/library', words = { 'vim%.uv' } },
-						{ path = 'wezterm-types', mods = { 'wezterm' } },
-						{ path = '~/PersonalConfigs/.config/wezterm', mods = { 'wezterm' } },
+						-- { path = 'wezterm-types', mods = { 'wezterm' } },
+						-- { path = '~/PersonalConfigs/.config/wezterm', mods = { 'wezterm' } },
 					},
-					-- disable when a .luarc.json file is found
-					-- enabled = function(root_dir)
-					-- 	return not vim.uv.fs_stat(root_dir .. '/.luarc.json')
-					-- end,
+					enabled = function(root_dir)
+						-- disable for wezterm config
+						if vim.uv.fs_stat(root_dir .. '/wezterm.lua') then return false end
+
+						-- disable when a .luarc.json file is found
+						if vim.uv.fs_stat(root_dir .. '/.luarc.json') then return false end
+
+						return true
+					end,
 				},
 			},
 			{ 'Bilal2453/luvit-meta', lazy = true },
@@ -100,6 +107,7 @@ return {
 				lua_ls = {
 					settings = {
 						Lua = {
+							hint = { enable = true },
 							workspace = {
 								checkThirdParty = false,
 							},
