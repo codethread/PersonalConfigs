@@ -1,5 +1,5 @@
 local wezterm = require 'wezterm' --[[@as Wezterm]]
-local fs = require 'ct.collections.fs'
+local _ = require '_'
 local M = {}
 
 function M.home(path) return os.getenv 'HOME' .. '/' .. path end
@@ -23,7 +23,7 @@ end
 
 function M.get_envs()
 	local target = wezterm.home_dir .. '/.config/envy/envs.json'
-	local raw = fs.readfile(target)
+	local raw = _.fs.readfile(target)
 	if not raw then error('could not load envs file: ' .. target) end
 	local envs = wezterm.json_parse(raw:trim():to_string())
 	if not envs then error('could not load envs file: ' .. target) end

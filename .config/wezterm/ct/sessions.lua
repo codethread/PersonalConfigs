@@ -29,7 +29,7 @@ local projects = utils.machine 'work'
 		},
 		{ 1, utils.home 'PersonalConfigs' },
 
-		{ 2, utils.home 'dev/projects/tstl-validate' },
+		{ 2, utils.home 'dev/projects/_lua' },
 		{ 3, utils.home 'dev/projects/tstl-result' },
 		{ 4, utils.home 'dev/projects/tstl-fn' },
 		-- { 3, utils.home 'dev/projects/pomo' },

@@ -38,12 +38,10 @@ return {
 					---@module "lazydev"
 					---@type lazydev.Library.spec[]
 					library = {
-						'/opt/homebrew/share/lua/5.4', -- luarocks wezterm
 						-- See the configuration section for more details
 						-- Load luvit types when the `vim.uv` word is found
 						{ path = 'luvit-meta/library', words = { 'vim%.uv' } },
-						-- { path = 'wezterm-types', mods = { 'wezterm' } },
-						-- { path = '~/PersonalConfigs/.config/wezterm', mods = { 'wezterm' } },
+						{ path = '~/PersonalConfigs/.config/wezterm/ct/collections' },
 					},
 					enabled = function(root_dir)
 						-- disable for wezterm config

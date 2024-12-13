@@ -212,6 +212,7 @@ end
 ---@return table
 function M.create_keymaps(custom_keys)
 	local keys = {}
+
 	-- Iterate over the keymaps table
 	for mods, keymap in pairs(custom_keys) do
 		for key, values in pairs(keymap) do

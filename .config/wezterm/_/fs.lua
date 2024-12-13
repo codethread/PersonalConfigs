@@ -1,4 +1,4 @@
-local Str = require 'ct.collections.Str'
+local str = require '_.str'
 local Fs = {}
 
 local cache = {}
@@ -17,7 +17,7 @@ function Fs.readfile(file, opts)
 	local content = f:read '*all'
 	if type(content) ~= 'string' then return nil end
 	f:close()
-	local out = Str(content)
+	local out = str(content)
 	cache[file] = out
 	return out
 end
