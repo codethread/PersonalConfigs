@@ -104,6 +104,7 @@ return {
 						run = 'onSave',
 					},
 				},
+				teal_ls = {},
 				lua_ls = {
 					settings = {
 						Lua = {

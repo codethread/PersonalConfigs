@@ -1,7 +1,7 @@
 local wezterm = require 'wezterm' --[[@as Wezterm]]
 local Str = require 'ct.collections.Str'
-local Arr = require 'ct.collections.Arr'
 local utils = require 'ct.utils'
+local u = require 'ct.collections.u'
 
 local act = wezterm.action
 
@@ -9,9 +9,9 @@ local M = {}
 
 M.runWorkProject = wezterm.action_callback(function(w, p)
 	local TARGET = 'work-web'
-	local sessions = Arr(wezterm.mux.get_workspace_names())
+	local sessions = wezterm.mux.get_workspace_names()
 
-	local running_session = sessions:find(function(s) return Str(s):starts_with(TARGET) end)
+	local running_session = u.find(sessions, function(s) return Str(s):starts_with(TARGET) end)
 
 	if running_session then
 		return w:perform_action(
@@ -22,9 +22,9 @@ M.runWorkProject = wezterm.action_callback(function(w, p)
 		)
 	end
 
-	local projects = Arr { 'deals-light-ui', 'fe-review', 'fe-native' }
+	local projects = { 'deals-light-ui', 'fe-review', 'fe-native' }
 
-	local choices = projects:map(function(label) return { label = label } end)
+	local choices = u.map(projects, function(label) return { label = label } end)
 
 	w:perform_action(
 		act.InputSelector {
