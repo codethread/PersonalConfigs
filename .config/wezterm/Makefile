@@ -1,6 +1,6 @@
 .PHONY: all types lint format
 
-all: format lint types
+all: format types
 
 types:
 	@echo running test

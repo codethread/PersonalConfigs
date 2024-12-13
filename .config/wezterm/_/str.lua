@@ -9,7 +9,6 @@ local str = {}
 ---@return Str
 function str.new(value)
 	if type(value) ~= 'string' then error 'value must be string,' end
-	---@type Str
 	local newStr = { value = value }
 	local obj = setmetatable(newStr, { __index = str })
 	return obj

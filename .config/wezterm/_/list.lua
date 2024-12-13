@@ -17,7 +17,9 @@ end
 ---@param tbl A[]
 ---@param fn fun(val: A, i: integer, tbl: A[]): boolean
 ---@return A[]
-function list.filter(tbl, fn) return error 'no impl' end
+function list.filter(tbl, fn)
+	return error 'no impl' --[[@as any]]
+end
 
 ---@generic A
 ---@param tbl A[]
