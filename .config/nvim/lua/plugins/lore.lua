@@ -156,9 +156,7 @@ return {
 				s = {
 					name = 'Search',
 					s = {
-						function()
-							require('telescope-live-grep-args.shortcuts').grep_visual_selection()
-						end,
+						function() require('telescope-live-grep-args.shortcuts').grep_visual_selection() end,
 						'live',
 					},
 					r = {

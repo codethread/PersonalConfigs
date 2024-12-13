@@ -63,6 +63,10 @@ return {
 							['<C-l>'] = actions.complete_tag,
 							['<C-_>'] = actions.which_key, -- keys from pressing <C-/>
 							['<M-p>'] = action_layout.toggle_preview,
+
+							['<C-i>'] = require('telescope-live-grep-args.actions').quote_prompt {
+								postfix = ' --iglob ',
+							},
 						},
 
 						n = {

@@ -4,6 +4,5 @@
 # e.g dotty completion zsh > "${ZDOTDIR}/completions/_dotty"
 # don't forget to run compinit after
 
-volta completions zsh > "${ZDOTDIR}/completions/_volta"
-dotty completion zsh > "${ZDOTDIR}/completions/_dotty"
-
+volta completions zsh >"${ZDOTDIR}/completions/_volta"
+dotty completion zsh >"${ZDOTDIR}/completions/_dotty"

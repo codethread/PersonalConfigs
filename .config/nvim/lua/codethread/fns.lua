@@ -42,7 +42,7 @@ vim.api.nvim_create_user_command(
 
 ---Save the current buffer, but also handles oil buffers
 function M.save_buffer()
-	local ft = U.ft()
+	local ft = vim.bo.filetype
 	if ft == 'oil' then
 		require('oil').save(nil, function(err)
 			if err then
@@ -61,7 +61,7 @@ function M.save_buffer()
 end
 
 function M.test_current_file()
-	local ft = U.ft()
+	local ft = vim.bo.filetype
 	if ft == 'lua' then
 		vim.cmd 'w'
 		-- require('plenary.test_harness').test_directory(vim.fn.expand '%:p')
@@ -108,6 +108,18 @@ function M.store_to_clipboard(str)
 	end
 	vim.cmd([[let @*="]] .. str .. '"')
 end
+
 function M.copy_filepath_relative() local p = vim.fn.expand '%:p' end
+
+function M.debounce(ms, fn)
+	local timer = vim.uv.new_timer()
+	return function(...)
+		local argv = { ... }
+		timer:start(ms, 0, function()
+			timer:stop()
+			vim.schedule_wrap(fn)(unpack(argv))
+		end)
+	end
+end
 
 return M

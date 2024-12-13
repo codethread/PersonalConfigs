@@ -22,13 +22,10 @@ return {
 					local rt = require 'rust-tools'
 					rt.inlay_hints.enable()
 
-					vim.api.nvim_create_autocmd(
-						{ 'BufWritePost', 'BufEnter', 'CursorHold', 'InsertLeave' },
-						{
-							buffer = bufnr,
-							callback = function() vim.lsp.codelens.refresh() end,
-						}
-					)
+					vim.api.nvim_create_autocmd({ 'BufWritePost', 'BufEnter', 'CursorHold', 'InsertLeave' }, {
+						buffer = bufnr,
+						callback = function() vim.lsp.codelens.refresh() end,
+					})
 				end
 			end)
 

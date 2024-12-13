@@ -5,7 +5,7 @@ return {
 		-- tag = 'legacy',
 		opts = {
 			progress = {
-				ignore = { 'null-ls' },
+				ignore = {},
 				display = {
 					done_icon = '✓',
 				},
@@ -35,16 +35,23 @@ return {
 				},
 				ft = 'lua', -- only load on lua files
 				opts = {
+					---@module "lazydev"
+					---@type lazydev.Library.spec[]
 					library = {
 						-- See the configuration section for more details
 						-- Load luvit types when the `vim.uv` word is found
 						{ path = 'luvit-meta/library', words = { 'vim%.uv' } },
-						{ path = 'wezterm-types', mods = { 'wezterm' } },
+						{ path = '~/PersonalConfigs/.config/wezterm/ct/collections' },
 					},
-					-- disable when a .luarc.json file is found
-					-- enabled = function(root_dir)
-					-- 	return not vim.uv.fs_stat(root_dir .. '/.luarc.json')
-					-- end,
+					enabled = function(root_dir)
+						-- disable for wezterm config
+						if vim.uv.fs_stat(root_dir .. '/wezterm.lua') then return false end
+
+						-- disable when a .luarc.json file is found
+						if vim.uv.fs_stat(root_dir .. '/.luarc.json') then return false end
+
+						return true
+					end,
 				},
 			},
 			{ 'Bilal2453/luvit-meta', lazy = true },
@@ -55,6 +62,7 @@ return {
 			'hrsh7th/nvim-cmp',
 			'hrsh7th/cmp-nvim-lsp',
 		},
+		---@diagnostic disable: missing-fields
 		---@class PluginLspOpts
 		opts = {
 			-- options for vim.diagnostic.config()
@@ -67,10 +75,7 @@ return {
 					-- lazy-load schemastore when needed
 					on_new_config = function(new_config)
 						new_config.settings.json.schemas = new_config.settings.json.schemas or {}
-						vim.list_extend(
-							new_config.settings.json.schemas,
-							require('schemastore').json.schemas()
-						)
+						vim.list_extend(new_config.settings.json.schemas, require('schemastore').json.schemas())
 					end,
 					settings = {
 						json = {
@@ -97,9 +102,11 @@ return {
 						run = 'onSave',
 					},
 				},
+				teal_ls = {},
 				lua_ls = {
 					settings = {
 						Lua = {
+							hint = { enable = true },
 							workspace = {
 								checkThirdParty = false,
 							},
@@ -116,6 +123,7 @@ return {
 									'Term',
 									'async',
 									'await',
+									'utf8',
 								},
 							},
 						},
@@ -130,7 +138,7 @@ return {
 				-- vim.print(client.server_capabilities)
 
 				if client.name == 'nushell' then
-					-- TODO these are brokded
+					-- TODO: these are brokded
 					vim.diagnostic.enable(false)
 				end
 				if not vim.list_contains({ 'nushell' }, client.name) then
@@ -159,30 +167,7 @@ return {
 				end
 			end)
 
-			local augroup = U.augroups.lsp_formatting
-
 			U.lsp_attach('*', function(client, bufnr)
-				if client.supports_method 'textDocument/formatting' then
-					local function format()
-						local map = {
-							-- lua = 'lua_ls',
-							gleam = 'gleam',
-						}
-						local formatter = map[U.ft()] or 'null-ls'
-						vim.print('formating with buffer: ' .. bufnr .. ' ' .. formatter)
-
-						vim.lsp.buf.format { bufnr = bufnr, name = formatter }
-					end
-
-					vim.api.nvim_buf_create_user_command(bufnr, 'Format', format, {})
-					vim.api.nvim_clear_autocmds { group = augroup, buffer = bufnr }
-					vim.api.nvim_create_autocmd('BufWritePre', {
-						group = augroup,
-						buffer = bufnr,
-						callback = format,
-					})
-				end
-
 				-- highlight on hover
 				if client.server_capabilities.documentHighlightProvider then
 					vim.api.nvim_create_augroup('lsp_document_highlight', { clear = true })
@@ -208,15 +193,12 @@ return {
 
 			local function setup(server)
 				local server_opts = vim.tbl_deep_extend('force', {
-					capabilities = vim.deepcopy(
-						require 'plugins.lsp.capabilities'(opts.capabilities)
-					),
+					capabilities = vim.deepcopy(require 'plugins.lsp.capabilities'(opts.capabilities)),
 				}, servers[server] or {})
 
 				-- disable snippets in autocomplete
 				-- TODO this is needed as true for JSONls, but if annoying will conditionally disable
-				server_opts.capabilities.textDocument.completion.completionItem.snippetSupport =
-					true
+				server_opts.capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 				if opts.setup[server] then
 					if opts.setup[server](server, server_opts) then return end
@@ -236,9 +218,7 @@ return {
 				if server_opts then
 					server_opts = server_opts == true and {} or server_opts
 					-- run manual setup if mason=false or if this is a server that cannot be installed with mason-lspconfig
-					if
-						server_opts.mason == false or not vim.tbl_contains(all_mslp_servers, server)
-					then
+					if server_opts.mason == false or not vim.tbl_contains(all_mslp_servers, server) then
 						setup(server)
 					else
 						ensure_installed[#ensure_installed + 1] = server

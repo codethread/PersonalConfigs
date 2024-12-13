@@ -86,16 +86,12 @@ return {
 								},
 								{
 									'o',
-									function()
-										require('typescript').actions.organizeImports { sync = true }
-									end,
+									function() require('typescript').actions.organizeImports { sync = true } end,
 									'organise imports',
 								},
 								{
 									',',
-									function()
-										require('typescript').actions.removeUnused { sync = true }
-									end,
+									function() require('typescript').actions.removeUnused { sync = true } end,
 									'Remove unused',
 								},
 							})

@@ -1,5 +1,5 @@
 local wezterm = require 'wezterm' --[[@as Wezterm]]
-local utils = require 'utils'
+local utils = require 'ct.utils'
 
 local M = {}
 
@@ -29,18 +29,25 @@ local projects = utils.machine 'work'
 		},
 		{ 1, utils.home 'PersonalConfigs' },
 
-		{ 2, utils.home 'dev/projects/git-buddy' },
-		{ 3, utils.home 'dev/projects/pomo' },
-		{ 4, utils.home 'dev/projects/qmk.nvim' },
-		{ 5, utils.home 'dev/projects/git-tools' },
+		{ 2, utils.home 'dev/projects/_lua' },
+		{ 3, utils.home 'dev/projects/tstl-result' },
+		{ 4, utils.home 'dev/projects/tstl-fn' },
+		-- { 3, utils.home 'dev/projects/pomo' },
+		-- { 5, utils.home 'dev/projects/git-tools' },
 
+		{ 8, utils.home 'dev/projects/qmk.nvim' },
 		{ 9, utils.home 'dev/projects/nuphy_firmware/keyboards/nuphy/halo75v2/ansi', 'nuphy' },
 	}
 
-print(projects)
+---@class Sessionizer
+---@field config any Override settings
+---@field show fun(): nil
+---@field show_active fun(): nil
+---@field switch_to_most_recent fun(): nil
+---@field apply_to_config fun(config: Config, default_bindings?: boolean): nil
 
 function M.sessionizer()
-	return wezterm.plugin.require 'https://github.com/mikkasendke/sessionizer.wezterm'
+	return wezterm.plugin.require 'https://github.com/mikkasendke/sessionizer.wezterm' --[[@as Sessionizer]]
 end
 
 ---comment

@@ -192,13 +192,10 @@ return {
 			-- :help ins-completion
 			-- U.keymap('i', '<C-Space>', '<C-x>')
 
-			U.keymap('i', '<C-Space>', complete { 'nvim_lsp' }, 'Cmp')
-
-			U.keymap('i', '<C-p>', complete 'luasnip')
-
-			U.keymap('i', '<C-f>', complete 'path')
-
-			U.keymap('i', '<C-n>', function()
+			U.keymap('i', '<C-Space><C-Space>', complete { 'nvim_lsp' }, 'Cmp')
+			U.keymap('i', '<C-Space><C-p>', complete 'luasnip')
+			U.keymap('i', '<C-Space><C-f>', complete 'path')
+			U.keymap('i', '<C-Space><C-n>', function()
 				cmp.complete {
 					config = {
 						sources = {

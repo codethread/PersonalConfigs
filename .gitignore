@@ -2,9 +2,10 @@
 .config/exercism
 .config/yarn
 
-.config/kitty/kitty.conf.bak 
+.config/kitty/kitty.conf.bak
 .luarc.json
 brain.md
+reports
 
 node_modules
 bun.lockb
