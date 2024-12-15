@@ -14,10 +14,10 @@ function str.new(value)
 	return obj
 end
 
----Does Str contain subtring
+---Does Str include subtring
 ---@param substring string
 ---@return boolean
-function str:contains(substring) return self.value:find(substring, 1, true) ~= nil end
+function str:includes(substring) return self.value:find(substring, 1, true) ~= nil end
 
 ---@param start string
 ---@return boolean
@@ -85,6 +85,19 @@ function str:to_lower_case() return str.new(self.value:lower()) end
 ---Method to mimic JavaScript's String.prototype.trim
 ---@return Str A new String object with whitespace removed from both ends
 function str:trim() return str.new(self.value:gsub('^%s*(.-)%s*$', '%1')) end
+
+---Split a string on a delimiter
+---@param sep string
+---@return string[]
+function str:split(sep)
+	assert(sep, 'missing separator argument')
+
+	local result = {}
+	for part in string.gmatch(self.value, '([^' .. sep .. ']+)') do
+		table.insert(result, part)
+	end
+	return result
+end
 
 function str:to_string() return self.value end
 

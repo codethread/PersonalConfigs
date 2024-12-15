@@ -16,11 +16,30 @@
 print '--|  LOADING   |--'
 
 local wezterm = require 'wezterm' --[[@as Wezterm]]
+local config = wezterm.config_builder()
 
-local _, err = pcall(function() require('ct.globals').setup() end)
-if err then wezterm.log_error(err) end
+---Not present in wezterm, but if using things from luarocks, they may expect this
+debug = require 'debug'
 
-local ok, config_or_err = pcall(function() return require('ct.setup').setup() end)
+local ok, config_or_err = pcall(function()
+	local utils = require 'ct.utils'
+
+	config.set_environment_variables = utils.get_envs()
+	config.default_prog = { 'nu', '-l' }
+	-- not sure if this will be annoying
+	config.exit_behavior = 'CloseOnCleanExit'
+
+	local file_handlers = require 'ct.filehandlers'
+	file_handlers.apply_to_config(config)
+	local ui = require 'ct.ui'
+	ui.apply_to_config(config)
+	local sessions = require 'ct.sessions'
+	sessions.apply_to_config(config)
+	local keymaps = require 'ct.keymaps'
+	keymaps.apply_to_config(config)
+
+	return config
+end)
 
 -- config_or_err.automatically_reload_config = false
 

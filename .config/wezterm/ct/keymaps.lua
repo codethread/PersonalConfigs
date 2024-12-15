@@ -1,5 +1,7 @@
+---@diagnostic disable: param-type-mismatch
 local wezterm = require 'wezterm' --[[@as Wezterm]]
 local actions = require 'ct.actions'
+local _ = require '_'
 local act = wezterm.action
 local utils = require 'ct.utils'
 
@@ -17,10 +19,20 @@ local keymaps = {
 		},
 	},
 	LEADER = {
+		['s'] = {
+			action = actions.open_file_in_nvim,
+		},
 		[';'] = act.ActivateCommandPalette,
 
 		[' '] = {
-			action = act.TogglePaneZoomState,
+			action = wezterm.action_callback(function(win, pane)
+				-- if only one pane, create a split instead of doing nothing
+				if #win:active_tab():panes() > 1 then
+					return win:perform_action(act.TogglePaneZoomState, pane)
+				else
+					return win:perform_action(act.SplitHorizontal { domain = 'CurrentPaneDomain' }, pane)
+				end
+			end),
 		},
 
 		['I'] = {
@@ -159,12 +171,8 @@ local M = {}
 function M.apply_to_config(config)
 	config.leader = { key = 'a', mods = 'CTRL', timeout_milliseconds = 1000 }
 
-	Try {
-		function()
-			local smart_splits = wezterm.plugin.require 'https://github.com/mrjones2014/smart-splits.nvim'
-			smart_splits.apply_to_config(config, { log_level = 'warn' })
-		end,
-	}
+	local smart_splits = wezterm.plugin.require 'https://github.com/mrjones2014/smart-splits.nvim'
+	smart_splits.apply_to_config(config, { log_level = 'warn' })
 
 	local keys = M.create_keymaps(keymaps)
 

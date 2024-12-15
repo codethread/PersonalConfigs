@@ -9,7 +9,6 @@ function M.bin(b) return '/opt/homebrew/bin/' .. b end
 ---@return boolean
 function M.machine(current)
 	local user = M.get_envs().CT_USER
-	print('user: ', user)
 	return current == user
 end
 
@@ -29,5 +28,7 @@ function M.get_envs()
 	if not envs then error('could not load envs file: ' .. target) end
 	return envs
 end
+
+function M.notify(window, msg, info) window:toast_notification(msg, info, nil, 4000) end
 
 return M

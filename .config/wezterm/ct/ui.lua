@@ -4,57 +4,6 @@ local theme = require 'ct.theme'
 
 local M = {}
 
--- It prefers the title that was set via `tab:set_title()` but falls back
--- to the title of the active pane in that tab.
---
--- https://wezfurlong.org/wezterm/config/lua/window-events/format-tab-title.html
-local function format_tabs()
-	---@param tab_info TabInformation
-	local function tab_title(tab_info)
-		local title = tab_info.tab_title
-		local z = tab_info.active_pane.is_zoomed and '+ ' or ''
-		if title and #title > 0 then return title .. z end
-		return tab_info.active_pane.title .. z
-	end
-
-	wezterm.on('format-tab-title', function(tab, tabs, panes, config, hover, max_width)
-		local title = tab_title(tab)
-		if tab.is_active then
-			return wezterm.format {
-				-- { Background = { Color = 'blue' } },
-				-- { Text = ' ' .. title .. ' ' },
-				{ Attribute = { Intensity = 'Bold' } },
-				{ Text = title },
-			}
-		end
-		return wezterm.format {
-			{ Text = title },
-		}
-	end)
-end
-
---- https://wezfurlong.org/wezterm/config/appearance.html#native-fancy-tab-bar-appearance
-local format = {
-	---@param config Config
-	fancy = function(config)
-		-- config.show_close_tab_button_in_tabs = false
-		config.tab_bar_at_bottom = false
-		config.use_fancy_tab_bar = true
-		config.window_frame = {
-			font = config.font,
-			font_size = config.font_size,
-			active_titlebar_bg = theme.colors.background,
-			inactive_titlebar_bg = theme.colors.background,
-		}
-	end,
-	---@param config Config
-	retro = function(config)
-		config.tab_bar_at_bottom = false
-		config.tab_max_width = 100 -- non-fancy
-		config.use_fancy_tab_bar = false
-	end,
-}
-
 local SIZE = {
 	LARGE = 'large',
 	CRISP = 'CRISP',
@@ -62,11 +11,10 @@ local SIZE = {
 
 ---Update Ui elements that require screen info (only assesible in callback at
 ---this time)
----
 ---@param window Window
----@param pane Pane
-local function update_ui(window, pane)
+local function update_font_config(window)
 	if not window:is_focused() then return end
+
 	local gui = wezterm.gui
 	if gui then
 		local dpi = gui.screens().main.effective_dpi > 100 and SIZE.CRISP or SIZE.LARGE
@@ -125,6 +73,7 @@ end
 
 ---@param config Config
 function M.apply_to_config(config)
+	config.max_fps = 120
 	config.window_decorations = 'RESIZE'
 	-- config.tab_and_split_indices_are_zero_based = true
 	config.line_height = 1
@@ -158,13 +107,35 @@ function M.apply_to_config(config)
 	config.command_palette_fg_color = theme.colors.foreground
 	config.command_palette_font_size = config.font_size + 2
 
-	format.fancy(config)
-
-	format_tabs()
+	M.format.fancy(config)
 end
 
-wezterm.on('window-focus-changed', update_ui)
-wezterm.on('window-config-reloaded', update_ui)
+wezterm.on('window-focus-changed', update_font_config)
+wezterm.on('window-config-reloaded', update_font_config)
+
+wezterm.on('format-tab-title', function(tab)
+	-- It prefers the title that was set via `tab:set_title()` but falls back
+	-- to the title of the active pane in that tab.
+	--
+	-- https://wezfurlong.org/wezterm/config/lua/window-events/format-tab-title.html
+
+	local title
+	do -- create tab title
+		local tt = tab.tab_title
+		local is_zoomed = tab.active_pane.is_zoomed and '+ ' or ''
+		if tt and #tt > 0 then
+			title = tt .. is_zoomed
+		else
+			title = tab.active_pane.title .. is_zoomed
+		end
+	end
+
+	return wezterm.format {
+		{ Attribute = { Intensity = tab.is_active and 'Bold' or 'Normal' } },
+		{ Text = title },
+	}
+end)
+
 wezterm.on('update-right-status', function(window, _)
 	local name = window:mux_window():get_workspace()
 	local text = wezterm.nerdfonts.md_folder_marker .. ' ' .. name .. '  '
@@ -206,5 +177,28 @@ wezterm.on('update-right-status', function(window, _)
 		{ Text = window:leader_is_active() and '' or '' },
 	})
 end)
+
+---https://wezfurlong.org/wezterm/config/appearance.html#native-fancy-tab-bar-appearance
+---@package
+M.format = {
+	---@param config Config
+	fancy = function(config)
+		-- config.show_close_tab_button_in_tabs = false
+		config.tab_bar_at_bottom = false
+		config.use_fancy_tab_bar = true
+		config.window_frame = {
+			font = config.font,
+			font_size = config.font_size,
+			active_titlebar_bg = theme.colors.background,
+			inactive_titlebar_bg = theme.colors.background,
+		}
+	end,
+	---@param config Config
+	retro = function(config)
+		config.tab_bar_at_bottom = false
+		config.tab_max_width = 100 -- non-fancy
+		config.use_fancy_tab_bar = false
+	end,
+}
 
 return M
