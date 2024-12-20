@@ -1,4 +1,4 @@
-;; extends
+; inherits: ecma
 
 ;; imports, just named for now, e.g import {foo, baz} from 'bar'
 (named_imports
