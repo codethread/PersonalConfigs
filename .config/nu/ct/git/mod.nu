@@ -71,8 +71,8 @@ export def gnah [] {
 }
 
 export def gnew [name: string] {
-	if ($name | split chars | length) > 52 { 
-		error { msg: "branch name can't exceed 52 chars!", label: { text: "branch", span: (metadata $name).span } } 
+	if ($name | split chars | length) > 52 {
+		error make { msg: "branch name can't exceed 52 chars!", label: { text: "branch", span: (metadata $name).span } }
 	}
 	let trunk = (git_main_branch)
 	let target = $"($trunk):($trunk)"
@@ -100,7 +100,7 @@ export def gls [] {
 }
 
 export def gundo [] {
-	git reset --soft HEAD~1 
+	git reset --soft HEAD~1
 	git restore --staged .
 }
 
@@ -116,7 +116,7 @@ export def gchanged [
 }
 
 export def git_reset_files [...files: string] {
-	$files | each {|f| 
+	$files | each {|f|
 		let c = $"git checkout origin/develop ($f)"
 		print $c
 		zsh -c $c
@@ -142,8 +142,4 @@ export def git_squash [
 # check for unstaged or uncommitted changes
 export def git_is_dirty [] {
 	git status --short | is-not-empty
-}
-
-export def "git go" [] {
-	^git push --no-verify --force-with-lease
 }

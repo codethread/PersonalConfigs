@@ -8,6 +8,11 @@ export def cmds [] {
 	help commands | where command_type == "custom" | reject params
 }
 
+# checks if `cmd` is an alias or command and returns appropriate info
+export def what [...cmd: string] {
+	help --find ($cmd | str join " ")
+}
+
 export def nud [] {
 	let val = $in;
 	print $val;

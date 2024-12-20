@@ -154,3 +154,5 @@ export alias gams = git am --skip
 export alias gama = git am --abort
 export alias gamscp = git am --show-current-patch
 
+export alias "git go" = git push --no-verify --force-with-lease
+

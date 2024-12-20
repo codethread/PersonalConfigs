@@ -24,13 +24,17 @@ alias vo = ls
 # WEZTERM
 # -------------------------------------------#
 
-def wez_debug [--open] { 
-	let f = ls ~/.local/share/wezterm/ | sort-by modified | last 
+def wez_debug [--open] {
+	let f = ls ~/.local/share/wezterm/ | sort-by modified | last
 	if $open {
 		nvim $f.name
 	} else {
-		tail -f $f.name 
+		tail -f $f.name
 	}
+}
+
+def wez_emit [blob] {
+	printf $"\\033]1337;SetUserVar=event=($blob | to json | base64)\\007"
 }
 
 #---------------------------------------------#
@@ -113,17 +117,17 @@ export def slacky [] {
 	mkdir $target
 	let p = op-goog-auth
 	hide-all {
-		(deno run 
-			--allow-env 
-			--allow-read 
-			--allow-write=/var/folders 
-			--allow-net=127.0.0.1 
+		(deno run
+			--allow-env
+			--allow-read
+			--allow-write=/var/folders
+			--allow-net=127.0.0.1
 			--allow-run="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 			~/PersonalConfigs/_scripts/getSlackCreds.ts
-			--email adam.hall@perkbox.com 
+			--email adam.hall@perkbox.com
 			--password $p
 			--domain https://perkbox.slack.com)
-	} | from json 
+	} | from json
 	| save ([$target slack.json] | path join)
 }
 
@@ -154,9 +158,9 @@ export def hide-all [closure: closure] {
 		HUSKY
 	]
 
-	let hidden = ($env 
-		| transpose name value 
-		| filter {|e| 
+	let hidden = ($env
+		| transpose name value
+		| filter {|e|
 			$allow | any {|s| $e.name starts-with $s } | $in == false
 		}
 		| get name)
