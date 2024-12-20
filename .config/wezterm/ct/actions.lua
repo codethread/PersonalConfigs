@@ -1,5 +1,6 @@
 local wezterm = require 'wezterm' --[[@as Wezterm]]
 local utils = require 'ct.utils'
+local switch_workspace = require('ct.sessions').switch_workspace
 local _ = require '_'
 
 local act = wezterm.action
@@ -14,7 +15,7 @@ M.runWorkProject = wezterm.action_callback(function(w, p)
 
 	if running_session then
 		return w:perform_action(
-			act.SwitchToWorkspace {
+			switch_workspace {
 				name = running_session,
 			},
 			p
@@ -31,17 +32,17 @@ M.runWorkProject = wezterm.action_callback(function(w, p)
 			fuzzy_description = wezterm.format {
 				{ Attribute = { Intensity = 'Bold' } },
 				{ Foreground = { AnsiColor = 'Fuchsia' } },
-				{ Text = 'foo bar' },
+				{ Text = 'Run project:' },
 			},
 			choices = choices,
 			action = wezterm.action_callback(
 				function(w1, p1, _, line)
 					w1:perform_action(
-						act.SwitchToWorkspace {
+						switch_workspace {
 							name = TARGET .. '-' .. line,
 							spawn = {
 								cwd = utils.home('work/' .. line),
-								args = { 'testy' },
+								args = { 'fe-app-start' },
 							},
 						},
 						p1
@@ -120,7 +121,7 @@ M.quick_select_file_for_editor = wezterm.action_callback(function(win, pane)
 		win:perform_action(
 			act.QuickSelectArgs {
 				patterns = {
-					'[a-zA-Z\\.-_/]*[\\./][a-zA-Z\\.-_/:]*',
+					'[a-zA-Z0-9\\.-_/]*[\\./][a-zA-Z0-9\\.-_/:]*\\s',
 				},
 				action = wezterm.action_callback(function(window, p)
 					local url = window:get_selection_text_for_pane(p)
@@ -159,5 +160,52 @@ function M.open_in_nvim(window, file, line, col)
 		nvim_pane:send_text(':e ' .. file .. '\r')
 	end
 end
+
+M.open_scrollback_in_nvim = wezterm.action_callback(function(win, pane)
+	local neovim_padding = 8
+	local pane_d = pane:get_dimensions()
+
+	-- Retrieve the text from the pane
+	local text = pane:get_lines_as_text(pane_d.scrollback_rows)
+
+	-- Create a temporary file to pass to vim
+	local name = os.tmpname() .. '.log'
+	local f = io.open(name, 'w+')
+	if not f then return end
+	f:write(text)
+	f:flush()
+	f:close()
+
+	-- set the new window size (via initial size values)
+	local o = win:get_config_overrides()
+	o.initial_cols = pane_d.cols + neovim_padding
+	o.initial_rows = pane_d.viewport_rows
+	win:set_config_overrides(o)
+
+	-- get size of current display in order to center the new screen
+	-- there isn't any builtin way to get x,y pos of win or pane so we'll just center
+	-- good get cute and infer which pane is active, and based on my common use cases, position it
+	---@type { width: number, height: number }
+	local screen = wezterm.gui.screens().active
+	local pos_x = math.floor((screen.width / 2) - (pane_d.pixel_width / 2))
+	local pos_y = math.floor((screen.height / 2) - (pane_d.pixel_height / 2))
+
+	-- Open nvim and scroll to bottom
+	win:perform_action(
+		act.SpawnCommandInNewWindow {
+			args = { 'nvim', name, '+$' },
+			position = {
+				x = pos_x,
+				y = pos_y,
+			},
+		},
+		pane
+	)
+
+	-- Wait "enough" time for vim to read the file before we remove it to avoid
+	-- cluttering up the temporary directory.
+	wezterm.sleep_ms(1000)
+	os.remove(name)
+end)
 
 return M

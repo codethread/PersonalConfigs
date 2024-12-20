@@ -10,7 +10,7 @@ function M.apply_to_config(config)
 	config.hyperlink_rules = wezterm.default_hyperlink_rules()
 
 	table.insert(config.hyperlink_rules, {
-		regex = '[/.A-Za-z0-9_-]+\\.[A-Za-z0-9]+(:\\d+)*(?=\\s*|$)',
+		regex = '[/.A-Za-z0-9_-]+\\.[A-Za-z0-9-_]+(:\\d+)*(?=\\s*|$)',
 		format = '$EDITOR://$0',
 	})
 end

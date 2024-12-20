@@ -1,6 +1,7 @@
 ---@diagnostic disable: missing-fields
 local wezterm = require 'wezterm' --[[@as Wezterm]]
 local theme = require 'ct.theme'
+local _ = require '_'
 
 local M = {}
 
@@ -22,48 +23,17 @@ local function update_font_config(window)
 		local overrides = window:get_config_overrides() or {}
 		if dpi == SIZE.CRISP then
 			overrides.font_size = 14.0
-			overrides.line_height = 1.2
-			overrides.harfbuzz_features = {
-				'salt=2',
-				'cv01=1',
-				'cv02=1',
-				'cv06=1',
-				'cv14=1',
-				'+zero',
-				'+onum',
-				'+ss04',
-				'cv18=1',
-				'cv30=1',
-				'+ss09',
-				'+ss07',
-			}
-			overrides.underline_position = -4
 		else
-			overrides.font_size = 14.0
-			overrides.line_height = 1.0
-			-- overrides.underline_position = nil
-			-- overrides.underline_position = -2
-			overrides.harfbuzz_features = {
-				-- 'calt=0',
-				-- 'clig=0',
-				-- 'liga=0',
-
-				'salt=2',
-				'cv01=1',
-				'cv02=1',
-				'cv06=1',
-				'cv14=1',
-				'+zero',
-				'+onum',
-				'+ss04',
-				'cv18=1',
-				'cv30=1',
-				'+ss09',
-				'+ss07',
-			}
+			overrides.font_size = 16.0
+			-- overrides.dpi = 109
 		end
-		-- NOTE: probably just want to hash function changes
-		local overrides_hash = wezterm.json_encode { [dpi] = overrides }
+
+		overrides.command_palette_font_size = overrides.font_size + 2
+
+		local overrides_hash = wezterm.json_encode {
+			[dpi] = _.obj.pick(overrides, { 'font_size', 'command_palette_font_size' }),
+		}
+
 		if wezterm.GLOBAL.overrides_hash == overrides_hash then return end
 		print('font changes', overrides)
 		wezterm.GLOBAL.overrides_hash = overrides_hash
@@ -76,7 +46,6 @@ function M.apply_to_config(config)
 	config.max_fps = 120
 	config.window_decorations = 'RESIZE'
 	-- config.tab_and_split_indices_are_zero_based = true
-	config.line_height = 1
 	config.window_padding = {
 		left = 4,
 		right = 4,
@@ -87,17 +56,30 @@ function M.apply_to_config(config)
 		saturation = 1,
 		brightness = 0.9,
 	}
-	config.underline_position = -4 -- seems to mess with fonts
 	-- config.underline_thickness = 2 -- weird
 
 	config.font_size = 14.0
+	config.line_height = 1.2
+	config.underline_position = -4
+
 	-- wezterm ls-fonts --list-system
-	config.font = wezterm.font {
-		-- family = 'Liga Hack',
-		family = 'FiraCode Nerd Font',
-		-- family = 'FiraCode Nerd Font Mono',
-		-- family = 'FiraCode Nerd Font Propo',
-		weight = 'Medium',
+
+	-- config.font = wezterm.font('JetBrains Mono', { weight = 'DemiBold' })
+	-- config.font = wezterm.font { family = 'FiraCode Nerd Font', weight = 'DemiBold' }
+	config.font = wezterm.font 'Fira Code'
+	config.harfbuzz_features = {
+		'salt=2',
+		'cv01=1',
+		'cv02=1',
+		'cv06=1',
+		'cv14=1',
+		'+zero',
+		'+onum',
+		'+ss04',
+		'cv18=1',
+		'cv30=1',
+		'+ss09',
+		'+ss07',
 	}
 
 	config.color_scheme = 'rose-pine-moon'
@@ -105,7 +87,6 @@ function M.apply_to_config(config)
 
 	config.command_palette_bg_color = theme.palette.overlay
 	config.command_palette_fg_color = theme.colors.foreground
-	config.command_palette_font_size = config.font_size + 2
 
 	M.format.fancy(config)
 end
@@ -137,7 +118,11 @@ wezterm.on('format-tab-title', function(tab)
 end)
 
 wezterm.on('update-right-status', function(window, _)
-	local name = window:mux_window():get_workspace()
+	local ok, name = pcall(function() return window:mux_window():get_workspace() end)
+	if not ok then
+		-- can fail when a window is closed
+		return
+	end
 	local text = wezterm.nerdfonts.md_folder_marker .. ' ' .. name .. '  '
 
 	window:set_left_status(wezterm.format {

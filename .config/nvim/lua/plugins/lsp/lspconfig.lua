@@ -30,7 +30,7 @@ return {
 				'folke/lazydev.nvim',
 				dependencies = {
 					{ 'gonstoll/wezterm-types', lazy = true }, -- update of below
-					-- { 'justinsgithub/wezterm-types', lazy = true },
+					{ 'justinsgithub/wezterm-types', lazy = true },
 					{ 'Bilal2453/luvit-meta', lazy = true },
 				},
 				ft = 'lua', -- only load on lua files
@@ -41,12 +41,9 @@ return {
 						-- See the configuration section for more details
 						-- Load luvit types when the `vim.uv` word is found
 						{ path = 'luvit-meta/library', words = { 'vim%.uv' } },
-						{ path = '~/PersonalConfigs/.config/wezterm/ct/collections' },
+						{ path = 'wezterm-types', mods = { 'wezterm' } },
 					},
 					enabled = function(root_dir)
-						-- disable for wezterm config
-						if vim.uv.fs_stat(root_dir .. '/wezterm.lua') then return false end
-
 						-- disable when a .luarc.json file is found
 						if vim.uv.fs_stat(root_dir .. '/.luarc.json') then return false end
 

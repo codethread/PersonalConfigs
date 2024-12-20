@@ -29,6 +29,7 @@ local ok, config_or_err = pcall(function()
 	-- not sure if this will be annoying
 	config.exit_behavior = 'CloseOnCleanExit'
 
+	require 'ct.events'
 	local file_handlers = require 'ct.filehandlers'
 	file_handlers.apply_to_config(config)
 	local ui = require 'ct.ui'
@@ -45,7 +46,6 @@ end)
 
 if not ok then
 	wezterm.log_error(config_or_err --[[@as string]])
-	local config = wezterm.config_builder()
 
 	config.max_fps = 120
 	config.leader = { key = 'a', mods = 'CTRL', timeout_milliseconds = 1000 }
@@ -79,3 +79,11 @@ else
 	print '--| LOADED |--'
 	return config_or_err
 end
+
+---@class WezGlobal
+---@field sessions? { current: 'a'|'b', a: string, b: string } Stored sessions for toggling
+---@field overrides_hash? string Stored overrides for checking changes between update events
+
+---@class Wezterm
+---@diagnostic disable-next-line: duplicate-doc-field
+---@field GLOBAL WezGlobal

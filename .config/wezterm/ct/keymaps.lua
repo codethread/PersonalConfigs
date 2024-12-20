@@ -4,12 +4,15 @@ local actions = require 'ct.actions'
 local _ = require '_'
 local act = wezterm.action
 local utils = require 'ct.utils'
+local switch_workspace = require('ct.sessions').switch_workspace
+local switch_last_workspace = require('ct.sessions').switch_last_workspace
+local sessionizer = require('ct.sessions').sessionizer
 
 -- https://wezfurlong.org/wezterm/config/keys.html#configuring-key-assignments
 local keymaps = {
 	CMD = {
 		[','] = {
-			action = act.SwitchToWorkspace {
+			action = switch_workspace {
 				name = 'wez',
 				spawn = {
 					cwd = utils.home 'PersonalConfigs/.config/wezterm',
@@ -19,9 +22,8 @@ local keymaps = {
 		},
 	},
 	LEADER = {
-		['s'] = {
-			action = actions.open_file_in_nvim,
-		},
+		['/'] = { action = actions.open_file_in_nvim },
+		['?'] = { action = actions.quick_select_file_for_editor },
 		[';'] = act.ActivateCommandPalette,
 
 		[' '] = {
@@ -46,86 +48,51 @@ local keymaps = {
 			end),
 		},
 
-		['c'] = {
-			action = act.SpawnTab 'CurrentPaneDomain',
-		},
-		['x'] = {
-			action = act.CloseCurrentPane { confirm = true },
-		},
-		['n'] = {
-			action = act.SpawnTab 'CurrentPaneDomain',
-		},
+		['c'] = { action = act.SpawnTab 'CurrentPaneDomain' },
+		['x'] = { action = act.CloseCurrentPane { confirm = true } },
+		['n'] = { action = act.SpawnTab 'CurrentPaneDomain' },
 
-		['|'] = {
-			action = act.SplitHorizontal { domain = 'CurrentPaneDomain' },
-		},
-		['-'] = {
-			action = act.SplitVertical { domain = 'CurrentPaneDomain' },
-		},
+		['|'] = { action = act.SplitHorizontal { domain = 'CurrentPaneDomain' } },
+		['-'] = { action = act.SplitVertical { domain = 'CurrentPaneDomain' } },
 
 		['b'] = {
-			action = act.PaneSelect {
-				mode = 'MoveToNewTab',
-			},
+			action = act.PaneSelect { mode = 'MoveToNewTab' },
 		},
 
-		['h'] = {
-			action = act.ActivatePaneDirection 'Left',
-		},
-		['j'] = {
-			action = act.ActivatePaneDirection 'Down',
-		},
-		['k'] = {
-			action = act.ActivatePaneDirection 'Up',
-		},
-		['l'] = {
-			action = act.ActivatePaneDirection 'Right',
-		},
+		['h'] = { action = act.ActivatePaneDirection 'Left' },
+		['j'] = { action = act.ActivatePaneDirection 'Down' },
+		['k'] = { action = act.ActivatePaneDirection 'Up' },
+		['l'] = { action = act.ActivatePaneDirection 'Right' },
 
-		['LeftArrow'] = {
-			action = act.AdjustPaneSize { 'Left', 5 },
-		},
-		['RightArrow'] = {
-			action = act.AdjustPaneSize { 'Right', 5 },
-		},
-		['DownArrow'] = {
-			action = act.AdjustPaneSize { 'Down', 5 },
-		},
-		['UpArrow'] = {
-			action = act.AdjustPaneSize { 'Up', 5 },
-		},
+		['LeftArrow'] = { action = act.AdjustPaneSize { 'Left', 5 } },
+		['RightArrow'] = { action = act.AdjustPaneSize { 'Right', 5 } },
+		['DownArrow'] = { action = act.AdjustPaneSize { 'Down', 5 } },
+		['UpArrow'] = { action = act.AdjustPaneSize { 'Up', 5 } },
 
-		['{'] = {
-			action = act.RotatePanes 'CounterClockwise',
-		},
-		['}'] = {
-			action = act.RotatePanes 'Clockwise',
-		},
+		['{'] = { action = act.RotatePanes 'CounterClockwise' },
+		['}'] = { action = act.RotatePanes 'Clockwise' },
 
-		['S'] = {
+		['s'] = {
 			action = act.PaneSelect {
 				mode = 'SwapWithActiveKeepFocus', -- 'SwapWithActive'
 			},
 		},
-		['['] = {
-			action = act.ActivateCopyMode,
+		['['] = { action = act.ActivateCopyMode },
+		['w'] = { action = actions.runWorkProject },
+		['W'] = {
+			action = switch_workspace {
+				name = 'work-native',
+				spawn = {
+					args = { 'fe-native-start' },
+				},
+			},
 		},
-		w = {
-			action = actions.runWorkProject,
-		},
-		f = {
-			action = require('ct.sessions').sessionizer().show,
-		},
-		['p'] = {
-			action = require('ct.sessions').sessionizer().show_active,
-		},
-		['Tab'] = {
-			action = require('ct.sessions').sessionizer().switch_to_most_recent,
-		},
+		['f'] = { action = sessionizer().show },
+		['p'] = { action = sessionizer().show_active },
+		['Tab'] = { action = sessionizer().switch_to_most_recent },
+		['e'] = { action = actions.open_scrollback_in_nvim },
 
-		['Backspace'] = {
-			action = act.CloseCurrentTab { confirm = false },
-		},
+		['Backspace'] = { action = act.CloseCurrentTab { confirm = false } },
 
 		-- ['o'] = {
 		-- 	-- close other panes
@@ -154,13 +121,15 @@ local keymaps = {
 		},
 	},
 
+	['CTRL'] = {
+		['Tab'] = { action = switch_last_workspace() },
+	},
+
 	['LEADER|CTRL'] = {
 		-- assumes leader is also ctrl-a
 		-- mimics tmux behaviour of sending ctrl-a if hit twice, e.g hit
 		-- ctrl-a ctrl-a to send a single ctrl-a to vim
-		['a'] = {
-			action = act { SendString = '\x01' },
-		},
+		['a'] = { action = act { SendString = '\x01' } },
 	},
 }
 

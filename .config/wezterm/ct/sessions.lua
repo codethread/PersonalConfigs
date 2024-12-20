@@ -49,16 +49,53 @@ function M.sessionizer()
 	return wezterm.plugin.require 'https://github.com/mikkasendke/sessionizer.wezterm' --[[@as Sessionizer]]
 end
 
+---@param args {name: string, spawn?: { cwd?: string, args?: string[] } }
+function M.switch_workspace(args)
+	return wezterm.action_callback(function(win, pane)
+		local sessions = wezterm.GLOBAL.sessions or { current = 'a', a = '', b = '' }
+
+		if sessions.current == 'a' then
+			sessions.current = 'b'
+			sessions.b = args.name
+		else
+			sessions.current = 'a'
+			sessions.a = args.name
+		end
+		wezterm.GLOBAL.sessions = sessions
+
+		win:perform_action(wezterm.action.SwitchToWorkspace(args), pane)
+	end)
+end
+
+function M.switch_last_workspace()
+	return wezterm.action_callback(function(win, pane)
+		local sessions = wezterm.GLOBAL.sessions or { current = 'a', a = '', b = '' }
+
+		local name
+		if sessions.current == 'a' then
+			sessions.current = 'b'
+			name = sessions.b
+		else
+			sessions.current = 'a'
+			name = sessions.a
+		end
+		wezterm.GLOBAL.sessions = sessions
+
+		win:perform_action(wezterm.action.SwitchToWorkspace { name = name }, pane)
+	end)
+end
+
 ---comment
 ---@param config Config
 function M.apply_to_config(config)
 	if not config.keys then config.keys = {} end
 	for _, project in ipairs(projects) do
+		local name = project[3] or utils.getFilename(project[2])
 		table.insert(config.keys, {
 			key = tostring(project[1]),
 			mods = 'LEADER',
-			action = wezterm.action.SwitchToWorkspace {
-				name = project[3] or utils.getFilename(project[2]),
+			action = M.switch_workspace {
+				name = name,
 				spawn = { cwd = project[2] },
 			},
 		})

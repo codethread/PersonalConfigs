@@ -22,3 +22,22 @@ function Obj.values(tbl)
 	end
 	return keys
 end
+
+---Pick a list of keys from tbl, returning a new table
+---@param tbl table
+---@param keys string[]
+---@return table
+function Obj.pick(tbl, keys)
+	local picked = {}
+	for key, value in pairs(tbl) do
+		for _, picked_key in ipairs(keys) do
+			if key == picked_key then
+				picked[key] = value
+				break
+			end
+		end
+	end
+	return picked
+end
+
+return Obj

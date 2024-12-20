@@ -58,6 +58,8 @@
 
 		# Fonts
 		cask "font-fira-code-nerd-font"
+		cask "font-fira-code"
+		cask "font-iosevka"
 		cask "font-symbols-only-nerd-font"
 
 		mas "DaisyDisk", id: 411643860
