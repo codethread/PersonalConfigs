@@ -8,6 +8,8 @@ local switch_workspace = require('ct.sessions').switch_workspace
 local switch_last_workspace = require('ct.sessions').switch_last_workspace
 local sessionizer = require('ct.sessions').sessionizer
 
+local M = {}
+
 -- https://wezfurlong.org/wezterm/config/keys.html#configuring-key-assignments
 local keymaps = {
 	CMD = {
@@ -125,6 +127,11 @@ local keymaps = {
 		['Tab'] = { action = switch_last_workspace() },
 	},
 
+	['SHIFT'] = {
+		['UpArrow'] = { action = act.ScrollToPrompt(-1) },
+		['DownArrow'] = { action = act.ScrollToPrompt(1) },
+	},
+
 	['LEADER|CTRL'] = {
 		-- assumes leader is also ctrl-a
 		-- mimics tmux behaviour of sending ctrl-a if hit twice, e.g hit
@@ -133,28 +140,69 @@ local keymaps = {
 	},
 }
 
-local M = {}
-
----comment
 ---@param config Config
 function M.apply_to_config(config)
+	wezterm.on('window-config-reloaded', M.notify_on_key_clash)
+
 	config.leader = { key = 'a', mods = 'CTRL', timeout_milliseconds = 1000 }
+
+	config.mouse_bindings = {
+		{
+			-- event = { Down = { streak = 3, button = 'Left' } },
+			event = { Down = { streak = 1, button = 'Right' } },
+			action = wezterm.action.SelectTextAtMouseCursor 'SemanticZone',
+			mods = 'NONE',
+		},
+	}
 
 	local smart_splits = wezterm.plugin.require 'https://github.com/mrjones2014/smart-splits.nvim'
 	smart_splits.apply_to_config(config, { log_level = 'warn' })
 
-	local keys = M.create_keymaps(keymaps)
+	M.create_keymaps(config, keymaps)
+end
+
+---Create wezterm keymaps from custom mappings
+---@package
+---@param config Config
+---@param custom_keys table
+---@return table
+function M.create_keymaps(config, custom_keys)
+	local keys = {}
+
+	-- Iterate over the keymaps table
+	for mods, keymap in pairs(custom_keys) do
+		for key, values in pairs(keymap) do
+			local entry = {}
+
+			-- TODO this doesn't really work as most of the act.* create tables
+			if type(values) == 'table' then
+				entry = values
+			else
+				-- allow passing just a function
+				entry.action = values
+			end
+
+			entry.key = key
+			entry.mods = mods
+
+			table.insert(keys, entry)
+		end
+	end
 
 	for _, key in ipairs(keys) do
 		table.insert(config.keys or {}, key)
 	end
+	return config
+end
 
-	wezterm.on('window-config-reloaded', function(window)
-		local duplicates = M.findKeymapDuplicates(config.keys)
-		for _, dup in ipairs(duplicates) do
-			window:toast_notification('wezterm', 'Duplicate key: ' .. dup, nil, 4000)
-		end
-	end)
+---Notify if any of my keymaps overlap
+---@param window Window
+function M.notify_on_key_clash(window)
+	local config = window:effective_config()
+	local duplicates = M.findKeymapDuplicates(config.keys)
+	for _, dup in ipairs(duplicates) do
+		window:toast_notification('wezterm', 'Duplicate key: ' .. dup, nil, 4000)
+	end
 end
 
 ---Function to find duplicates
@@ -181,36 +229,6 @@ function M.findKeymapDuplicates(list)
 	end
 
 	return duplicates
-end
-
----Create wezterm keymaps from custom mappings
----@package
----@param custom_keys table
----@return table
-function M.create_keymaps(custom_keys)
-	local keys = {}
-
-	-- Iterate over the keymaps table
-	for mods, keymap in pairs(custom_keys) do
-		for key, values in pairs(keymap) do
-			local entry = {}
-
-			-- TODO this doesn't really work as most of the act.* create tables
-			if type(values) == 'table' then
-				entry = values
-			else
-				-- allow passing just a function
-				entry.action = values
-			end
-
-			entry.key = key
-			entry.mods = mods
-
-			table.insert(keys, entry)
-		end
-	end
-
-	return keys
 end
 
 return M
