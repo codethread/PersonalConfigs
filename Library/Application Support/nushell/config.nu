@@ -54,7 +54,7 @@ $env.config = {
 	color_config: $themes.dark
 	edit_mode: emacs # emacs, vi
 	render_right_prompt_on_last_line: false # true or false to enable or disable right prompt to be rendered on last line of the prompt.
-	
+
 	shell_integration: {
 		osc2: true
 		osc7: true

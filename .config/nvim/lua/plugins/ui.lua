@@ -209,7 +209,10 @@ return {
 		end,
 	},
 
-	'DanilaMihailov/beacon.nvim',
+	{
+		'DanilaMihailov/beacon.nvim',
+		enabled = false,
+	},
 
 	-- {
 	-- 	'sphamba/smear-cursor.nvim',

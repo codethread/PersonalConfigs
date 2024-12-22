@@ -37,18 +37,14 @@ local function filename_and_parent(path, sep)
 	end
 end
 
-local notes = vim.tbl_filter(
-	function(i) return i[1] == 'epwalsh/obsidian.nvim' end,
-	require 'plugins.notes'
-)[1].opts.workspaces[1].path
-
 M.update_status = function()
 	local path_separator = '/'
 	local data
+	local note_info = require 'plugins.notes.constants'
 	-- absolute path, with tilde
 	local tildePath = vim.fn.expand '%:p:~'
-	if vim.startswith(tildePath, notes) then
-		data = string.gsub(tildePath, notes, '📖')
+	if note_info.has_notes and vim.startswith(tildePath, note_info.cwd) then
+		data = string.gsub(tildePath, note_info.cwd, '📖')
 	elseif custom_options.path == 1 then
 		-- relative path
 		data = vim.fn.expand '%:~:.'
