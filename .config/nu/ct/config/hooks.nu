@@ -5,10 +5,10 @@ export def main [] {
 		pre_execution: [] # run before the repl input is run
 		pre_prompt: [ # run before the prompt is shown
 			# {|| wezterm cli set-tab-title $nu.current-exe }
-		] 
+		]
 		env_change: {
 			PWD: [
-				...(wezterm_hooks),
+				# ...(wezterm_hooks),
 				...(fe-stuff),
 				...(be-stuff),
 			]

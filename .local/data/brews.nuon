@@ -1,18 +1,21 @@
 {
 	core : '
-		### CORE
-		# HOMEBREW stuff
-		brew "mas" # Mac App Store command-line interface (needed for mas installs)
+		##################################
+		#             CORE               #
+		##################################
 
-		# NODE JS
-		tap "oven-sh/bun"
-		brew "oven-sh/bun/bun"
-		brew "volta"
-		brew "deno"
+		## HOMEBREW stuff
+		brew "mas" # Mac App Store command-line interface (needed for mas installs)
 
 		# LANGS
 		brew "go"
 		brew "rustup"
+
+		## NODE JS
+		tap "oven-sh/bun"
+		brew "oven-sh/bun/bun"
+		brew "volta"
+		brew "deno"
 
 		# SHELL
 		brew "atuin"
@@ -20,7 +23,11 @@
 		brew "neovim", args: ["HEAD"]
 		brew "starship"
 		brew "terminal-notifier" # Send macOS User Notifications from the command-line
+
+		# TMUX
 		brew "tmux"
+		tap "morantron/tmux-fingers"
+		brew "tmux-fingers"
 
 		tap "rsteube/homebrew-tap" # autocompletion engine for nushell
 		brew "rsteube/tap/carapace"
@@ -38,7 +45,6 @@
 		brew "jq"
 		brew "tokei"
 		brew "tree"
-		brew "uutils-coreutils" # rust versions of core-utils, prefixed with u, e.g tail => utail
 		brew "grc"
 
 		# needed for gitwatch stuff
@@ -54,7 +60,6 @@
 		cask "kitty"
 		cask "visual-studio-code"
 		cask "spotify"
-		cask "wezterm"
 
 		# Fonts
 		cask "font-fira-code-nerd-font"
@@ -67,10 +72,13 @@
 		mas "Vimari", id: 1480933944
 		mas "TickTick:To-Do List, Calendar", id: 966085870
 		mas "Dark Reader for Safari", id: 1438243180
+		mas "Perplexity: Ask Anything", id: 6714467650
 	',
 
 	home : '
-		### HOME
+		##################################
+		#             HOME               #
+		##################################
 		cask "discord"
 		cask "whatsapp"
 
@@ -89,7 +97,9 @@
 	',
 
 	work : '
-		### WORK
+		##################################
+		#             WORK               #
+		##################################
 		# AWS
 		brew "awscli"
 		tap "cargo-lambda/cargo-lambda"
@@ -125,12 +135,11 @@
 		cask "proxyman"
 	',
 	temp: '
-		### TEMP
+		##################################
+		#             TEMP               #
+		##################################
 
 		tap "jesseduffield/lazygit"
 		brew "jesseduffield/lazygit/lazygit"
-
-		mas "Perplexity: Ask Anything", id: 6714467650
-		# cask "nikitabobko/tap/aerospace"
 	'
 }
