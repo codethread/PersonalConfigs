@@ -28,7 +28,7 @@ export def finger-other-pane [] {
 	] | compact) {
 		[] => { tmux display-message "no-match" }
 		[$pane, ..] => {
-			tmux-fingers start $pane
+			tmux-fingers start $pane --main-action 'xargs openInVim'
 			tmux select-pane -t 1
 		}
 	}
