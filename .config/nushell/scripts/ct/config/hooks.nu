@@ -3,9 +3,7 @@ use ct/core [dedent]
 export def main [] {
 	{
 		pre_execution: [] # run before the repl input is run
-		pre_prompt: [ # run before the prompt is shown
-			# {|| wezterm cli set-tab-title $nu.current-exe }
-		]
+		pre_prompt: [] # run before the prompt is shown
 		env_change: {
 			PWD: [
 				# ...(wezterm_hooks),
@@ -14,7 +12,7 @@ export def main [] {
 			]
 		}
 		# display_output: "if (term size).columns >= 100 { table -e } else { table }" # run to display the output of a pipeline
-		command_not_found: { null } # return an error message when a command is not found
+		command_not_found: [] # return an error message when a command is not found
 	}
 }
 

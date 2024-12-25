@@ -17,5 +17,5 @@ nu \
     --no-std-lib \
     --no-history \
     --no-config-file \
-    --include-path $(echo -e "${DOTFILES}/.config/nu${sep}${HOME}/workfiles/nu${sep}${HOME}/dev/vendor/nu_scripts/sourced") \
-    -c "$result"
+    \
+    -c "$result" # --include-path $(echo -e "${HOME}/.config/nushell/scripts${sep}${HOME}/workfiles/nu${sep}${HOME}/dev/vendor/nu_scripts/sourced") \
