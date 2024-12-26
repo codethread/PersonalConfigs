@@ -102,8 +102,6 @@
 
   "xstate.nestTypegenFiles": false,
 
-  "nushellLanguageServer.includeDirs": ["~/PersonalConfigs/.config/nu"],
-
   "colorize.languages": [
     "css",
     "sass",
@@ -305,5 +303,8 @@
       "commands": ["bookmarks.listFromAllFiles"]
     }
   ],
-  "prisma.showPrismaDataPlatformNotification": false
+  "prisma.showPrismaDataPlatformNotification": false,
+  "nushellLanguageServer.includeDirs": [
+    "~/PersonalConfigs/.config/nushell/scripts"
+  ]
 }

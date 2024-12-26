@@ -1,31 +1,26 @@
-local set = vim.opt
-
-set.shell = 'zsh' -- better for compatibilty
-set.termguicolors = true -- adds more colors
-set.hidden = true -- Required to keep multiple buffers open multiple buffers
-set.encoding = 'utf-8' -- The encoding displayed
-set.pumheight = 10 -- Makes popup menu smaller
-set.fileencoding = 'utf-8' -- The encoding written to file
-set.spellfile = vim.fn.expand '~' .. '/.config/.en.utf-8.add'
-set.ruler = true -- Show the cursor position all the time
-set.laststatus = 3
-set.wrap = false -- Display long lines as just one line
--- set.cmdheight = 2 -- More space for displaying messages
-set.splitbelow = true -- Horizontal splits will automatically be below
-set.splitright = true -- Vertical splits will automatically be to the right
--- set.splitkeep = 'screen'
-
-set.tabstop = 4 -- Insert X spaces for a tab
-set.shiftwidth = 0 -- Indent to whatever tabstop is
-set.smartindent = true -- Makes indenting smart
-set.autoindent = true -- Good auto indent
-
-set.softtabstop = 2 -- Set the behavior of tab
-set.smarttab = true -- Makes tabbing smarter will realize you have 2 vs 4
-set.expandtab = true -- Converts tabs to spaces
+-- terminal
+vim.opt.shell = 'zsh'
+vim.opt.termguicolors = true -- adds more colors
+vim.opt.hidden = true -- Required to keep multiple buffers open multiple buffers
+vim.opt.encoding = 'utf-8' -- The encoding displayed
+vim.opt.pumheight = 10 -- Makes popup menu smaller
+vim.opt.fileencoding = 'utf-8' -- The encoding written to file
+vim.opt.spellfile = vim.fn.expand '~' .. '/.config/.en.utf-8.add'
+vim.opt.ruler = true -- Show the cursor position all the time
+vim.opt.laststatus = 3
+vim.opt.wrap = false -- Display long lines as just one line
+vim.opt.splitbelow = true -- Horizontal splits will automatically be below
+vim.opt.splitright = true -- Vertical splits will automatically be to the right
+vim.opt.tabstop = 4 -- Insert X spaces for a tab
+vim.opt.shiftwidth = 0 -- Indent to whatever tabstop is
+vim.opt.smartindent = true -- Makes indenting smart
+vim.opt.autoindent = true -- Good auto indent
+vim.opt.softtabstop = 2 -- Set the behavior of tab
+vim.opt.smarttab = true -- Makes tabbing smarter will realize you have 2 vs 4
+vim.opt.expandtab = false -- Converts tabs to spaces
 
 -- if wanting to show white space in some way
-set.listchars = {
+vim.opt.listchars = {
 	tab = '» ',
 	eol = '¬',
 	space = '␣',
@@ -35,23 +30,23 @@ set.listchars = {
 }
 -- :set list
 
-set.relativenumber = true
-set.number = true -- Line numbers
-set.cursorline = true -- Enable highlighting of the current line
-set.showtabline = 2 -- Always show tabs
+vim.opt.relativenumber = true
+vim.opt.number = true -- Line numbers
+vim.opt.cursorline = true -- Enable highlighting of the current line
+vim.opt.showtabline = 2 -- Always show window tabs
 
-set.updatetime = 300 -- Faster completion
-set.timeoutlen = 500 -- By default timeoutlen is 1000 ms
--- set.formatoptions-=cro                  -- Stop newline continution of comments
--- set.clipboard:append("unnamed") -- Copy paste between vim and everything else
-set.signcolumn = 'yes'
+vim.opt.updatetime = 300 -- Faster completion
+vim.opt.timeoutlen = 500 -- By default timeoutlen is 1000 ms
+-- vim.opt.formatoptions-=cro                  -- Stop newline continution of comments
+-- vim.opt.clipboard:append("unnamed") -- Copy paste between vim and everything else
+vim.opt.signcolumn = 'yes'
 -- always keep some space around the window
-set.scrolloff = 4
+vim.opt.scrolloff = 4
 
-set.hlsearch = false -- don't keep / highlights after searching
+vim.opt.hlsearch = false -- don't keep / highlights after searching
 vim.o.smartcase = true
 
-set.showmode = false -- We don't need to see things like -- INSERT -- anymore
+vim.opt.showmode = false -- We don't need to see things like -- INSERT -- anymore
 
 -- can use abolish-grep with this
 -- e.g. :S /plugin/ *
