@@ -1,38 +1,38 @@
 {
-  dirs: [
-    ~/
-    ~/dev ~/dev/exercism ~/dev/projects ~/dev/learn ~/dev/vendor
-    ~/work ~/work/services ~/work/lambdas ~/work/utilities ~/work/infrastructure ~/work/libraries ~/work/docs
-    ~/.local/share/nvim/lazy ~/.local/share/nvim/mason/packages
-    `~/Library/Mobile Documents/com~apple~CloudDocs/Books/The_DynamoDB_Book_-_Plus_Package/Code examples`
-    `~/Library/Mobile Documents/iCloud~md~obsidian/Documents`
-  ]
-  base: [
-    [key , name];
-    [ P0 , "~/dev/projects/qmk_firmware/keyboards/preonic/keymaps/codethread"]
-    # [ P0 , "~/dev/projects/nuphy_firmware/keyboards/nuphy/halo75v2/ansi" ]
-  ]
-  personal: [
-    [key , name];
-    [ P2 , "~/dev/projects/git-buddy", ]
-    [ P3 , "~/dev/projects/pomo", ]
-    [ P4 , "~/dev/projects/qmk.nvim", ]
-    [ P5 , "~/dev/projects/git-tools", ]
+	dirs: [
+		~/
+		~/dev ~/dev/exercism ~/dev/projects ~/dev/learn ~/dev/vendor
+		~/work ~/work/services ~/work/lambdas ~/work/utilities ~/work/infrastructure ~/work/libraries ~/work/docs
+		~/.local/share/nvim/lazy ~/.local/share/nvim/mason/packages
+		`~/Library/Mobile Documents/com~apple~CloudDocs/Books/The_DynamoDB_Book_-_Plus_Package/Code examples`
+		`~/Library/Mobile Documents/iCloud~md~obsidian/Documents`
+	]
+	base: [
+		[key , name];
+		[ P0 , "~/dev/projects/qmk_firmware/keyboards/preonic/keymaps/codethread"]
+		# [ P0 , "~/dev/projects/nuphy_firmware/keyboards/nuphy/halo75v2/ansi" ]
+	]
+	personal: [
+		[key , name];
+		[ P2 , "~/dev/projects/git-buddy", ]
+		[ P3 , "~/dev/projects/pomo", ]
+		[ P4 , "~/dev/projects/qmk.nvim", ]
+		[ P5 , "~/dev/projects/git-tools", ]
 
-    [ P8 , "~/dev/projects/qmk_firmware/keyboards/preonic/keymaps/codethread"]
-    [ P9 , "~/Library/Mobile Documents/com~apple~CloudDocs/Documents/Notes"]
-  ],
-  work: [
-    [key , name];
-    [ P2 , "~/work/deals-light-ui", ]
-    [ P3 , "~/work/fe-review", ]
-    [ P4 , "~/work/services/flexi-points-app", ]
-    [ P5 , "~/work/fe-native", ]
+		[ P8 , "~/dev/projects/qmk_firmware/keyboards/preonic/keymaps/codethread"]
+		[ P9 , "~/Library/Mobile Documents/com~apple~CloudDocs/Documents/Notes"]
+	],
+	work: [
+		[key , name];
+		[ P2 , "~/work/deals-light-ui", ]
+		[ P3 , "~/work/fe-review", ]
+		[ P4 , "~/work/services/flexi-points-app", ]
+		[ P5 , "~/work/fe-native", ]
 
 
-    [ P6 , "~/dev/projects/git-tools", ]
-    [ P7 , "~/work/libraries/inspect-my-package", ]
-    [ P8 , "~/workfiles", ]
-    [ P9 , "~/work/services/protobuf", ]
-  ]
+		[ P6 , "~/dev/projects/git-tools", ]
+		[ P7 , "~/work/libraries/inspect-my-package", ]
+		[ P8 , "~/workfiles", ]
+		[ P9 , "~/work/services/protobuf", ]
+	]
 }

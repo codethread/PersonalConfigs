@@ -88,9 +88,9 @@ return {
 		init = function()
 			-- TODO move
 			vim.cmd [[
-        " nmap ga <Plug>(EasyAlign)
-        " xmap ga <Plug>(EasyAlign)
-      ]]
+		" nmap ga <Plug>(EasyAlign)
+		" xmap ga <Plug>(EasyAlign)
+		]]
 			vim.api.nvim_create_user_command(
 				'CsvFormat',
 				':EasyAlign *,<CR>',

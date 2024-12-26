@@ -13,7 +13,7 @@ export TMUX_SESSION_PROJ_8="${HOME}/"
 export TMUX_SESSION_PROJ_9="${HOME}/"
 
 if [ $CT_IS_WORK -eq 1 ]; then
-	ssource "${HOME}/.config/tmux/work_tmux_projects"
+  ssource "${HOME}/.config/tmux/work_tmux_projects"
 else
   export TMUX_SESSION_PROJ_2="${HOME}/dev/projects/qmk.nvim"
   export TMUX_SESSION_PROJ_3="${HOME}/dev/projects/tstl-prelude"
@@ -22,16 +22,16 @@ else
 fi
 
 tmux-echo() {
-	echo 0 ${TMUX_SESSION_PROJ_0}
-	echo 1 ${TMUX_SESSION_PROJ_1}
-	echo 2 ${TMUX_SESSION_PROJ_2}
-	echo 3 ${TMUX_SESSION_PROJ_3}
-	echo 4 ${TMUX_SESSION_PROJ_4}
-	echo 5 ${TMUX_SESSION_PROJ_5}
-	echo 6 ${TMUX_SESSION_PROJ_6}
-	echo 7 ${TMUX_SESSION_PROJ_7}
-	echo 8 ${TMUX_SESSION_PROJ_8}
-	echo 9 ${TMUX_SESSION_PROJ_9}
+  echo 0 ${TMUX_SESSION_PROJ_0}
+  echo 1 ${TMUX_SESSION_PROJ_1}
+  echo 2 ${TMUX_SESSION_PROJ_2}
+  echo 3 ${TMUX_SESSION_PROJ_3}
+  echo 4 ${TMUX_SESSION_PROJ_4}
+  echo 5 ${TMUX_SESSION_PROJ_5}
+  echo 6 ${TMUX_SESSION_PROJ_6}
+  echo 7 ${TMUX_SESSION_PROJ_7}
+  echo 8 ${TMUX_SESSION_PROJ_8}
+  echo 9 ${TMUX_SESSION_PROJ_9}
 }
 
 alias cd0="cd \${TMUX_SESSION_PROJ_0}"

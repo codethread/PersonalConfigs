@@ -51,20 +51,20 @@ export def main [
 
 def user-get-project [] {
 	get dirs
-	| path expand 
-	| filter { || $in | path exists } 
-	| each { |d| ls $d } 
-	| flatten 
-	| where type == 'dir' 
-	| get name 
-	| str join "\n" 
+	| path expand
+	| filter { || $in | path exists }
+	| each { |d| ls $d }
+	| flatten
+	| where type == 'dir'
+	| get name
+	| str join "\n"
 	| fzf-tmux -p
 	| str trim
 }
 
 def get-sessions [] {
-	tmux list-session 
-	| lines 
+	tmux list-session
+	| lines
 	| parse "{name}:{rest}"
 	| get name
 }

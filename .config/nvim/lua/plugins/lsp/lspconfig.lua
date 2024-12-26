@@ -38,15 +38,12 @@ return {
 					---@module "lazydev"
 					---@type lazydev.Library.spec[]
 					library = {
-						-- See the configuration section for more details
-						-- Load luvit types when the `vim.uv` word is found
 						{ path = 'luvit-meta/library', words = { 'vim%.uv' } },
 						{ path = 'wezterm-types', mods = { 'wezterm' } },
 					},
 					enabled = function(root_dir)
 						-- disable when a .luarc.json file is found
 						if vim.uv.fs_stat(root_dir .. '/.luarc.json') then return false end
-
 						return true
 					end,
 				},
@@ -69,7 +66,6 @@ return {
 			---@type lspconfig.options
 			servers = {
 				jsonls = {
-					-- lazy-load schemastore when needed
 					on_new_config = function(new_config)
 						new_config.settings.json.schemas = new_config.settings.json.schemas or {}
 						vim.list_extend(new_config.settings.json.schemas, require('schemastore').json.schemas())
@@ -87,8 +83,9 @@ return {
 					cmd = {
 						'nu',
 						'--lsp',
-						-- BUG: doesn't actually work yet: https://github.com/nushell/nushell/issues/5655
-						-- '--include-path=' .. vim.fn.expand '~/PersonalConfigs/.config/nu',
+						'--env-config=' .. vim.fn.expand '~/PersonalConfigs/.config/nushell/env.nu',
+						'--config=' .. vim.fn.expand '~/PersonalConfigs/.config/nushell/config.nu',
+						'--include-path=' .. vim.fn.expand '~/PersonalConfigs/.config/nushell/scripts',
 					},
 				},
 				-- clangd = {
@@ -133,34 +130,21 @@ return {
 				-- NOTE: uncomment to see
 				-- vim.print(client.server_capabilities)
 
-				if client.name == 'nushell' then
-					-- TODO: these are brokded
-					vim.diagnostic.enable(false)
-				end
-				if not vim.list_contains({ 'nushell' }, client.name) then
-					U.keys(buf, {
-						{ 'gD', function() vim.lsp.buf.declaration() end, 'declaration' },
-						{
-							'gd',
-							function() vim.lsp.buf.definition { reuse_win = true } end,
-							'definition',
-						},
-						{
-							'K',
-							function()
-								local winid = require('ufo').peekFoldedLinesUnderCursor()
-								if not winid then
-									-- choose one of coc.nvim and nvim lsp
-									vim.lsp.buf.hover()
-								end
-							end,
-							'hover',
-						},
-						{ 'gi', function() vim.lsp.buf.implementation() end, 'implementation' },
-						{ 'gh', function() vim.lsp.buf.signature_help() end, 'signature_help' },
-						{ 'gr', function() vim.lsp.buf.references() end, 'references' },
-					}, { prefix = '', unique = false })
-				end
+				U.keys(buf, {
+					{ 'gD', function() vim.lsp.buf.declaration() end, 'declaration' },
+					{ 'gd', function() vim.lsp.buf.definition { reuse_win = true } end, 'definition' },
+					{
+						'K',
+						function()
+							local winid = require('ufo').peekFoldedLinesUnderCursor()
+							if not winid then vim.lsp.buf.hover() end
+						end,
+						'hover',
+					},
+					{ 'gi', function() vim.lsp.buf.implementation() end, 'implementation' },
+					{ 'gh', function() vim.lsp.buf.signature_help() end, 'signature_help' },
+					{ 'gr', function() vim.lsp.buf.references() end, 'references' },
+				}, { prefix = '', unique = false })
 			end)
 
 			U.lsp_attach('*', function(client, bufnr)

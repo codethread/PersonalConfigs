@@ -10,7 +10,7 @@ export def macos_has_full_disk_access [
 	let missing_access = (sqlite3 `/Library/Application Support/com.apple.TCC/TCC.db` 'select * from access'
 		| complete
 		| clog "macos_has_full_disk_access"
-		| get stderr 
+		| get stderr
 		# Error: unable to open database "/Library/Application Support/com.apple.TCC/TCC.db": authorization denied
 		| str contains 'authorization')
 

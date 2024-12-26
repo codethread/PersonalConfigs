@@ -7,8 +7,8 @@ export def main [] {
 		| get name
 		| first)
 
-	let sessions = (tmux list-session 
-		| lines 
+	let sessions = (tmux list-session
+		| lines
 		| parse "{name}:{rest}"
 		| get name
 		| where $it !~ $attatched)

@@ -1,7 +1,7 @@
 use ct/git [gchanged]
 
 export def npc [] {
-	rm -rf ./node_modules 
+	rm -rf ./node_modules
 	npm cache clear
 	npm i
 }
@@ -32,16 +32,16 @@ export def pjs [...deps: string] {
 
 export def prettier-changed [--commit branch: string] {
 	gchanged --commit=$commit $branch
-	| lines 
+	| lines
 	| par-each { node_modules/.bin/prettier --write $in }
 }
 
 export def rn-nuke [] {
 	git clean -dfX
-	yarn 
-	cd ios 
-	pod install 
-	cd .. 
+	yarn
+	cd ios
+	pod install
+	cd ..
 	yarn run-ios --reset-cache
 }
 
@@ -57,15 +57,15 @@ export def yarn-workspaces [] {
 ##############################################
 
 export def nvm [] {
-	volta pin node@14 
+	volta pin node@14
 	volta pin yarn@1.22.4
 }
 
-export def react-native-clean [] { 
-	git pull 
-	gclean 
-	yarn 
-	yarn install:app 
+export def react-native-clean [] {
+	git pull
+	gclean
+	yarn
+	yarn install:app
 	yarn run-ios --simulator "iPhone SE (3rd generation)"
 }
 
@@ -84,7 +84,7 @@ export def unit-test [path: path] {
 	let target = [$dir "*.test.ts"] | str join "/"
 
 	print (dedent $"running tests with glob:
-	(ansi blue)($target)(ansi reset)")
+		(ansi blue)($target)(ansi reset)")
 
 	print ""
 	watch $dir {||

@@ -4,7 +4,7 @@
 alias v="nvim"
 alias zz="nvim ${ZDOTDIR}/.zshrc"
 alias vv="cd ${DOTFILES}/.config/nvim; nvim ./init.lua" # open vim config
-alias aa="nvim ~/.aliases.zsh" # open aliases
+alias aa="nvim ~/.aliases.zsh"                          # open aliases
 # see https://github.com/wbthomason/packer.nvim/issues/180 for MACOSX_DEPLOYMENT_TARGET=10.15
 alias nvim-boot="MACOSX_DEPLOYMENT_TARGET=10.15 nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'"
 
@@ -62,8 +62,8 @@ alias brewup='brew update; brew doctor; brew upgrade; brewclean'
 alias brewclean='brew cleanup; brew autoremove'
 alias brewdeps="brew deps --graph --installed"
 
-alias bbd="brew bundle dump" # update brewfile
-alias bbc="brew bundle check" # ensure all installed
+alias bbd="brew bundle dump"    # update brewfile
+alias bbc="brew bundle check"   # ensure all installed
 alias bbx="brew bundle cleanup" # removed unlisted
 alias bbi="brew bundle install"
 
@@ -89,7 +89,7 @@ alias rn-nuke="gnuke && yarn && cd ios && pod install && cd .. && yarn run-ios -
 #---------------------------------------------#
 # DOCKER
 # -------------------------------------------#
-alias dock_ri='docker rmi $(docker images -a --filter=dangling=true -q)' #docker_clean_images
+alias dock_ri='docker rmi $(docker images -a --filter=dangling=true -q)'                 #docker_clean_images
 alias dock_rc='docker rm $(docker ps --filter=status=exited --filter=status=created -q)' #docker_clean_ps
 alias dock_prune='docker system prune -a'
 alias dcup='docker-compose up'
@@ -132,16 +132,15 @@ alias gcache-clear="git rev-parse --show-toplevel | rargs rm -rf {0}/.git/rr-cac
 
 # create a new branch from trunk
 gnew() {
-    if [ $# -eq 0 ]
-    then
-        echo "No arguments supplied"
-    else
-        echo "Creating branch $1"
-        git fetch origin $(gtrunk):$(gtrunk);
-        git checkout -b "$1" $(gtrunk)
-        # don't want to push to gtrunk
-        git branch --unset-upstream
-    fi
+  if [ $# -eq 0 ]; then
+    echo "No arguments supplied"
+  else
+    echo "Creating branch $1"
+    git fetch origin $(gtrunk):$(gtrunk)
+    git checkout -b "$1" $(gtrunk)
+    # don't want to push to gtrunk
+    git branch --unset-upstream
+  fi
 }
 
 # worktree

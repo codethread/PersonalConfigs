@@ -4,7 +4,7 @@ use std/util "path add"
 #: fns {{{
 
 def home [p: string] {
-  $nu.home-path | path join $p
+	$nu.home-path | path join $p
 }
 
 #: }}}
@@ -21,14 +21,14 @@ $env.LS_COLORS = "*~=0;38;2;57;53;82:bd=0;38;2;196;167;231;48;2;42;39;63:ca=0:cd
 
 $env.CT_LOG = false
 $env.CT_USER = (match (whoami) {
-  "adam.hall" => "work",
-  "codethread" => "home",
-  _ => "unknown",
+	"adam.hall" => "work",
+	"codethread" => "home",
+	_ => "unknown",
 })
 
 $env.CT_NOTES = (match $env.CT_USER {
-  "work" => (home 'gdrive/perks'),
-  _ => (home 'Library/Mobile Documents/com~apple~CloudDocs/Documents/Notes'),
+	"work" => (home 'gdrive/perks'),
+	_ => (home 'Library/Mobile Documents/com~apple~CloudDocs/Documents/Notes'),
 })
 
 $env.WAKATIME_HOME = (home ".config/wakatime")
@@ -69,11 +69,11 @@ $env.FZF_CTRL_T_COMMAND = "fd --type f --hidden --exclude '{.git}'"
 $env.FZF_DEFAULT_COMMAND = "fd --type f --hidden --exclude '{.git}'"
 # rose pine moon
 $env.FZF_DEFAULT_OPTS = "
-	--color=fg:#908caa,bg:#232136,hl:#ea9a97
-	--color=fg+:#e0def4,bg+:#393552,hl+:#ea9a97
-	--color=border:#44415a,header:#3e8fb0,gutter:#232136
-	--color=spinner:#f6c177,info:#9ccfd8
-	--color=pointer:#c4a7e7,marker:#eb6f92,prompt:#908caa"
+--color=fg:#908caa,bg:#232136,hl:#ea9a97
+--color=fg+:#e0def4,bg+:#393552,hl+:#ea9a97
+--color=border:#44415a,header:#3e8fb0,gutter:#232136
+--color=spinner:#f6c177,info:#9ccfd8
+--color=pointer:#c4a7e7,marker:#eb6f92,prompt:#908caa"
 
 #: }}}
 #: go {{{

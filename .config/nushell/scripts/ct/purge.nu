@@ -1,21 +1,21 @@
 # Search through projects, find the largest and present them ina fuzzy finder
 # to be purged. At this point a git clean is run
 #
-# TODO: 
+# TODO:
 # - would be charming to get the output
 # - add some flags for actually deleting
 # - show size in fuzzy if possible
 export def main [] {
-	let purged = dirs 
+	let purged = dirs
 	| path expand
-	| filter { path exists } 
-	| each {|p| ls $p 
-		| where type == "dir" 
-		| get name 
-	} 
-	| flatten 
-	| par-each {|d| $d | get-dir-size } 
-	| flatten 
+	| filter { path exists }
+	| each {|p| ls $p
+		| where type == "dir"
+		| get name
+	}
+	| flatten
+	| par-each {|d| $d | get-dir-size }
+	| flatten
 	| sort
 	| last 30
 	| get name
@@ -37,7 +37,7 @@ export def main [] {
 def get-dir-size [] {
 	^du -sh $in
 	| parse "{size}\t{name}"
-	| str trim 
+	| str trim
 	| upsert size {|r| $r.size | into filesize }
 }
 

@@ -24,7 +24,7 @@ export const themes = {
 		list: white
 		block: white
 		hints: dark_gray
-		search_result: {bg: red fg: white}    
+		search_result: {bg: red fg: white}
 		shape_and: purple_bold
 		shape_binary: purple_bold
 		shape_block: blue_bold
@@ -87,7 +87,7 @@ export const themes = {
 		list: white
 		block: white
 		hints: dark_gray
-		search_result: {fg: white bg: red}    
+		search_result: {fg: white bg: red}
 		shape_and: purple_bold
 		shape_binary: purple_bold
 		shape_block: blue_bold

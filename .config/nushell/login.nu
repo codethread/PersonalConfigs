@@ -10,37 +10,37 @@ const carapace = ("~/.cache/carapace/init.nu" | path expand)
 source (if ($carapace | path exists) { $carapace } else { "empty.nu" })
 
 def get-package-scripts [] {
-  open package.json | get scripts | items { |key,_| $key }
+	open package.json | get scripts | items { |key,_| $key }
 }
 
 def get-workspace-names [--only-scripts] {
-  fd package.json
-  | lines
-  | par-each {|| open $in }
-  | where {|pj| match ($only_scripts) {
-      true => { "scripts" in $pj },
-      false => { "name" in $pj }
-    }
-  }
-  | get name
+	fd package.json
+	| lines
+	| par-each {|| open $in }
+	| where {|pj| match ($only_scripts) {
+		true => { "scripts" in $pj },
+		false => { "name" in $pj }
+	}
+	}
+	| get name
 }
 
 export extern "bun run" [
-  cmd: string@get-package-scripts
+	cmd: string@get-package-scripts
 ] {
-  ^bun run $cmd
+	^bun run $cmd
 }
 
 export extern "yarn run" [
-  cmd: string@get-package-scripts
+	cmd: string@get-package-scripts
 ] {
-  ^yarn run $cmd
+	^yarn run $cmd
 }
 
 export extern "yarn workspace" [
-  workspace: string@get-workspace-names --only-scripts
+	workspace: string@get-workspace-names --only-scripts
 ] {
-  ^yarn workspace $workspace
+	^yarn workspace $workspace
 }
 
 #---------------------------------------------#

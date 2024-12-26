@@ -11,6 +11,12 @@ indent_style = tab
 indent_style = space
 indent_size = 4
 
-[*.{js,jsx,ts,tsx,html,css}]
+# shell
+[*.{sh,zsh}]
+indent_style = space
+indent_size = 2
+
+# web
+[*.{json,js,jsx,ts,tsx,html,css}]
 indent_style = space
 indent_size = 2

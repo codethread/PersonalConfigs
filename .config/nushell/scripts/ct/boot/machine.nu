@@ -74,7 +74,7 @@ def clone_tools [
 
 		print $"(ansi green)Cloning(ansi reset) ($t.git) into ($t.dir)"
 
-		if $clean and $is_cloned { 
+		if $clean and $is_cloned {
 			print $"(ansi cyan)Cleaning(ansi reset) ($project.repo)"
 			cd $project.repo
 
@@ -86,20 +86,20 @@ def clone_tools [
 			}
 
 			cd -;
-			rm -rf $project.repo 
+			rm -rf $project.repo
 		}
 
 		if not $is_cloned {
-			git clone -q $t.git 
+			git clone -q $t.git
 		}
 
 		print $"(ansi green)Running(ansi reset) install script for ($project.repo)"
-		do $t.install 
+		do $t.install
 	}
 }
 
 # Setup macos launchd processes as plist files
-# 
+#
 # In short these are plist files that are managed by launchd and they are
 # written into the appropriate folder then started. Keep them simple at let the
 # content of the script do most of the heavy lifting, just use the plist to
@@ -109,17 +109,17 @@ def clone_tools [
 # - https://www.youtube.com/watch?v=guBV0jftT40&ab_channel=AUC_ANZ
 # - https://www.launchd.info/
 def setup_background_items [] {
-	let files = ls ~/PersonalConfigs/.config/nu/ct/boot/_LaunchAgents
+	let files = ls ~/PersonalConfigs/.config/nushell/scripts/ct/boot/_LaunchAgents
 
-	$files 
-	| each {|f| 
+	$files
+	| each {|f|
 		let target = $f.name | split row "_" | get 1
 		let domain = $f.name | path parse | get stem
 		let target_file = [~/Library $target] | path join | path expand
 		let log_dir = ([~/ .local/state $domain] | path join | path expand)
-		
+
 		# $HOME doesn't seem to expand
-		let content = open $f.name 
+		let content = open $f.name
 		| str replace --all "{{HOME}}" $env.HOME
 		| str replace --all "{{LOGFILE}}" ([$log_dir std.log] | path join)
 		| str replace --all "{{PATH}}" ($env.PATH | str join ":")
@@ -136,7 +136,7 @@ def setup_background_items [] {
 }
 
 def macos_set_defaults [] {
-	# more things in 
+	# more things in
 	# - https://gist.github.com/scottstanfield/688909eb2cc2b3dfcea2d9e50027d212
 	# - https://macos-defaults.com/dock/autohide-delay.html
 	# - https://github.com/LnL7/nix-darwin/blob/698a62c628c2ec423aa770d8ec0e1d0bcf4fca1a/modules/system/defaults-write.nix#L34

@@ -7,7 +7,7 @@ return {
 			vim.cmd [[
 				nnoremap < :cprevious<CR>
 				nnoremap > :cnext<CR>
-			]]
+				]]
 
 			U.keys('qf', {
 				{ '>', function() require('bqf.qfwin.handler').navHistory(true) end, 'Next list' },

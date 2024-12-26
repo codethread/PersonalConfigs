@@ -29,9 +29,9 @@ return {
 			matchup = {
 				enable = true,
 			},
-            -- stylua: ignore
-            ensure_installed = vim.iter({
-                -- scripting
+			-- stylua: ignore
+			ensure_installed = vim.iter({
+				-- scripting
 				{ 'awk','bash','jq', 'nu' },
 				-- langs
 				{ 'c','rust','scala','haskell', 'gleam', 'python' },
@@ -50,7 +50,7 @@ return {
 				{ 'vim','vimdoc','lua','luadoc','luap', 'query' },
 				-- misc
 				{ 'comment','todotxt','markdown','markdown_inline','regex' },
-            }):flatten():totable(),
+			}):flatten():totable(),
 		},
 		---@param opts TSConfig
 		config = function(_, opts)

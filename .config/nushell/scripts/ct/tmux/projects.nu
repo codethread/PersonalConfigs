@@ -1,8 +1,8 @@
 export def get-projects [] {
 	let projects = if ($in | is-empty) { load-config } else { $in }
 
-	echo [[key,name]; [P1, ($env.DOTFILES)]] 
-	| append $projects.base 
+	echo [[key,name]; [P1, ($env.DOTFILES)]]
+	| append $projects.base
 	| (match (is_work) {
 		true => { $in ++ $projects.work },
 		_    => { $in ++ $projects.personal },
@@ -17,7 +17,7 @@ export def get-project [proj: string] {
 }
 
 export def load-config [] {
-	echo "~/.local/data/tmux.nuon" 
+	echo "~/.local/data/tmux.nuon"
 	| path expand
 	| clog "opening config file:"
 	| open

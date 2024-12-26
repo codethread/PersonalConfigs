@@ -13,10 +13,10 @@ export def sync [
 	if ($dry_run) {
 		$conf
 	} else if ($clean) {
-		echo $conf 
+		echo $conf
 		| ^brew bundle --file=- --no-upgrade --no-lock --cleanup --zap --verbose
 	} else {
-		echo $conf 
+		echo $conf
 		| ^brew bundle --file=- --no-upgrade --no-lock
 	}
 }
@@ -44,7 +44,7 @@ def get_bundle_for_machine [
 ] {
 	let brews = (open ([$env.DOTFILES ".local/data/brews.nuon"] | path join))
 
-	dedent ($brews.core 
+	dedent ($brews.core
 		++ (match $env.CT_USER {
 			work => $brews.work,
 			home => $brews.home
@@ -57,14 +57,14 @@ def get_bundle_for_machine [
 	);
 }
 
-###################### 
+######################
 # HELPERS
-###################### 
+######################
 
 def strip-comments []: list<string> -> list<string> {
-	$in 
+	$in
 	| where (
-		$it starts-with "brew" 
+		$it starts-with "brew"
 		or $it starts-with "tap"
 		or $it starts-with "cask"
 		or $it starts-with "mas"

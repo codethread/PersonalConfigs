@@ -1,6 +1,6 @@
 use ct/core *
 export use cache.nu [load-cache, save-cache, delete-cache]
-export use config.nu 
+export use config.nu
 
 export def link [
 	--no-cache(-c)
@@ -10,7 +10,7 @@ export def link [
 	let res = config load
 	| par-each { |proj| get-project-files-to-link $proj $no_cache  }
 	| assert-no-conflicts $force
-	| par-each {|proj| 
+	| par-each {|proj|
 		# delete
 		$proj.delete | each {|f| rm -f $f }
 
@@ -21,11 +21,11 @@ export def link [
 		$proj.files | par-each { ln -s $in.from $in.to }
 
 		# update cache
-		$proj.existing ++ ($proj.files | get file) 
+		$proj.existing ++ ($proj.files | get file)
 		| sort
 		| save-cache $proj.name
 
-		$proj 
+		$proj
 		| rename --column { files: created, delete: deleted }
 		| select name created deleted
 	}
@@ -53,8 +53,15 @@ export def is-cwd [
 	}
 }
 
-# TODO: noticed some old files lingering.
-export def list-dead-links [] {
+# Remove symlinks that don't point to anything
+export def prune [target: glob = ~/.config/**/*] {
+	ls -all --long ...(glob $target)
+	| where type == symlink
+	| where ($it.target | path exists | $in == false)
+	| each { |f|
+		print $"removing ($f.name)";
+		rm $f.name
+	}
 }
 
 # assumes run from PWD
@@ -77,7 +84,7 @@ export def test [...files] {
 
 	let files = $files | path relative-to $env.PWD
 
-	let all_files = list-files $proj.from --excludes $proj.excludes 
+	let all_files = list-files $proj.from --excludes $proj.excludes
 
 	let invalid = $files | where { $in not-in $all_files }
 
@@ -92,9 +99,9 @@ def err_format [ title, files ] {
 
 export def teardown [] {
 	config load
-	| par-each {|proj| 
+	| par-each {|proj|
 		cd $proj.to
-		let files = load-cache $proj.name 
+		let files = load-cache $proj.name
 
 		$files | par-each {|f| rm -f $f }
 
@@ -105,22 +112,21 @@ export def teardown [] {
 }
 
 def delete-empty-dirs [files] {
-	$files 
+	$files
 	| list-dirs-to-make
 	| par-each {|dir| ls $dir | is-empty | if $in { $dir } else null }
 	| compact
 	| each {|dir| rm $dir }
 }
 
-
 # takes a list of files and returns a list of directories that will need
 # to be created for them
 def list-dirs-to-make []: list -> list  {
-	path parse 
-	| get parent 
-	| uniq 
+	path parse
+	| get parent
+	| uniq
 	| sort
-	| reduce --fold [""] {|it, acc| 
+	| reduce --fold [""] {|it, acc|
 		if ($it | str starts-with ($acc | last)) {
 			let final_pos = ($acc | length) - 1
 			$acc | upsert $final_pos $it
@@ -150,7 +156,7 @@ def get-project-files-to-link [proj, no_cache] {
 		name: $proj.name,
 		files:
 		($new_files | each {|file|
-			{ 
+			{
 				file: $file,
 				from:  ($proj.from | path join $file),
 				to: ($proj.to | path join $file)
@@ -178,12 +184,12 @@ def assert-no-conflicts [force:bool] {
 	let proj = $in
 
 	let files = $proj
-	| get files 
-	| each {|| get to } 
+	| get files
+	| each {|| get to }
 	| reduce {|it,acc| $it ++ $acc }
 
 	$files | uniq --repeated | match ($in | is-empty) {
-		false => { 
+		false => {
 			let msg = $"multiple files attempted to write to ($in | str join ","). Process cancelled"
 			error make -u { msg: $msg }
 		}

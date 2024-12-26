@@ -1,145 +1,146 @@
 {
 	core : '
-		##################################
-		#             CORE               #
-		##################################
+	##################################
+	#             CORE               #
+	##################################
 
-		## HOMEBREW stuff
-		brew "mas" # Mac App Store command-line interface (needed for mas installs)
+	## HOMEBREW stuff
+	brew "mas" # Mac App Store command-line interface (needed for mas installs)
 
-		# LANGS
-		brew "go"
-		brew "rustup"
+	# LANGS
+	brew "go"
+	brew "rustup"
 
-		## NODE JS
-		tap "oven-sh/bun"
-		brew "oven-sh/bun/bun"
-		brew "volta"
-		brew "deno"
+	## NODE JS
+	tap "oven-sh/bun"
+	brew "oven-sh/bun/bun"
+	brew "volta"
+	brew "deno"
 
-		# SHELL
-		brew "atuin"
-		brew "utf8proc", args: ["HEAD"] # needed by neovim (might change in future)
-		brew "neovim", args: ["HEAD"]
-		brew "starship"
-		brew "terminal-notifier" # Send macOS User Notifications from the command-line
+	# SHELL
+	brew "atuin"
+	brew "utf8proc", args: ["HEAD"] # needed by neovim (might change in future)
+	brew "neovim", args: ["HEAD"]
+	brew "starship"
+	brew "terminal-notifier" # Send macOS User Notifications from the command-line
 
-		# TMUX
-		brew "tmux"
-		tap "morantron/tmux-fingers"
-		brew "tmux-fingers"
+	# TMUX
+	brew "tmux"
+	tap "morantron/tmux-fingers"
+	brew "tmux-fingers"
+	brew "smug"
 
-		tap "rsteube/homebrew-tap" # autocompletion engine for nushell
-		brew "rsteube/tap/carapace"
+	tap "rsteube/homebrew-tap" # autocompletion engine for nushell
+	brew "rsteube/tap/carapace"
 
-		# UTILS
-		brew "dust"
-		brew "bat"
-		brew "fd"
-		brew "fzf"
-		brew "pam-reattach" # PAM module for reattaching to the users GUI (Aqua) session
-		brew "ripgrep"
-		brew "sd"
-		brew "stylua"
-		brew "wakatime-cli"
-		brew "jq"
-		brew "tokei"
-		brew "tree"
-		brew "grc"
+	# UTILS
+	brew "dust"
+	brew "bat"
+	brew "fd"
+	brew "fzf"
+	brew "pam-reattach" # PAM module for reattaching to the users GUI (Aqua) session
+	brew "ripgrep"
+	brew "sd"
+	brew "stylua"
+	brew "wakatime-cli"
+	brew "jq"
+	brew "tokei"
+	brew "tree"
+	brew "grc"
 
-		# needed for gitwatch stuff
-		brew "coreutils"
-		brew "fswatch"
+	# needed for gitwatch stuff
+	brew "coreutils"
+	brew "fswatch"
 
-		# Apps
-		cask "1password"
-		cask "1password-cli"
-		cask "alfred"
-		cask "google-chrome"
-		cask "jordanbaird-ice" # Menu bar manager
-		cask "kitty"
-		cask "visual-studio-code"
-		cask "spotify"
+	# Apps
+	cask "1password"
+	cask "1password-cli"
+	cask "alfred"
+	cask "google-chrome"
+	cask "jordanbaird-ice" # Menu bar manager
+	cask "kitty"
+	cask "visual-studio-code"
+	cask "spotify"
 
-		# Fonts
-		cask "font-fira-code-nerd-font"
-		cask "font-fira-code"
-		cask "font-iosevka"
-		cask "font-symbols-only-nerd-font"
+	# Fonts
+	cask "font-fira-code-nerd-font"
+	cask "font-fira-code"
+	cask "font-iosevka"
+	cask "font-symbols-only-nerd-font"
 
-		mas "DaisyDisk", id: 411643860
-		mas "Key Codes", id: 414568915
-		mas "Vimari", id: 1480933944
-		mas "TickTick:To-Do List, Calendar", id: 966085870
-		mas "Dark Reader for Safari", id: 1438243180
-		mas "Perplexity: Ask Anything", id: 6714467650
+	mas "DaisyDisk", id: 411643860
+	mas "Key Codes", id: 414568915
+	mas "Vimari", id: 1480933944
+	mas "TickTick:To-Do List, Calendar", id: 966085870
+	mas "Dark Reader for Safari", id: 1438243180
+	mas "Perplexity: Ask Anything", id: 6714467650
 	',
 
 	home : '
-		##################################
-		#             HOME               #
-		##################################
-		cask "discord"
-		cask "whatsapp"
+	##################################
+	#             HOME               #
+	##################################
+	cask "discord"
+	cask "whatsapp"
 
-		# Fast, disk space efficient package manager
-		brew "pnpm"
+	# Fast, disk space efficient package manager
+	brew "pnpm"
 
-		# Run arbitrary commands when files change
-		brew "entr"
-		brew "luarocks"
+	# Run arbitrary commands when files change
+	brew "entr"
+	brew "luarocks"
 
-		# keyboard stuff
-		tap "qmk/qmk"
-		brew "qmk/qmk/qmk"
+	# keyboard stuff
+	tap "qmk/qmk"
+	brew "qmk/qmk/qmk"
 
-		mas "Paprika Recipe Manager 3", id: 1303222628
+	mas "Paprika Recipe Manager 3", id: 1303222628
 	',
 
 	work : '
-		##################################
-		#             WORK               #
-		##################################
-		# AWS
-		brew "awscli"
-		tap "cargo-lambda/cargo-lambda"
-		brew "cargo-lambda/cargo-lambda/cargo-lambda"
+	##################################
+	#             WORK               #
+	##################################
+	# AWS
+	brew "awscli"
+	tap "cargo-lambda/cargo-lambda"
+	brew "cargo-lambda/cargo-lambda/cargo-lambda"
 
-		brew "buf" # protobuf lsp
-		brew "glab"
-		brew "grpcui"
-		brew "grpcurl"
+	brew "buf" # protobuf lsp
+	brew "glab"
+	brew "grpcui"
+	brew "grpcurl"
 
-		tap "hashicorp/tap"
-		brew "hashicorp/tap/vault"
-		tap "joemiller/taps"
-		brew "joemiller/taps/vault-token-helper"
+	tap "hashicorp/tap"
+	brew "hashicorp/tap/vault"
+	tap "joemiller/taps"
+	brew "joemiller/taps/vault-token-helper"
 
-		brew "ical-buddy"
+	brew "ical-buddy"
 
-		# native??
-		brew "rbenv"
-		brew "ruby-build"
-		brew "ruby@3.1"
-		# cask "flipper"
+	# native??
+	brew "rbenv"
+	brew "ruby-build"
+	brew "ruby@3.1"
+	# cask "flipper"
 
-		#? brew openldap
-		# TODO: bunch of files at /opt/homebrew/etc/openldap to be removed if not
+	#? brew openldap
+	# TODO: bunch of files at /opt/homebrew/etc/openldap to be removed if not
 
-		# TODO: migrate notes
-		cask "logseq"
-		cask "obsidian"
+	# TODO: migrate notes
+	cask "logseq"
+	cask "obsidian"
 
-		cask "google-drive"
-		cask "obs"
-		cask "proxyman"
+	cask "google-drive"
+	cask "obs"
+	cask "proxyman"
 	',
 	temp: '
-		##################################
-		#             TEMP               #
-		##################################
+	##################################
+	#             TEMP               #
+	##################################
 
-		tap "jesseduffield/lazygit"
-		brew "jesseduffield/lazygit/lazygit"
+	tap "jesseduffield/lazygit"
+	brew "jesseduffield/lazygit/lazygit"
 	'
 }

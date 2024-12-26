@@ -1,7 +1,7 @@
 use ct/core clog
 
 # load in dotty config, currently in code but could be a nuon file
-export def load [] {
+export def load []: nothing -> table<name: string, from: path, to: path, excludes: list<path>> {
 	let excludes = [
 		"**/_?*/**" # files/folder starting with an underscore (but not just a single underscore)
 		"**/.gitignore"
@@ -23,7 +23,6 @@ export def load [] {
 	| upsert excludes { |project| $project.excludes ++ $excludes }
 	| filter {|proj| $proj.from | path exists }
 	| clog --expand
-
 }
 
 def dir [str: path] {

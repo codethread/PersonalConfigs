@@ -1,11 +1,11 @@
 export const keybindings = [
-    {
-        name: help_menu
-        modifier: alt
-        keycode: char_/
-        mode: [emacs, vi_insert, vi_normal]
-        event: { send: menu name: help_menu }
-    }
+	{
+		name: help_menu
+		modifier: alt
+		keycode: char_/
+		mode: [emacs, vi_insert, vi_normal]
+		event: { send: menu name: help_menu }
+	}
 	{
 		name: reload_config
 		modifier: alt
@@ -37,16 +37,16 @@ export const keybindings = [
 			cmd: '
 			commandline --replace "use "
 			commandline --insert (
-				$NU_LIB_DIRS
-				| each {|dir|
-					ls ($dir | path join "**" "*.nu")
-					| get name
-					| str replace $dir ""
-					| str trim -c "/"
-				}
-				| flatten
-				| input list --fuzzy
-				$"Please choose a (ansi magenta)module(ansi reset) to (ansi cyan_underline)load(ansi reset):"
+			$NU_LIB_DIRS
+			| each {|dir|
+			ls ($dir | path join "**" "*.nu")
+			| get name
+			| str replace $dir ""
+			| str trim -c "/"
+			}
+			| flatten
+			| input list --fuzzy
+			$"Please choose a (ansi magenta)module(ansi reset) to (ansi cyan_underline)load(ansi reset):"
 			)
 			'
 		}
@@ -60,10 +60,10 @@ export const keybindings = [
 			send: executehostcommand
 			cmd: "
 			commandline -a (
-				fd --type=directory
-				| lines
-				| input list --fuzzy
-				$'Please choose a (ansi magenta)directory(ansi reset) to (ansi cyan_underline)insert(ansi reset):'
+			fd --type=directory
+			| lines
+			| input list --fuzzy
+			$'Please choose a (ansi magenta)directory(ansi reset) to (ansi cyan_underline)insert(ansi reset):'
 			)"
 		}
 	}
@@ -76,10 +76,10 @@ export const keybindings = [
 			send: executehostcommand
 			cmd: "
 			commandline -a (
-				rg --files-with-matches --hidden .
-				| lines
-				| input list --fuzzy
-				$'Please choose a (ansi magenta)file(ansi reset) to (ansi cyan_underline)insert(ansi reset):'
+			rg --files-with-matches --hidden .
+			| lines
+			| input list --fuzzy
+			$'Please choose a (ansi magenta)file(ansi reset) to (ansi cyan_underline)insert(ansi reset):'
 			)"
 		}
 	}

@@ -29,8 +29,8 @@ async function shell(cmd) {
       } else {
         reject(
           new Error(
-            `spawned process ${cmd} exited with code ${code}, stderr ${stderr}`
-          )
+            `spawned process ${cmd} exited with code ${code}, stderr ${stderr}`,
+          ),
         );
       }
     });

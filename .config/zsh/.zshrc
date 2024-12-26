@@ -12,7 +12,7 @@
 bindkey -e # emacs key bindings
 
 if [[ "${terminfo[kcbt]}" != "" ]]; then
-    bindkey "${terminfo[kcbt]}" reverse-menu-complete # [Shift-Tab] - move through the completion menu backwards
+  bindkey "${terminfo[kcbt]}" reverse-menu-complete # [Shift-Tab] - move through the completion menu backwards
 fi
 
 # highlight tab
@@ -20,9 +20,9 @@ zstyle ':completion:*' menu selecto
 
 # fix for navigation keys in IDEA terminal
 if [[ "$TERMINAL_EMULATOR" == "JetBrains-JediTerm" ]]; then
-    bindkey "∫" backward-word # Option-b
-    bindkey "ƒ" forward-word  # Option-f
-    bindkey "∂" delete-word   # Option-d
+  bindkey "∫" backward-word # Option-b
+  bindkey "ƒ" forward-word  # Option-f
+  bindkey "∂" delete-word   # Option-d
 fi
 
 #: }}}
@@ -49,7 +49,7 @@ ssource "$ZDOTDIR/.aliases.zsh"
 ssource ~/.private
 
 if [ $CT_IS_WORK -eq 1 ]; then
-    source ~/.config/zsh/work/work.zsh
+  source ~/.config/zsh/work/work.zsh
 fi
 
 #: }}}
@@ -97,9 +97,9 @@ source "${DOTFILES}/.config/zsh/tmux_projects.sh"
 #: gcloud {{{
 
 gcloud() {
-    ssource "$HOME/google-cloud-sdk/completion.zsh.inc"
-    # The next line updates PATH for the Google Cloud SDK.
-    ssource "$HOME/google-cloud-sdk/path.zsh.inc"
+  ssource "$HOME/google-cloud-sdk/completion.zsh.inc"
+  # The next line updates PATH for the Google Cloud SDK.
+  ssource "$HOME/google-cloud-sdk/path.zsh.inc"
 }
 
 #: }}}
@@ -109,8 +109,8 @@ gcloud() {
 # ssource '/usr/local/Cellar/jenv/0.5.3/libexec/libexec/../completions/jenv.zsh'
 # https://github.com/jenv/jenv/issues/148 speed up ideas
 jenvy() {
-    # brew install rlwrap if this fails
-    eval "$(jenv init -)"
+  # brew install rlwrap if this fails
+  eval "$(jenv init -)"
 }
 
 #: }}}
@@ -118,8 +118,8 @@ jenvy() {
 #: ruby {{{
 
 rbenv() {
-    eval "$(command rbenv init -)"
-    rbenv "$@"
+  eval "$(command rbenv init -)"
+  rbenv "$@"
 }
 
 #: }}}
@@ -150,7 +150,7 @@ eval "$(atuin init zsh --disable-up-arrow)"
 # zprof
 
 if [[ "$PROFILE_STARTUP" == true ]]; then
-    unsetopt xtrace
-    exec 2>&3 3>&-
+  unsetopt xtrace
+  exec 2>&3 3>&-
 fi
 #: }}}

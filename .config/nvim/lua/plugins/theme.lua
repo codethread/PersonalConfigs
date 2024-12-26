@@ -176,11 +176,11 @@ return {
 			}
 
 			vim.cmd [[
-            augroup NordHighlights
-                au!
-                au FileType help setlocal winhighlight=Normal:NormalDark,SignColumn:NormalDark
-            augroup end
-        ]]
+			augroup NordHighlights
+			au!
+			au FileType help setlocal winhighlight=Normal:NormalDark,SignColumn:NormalDark
+			augroup end
+			]]
 		end,
 	},
 }

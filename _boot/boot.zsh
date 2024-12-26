@@ -1,11 +1,11 @@
 #!/usr/bin/env zsh
 
 # install homebrew
-if command -v brew > /dev/null 2>&1; then
-    echo "( ◕ ◡ ◕ ) brew installed, skipping install"
+if command -v brew >/dev/null 2>&1; then
+  echo "( ◕ ◡ ◕ ) brew installed, skipping install"
 else
-    echo "( ◕ ◡ ◕ ) installing brew"
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  echo "( ◕ ◡ ◕ ) installing brew"
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
 echo "( ◕ ◡ ◕ ) running brew bundle, go grab a drink"
@@ -21,7 +21,7 @@ echo "( ◕ ◡ ◕ ) setting up path for everyone"
 source "${DOTFILES}/.zshenv"
 
 echo "( ◕ ◡ ◕ ) setting brewshell env"
-brew shellenv | sed 's/export PATH.*//' > "${ZDOTDIR}/shellenv.zsh"
+brew shellenv | sed 's/export PATH.*//' >"${ZDOTDIR}/shellenv.zsh"
 
 echo "( ◕ ◡ ◕ ) running antiup to install zsh plugins"
 "${DOTFILES}/.local/bin/antiup"
