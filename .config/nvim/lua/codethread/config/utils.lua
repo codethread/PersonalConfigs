@@ -206,12 +206,19 @@ function M.autocmd(events, opts)
 	})
 end
 
---- Run a nushell command using `vim.system`
---- @param nu_block string
---- @param opts vim.SystemOpts? Options
---- @param on_exit? fun(out: vim.SystemCompleted) Called when subprocess exits. When provided, the command runs async
---- @return vim.SystemObj
-function M.nush(nu_block, opts, on_exit) return vim.system({ 'nush', nu_block }, opts, on_exit) end
+---Run a nushell command using `vim.system`
+---@overload fun(nu_block: string, opts?: vim.SystemOpts): vim.SystemCompleted
+---@overload fun(nu_block: string, opts: vim.SystemOpts, on_exit: fun(res: vim.SystemCompleted)): vim.SystemObj
+function M.nush(nu_block, opts, on_exit)
+	local cmd =
+		{ 'nu', '--no-std-lib', '--no-history', '--error-style=plain', '-c', vim.trim(nu_block) }
+	opts = vim.tbl_extend('force', { text = true }, opts or {})
+	if on_exit then
+		return vim.system(cmd, opts, on_exit)
+	else
+		return vim.system(cmd, opts):wait()
+	end
+end
 
 -- function M.nush(nu_block) return "nush '" .. nu_block:gsub('\n', '; ') .. "'" end
 

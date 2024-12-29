@@ -14,36 +14,6 @@ return {
 	},
 
 	{
-		'rcarriga/nvim-notify',
-		version = 'v3.*',
-		config = function()
-			local notify = require 'notify'
-
-			notify.setup {
-				-- background_colour = '#000000',
-				max_width = 100,
-				stages = 'fade_in_slide_out',
-				timeout = 500,
-			}
-
-			-- silence annoying errors from lsp's that have no hover information
-			-- source https://github.com/neovim/nvim-lspconfig/issues/1931#issuecomment-1297599534
-			local banned_messages = {
-				'No information available',
-				'warning: multiple different client offset_encodings detected for buffer, this is not supported yet',
-			}
-
-			---@diagnostic disable-next-line: duplicate-set-field
-			vim.notify = function(msg, ...)
-				for _, banned in ipairs(banned_messages) do
-					if msg == banned then return end
-				end
-
-				notify(msg, ...)
-			end
-		end,
-	},
-	{
 		'lukas-reineke/indent-blankline.nvim',
 		event = { 'BufReadPost', 'BufNewFile' },
 		version = 'v2.*',
@@ -181,10 +151,6 @@ return {
 		dependencies = {
 			-- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
 			'MunifTanjim/nui.nvim',
-			-- OPTIONAL:
-			--   `nvim-notify` is only needed, if you want to use the notification view.
-			--   If not available, we use `mini` as the fallback
-			'rcarriga/nvim-notify',
 		},
 	},
 

@@ -65,14 +65,13 @@ return {
 
 			vim.api.nvim_create_autocmd({ 'BufWritePost', 'BufReadPost', 'InsertLeave' }, {
 				group = vim.api.nvim_create_augroup('nvim-lint', { clear = true }),
-				callback = require('codethread.fns').debounce(100, function()
-					print 'run'
-					require('lint').try_lint()
-				end),
+				callback = require('codethread.fns').debounce(
+					100,
+					function() require('lint').try_lint() end
+				),
 			})
 		end,
 		config = function()
-			print 'setup'
 			require('lint').linters_by_ft = {
 				fish = { 'fish' },
 				-- lua = { 'luacheck' },

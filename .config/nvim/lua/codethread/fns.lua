@@ -46,7 +46,7 @@ function M.save_buffer()
 	if ft == 'oil' then
 		require('oil').save(nil, function(err)
 			if err then
-				vim.notify(err, vim.log.levels.ERROR, { title = 'Dotty' })
+				vim.notify(err, vim.log.levels.ERROR, { title = 'Oil' })
 			else
 				require('codethread.dotty').dotty_link()
 

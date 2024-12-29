@@ -28,8 +28,6 @@ return U.flatten {
 		-- 	},
 		-- },
 
-		{ 'mrcjkb/haskell-tools.nvim', version = '1.x.x' },
-
 		-- help for lua, TODO need to make this work
 		-- U.tools_null { 'stylua', 'luacheck' },
 		-- use 'wsdjeg/luarefvim'

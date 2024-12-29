@@ -161,6 +161,7 @@ return {
 		'🐉 Mover',
 	},
 
+	-- NOTE: this is a terrible keymap
 	k = {
 		function() require('codethread.fold').fold_hyrda:activate() end,
 		'🐉 Folds',
@@ -246,7 +247,13 @@ return {
 		-- if you can't beat 'em
 		c = { Cmd 'silent !code %', 'VSCode' },
 		d = { Cmd 'Oil', 'Dir' },
-		n = { function() require('codethread.fns').open_next_file() end, 'Open next file' },
+		n = {
+			function()
+				---@module "snacks"
+				Snacks.notifier.show_history {}
+			end,
+			'Notifcation History',
+		},
 	},
 
 	t = {

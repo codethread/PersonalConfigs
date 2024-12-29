@@ -1,4 +1,4 @@
-U = require 'config.utils'
+U = require 'codethread.config.utils'
 
 -- print a keymap for a given lhs
 -- accepts optional buffer arg to use buffer local keymaps

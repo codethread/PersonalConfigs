@@ -7,9 +7,9 @@ vim.keymap.set('', ',', '<Nop>')
 vim.g.maplocalleader = ','
 
 -- config that is always defined
-require 'config'
+require 'codethread.config'
 -- disabled vim builtins
-require 'disabled'
+require 'codethread.disabled'
 
 -- zzz
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
