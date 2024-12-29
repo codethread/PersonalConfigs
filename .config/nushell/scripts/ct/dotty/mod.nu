@@ -1,15 +1,26 @@
-use ct/core *
-export use cache.nu [load-cache, save-cache, delete-cache]
+# The dotty module exposes tools to sync directories to a target directory, i.e
+# dotfiles from ~/some_dir into ~/
+#
+# `link` is the main command of interest
+#
+# Editor tooling can also be setup to run changes as needed, see `.config/nvim/lua/codethread/dotty.lua` for my reference
+# - `dotty is-cwd` can help identify if dotty should be run for the given project
+# - `dotty test ...files` can check if saving a file should trigger a re-sync
+# - `dotty format` can display the output of `dotty link` in a nicer view for editors
+
+use ct/core [dedent is-not-empty md-list]
+export use cache.nu
 export use config.nu
+use helpers.nu [assert-no-conflicts]
+use list-files.nu
 
 export def link [
 	--no-cache(-c)
 	--force(-f)
-	--stdout
-] {
-	let res = config load
+]: nothing -> table<name: string, created: table, deleted: table> {
+	config load
 	| par-each { |proj| get-project-files-to-link $proj $no_cache  }
-	| assert-no-conflicts $force
+	| assert-no-conflicts --force=$force
 	| par-each {|proj|
 		# delete
 		$proj.delete | each {|f| rm -f $f }
@@ -17,29 +28,50 @@ export def link [
 		# create
 		$proj.files | get to | list-dirs-to-make | par-each {|dir| mkdir $dir }
 
-		# link TODO: could probably remove the stdout if link exists
-		$proj.files | par-each { ln -s $in.from $in.to }
+		$proj.files
+		| par-each {|f|
+			# `try` because sometimes cache isn't up-to-date, so a link might
+			# be recreated. This is trusting assert-no-conflicts to do it's job
+			ln -s $f.from $f.to | complete | ignore
+		}
 
 		# update cache
 		$proj.existing ++ ($proj.files | get file)
 		| sort
-		| save-cache $proj.name
+		| cache store $proj.name
 
 		$proj
 		| rename --column { files: created, delete: deleted }
-		| select name created deleted
+		| select name root created deleted
 	}
 	| filter {|r| ($r.created | is-not-empty) or ($r.deleted | is-not-empty) }
-	if ($stdout) {
-		$'Created:
-		($res.created | select file | to text)
-		Deleted:
-		($res.deleted | to text)'
-	} else {
-		$res | table --collapse --flatten
+}
+
+# Format the output from `dotty link` into something easier to read, e.g in an
+# editor cli
+export def format []: table -> record<changes: bool, diff: string> {
+	let links = $in
+	let formatted = ($links
+		| each {|proj|
+			let has_created = ($proj.created | is-not-empty)
+			let has_deleted = ($proj.deleted | is-not-empty)
+
+			let created = $"Created:\n($proj.created | get file | md-list)\n"
+			let deleted = $"Deleted:\n($proj.deleted | md-list)\n"
+
+			$"## Project: ($proj.name)\n\n(if $has_created { $created } else "")(if $has_deleted { $deleted } else "")"
+		}
+		| str join ''
+	)
+
+	{
+		changes: ($links | is-not-empty)
+		diff: $formatted
 	}
 }
 
+# Check if the given `dir` (defaults to PWD) is part of any dotty projects
+# dir is only checked against the root of a dotty project, not a nested one
 export def is-cwd [
 	dir?: path # directory path to check
 	--exit # returns an exit code rather than true/false
@@ -64,8 +96,9 @@ export def prune [target: glob = ~/.config/**/*] {
 	}
 }
 
-# assumes run from PWD
-# expected to be called by other tools, hence the errors
+# Test if a list of files are part of a dotty project at any depth.
+# Files are compared against the dotty project of the PWD.
+# Expected to be called by other tools, so throws errors
 export def test [...files] {
 	let proj = config load | where from == $env.PWD
 	if ($proj | is-empty) {
@@ -93,27 +126,25 @@ export def test [...files] {
 	}
 }
 
-def err_format [ title, files ] {
-	$"($title):\n($files | to text)"
-}
-
 export def teardown [] {
 	config load
 	| par-each {|proj|
 		cd $proj.to
-		let files = load-cache $proj.name
+		let files = cache load $proj.name
 
 		$files | par-each {|f| rm -f $f }
+		$files | delete-empty-dirs
 
-		delete-empty-dirs $files
-
-		delete-cache $proj.name
+		cache delete $proj.name
 	}
 }
 
-def delete-empty-dirs [files] {
-	$files
-	| list-dirs-to-make
+def err_format [ title, files ] {
+	$"($title):\n($files | to text)"
+}
+
+def delete-empty-dirs []: list<string> -> list<string> {
+	list-dirs-to-make
 	| par-each {|dir| ls $dir | is-empty | if $in { $dir } else null }
 	| compact
 	| each {|dir| rm $dir }
@@ -121,7 +152,7 @@ def delete-empty-dirs [files] {
 
 # takes a list of files and returns a list of directories that will need
 # to be created for them
-def list-dirs-to-make []: list -> list  {
+def list-dirs-to-make []: list<string> -> list<string>  {
 	path parse
 	| get parent
 	| uniq
@@ -139,7 +170,7 @@ def list-dirs-to-make []: list -> list  {
 def get-project-files-to-link [proj, no_cache] {
 	# cd in order to get all the gitignores correct
 	cd $proj.from
-	let cache = load-cache $proj.name
+	let cache = cache load $proj.name
 
 	let files = list-files $proj.from --excludes $proj.excludes
 
@@ -154,6 +185,7 @@ def get-project-files-to-link [proj, no_cache] {
 
 	{
 		name: $proj.name,
+		root: $proj.from,
 		files:
 		($new_files | each {|file|
 			{
@@ -162,63 +194,7 @@ def get-project-files-to-link [proj, no_cache] {
 				to: ($proj.to | path join $file)
 			}
 		})
-		delete: ($to_delete | each {|f| $proj.to | path join $f }),
+		delete: ($to_delete | each {|f| $proj.to | path join $f | path relative-to $env.HOME })
 		existing: $existing,
 	}
-}
-
-def list-files [path, --excludes = []] {
-	glob **/* --no-dir --exclude ([**/target/** **/.git/**] ++ $excludes)
-	| path relative-to $env.PWD
-	| list-not-ignored
-}
-
-def list-not-ignored [] {
-	let files = $in
-	let ignored = $files | to text | git check-ignore --stdin | lines
-
-	$files | where { $in not-in $ignored } | sort
-}
-
-def assert-no-conflicts [force:bool] {
-	let proj = $in
-
-	let files = $proj
-	| get files
-	| each {|| get to }
-	| reduce {|it,acc| $it ++ $acc }
-
-	$files | uniq --repeated | match ($in | is-empty) {
-		false => {
-			let msg = $"multiple files attempted to write to ($in | str join ","). Process cancelled"
-			error make -u { msg: $msg }
-		}
-		_ => { $files }
-	}
-
-	let existing_files = $files | par-each {|file| { file: $file, exists: (file-exists $file) } } | where exists == true | get file
-
-	if (($existing_files | is-not-empty) and $force) {
-		$existing_files | each {|f| rm $f }
-	} else if ($existing_files | is-not-empty) {
-		print "A number of files already exist:"
-		$existing_files | to text | print
-		let choice = input $"would you like to remove these? [(ansi default_bold)Y(ansi reset)/n]: "
-
-		if ($choice != 'n') {
-			$existing_files | each {|f| rm $f }
-		} else {
-			error make -u { msg: "you'll have to remove them manually or change some file to proceed, alternativly you can pass the --force flag to overwrite them" }
-		}
-	}
-
-	$proj
-}
-
-def file-exists [file: path] {
-	($file | path exists) and (is-symlink $file | not $in)
-}
-
-def is-symlink [file:path] {
-	($file | path exists) and (do { ^test -L $file } | complete | get exit_code | into bool | not $in )
 }

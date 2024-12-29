@@ -65,3 +65,8 @@ export def dedent [str: string] {
 	| str trim
 	| str join "\n"
 }
+
+# format a list as a markdown list
+export def md-list []: list<string> -> string {
+	str join "\n- " | "- " ++ $in
+}
