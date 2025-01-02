@@ -142,5 +142,6 @@
 
 	tap "jesseduffield/lazygit"
 	brew "jesseduffield/lazygit/lazygit"
+	cask "ghostty"
 	'
 }

@@ -7,6 +7,7 @@ return {
 	---@diagnostic disable-next-line: missing-fields
 	opts = {
 		bigfile = { enabled = true },
+		quickfile = {},
 		notifier = {
 			-- NOTE: from 'rcarriga/nvim-notify',
 			-- silence annoying errors from lsp's that have no hover information

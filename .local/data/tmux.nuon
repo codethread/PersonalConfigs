@@ -14,7 +14,7 @@
 	]
 	personal: [
 		[key , name];
-		[ P2 , "~/dev/projects/git-buddy", ]
+		[ P2 , "~/dev/projects/dotty", ]
 		[ P3 , "~/dev/projects/pomo", ]
 		[ P4 , "~/dev/projects/qmk.nvim", ]
 		[ P5 , "~/dev/projects/git-tools", ]
