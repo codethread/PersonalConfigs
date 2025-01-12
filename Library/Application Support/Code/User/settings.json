@@ -306,7 +306,5 @@
   "prisma.showPrismaDataPlatformNotification": false,
   "nushellLanguageServer.includeDirs": [
     "~/PersonalConfigs/.config/nushell/scripts"
-  ],
-
-  // "wgsl-analyzer.server.path": "~/.cargo/bin/wgsl_analyzer"
+  ]
 }
