@@ -1,3 +1,4 @@
+---@diagnostic disable: missing-fields
 return {
 	{
 		'nvim-treesitter/nvim-treesitter',
@@ -123,12 +124,6 @@ return {
 	},
 
 	{
-		'nvim-treesitter/playground',
-		cmd = 'TSPlaygroundToggle',
-		dependencies = 'nvim-treesitter/nvim-treesitter',
-	},
-
-	{
 		'nvim-treesitter/nvim-treesitter',
 		lazy = true,
 		dependencies = {
@@ -144,16 +139,17 @@ return {
 	{
 		'nvim-treesitter/nvim-treesitter',
 		lazy = true,
-		dependencies = {
-			'windwp/nvim-ts-autotag', -- close <div tags, and ciw
-			opts = {
-				autotag = {
-					enable = true,
-					enable_close_on_slash = false, -- till https://github.com/aca/emmet-ls/issues/69 is resolved
-				},
+		opts = {
+			playground = {
+				enable = true,
 			},
+		},
+		dependencies = {
+			'nvim-treesitter/playground',
+			lazy = true,
+			cmd = 'TSPlaygroundToggle',
 		},
 	},
 
-	{ 'fei6409/log-highlight.nvim', event = 'BufRead *.log', opts = {} },
+	{ 'fei6409/log-highlight.nvim', event = 'BufRead *.log', ft = 'log', opts = {} },
 }

@@ -4,6 +4,8 @@ vim.keymap.set('n', 'M', 'm')
 
 U.keymap('i', 'jk', '<ESC>')
 U.keymap('i', 'jj', '<c-w>')
+-- vim.cmd [[inoremap <C-l> <C-o>C]]
+vim.cmd [[inoremap <C-d> <C-o>C]]
 
 return {
 	-- don't changed jumplist with paragraph jumps :help jumplist

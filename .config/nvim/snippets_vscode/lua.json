@@ -36,5 +36,10 @@
       "",
       "$3"
     ]
+  },
+  "reload": {
+    "prefix": "reload",
+    "body": ["require('plenary.reload').reload_module '${1}'", "${2}"],
+    "description": "use plenary.reload for a given module"
   }
 }

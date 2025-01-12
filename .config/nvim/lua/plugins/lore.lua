@@ -85,42 +85,6 @@ return {
 	},
 
 	{
-		-- TODO: replace with https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-pairs.md
-		'windwp/nvim-autopairs',
-		enabled = false,
-		event = 'InsertEnter',
-		config = function()
-			local _, npairs = pcall(require, 'nvim-autopairs')
-			npairs.setup {
-				check_ts = true,
-				ts_config = {
-					lua = { 'string', 'source' },
-					javascript = { 'string', 'template_string' },
-					java = false,
-				},
-				disable_filetype = { 'TelescopePrompt', 'spectre_panel' },
-				disable_in_macro = true,
-				fast_wrap = {
-					map = '<M-e>',
-					chars = { '{', '[', '(', '"', "'" },
-					pattern = string.gsub([[ [%'%"%)%>%]%)%}%,] ]], '%s+', ''),
-					offset = 0, -- Offset from pattern match
-					end_key = '$',
-					keys = 'qwertyuiopzxcvbnmasdfghjkl',
-					check_comma = true,
-					highlight = 'PmenuSel',
-					highlight_grey = 'LineNr',
-				},
-			}
-
-			local cmp_autopairs = require 'nvim-autopairs.completion.cmp'
-			local cmp_status_ok, cmp = pcall(require, 'cmp')
-			if not cmp_status_ok then return end
-			cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done { map_char = { tex = '' } })
-		end,
-	},
-
-	{
 		'folke/which-key.nvim',
 		lazy = false,
 		priority = 100,
@@ -173,5 +137,14 @@ return {
 				nowait = true, -- use `nowait` when creating keymaps
 			})
 		end,
+	},
+
+	-- Lua
+	{
+		'folke/persistence.nvim',
+		event = 'BufReadPre', -- this will only start session saving when an actual file was opened
+		opts = {
+			branch = false,
+		},
 	},
 }

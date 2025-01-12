@@ -11,12 +11,7 @@ return {
 			local presets = require 'markview.presets'
 			local mm = require 'markview'
 			mm.setup {
-				modes = { 'n', 'i', 'no', 'c' }, -- Change these modes
-				-- to what you need
-
-				hybrid_modes = { 'i' }, -- Uses this feature on
-				-- normal mode
-
+				hybrid_modes = { 'i' }, -- Uses this feature on normal mode
 				-- This is nice to have
 				callbacks = {
 					on_enable = function(_, win)
@@ -26,6 +21,12 @@ return {
 				},
 
 				-- ui
+				code_blocks = {
+					icons = 'devicons',
+					style = 'simple',
+					-- pad_amount = 3,
+				},
+
 				list_items = {
 					marker_minus = {
 						text = '•',
@@ -39,5 +40,13 @@ return {
 				},
 			}
 		end,
+	},
+
+	{
+		-- just importing to see the source
+		'saghen/blink.cmp',
+		-- use a release tag to download pre-built binaries
+		version = '*',
+		enabled = false,
 	},
 }

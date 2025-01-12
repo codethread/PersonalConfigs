@@ -25,12 +25,18 @@ return {
 		'neovim/nvim-lspconfig',
 		event = { 'BufReadPre', 'BufNewFile' },
 		dependencies = {
+			'j-hui/fidget.nvim',
+			'williamboman/mason.nvim',
+			'williamboman/mason-lspconfig.nvim',
+			'hrsh7th/nvim-cmp',
+			'hrsh7th/cmp-nvim-lsp',
 			{ 'folke/neoconf.nvim', cmd = 'Neoconf', config = true },
+
 			{
 				'folke/lazydev.nvim',
 				dependencies = {
-					{ 'gonstoll/wezterm-types', lazy = true }, -- update of below
-					{ 'justinsgithub/wezterm-types', lazy = true },
+					-- { 'gonstoll/wezterm-types', lazy = true }, -- update of below
+					-- { 'justinsgithub/wezterm-types', lazy = true },
 					{ 'Bilal2453/luvit-meta', lazy = true },
 				},
 				ft = 'lua', -- only load on lua files
@@ -48,13 +54,6 @@ return {
 					end,
 				},
 			},
-			{ 'Bilal2453/luvit-meta', lazy = true },
-
-			'j-hui/fidget.nvim',
-			'williamboman/mason.nvim',
-			'williamboman/mason-lspconfig.nvim',
-			'hrsh7th/nvim-cmp',
-			'hrsh7th/cmp-nvim-lsp',
 		},
 		---@diagnostic disable: missing-fields
 		---@class PluginLspOpts

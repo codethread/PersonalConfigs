@@ -1,4 +1,5 @@
 return {
+	-- TODO: https://github.com/folke/snacks.nvim/blob/main/docs/terminal.md
 	{
 		'akinsho/toggleterm.nvim',
 		version = 'v2.*',

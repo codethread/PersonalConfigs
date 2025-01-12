@@ -7,5 +7,7 @@
 brain.md
 reports
 
+*.log
+
 node_modules
 bun.lockb

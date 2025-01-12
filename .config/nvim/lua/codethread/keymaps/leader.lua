@@ -18,9 +18,9 @@ return {
 
 	a = { Cmd 'AerialToggle! left', 'Aerial' },
 
-	b = {
-		name = '...',
-	},
+	-- b = {
+	-- 	name = '...',
+	-- },
 
 	e = {
 		name = 'Errors',
@@ -80,15 +80,7 @@ return {
 			'Save',
 		},
 		u = { function() require('plugins.telescope.pickers').unsaved() end, 'Unsaved' },
-		y = {
-			name = 'copy path',
-			l = {
-				function() require('codethread.fns').copy_filepath_relative() end,
-				'path [gitlab]',
-			},
-			r = { Cmd 'let @*=@%', 'path [root]' },
-			y = { Cmd 'let @*=@%', 'path [relative]' },
-		},
+		O = { function() Snacks.bufdelete.other {} end, 'Delete Others' },
 	},
 
 	j = {
@@ -112,8 +104,8 @@ return {
 		c = { Cmd 'Telescope git_commits', 'Checkout commit' },
 		d = { function() require('gitsigns').diffthis() end, 'Diff' },
 		g = { function() require('neogit').open {} end, 'Status' },
-		j = { function() require('gitsigns').next_hunk() end, 'Next Hunk' },
-		k = { function() require('gitsigns').prev_hunk() end, 'Prev Hunk' },
+		j = { function() require('gitsigns').nav_hunk('next', { preview = true }) end, 'Next Hunk' },
+		k = { function() require('gitsigns').nav_hunk('prev', { preview = true }) end, 'Prev Hunk' },
 		h = { function() require('codethread.fns').toggle_file_history() end, 'File History' },
 		l = { function() require('gitsigns').blame_line() end, 'Blame' },
 		o = { Cmd 'Telescope git_status', 'Open changed file' },
@@ -247,13 +239,8 @@ return {
 		-- if you can't beat 'em
 		c = { Cmd 'silent !code %', 'VSCode' },
 		d = { Cmd 'Oil', 'Dir' },
-		n = {
-			function()
-				---@module "snacks"
-				Snacks.notifier.show_history {}
-			end,
-			'Notifcation History',
-		},
+		n = { Cmd 'LogOpen notifications', 'Notifcation History' },
+		l = { function() require('codethread.logger').select() end, 'open log file' },
 	},
 
 	t = {
@@ -273,9 +260,8 @@ return {
 	u = {
 		name = 'Utils',
 		f = { "mbggVG=='b", 'format buffer' },
-		y = { Cmd 'let @*=@%', 'save filename' },
 		s = { '1z=', 'autocorrect' },
-		c = { 'vip:EasyAlign *,<CR>', 'format csv' },
+		b = { function() require('codethread.box').box() end, 'Box' },
 		r = {
 			function()
 				require('luasnip.loaders.from_vscode').load {
@@ -287,5 +273,17 @@ return {
 			end,
 			'reload snippets',
 		},
+	},
+
+	-- clipboard, copy
+	y = {
+		name = 'Yank',
+		l = {
+			function() require('codethread.fns').copy_filepath_relative() end,
+			'path [gitlab]',
+		},
+		r = { Cmd 'let @*=@%', 'path [root]' }, -- TODO:
+		y = { Cmd 'let @*=@%', 'path [relative]' }, -- TODO:
+		s = { Cmd 'Telescope neoclip', 'Search' },
 	},
 }

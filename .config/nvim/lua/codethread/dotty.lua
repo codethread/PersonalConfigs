@@ -2,9 +2,8 @@
 --- for managing dotfiles (see `dotty --help`).
 local M = {}
 
-local logger = require 'codethread.log'
+local log = require('codethread.logger.init').new { plugin = 'dotty' }
 
-local log = logger.new { plugin = 'dotty' }
 local in_dotfiles = false
 
 ---notify at info level
