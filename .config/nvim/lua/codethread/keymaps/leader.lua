@@ -239,13 +239,8 @@ return {
 		-- if you can't beat 'em
 		c = { Cmd 'silent !code %', 'VSCode' },
 		d = { Cmd 'Oil', 'Dir' },
-		n = {
-			function()
-				---@module "snacks"
-				Snacks.notifier.show_history {}
-			end,
-			'Notifcation History',
-		},
+		n = { Cmd 'LogOpen notifications', 'Notifcation History' },
+		l = { function() require('codethread.logger').select() end, 'open log file' },
 	},
 
 	t = {
@@ -266,7 +261,7 @@ return {
 		name = 'Utils',
 		f = { "mbggVG=='b", 'format buffer' },
 		s = { '1z=', 'autocorrect' },
-		c = { 'vip:EasyAlign *,<CR>', 'format csv' },
+		b = { function() require('codethread.box').box() end, 'Box' },
 		r = {
 			function()
 				require('luasnip.loaders.from_vscode').load {

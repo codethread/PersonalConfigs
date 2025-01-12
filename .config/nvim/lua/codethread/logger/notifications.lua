@@ -1,19 +1,27 @@
+--- Notifications handles a 'drawer' for logs and messages.
+---
+--- notifications from Snacks (including getting history and piping to a buffer,
+--- with updates).
+---
+--- Also works with my log implementation to grab from there if requested.
+---
+--- TODO:
+--- - logs need aligning a little better (formats are different)
+--- - does this need a keybinding?
+--- - should other windows get closed?
 local M = {}
 
 ---@module 'snacks'
 
 local obj = require 'lib.obj'
-local log = require('codethread.logger.init').new { plugin = 'popup', level = 'debug' }
+local log = require('codethread.logger.init').new { plugin = 'popup' }
 
----@type ct.logs.state
-local default_state = {
-	win = nil,
-	last_id = 0,
-}
+---@returns ct.logs.state
+local function default_state() return { win = nil, last_id = 0 } end
 
 ---@type table<string, ct.logs.state>
 local windows = {
-	notifications = default_state,
+	notifications = default_state(),
 }
 
 ---Take an iterable list of notifications and convert them to strings for
@@ -136,7 +144,7 @@ function M.pop(type)
 			state.win:toggle()
 		end
 	else
-		local state = windows[type] or default_state
+		local state = windows[type] or default_state()
 		log.debug(state)
 		local log_info = require('codethread.logger.init').loggers[type]
 		log.debug(obj.omit(log_info, { 'logger' }))
@@ -156,15 +164,6 @@ function M.pop(type)
 		end
 	end
 end
-
---test
-Snacks.debug { message = math.random() }
-log.info 'info hey'
-log.debug 'debug hey'
-log.debug('debug hey', { some = { 1, 2, 3 }, mod = 22 })
-vim.keymap.set('n', '<leader>tn', function() M.pop 'notifications' end)
-vim.keymap.set('n', '<leader>tt', function() M.pop 'popup' end)
-log.info '----restart'
 
 ---@class ct.logs.state
 ---@field win? snacks.win

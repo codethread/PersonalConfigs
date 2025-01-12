@@ -1,8 +1,19 @@
+---@diagnostic disable: missing-fields
+---@module "snacks"
+
 return {
 	'folke/snacks.nvim',
+	dependencies = {
+		U.highlights {
+			SnacksDebugPrint = { bg = 'surface', fg = 'white' },
+		},
+	},
 	priority = 1000,
 	lazy = false,
-	---@module "snacks"
+	keys = {
+		{ '<leader>.', function() Snacks.scratch() end, desc = 'Toggle Scratch Buffer' },
+		{ '<leader>S', function() Snacks.scratch.select() end, desc = 'Select Scratch Buffer' },
+	},
 	---@type snacks.Config
 	---@diagnostic disable-next-line: missing-fields
 	opts = {
@@ -17,5 +28,7 @@ return {
 			-- 	'warning: multiple different client offset_encodings detected for buffer, this is not supported yet',
 			-- }
 		},
+		---@type snacks.dashboard.Config
+		dashboard = {},
 	},
 }

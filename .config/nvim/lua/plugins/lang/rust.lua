@@ -7,6 +7,9 @@ local function get_codelldb()
 	return codelldb_path, liblldb_path
 end
 
+-- interesting stuff here to steal
+-- https://github.com/noib3/dotfiles/blob/master/modules/home/neovim/lua/diagnostic/rust.lua
+
 return {
 	{
 		'neovim/nvim-lspconfig',

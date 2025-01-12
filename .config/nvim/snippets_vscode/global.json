@@ -1,0 +1,8 @@
+{
+  "sleep": {
+    "prefix": "##",
+    "scope": "lua",
+    "body": ["--[[", "$1", "--]"]
+  }
+}
+// here be comment

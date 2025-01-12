@@ -42,15 +42,9 @@ vim.cmd [[
 ---@return LazySpec[]
 return {
 	'wellle/targets.vim',
+	{ 'echasnovski/mini.ai', version = false, opts = {} },
 
 	{ 'tpope/vim-rsi', event = { 'InsertEnter', 'CmdlineEnter' } }, -- readline movement, e.g C-f is forward char
-
-	{
-		'kylechui/nvim-surround',
-		version = 'v1.*',
-		event = 'VeryLazy',
-		config = true,
-	},
 
 	{
 		-- Text editing in Neovim with immediate visual feedback: view the effects of any
@@ -82,6 +76,7 @@ return {
 	-- (crm), camelCase (crc), snake_case (crs), UPPER_CASE (cru), dash-case (cr-),
 	-- dot.case (cr.), space case (cr<space>), and Title Case (crt) are all just 3 keystrokes away.
 	'tpope/vim-abolish',
+	-- also https://github.com/gregorias/coerce.nvim/tree/main if wanting lua api
 
 	{
 		'junegunn/vim-easy-align',

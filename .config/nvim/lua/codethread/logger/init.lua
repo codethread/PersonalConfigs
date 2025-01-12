@@ -1,15 +1,6 @@
 local M = {}
 
----@module 'snacks'
-
 local log = require 'codethread.logger.plenarylog'
-
----@type ct.LogLevels[]
-local levels = {
-	'error',
-	'info',
-	'debug',
-}
 
 ---List of loggers to use throughout config, can be controlled globally
 ---@type { [string]: ct.Loggers }
@@ -18,31 +9,20 @@ M.loggers = {}
 ---Logger for debugging my own config. Builds on plenary log but is controlled
 ---through `Log` ex command to change at runtime or startup
 ---Also supports env_var `DEBUG_CT_ ..config.plugin`, e.g `DEBUG_CT_DOTTY`
----@param config ct.LogConfig
+---@param opts ct.LogConfig
 ---@return ct.Logger
-function M.new(config)
-	do -- validation of inputs
-		if not config or not config.plugin then error 'log.new needs config and plugin' end
-
-		vim.validate('config.level', config.level, function(l)
-			local ok = vim.list_contains(levels, l)
-			if ok then return ok end
-			return ok, string.format('expected %s to be one of %s', l, table.concat(levels, ', '))
-		end, true)
-	end
-
-	config.use_console = config.use_console or false
-	config.level = config.level or os.getenv('DEBUG_CT_' .. config.plugin:upper()) or 'error'
-
-	-- create a log file automatically and pass to plenary
-	---@diagnostic disable-next-line: inject-field
-	config.outfile = not config.use_console
-			and (vim.fn.stdpath 'cache' .. '/' .. config.plugin .. '.log')
-		or nil
+function M.new(opts)
+	local config = log.create_config {
+		plugin = opts.plugin,
+		level = opts.level or os.getenv('DEBUG_CT_' .. opts.plugin:upper()) or 'error',
+		use_console = opts.use_console or false,
+		outfile = not opts.use_console and (vim.fn.stdpath 'cache' .. '/' .. opts.plugin .. '.log')
+			or nil,
+	}
 
 	local logger = log.new(config)
 
-	M.loggers[config.plugin] = {
+	M.loggers[opts.plugin] = {
 		logger = logger,
 		config = config,
 		file = config.outfile,
@@ -77,11 +57,9 @@ function M.set(logger, level)
 	M.new(opts)
 end
 
----@alias ct.LogLevels 'debug' | 'info' | 'error'
-
 ---@class ct.Loggers
 ---@field logger ct.Logger instance of a logger
----@field config ct.LogConfig config for reconstructing logger on level change
+---@field config ct.LoggerLogInternalConfig config for reconstructing logger on level change
 ---@field file? string log file
 
 ---@class ct.LogConfig
@@ -119,24 +97,19 @@ end, {
 
 vim.api.nvim_create_user_command('LogOpen', function(opts)
 	local logger = opts.fargs[1]
-	local file = M.loggers[logger].file
-
-	Snacks.win.new {
-		position = 'bottom',
-		minimal = true,
-		enter = true,
-		file = file,
-		fixbuf = true,
-		wo = { wrap = false },
-		keys = {
-			q = 'close',
-			t = function() vim.wo.wrap = not vim.wo.wrap end,
-		},
-	}
+	require('codethread.logger.notifications').pop(logger)
 end, {
-	desc = 'Open log file',
+	desc = 'Open log file, includes notifications from messages',
 	nargs = 1,
-	complete = function() return vim.tbl_keys(M.loggers) end,
+	complete = function() return vim.list_extend({ 'notifications' }, vim.tbl_keys(M.loggers)) end,
 })
+
+function M.select()
+	local items = vim.list_extend({ 'notifications' }, vim.tbl_keys(M.loggers))
+	vim.ui.select(items, {}, function(choice)
+		if not choice then return end
+		require('codethread.logger.notifications').pop(choice)
+	end)
+end
 
 return M

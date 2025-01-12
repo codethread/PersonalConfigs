@@ -1,3 +1,4 @@
+---@diagnostic disable: missing-fields
 return {
 	{
 		'nvim-treesitter/nvim-treesitter',
@@ -40,6 +41,7 @@ return {
 				{ 'sql' },
 				--web
 				{ 'css','scss','html','jsdoc','javascript','typescript','tsx','graphql', 'svelte', 'styled' },
+				{ 'wgsl'},
 				-- webish
 				{ 'embedded_template','http','prisma','proto' },
 				-- config
@@ -123,12 +125,6 @@ return {
 	},
 
 	{
-		'nvim-treesitter/playground',
-		cmd = 'TSPlaygroundToggle',
-		dependencies = 'nvim-treesitter/nvim-treesitter',
-	},
-
-	{
 		'nvim-treesitter/nvim-treesitter',
 		lazy = true,
 		dependencies = {
@@ -144,14 +140,15 @@ return {
 	{
 		'nvim-treesitter/nvim-treesitter',
 		lazy = true,
-		dependencies = {
-			'windwp/nvim-ts-autotag', -- close <div tags, and ciw
-			opts = {
-				autotag = {
-					enable = true,
-					enable_close_on_slash = false, -- till https://github.com/aca/emmet-ls/issues/69 is resolved
-				},
+		opts = {
+			playground = {
+				enable = true,
 			},
+		},
+		dependencies = {
+			'nvim-treesitter/playground',
+			lazy = true,
+			cmd = 'TSPlaygroundToggle',
 		},
 	},
 

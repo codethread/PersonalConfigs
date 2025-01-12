@@ -1,3 +1,4 @@
+-- TODO: change cursor, line is easy to miss
 -- terminal
 vim.opt.shell = 'zsh'
 vim.opt.termguicolors = true -- adds more colors

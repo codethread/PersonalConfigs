@@ -9,9 +9,8 @@
 
 local Path = require 'plenary.path'
 
-local _ = require 'lib.obj'
+local lib_obj = require 'lib.obj'
 
--- User configuration section
 local default_config = {
 	-- Name of the plugin. Prepended to log messages.
 	plugin = 'plenary',
@@ -29,6 +28,7 @@ local default_config = {
 
 	-- Output file has precedence over plugin, if not nil.
 	-- Used for the logging file, if not nil and use_file == true.
+	---@type string | nil
 	outfile = nil,
 
 	-- Any messages above this level will be logged.
@@ -74,8 +74,31 @@ local default_config = {
 
 local log = {}
 
----comment
----@param config any
+---@alias ct.LogLevels 'debug' | 'info' | 'error'
+
+---@type ct.LogLevels[]
+log.levels = {
+	'error',
+	'info',
+	'debug',
+}
+
+---@param config ct.LoggerLogInternalConfig
+---@return ct.LoggerLogInternalConfig
+log.create_config = function(config)
+	if not config or not config.plugin then error 'log.new needs config and plugin' end
+
+	vim.validate('config.level', config.level, function(l)
+		local ok = vim.list_contains(log.levels, l)
+		if ok then return ok end
+		return ok, string.format('expected %s to be one of %s', l, table.concat(levels, ', '))
+	end, true)
+
+	return vim.tbl_deep_extend('force', default_config, config)
+end
+
+---Create an instance of a logger
+---@param config ct.LoggerLogInternalConfig
 ---@return ct.Logger
 log.new = function(config)
 	config = vim.tbl_deep_extend('force', default_config, config)
@@ -107,7 +130,7 @@ log.new = function(config)
 			if type(x) == 'number' and config.float_precision then
 				x = tostring(round(x, config.float_precision))
 			elseif type(x) == 'table' then
-				x = vim.inspect(_.to_inspectable(x))
+				x = vim.inspect(lib_obj.to_inspectable(x))
 			else
 				x = tostring(x)
 			end
@@ -187,5 +210,11 @@ end
 ---@field lazy_warn fun(...: any): nil
 ---@field lazy_error fun(...: any): nil
 ---@field lazy_fatal fun(...: any): nil
+
+---@class ct.LoggerLogInternalConfig
+---@field plugin string Name of the plugin. Prepended to log messages.
+---@field use_console boolean Will log to messages, else logs to `stdpath("cache")/plugin` [default: false]
+---@field level ct.LogLevels level for logger [default: error]
+---@field outfile string | nil
 
 return log

@@ -2,7 +2,7 @@
 --- for managing dotfiles (see `dotty --help`).
 local M = {}
 
-local log = require('codethread.logger.init').new { plugin = 'dotty', level = 'debug' }
+local log = require('codethread.logger.init').new { plugin = 'dotty' }
 
 local in_dotfiles = false
 

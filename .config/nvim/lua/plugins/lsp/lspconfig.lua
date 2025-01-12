@@ -87,6 +87,9 @@ return {
 						'--include-path=' .. vim.fn.expand '~/PersonalConfigs/.config/nushell/scripts',
 					},
 				},
+				wgsl_analyzer = {
+					settings = {},
+				},
 				-- clangd = {
 				-- 	filetypes = { 'c', 'cpp', 'objc', 'objcpp', 'cuda' },
 				-- },

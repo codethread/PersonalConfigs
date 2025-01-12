@@ -7,21 +7,40 @@ return {
 			vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
 			vim.o.foldlevelstart = 99
 			vim.o.foldenable = true
+			vim.o.foldnestmax = 4 -- TRIAL: no more than 4 levels of nesting
 
 			-- hide foldcolumn, can be enabled with foldcolumn = 1. This is a list in the left gutter, it's not useful for me
 			vim.o.foldcolumn = '0'
 			-- vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]] -- add nice fold icons
 		end,
+		---@module 'ufo'
+		---@type UfoConfig
 		opts = {
+			-- NOTE: careful here, if using lsp provider then folds will be
+			-- applied to any unfolded areas (even if already folded) beacuse
+			-- only 'closed' folds are persisted, so it's impossible to _not_
+			-- fold an area, i.e it won't persist "keep this open please"
 			close_fold_kinds_for_ft = {
-				default = { 'imports' },
+				default = {
+					'imports',
+					'marker',
+					-- 'comment',
+					--
+					-- NOTE: region is defined by lsp itself, so just trial and error to see if this is nice.
+					-- Annoying because it overrides persisted folds
+					--
+					-- 'region',
+				},
 			},
+			---@return UfoProviderEnum[] | ''
 			provider_selector = function(_, filetype)
+				---@type table<string, UfoProviderEnum[] | ''> empty '' disables
 				local ftMap = {
-					vim = 'indent',
-					typescriptreact = 'lsp',
-					typescript = 'lsp',
-					rust = 'lsp',
+					vim = { 'indent' },
+					typescriptreact = { 'lsp' },
+					typescript = { 'lsp' },
+					rust = { 'lsp' },
+					lua = { 'lsp' },
 					git = '',
 				}
 
