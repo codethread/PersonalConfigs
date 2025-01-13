@@ -28,37 +28,40 @@ return {
 		x = {
 			function()
 				local file = vim.fn.expand '<cfile>'
-				local Job = require 'plenary.job'
-
-				local function is_github_link(w)
-					local bits = vim.split(w, '/')
-					return #bits == 2
-				end
 
 				if vim.startswith(file, 'http') then
-					Job:new({
-						command = 'open',
-						args = { file },
-					}):sync()
-				elseif is_github_link(file) then
-					Job:new({
-						command = 'open',
-						args = { 'https://github.com/' .. file },
-					}):sync()
+					vim.system({ 'open', file }, { detach = true })
+				elseif vim.bo.ft == 'lua' and file:find '^([%w-_]+/[%w-_.]+)$' then -- github link like foo/bar.nvim
+					vim.system({ 'open', 'https://github.com/' .. file }, { detach = true })
 				elseif vim.system({ 'isPhrase', file }):wait().code == 0 then
-					-- TODO be smart if in native/web
+					local file_path = vim.fn.expand '%'
+					local dir = vim.split(file_path, '/')[2]
+					local dirs = { 'native', 'web' }
+
+					if not vim.list_contains(dirs, dir) then
+						local msg = string.format(
+							'%s is not an expected dir of %s in path %s',
+							dir,
+							table.concat(dirs, ','),
+							file_path
+						)
+						error(msg)
+					end
 					vim.system({
 						'rg',
 						file,
 						'-F',
 						'--vimgrep',
-						'apps/web/app/public/locale/web/en-gb',
+						dir == 'web' and 'apps/web/app/public/locale/web/en-gb'
+							or 'apps/web/app/public/locale/app/en-gb',
 					}, { text = true }, function(obj)
 						local lines = vim.split(vim.trim(obj.stdout), '\n')
 						if #lines == 1 then
-							vim.print(1)
 							local res = vim.split(lines[1], ':  ')[1]
 							vim.system { 'openInVim', res }
+						else
+							vim.print(lines)
+							error 'got too many results'
 						end
 					end)
 				else
