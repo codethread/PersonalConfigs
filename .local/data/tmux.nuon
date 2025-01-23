@@ -7,6 +7,11 @@
 		`~/Library/Mobile Documents/com~apple~CloudDocs/Books/The_DynamoDB_Book_-_Plus_Package/Code examples`
 		`~/Library/Mobile Documents/iCloud~md~obsidian/Documents`
 	]
+	# these will be run and added to dirs
+	dirs_special: [
+		[cmd , args];
+		[nvim, [--clean --headless `+=vim.fs.dirname(os.getenv('VIMRUNTIME'))` +qall]]
+	]
 	base: [
 		[key , name];
 		[ P0 , "~/dev/projects/qmk_firmware/keyboards/preonic/keymaps/codethread"]
@@ -19,7 +24,8 @@
 		[ P4 , "~/dev/projects/qmk.nvim", ]
 		[ P5 , "~/dev/projects/git-tools", ]
 
-		[ P8 , "~/dev/projects/qmk_firmware/keyboards/preonic/keymaps/codethread"]
+		# [ P8 , "~/dev/projects/qmk_firmware/keyboards/preonic/keymaps/codethread"]
+		[ P8 , "~/dev/projects/nuphy_firmware/keyboards/nuphy/halo75v2/ansi" ]
 		[ P9 , "~/Library/Mobile Documents/com~apple~CloudDocs/Documents/Notes"]
 	],
 	work: [
