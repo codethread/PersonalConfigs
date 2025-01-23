@@ -99,7 +99,7 @@ return {
 				['@variable'] = { italic = false },
 
 				['@keyword.bang'] = { fg = 'love', underline = true },
-				['@keyword.return'] = { fg = 'iris', undercurl = true },
+				['@keyword.return'] = { fg = 'iris' },
 
 				-- js stuff
 				-- ['@arrow_function.const'] = { undercurl = true },

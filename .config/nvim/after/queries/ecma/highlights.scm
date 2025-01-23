@@ -5,6 +5,7 @@
 
 "default" @keyword.default
 "export" @keyword.export
+"throw" @keyword.export
 
 ; highlight arrow functions
 (lexical_declaration
