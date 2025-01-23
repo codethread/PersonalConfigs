@@ -100,6 +100,14 @@ function M.machine(match)
 	return match[user] or {}
 end
 
+---Get current file relative to cwd
+---@return string
+function M.get_current_file()
+	local Path = require 'plenary.path'
+	local full_path = vim.fn.expand '%:p'
+	return Path:new(full_path):make_relative()
+end
+
 -----------------------------------------------------------------------------------
 -- Keybindings / mappings
 -----------------------------------------------------------------------------------

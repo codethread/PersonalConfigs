@@ -122,4 +122,59 @@ function M.debounce(ms, fn)
 	end
 end
 
+---comment
+---@param key string
+function M.open_phrase_key(key)
+	local file_path = U.get_current_file()
+	local dir = vim.split(file_path, '/')[2]
+	local dirs = { 'native', 'web', 'clientShared' }
+
+	if not vim.list_contains(dirs, dir) then
+		local msg = string.format(
+			'%s is not an expected dir of %s in path %s',
+			dir,
+			table.concat(dirs, ','),
+			file_path
+		)
+		error(msg)
+	end
+
+	local web = 'apps/web/app/public/locale/web/en-gb'
+	local native = 'apps/web/app/public/locale/app/en-gb'
+
+	---@type string[]
+	local serach_dirs = dir == 'web' and { web } or dir == 'native' and { native } or { web, native }
+
+	local cmd = {
+		'rg',
+		key,
+		'-F',
+		'--vimgrep',
+		unpack(serach_dirs),
+	}
+
+	vim.system(cmd, { text = true }, function(obj)
+		local lines = vim.split(vim.trim(obj.stdout), '\n')
+		---@type string
+		local target
+		if #lines == 1 then
+			target = vim.split(lines[1], ':  ')[1]
+			vim.system { 'openInVim', target }
+		else
+			vim.ui.select(lines, {
+				prompt = 'Phrase file',
+				format_item = function(line)
+					local path, match = unpack(vim.split(line, '  ', { plain = true }))
+					return path:gsub('apps/web/app/public/locale/', '') .. ' | ' .. match
+				end,
+			}, function(choice)
+				if choice then
+					target = vim.split(choice, ':  ')[1]
+					vim.system { 'openInVim', target }
+				end
+			end)
+		end
+	end)
+end
+
 return M

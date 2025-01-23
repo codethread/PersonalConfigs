@@ -1,5 +1,11 @@
 use ct/git [gmm]
 
+# XXX
+# phrase stuff
+# isPhrase needs moving, rg-phrase can be moved
+# move all into neovim as picker
+# use to learn fzf-lua
+
 export def rg-phrase [
 	text: string,
 	--app # defaults to web
