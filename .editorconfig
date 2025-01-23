@@ -20,3 +20,8 @@ indent_size = 2
 [*.{json,js,jsx,ts,tsx,html,css}]
 indent_style = space
 indent_size = 2
+
+# treesitter queries indent a lot!
+[*.{scm}]
+indent_style = space
+indent_size = 2

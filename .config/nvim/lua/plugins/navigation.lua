@@ -7,16 +7,12 @@ return {
 
 	{
 		'rgroli/other.nvim',
+		name = 'other-nvim',
 		cmd = 'Other',
 		opts = {
 			mappings = {
-				{
-					{
-						pattern = '/src/app/(.*)/.*.ts$',
-						target = '/src/app/%1/%1.component.html',
-						context = 'component', -- optional
-					},
-				},
+				{ pattern = 'lua/(.*)/(.*).lua$', target = 'test/%1/%2.lua' },
+				{ pattern = 'test/(.*)/(.*).lua$', target = 'lua/%1/%2.lua' },
 			},
 		},
 	},

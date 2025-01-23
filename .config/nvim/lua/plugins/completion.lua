@@ -190,7 +190,7 @@ return {
 			end
 
 			-- :help ins-completion
-			-- U.keymap('i', '<C-Space>', '<C-x>')
+			U.keymap('i', '<C-Space><C-o', '<C-x><C-o>')
 
 			U.keymap('i', '<C-Space><C-Space>', complete { 'nvim_lsp' }, 'Cmp')
 			U.keymap('i', '<C-Space><C-p>', complete 'luasnip')

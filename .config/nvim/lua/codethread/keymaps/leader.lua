@@ -16,7 +16,7 @@ return {
 		'Workspace Symbols',
 	},
 
-	a = { Cmd 'AerialToggle! left', 'Aerial' },
+	a = { Cmd 'Other', 'other' },
 
 	-- b = {
 	-- 	name = '...',
@@ -235,12 +235,13 @@ return {
 	-- open, Open, openers, Openers
 	o = {
 		name = 'Open',
-		i = { Cmd 'OpenInitBuffer', 'Open init buffer' },
+		a = { Cmd 'AerialToggle! left', 'Aerial' },
 		-- if you can't beat 'em
 		c = { Cmd 'silent !code %', 'VSCode' },
 		d = { Cmd 'Oil', 'Dir' },
-		n = { Cmd 'LogOpen notifications', 'Notifcation History' },
+		i = { Cmd 'OpenInitBuffer', 'Open init buffer' },
 		l = { function() require('codethread.logger').select() end, 'open log file' },
+		n = { Cmd 'LogOpen notifications', 'Notifcation History' },
 	},
 
 	t = {

@@ -129,9 +129,34 @@ return {
 				-- NOTE: uncomment to see
 				-- vim.print(client.server_capabilities)
 
+				local reuse_win = true
+				local on_list
+				if client.name == 'lua_ls' then
+					on_list = require('plugins.lsp.definition').on_list_fact {
+						reuse_win = reuse_win,
+						filter = function(item)
+							--- WIP:
+							--- - in lua class defs might be better refersed (extensions are more interesting)
+
+							-- remove function assignments, e.g local foo = function() end
+							local s = item.text:gsub('%s', ' ')
+							local start = s:find 'function%s*%('
+							return start ~= item.col
+						end,
+					}
+				end
 				U.keys(buf, {
 					{ 'gD', function() vim.lsp.buf.declaration() end, 'declaration' },
-					{ 'gd', function() vim.lsp.buf.definition { reuse_win = true } end, 'definition' },
+					{
+						'gd',
+						function()
+							vim.lsp.buf.definition {
+								on_list = on_list,
+								reuse_win = reuse_win,
+							}
+						end,
+						'definition',
+					},
 					{
 						'K',
 						function()
