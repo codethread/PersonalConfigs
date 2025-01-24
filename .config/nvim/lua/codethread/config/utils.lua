@@ -1,5 +1,15 @@
 local M = {}
 
+function M.pipe(functions)
+	return function(input)
+		local result = input
+		for _, func in ipairs(functions) do
+			result = func(result)
+		end
+		return result
+	end
+end
+
 ---@param client string
 ---@param on_attach fun(client, buffer)
 function M.lsp_attach(client, on_attach)

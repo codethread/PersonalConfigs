@@ -1,3 +1,4 @@
+---@diagnostic disable: missing-fields
 vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
 
 return {
@@ -73,7 +74,7 @@ return {
 	{
 		'hrsh7th/nvim-cmp',
 		version = false, -- last release is way too old
-		event = 'InsertEnter',
+		event = { 'InsertEnter', 'CmdlineEnter' },
 		dependencies = {
 			'hrsh7th/cmp-nvim-lsp',
 			'hrsh7th/cmp-cmdline',
@@ -84,39 +85,55 @@ return {
 				'saadparwaiz1/cmp_luasnip',
 				dependencies = 'L3MON4D3/LuaSnip',
 			},
-			'zbirenbaum/copilot-cmp',
 		},
 		config = function()
 			local cmp = require 'cmp'
+			local kinds = require('lspkind').cmp_format { mode = 'symbol_text', maxwidth = 50 }
+
 			cmp.setup {
 				snippet = {
 					expand = function(args) require('luasnip').lsp_expand(args.body) end,
 				},
-				mapping = {
+				window = {
+					completion = {
+						col_offset = -3,
+					},
+				},
+				mapping = cmp.mapping.preset.insert {
+					-- see :h ins-completion for more
+					-- CTRL-Y		  Yes: Accept the currently selected match and stop completion.
+					-- CTRL-E		  End completion, go back to what was there before selecting a
+					-- 				  match (what was typed or longest common string).
 					['<C-k>'] = cmp.mapping.select_prev_item(),
 					['<C-j>'] = cmp.mapping.select_next_item(),
 					['<C-l>'] = cmp.mapping.confirm { select = true }, -- select grabs first item if none were selected
-					['<Esc>'] = cmp.mapping.abort(),
-					['<C-c>'] = cmp.mapping.abort(),
-					['<C-e>'] = cmp.mapping.abort(),
+					['<C-y>'] = cmp.mapping.close(), -- good if not wanting snippet expansion
+					['<C-e>'] = cmp.mapping.abort(), -- end completion and remove completion text
+					['<C-c>'] = cmp.mapping.abort(), -- ^^
 					['<C-u>'] = cmp.mapping.scroll_docs(-4),
 					['<C-d>'] = cmp.mapping.scroll_docs(4),
+					-- ['<C-Space>'] = cmp.mapping.complete(),
 				},
 				completion = {
 					keyword_length = 2,
 					-- keyword_length = 1000,
 				},
 				sources = cmp.config.sources {
-					{ name = 'nvim_lsp' },
-					{ name = 'copilot' },
+					{
+						name = 'nvim_lsp',
+						---@param entry cmp.Entry
+						---@param ctx cmp.Context
+						entry_filter = function(entry, ctx)
+							-- this pops up and is quite annoying, I think it's the square brackets
+							return entry.word ~= '[Symbol]'
+						end,
+					},
 				},
 				formatting = {
+					expandable_indicator = true,
 					fields = { 'kind', 'abbr', 'menu' },
 					format = function(entry, vim_item)
-						local kind = require('lspkind').cmp_format {
-							mode = 'symbol_text',
-							maxwidth = 50,
-						}(entry, vim_item)
+						local kind = kinds(entry, vim_item)
 						local strings = vim.split(kind.kind, '%s', { trimempty = true })
 						kind.kind = ' ' .. (strings[1] or '') .. ' '
 						local m = strings[2]
@@ -132,10 +149,6 @@ return {
 					ghost_text = {
 						hl_group = 'LspCodeLens',
 					},
-				},
-				confirm_opts = {
-					behavior = cmp.ConfirmBehavior.Replace,
-					select = false,
 				},
 			}
 
@@ -162,10 +175,7 @@ return {
 				completion = {
 					keyword_length = 1,
 				},
-				confirm_opts = {
-					behavior = cmp.ConfirmBehavior.Replace,
-					select = true,
-				},
+				matching = { disallow_symbol_nonprefix_matching = false }, -- recommended by docs
 			})
 
 			cmp.setup.cmdline({ '/', '?' }, {
@@ -189,8 +199,10 @@ return {
 				end
 			end
 
+			-- vim.cmd [[unmap <C-Space>]]
+
 			-- :help ins-completion
-			U.keymap('i', '<C-Space><C-o', '<C-x><C-o>')
+			U.keymap('i', '<C-Space><C-o>', '<C-x><C-o>')
 
 			U.keymap('i', '<C-Space><C-Space>', complete { 'nvim_lsp' }, 'Cmp')
 			U.keymap('i', '<C-Space><C-p>', complete 'luasnip')

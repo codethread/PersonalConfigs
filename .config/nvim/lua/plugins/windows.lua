@@ -3,17 +3,7 @@ return {
 
 	{ 'shortcuts/no-neck-pain.nvim', version = '*', cmd = { 'NoNeckPain' } },
 
-	{
-		'szw/vim-maximizer',
-		cmd = { 'MaximizerToggle' },
-		init = function()
-			vim.cmd [[
-				nnoremap <silent><C-Y> :MaximizerToggle<CR>
-				vnoremap <silent><C-Y> :MaximizerToggle<CR>gv
-				inoremap <silent><C-Y> <C-o>:MaximizerToggle<CR>
-				]]
-		end,
-	},
+	{ 'declancm/maximize.nvim', opts = {}, cmd = { 'Maximize' } },
 
 	{
 		'christoomey/vim-tmux-navigator',

@@ -49,4 +49,11 @@ return {
 		version = '*',
 		enabled = false,
 	},
+	{
+		'jmbuhr/otter.nvim',
+		dependencies = {
+			'nvim-treesitter/nvim-treesitter',
+		},
+		opts = {},
+	},
 }

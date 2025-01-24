@@ -173,6 +173,7 @@ return {
 			'🐉 Tabs',
 		},
 	},
+	W = { Cmd 'Maximize', 'Window Maximise' },
 
 	s = {
 		name = 'Search',
@@ -182,7 +183,25 @@ return {
 			Cmd 'Telescope current_buffer_fuzzy_find theme=ivy previewer=false',
 			'Buffer',
 		},
+		F = {
+			function()
+				require('telescope.builtin').live_grep {
+					grep_open_files = true,
+				}
+			end,
+			'Buffers',
+		},
 		h = { Cmd 'Telescope help_tags', 'Find Help' },
+		H = {
+			function()
+				--WIP needs stealing from the source to open as help
+				require('telescope.builtin').live_grep {
+					cwd = vim.fs.joinpath(os.getenv 'VIMRUNTIME', 'doc'),
+				}
+			end,
+			'Grep Help',
+		},
+
 		M = { Cmd 'Telescope man_pages', 'Man Pages' },
 		r = { Cmd 'Telescope oldfiles', 'Open Recent File' },
 		R = { Cmd 'Telescope registers', 'Registers' },

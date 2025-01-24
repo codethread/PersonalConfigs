@@ -1,4 +1,3 @@
-vim.print 'hi!'
 do -- setup some common keymaps
 	-- use space as the leader key
 	vim.keymap.set('', '<Space>', '<Nop>')

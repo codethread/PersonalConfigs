@@ -41,6 +41,7 @@ return {
 			end,
 			'Go to link',
 		},
+		-- ['='] -- eval stuff
 	},
 
 	-- keep cursor centered
