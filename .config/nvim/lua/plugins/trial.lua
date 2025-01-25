@@ -56,4 +56,16 @@ return {
 		},
 		opts = {},
 	},
+	{
+		'mistricky/codesnap.nvim',
+		build = 'make',
+		cmd = 'CodeSnap',
+		opts = {
+			min_width = 80,
+			has_breadcrumbs = true,
+			bg_x_padding = 61,
+			bg_y_padding = 41,
+			bg_theme = 'dusk',
+		},
+	},
 }
