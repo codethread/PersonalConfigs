@@ -35,6 +35,26 @@ function M.highlights(hls)
 	}
 end
 
+---@param name 'base' | 'surface' | 'overlay' | 'muted' | 'subtle' | 'text' | 'love' | 'gold' | 'rose' | 'pine' | 'foam' | 'iris' | 'highlight_low' | 'highlight_med' | 'highlight_high' | 'none' | string
+---@return string
+function M.hl(name)
+	local c = require('rose-pine.utilities').parse_color(name)
+	if not c then error('no color for ' .. name) end
+	return c
+end
+
+---set highlight groups
+---@param table table<string, vim.api.keyset.highlight>
+function M.hls(table)
+	for hl_group, highlight_settings in pairs(table) do
+		local highlights = {}
+		for setting, color in pairs(highlight_settings) do
+			highlights[setting] = M.hl(color)
+		end
+		vim.api.nvim_set_hl(0, hl_group, highlights)
+	end
+end
+
 ---@param tool_list string[] list of tools to install, e.g { tsserver, eslintd }
 ---@return table
 function M.tools_lsp(tool_list)
@@ -66,7 +86,7 @@ function M.file_exits(path)
 	return vim.fn.isdirectory(p) == 1
 end
 
-function M.get_visual_selection()
+local function get_visual_selection()
 	-- also https://github.com/neovim/neovim/pull/13896#issuecomment-774680224
 
 	-- Yank current visual selection into the 'v' register
@@ -74,8 +94,26 @@ function M.get_visual_selection()
 	-- Note that this makes no effort to preserve this register
 	vim.cmd 'noau normal! "vy"'
 
-	return vim.fn.getreg 'v'
+	local s = vim.fn.getreg 'v'
+	dd(s)
 end
+
+local function get_visual()
+	local _, ls, cs = unpack(vim.fn.getpos 'v')
+	local _, le, ce = unpack(vim.fn.getpos '.')
+
+	-- nvim_buf_get_text requires start and end args be in correct order
+	ls, le = math.min(ls, le), math.max(ls, le)
+	cs, ce = math.min(cs, ce), math.max(cs, ce)
+
+	local s = vim.api.nvim_buf_get_text(0, ls - 1, cs - 1, le - 1, ce, {})
+	for _, value in ipairs(s) do
+		dd(value)
+	end
+end
+
+vim.keymap.set('v', '<localleader>r', get_visual, { buffer = true })
+vim.keymap.set('v', '<localleader>e', get_visual_selection, { buffer = true })
 
 ---@return number row, number column
 function M.current_pos()

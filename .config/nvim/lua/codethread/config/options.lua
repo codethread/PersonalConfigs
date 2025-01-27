@@ -31,9 +31,12 @@ vim.opt.listchars = {
 }
 -- :set list
 
+-- change ~ eol chars
+vim.opt.fillchars:append { eob = ' ' }
+
 vim.opt.relativenumber = true
 vim.opt.number = true -- Line numbers
-vim.opt.cursorline = true -- Enable highlighting of the current line
+vim.opt.cursorline = false -- Enable highlighting of the current line
 vim.opt.showtabline = 2 -- Always show window tabs
 
 vim.opt.updatetime = 300 -- Faster completion

@@ -186,5 +186,8 @@ return {
 		},
 	},
 
+	-- printf style debugging
+	-- normal mode g? , e.g g?p g?v
+	-- visual mode g? , e.g g?v
 	{ 'andrewferrier/debugprint.nvim', opts = {} },
 }

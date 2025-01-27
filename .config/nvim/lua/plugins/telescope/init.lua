@@ -14,12 +14,26 @@ return {
 		dependencies = {
 			{ 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
 			U.highlights {
-				TelescopeBorder = { fg = 'highlight_high', bg = 'none' },
-				TelescopeNormal = { bg = 'none' },
-				TelescopePromptNormal = { bg = 'base' },
-				TelescopeResultsNormal = { fg = 'subtle', bg = 'none' },
-				TelescopeSelection = { fg = 'text', bg = 'surface' },
-				TelescopeSelectionCaret = { fg = 'rose', bg = 'rose' },
+				TelescopeBorder = { fg = 'highlight_low', bg = 'highlight_low' },
+				TelescopeNormal = { fg = 'highlight_low', bg = 'highlight_low' },
+				TelescopeSelection = { fg = 'text', bg = 'highlight_med' },
+				TelescopeSelectionCaret = { fg = 'love', bg = 'highlight_med' },
+				TelescopeMultiSelection = { fg = 'text', bg = 'highlight_high' },
+
+				TelescopeTitle = { fg = 'love' },
+				TelescopePromptTitle = { fg = 'rose' },
+				TelescopePreviewTitle = { fg = 'iris' },
+
+				TelescopePromptNormal = { fg = 'text', bg = 'surface' },
+				TelescopePromptBorder = { fg = 'surface', bg = 'surface' },
+				TelescopePromptCounter = { fg = 'subtle' },
+
+				-- alt
+				-- TelescopeBorder = { fg = 'muted', bg = 'none' },
+				-- TelescopeNormal = { fg = 'subtle', bg = 'none' },
+				-- TelescopePromptCounter = { fg = 'subtle', bg = 'none' },
+				-- TelescopePromptNormal = { fg = 'text', bg = 'none' },
+				-- TelescopePromptBorder = { fg = 'rose', bg= 'none' },
 			},
 			{
 				'nvim-telescope/telescope-live-grep-args.nvim',
@@ -40,6 +54,7 @@ return {
 					initial_mode = 'insert',
 					path_display = { 'truncate' },
 					color_devicons = true,
+					dynamic_preview_title = true,
 					mappings = {
 						i = {
 							['<C-n>'] = actions.cycle_history_next,
@@ -167,24 +182,7 @@ return {
 			telescope.setup(options)
 
 			telescope.load_extension 'live_grep_args'
-
-			-- WIP
-			--[[ local function ts_word()
-	  -- local winnr = vim.fn.winnr '#'
-	  local winnr = vim.fn.winnr()
-	  local buf = vim.fn.winbufnr(winnr)
-	  local c = vim.fn.getcurpos(winnr)
-	  local row = c[2] - 1
-	  local col = c[3] - 1
-
-	  local ts_utils = require 'nvim-treesitter.ts_utils'
-	  local node = ts_utils.get_node_at_cursor(winnr)
-	  -- local node = vim.treesitter.get_node_at_pos(buf, row, col, {})
-	  local txt = vim.treesitter.get_node_text(node, buf, {})
-	  return txt
-	end
-
-	vim.api.nvim_create_user_command('TSWord', function() print(ts_word()) end, {}) ]]
+			telescope.load_extension 'fzf'
 		end,
 	},
 }

@@ -261,6 +261,7 @@ return {
 		i = { Cmd 'OpenInitBuffer', 'Open init buffer' },
 		l = { function() require('codethread.logger').select() end, 'open log file' },
 		n = { Cmd 'LogOpen notifications', 'Notifcation History' },
+		N = { function() Snacks.notifier.hide() end, 'Hide Notifications' },
 	},
 
 	t = {

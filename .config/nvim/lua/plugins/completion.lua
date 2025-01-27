@@ -99,7 +99,7 @@ return {
 						col_offset = -3,
 					},
 				},
-				mapping = cmp.mapping.preset.insert {
+				mapping = {
 					-- see :h ins-completion for more
 					-- CTRL-Y		  Yes: Accept the currently selected match and stop completion.
 					-- CTRL-E		  End completion, go back to what was there before selecting a
@@ -112,6 +112,10 @@ return {
 					['<C-c>'] = cmp.mapping.abort(), -- ^^
 					['<C-u>'] = cmp.mapping.scroll_docs(-4),
 					['<C-d>'] = cmp.mapping.scroll_docs(4),
+
+					['<C-n>'] = {},
+					['<C-p>'] = {},
+
 					-- ['<C-Space>'] = cmp.mapping.complete(),
 				},
 				completion = {
