@@ -92,12 +92,17 @@ return {
 			local wk = require 'which-key'
 			wk.setup {
 				plugins = {
-					presets = {
-						operators = false,
-						motions = false,
-						text_objects = false,
-					},
+					-- presets = {
+					-- 	operators = false,
+					-- 	motions = false,
+					-- 	text_objects = false,
+					-- },
 				},
+				icons = {
+					mappings = false, -- turns of icons
+				},
+				sort = { 'order' },
+				expand = 1,
 			}
 			wk.register(require 'codethread.keymaps.leader', {
 				mode = 'n', -- NORMAL mode

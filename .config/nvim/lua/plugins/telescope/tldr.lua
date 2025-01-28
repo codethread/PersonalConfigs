@@ -162,5 +162,5 @@ local custom_preview = pickers.new({
 	},
 })
 
-local run = min_async
+local run = with_action
 run:find()

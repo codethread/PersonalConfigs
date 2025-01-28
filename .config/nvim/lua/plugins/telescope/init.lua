@@ -14,6 +14,7 @@ return {
 		dependencies = {
 			{ 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
 			{ 'nvim-telescope/telescope-live-grep-args.nvim', version = '^1.0.0' },
+			{ 'catgoose/telescope-helpgrep.nvim' },
 			U.highlights {
 				TelescopeBorder = { fg = 'highlight_low', bg = 'highlight_low' },
 				TelescopeNormal = { fg = 'highlight_low', bg = 'highlight_low' },
@@ -38,6 +39,7 @@ return {
 			},
 		},
 		config = function(_, opts)
+			opts = opts or {}
 			local telescope = require 'telescope'
 			local actions = require 'telescope.actions'
 			local action_layout = require 'telescope.actions.layout'
@@ -175,12 +177,31 @@ return {
 						path_display = 'hidden',
 					},
 				},
+				extensions = {
+					helpgrep = {
+						ignore_paths = {
+							vim.fn.stdpath 'state' .. '/lazy/readme',
+						},
+						-- mappings = {
+						--   i = {
+						--     ["<CR>"] = actions.select_default,
+						--     ["<C-v>"] = actions.select_vertical,
+						--   },
+						--   n = {
+						--     ["<CR>"] = actions.select_default,
+						--     ["<C-s>"] = actions.select_horizontal,
+						--   }
+						-- },
+						-- default_grep = builtin.live_grep,
+					},
+				},
 			})
 
 			telescope.setup(options)
 
 			telescope.load_extension 'live_grep_args'
 			telescope.load_extension 'fzf'
+			telescope.load_extension 'helpgrep'
 		end,
 	},
 }

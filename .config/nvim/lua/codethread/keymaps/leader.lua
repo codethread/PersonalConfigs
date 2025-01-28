@@ -11,10 +11,7 @@ return {
 	[':'] = { Cmd 'Telescope command_history', 'M-x [hist]' },
 	['/'] = { Cmd 'Telescope search_history', '/ [hist]' },
 	['q'] = { Cmd 'w | luafile %', 'Reload Luafile' },
-	[','] = {
-		function() require('plugins.telescope.pickers').workspace_symbols {} end,
-		'Workspace Symbols',
-	},
+	[','] = { Cmd 'Telescope resume', '🔭' },
 
 	a = { Cmd 'Other', 'other' },
 
@@ -126,6 +123,7 @@ return {
 	h = {
 		name = 'Help',
 		h = { Cmd 'Telescope help_tags', 'Help' },
+		H = { Cmd 'Telescope helpgrep', 'Help Grep' }, -- TODO: steal code and use my own grepper
 		m = { Cmd 'Telescope man_pages', 'Man' },
 		v = { Cmd 'Telescope vim_options', 'Settings' },
 		t = { Cmd 'Telescope builtin', 'Telescope' },
@@ -195,6 +193,7 @@ return {
 		H = {
 			function()
 				--WIP needs stealing from the source to open as help
+				--TODO: this is in hH so remove
 				require('telescope.builtin').live_grep {
 					cwd = vim.fs.joinpath(os.getenv 'VIMRUNTIME', 'doc'),
 				}
@@ -207,7 +206,11 @@ return {
 		R = { Cmd 'Telescope registers', 'Registers' },
 		k = { Cmd 'Telescope keymaps', 'Keymaps' },
 		C = { Cmd 'Telescope commands', 'Commands' },
-		p = { Cmd 'Telescope live_grep_args', 'Live Grep' },
+		-- p = { Cmd 'Telescope live_grep_args', 'Live Grep' },
+		p = {
+			function() require('plugins.telescope.pickers.rg').live_grepper {} end,
+			'Live Grep',
+		},
 		w = {
 			function()
 				require('telescope-live-grep-args.shortcuts').grep_word_under_cursor {
