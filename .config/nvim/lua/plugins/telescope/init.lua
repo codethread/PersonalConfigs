@@ -13,6 +13,7 @@ return {
 		cmd = 'Telescope',
 		dependencies = {
 			{ 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
+			{ 'nvim-telescope/telescope-live-grep-args.nvim', version = '^1.0.0' },
 			U.highlights {
 				TelescopeBorder = { fg = 'highlight_low', bg = 'highlight_low' },
 				TelescopeNormal = { fg = 'highlight_low', bg = 'highlight_low' },
@@ -29,15 +30,11 @@ return {
 				TelescopePromptCounter = { fg = 'subtle' },
 
 				-- alt
-				-- TelescopeBorder = { fg = 'muted', bg = 'none' },
-				-- TelescopeNormal = { fg = 'subtle', bg = 'none' },
-				-- TelescopePromptCounter = { fg = 'subtle', bg = 'none' },
-				-- TelescopePromptNormal = { fg = 'text', bg = 'none' },
-				-- TelescopePromptBorder = { fg = 'rose', bg= 'none' },
-			},
-			{
-				'nvim-telescope/telescope-live-grep-args.nvim',
-				version = '^1.0.0',
+				-- TelescopeBorder = { fg = 'muted', bg = 'base' },
+				-- TelescopeNormal = { fg = 'subtle', bg = 'base' },
+				-- TelescopePromptCounter = { fg = 'subtle', bg = 'base' },
+				-- TelescopePromptNormal = { fg = 'text', bg = 'base' },
+				-- TelescopePromptBorder = { fg = 'rose', bg = 'base' },
 			},
 		},
 		config = function(_, opts)
@@ -86,6 +83,7 @@ return {
 							['<C-l>'] = actions.complete_tag,
 							['<C-_>'] = actions.which_key, -- keys from pressing <C-/>
 							['<M-p>'] = action_layout.toggle_preview,
+							['<C-Space>'] = actions.to_fuzzy_refine, -- this is awesome
 
 							['<C-i>'] = require('telescope-live-grep-args.actions').quote_prompt {
 								postfix = ' --iglob ',

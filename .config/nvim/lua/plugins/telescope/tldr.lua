@@ -114,7 +114,6 @@ local previewers = require 'telescope.previewers'
 local make_entry = require 'telescope.make_entry'
 
 local min_shot = pickers.new({}, {
-	-- prompt_title = 'Find Files',
 	finder = finders.new_oneshot_job({ 'rg', '--vimgrep', 'vim' }, {
 		entry_maker = make_entry.gen_from_vimgrep {},
 	}),
@@ -123,6 +122,21 @@ local min_shot = pickers.new({}, {
 	sorter = sorters.get_generic_fuzzy_sorter(),
 })
 
+local min_dynamic = pickers.new({}, {
+	finder = finders.new_dynamic {
+		entry_maker = function(res) return { value = res, ordinal = res, display = string.upper(res) } end,
+		fn = function(prompt) return { 'hello' .. prompt, 'goodbye' .. prompt } end,
+	},
+	sorter = sorters.get_generic_fuzzy_sorter(),
+})
+
+local min_async = pickers.new({}, {
+	finder = finders.new_async_job {
+		entry_maker = function(res) return { value = res, ordinal = res, display = string.upper(res) } end,
+		command_generator = function(prompt) return { 'ls', '-l', '-a', prompt } end,
+	},
+	sorter = sorters.get_generic_fuzzy_sorter(),
+})
 --   ╭─────────────────────────────────────────────────────────────────────────╮
 --   │                                previews                                 │
 --   ╰─────────────────────────────────────────────────────────────────────────╯
@@ -130,7 +144,6 @@ local min_shot = pickers.new({}, {
 local custom_preview = pickers.new({
 	dynamic_preview_title = true,
 }, {
-	-- prompt_title = 'Find Files',
 	finder = finders.new_oneshot_job({ 'fd', '--type', 'd', '--hidden', '--exclude', "'.git'" }, {
 		entry_maker = make_entry.gen_from_file {},
 	}),
@@ -149,5 +162,5 @@ local custom_preview = pickers.new({
 	},
 })
 
-local run = custom_preview
+local run = min_async
 run:find()

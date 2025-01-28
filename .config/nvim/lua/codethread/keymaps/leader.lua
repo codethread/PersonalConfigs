@@ -209,7 +209,11 @@ return {
 		C = { Cmd 'Telescope commands', 'Commands' },
 		p = { Cmd 'Telescope live_grep_args', 'Live Grep' },
 		w = {
-			function() require('telescope-live-grep-args.shortcuts').grep_word_under_cursor() end,
+			function()
+				require('telescope-live-grep-args.shortcuts').grep_word_under_cursor {
+					cwd = vim.fs.root(0, '.git'),
+				}
+			end,
 			'Word',
 		},
 		l = { Cmd 'Telescope lsp_document_symbols', 'Symbol' },
