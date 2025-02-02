@@ -30,17 +30,27 @@ return {
 			matchup = {
 				enable = true,
 			},
+			incremental_selection = {
+				enable = true,
+				keymaps = {
+					init_selection = '<CR>',
+					node_incremental = '<CR>',
+					scope_incremental = '<Tab>',
+					node_decremental = '<S-Tab>',
+				},
+			},
+
 			-- stylua: ignore
 			ensure_installed = vim.iter({
 				-- scripting
-				{ 'awk','bash','jq', 'nu' },
+				{ 'awk', 'bash', 'jq', 'nu' },
 				-- langs
-				{ 'c', 'rust', 'scala', 'gleam', 'python' },
+				{ 'c', 'rust', 'gleam' },
 				{ 'go', 'gosum', 'gomod', 'gowork' },
 				-- DB
 				{ 'sql' },
 				--web
-				{ 'css','scss','html','jsdoc','javascript','typescript','tsx','graphql', 'svelte', 'styled' },
+				{ 'css','scss','html','jsdoc','javascript','typescript','tsx','graphql', 'styled' },
 				-- webish
 				{ 'embedded_template','http','prisma','proto' },
 				-- config
