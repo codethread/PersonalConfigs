@@ -1,16 +1,5 @@
 local M = {}
 
---TODO: make buffer local
-local diagnostics_active = true
-function M.toggle_diagnostic()
-	diagnostics_active = not diagnostics_active
-	if diagnostics_active then
-		vim.diagnostic.show()
-	else
-		vim.diagnostic.hide()
-	end
-end
-
 ---Open the next file in the directory tree (alphabetically).
 ---Useful in the context of running a macro over files in a directory
 function M.open_next_file()

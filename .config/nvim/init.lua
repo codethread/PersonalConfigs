@@ -61,5 +61,3 @@ vim.api.nvim_create_autocmd('User', {
 	pattern = 'VeryLazy',
 	callback = function() require 'codethread' end,
 })
-
-vim.cmd [[colorscheme rose-pine]]

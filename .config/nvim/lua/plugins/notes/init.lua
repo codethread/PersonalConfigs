@@ -27,7 +27,6 @@ return {
 
 	{
 		'epwalsh/obsidian.nvim',
-		version = '*', -- recommended, use latest release instead of latest commit
 		lazy = true,
 		enabled = false, -- taking a step back from the world
 		cond = constants.has_notes,

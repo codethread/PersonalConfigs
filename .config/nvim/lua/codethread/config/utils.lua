@@ -25,6 +25,29 @@ end
 M.augroups = {}
 M.augroups.lsp_formatting = vim.api.nvim_create_augroup('LspFormatting', {})
 
+---@alias ct.Rose 'base' | 'surface' | 'overlay' | 'muted' | 'subtle' | 'text' | 'leaf' | 'love' | 'gold' | 'rose' | 'pine' | 'foam' | 'iris' | 'highlight_low' | 'highlight_med' | 'highlight_high' | 'none' | string
+
+---@class ct.RoseColor : vim.api.keyset.highlight
+---@field fg? ct.Rose
+---@field bg? ct.Rose
+
+---Apply a set of highlights (supports rose_pine colors)
+---This needs to be set as dependency in a lazy.spec e.g:
+---```lua
+---return {
+---	'lukas-reineke/indent-blankline.nvim',
+---	dependencies = {
+---		U.highlights {
+---			IblIndent = { fg = 'overlay' },
+---			IblScope = { fg = 'iris' },
+---		},
+---	},
+---	opts = {},
+---}
+---```
+---Under the covers this is setting a dependency on rose pine and adding the highlights there
+---@param hls table<string, ct.RoseColor>
+---@return table
 function M.highlights(hls)
 	return {
 		'rose-pine/neovim',
@@ -35,15 +58,16 @@ function M.highlights(hls)
 	}
 end
 
----@param name 'base' | 'surface' | 'overlay' | 'muted' | 'subtle' | 'text' | 'love' | 'gold' | 'rose' | 'pine' | 'foam' | 'iris' | 'highlight_low' | 'highlight_med' | 'highlight_high' | 'none' | string
+---Get a single rose-pine color by name
+---@param name ct.Rose
 ---@return string
 function M.hl(name)
 	local c = require('rose-pine.utilities').parse_color(name)
-	if not c then error('no color for ' .. name) end
+	if not c or c == 'NONE' then error('no color for ' .. name) end
 	return c
 end
 
----set highlight groups
+---Apply a set of highlights (supports rose_pine colors)
 ---@param table table<string, vim.api.keyset.highlight>
 function M.hls(table)
 	for hl_group, highlight_settings in pairs(table) do

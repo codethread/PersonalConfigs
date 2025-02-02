@@ -5,7 +5,6 @@ return {
 	-- snippets
 	{
 		'L3MON4D3/LuaSnip',
-		version = 'v2.*',
 		dependencies = 'rafamadriz/friendly-snippets',
 		build = 'make install_jsregexp',
 		config = function()
@@ -73,7 +72,6 @@ return {
 	},
 	{
 		'hrsh7th/nvim-cmp',
-		version = false, -- last release is way too old
 		event = { 'InsertEnter', 'CmdlineEnter' },
 		dependencies = {
 			'hrsh7th/cmp-nvim-lsp',

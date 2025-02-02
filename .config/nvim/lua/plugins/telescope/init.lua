@@ -1,15 +1,14 @@
 return {
 	{
 		'nvim-telescope/telescope.nvim',
-		version = '0.1.x',
 		cmd = 'Telescope',
 		dependencies = {
 			{ 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
-			{ 'nvim-telescope/telescope-live-grep-args.nvim', version = '^1.0.0' },
+			{ 'nvim-telescope/telescope-live-grep-args.nvim' },
 			{ 'catgoose/telescope-helpgrep.nvim' },
 			U.highlights {
 				TelescopeBorder = { fg = 'highlight_low', bg = 'highlight_low' },
-				TelescopeNormal = { fg = 'highlight_low', bg = 'highlight_low' },
+				TelescopeNormal = { fg = 'text', bg = 'highlight_low' },
 				TelescopeSelection = { fg = 'text', bg = 'highlight_med' },
 				TelescopeSelectionCaret = { fg = 'love', bg = 'highlight_med' },
 				TelescopeMultiSelection = { fg = 'text', bg = 'highlight_high' },

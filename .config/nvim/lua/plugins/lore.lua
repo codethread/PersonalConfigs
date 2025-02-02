@@ -2,7 +2,7 @@ return {
 	'farmergreg/vim-lastplace',
 	'anuvyklack/hydra.nvim',
 
-	{ 'echasnovski/mini.bufremove', version = '*', lazy = true },
+	{ 'echasnovski/mini.bufremove', lazy = true },
 
 	{
 		'mbbill/undotree',
@@ -42,7 +42,6 @@ return {
 		cond = os.getenv 'WAKATIME_HOME' ~= nil,
 		-- event = { 'BufReadPre', 'BufNewFile' },
 		event = { 'InsertEnter' },
-		version = '9.*',
 	},
 
 	{

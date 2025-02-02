@@ -3,21 +3,10 @@ return {
 		'j-hui/fidget.nvim',
 		lazy = true,
 		-- tag = 'legacy',
-		opts = {
-			progress = {
-				ignore = {},
-				display = {
-					done_icon = '✓',
-				},
-			},
-		},
+		opts = { progress = { ignore = {}, display = { done_icon = '✓' } } },
 	},
 
-	{
-		'b0o/SchemaStore.nvim',
-		lazy = true,
-		version = false, -- last release is way too old
-	},
+	{ 'b0o/SchemaStore.nvim', lazy = true },
 
 	{
 		-- when looking for lsp capabilities for supports_method use spec (example is a pinned version, use latest):

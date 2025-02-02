@@ -1,6 +1,6 @@
 return {
-	{ 'echasnovski/mini.surround', version = false, opts = {} },
-	{ 'echasnovski/mini.pairs', version = false, opts = {} },
+	{ 'echasnovski/mini.surround', opts = {} },
+	{ 'echasnovski/mini.pairs', opts = {} },
 	-- {
 	-- 	'windwp/nvim-autopairs',
 	-- 	event = 'InsertEnter',

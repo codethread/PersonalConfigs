@@ -46,7 +46,7 @@ return {
 			end,
 			'Previous Diagnostic',
 		},
-		t = { function() require('codethread.fns').toggle_diagnostic() end, 'Toggle Diagnostics' },
+		t = { Cmd 'DiagnosticToggle', 'Toggle Diagnostics' },
 		q = { Cmd 'lua vim.diagnostic.setloclist()', 'Quickfix' },
 	},
 

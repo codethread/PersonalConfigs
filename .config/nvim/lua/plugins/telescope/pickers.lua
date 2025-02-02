@@ -125,32 +125,27 @@ function M.builtin_oldfiles_toggle_cwd(_, map)
 		end
 	end
 
-	local function toggle_cwd_off()
-		local function toggle_cwd(_prompt_bufnr)
-			local prompt = action_state.get_current_picker(_prompt_bufnr):_get_prompt()
-			actions.close(_prompt_bufnr)
-			builtin.oldfiles {
-				prompt_title = 'Oldfiles',
-				only_cwd = false,
-				attach_mappings = function(_p, _map)
-					local function toggle_cwd_on()
-						local _prompt = action_state.get_current_picker(_p):_get_prompt()
-						actions.close(_p)
-						builtin.oldfiles()
-						set_prompt_text(_prompt)
-					end
-					_map({ 'i', 'n' }, '<C-r>', toggle_cwd_on, { desc = 'heyyl' })
+	local function toggle_cwd(_prompt_bufnr)
+		local prompt = action_state.get_current_picker(_prompt_bufnr):_get_prompt()
+		actions.close(_prompt_bufnr)
+		builtin.oldfiles {
+			prompt_title = 'Oldfiles',
+			only_cwd = false,
+			attach_mappings = function(_p, _map)
+				_map({ 'i', 'n' }, '<C-r>', function()
+					local _prompt = action_state.get_current_picker(_p):_get_prompt()
+					actions.close(_p)
+					builtin.oldfiles()
+					set_prompt_text(_prompt)
+				end, { desc = 'Toggle cwd (on)' })
 
-					return true
-				end,
-			}
-			set_prompt_text(prompt)
-		end
-
-		return toggle_cwd
+				return true
+			end,
+		}
+		set_prompt_text(prompt)
 	end
 
-	map({ 'i', 'n' }, '<C-r>', toggle_cwd_off())
+	map({ 'i', 'n' }, '<C-r>', toggle_cwd, { desc = 'Toggle cwd (off)' })
 
 	return true
 end

@@ -43,13 +43,6 @@ return {
 	},
 
 	{
-		-- just importing to see the source
-		'saghen/blink.cmp',
-		-- use a release tag to download pre-built binaries
-		version = '*',
-		enabled = false,
-	},
-	{
 		'jmbuhr/otter.nvim',
 		dependencies = {
 			'nvim-treesitter/nvim-treesitter',
