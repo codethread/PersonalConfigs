@@ -23,12 +23,6 @@ function M.open_next_file()
 	end
 end
 
-vim.api.nvim_create_user_command(
-	'OpenNextFile',
-	M.open_next_file,
-	{ desc = 'Open next file in directory' }
-)
-
 ---Save the current buffer, but also handles oil buffers
 function M.save_buffer()
 	local ft = vim.bo.filetype
@@ -70,25 +64,6 @@ function M.test_current_file()
 		print('no setup for filetype: ' .. ft)
 	end
 end
-
-function M.toggle_file_history()
-	local is_diff = vim.startswith(vim.fn.expand '%', 'diffview://')
-	if is_diff then
-		vim.cmd [[DiffviewClose]]
-	else
-		vim.cmd [[DiffviewFileHistory % --no-merges]]
-	end
-end
-
-function M.align_by(char)
-	local txt = U.get_visual_selection()
-	local lines = vim.split(txt, '\n', { trimempty = true })
-	for _, line in ipairs(lines) do
-		print(line)
-	end
-end
-
-vim.api.nvim_create_user_command('Testy', M.align_by, {})
 
 function M.store_to_clipboard(str)
 	if not type(str) == 'string' then
@@ -164,6 +139,62 @@ function M.open_phrase_key(key)
 			end)
 		end
 	end)
+end
+
+---Show listchars to see things like tabs/spaces and trailing lines
+function M.toggle_listchars()
+	local state = vim.b.ct_debug_spacing or false
+	if state then
+		vim.b.ct_debug_spacing = false
+		vim.b.miniindentscope_disable = false
+		vim.cmd 'set nolist'
+		vim.api.nvim_set_hl(0, 'Whitespace', { fg = U.hl 'base' })
+		require('ibl').setup_buffer(0, { enabled = true })
+	else
+		vim.b.ct_debug_spacing = true
+		vim.b.miniindentscope_disable = true
+		vim.cmd 'set list'
+		vim.api.nvim_set_hl(0, 'Whitespace', { fg = U.hl 'leaf' })
+		require('ibl').setup_buffer(0, { enabled = false })
+	end
+end
+
+function M.toggle_diagnostics()
+	local state = vim.b.ct_diagnostics_off or true
+	if state then
+		vim.diagnostic.hide()
+		vim.b.ct_diagnostics_off = true
+	else
+		vim.diagnostic.show()
+		vim.b.ct_diagnostics_off = false
+	end
+end
+
+function M.toggle_file_history()
+	local is_diff = vim.startswith(vim.fn.expand '%', 'diffview://')
+	if is_diff then
+		vim.cmd [[DiffviewClose]]
+	else
+		vim.cmd [[DiffviewFileHistory % --no-merges]]
+	end
+end
+
+function M.toggle_indent_scope()
+	local state = vim.b.ct_indent_scope or 'scope'
+	if state == 'indent' then
+		require('ibl').setup_buffer(0, {
+			scope = { enabled = true },
+		})
+
+		vim.b.miniindentscope_disable = true
+		vim.b.ct_indent_scope = 'scope'
+	else
+		require('ibl').setup_buffer(0, {
+			scope = { enabled = false },
+		})
+		vim.b.miniindentscope_disable = false
+		vim.b.ct_indent_scope = 'indent'
+	end
 end
 
 return M

@@ -1,3 +1,4 @@
+local fns = require 'codethread.fns'
 -- TIPS
 -- to see raw key
 -- go to insert mode, type <C-v> then type, and that key will be shown
@@ -72,20 +73,14 @@ return {
 		r = { Cmd 'Telescope oldfiles', 'recent' },
 		R = { Cmd 'e!', 'reload' },
 		k = { function() require('mini.bufremove').delete() end, 'kill' },
-		s = {
-			function() require('codethread.fns').save_buffer() end,
-			'Save',
-		},
+		s = { fns.save_buffer, 'Save' },
 		u = { function() require('plugins.telescope.pickers').unsaved() end, 'Unsaved' },
 		O = { function() Snacks.bufdelete.other {} end, 'Delete Others' },
 	},
 
 	j = {
 		name = 'Test',
-		j = {
-			function() require('codethread.fns').test_current_file() end,
-			'file',
-		},
+		j = { fns.test_current_file, 'file' },
 	},
 
 	g = {
@@ -103,7 +98,7 @@ return {
 		g = { function() require('neogit').open {} end, 'Status' },
 		j = { function() require('gitsigns').nav_hunk('next', { preview = true }) end, 'Next Hunk' },
 		k = { function() require('gitsigns').nav_hunk('prev', { preview = true }) end, 'Prev Hunk' },
-		h = { function() require('codethread.fns').toggle_file_history() end, 'File History' },
+		h = { fns.toggle_file_history, 'File History' },
 		l = { function() require('gitsigns').blame_line() end, 'Blame' },
 		o = { Cmd 'Telescope git_status', 'Open changed file' },
 		p = { function() require('gitsigns').preview_hunk() end, 'Preview Hunk' },
@@ -124,7 +119,7 @@ return {
 		name = 'Help',
 		h = { Cmd 'Telescope help_tags', 'Help' },
 		H = { Cmd 'Telescope helpgrep', 'Help Grep' }, -- TODO: steal code and use my own grepper
-		m = { Cmd 'Telescope man_pages', 'Man' },
+		m = { Cmd 'Telescope man_pages', 'Man pages' },
 		v = { Cmd 'Telescope vim_options', 'Settings' },
 		t = { Cmd 'Telescope builtin', 'Telescope' },
 		c = { Cmd 'Telescope highlights', 'Telescope' },
@@ -133,10 +128,7 @@ return {
 	l = {
 		name = 'LSP',
 		-- a = { Cmd'Telescope lsp_code_actions them=cursor', "Code Action" },
-		a = {
-			Cmd 'lua vim.lsp.buf.code_action()',
-			'Code Action',
-		},
+		a = { Cmd 'lua vim.lsp.buf.code_action()', 'Code Action' },
 		d = { Cmd 'lua vim.lsp.buf.declaration({ reuse_win = true })', 'Declaration' },
 		i = { Cmd 'LspInfo', 'Info' },
 		I = { Cmd 'LspInstallInfo', 'Installer Info' },
@@ -189,19 +181,6 @@ return {
 			end,
 			'Buffers',
 		},
-		h = { Cmd 'Telescope help_tags', 'Find Help' },
-		H = {
-			function()
-				--WIP needs stealing from the source to open as help
-				--TODO: this is in hH so remove
-				require('telescope.builtin').live_grep {
-					cwd = vim.fs.joinpath(os.getenv 'VIMRUNTIME', 'doc'),
-				}
-			end,
-			'Grep Help',
-		},
-
-		M = { Cmd 'Telescope man_pages', 'Man Pages' },
 		r = { Cmd 'Telescope oldfiles', 'Open Recent File' },
 		R = { Cmd 'Telescope registers', 'Registers' },
 		k = { Cmd 'Telescope keymaps', 'Keymaps' },
@@ -283,6 +262,8 @@ return {
 	T = {
 		name = 'Toggle',
 		i = { Cmd "lua print'nothing setup'", 'Inlay Hints' },
+		[' '] = { fns.toggle_listchars, 'Whitespace' },
+		['>'] = { fns.toggle_indent_scope, 'IndentScope' },
 	},
 
 	u = {
@@ -306,10 +287,7 @@ return {
 	-- clipboard, copy
 	y = {
 		name = 'Yank',
-		l = {
-			function() require('codethread.fns').copy_filepath_relative() end,
-			'path [gitlab]',
-		},
+		l = { fns.copy_filepath_relative, 'path [gitlab]' },
 		r = { Cmd 'let @*=@%', 'path [root]' }, -- TODO:
 		y = { Cmd 'let @*=@%', 'path [relative]' }, -- TODO:
 		s = { Cmd 'Telescope neoclip', 'Search' },

@@ -37,7 +37,7 @@ return {
 				char = '┊',
 			},
 			scope = {
-				enabled = false, -- using mini.indentscope which highlights indent (which is more useful in nested tables/objects)
+				enabled = true, --
 				char = '│',
 				show_start = false,
 				show_end = false,
@@ -53,6 +53,12 @@ return {
 				MiniIndentscopeSymbol = { fg = 'iris' },
 			},
 		},
+		init = function()
+			vim.api.nvim_create_autocmd(
+				'BufNew',
+				{ callback = function(opts) vim.b[opts.buf].miniindentscope_disable = true end }
+			)
+		end,
 		opts = {
 			symbol = '│',
 			options = { try_as_border = true },
