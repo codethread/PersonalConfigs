@@ -162,5 +162,6 @@ local custom_preview = pickers.new({
 	},
 })
 
-local run = with_action
+local run = min_shot
+
 run:find()

@@ -1,4 +1,5 @@
 local actions = require 'telescope.actions'
+local action_state = require 'telescope.actions.state'
 local channel = require('plenary.async.control').channel
 local conf = require('telescope.config').values
 local finders = require 'telescope.finders'
@@ -6,6 +7,7 @@ local make_entry = require 'telescope.make_entry'
 local pickers = require 'telescope.pickers'
 local previewers = require 'telescope.previewers'
 local sorters = require 'telescope.sorters'
+local builtin = require 'telescope.builtin'
 
 local M = {}
 function M.unsaved(opts)
@@ -85,6 +87,72 @@ function M.workspace_symbols(opts)
 			end,
 		})
 		:find()
+end
+
+function M.action_open_help_vert(prompt_bufnr)
+	return function()
+		local utils = require 'telescope.utils'
+		local selection = action_state.get_selected_entry()
+		if selection == nil then
+			utils.__warn_no_selection 'builtin.help_tags'
+			return
+		end
+		actions.close(prompt_bufnr)
+		vim.cmd('vert help ' .. selection.value)
+	end
+end
+
+---Invoke an `fn` on the just created picker. This is likely a hack, but useful to specifiy starting prompt
+---@param fn fun(picker: Picker)
+function M.picker_action(fn)
+	vim.schedule(function()
+		local pp_b = vim.api.nvim_win_get_buf(0)
+		local picker = action_state.get_current_picker(pp_b)
+		fn(picker)
+	end)
+end
+
+---@alias NvimSetKeymap fun( mode: string|string[] , lhs: string ,rhs: string|function, opts?: vim.keymap.set.Opts): nil
+
+---Pass to attach_mappings and this will toggle oldfiles. Prompt text is
+---preserved
+---TODO: there's an abstraction in here somewhere
+---@param map NvimSetKeymap
+function M.builtin_oldfiles_toggle_cwd(_, map)
+	local function set_prompt_text(prompt)
+		if prompt and prompt ~= '' then
+			M.picker_action(function(picker) picker:set_prompt(prompt) end)
+		end
+	end
+
+	local function toggle_cwd_off()
+		local function toggle_cwd(_prompt_bufnr)
+			local prompt = action_state.get_current_picker(_prompt_bufnr):_get_prompt()
+			actions.close(_prompt_bufnr)
+			builtin.oldfiles {
+				prompt_title = 'Oldfiles',
+				only_cwd = false,
+				attach_mappings = function(_p, _map)
+					local function toggle_cwd_on()
+						local _prompt = action_state.get_current_picker(_p):_get_prompt()
+						actions.close(_p)
+						builtin.oldfiles()
+						set_prompt_text(_prompt)
+					end
+					_map({ 'i', 'n' }, '<C-r>', toggle_cwd_on, { desc = 'heyyl' })
+
+					return true
+				end,
+			}
+			set_prompt_text(prompt)
+		end
+
+		return toggle_cwd
+	end
+
+	map({ 'i', 'n' }, '<C-r>', toggle_cwd_off())
+
+	return true
 end
 
 return M

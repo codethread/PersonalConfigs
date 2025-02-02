@@ -1,13 +1,5 @@
 return {
 	{
-		'ibhagwan/fzf-lua',
-		-- optional for icon support
-		dependencies = { 'nvim-tree/nvim-web-devicons' },
-		-- or if using mini.icons/mini.nvim
-		-- dependencies = { "echasnovski/mini.icons" },
-		opts = {},
-	},
-	{
 		'nvim-telescope/telescope.nvim',
 		version = '0.1.x',
 		cmd = 'Telescope',
@@ -43,6 +35,8 @@ return {
 			local telescope = require 'telescope'
 			local actions = require 'telescope.actions'
 			local action_layout = require 'telescope.actions.layout'
+			local action_state = require 'telescope.actions.state'
+			local custom = require 'plugins.telescope.pickers'
 
 			local options = vim.tbl_deep_extend('force', opts, {
 				defaults = {
@@ -152,12 +146,12 @@ return {
 						'--smart-case',
 						'--hidden',
 					},
+					cache_picker = {
+						num_pickers = 2, -- store 2 in history for making nested pickers
+					},
 				},
 				pickers = {
 					find_files = {
-						-- hidden = true,
-						-- find_command = { 'fd', '--type', 'f', '--strip-cwd-prefix' },
-						-- rg is actually faster at finding files!
 						find_command = {
 							'rg',
 							'--hidden',
@@ -175,6 +169,17 @@ return {
 					},
 					diagnostics = {
 						path_display = 'hidden',
+					},
+					oldfiles = {
+						prompt_title = 'Oldfiles (cwd)',
+						only_cwd = true,
+						attach_mappings = custom.builtin_oldfiles_toggle_cwd,
+					},
+					help_tags = {
+						attach_mappings = function(prompt_bufnr)
+							actions.select_default:replace(custom.action_open_help_vert(prompt_bufnr))
+							return true
+						end,
 					},
 				},
 				extensions = {
