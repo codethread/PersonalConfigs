@@ -289,4 +289,35 @@ function M.dig(t, ...)
 	end
 	return t
 end
+
+---Recurse through a project till a marker is hit or return `nil`
+---@param markers string | string[]
+---@param opts? { silent?: boolean }
+---@return string?
+function M.find_lsp_root(markers, opts)
+	opts = opts or {}
+	---@cast markers string[]
+	markers = type(markers) == 'string' and { markers } or markers
+	local base = vim.fs.root(0, markers)
+	if not base then
+		if not opts.silent then
+			vim.notify(
+				string.format('markers "%s" not found', table.concat(markers, ', ')),
+				vim.log.levels.WARN
+			)
+		end
+		return nil
+	end
+	if #base <= #vim.uv.os_homedir() then
+		if not opts.silent then
+			vim.notify(
+				string.format('found a marker but it was in the home_dir or less "%s"', base),
+				vim.log.levels.WARN
+			)
+		end
+		return nil
+	end
+	return base
+end
+
 return M
