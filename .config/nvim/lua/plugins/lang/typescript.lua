@@ -11,8 +11,8 @@ return {
 			local nvim_lsp = require 'lspconfig'
 			local root = nvim_lsp.util.root_pattern
 
+			---@type PluginLspOpts
 			return {
-				-- make sure mason installs the server
 				servers = {
 					tailwindcss = {
 						root_dir = root 'tailwind.config.js',
@@ -30,11 +30,15 @@ return {
 							},
 						},
 					},
+					eslint = {
+						settings = {
+							run = 'onSave',
+						},
+					},
 					denols = {
 						root_dir = root('deno.json', 'deno.jsonc'),
 					},
-					---@type lspconfig.options.tsserver
-					tsserver = {
+					ts_ls = {
 						root_dir = root 'package.json',
 						single_file_support = false, -- XXX: copied from deno, not sure if i want this or not
 						settings = {
@@ -60,11 +64,16 @@ return {
 				},
 				setup = {
 					denols = function(_, opts) end,
-					tsserver = function(_, opts)
-						U.lsp_attach('tsserver', function(client, buffer)
+					ts_ls = function(_, opts)
+						U.lsp_attach('ts_ls', function(client, buffer)
 							require('twoslash-queries').attach(client, buffer)
 
 							U.keys(buffer, {
+								{
+									'g',
+									function() require('codethread.find_node_module').find_node_module() end,
+									'Find Modules',
+								},
 								{
 									'cc',
 									Cmd '%g/console/norm dd',
@@ -106,6 +115,7 @@ return {
 							-- map <leader>ld :%s/.*console.log.*\n//g<CR>
 						end)
 						require('typescript').setup { server = opts }
+
 						return true
 					end,
 				},

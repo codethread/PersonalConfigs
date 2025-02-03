@@ -38,7 +38,6 @@ vim.cmd [[
 	vnoremap <Up> :m '<-2<CR>gv=gv
 ]]
 
----@module "lazy"
 ---@return LazySpec[]
 return {
 	'wellle/targets.vim',

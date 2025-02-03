@@ -9,6 +9,32 @@ return {
 	{ 'b0o/SchemaStore.nvim', lazy = true },
 
 	{
+		'folke/lazydev.nvim',
+		dependencies = {
+			-- { 'gonstoll/wezterm-types', lazy = true }, -- update of below
+			-- { 'justinsgithub/wezterm-types', lazy = true },
+			{ 'Bilal2453/luvit-meta', lazy = true },
+			'neovim/nvim-lspconfig',
+		},
+		ft = 'lua', -- only load on lua files
+		opts = {
+			---@module 'lazydev'
+			---@type lazydev.Library.spec[]
+			library = {
+				{ path = 'luvit-meta/library', words = { 'vim%.uv' } },
+				{ path = 'wezterm-types', mods = { 'wezterm' } },
+				'snacks.nvim',
+				'lazy.nvim',
+			},
+			enabled = function(root_dir)
+				-- disable when a .luarc.json file is found
+				if vim.uv.fs_stat(root_dir .. '/.luarc.json') then return false end
+				return true
+			end,
+		},
+	},
+
+	{
 		-- when looking for lsp capabilities for supports_method use spec (example is a pinned version, use latest):
 		-- https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#languageFeatures
 		'neovim/nvim-lspconfig',
@@ -17,40 +43,13 @@ return {
 			'j-hui/fidget.nvim',
 			'williamboman/mason.nvim',
 			'williamboman/mason-lspconfig.nvim',
-			'hrsh7th/nvim-cmp',
 			'hrsh7th/cmp-nvim-lsp',
-			-- { 'folke/neoconf.nvim', cmd = 'Neoconf', config = true },
-
-			{
-				'folke/lazydev.nvim',
-				dependencies = {
-					-- { 'gonstoll/wezterm-types', lazy = true }, -- update of below
-					-- { 'justinsgithub/wezterm-types', lazy = true },
-					{ 'Bilal2453/luvit-meta', lazy = true },
-				},
-				ft = 'lua', -- only load on lua files
-				opts = {
-					---@module "lazydev"
-					---@type lazydev.Library.spec[]
-					library = {
-						{ path = 'luvit-meta/library', words = { 'vim%.uv' } },
-						{ path = 'wezterm-types', mods = { 'wezterm' } },
-					},
-					enabled = function(root_dir)
-						-- disable when a .luarc.json file is found
-						if vim.uv.fs_stat(root_dir .. '/.luarc.json') then return false end
-						return true
-					end,
-				},
-			},
+			{ 'folke/neoconf.nvim', cmd = 'Neoconf', opts = {} }, -- adds lspconfig type
 		},
-		---@diagnostic disable: missing-fields
 		---@class PluginLspOpts
 		opts = {
-			-- options for vim.diagnostic.config()
-			diagnostics = {},
-
 			-- LSP Server Settings
+			---@diagnostic disable: missing-fields
 			---@type lspconfig.options
 			servers = {
 				jsonls = {
@@ -79,11 +78,6 @@ return {
 				-- clangd = {
 				-- 	filetypes = { 'c', 'cpp', 'objc', 'objcpp', 'cuda' },
 				-- },
-				eslint = {
-					settings = {
-						run = 'onSave',
-					},
-				},
 				lua_ls = {
 					settings = {
 						Lua = {
@@ -111,6 +105,9 @@ return {
 					},
 				},
 			},
+			-- you can do any additional lsp server setup here
+			-- return true if you don't want this server to be setup with lspconfig
+			---@type table<string, fun(server:string, opts:_.lspconfig.options):boolean?>
 			setup = {},
 		},
 		config = function(_, opts)
@@ -180,23 +177,22 @@ return {
 				end
 			end)
 
-			vim.diagnostic.config(vim.deepcopy(opts.diagnostics))
-
 			local servers = opts.servers
+
+			local capabilities = vim.tbl_deep_extend(
+				'force',
+				{},
+				vim.lsp.protocol.make_client_capabilities(),
+				require('cmp_nvim_lsp').default_capabilities()
+			)
 
 			local function setup(server)
 				local server_opts = vim.tbl_deep_extend('force', {
-					capabilities = vim.deepcopy(require 'plugins.lsp.capabilities'(opts.capabilities)),
+					capabilities = vim.deepcopy(capabilities),
 				}, servers[server] or {})
-
-				-- disable snippets in autocomplete
-				-- TODO this is needed as true for JSONls, but if annoying will conditionally disable
-				server_opts.capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 				if opts.setup[server] then
 					if opts.setup[server](server, server_opts) then return end
-				elseif opts.setup['*'] then
-					if opts.setup['*'](server, server_opts) then return end
 				end
 				require('lspconfig')[server].setup(server_opts)
 			end

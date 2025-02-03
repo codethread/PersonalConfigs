@@ -1,5 +1,4 @@
 ---@diagnostic disable: missing-fields
----@module "snacks"
 
 return {
 	'folke/snacks.nvim',

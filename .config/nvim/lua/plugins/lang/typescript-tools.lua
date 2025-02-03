@@ -41,6 +41,11 @@ return {
 					-- map <leader>ld :%s/.*console.log.*\n//g<CR>
 					U.keys(buffer, {
 						{
+							'g',
+							function() require('codethread.find_node_module').find_node_module() end,
+							'Find Modules',
+						},
+						{
 							'cc',
 							Cmd '%g/console/norm dd',
 							'Clear logs',
