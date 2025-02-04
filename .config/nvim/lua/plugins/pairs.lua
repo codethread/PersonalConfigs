@@ -8,5 +8,5 @@ return {
 	-- },
 
 	-- close <div tags, and ciw
-	{ 'windwp/nvim-ts-autotag', opts = {} },
+	{ 'windwp/nvim-ts-autotag', opts = {}, event = { 'InsertEnter' } },
 }

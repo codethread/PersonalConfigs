@@ -2,7 +2,7 @@
 return {
 	{
 		'nvim-treesitter/nvim-treesitter',
-		event = { 'BufReadPost', 'BufNewFile', 'VeryLazy' },
+		event = { 'BufReadPost', 'BufNewFile' },
 		lazy = vim.fn.argc(-1) == 0, -- load treesitter early when opening a file from the cmdline
 		init = function(plugin)
 			-- PERF: add nvim-treesitter queries to the rtp and it's custom query predicates early
@@ -17,6 +17,7 @@ return {
 		build = ':TSUpdate',
 		dependencies = {
 			{ 'nushell/tree-sitter-nu', build = { ':TSUpdate nu' } },
+			'andymass/vim-matchup',
 		},
 		---@type TSConfig
 		opts = {

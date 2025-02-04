@@ -6,6 +6,7 @@ return {
 	{ 'declancm/maximize.nvim', opts = {}, cmd = { 'Maximize' } },
 
 	-- TODO: why do i have three things here
+	-- TODO: make <C-/> expand main window when moving back
 	{
 		'christoomey/vim-tmux-navigator',
 		enabled = false,

@@ -187,6 +187,7 @@ end
 ---create a table of options for keymap.set
 ---@param opts? table
 ---@return table
+---@deprecated
 function M.map_args(opts)
 	return vim.tbl_extend('keep', { silent = true, noremap = true }, opts or {})
 end
@@ -197,6 +198,7 @@ end
 ---@param lhs string
 ---@param rhs string | function
 ---@param opts? table | string
+---@deprecated
 function M.keymap(mode, lhs, rhs, opts)
 	local options = opts or {}
 	if type(options) == 'string' then
@@ -210,6 +212,7 @@ end
 ---@param filetype number | string | string[] either a number for a buffer or a string for a filetype, if the latter, an autocmd will be created
 ---@param mapping (string | fun())[][]
 ---@param opts? table
+---@deprecated use
 function M.keys(filetype, mapping, opts)
 	local bindings = {}
 
