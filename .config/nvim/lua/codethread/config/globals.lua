@@ -19,4 +19,23 @@ function Cmd(command) return '<Cmd>' .. command .. '<CR>' end
 
 function Lua(command) return '<Cmd>lua ' .. command .. '<CR>' end
 
+---@param fn function
+local function try_fn(fn)
+	local ok, err = pcall(fn)
+	if not ok then vim.notify(err, 'error') end
+end
+
+---`pcall` the function and log an error if fails, mainly intended for things
+---like ftplugin/* which will fail silently
+---@param fns function | function[] # closure to run
+function Try(fns)
+	if type(fns) == 'table' then
+		for _, fn in ipairs(fns) do
+			try_fn(fn)
+		end
+	else
+		try_fn(fns)
+	end
+end
+
 function Term() end

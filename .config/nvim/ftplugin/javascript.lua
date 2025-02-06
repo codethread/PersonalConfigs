@@ -13,8 +13,15 @@ vim.opt_local.spellcapcheck = ''
 ---@field mode? string|string[]
 
 ---Create local mappings
+--- TODO: move to utils
+---
 ---@param opts ct.keymapOpts[]
 local function localleader(opts)
+	-- only set bindings for buffer once (is an issue if runtime files are composesd with `unique` keys)
+	-- TODO: migrate to which key and use checkhealth for clashes instead
+	vim.b.ct_set_bindings = vim.b.ct_set_bindings or false
+	if vim.b.ct_set_bindings then return end
+
 	---@type vim.keymap.set.Opts
 	local defaults = { buffer = true, silent = true, unique = true }
 
@@ -30,7 +37,10 @@ local function localleader(opts)
 			if type(opt_key) == 'string' and opt_key ~= 'mode' then set_opts[opt_key] = value end
 		end
 
-		vim.keymap.set(keyset.mode or { 'n' }, '<localleader>' .. lhs, rhs, set_opts)
+		Try(
+			function() vim.keymap.set(keyset.mode or { 'n' }, '<localleader>' .. lhs, rhs, set_opts) end
+		)
+		vim.b.ct_set_bindings = true
 	end
 end
 
