@@ -102,6 +102,4 @@ local function dumpjump()
 	end
 end
 
-U.keys(0, {
-	{ 'gd', dumpjump, 'Go to def' },
-}, { prefix = '' })
+vim.keymap.set('n', 'gd', dumpjump, { desc = 'Go to definition', buffer = true })

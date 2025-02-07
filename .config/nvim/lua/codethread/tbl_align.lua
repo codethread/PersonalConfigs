@@ -100,15 +100,26 @@ M.format_table = function(bufn)
 		table.insert(changes, change)
 	end
 
-	if #changes > 1 then vim.notify('only one done, please extend', 'warn') end
-
+	local offset = 0
 	for _, change in ipairs(changes) do
+		vim.print(offset, change.start, change.end_)
 		local text = {}
 		for _, row in ipairs(change.lines) do
 			local txt = padding .. '{ ' .. table.concat(row, ', ') .. ' },'
 			table.insert(text, txt)
 		end
-		vim.api.nvim_buf_set_lines(bufn, change.start, change.end_, true, text)
+		vim.api.nvim_buf_set_lines(bufn, change.start + offset, change.end_ + offset, true, text)
+		--calculate offset create by changing lines
+		local original_size = (change.end_ - change.start)
+		local new_size = #text
+		local diff = new_size - original_size -- e.g was 5 but now 10, so diff is +5, which wil then be used for next insertion
+		offset = offset + diff
+		vim.print {
+			original_size = original_size,
+			new_size = new_size,
+			diff = diff,
+			offset = offset,
+		}
 	end
 end
 

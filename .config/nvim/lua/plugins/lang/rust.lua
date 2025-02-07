@@ -32,23 +32,16 @@ return {
 				end
 			end)
 
+			--[[stylua: ignore]] --format
 			U.keys('rust', {
-				{ 'h', Lua "require('rust-tools').hover_actions.hover_actions()", 'hover actions' },
-				{
-					'a',
-					Lua "require('rust-tools').code_action_group.code_action_group()",
-					'code actions',
-				},
-				{ 'l', function() vim.lsp.codelens.run() end, 'Code Lens' },
-				{ 'e', Cmd 'RustRunnables', 'Runnables' },
-				{ 'd', Cmd 'RustDebuggables', 'Runnables' },
-				{ 't', Cmd 'Cargo test', 'Cargo test' },
-				{ 'R', Cmd 'Cargo run', 'Cargo run' },
-				{
-					'cc',
-					Cmd '%g/println/norm dd',
-					'Clear logs',
-				},
+	{ 'h' , Lua "require('rust-tools').hover_actions.hover_actions()"        , 'hover actions' },
+	{ 'a' , Lua "require('rust-tools').code_action_group.code_action_group()", 'code actions'  },
+	{ 'l' , function() vim.lsp.codelens.run() end                            , 'Code Lens'     },
+	{ 'e' , Cmd 'RustRunnables'                                              , 'Runnables'     },
+	{ 'd' , Cmd 'RustDebuggables'                                            , 'Runnables'     },
+	{ 't' , Cmd 'Cargo test'                                                 , 'Cargo test'    },
+	{ 'R' , Cmd 'Cargo run'                                                  , 'Cargo run'     },
+	{ 'cc', Cmd '%g/println/norm dd'                                         , 'Clear logs'    },
 			})
 		end,
 		opts = {
@@ -102,16 +95,13 @@ return {
 			vim.api.nvim_create_autocmd({ 'BufEnter' }, {
 				pattern = { 'Cargo.toml' },
 				callback = function(event)
+					--[[stylua: ignore]] --format
 					U.keys(event.buf, {
-						{ 'y', Lua "require'crates'.open_repository()", 'Open Repository' },
-						{ 'p', Lua "require'crates'.show_popup()", 'Show Popup' },
-						{ 'i', Lua "require'crates'.show_crate_popup()", 'Show Info' },
-						{ 'f', Lua "require'crates'.show_features_popup()", 'Show Features' },
-						{
-							'd',
-							Lua "require'crates'.show_dependencies_popup()",
-							'Show Dependencies',
-						},
+	{ 'y', Lua "require'crates'.open_repository()"        , 'Open Repository'   },
+	{ 'p', Lua "require'crates'.show_popup()"             , 'Show Popup'        },
+	{ 'i', Lua "require'crates'.show_crate_popup()"       , 'Show Info'         },
+	{ 'f', Lua "require'crates'.show_features_popup()"    , 'Show Features'     },
+	{ 'd', Lua "require'crates'.show_dependencies_popup()", 'Show Dependencies' },
 					})
 				end,
 			})

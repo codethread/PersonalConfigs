@@ -25,9 +25,10 @@ return {
 						direction = 'vertical',
 					}
 
+					--[[stylua: ignore]] --format
 					U.keys('go', {
-						{ 'r', function() return vim.cmd.wa() and go_run:toggle() end, 'GoRun' },
-						{ 'e', Cmd 'GoIfErr', 'err' },
+	{ 'r', function() return vim.cmd.wa() and go_run:toggle() end, 'GoRun' },
+	{ 'e', Cmd 'GoIfErr'                                         , 'err'   },
 					})
 
 					return true

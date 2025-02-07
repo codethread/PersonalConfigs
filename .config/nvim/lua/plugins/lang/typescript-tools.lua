@@ -39,23 +39,6 @@ return {
 					})
 					-- map <leader>ll yiwoconsole.log('\n<C-r>0:', <C-r>0);<C-[>k
 					-- map <leader>ld :%s/.*console.log.*\n//g<CR>
-					U.keys(buffer, {
-						{
-							'g',
-							function() require('codethread.find_node_module').find_node_module() end,
-							'Find Modules',
-						},
-						{
-							'cc',
-							Cmd '%g/console/norm dd',
-							'Clear logs',
-						},
-						{
-							's',
-							function() require('swap-ternary').swap() end,
-							'Swap ternary',
-						},
-					})
 				end,
 			}
 		end,

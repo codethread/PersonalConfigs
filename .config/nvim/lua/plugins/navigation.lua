@@ -100,26 +100,15 @@ return {
 			},
 		},
 		init = function()
+			--[[stylua: ignore]] --format
 			U.keys('oil', {
-				{
-					'c',
-					function() require('oil.actions').copy_entry_path.callback() end,
-					'copy filepath',
-				},
-				{ 'r', function() require('oil.actions').refresh.callback() end, 'refresh' },
-				{ 't', function() require('oil.actions').select_tab.callback() end, 'open in tab' },
-				{
-					'v',
-					function() require('oil.actions').select_vsplit.callback() end,
-					'open in vertical',
-				},
-				{
-					's',
-					function() require('oil.actions').select_split.callback() end,
-					'open in split',
-				},
-				{ '.', function() require('oil.actions').tcd.callback() end, 'make dir PWD' },
-			})
+	{ 'c', function() require('oil.actions').copy_entry_path.callback() end, 'copy filepath'    },
+	{ 'r', function() require('oil.actions').refresh.callback() end        , 'refresh'          },
+	{ 't', function() require('oil.actions').select_tab.callback() end     , 'open in tab'      },
+	{ 'v', function() require('oil.actions').select_vsplit.callback() end  , 'open in vertical' },
+	{ 's', function() require('oil.actions').select_split.callback() end   , 'open in split'    },
+	{ '.', function() require('oil.actions').tcd.callback() end            , 'make dir PWD'     },
+			 })
 		end,
 	},
 

@@ -209,14 +209,19 @@ function M.keymap(mode, lhs, rhs, opts)
 end
 
 ---Create local bindings for a buffer or filetype (currently backed by which-key)
----@param filetype number | string | string[] either a number for a buffer or a string for a filetype, if the latter, an autocmd will be created
----@param mapping (string | fun())[][]
----@param opts? table
----@deprecated use
-function M.keys(filetype, mapping, opts)
+---@overload fun(filetype: number|string, mappings: ct.keymapOpts[]): nil
+---@overload fun(filetype: number|string, opts: vim.keymap.set.Opts, mappings: ct.keymapOpts[]): nil
+function M.keys(filetype, opts, mappings)
+	---@cast opts vim.keymap.set.Opts
+	if not mappings then -- handle fn overlaod
+		---@type ct.keymapOpts[]
+		mappings = opts
+		opts = {}
+	end
+
 	local bindings = {}
 
-	for _, binding in ipairs(mapping) do
+	for _, binding in ipairs(mappings) do
 		local lhs, rhs, desc = binding[1], binding[2], binding[3]
 		bindings[lhs] = { rhs, desc }
 	end
@@ -249,7 +254,7 @@ function M.keys(filetype, mapping, opts)
 
 				wk.register(
 					bindings,
-					vim.tbl_deep_extend('force', base_options, { buffer = ops.buffer }, opts or {})
+					vim.tbl_deep_extend('force', base_options, { buffer = ops.buf }, opts or {})
 				)
 			end,
 		})
@@ -346,5 +351,95 @@ function M.find_lsp_root(markers, opts)
 	end
 	return base
 end
+
+---comment
+---@param file string
+function M.run_ftplugin(file)
+	local file_path = vim.fs.joinpath('ftplugin', file)
+	local runtime_files = vim.api.nvim_get_runtime_file(file_path, true)
+	Try {
+		function()
+			assert(
+				#runtime_files == 1,
+				string.format(
+					'expected one runtime file for %s but got "%s"',
+					file,
+					table.concat(runtime_files)
+				)
+			)
+			dofile(runtime_files[1])
+		end,
+	}
+end
+
+--   ╭─────────────────────────────────────────────────────────────────────────╮
+--   │                          Keymap related things                          │
+--   ╰─────────────────────────────────────────────────────────────────────────╯
+--#region
+---@class ct.keymapOpts
+---@field [1] string
+---@field [2] string | function
+---@field [3]? string
+---@field desc? string
+---@field mode? string|string[]
+
+---@class ct.KeymapSetOpts : ct.keymapOpts
+---@field mode string[]
+---@field opts vim.keymap.set.Opts
+
+---Wrapper around vim.keymap.set
+---@param opts ct.KeymapSetOpts
+local function create_keymap(opts)
+	local lhs = opts[1]
+	local rhs = opts[2]
+	local desc = opts[3]
+
+	local set_opts = opts.opts
+	set_opts.desc = desc
+
+	for opt_key, value in pairs(opts) do
+		if type(opt_key) == 'string' and opt_key ~= 'mode' and opt_key ~= 'opts' then
+			set_opts[opt_key] = value
+		end
+	end
+
+	Try(function() vim.keymap.set(opts.mode, lhs, rhs, set_opts) end)
+end
+
+---Create local mappings
+---@param opts ct.keymapOpts[]
+function M.localleader(opts)
+	local buf = vim.api.nvim_win_get_buf(0)
+	-- only set bindings for buffer once (is an issue if runtime files are composesd with `unique` keys)
+	-- TODO: migrate to which key and use checkhealth for clashes instead
+	local is_bound = vim.b[buf].ct_set_bindings or false
+	if is_bound then return end
+	vim.b[buf].ct_set_bindings = true
+
+	---@type vim.keymap.set.Opts
+	local defaults = { buffer = buf, silent = true, unique = true }
+
+	for _, keyset in ipairs(opts) do
+		---@cast keyset ct.KeymapSetOpts
+		keyset.opts = vim.deepcopy(defaults, true)
+		keyset[1] = '<localleader>' .. keyset[1]
+		keyset.mode = keyset.mode or { 'n' }
+
+		create_keymap(keyset)
+	end
+end
+
+---Wrapper around vim.keympa.set but take opts first and then apply to all
+---@param opts vim.keymap.set.Opts
+---@param mappings ct.keymapOpts[]
+function M.keymaps(opts, mappings)
+	for _, keyset in ipairs(mappings) do
+		create_keymap(vim.tbl_extend('force', {
+			opts = opts,
+			mode = keyset.mode or { 'n' },
+		}, keyset))
+	end
+end
+--#endregion
 
 return M

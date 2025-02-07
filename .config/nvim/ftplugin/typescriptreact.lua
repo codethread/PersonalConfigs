@@ -1,1 +1,2 @@
-vim.cmd.runtime { args = { 'ftplugin/typescript.lua', 'ftplugin/javascript.lua' }, bang = true }
+U.run_ftplugin 'javascriptreact.lua'
+U.run_ftplugin 'typescript.lua'

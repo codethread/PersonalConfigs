@@ -1,1 +1,1 @@
-vim.cmd.runtime { args = { 'ftplugin/javascript.lua' }, bang = true }
+U.run_ftplugin 'javascript.lua'

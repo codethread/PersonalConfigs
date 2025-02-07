@@ -9,13 +9,10 @@ return {
 				nnoremap > :cnext<CR>
 				]]
 
+			--[[stylua: ignore]] --format
 			U.keys('qf', {
-				{ '>', function() require('bqf.qfwin.handler').navHistory(true) end, 'Next list' },
-				{
-					'<',
-					function() require('bqf.qfwin.handler').navHistory(false) end,
-					'Prev list',
-				},
+	{ '>', function() require('bqf.qfwin.handler').navHistory(true) end , 'Next list' },
+	{ '<', function() require('bqf.qfwin.handler').navHistory(false) end, 'Prev list' },
 			})
 		end,
 		---@type BqfConfig
