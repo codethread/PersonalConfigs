@@ -240,6 +240,7 @@ return {
 	o = {
 		name = 'Open',
 		a = { Cmd 'AerialToggle! left', 'Aerial' },
+		f = { function() vim.ui.open(vim.fn.expand '%:p:h') end, 'Open finder' },
 		-- if you can't beat 'em
 		c = { Cmd 'silent !code %', 'VSCode' },
 		d = { Cmd 'Oil', 'Dir' },

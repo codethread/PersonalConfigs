@@ -21,7 +21,7 @@
 	brew "atuin"
 	brew "starship"
 	brew "terminal-notifier" # Send macOS User Notifications from the command-line
-	b2rew "neovim" # this is just to have a version, but latest is built via $install-neovim
+	brew "neovim" # this is just to have a version, but latest is built via $install-neovim
 
 	# neovim (build dependencies)
 	brew "ninja"
@@ -52,6 +52,7 @@
 	brew "tokei"
 	brew "tree"
 	brew "grc"
+	brew "yt-dlp"
 
 	# needed for gitwatch stuff
 	brew "coreutils"

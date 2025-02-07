@@ -66,7 +66,15 @@ return {
 		opts = {
 			find_engine = {
 				rg = {
-					-- can add more options
+					args = {
+						'--color=never',
+						'--no-heading',
+						'--with-filename',
+						'--line-number',
+						'--glob',
+						'!.git',
+						'--column',
+					},
 				},
 			},
 			default = {

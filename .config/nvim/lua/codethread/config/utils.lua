@@ -316,7 +316,7 @@ end
 ---@field buffer? number
 
 ---@class ct.KeymapSetOpts : ct.keymapOpts
----@field mode string[]
+---@field mode string|string[]
 ---@field opts vim.keymap.set.Opts
 
 ---Wrapper around vim.keymap.set
@@ -342,7 +342,7 @@ end
 ---Create local mappings
 ---@param opts ct.keymapOpts[]
 function M.localleader(opts)
-	local buf = opts[1].buffer or vim.api.nvim_win_get_buf(0)
+	local buf = opts[1].buffer or vim.api.nvim_get_current_buf()
 	-- only set bindings for buffer once (is an issue if runtime files are composesd with `unique` keys)
 	local is_bound = vim.b[buf].ct_set_bindings or false
 	if is_bound then return end
@@ -352,12 +352,13 @@ function M.localleader(opts)
 	local defaults = { buffer = buf, silent = true, unique = true }
 
 	for _, keyset in ipairs(opts) do
-		---@cast keyset ct.KeymapSetOpts
-		keyset.opts = vim.deepcopy(defaults, true)
-		keyset[1] = '<localleader>' .. keyset[1]
-		keyset.mode = keyset.mode or { 'n' }
-
-		create_keymap(keyset)
+		create_keymap {
+			'<localleader>' .. keyset[1],
+			keyset[2],
+			keyset[3],
+			opts = vim.deepcopy(defaults, true),
+			mode = keyset.mode or { 'n' },
+		}
 	end
 end
 
