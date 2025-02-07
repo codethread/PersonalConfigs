@@ -27,6 +27,7 @@ $env.config.cursor_shape = $env.config.cursor_shape | merge {
 # NOTE: may need to check how this behaves for scripts and nush
 $env.config.display_errors.exit_code = false # this shows a nushell error, which is annoying in repl
 $env.config.display_errors.termination_signal = true
+$env.config.use_ansi_coloring = "auto"
 $env.config.use_kitty_protocol = true # who knows
 $env.config.shell_integration = $env.config.shell_integration | merge {
 	osc2 : true
@@ -61,7 +62,7 @@ $env.PROMPT_INDICATOR_VI_NORMAL = "〉"
 $env.PROMPT_MULTILINE_INDICATOR = "::: "
 
 const workp = ("~/.work.nu" | path expand)
-source (if ($workp | path exists) { $workp } else { "empty.nu" })
+source (if ($workp | path exists) { $workp } else { null })
 
 const privates = ("~/.privates.nu" | path expand)
-source (if ($privates | path exists) { $privates } else { "empty.nu" })
+source (if ($privates | path exists) { $privates } else { null })

@@ -4,10 +4,10 @@ alias p = ^p
 alias als = scope aliases
 
 const atuin = ("~/.local/share/atuin/init.nu" | path expand)
-source (if ($atuin | path exists) { $atuin } else { "empty.nu" })
+source (if ($atuin | path exists) { $atuin } else { null })
 
 const carapace = ("~/.cache/carapace/init.nu" | path expand)
-source (if ($carapace | path exists) { $carapace } else { "empty.nu" })
+source (if ($carapace | path exists) { $carapace } else { null })
 
 def get-package-scripts [] {
 	open package.json | get scripts | items { |key,_| $key }

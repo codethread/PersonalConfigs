@@ -123,6 +123,15 @@ export def git_reset_files [...files: string] {
 	}
 }
 
+export def git_pick_files [branch: string]: list<string> -> nothing {
+	each {|f|
+		let c = $"git checkout origin/($branch) ($f)"
+		print $c
+		zsh -c $c
+	}
+	null
+}
+
 export def git_squash [
 	branch: string
 	--this-branch # if true, will squash into the current branch, otherwise will checkout trunk
