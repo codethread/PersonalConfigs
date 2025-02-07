@@ -1,10 +1,9 @@
----Align blocks in a simple but inferred manner.
----use @align ... @align-end comments to mark a region
----region expects a table (or function table) containing nested tables
----each row will be aligned according to argument position
-
 local M = {}
 
+---Align blocks in a simple but inferred manner.
+---`--[[stylua: ignore]] --format` to mark a region
+---region expects a table (or function table) containing nested tables
+---each row will be aligned according to argument position
 M.format_table = function(bufn)
 	local ts = vim.treesitter
 	local tree = ts.get_parser(bufn)
@@ -102,7 +101,6 @@ M.format_table = function(bufn)
 
 	local offset = 0
 	for _, change in ipairs(changes) do
-		vim.print(offset, change.start, change.end_)
 		local text = {}
 		for _, row in ipairs(change.lines) do
 			local txt = padding .. '{ ' .. table.concat(row, ', ') .. ' },'
@@ -114,12 +112,6 @@ M.format_table = function(bufn)
 		local new_size = #text
 		local diff = new_size - original_size -- e.g was 5 but now 10, so diff is +5, which wil then be used for next insertion
 		offset = offset + diff
-		vim.print {
-			original_size = original_size,
-			new_size = new_size,
-			diff = diff,
-			offset = offset,
-		}
 	end
 end
 

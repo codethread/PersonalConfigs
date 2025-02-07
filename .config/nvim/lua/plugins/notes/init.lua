@@ -40,7 +40,7 @@ return {
 			-- set.conceallevel = 0 -- So that I can see `` in markdown files
 			vim.opt.conceallevel = 2 -- while trying obsidian
 			--[[stylua: ignore]] --format
-			U.keys('markdown', {
+			U.ft_localleader('markdown', {
 	{ 'j', function() require('plugins.notes.fns').table_swap_down() end , 'Table ⬇' },
 	{ 'k', function() require('plugins.notes.fns').table_swap_up() end   , 'Table ⬆' },
 	{ 'h', function() require('plugins.notes.fns').table_swap_left() end , 'Table ⇽' },

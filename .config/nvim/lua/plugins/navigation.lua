@@ -101,7 +101,7 @@ return {
 		},
 		init = function()
 			--[[stylua: ignore]] --format
-			U.keys('oil', {
+			U.ft_localleader('oil', {
 	{ 'c', function() require('oil.actions').copy_entry_path.callback() end, 'copy filepath'    },
 	{ 'r', function() require('oil.actions').refresh.callback() end        , 'refresh'          },
 	{ 't', function() require('oil.actions').select_tab.callback() end     , 'open in tab'      },

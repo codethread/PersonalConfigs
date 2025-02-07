@@ -88,17 +88,23 @@ M.live_grepper = function(opts)
 						end
 					end
 
+					for _, flag in ipairs(_flags) do
+						table.insert(cmd, flag)
+					end
+
 					do
 						local prompt_bufnr = vim.api.nvim_get_current_buf()
 						local current_picker = action_state.get_current_picker(prompt_bufnr)
-						current_picker.prompt_border:change_title(
-							(is_literal and 'Fixed grep: ' or 'Grep: ')
-								.. grep
-								.. (
-									vim.tbl_isempty(dirs) and ''
-									or string.format(' | Globs: %s', table.concat(dirs, ' '))
-								)
-						)
+						local title_parts = {
+							(is_literal and 'Fixed grep: ' or 'Grep: ') .. grep,
+						}
+						if not vim.tbl_isempty(dirs) then
+							table.insert(title_parts, string.format('Globs: %s', table.concat(dirs, ' ')))
+						end
+						if not vim.tbl_isempty(_flags) then
+							table.insert(title_parts, string.format('Flags: %s', table.concat(_flags, ' ')))
+						end
+						current_picker.prompt_border:change_title(table.concat(title_parts, '| '))
 					end
 
 					return cmd

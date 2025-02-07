@@ -11,7 +11,6 @@ return {
 	[';'] = { Cmd 'Telescope commands', 'M-x' },
 	[':'] = { Cmd 'Telescope command_history', 'M-x [hist]' },
 	['/'] = { Cmd 'Telescope search_history', '/ [hist]' },
-	['q'] = { Cmd 'w | luafile %', 'Reload Luafile' },
 	[','] = { Cmd 'Telescope resume', '🔭' },
 
 	a = { Cmd 'Other', 'other' },
@@ -244,7 +243,6 @@ return {
 		-- if you can't beat 'em
 		c = { Cmd 'silent !code %', 'VSCode' },
 		d = { Cmd 'Oil', 'Dir' },
-		i = { Cmd 'OpenInitBuffer', 'Open init buffer' },
 		l = { function() require('codethread.logger').select() end, 'open log file' },
 		n = { Cmd 'LogOpen notifications', 'Notifcation History' },
 		N = { function() Snacks.notifier.hide() end, 'Hide Notifications' },
@@ -256,7 +254,6 @@ return {
 		t = { Cmd 'ToggleTerm direction=float', 'Float' },
 		h = { Cmd 'ToggleTerm size=10 direction=horizontal', 'Horizontal' },
 		v = { Cmd 'ToggleTerm size=80 direction=vertical', 'Vertical' },
-		r = { Cmd 'TermExec Cmd="eslint_d restart"', 'Vertical' },
 	},
 
 	T = {

@@ -208,75 +208,6 @@ function M.keymap(mode, lhs, rhs, opts)
 	end
 end
 
----Create local bindings for a buffer or filetype (currently backed by which-key)
----@overload fun(filetype: number|string, mappings: ct.keymapOpts[]): nil
----@overload fun(filetype: number|string, opts: vim.keymap.set.Opts, mappings: ct.keymapOpts[]): nil
-function M.keys(filetype, opts, mappings)
-	---@cast opts vim.keymap.set.Opts
-	if not mappings then -- handle fn overlaod
-		---@type ct.keymapOpts[]
-		mappings = opts
-		opts = {}
-	end
-
-	local bindings = {}
-
-	for _, binding in ipairs(mappings) do
-		local lhs, rhs, desc = binding[1], binding[2], binding[3]
-		bindings[lhs] = { rhs, desc }
-	end
-
-	local base_options = M.map_args {
-		mode = 'n',
-		prefix = '<localleader>',
-	}
-
-	if type(filetype) == 'string' or type(filetype) == 'table' then
-		if type(filetype) == 'table' then
-			for _, ft in ipairs(filetype) do
-				if type(ft) ~= 'string' then
-					vim.notify(
-						'filetypes should be strings when passed as arrays, got' .. vim.inspect(ft),
-						vim.log.levels.ERROR
-					)
-					return
-				end
-			end
-		end
-		vim.api.nvim_create_autocmd('FileType', {
-			pattern = filetype,
-			callback = function(ops)
-				local ok, wk = pcall(require, 'which-key')
-				if not ok then
-					vim.notify('needs which key', vim.log.levels.ERROR)
-					return
-				end
-
-				wk.register(
-					bindings,
-					vim.tbl_deep_extend('force', base_options, { buffer = ops.buf }, opts or {})
-				)
-			end,
-		})
-	elseif type(filetype) == 'number' then
-		local ok, wk = pcall(require, 'which-key')
-		if not ok then
-			vim.notify('needs which key', vim.log.levels.ERROR)
-			return
-		end
-
-		wk.register(
-			bindings,
-			vim.tbl_deep_extend('force', base_options, { buffer = filetype }, opts or {})
-		)
-	else
-		vim.notify(
-			'keys is intended for filetype local mappings, pass a filetype or a bufnr',
-			vim.log.levels.ERROR
-		)
-	end
-end
-
 function M.command(desc, lhs, rhs, arg_count)
 	vim.api.nvim_buf_create_user_command(arg_count or 0, lhs, rhs, { desc = desc })
 end
@@ -382,6 +313,7 @@ end
 ---@field [3]? string
 ---@field desc? string
 ---@field mode? string|string[]
+---@field buffer? number
 
 ---@class ct.KeymapSetOpts : ct.keymapOpts
 ---@field mode string[]
@@ -403,15 +335,15 @@ local function create_keymap(opts)
 		end
 	end
 
+	-- TODO: migrate to which key and use checkhealth for clashes instead
 	Try(function() vim.keymap.set(opts.mode, lhs, rhs, set_opts) end)
 end
 
 ---Create local mappings
 ---@param opts ct.keymapOpts[]
 function M.localleader(opts)
-	local buf = vim.api.nvim_win_get_buf(0)
+	local buf = opts[1].buffer or vim.api.nvim_win_get_buf(0)
 	-- only set bindings for buffer once (is an issue if runtime files are composesd with `unique` keys)
-	-- TODO: migrate to which key and use checkhealth for clashes instead
 	local is_bound = vim.b[buf].ct_set_bindings or false
 	if is_bound then return end
 	vim.b[buf].ct_set_bindings = true
@@ -439,6 +371,16 @@ function M.keymaps(opts, mappings)
 			mode = keyset.mode or { 'n' },
 		}, keyset))
 	end
+end
+
+---Create local bindings for a filetype
+---@param filetype string,
+---@param mappings ct.keymapOpts[]
+function M.ft_localleader(filetype, mappings)
+	vim.api.nvim_create_autocmd('FileType', {
+		pattern = filetype,
+		callback = function() M.localleader(mappings) end,
+	})
 end
 --#endregion
 

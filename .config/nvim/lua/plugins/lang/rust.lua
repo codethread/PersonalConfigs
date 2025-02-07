@@ -33,7 +33,7 @@ return {
 			end)
 
 			--[[stylua: ignore]] --format
-			U.keys('rust', {
+			U.ft_localleader('rust', {
 	{ 'h' , Lua "require('rust-tools').hover_actions.hover_actions()"        , 'hover actions' },
 	{ 'a' , Lua "require('rust-tools').code_action_group.code_action_group()", 'code actions'  },
 	{ 'l' , function() vim.lsp.codelens.run() end                            , 'Code Lens'     },
@@ -96,13 +96,13 @@ return {
 				pattern = { 'Cargo.toml' },
 				callback = function(event)
 					--[[stylua: ignore]] --format
-					U.keys(event.buf, {
+					U.localleader {
 	{ 'y', Lua "require'crates'.open_repository()"        , 'Open Repository'   },
 	{ 'p', Lua "require'crates'.show_popup()"             , 'Show Popup'        },
 	{ 'i', Lua "require'crates'.show_crate_popup()"       , 'Show Info'         },
 	{ 'f', Lua "require'crates'.show_features_popup()"    , 'Show Features'     },
 	{ 'd', Lua "require'crates'.show_dependencies_popup()", 'Show Dependencies' },
-					})
+					}
 				end,
 			})
 		end,
