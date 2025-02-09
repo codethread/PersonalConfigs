@@ -1,5 +1,7 @@
 local M = {}
 
+local log = require('codethread.logger.init').new { plugin = 'tbl_align' }
+
 ---Align blocks in a simple but inferred manner.
 ---`--[[stylua: ignore]] --format` to mark a region
 ---region expects a table (or function table) containing nested tables
@@ -22,8 +24,10 @@ M.format_table = function(bufn)
 			---@type Block
 			local block = { line = i, width = #line }
 			table.insert(blocks, block)
+			log.info('line:', line, 'block:', block)
 		end
 	end
+	log.info('blocks', blocks)
 
 	local nested_tables_query = vim.treesitter.query.parse(
 		'lua',

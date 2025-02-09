@@ -37,9 +37,9 @@ end
 function M.set(logger, level)
 	vim.validate('logger', logger, 'string')
 	vim.validate('level', level, function(l)
-		local ok = vim.list_contains(levels, l)
+		local ok = vim.list_contains(log.levels, l)
 		if ok then return ok end
-		return ok, string.format('expected %s to be one of %s', l, table.concat(levels, ', '))
+		return ok, string.format('expected %s to be one of %s', l, table.concat(log.levels, ', '))
 	end)
 
 	local instance = M.loggers[logger]
@@ -79,7 +79,7 @@ local function completion_set(arg_lead, cmd_line, cursor_pos)
 	end
 
 	if count > 1 then -- show level completions
-		return levels
+		return log.levels
 	else -- show logger completions
 		return vim.tbl_keys(M.loggers)
 	end

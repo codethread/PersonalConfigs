@@ -13,7 +13,7 @@ return {
 	['/'] = { Cmd 'Telescope search_history', '/ [hist]' },
 	[','] = { Cmd 'Telescope resume', '🔭' },
 
-	a = { Cmd 'Other', 'other' },
+	-- a = { Cmd 'Other', 'other' },
 
 	-- b = {
 	-- 	name = '...',

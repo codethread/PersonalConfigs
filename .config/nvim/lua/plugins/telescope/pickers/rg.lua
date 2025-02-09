@@ -77,6 +77,7 @@ M.live_grepper = function(opts)
 						'--hidden',
 						'--smart-case',
 						'--glob-case-insensitive',
+						-- TODO: -e/--regexp for handling flags
 						grep,
 					}
 

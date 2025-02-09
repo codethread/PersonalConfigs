@@ -1,13 +1,16 @@
 local M = {}
 
-function M.pipe(functions)
-	return function(input)
-		local result = input
-		for _, func in ipairs(functions) do
-			result = func(result)
-		end
-		return result
+---Get a deeply nested field from table `t`
+---@param t table
+---@param ... string keys to dig into table
+---@return any | nil
+---@deprecated builtin
+function M.dig(t, ...)
+	for _, k in ipairs { ... } do
+		t = t[k]
+		if not t then return nil end
 	end
+	return t
 end
 
 ---@param client string
@@ -240,18 +243,6 @@ function M.nush(nu_block, opts, on_exit)
 end
 
 -- function M.nush(nu_block) return "nush '" .. nu_block:gsub('\n', '; ') .. "'" end
-
----Get a deeply nested field from table `t`
----@param t table
----@param ... string keys to dig into table
----@return any | nil
-function M.dig(t, ...)
-	for _, k in ipairs { ... } do
-		t = t[k]
-		if not t then return nil end
-	end
-	return t
-end
 
 ---Recurse through a project till a marker is hit or return `nil`
 ---@param markers string | string[]

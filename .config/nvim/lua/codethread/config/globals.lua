@@ -15,6 +15,15 @@ K = function(mode, lhs, buffer)
 	end
 end
 
+---Print a value and return it (tap)
+---@generic A
+---@param ... A
+---@return A
+P = function(...)
+	vim.print(...)
+	return ...
+end
+
 function Cmd(command) return '<Cmd>' .. command .. '<CR>' end
 
 function Lua(command) return '<Cmd>lua ' .. command .. '<CR>' end

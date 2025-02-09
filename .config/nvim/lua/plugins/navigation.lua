@@ -13,6 +13,18 @@ return {
 			mappings = {
 				{ pattern = 'lua/(.*)/(.*).lua$', target = 'test/%1/%2.lua' },
 				{ pattern = 'test/(.*)/(.*).lua$', target = 'lua/%1/%2.lua' },
+
+				{
+					---@param path string
+					---@return string[]?
+					pattern = function(path)
+						local stem, ext = path:match '(.*)%.test%.(m?[tj]sx?)$'
+						if stem then return { stem, ext } end
+						stem, ext = path:match '(.*)%.(m?[tj]sx?)$'
+						return { stem .. '.test', ext }
+					end,
+					target = '%1.%2',
+				},
 			},
 		},
 	},
