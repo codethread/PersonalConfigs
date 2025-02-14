@@ -192,6 +192,7 @@ return {
 		w = {
 			function()
 				require('telescope-live-grep-args.shortcuts').grep_word_under_cursor {
+					-- TODO fix for being in a nested dir
 					cwd = vim.fs.root(0, '.git'),
 				}
 			end,

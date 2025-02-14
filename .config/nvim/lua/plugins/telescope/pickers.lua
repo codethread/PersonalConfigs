@@ -150,4 +150,8 @@ function M.builtin_oldfiles_toggle_cwd(_, map)
 	return true
 end
 
+function M.npm_modules() end
+
+vim.api.nvim_create_user_command('NPM', function() M.npm_modules() end, {})
+
 return M

@@ -24,23 +24,7 @@ return {
 	g = {
 		name = 'stuff',
 		a = { Cmd 'Other', 'alt file' },
-		-- replace missing gx with netrw gone
-		x = {
-			function()
-				local file = vim.fn.expand '<cfile>'
-
-				if vim.startswith(file, 'http') then
-					vim.ui.open 'file'
-				elseif vim.bo.ft == 'lua' and file:find '^([%w-_]+/[%w-_.]+)$' then -- github link like foo/bar.nvim
-					vim.ui.open('https://github.com/' .. file)
-				elseif vim.system({ 'isPhrase', file }):wait().code == 0 then
-					require('codethread.fns').open_phrase_key(file)
-				else
-					print('not a link: ' .. file)
-				end
-			end,
-			'Go to link',
-		},
+		x = { function() require('codethread.gx').gx() end, 'Go to link' },
 		-- ['='] -- eval stuff
 	},
 
