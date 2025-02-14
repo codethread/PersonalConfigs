@@ -65,9 +65,13 @@ export def gwip [msg = "wip"] {
 	git commit -nm $msg;
 }
 
-export def gnah [] {
-	git reset --hard
-	git clean -df
+export def gnah [--force] {
+	if $force {
+		git stash
+	} else {
+		git reset --hard
+		git clean -df
+	}
 }
 
 export def gnew [name: string] {
