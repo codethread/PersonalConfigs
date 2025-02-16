@@ -15,10 +15,7 @@ return {
 		end,
 		cmd = { 'TSUpdateSync', 'TSUpdate', 'TSInstall' },
 		build = ':TSUpdate',
-		dependencies = {
-			{ 'nushell/tree-sitter-nu', build = { ':TSUpdate nu' } },
-			'andymass/vim-matchup',
-		},
+		dependencies = { 'andymass/vim-matchup' },
 		---@type TSConfig
 		opts = {
 			highlight = {
@@ -32,8 +29,8 @@ return {
 			incremental_selection = {
 				enable = true,
 				keymaps = {
-					init_selection = '<CR>',
-					node_incremental = '<CR>',
+					init_selection = '<Tab>',
+					node_incremental = '<M-Tab>',
 					scope_incremental = '<Tab>',
 					node_decremental = '<S-Tab>',
 				},
