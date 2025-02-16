@@ -34,12 +34,27 @@ return {
 			local telescope = require 'telescope'
 			local actions = require 'telescope.actions'
 			local action_layout = require 'telescope.actions.layout'
-			local action_state = require 'telescope.actions.state'
 			local custom = require 'plugins.telescope.pickers'
 
 			local options = vim.tbl_deep_extend('force', opts, {
 				defaults = {
 					-- ui
+					-- layout_strategy = 'flex',
+					layout_config = {
+						height = { padding = 1 },
+						width = { padding = 2 },
+						horizontal = {
+							-- mirror = true,
+							preview_cutoff = 160,
+							preview_width = { 0.6, min = 80, max = 120 + 2 },
+						},
+						vertical = {
+							width = { 0.99, max = 120 + 2 },
+							mirror = true,
+							preview_height = 0.4,
+							preview_cutoff = 1,
+						},
+					},
 					prompt_prefix = '   ',
 					selection_caret = '  ',
 					entry_prefix = '  ',
@@ -121,7 +136,7 @@ return {
 							['>'] = action_layout.cycle_layout_next,
 							[']'] = actions.cycle_previewers_next,
 
-							['C-1'] = action_layout.toggle_prompt_position,
+							['<M-l>'] = action_layout.toggle_mirror,
 						},
 					},
 
@@ -170,6 +185,7 @@ return {
 						path_display = 'hidden',
 					},
 					oldfiles = {
+						layout_config = { horizontal = { mirror = false } },
 						prompt_title = 'Oldfiles (cwd)',
 						only_cwd = true,
 						attach_mappings = custom.builtin_oldfiles_toggle_cwd,

@@ -113,19 +113,23 @@ function M.file_exits(path)
 	return vim.fn.isdirectory(p) == 1
 end
 
-local function get_visual_selection()
-	-- also https://github.com/neovim/neovim/pull/13896#issuecomment-774680224
-
+---Get current visual selection
+---@see M.get_visual_to_cursor
+---@param opts? { trim?: boolean }
+function M.get_visual_selection(opts)
+	local pos = vim.api.nvim_win_get_cursor(0)
+	opts = opts or { trim = false }
 	-- Yank current visual selection into the 'v' register
-	--
 	-- Note that this makes no effort to preserve this register
-	vim.cmd 'noau normal! "vy"'
-
-	local s = vim.fn.getreg 'v'
-	dd(s)
+	vim.cmd 'noau silent normal! "vy"'
+	vim.api.nvim_win_set_cursor(0, pos)
+	local t = vim.split(vim.fn.getreg 'v', '\n')
+	return opts.trim and vim.iter(t):map(vim.trim):totable() or t
 end
 
-local function get_visual()
+---Get current visual selection up to cursor
+---@see M.get_visual_selection
+function M.get_visual_to_cursor()
 	local _, ls, cs = unpack(vim.fn.getpos 'v')
 	local _, le, ce = unpack(vim.fn.getpos '.')
 
@@ -138,9 +142,6 @@ local function get_visual()
 		dd(value)
 	end
 end
-
-vim.keymap.set('v', '<localleader>r', get_visual, { buffer = true })
-vim.keymap.set('v', '<localleader>e', get_visual_selection, { buffer = true })
 
 ---@return number row, number column
 function M.current_pos()
@@ -215,17 +216,36 @@ function M.command(desc, lhs, rhs, arg_count)
 	vim.api.nvim_buf_create_user_command(arg_count or 0, lhs, rhs, { desc = desc })
 end
 
-function M.autocmd(events, opts)
-	local group = opts.group or vim.api.nvim_create_augroup('codethread', {
-		clear = false,
-	})
-	if opts.group then vim.api.nvim_clear_autocmds { group = group, buffer = opts.buffer } end
-	vim.api.nvim_create_autocmd(events, {
-		pattern = opts.pattern,
-		group = group,
-		buffer = opts.buffer,
-		callback = opts.fn,
-	})
+local default_augroup = vim.api.nvim_create_augroup('codethread', { clear = true })
+---@type table<string, number?> # map of descriptions to autocmds
+local aus = {}
+
+--- Options for autocmds
+--- @class ct.au_opts
+--- @field buffer? integer
+--- @field group? integer|string
+--- @field once? boolean
+--- @field pattern? string|string[]
+
+--- @param desc string docstring
+--- @param events string[] Event(s) that will trigger the handler (`callback` or `command`).
+--- @param fn fun(args: vim.api.keyset.create_autocmd.callback_args): boolean?
+--- @param opts? ct.au_opts
+function M.au(desc, events, fn, opts)
+	-- TODO: write script to grab events from docs
+	-- TODO: make this smarter, use patterns and events for smarter deletes if desc changes
+	local old = aus[desc]
+	if old then vim.api.nvim_del_autocmd(old) end
+	opts = opts or {}
+	local au = vim.api.nvim_create_autocmd(
+		events,
+		vim.tbl_deep_extend('force', {
+			group = opts.group or default_augroup,
+			desc = desc,
+			callback = fn,
+		}, opts)
+	)
+	aus[desc] = au
 end
 
 ---Run a nushell command using `vim.system`

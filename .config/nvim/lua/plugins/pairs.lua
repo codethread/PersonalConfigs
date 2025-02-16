@@ -1,6 +1,17 @@
 return {
 	{ 'echasnovski/mini.surround', opts = {} },
-	{ 'echasnovski/mini.pairs', opts = {} },
+	--use i_ctrl_v for literal inserts
+	{
+		'echasnovski/mini.pairs',
+		opts = {},
+		init = function()
+			U.au(
+				'Toggle autopairs in macros',
+				{ 'RecordingEnter', 'RecordingLeave' },
+				function(e) vim.b[e.buf].minipairs_disable = e.event == 'RecordingEnter' end
+			)
+		end,
+	},
 	-- {
 	-- 	'windwp/nvim-autopairs',
 	-- 	event = 'InsertEnter',

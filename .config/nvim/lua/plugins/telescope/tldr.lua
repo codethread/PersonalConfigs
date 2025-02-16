@@ -162,6 +162,18 @@ local custom_preview = pickers.new({
 	},
 })
 
-local run = min_shot
+--   ╭─────────────────────────────────────────────────────────────────────────╮
+--   │                                 layouts                                 │
+--   ╰─────────────────────────────────────────────────────────────────────────╯
+local builtin = require 'telescope.builtin'
+local themes = require 'telescope.themes'
 
-run:find()
+local layout_play = function()
+	builtin.find_files {
+		layout_strategy = 'flex',
+	}
+end
+
+layout_play()
+-- local run = min_shot
+-- run:find()

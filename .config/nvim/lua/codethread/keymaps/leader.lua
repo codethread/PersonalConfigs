@@ -102,8 +102,7 @@ return {
 		o = { Cmd 'Telescope git_status', 'Open changed file' },
 		p = { function() require('gitsigns').preview_hunk() end, 'Preview Hunk' },
 		r = { function() require('gitsigns').reset_hunk() end, 'Reset Hunk' },
-		s = { function() require('gitsigns').stage_hunk() end, 'Stage Hunk' },
-		u = { function() require('gitsigns').undo_stage_hunk() end, 'Undo Stage Hunk' },
+		s = { function() require('gitsigns').stage_hunk() end, '(un)Stage Hunk' },
 		v = { Cmd 'silent !gh repo view --web', 'Ghub view' },
 	},
 
@@ -169,7 +168,7 @@ return {
 		b = { Cmd 'Telescope git_branches', 'Checkout branch' },
 		c = { Cmd 'Telescope colorscheme', 'Colorscheme' },
 		f = {
-			Cmd 'Telescope current_buffer_fuzzy_find theme=ivy previewer=false',
+			Cmd 'Telescope current_buffer_fuzzy_find mirror=true',
 			'Buffer',
 		},
 		F = {
