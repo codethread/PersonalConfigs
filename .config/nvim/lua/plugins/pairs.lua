@@ -1,5 +1,6 @@
 return {
 	{ 'echasnovski/mini.surround', opts = {} },
+
 	--use i_ctrl_v for literal inserts
 	{
 		'echasnovski/mini.pairs',

@@ -41,3 +41,23 @@ vim.diagnostic.config {
 		format = format,
 	},
 }
+
+local M = {}
+function M.next_diagnostic()
+	local ft = vim.bo.filetype
+	vim.diagnostic.jump {
+		severity = ft ~= 'lua' and vim.diagnostic.severity.ERROR or vim.diagnostic.severity.WARN,
+		count = 1,
+		float = true,
+	}
+end
+
+function M.previous_diagnostic()
+	local ft = vim.bo.filetype
+	vim.diagnostic.jump {
+		severity = ft ~= 'lua' and vim.diagnostic.severity.ERROR or vim.diagnostic.severity.WARN,
+		count = -1,
+		float = true,
+	}
+end
+return M

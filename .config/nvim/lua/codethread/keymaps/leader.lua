@@ -3,52 +3,202 @@ local fns = require 'codethread.fns'
 -- to see raw key
 -- go to insert mode, type <C-v> then type, and that key will be shown
 
+U.keymaps({}, {
+	{ '<leader><leader>', Cmd 'Telescope find_files', 'Files' },
+	{ '<leader>;', Cmd 'Telescope commands', 'M-x' },
+	{ '<leader>:', Cmd 'Telescope command_history', 'M-x [hist]' },
+	{ '<leader>/', Cmd 'Telescope search_history', '/ [hist]' },
+	{ '<leader>,', Cmd 'Telescope resume', '🔭' },
+})
+require('which-key').add {
+	{ '<leader>e', group = 'Errors' },
+	{ '<leader>f', group = 'Buffer' },
+	{ '<leader>g', group = 'Git' },
+	{ '<leader>G', group = 'Global' },
+	{ '<leader>h', group = 'Help' },
+	{ '<leader>l', group = 'LSP' },
+	{ '<leader>w', group = 'Window' },
+	{ '<leader>s', group = 'Search' },
+	-- open, Open, openers, Openers
+	{ '<leader>o', group = 'Open' },
+	{ '<leader>T', group = 'Toggle' },
+	{ '<leader>u', group = 'Utils' },
+	-- clipboard, copy
+	{ '<leader>y', group = 'Yank' },
+}
+U.keymaps({}, {
+	{ '<leader>eh', function() vim.diagnostic.open_float() end, 'Hover' },
+	{ '<leader>el', Cmd 'Telescope diagnostics theme=ivy bufnr=0', 'Document Diagnostics' },
+	{ '<leader>eL', Cmd 'Telescope diagnostics', 'Workspace Diagnostics' },
+	{
+		'<leader>en',
+		function() require('codethread.diagnostics').next_diagnostic() end,
+		'Next Diagnostic',
+	},
+	{
+		'<leader>ep',
+		function() require('codethread.diagnostics').previous_diagnostic() end,
+		'Previous Diagnostic',
+	},
+	{ '<leader>et', Cmd 'DiagnosticToggle', 'Toggle Diagnostics' },
+	{ '<leader>eq', Cmd 'lua vim.diagnostic.setloclist()', 'Quickfix' },
+
+	{ '<leader>fb', [[<C-^>]], 'Toggle' },
+	{ '<leader>fl', Cmd 'Telescope buffers', 'list' },
+	{ '<leader>ff', function() require('codethread.split').split() end, 'Split last' },
+	{ '<leader>fr', Cmd 'Telescope oldfiles', 'recent' },
+	{ '<leader>fR', Cmd 'e!', 'reload' },
+	{ '<leader>fk', function() require('mini.bufremove').delete() end, 'kill' },
+	{ '<leader>fs', fns.save_buffer, 'Save' },
+	{ '<leader>fu', function() require('plugins.telescope.pickers').unsaved() end, 'Unsaved' },
+	{ '<leader>fO', function() Snacks.bufdelete.other {} end, 'Delete Others' },
+
+	----
+	{
+		'<leader>gR',
+		function()
+			require('gitsigns').reset_buffer()
+			vim.cmd [[noa w]]
+		end,
+		'Reset Buffer',
+	},
+	{ '<leader>gb', Cmd 'Telescope git_branches', 'Checkout branch' },
+	{ '<leader>gc', Cmd 'Telescope git_commits', 'Checkout commit' },
+	{ '<leader>gd', function() require('gitsigns').diffthis() end, 'Diff' },
+	{ '<leader>gg', function() require('neogit').open {} end, 'Status' },
+	{
+		'<leader>gj',
+		function() require('gitsigns').nav_hunk('next', { preview = true }) end,
+		'Next Hunk',
+	},
+	{
+		'<leader>gk',
+		function() require('gitsigns').nav_hunk('prev', { preview = true }) end,
+		'Prev Hunk',
+	},
+	{ '<leader>gh', fns.toggle_file_history, 'File History' },
+	{ '<leader>gl', function() require('gitsigns').blame_line() end, 'Blame' },
+	{ '<leader>go', Cmd 'Telescope git_status', 'Open changed file' },
+	{ '<leader>gp', function() require('gitsigns').preview_hunk() end, 'Preview Hunk' },
+	{ '<leader>gr', function() require('gitsigns').reset_hunk() end, 'Reset Hunk' },
+	{ '<leader>gs', function() require('gitsigns').stage_hunk() end, '(un)Stage Hunk' },
+	{ '<leader>gv', Cmd 'silent !gh repo view --web', 'Ghub view' },
+	---
+	{ '<leader>GL', Cmd 'Lazy', 'Lazy' },
+	{ '<leader>GM', Cmd 'Mason', 'Mason' },
+	{ '<leader>Gm', Cmd 'Bufferize messages', 'messages' },
+	---
+	{ '<leader>hh', Cmd 'Telescope help_tags', 'Help' },
+	{ '<leader>hH', Cmd 'Telescope helpgrep', 'Help Grep' }, -- TODO: steal code and use my own grepper
+	{ '<leader>hm', Cmd 'Telescope man_pages', 'Man pages' },
+	{ '<leader>hv', Cmd 'Telescope vim_options', 'Settings' },
+	{ '<leader>ht', Cmd 'Telescope builtin', 'Telescope' },
+	{ '<leader>hc', Cmd 'Telescope highlights', 'Telescope' },
+	---
+	-- { '<leader>la', Cmd'Telescope lsp_code_actions them=cursor', "Code Action" },
+	{ '<leader>la', Cmd 'lua vim.lsp.buf.code_action()', 'Code Action' },
+	{ '<leader>ld', Cmd 'lua vim.lsp.buf.declaration({ reuse_win = true })', 'Declaration' },
+	{ '<leader>li', Cmd 'LspInfo', 'Info' },
+	{ '<leader>lI', Cmd 'LspInstallInfo', 'Installer Info' },
+	{ '<leader>ll', Cmd 'lua vim.lsp.codelens.run()', 'CodeLens Action' },
+	{ '<leader>lr', Cmd 'lua vim.lsp.buf.rename()', 'Rename' },
+	{ '<leader>ls', Cmd 'Telescope lsp_document_symbols', 'Document Symbols' },
+	{ '<leader>lS', Cmd 'Telescope lsp_dynamic_workspace_symbols', 'Workspace Symbols' },
+	---
+	{ '<leader>wN', Cmd 'tabnew', 'New Tab' },
+	{ '<leader>wk', Cmd 'close', 'Close' },
+	{ '<leader>wl', function() require('telescope-tabs').list_tabs() end, 'List Tabs' }, -- TODO: put through telescope
+	{ '<leader>wn', Cmd 'tabNext', 'Next Tab' }, -- TODO: put through telescope
+	{ '<leader>wp', Cmd 'tabprevious', 'Previous Tab' }, -- TODO: put through telescope
+	{ '<leader>ww', Cmd 'vsplit', 'Split' }, -- TODO: put through telescope
+	{ '<leader>ws', Cmd 'SwapSplit', 'Swap' },
+	{
+		'<leader>we',
+		function() require('codethread.movement').tab_hydra:activate() end,
+		'🐉 Tabs',
+	},
+	---
+	{ '<leader>sb', Cmd 'Telescope git_branches', 'Checkout branch' },
+	{ '<leader>sc', Cmd 'Telescope colorscheme', 'Colorscheme' },
+	{ '<leader>sf', Cmd 'Telescope current_buffer_fuzzy_find mirror=true', 'Buffer' },
+	{
+		'<leader>sF',
+		function()
+			require('telescope.builtin').live_grep {
+				grep_open_files = true,
+			}
+		end,
+		'Buffers',
+	},
+	{ '<leader>sr', Cmd 'Telescope oldfiles', 'Open Recent File' },
+	{ '<leader>sR', Cmd 'Telescope registers', 'Registers' },
+	{ '<leader>sk', Cmd 'Telescope keymaps', 'Keymaps' },
+	{ '<leader>sC', Cmd 'Telescope commands', 'Commands' },
+	-- { '<leader>sp', Cmd 'Telescope live_grep_args', 'Live Grep' },
+	{
+		'<leader>sp',
+		function() require('plugins.telescope.pickers.rg').live_grepper {} end,
+		'Live Grep',
+	},
+	{
+		'<leader>sw',
+		function()
+			require('telescope-live-grep-args.shortcuts').grep_word_under_cursor {
+				-- TODO fix for being in a nested dir
+				cwd = vim.fs.root(0, '.git'),
+			}
+		end,
+		'Word',
+	},
+	{ '<leader>sl', Cmd 'Telescope lsp_document_symbols', 'Symbol' },
+	{ '<leader>sL', ':Telescope lsp_workspace_symbols query=', 'Global Symbols' },
+	{ '<leader>ss', Cmd 'Spectre', 'Spectre' },
+	{ '<leader>sy', Cmd 'Telescope neoclip', 'Clipboard' },
+	---
+	{ '<leader>oa', Cmd 'AerialToggle! left', 'Aerial' },
+	{ '<leader>of', function() vim.ui.open(vim.fn.expand '%:p:h') end, 'Open finder' },
+	-- if you can't beat 'em
+	{ '<leader>oc', Cmd 'silent !code %', 'VSCode' },
+	{ '<leader>od', Cmd 'Oil', 'Dir' },
+	{ '<leader>ol', function() require('codethread.logger').select() end, 'open log file' },
+	{ '<leader>on', Cmd 'LogOpen notifications', 'Notifcation History' },
+	{ '<leader>oN', function() Snacks.notifier.hide() end, 'Hide Notifications' },
+	---
+	{ '<leader>Ti', Cmd "lua print'nothing setup'", 'Inlay Hints' },
+	{ '<leader>T ', fns.toggle_listchars, 'Whitespace' },
+	{ '<leader>T>', fns.toggle_indent_scope, 'IndentScope' },
+
+	---
+	{ '<leader>uf', "mbggVG=='b", 'format buffer' },
+	{ '<leader>us', '1z=', 'autocorrect' },
+	{ '<leader>ub', function() require('codethread.box').box() end, 'Box' },
+	{
+		'<leader>ur',
+		function()
+			require('luasnip.loaders.from_vscode').load {
+				paths = {
+					'~/.config/nvim/snippets_vscode',
+					'~/.local/share/nvim/lazy/friendly-snippets',
+				},
+			}
+		end,
+		'reload snippets',
+	},
+	---
+	{ '<leader>yl', fns.copy_filepath_relative, 'path [gitlab]' },
+	{ '<leader>yr', Cmd 'let @*=@%', 'path [root]' }, -- TODO:
+	{ '<leader>yy', Cmd 'let @*=@%', 'path [relative]' }, -- TODO:
+	{ '<leader>ys', Cmd 'Telescope neoclip', 'Search' },
+})
+
 return {
-	['<leader>'] = { Cmd 'Telescope find_files', 'Files' },
-	[']'] = { name = '+next' },
-	['['] = { name = '+prev' },
 	-- ['<leader>v'] = { name = '+vim' },
-	[';'] = { Cmd 'Telescope commands', 'M-x' },
-	[':'] = { Cmd 'Telescope command_history', 'M-x [hist]' },
-	['/'] = { Cmd 'Telescope search_history', '/ [hist]' },
-	[','] = { Cmd 'Telescope resume', '🔭' },
 
 	-- a = { Cmd 'Other', 'other' },
 
 	-- b = {
 	-- 	name = '...',
 	-- },
-
-	e = {
-		name = 'Errors',
-		h = { function() vim.diagnostic.open_float() end, 'Hover' },
-		l = { Cmd 'Telescope diagnostics theme=ivy bufnr=0', 'Document Diagnostics' },
-		L = { Cmd 'Telescope diagnostics', 'Workspace Diagnostics' },
-		n = {
-			function()
-				local ft = vim.bo.filetype
-				vim.diagnostic.jump {
-					severity = ft ~= 'lua' and vim.diagnostic.severity.ERROR or vim.diagnostic.severity.WARN,
-					count = 1,
-					float = true,
-				}
-			end,
-			'Next Diagnostic',
-		},
-		p = {
-			function()
-				local ft = vim.bo.filetype
-				vim.diagnostic.jump {
-					severity = ft ~= 'lua' and vim.diagnostic.severity.ERROR or vim.diagnostic.severity.WARN,
-					count = -1,
-					float = true,
-				}
-			end,
-			'Previous Diagnostic',
-		},
-		t = { Cmd 'DiagnosticToggle', 'Toggle Diagnostics' },
-		q = { Cmd 'lua vim.diagnostic.setloclist()', 'Quickfix' },
-	},
 
 	-- d = {
 	--   function()
@@ -64,76 +214,10 @@ return {
 	-- },
 
 	-- files, buffers, buffer
-	f = {
-		name = 'Buffer',
-		b = { [[<C-^>]], 'Toggle' },
-		l = { Cmd 'Telescope buffers', 'list' },
-		f = { function() require('codethread.split').split() end, 'Split last' },
-		r = { Cmd 'Telescope oldfiles', 'recent' },
-		R = { Cmd 'e!', 'reload' },
-		k = { function() require('mini.bufremove').delete() end, 'kill' },
-		s = { fns.save_buffer, 'Save' },
-		u = { function() require('plugins.telescope.pickers').unsaved() end, 'Unsaved' },
-		O = { function() Snacks.bufdelete.other {} end, 'Delete Others' },
-	},
 
 	j = {
 		name = 'Test',
 		j = { fns.test_current_file, 'file' },
-	},
-
-	g = {
-		name = 'Git',
-		R = {
-			function()
-				require('gitsigns').reset_buffer()
-				vim.cmd [[noa w]]
-			end,
-			'Reset Buffer',
-		},
-		b = { Cmd 'Telescope git_branches', 'Checkout branch' },
-		c = { Cmd 'Telescope git_commits', 'Checkout commit' },
-		d = { function() require('gitsigns').diffthis() end, 'Diff' },
-		g = { function() require('neogit').open {} end, 'Status' },
-		j = { function() require('gitsigns').nav_hunk('next', { preview = true }) end, 'Next Hunk' },
-		k = { function() require('gitsigns').nav_hunk('prev', { preview = true }) end, 'Prev Hunk' },
-		h = { fns.toggle_file_history, 'File History' },
-		l = { function() require('gitsigns').blame_line() end, 'Blame' },
-		o = { Cmd 'Telescope git_status', 'Open changed file' },
-		p = { function() require('gitsigns').preview_hunk() end, 'Preview Hunk' },
-		r = { function() require('gitsigns').reset_hunk() end, 'Reset Hunk' },
-		s = { function() require('gitsigns').stage_hunk() end, '(un)Stage Hunk' },
-		v = { Cmd 'silent !gh repo view --web', 'Ghub view' },
-	},
-
-	G = {
-		name = 'Global',
-		L = { Cmd 'Lazy', 'Lazy' },
-		M = { Cmd 'Mason', 'Mason' },
-		m = { Cmd 'Bufferize messages', 'messages' },
-	},
-
-	h = {
-		name = 'Help',
-		h = { Cmd 'Telescope help_tags', 'Help' },
-		H = { Cmd 'Telescope helpgrep', 'Help Grep' }, -- TODO: steal code and use my own grepper
-		m = { Cmd 'Telescope man_pages', 'Man pages' },
-		v = { Cmd 'Telescope vim_options', 'Settings' },
-		t = { Cmd 'Telescope builtin', 'Telescope' },
-		c = { Cmd 'Telescope highlights', 'Telescope' },
-	},
-
-	l = {
-		name = 'LSP',
-		-- a = { Cmd'Telescope lsp_code_actions them=cursor', "Code Action" },
-		a = { Cmd 'lua vim.lsp.buf.code_action()', 'Code Action' },
-		d = { Cmd 'lua vim.lsp.buf.declaration({ reuse_win = true })', 'Declaration' },
-		i = { Cmd 'LspInfo', 'Info' },
-		I = { Cmd 'LspInstallInfo', 'Installer Info' },
-		l = { Cmd 'lua vim.lsp.codelens.run()', 'CodeLens Action' },
-		r = { Cmd 'lua vim.lsp.buf.rename()', 'Rename' },
-		s = { Cmd 'Telescope lsp_document_symbols', 'Document Symbols' },
-		S = { Cmd 'Telescope lsp_dynamic_workspace_symbols', 'Workspace Symbols' },
 	},
 
 	['m'] = {
@@ -147,61 +231,7 @@ return {
 		'🐉 Folds',
 	},
 
-	w = {
-		name = 'Window',
-		N = { Cmd 'tabnew', 'New Tab' },
-		k = { Cmd 'close', 'Close' },
-		l = { function() require('telescope-tabs').list_tabs() end, 'List Tabs' }, -- TODO: put through telescope
-		n = { Cmd 'tabNext', 'Next Tab' }, -- TODO: put through telescope
-		p = { Cmd 'tabprevious', 'Previous Tab' }, -- TODO: put through telescope
-		w = { Cmd 'vsplit', 'Split' }, -- TODO: put through telescope
-		s = { Cmd 'SwapSplit', 'Swap' },
-		e = {
-			function() require('codethread.movement').tab_hydra:activate() end,
-			'🐉 Tabs',
-		},
-	},
 	W = { Cmd 'Maximize', 'Window Maximise' },
-
-	s = {
-		name = 'Search',
-		b = { Cmd 'Telescope git_branches', 'Checkout branch' },
-		c = { Cmd 'Telescope colorscheme', 'Colorscheme' },
-		f = {
-			Cmd 'Telescope current_buffer_fuzzy_find mirror=true',
-			'Buffer',
-		},
-		F = {
-			function()
-				require('telescope.builtin').live_grep {
-					grep_open_files = true,
-				}
-			end,
-			'Buffers',
-		},
-		r = { Cmd 'Telescope oldfiles', 'Open Recent File' },
-		R = { Cmd 'Telescope registers', 'Registers' },
-		k = { Cmd 'Telescope keymaps', 'Keymaps' },
-		C = { Cmd 'Telescope commands', 'Commands' },
-		-- p = { Cmd 'Telescope live_grep_args', 'Live Grep' },
-		p = {
-			function() require('plugins.telescope.pickers.rg').live_grepper {} end,
-			'Live Grep',
-		},
-		w = {
-			function()
-				require('telescope-live-grep-args.shortcuts').grep_word_under_cursor {
-					-- TODO fix for being in a nested dir
-					cwd = vim.fs.root(0, '.git'),
-				}
-			end,
-			'Word',
-		},
-		l = { Cmd 'Telescope lsp_document_symbols', 'Symbol' },
-		L = { ':Telescope lsp_workspace_symbols query=', 'Global Symbols' },
-		s = { Cmd 'Spectre', 'Spectre' },
-		y = { Cmd 'Telescope neoclip', 'Clipboard' },
-	},
 
 	n = {
 		name = 'notes',
@@ -236,58 +266,11 @@ return {
 		-- t = { Cmd 'ObsidianTags', 'Tags' },
 	},
 
-	-- open, Open, openers, Openers
-	o = {
-		name = 'Open',
-		a = { Cmd 'AerialToggle! left', 'Aerial' },
-		f = { function() vim.ui.open(vim.fn.expand '%:p:h') end, 'Open finder' },
-		-- if you can't beat 'em
-		c = { Cmd 'silent !code %', 'VSCode' },
-		d = { Cmd 'Oil', 'Dir' },
-		l = { function() require('codethread.logger').select() end, 'open log file' },
-		n = { Cmd 'LogOpen notifications', 'Notifcation History' },
-		N = { function() Snacks.notifier.hide() end, 'Hide Notifications' },
-	},
-
 	t = {
 		name = 'Terminal',
 		n = { Cmd 'lua _NODE_TOGGLE()', 'Node' },
 		t = { Cmd 'ToggleTerm direction=float', 'Float' },
 		h = { Cmd 'ToggleTerm size=10 direction=horizontal', 'Horizontal' },
 		v = { Cmd 'ToggleTerm size=80 direction=vertical', 'Vertical' },
-	},
-
-	T = {
-		name = 'Toggle',
-		i = { Cmd "lua print'nothing setup'", 'Inlay Hints' },
-		[' '] = { fns.toggle_listchars, 'Whitespace' },
-		['>'] = { fns.toggle_indent_scope, 'IndentScope' },
-	},
-
-	u = {
-		name = 'Utils',
-		f = { "mbggVG=='b", 'format buffer' },
-		s = { '1z=', 'autocorrect' },
-		b = { function() require('codethread.box').box() end, 'Box' },
-		r = {
-			function()
-				require('luasnip.loaders.from_vscode').load {
-					paths = {
-						'~/.config/nvim/snippets_vscode',
-						'~/.local/share/nvim/lazy/friendly-snippets',
-					},
-				}
-			end,
-			'reload snippets',
-		},
-	},
-
-	-- clipboard, copy
-	y = {
-		name = 'Yank',
-		l = { fns.copy_filepath_relative, 'path [gitlab]' },
-		r = { Cmd 'let @*=@%', 'path [root]' }, -- TODO:
-		y = { Cmd 'let @*=@%', 'path [relative]' }, -- TODO:
-		s = { Cmd 'Telescope neoclip', 'Search' },
 	},
 }
