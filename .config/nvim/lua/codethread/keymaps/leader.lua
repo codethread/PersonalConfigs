@@ -133,6 +133,7 @@ U.keymaps({}, {
 	{ '<leader>sr', Cmd 'Telescope oldfiles', 'Open Recent File' },
 	{ '<leader>sR', Cmd 'Telescope registers', 'Registers' },
 	{ '<leader>sk', Cmd 'Telescope keymaps', 'Keymaps' },
+	{ '<leader>sm', function() require('plugins.telescope.pickers').multi_grep {} end, 'Multi-grep' },
 	{ '<leader>sC', Cmd 'Telescope commands', 'Commands' },
 	-- { '<leader>sp', Cmd 'Telescope live_grep_args', 'Live Grep' },
 	{

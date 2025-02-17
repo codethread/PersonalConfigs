@@ -1,3 +1,4 @@
+require 'telescope'
 local actions = require 'telescope.actions'
 local action_state = require 'telescope.actions.state'
 local channel = require('plenary.async.control').channel
@@ -153,5 +154,33 @@ end
 function M.npm_modules() end
 
 vim.api.nvim_create_user_command('NPM', function() M.npm_modules() end, {})
+
+--- Apply multiple greps in series, separated by `|`
+--- e.g foo | bar will find all files with `foo` and then only those files will be searched for `foo`
+--- @param opts any
+--- TODO: handle flags
+M.multi_grep = function(opts)
+	opts = opts or {}
+	opts.cwd = opts.cwd or vim.fs.root(0, '.git')
+	opts.dynamic_preview_title = opts.dynamic_preview_title or true
+
+	pickers
+		.new(opts, {
+			prompt_title = 'Multi Grep',
+			finder = finders.new_async_job {
+				entry_maker = make_entry.gen_from_vimgrep(opts),
+				command_generator = function(prompt)
+					if not prompt or vim.trim(prompt) == '' then return nil end
+					local chunks = vim.iter(vim.split(prompt, '|')):map(vim.trim):totable()
+					table.insert(chunks, 1, 'multi-grep')
+					vim.print(chunks)
+					return chunks
+				end,
+			},
+			previewer = conf.grep_previewer(opts), -- defaults to above
+			sorter = sorters.highlighter_only(opts), -- TODO: need to adjust the highlight to only use the `grep` bit
+		})
+		:find()
+end
 
 return M

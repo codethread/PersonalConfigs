@@ -1,0 +1,34 @@
+#!/usr/bin/env nu
+
+const args = [
+	"--hidden"
+	# "--smart-case"
+]
+
+# Run ripgrep over patterns in sequence, using the previous search to narrow down the list of files
+# TODO: pass in flags
+def main [
+	...regexps: string
+	# --word(-w) # forward -w to rg
+] {
+	let filters = $regexps | drop 1
+	let search = $regexps | last
+
+	({f: $filters, s: $search} | table --flatten | save --append ~/tmp.txt)
+
+	if ($filters | is-empty) {
+		[] | search $search
+	} else {
+		$filters
+		| reduce --fold [] {|it, acc|
+			let cmd = [rg ...$args "-l" $it ...$acc]
+			run-external ...$cmd  | lines
+		}
+		| search $search
+	}
+}
+
+def search [pattern: string]: list<string> -> string {
+	let paths = $in
+	rg ...$args --vimgrep $pattern ...$paths
+}
