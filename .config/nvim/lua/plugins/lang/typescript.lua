@@ -24,53 +24,29 @@ return {
 			---@type PluginLspOpts
 			return {
 				servers = {
-					tailwindcss = {
-						root_dir = root 'tailwind.config.js',
-						settings = {
-							-- TODO: turn this off based on project, probably needs to look for the tailwind config
-							tailwindCSS = {
-								experimental = {
-									classRegex = {
-										{
-											'tv\\((([^()]*|\\([^()]*\\))*)\\)',
-											'["\'`]([^"\'`]*).*?["\'`]',
-										},
-									},
-								},
-							},
-						},
-					},
-					eslint = {
-						settings = {
-							run = 'onSave',
-						},
-					},
-					denols = {
-						root_dir = root('deno.json', 'deno.jsonc'),
-					},
-					ts_ls = {
-						root_dir = root 'package.json',
-						single_file_support = false, -- XXX: copied from deno, not sure if i want this or not
-						settings = {
-							typescript = {
-								format = {
-									indentSize = vim.o.shiftwidth,
-									convertTabsToSpaces = vim.o.expandtab,
-									tabSize = vim.o.tabstop,
-								},
-							},
-							javascript = {
-								format = {
-									indentSize = vim.o.shiftwidth,
-									convertTabsToSpaces = vim.o.expandtab,
-									tabSize = vim.o.tabstop,
-								},
-							},
-							completions = {
-								completeFunctionCalls = true,
-							},
-						},
-					},
+					-- ts_ls = {
+					-- 	root_dir = root 'package.json',
+					-- 	single_file_support = false, -- XXX: copied from deno, not sure if i want this or not
+					-- 	settings = {
+					-- 		typescript = {
+					-- 			format = {
+					-- 				indentSize = vim.o.shiftwidth,
+					-- 				convertTabsToSpaces = vim.o.expandtab,
+					-- 				tabSize = vim.o.tabstop,
+					-- 			},
+					-- 		},
+					-- 		javascript = {
+					-- 			format = {
+					-- 				indentSize = vim.o.shiftwidth,
+					-- 				convertTabsToSpaces = vim.o.expandtab,
+					-- 				tabSize = vim.o.tabstop,
+					-- 			},
+					-- 		},
+					-- 		completions = {
+					-- 			completeFunctionCalls = true,
+					-- 		},
+					-- 	},
+					-- },
 				},
 				setup = {
 					denols = function(_, opts) end,

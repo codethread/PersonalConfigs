@@ -47,69 +47,129 @@ return {
 			{ 'folke/neoconf.nvim', cmd = 'Neoconf', opts = {} }, -- adds lspconfig type
 		},
 		---@class PluginLspOpts
-		opts = {
-			-- LSP Server Settings
-			---@diagnostic disable: missing-fields
-			---@type lspconfig.options
-			servers = {
-				jsonls = {
-					on_new_config = function(new_config)
-						new_config.settings.json.schemas = new_config.settings.json.schemas or {}
-						vim.list_extend(new_config.settings.json.schemas, require('schemastore').json.schemas())
-					end,
-					settings = {
-						json = {
-							format = {
-								enable = true,
+		opts = function()
+			local nvim_lsp = require 'lspconfig'
+			local root = nvim_lsp.util.root_pattern
+			return {
+				-- LSP Server Settings
+				---@diagnostic disable: missing-fields
+				---@type lspconfig.options
+				servers = {
+					jsonls = {
+						on_new_config = function(new_config)
+							new_config.settings.json.schemas = new_config.settings.json.schemas or {}
+							vim.list_extend(
+								new_config.settings.json.schemas,
+								require('schemastore').json.schemas()
+							)
+						end,
+						settings = {
+							json = {
+								format = {
+									enable = true,
+								},
+								validate = { enable = true },
 							},
-							validate = { enable = true },
 						},
 					},
-				},
-				nushell = {
-					cmd = {
-						'nu',
-						'--lsp',
-						'--env-config=' .. vim.fn.expand '~/PersonalConfigs/.config/nushell/env.nu',
-						'--config=' .. vim.fn.expand '~/PersonalConfigs/.config/nushell/config.nu',
-						'--include-path=' .. vim.fn.expand '~/PersonalConfigs/.config/nushell/scripts',
+					nushell = {
+						cmd = {
+							'nu',
+							'--lsp',
+							'--env-config=' .. vim.fn.expand '~/PersonalConfigs/.config/nushell/env.nu',
+							'--config=' .. vim.fn.expand '~/PersonalConfigs/.config/nushell/config.nu',
+							'--include-path=' .. vim.fn.expand '~/PersonalConfigs/.config/nushell/scripts',
+						},
 					},
-				},
-				-- clangd = {
-				-- 	filetypes = { 'c', 'cpp', 'objc', 'objcpp', 'cuda' },
-				-- },
-				lua_ls = {
-					settings = {
-						Lua = {
-							hint = { enable = true },
-							workspace = {
-								checkThirdParty = false,
-							},
-							completion = {
-								callSnippet = 'Replace',
-							},
-							diagnostics = {
-								globals = {
-									'vim',
-									'K',
-									'U',
-									'Cmd',
-									'Lua',
-									'Term',
-									'async',
-									'await',
-									'utf8',
+					-- clangd = {
+					-- 	filetypes = { 'c', 'cpp', 'objc', 'objcpp', 'cuda' },
+					-- },
+					lua_ls = {
+						settings = {
+							Lua = {
+								hint = { enable = true },
+								workspace = {
+									checkThirdParty = false,
+								},
+								completion = {
+									callSnippet = 'Replace',
+								},
+								diagnostics = {
+									globals = {
+										'vim',
+										'K',
+										'U',
+										'Cmd',
+										'Lua',
+										'Term',
+										'async',
+										'await',
+										'utf8',
+									},
 								},
 							},
 						},
 					},
+					tailwindcss = {
+						root_dir = root 'tailwind.config.js',
+						settings = {
+							-- TODO: turn this off based on project, probably needs to look for the tailwind config
+							tailwindCSS = {
+								enable = false,
+								experimental = {
+									classRegex = {
+										{
+											'tv\\((([^()]*|\\([^()]*\\))*)\\)',
+											'["\'`]([^"\'`]*).*?["\'`]',
+										},
+									},
+								},
+							},
+						},
+					},
+					eslint = {
+						settings = {
+							run = 'onSave',
+						},
+					},
+					denols = {
+						root_dir = root('deno.json', 'deno.jsonc'),
+						settings = {
+							deno = {
+								enable = false,
+							},
+						},
+					},
+					vtsls = {
+						root_dir = root 'package.json',
+						settings = {
+							typescript = {
+								inlayHints = {
+									parameterNames = { enabled = 'literals' },
+									parameterTypes = { enabled = true },
+									variableTypes = { enabled = true },
+									propertyDeclarationTypes = { enabled = true },
+									functionLikeReturnTypes = { enabled = true },
+									enumMemberValues = { enabled = true },
+								},
+								tsserver = {
+									maxTsServerMemory = 8192,
+								},
+							},
+						},
+						experimental = {
+							completion = {
+								enableServerSideFuzzyMatch = true,
+							},
+						},
+					},
 				},
-			},
-			-- you can do any additional lsp server setup here
-			-- return true if you don't want this server to be setup with lspconfig
-			---@type table<string, fun(server:string, opts:_.lspconfig.options):boolean?>
-			setup = {},
-		},
+				-- you can do any additional lsp server setup here
+				-- return true if you don't want this server to be setup with lspconfig
+				---@type table<string, fun(server:string, opts:_.lspconfig.options):boolean?>
+				setup = {},
+			}
+		end,
 		config = function(_, opts)
 			U.lsp_attach('*', function(client, buf)
 				-- NOTE: uncomment to see

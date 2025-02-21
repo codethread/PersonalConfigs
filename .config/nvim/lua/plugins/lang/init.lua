@@ -1,8 +1,14 @@
 return U.flatten {
 	require 'plugins.lang.go',
-	require 'plugins.lang.typescript',
+	-- require 'plugins.lang.typescript',
+	-- require 'plugins.lang.typescript-tools',
 	-- require 'plugins.lang.typescript-tools',
 	require 'plugins.lang.rust',
+
+	{
+		'yioneko/nvim-vtsls',
+		opts = {},
+	},
 
 	{
 		-- https://github.com/nushell/tree-sitter-nu/blob/main/installation/neovim.md
