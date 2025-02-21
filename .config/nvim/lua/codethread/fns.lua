@@ -142,4 +142,27 @@ function M.toggle_indent_scope()
 	end
 end
 
+function M.worktree_open_alt()
+	U.nush(
+		[[git worktree list | parse '{p} {sha} {branch}' | str trim | get p | to text]],
+		{},
+		vim.schedule_wrap(function(out)
+			local wks = vim.split(out.stdout, '\n')
+			local str = require 'lib.str'
+			local full_path = vim.fn.expand '%:p'
+			local buffer_path = vim.fn.expand '%'
+			assert(buffer_path ~= full_path, 'paths should not be equal') -- sometimes this happens and not sure why
+			local wktrs = vim
+				.iter(wks)
+				:filter(function(wk) return not str(full_path):includes(wk) end)
+				:totable()
+			vim.ui.select(
+				wktrs,
+				{},
+				function(choice) vim.cmd.vsplit(vim.fs.joinpath(choice, buffer_path)) end
+			)
+		end)
+	)
+end
+
 return M

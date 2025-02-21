@@ -11,20 +11,19 @@ U.keymaps({}, {
 	{ '<leader>,', Cmd 'Telescope resume', '🔭' },
 })
 require('which-key').add {
+	{ '<leader>G', group = 'Global' },
+	{ '<leader>T', group = 'Toggle' },
 	{ '<leader>e', group = 'Errors' },
 	{ '<leader>f', group = 'Buffer' },
 	{ '<leader>g', group = 'Git' },
-	{ '<leader>G', group = 'Global' },
+	{ '<leader>gw', group = 'Worktree' },
 	{ '<leader>h', group = 'Help' },
 	{ '<leader>l', group = 'LSP' },
-	{ '<leader>w', group = 'Window' },
+	{ '<leader>o', group = 'Open' }, -- open, Open, openers, Openers
 	{ '<leader>s', group = 'Search' },
-	-- open, Open, openers, Openers
-	{ '<leader>o', group = 'Open' },
-	{ '<leader>T', group = 'Toggle' },
 	{ '<leader>u', group = 'Utils' },
-	-- clipboard, copy
-	{ '<leader>y', group = 'Yank' },
+	{ '<leader>w', group = 'Window' },
+	{ '<leader>y', group = 'Yank' }, -- clipboard, copy
 }
 U.keymaps({}, {
 	{ '<leader>eh', function() vim.diagnostic.open_float() end, 'Hover' },
@@ -83,6 +82,11 @@ U.keymaps({}, {
 	{ '<leader>gr', function() require('gitsigns').reset_hunk() end, 'Reset Hunk' },
 	{ '<leader>gs', function() require('gitsigns').stage_hunk() end, '(un)Stage Hunk' },
 	{ '<leader>gv', Cmd 'silent !gh repo view --web', 'Ghub view' },
+	{
+		'<leader>gwa',
+		function() require('codethread.fns').worktree_open_alt() end,
+		'Split buffer',
+	},
 	---
 	{ '<leader>GL', Cmd 'Lazy', 'Lazy' },
 	{ '<leader>GM', Cmd 'Mason', 'Mason' },
