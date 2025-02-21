@@ -10,6 +10,7 @@
 	# LANGS
 	brew "go"
 	brew "rustup"
+	brew "zig"
 
 	## NODE JS
 	tap "oven-sh/bun"
@@ -67,6 +68,7 @@
 	cask "kitty"
 	cask "visual-studio-code"
 	cask "spotify"
+	cask "firefox@developer-edition"
 
 	# Fonts
 	cask "font-fira-code-nerd-font"

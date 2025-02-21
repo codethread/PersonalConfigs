@@ -77,3 +77,5 @@ project/metals.sbt
 
 # nu
 scratch.nu
+
+.zig-cache/

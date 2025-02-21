@@ -39,6 +39,7 @@ return {
 				lua = { 'stylua' },
 				go = { 'goimports', 'gofmt' },
 				rust = { 'rustfmt' },
+				zig = { 'zigfmt' },
 
 				-- TODO: migrate null-ls
 				-- formatting.rustfmt.with {

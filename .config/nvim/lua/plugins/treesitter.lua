@@ -41,7 +41,7 @@ return {
 				-- scripting
 				{ 'awk', 'bash', 'jq', 'nu' },
 				-- langs
-				{ 'c', 'rust', 'gleam' },
+				{ 'c', 'rust', 'gleam', 'zig' },
 				{ 'go', 'gosum', 'gomod', 'gowork' },
 				-- DB
 				{ 'sql' },
