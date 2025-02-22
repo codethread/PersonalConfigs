@@ -332,7 +332,7 @@ end
 
 ---Wrapper around vim.keymap.set
 ---@param opts ct.KeymapSetOpts
-local function create_keymap(opts)
+function M.create_keymap(opts)
 	local lhs = opts[1]
 	local rhs = opts[2]
 	local desc = opts[3]
@@ -363,7 +363,7 @@ function M.localleader(opts)
 	local defaults = { buffer = buf, silent = true, unique = true }
 
 	for _, keyset in ipairs(opts) do
-		create_keymap {
+		M.create_keymap {
 			'<localleader>' .. keyset[1],
 			keyset[2],
 			keyset[3],
@@ -378,7 +378,7 @@ end
 ---@param mappings ct.keymapOpts[]
 function M.keymaps(opts, mappings)
 	for _, keyset in ipairs(mappings) do
-		create_keymap(vim.tbl_extend('force', {
+		M.create_keymap(vim.tbl_extend('force', {
 			opts = opts,
 			mode = keyset.mode or { 'n' },
 		}, keyset))

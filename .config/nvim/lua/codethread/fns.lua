@@ -165,4 +165,18 @@ function M.worktree_open_alt()
 	)
 end
 
+function M.reload_snippets()
+	require('luasnip.loaders.from_vscode').load {
+		paths = {
+			'~/.config/nvim/snippets_vscode',
+			'~/.local/share/nvim/lazy/friendly-snippets',
+		},
+	}
+end
+
+function M.git_reset_buffer()
+	require('gitsigns').reset_buffer()
+	vim.cmd [[noa w]]
+end
+
 return M
