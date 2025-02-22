@@ -68,7 +68,6 @@
 	cask "kitty"
 	cask "visual-studio-code"
 	cask "spotify"
-	cask "firefox@developer-edition"
 
 	# Fonts
 	cask "font-fira-code-nerd-font"
@@ -142,6 +141,7 @@
 	cask "google-drive"
 	cask "obs"
 	cask "proxyman"
+	cask "firefox@developer-edition"
 	',
 	temp: '
 	##################################
