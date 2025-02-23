@@ -1,3 +1,5 @@
+local keymapper = require 'codethread.keymaps.keymapper'
+
 vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
 	group = vim.api.nvim_create_augroup('ctalign', { clear = true }),
 	buffer = vim.api.nvim_get_current_buf(),
@@ -11,8 +13,7 @@ local function eval_selection()
 	assert(loadstring(table.concat(lines)))()
 end
 
---[[stylua: ignore]] --format
-U.localleader {
-	{ ',', Cmd 'w | luafile %', 'Reload Luafile' },
-	{ ',', eval_selection     , 'Reload block'  , mode = 'v' },
+keymapper.localleader {
+	{ ',', 'Reload Luafile', Cmd 'w | luafile %' },
+	{ ',', 'Reload block', eval_selection, mode = 'v' },
 }

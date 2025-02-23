@@ -113,13 +113,13 @@ return {
 		},
 		init = function()
 			--[[stylua: ignore]] --format
-			U.ft_localleader('oil', {
-	{ 'c', function() require('oil.actions').copy_entry_path.callback() end, 'copy filepath'    },
-	{ 'r', function() require('oil.actions').refresh.callback() end        , 'refresh'          },
-	{ 't', function() require('oil.actions').select_tab.callback() end     , 'open in tab'      },
-	{ 'v', function() require('oil.actions').select_vsplit.callback() end  , 'open in vertical' },
-	{ 's', function() require('oil.actions').select_split.callback() end   , 'open in split'    },
-	{ '.', function() require('oil.actions').tcd.callback() end            , 'make dir PWD'     },
+			Keys.localleader_ft('oil', {
+	{ 'c', 'copy filepath'   , function() require('oil.actions').copy_entry_path.callback() end },
+	{ 'r', 'refresh'         , function() require('oil.actions').refresh.callback() end         },
+	{ 't', 'open in tab'     , function() require('oil.actions').select_tab.callback() end      },
+	{ 'v', 'open in vertical', function() require('oil.actions').select_vsplit.callback() end   },
+	{ 's', 'open in split'   , function() require('oil.actions').select_split.callback() end    },
+	{ '.', 'make dir PWD'    , function() require('oil.actions').tcd.callback() end             },
 			 })
 		end,
 	},

@@ -1,10 +1,9 @@
-local b = require 'codethread.keymaps.builder'
 local fns = require 'codethread.fns'
 -- TIPS
 -- to see raw key
 -- go to insert mode, type <C-v> then type, and that key will be shown
 
-b.create_keys('<leader>', {
+Keys.tbl('<leader>', {
 	['<leader>'] = { 'Files', Cmd 'Telescope find_files' },
 	[';'] = { 'M-x', Cmd 'Telescope commands' },
 	[':'] = { 'M-x [hist]', Cmd 'Telescope command_history' },
@@ -27,7 +26,6 @@ b.create_keys('<leader>', {
 
 	f = {
 		group = 'Buffer',
-
 		b = { 'Toggle', [[<C-^>]] },
 		l = { 'list', Cmd 'Telescope buffers' },
 		f = { 'Split last', function() require('codethread.split').split() end },
@@ -143,6 +141,7 @@ b.create_keys('<leader>', {
 		l = { 'open log file', function() require('codethread.logger').select() end },
 		n = { 'Notifcation History', Cmd 'LogOpen notifications' },
 		N = { 'Hide Notifications', function() Snacks.notifier.hide() end },
+		S = { 'Sessions', function() require('persistence').select() end },
 	},
 	T = {
 		group = 'Toggle',

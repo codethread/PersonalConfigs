@@ -84,6 +84,4 @@ vim.api.nvim_create_user_command(
 	{ desc = 'Jump to Alternate file' }
 )
 
-U.keymap('n', 'ga', Cmd 'A', 'go to alternate file')
-
 return M

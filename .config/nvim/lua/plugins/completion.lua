@@ -14,12 +14,7 @@ return {
 				history = true,
 				delete_check_events = 'TextChanged',
 			}
-			require('luasnip.loaders.from_vscode').lazy_load {
-				paths = {
-					'~/.config/nvim/snippets_vscode',
-					'~/.local/share/nvim/lazy/friendly-snippets',
-				},
-			}
+			require('codethread.fns').reload_snippets()
 
 			vim.keymap.set({ 'i', 's' }, '<S-Tab>', function() ls.expand() end, { silent = true })
 			vim.keymap.set({ 'i', 's' }, '<C-n>', function() ls.jump(1) end, { silent = true })
@@ -202,15 +197,12 @@ return {
 				end
 			end
 
-			-- vim.cmd [[unmap <C-Space>]]
-
 			-- :help ins-completion
-			U.keymap('i', '<C-Space><C-o>', '<C-x><C-o>')
-
-			U.keymap('i', '<C-Space><C-Space>', complete { 'nvim_lsp' }, 'Cmp')
-			U.keymap('i', '<C-Space><C-p>', complete 'luasnip')
-			U.keymap('i', '<C-Space><C-f>', complete 'path')
-			U.keymap('i', '<C-Space><C-n>', function()
+			vim.keymap.set('i', '<C-Space><C-o>', '<C-x><C-o>')
+			vim.keymap.set('i', '<C-Space><C-Space>', complete { 'nvim_lsp' })
+			vim.keymap.set('i', '<C-Space><C-p>', complete 'luasnip')
+			vim.keymap.set('i', '<C-Space><C-f>', complete 'path')
+			vim.keymap.set('i', '<C-Space><C-n>', function()
 				cmp.complete {
 					config = {
 						sources = {
@@ -231,7 +223,7 @@ return {
 						},
 					},
 				}
-			end, 'Buffer completion')
+			end)
 		end,
 	},
 }

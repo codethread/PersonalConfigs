@@ -65,8 +65,8 @@ function M.send_selection_to_pane()
 end
 
 --[[stylua: ignore]] --format
-U.ft_localleader('nu', {
-	{ 'ee', function() M.send_def_to_pane() end   , 'Evaluate def'    },
-	{ 'eb', function() M.send_buffer_to_pane() end, 'Evaluate buffer' },
-	{ 'e' , function() M.send_buffer_to_pane() end, 'Evaluate buffer', mode = 'v' },
+Keys.localleader_ft('nu', {
+	{ 'ee', 'Evaluate def'   , function() M.send_def_to_pane() end    },
+	{ 'eb', 'Evaluate buffer', function() M.send_buffer_to_pane() end },
+	{ 'e' , 'Evaluate buffer', function() M.send_buffer_to_pane() end, mode = 'v' },
 })

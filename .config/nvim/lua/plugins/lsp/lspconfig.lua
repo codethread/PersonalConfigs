@@ -196,13 +196,13 @@ return {
 				end
 
 				--[[stylua: ignore]] --format
-				U.keymaps({ buffer = true }, {
-	{ 'gD', function() vim.lsp.buf.declaration() end                                                      , 'declaration'    },
-	{ 'gd', function() vim.lsp.buf.definition { on_list = on_list, reuse_win = reuse_win, } end           , 'definition'     },
-	{ 'K' , function() if not require('ufo').peekFoldedLinesUnderCursor() then vim.lsp.buf.hover() end end, 'hover'          },
-	{ 'gi', function() vim.lsp.buf.implementation() end                                                   , 'implementation' },
-	{ 'gh', function() vim.lsp.buf.signature_help() end                                                   , 'signature_help' },
-	{ 'gr', function() vim.lsp.buf.references() end                                                       , 'references'     },
+					Keys.list({buffer = true }, {
+	{ 'gD', 'declaration'   , function() vim.lsp.buf.declaration() end                                                       },
+	{ 'gd', 'definition'    , function() vim.lsp.buf.definition { on_list = on_list, reuse_win = reuse_win, } end            },
+	{ 'K' , 'hover'         , function() if not require('ufo').peekFoldedLinesUnderCursor() then vim.lsp.buf.hover() end end },
+	{ 'gi', 'implementation', function() vim.lsp.buf.implementation() end                                                    },
+	{ 'gh', 'signature_help', function() vim.lsp.buf.signature_help() end                                                    },
+	{ 'gr', 'references'    , function() vim.lsp.buf.references() end                                                        },
 				})
 			end)
 

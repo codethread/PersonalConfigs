@@ -67,6 +67,14 @@ M.fold_hyrda = Hydra {
 	},
 }
 
+function M.set_fold_level()
+	if not vim.v.count then
+		vim.notify('No foldlevel given to set!', vim.log.levels.WARN)
+	else
+		M.fold_setlevel(vim.v.count)
+	end
+end
+
 -- TODO: some more cool plugins:
 -- https://github.com/mfussenegger/nvim-treehopper
 

@@ -10,9 +10,9 @@ return {
 				]]
 
 			--[[stylua: ignore]] --format
-			U.ft_localleader('qf', {
-	{ '>', function() require('bqf.qfwin.handler').navHistory(true) end , 'Next list' },
-	{ '<', function() require('bqf.qfwin.handler').navHistory(false) end, 'Prev list' },
+			Keys.localleader_ft('qf', {
+	{ '>', 'Next list', function() require('bqf.qfwin.handler').navHistory(true) end  },
+	{ '<', 'Prev list', function() require('bqf.qfwin.handler').navHistory(false) end },
 			})
 		end,
 		---@type BqfConfig

@@ -26,9 +26,9 @@ return {
 					}
 
 					--[[stylua: ignore]] --format
-					U.ft_localleader('go', {
-	{ 'r', function() return vim.cmd.wa() and go_run:toggle() end, 'GoRun' },
-	{ 'e', Cmd 'GoIfErr'                                         , 'err'   },
+					Keys.localleader_ft('go', {
+	{ 'r', 'GoRun', function() return vim.cmd.wa() and go_run:toggle() end },
+	{ 'e', 'err'  , Cmd 'GoIfErr'                                          },
 					})
 
 					return true

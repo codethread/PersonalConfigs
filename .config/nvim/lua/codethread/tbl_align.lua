@@ -6,6 +6,7 @@ local log = require('codethread.logger.init').new { plugin = 'tbl_align' }
 ---`--[[stylua: ignore]] --format` to mark a region
 ---region expects a table (or function table) containing nested tables
 ---each row will be aligned according to argument position
+--- TODO: handle comments
 M.format_table = function(bufn)
 	local ts = vim.treesitter
 	local tree = ts.get_parser(bufn)

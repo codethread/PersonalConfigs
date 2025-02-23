@@ -24,9 +24,17 @@ P = function(...)
 	return ...
 end
 
+---inline an ex command, handy for keymaps
+---@param command string
+---@return string
 function Cmd(command) return '<Cmd>' .. command .. '<CR>' end
 
+---inline some lua code, handle for keymaps
+---@param command string
+---@return string
 function Lua(command) return '<Cmd>lua ' .. command .. '<CR>' end
+
+Keys = require 'codethread.keymaps.keymapper'
 
 ---@param fn function
 local function try_fn(fn)
