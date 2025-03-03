@@ -6,6 +6,14 @@ M.gx = function()
 
 	if vim.startswith(file, 'http') then
 		vim.ui.open(file)
+	elseif vim.startswith(file, 'file://') then
+		-- NOTE: currently only designed for jumping in a markdown hover
+		--
+		-- can have syntax file:///foo/bar#L1 in the case of markdown in lsp hover
+		local _, _, path, line = file:find 'file://(.*)#L(.*)'
+		if not path then error('regex needs changing, likely no line number: ' .. file) end
+		vim.cmd.norm"q" -- close hover
+		vim.cmd(string.format('keepjumps view +%s %s', line, path))
 	elseif curFile == 'package.json' then
 		M.open_npm_package()
 	elseif vim.bo.ft == 'lua' and file:find '^([%w-_]+/[%w-_.]+)$' then -- github link like foo/bar.nvim

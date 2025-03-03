@@ -33,7 +33,7 @@ $env.config.shell_integration = $env.config.shell_integration | merge {
 	osc2 : true
 	osc7 : true
 	osc8 : true
-	osc9_9 : true
+	# osc9_9 : true # sends the path, but also causes notifications
 	osc133 : true
 	osc633 : true
 	reset_application_mode : true

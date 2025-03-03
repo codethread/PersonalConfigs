@@ -306,5 +306,6 @@
   "prisma.showPrismaDataPlatformNotification": false,
   "nushellLanguageServer.includeDirs": [
     "~/PersonalConfigs/.config/nushell/scripts"
-  ]
+  ],
+  "zig.zls.enabled": "on"
 }

@@ -129,6 +129,7 @@ Keys.tbl('<leader>', {
 		l = { 'Symbol', Cmd 'Telescope lsp_document_symbols' },
 		L = { 'Global Symbols', ':Telescope lsp_workspace_symbols query=' },
 		s = { 'Spectre', Cmd 'Spectre' },
+		t = { 'Todos', Cmd 'TodoTelescope keywords=TODO,FIX,XXX,HACK' },
 		y = { 'Clipboard', Cmd 'Telescope neoclip' },
 	},
 	o = {
