@@ -25,6 +25,7 @@ $env.ENV_CONVERSIONS = {
 }
 $env.CT_USER = (match (whoami) {
 	"adam.hall" => "work",
+	"adamhall" => "work",
 	"codethread" => "home",
 	_ => { error make { msg: $"unkown user '(whoami)'; please update env.nu with user"}},
 })
