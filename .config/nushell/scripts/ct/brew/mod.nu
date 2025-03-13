@@ -8,16 +8,17 @@ export def sync [
 	--clean
 	--with-temp
 ] {
+	print $"(ansi green)Running Brew Sync(ansi reset)"
 	let conf = ( get_bundle_for_machine --with-temp=$with_temp)
 
 	if ($dry_run) {
 		$conf
 	} else if ($clean) {
 		echo $conf
-		| ^brew bundle --file=- --no-upgrade --no-lock --cleanup --zap --verbose
+		| ^brew bundle --file=- --no-upgrade --cleanup --zap --verbose
 	} else {
 		echo $conf
-		| ^brew bundle --file=- --no-upgrade --no-lock
+		| ^brew bundle --file=- --no-upgrade
 	}
 }
 
