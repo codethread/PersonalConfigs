@@ -141,7 +141,9 @@ return {
 						},
 					},
 					vtsls = {
-						root_dir = root 'package.json',
+						root_dir = root 'tsconfig.json',
+						-- autoUseWorkspaceTsdk = true,
+						-- tsdk = vim.fs.joinpath(vim.uv.cwd() .. 'node_modules/typescript/lib'),
 						settings = {
 							typescript = {
 								inlayHints = {
@@ -154,6 +156,13 @@ return {
 								},
 								tsserver = {
 									maxTsServerMemory = 8192,
+									-- globalPlugins = {
+									-- 	{
+									-- 		name = '@styled/typescript-styled-plugin',
+									-- 		location = vim.fn.expand '~/.volta/tools/image/packages/@styled/typescript-styled-plugin/lib/node_modules',
+									-- 		enableForWorkspaceTypeScriptVersions = true,
+									-- 	},
+									-- },
 								},
 							},
 						},

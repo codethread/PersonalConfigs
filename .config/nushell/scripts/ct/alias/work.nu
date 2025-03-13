@@ -8,9 +8,10 @@ use ct/git [gmm]
 
 export def rg-phrase [
 	text: string,
-	--app # defaults to web
+	--app
+	--web
 ] {
-	let app = if ($app) { "app" } else "web";
+	let app = if ($app) { "app" } else if ($web) { "web" } else { "{web,app}" };
 	let glob = $"apps/web/app/public/locale/($app)/en-gb/**/*"
 	rg -g $glob --no-ignore $text
 }
@@ -71,4 +72,12 @@ export def nah [
 		git checkout develop
 		git checkout -b $name
 	}
+}
+
+# rebase on the helpers branch
+export def ct-helpers [] {
+	git checkout ct-my-helpers
+	gmm
+	git checkout -
+	git rebase ct-my-helpers
 }

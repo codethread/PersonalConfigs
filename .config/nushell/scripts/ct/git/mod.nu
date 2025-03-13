@@ -113,10 +113,10 @@ export def gchanged [
 	--commit # just list for the current commit
 ] {
 	match [$commit, $branch] {
-		[true, _] => { git diff --name-only --diff-filter=d },
-		[_, $b] if $b != null => { git diff --name-only --diff-filter=d $"($b)..HEAD" },
-		_ => { git diff --name-only --diff-filter=d $"origin/(git_main_branch)..HEAD" },
-	}
+	[true, _] => { git diff --name-only --diff-filter=d },
+	[_, $b] if $b != null => { git diff --name-only --diff-filter=d $"($b)..HEAD" },
+	_ => { git diff --name-only --diff-filter=d $"origin/(git_main_branch)..HEAD" },
+}
 }
 
 export def git_reset_files [...files: string] {
@@ -155,4 +155,15 @@ export def git_squash [
 # check for unstaged or uncommitted changes
 export def git_is_dirty [] {
 	git status --short | is-not-empty
+}
+
+export def loc [--git] {
+	(if ($git) {
+		git ls-tree -r (git_current_branch) --name-only
+	} else {
+			fd --type f --hidden --exclude '{.git}'
+		})
+	| lines | each {|f|
+		wc -l $f | str trim | parse "{n} {f}" | get n | first| into int
+	} | collect | math sum
 }

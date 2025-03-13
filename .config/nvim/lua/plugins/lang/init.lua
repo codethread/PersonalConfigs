@@ -4,11 +4,7 @@ return U.flatten {
 	-- require 'plugins.lang.typescript-tools',
 	-- require 'plugins.lang.typescript-tools',
 	require 'plugins.lang.rust',
-
-	{
-		'yioneko/nvim-vtsls',
-		opts = {},
-	},
+	require 'plugins.lang.ts',
 
 	{
 		-- https://github.com/nushell/tree-sitter-nu/blob/main/installation/neovim.md
@@ -38,7 +34,7 @@ return U.flatten {
 		-- U.tools_null { 'stylua', 'luacheck' },
 		-- use 'wsdjeg/luarefvim'
 		-- use 'rafcamlet/nvim-luapad'
-		'milisims/nvim-luaref',
+		{ 'milisims/nvim-luaref' },
 
 		-- (l(i(s(p))))
 		{

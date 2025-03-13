@@ -39,7 +39,7 @@ return {
 			local options = vim.tbl_deep_extend('force', opts, {
 				defaults = {
 					-- ui
-					-- layout_strategy = 'flex',
+					layout_strategy = 'flex',
 					layout_config = {
 						height = { padding = 1 },
 						width = { padding = 2 },

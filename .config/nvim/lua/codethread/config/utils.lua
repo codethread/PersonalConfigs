@@ -149,6 +149,8 @@ function M.current_pos()
 	return c[1], c[2]
 end
 
+---@param specss LazyPluginSpec[][]
+---@return LazyPluginSpec[]
 function M.flatten(specss)
 	local collection = {}
 	for _, plugins in ipairs(specss) do
@@ -158,6 +160,11 @@ function M.flatten(specss)
 	end
 	return collection
 end
+
+M.ecma_ft = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' }
+
+---@param specs LazyPluginSpec[]
+function M.F(specs) return specs end
 
 function M.project(path, settings)
 	if vim.fn.getcwd() == vim.fn.expand(path) then
