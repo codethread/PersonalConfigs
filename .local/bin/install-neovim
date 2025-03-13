@@ -20,7 +20,7 @@ def main [--clean] {
 
 	if $clean {
 		print $"(ansi blue)Clean install coming up...(ansi reset)"
-		try { rm -r build/ }  # clear the CMake cache
+		git clean -dfX # clear the CMake cache
 	}
 
 	zsh -c 'make CMAKE_BUILD_TYPE=Release CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=$HOME/.local" && make install'
