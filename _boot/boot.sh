@@ -34,6 +34,10 @@ echo "( ◕ ◡ ◕ ) Installing nushell"
 
 echo "( ◕ ◡ ◕ ) Booting machine"
 echo "available again with 'boot machine --help'"
+
+export PATH="${HOME}/.local/bin:/opt/homebrew/bin:${PATH}"
+export XDG_CONFIG_HOME="${DOTFILES}/.config"
+
 ~/.local/bin/nu \
   --env-config "${DOTFILES}/.config/nushell/env.nu" \
   --config "${DOTFILES}/.config/nushell/config.nu" \
