@@ -307,5 +307,6 @@
   "nushellLanguageServer.includeDirs": [
     "~/PersonalConfigs/.config/nushell/scripts"
   ],
-  "zig.zls.enabled": "on"
+  "zig.zls.enabled": "on",
+  "redhat.telemetry.enabled": true
 }
