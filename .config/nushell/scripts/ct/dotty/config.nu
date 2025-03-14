@@ -16,7 +16,7 @@ export def load []: nothing -> table<name: string, from: path, to: path, exclude
 		[work, (dir ~/workfiles), (dir ~), []]
 
 		# as a bit of a hack, can reference git dirs directly
-		[deals, (dir ~/workfiles/work/deals-light-ui/_git), (dir ~/work/deals-light-ui/.git), []]
+		[deals, (dir ~/workfiles/work/app/deals-light-ui/_git), (dir ~/work/app/deals-light-ui/.git), []]
 	]
 
 	$config

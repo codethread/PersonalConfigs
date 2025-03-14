@@ -72,6 +72,7 @@ def clone_tools [
 		[git,                                   dir,          install];
 		[git@github.com:nushell/nu_scripts.git, ~/dev/vendor, {||}]
 		[git@github.com:gitwatch/gitwatch.git, ~/dev/vendor, {|| ln -f -s ~/dev/vendor/gitwatch/gitwatch.sh ~/.local/bin/gitwatch }]
+		[git@github.com:codethread/alfred.git, ~/sync, {|| }]
 	]
 
 	$tools | par-each { |t|
@@ -115,7 +116,8 @@ def clone_tools [
 # handy stuff from:
 # - https://www.youtube.com/watch?v=guBV0jftT40&ab_channel=AUC_ANZ
 # - https://www.launchd.info/
-def setup_background_items [] {
+export def setup_background_items [] {
+	print $"(ansi green)Background:(ansi reset) setting up launchagents"
 	let files = ls ~/PersonalConfigs/.config/nushell/scripts/ct/boot/_LaunchAgents
 
 	$files
@@ -132,8 +134,10 @@ def setup_background_items [] {
 		| str replace --all "{{PATH}}" ($env.PATH | str join ":")
 
 		mkdir $log_dir
+		print dir $log_dir
 		# may not have been setup so will do these in try
 		print $"(ansi cyan)Creating(ansi reset) ($target_file)"
+		print $content
 
 		try { launchctl unload $target_file }
 		try { rm $target_file }

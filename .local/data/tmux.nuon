@@ -1,8 +1,8 @@
 {
 	dirs: [
 		~/
-		~/dev ~/dev/exercism ~/dev/projects ~/dev/learn ~/dev/vendor
-		~/work ~/work/services ~/work/lambdas ~/work/utilities ~/work/infrastructure ~/work/libraries ~/work/docs
+		~/dev ~/dev/*
+		~/work ~/work/*
 		~/.local/share/nvim/lazy ~/.local/share/nvim/mason/packages
 		`~/Library/Mobile Documents/com~apple~CloudDocs/Books/The_DynamoDB_Book_-_Plus_Package/Code examples`
 		`~/Library/Mobile Documents/iCloud~md~obsidian/Documents`
@@ -30,15 +30,15 @@
 	],
 	work: [
 		[key , name];
-		[ P2 , "~/work/deals-light-ui", ]
-		[ P3 , "~/work/fe-review", ]
-		[ P4 , "~/work/services/flexi-points-app", ]
-		[ P5 , "~/work/fe-native", ]
+		[ P2 , "~/work/app/deals-light-ui", ]
+		[ P3 , "~/work/app/fe-review", ]
+		[ P4 , "~/work/perkbox-services/flexi-points-app", ]
+		[ P5 , "~/work/app/fe-native", ]
 
 
 		[ P6 , "~/dev/projects/git-nudge", ]
 		[ P7 , "~/work/libraries/inspect-my-package", ]
 		[ P8 , "~/workfiles", ]
-		[ P9 , "~/work/services/protobuf", ]
+		[ P9 , "~/work/perkbox-services/protobuf", ]
 	]
 }

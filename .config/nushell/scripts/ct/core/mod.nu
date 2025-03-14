@@ -51,11 +51,11 @@ export def clog [
 }
 
 export def is_work [] {
-	(whoami) == 'adam.hall'
+	($env.CT_USER) == 'work'
 }
 
 export def is_home [] {
-	(whoami) == 'codethread'
+	($env.CT_USER) == 'home'
 }
 
 # print a string, removing all space from the begining of each line

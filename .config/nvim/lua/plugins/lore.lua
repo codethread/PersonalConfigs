@@ -40,8 +40,9 @@ return {
 	{
 		'wakatime/vim-wakatime',
 		cond = os.getenv 'WAKATIME_HOME' ~= nil,
+		lazy = false,
 		-- event = { 'BufReadPre', 'BufNewFile' },
-		event = { 'InsertEnter' },
+		-- event = { 'InsertEnter' },
 	},
 
 	{

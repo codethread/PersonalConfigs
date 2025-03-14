@@ -17,6 +17,7 @@
 	brew "oven-sh/bun/bun"
 	brew "volta"
 	brew "deno"
+	brew "prettierd"
 
 	# SHELL
 	brew "atuin"
@@ -142,6 +143,7 @@
 	cask "obs"
 	cask "proxyman"
 	cask "firefox@developer-edition"
+	cask "slack"
 	',
 	temp: '
 	##################################

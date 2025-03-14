@@ -25,6 +25,16 @@ export def load-config [] {
 	| open
 	| clog "config:" --expand
 	| upsert dirs {|c|
-		$c.dirs ++ ($c.dirs_special | each {|s| run-external $s.cmd ...$s.args e+o>| })
+		($c.dirs | expand_globs)
+		# ($c.dirs)
+		| append ($c.dirs_special | par-each {|s| run-external $s.cmd ...$s.args e+o>| })
 	}
+}
+
+def expand_globs []: list<string> -> list<string> {
+	par-each {|p|
+		if ($p | str ends-with '*') {
+			glob --no-file --depth=1 --exclude [**/.git/** **/.gitconfig/**] $p
+		} else { $p }
+	} | flatten
 }

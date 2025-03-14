@@ -17,15 +17,7 @@ export def main [] {
 }
 
 const fes = [
-	~/work/deals-light-ui
-	~/work/fe-review
-	~/work/fe-native
-]
-
-const bes = [
-	~/work/lambdas
-	~/work/services
-	~/work/libraries
+	~/work/app
 ]
 
 def wezterm_hooks [] {
@@ -68,5 +60,5 @@ def is-fe [dir?: path] {
 
 def is-be [dir?: path] {
 	if ($dir |is-empty) { return false }
-	$bes | path expand | filter {|p| $dir | str starts-with $p } | is-not-empty
+	glob ~/work/* --no-file --depth 1 --exclude [app] | filter {|p| $dir | str starts-with $p } | is-not-empty
 }

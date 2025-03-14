@@ -98,6 +98,7 @@ path add "/opt/homebrew/lib/ruby/gems/3.1.0/bin"
 
 path add "~/.volta/bin"
 $env.VOLTA_HOME = (home ".volta")
+$env.VOLTA_FEATURE_PNPM = "1"
 $env.HUSKY = "0" # don"t hold my hand
 
 path add "~/.bun/bin"
