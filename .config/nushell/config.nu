@@ -16,7 +16,8 @@ use ct/git *
 use ct/purge.nu
 
 # $ config nu --doc | nu-highlight | less -R
-$env.config.table.mode = "light" # default 'rounded', also 'markdown' handy for scripts
+$env.config.table.mode = "compact" # default 'rounded', also 'markdown' handy for scripts
+# $env.config.table.mode = "light" # default 'rounded', also 'markdown' handy for scripts
 $env.config.table.index_mode = "auto"
 $env.config.table.show_empty = false # show 'empty list' and 'empty record' placeholders for command output
 $env.config.cursor_shape = $env.config.cursor_shape | merge {

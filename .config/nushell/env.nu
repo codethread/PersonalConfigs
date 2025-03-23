@@ -90,7 +90,9 @@ $env.GOPATH = (home "go")
 #: javascript / node / react-native {{{
 
 # android simulator
-path add "~/Library/Android/sdk/platform-tools"
+$env.ANDROID_HOME = ("~/Library/Android/sdk" | path expand)
+path add ($env.ANDROID_HOME | path join "emulator")
+path add ($env.ANDROID_HOME | path join "platform-tools")
 
 # ruby for gem install on m1 mac ios pods
 path add "/opt/homebrew/opt/ruby@3.1/bin"
@@ -106,7 +108,10 @@ path add "~/.bun/bin"
 #: }}}
 #: rust {{{
 
-path add "~/.cargo/bin"
+$env.RUSTUP_HOME = $env.XDG_DATA_HOME | path join 'rustup'
+$env.CARGO_HOME = $env.XDG_DATA_HOME | path join 'cargo'
+$env.CARGO_BIN = ($env.CARGO_HOME | path join 'bin')
+path add $env.CARGO_BIN
 
 # $env.RUSTFLAGS = (match $env.CT_USER {
 #   "work" => "-C link-arg=-fuse-ld=/opt/homebrew/opt/llvm/bin/ld64.lld"
@@ -119,7 +124,15 @@ path add "~/.cargo/bin"
 path add "~/.luarocks/bin"
 
 #: }}}
+#: java {{{
+
+$env.JAVA_HOME = "/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home"
+
+#: }}}
 #: nushell {{{
+
+# not sure if needed
+$env.CARAPACE_BRIDGES = 'zsh,fish,bash,inshellisense' # optional
 
 # Directories to search for scripts when calling source or use
 # const NU_LIB_DIRS = [
@@ -130,7 +143,7 @@ path add "~/.luarocks/bin"
 # ]
 
 # Directories to search for plugin binaries when calling register
-$env.NU_PLUGIN_DIRS = [(home ".cargo/bin")]
+$env.NU_PLUGIN_DIRS = [$env.CARGO_BIN]
 
 #: }}}
 # keep this at the end

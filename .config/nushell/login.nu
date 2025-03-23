@@ -37,6 +37,12 @@ export extern "yarn run" [
 	^yarn run $cmd
 }
 
+# export extern "pp run" [
+# 	cmd: string@get-package-scripts
+# ] {
+# 	^pnpm run $cmd
+# }
+
 export extern "yarn workspace" [
 	workspace: string@get-workspace-names --only-scripts
 ] {
