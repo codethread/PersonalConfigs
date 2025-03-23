@@ -17,18 +17,31 @@ export def get-project [proj: string] {
 }
 
 export def load-config [] {
-	# nvim --clean --headless +'echo "hi"' +qall e+o>| tmux display-message $in
-
 	echo "~/.local/data/tmux.nuon"
 	| path expand
 	| clog "opening config file:"
 	| open
 	| clog "config:" --expand
 	| upsert dirs {|c|
-		($c.dirs | expand_globs)
-		# ($c.dirs)
+		# TODO: move work stuff somewhere better
+		let work_conf = $env.XDG_DATA_HOME | path join "pb" "gitlab.json"
+		if ($work_conf | path exists) {
+			get_work_projects $work_conf
+		} else { [] }
+		| append ($c.dirs | expand_globs)
 		| append ($c.dirs_special | par-each {|s| run-external $s.cmd ...$s.args e+o>| })
 	}
+}
+
+# reads all files that exist from the gitlab index
+def get_work_projects [file: path] {
+	# an alternative (but slower approach) is as follows, where depth of 5 is arbitrary
+	# fd -E src --type=dir --prune --hidden --case-sensitive --maxdepth 5 -F '.git' work
+	$file | open
+	| par-each {|| ([$env.HOME work $in.fullPath] | path join) }
+	| filter {|| $in | path exists }
+	| where $it !~ '/work/app/'
+	| path dirname | uniq
 }
 
 def expand_globs []: list<string> -> list<string> {
