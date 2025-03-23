@@ -2,14 +2,15 @@
 	dirs: [
 		~/
 		~/dev ~/dev/*
-		~/work ~/work/*
+		~/work/app # fe worktrees
 		~/.local/share/nvim/lazy ~/.local/share/nvim/mason/packages
-		`~/Library/Mobile Documents/com~apple~CloudDocs/Books/The_DynamoDB_Book_-_Plus_Package/Code examples`
+		# `~/Library/Mobile Documents/com~apple~CloudDocs/Books/The_DynamoDB_Book_-_Plus_Package/Code examples`
 		`~/Library/Mobile Documents/iCloud~md~obsidian/Documents`
 	]
 	# these will be run and added to dirs
 	dirs_special: [
 		[cmd , args];
+		# get nvim runtime dir for searching definitions
 		[nvim, [--clean --headless `+=vim.fs.dirname(os.getenv('VIMRUNTIME'))` +qall]]
 	]
 	base: [
@@ -32,7 +33,7 @@
 		[key , name];
 		[ P2 , "~/work/app/deals-light-ui", ]
 		[ P3 , "~/work/app/fe-review", ]
-		[ P4 , "~/work/perkbox-services/flexi-points-app", ]
+		[ P4 , "~/work/perkbox-services/flexi-points/flexi-points-app", ]
 		[ P5 , "~/work/app/fe-native", ]
 
 
