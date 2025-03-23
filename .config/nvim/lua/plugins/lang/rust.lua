@@ -10,27 +10,28 @@ end
 -- interesting stuff here to steal
 -- https://github.com/noib3/dotfiles/blob/master/modules/home/neovim/lua/diagnostic/rust.lua
 
-return {
+return U.F {
 	{
 		'neovim/nvim-lspconfig',
 		dependencies = {
-			'simrat39/rust-tools.nvim',
-			'rust-lang/rust.vim',
-			-- 'nvim-dap'
-		},
-		ft = 'rust',
-		init = function()
-			U.lsp_attach('rust_analyzer', function(client, bufnr)
-				if client.supports_method 'textDocument/codeLens' then
-					local rt = require 'rust-tools'
-					rt.inlay_hints.enable()
+			'rust-lang/rust.vim', -- why here?
+			{
+				'simrat39/rust-tools.nvim',
+				init = function()
+					U.lsp_attach('rust_analyzer', function(client, bufnr)
+						if client.supports_method 'textDocument/codeLens' then
+							local rt = require 'rust-tools'
+							rt.inlay_hints.enable()
 
-					vim.api.nvim_create_autocmd({ 'BufWritePost', 'BufEnter', 'CursorHold', 'InsertLeave' }, {
-						buffer = bufnr,
-						callback = function() vim.lsp.codelens.refresh() end,
-					})
-				end
-			end)
+							vim.api.nvim_create_autocmd(
+								{ 'BufWritePost', 'BufEnter', 'CursorHold', 'InsertLeave' },
+								{
+									buffer = bufnr,
+									callback = function() vim.lsp.codelens.refresh() end,
+								}
+							)
+						end
+					end)
 
 			--[[stylua: ignore]] --format
 			Keys.localleader_ft('rust', {
@@ -43,7 +44,11 @@ return {
 	{ 'R' , 'Cargo run'    , Cmd 'Cargo run'                                                   },
 	{ 'cc', 'Clear logs'   , Cmd '%g/println/norm dd'                                          },
 			})
-		end,
+				end,
+			},
+			-- 'nvim-dap'
+		},
+		ft = 'rust',
 		opts = {
 			servers = {
 				rust_analyzer = {
@@ -90,6 +95,7 @@ return {
 
 	{
 		'saecki/crates.nvim',
+		enabled = false,
 		event = { 'BufRead Cargo.toml' },
 		init = function()
 			--stylua: ignore

@@ -47,10 +47,10 @@ return {
 			{ 'folke/neoconf.nvim', cmd = 'Neoconf', opts = {} }, -- adds lspconfig type
 		},
 		---@class PluginLspOpts
-		opts = function()
+		opts = function(_, opts)
 			local nvim_lsp = require 'lspconfig'
 			local root = nvim_lsp.util.root_pattern
-			return {
+			return vim.tbl_deep_extend('force', {
 				-- LSP Server Settings
 				---@diagnostic disable: missing-fields
 				---@type lspconfig.options
@@ -78,6 +78,7 @@ return {
 							'--lsp',
 							'--env-config=' .. vim.fn.expand '~/PersonalConfigs/.config/nushell/env.nu',
 							'--config=' .. vim.fn.expand '~/PersonalConfigs/.config/nushell/config.nu',
+							-- TODO: add work stuff
 							'--include-path=' .. vim.fn.expand '~/PersonalConfigs/.config/nushell/scripts',
 						},
 					},
@@ -111,17 +112,22 @@ return {
 						},
 					},
 					tailwindcss = {
-						root_dir = root 'tailwind.config.js',
+						-- root_dir = root 'tailwind.config.js',
+						root_dir = root 'package.json',
 						settings = {
 							-- TODO: turn this off based on project, probably needs to look for the tailwind config
 							tailwindCSS = {
-								enable = false,
+								enable = true,
 								experimental = {
 									classRegex = {
-										{
-											'tv\\((([^()]*|\\([^()]*\\))*)\\)',
-											'["\'`]([^"\'`]*).*?["\'`]',
-										},
+										-- {
+										-- 	'tv\\((([^()]*|\\([^()]*\\))*)\\)',
+										-- 	'["\'`]([^"\'`]*).*?["\'`]',
+										-- },
+										{ 'cva\\(([^)]*)\\)', '["\'`]([^"\'`]*).*?["\'`]' },
+										{ 'cx\\(([^)]*)\\)', "(?:'|\"|`)([^']*)(?:'|\"|`)" },
+										{ 'cn\\(([^)]*)\\)', '["\'`]([^"\'`]*).*?["\'`]' },
+										-- { '([a-zA-Z0-9\\-:]+)' },
 									},
 								},
 							},
@@ -140,20 +146,14 @@ return {
 							},
 						},
 					},
+					biome = {},
 					vtsls = {
 						root_dir = root 'tsconfig.json',
-						-- autoUseWorkspaceTsdk = true,
-						-- tsdk = vim.fs.joinpath(vim.uv.cwd() .. 'node_modules/typescript/lib'),
 						settings = {
+							vtsls = {
+								autoUseWorkspaceTsdk = true,
+							},
 							typescript = {
-								inlayHints = {
-									parameterNames = { enabled = 'literals' },
-									parameterTypes = { enabled = true },
-									variableTypes = { enabled = true },
-									propertyDeclarationTypes = { enabled = true },
-									functionLikeReturnTypes = { enabled = true },
-									enumMemberValues = { enabled = true },
-								},
 								tsserver = {
 									maxTsServerMemory = 8192,
 									-- globalPlugins = {
@@ -178,7 +178,7 @@ return {
 				-- return true if you don't want this server to be setup with lspconfig
 				---@type table<string, fun(server:string, opts:_.lspconfig.options):boolean?>
 				setup = {},
-			}
+			}, opts)
 		end,
 		config = function(_, opts)
 			U.lsp_attach('*', function(client, buf)
