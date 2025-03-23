@@ -1,3 +1,4 @@
+@category mine
 export def git_current_branch [] {
 	# (gstat).branch
 	git rev-parse --abbrev-ref HEAD

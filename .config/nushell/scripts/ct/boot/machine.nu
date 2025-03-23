@@ -34,6 +34,8 @@ export def main [
 		print $"(ansi magenta)Brew skipped(ansi reset)"
 	}
 
+	setup_tooling
+
 	if not ("/etc/pam.d/sudo_local" | path exists) {
 		print $"(ansi green)Setting up touchid(ansi reset)"
 
@@ -116,7 +118,7 @@ def clone_tools [
 # handy stuff from:
 # - https://www.youtube.com/watch?v=guBV0jftT40&ab_channel=AUC_ANZ
 # - https://www.launchd.info/
-export def setup_background_items [] {
+def setup_background_items [] {
 	print $"(ansi green)Background:(ansi reset) setting up launchagents"
 	let files = ls ~/PersonalConfigs/.config/nushell/scripts/ct/boot/_LaunchAgents
 
@@ -206,3 +208,22 @@ def macos_set_defaults [] {
 	killall Dock
 }
 
+def setup_tooling [] {
+	log-step Tooling installing
+	let carapace = ("~/.cache/carapace/init.nu" | path expand)
+	if ($carapace | path exists | $in == false) {
+		log-tool carapace running setup
+		mkdir ~/.cache/carapace
+		carapace _carapace nushell | save --force ~/.cache/carapace/init.nu
+	}
+}
+
+def log-step [title: string, ...msg: string] {
+	print $"(ansi green)($title)(ansi reset) ($msg | str join ' ')"
+}
+def log-tool [title: string, ...msg: string] {
+	print $"	(ansi cyan)($title)(ansi reset) ($msg| str join ' ')"
+}
+def log-skip [title: string, ...msg: string] {
+	print $"	(ansi magenta)($title)(ansi reset) ($msg| str join ' ')"
+}
