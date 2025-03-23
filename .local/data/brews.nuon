@@ -130,10 +130,9 @@
 	brew "rbenv"
 	brew "ruby-build"
 	brew "ruby@3.1"
+	brew "watchman"
+	cask "zulu@17" # handles android stuff
 	# cask "flipper"
-
-	#? brew openldap
-	# TODO: bunch of files at /opt/homebrew/etc/openldap to be removed if not
 
 	# TODO: migrate notes
 	cask "logseq"
