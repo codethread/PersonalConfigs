@@ -85,7 +85,8 @@ Keys.tbl('<leader>', {
 		I = { 'Installer Info', Cmd 'LspInstallInfo' },
 		l = { 'CodeLens Action', Cmd 'lua vim.lsp.codelens.run()' },
 		r = { 'Rename', Cmd 'lua vim.lsp.buf.rename()' },
-		s = { 'Document Symbols', Cmd 'Telescope lsp_document_symbols' },
+		s = { 'Document Symbols', Cmd 'Telescope aerial' },
+		-- s = { 'Document Symbols', Cmd 'Telescope lsp_document_symbols' },
 		S = { 'Workspace Symbols', Cmd 'Telescope lsp_dynamic_workspace_symbols' },
 	},
 	---

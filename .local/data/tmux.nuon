@@ -17,6 +17,7 @@
 		[key , name];
 		[ P0 , "~/dev/projects/qmk_firmware/keyboards/preonic/keymaps/codethread"]
 		# [ P0 , "~/dev/projects/nuphy_firmware/keyboards/nuphy/halo75v2/ansi" ]
+		[ P6 , "~/dev/projects/git-nudge", ]
 	]
 	personal: [
 		[key , name];

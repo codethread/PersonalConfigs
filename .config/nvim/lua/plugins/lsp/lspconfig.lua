@@ -154,6 +154,14 @@ return {
 								autoUseWorkspaceTsdk = true,
 							},
 							typescript = {
+								preferences = {
+									-- includeCompletionsForModuleExports = true,
+									-- includeCompletionsForImportStatements = true,
+
+									-- TODO: handle project based settings
+									importModuleSpecifier = 'non-relative',
+									preferTypeOnlyAutoImports = true,
+								},
 								tsserver = {
 									maxTsServerMemory = 8192,
 									-- globalPlugins = {

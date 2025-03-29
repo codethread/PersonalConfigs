@@ -46,7 +46,15 @@ return {
 			layout = {
 				min_width = 25,
 				default_direction = 'prefer_left',
+				placement = 'edge',
 			},
+
+			manage_folds = false,
+			link_folds_to_tree = false,
+			link_tree_to_folds = false,
+
+			on_attach = function(b) require('aerial').tree_close_all(b) end,
+
 			-- backends = {
 			-- 	-- ['_'] = { 'lsp', 'treesitter' },
 			-- 	['_'] = { 'lsp' },

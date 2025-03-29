@@ -1,10 +1,11 @@
-return {
+return U.F {
 	{ 'echasnovski/mini.surround', opts = {} },
 
 	--use i_ctrl_v for literal inserts
 	{
 		'echasnovski/mini.pairs',
 		opts = {},
+		enabled = false, -- just trying to type instead
 		init = function()
 			U.au(
 				'Toggle autopairs in macros',
