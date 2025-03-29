@@ -1,41 +1,7 @@
-use ct/dotty
-use ct/macos [macos_has_full_disk_access ]
-use ct/brew
-use ct/core [dedent is-not-empty]
-use ct/git [git_is_dirty]
+use log.nu
+use ct/macos
 
-export def main [
-	--skip-brew # skip installation and syncing of brew packages
-	--clean # install fresh dirs
-	--force # clean even with uncommitted changes
-] {
-	macos_has_full_disk_access
-
-	print $"(ansi cyan)Linking homefiles(ansi reset)"
-	dotty link;
-
-	# setup some folder structures how I like them
-	print $"(ansi green)Creating dirs(ansi reset)"
-	mkdir -v ~/dev/vendor/ ~/dev/learn/ ~/dev/projects/
-
-	clone_tools --clean=$clean --force=$force
-
-	if not $skip_brew { # brew installer
-		if not ("/opt/homebrew" | path exists) {
-			print $"(ansi green)Installing homebrew(ansi reset)"
-			zsh -c 'bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
-		} else {
-			print $"(ansi cyan)[cached] Homebrew(ansi reset)"
-		}
-
-		# custom nushell code to use a Brewfile
-		brew sync
-	} else {
-		print $"(ansi magenta)Brew skipped(ansi reset)"
-	}
-
-	setup_tooling
-
+export def main [] {
 	if not ("/etc/pam.d/sudo_local" | path exists) {
 		print $"(ansi green)Setting up touchid(ansi reset)"
 
@@ -57,55 +23,9 @@ export def main [
 	setup_background_items
 
 	# setup paths and envs for gui programs like wezterm
-	envy
-
-	print 'Files linked'
-}
-
-# Install various projects I use either for boot or general use (not available
-# through brew)
-def clone_tools [
-	--clean # install fresh dirs
-	--force # clean even with uncommitted changes
-] {
-	print $"(ansi green)Cloning tools(ansi reset)"
-
-	let tools = [
-		[git,                                   dir,          install];
-		[git@github.com:nushell/nu_scripts.git, ~/dev/vendor, {||}]
-		[git@github.com:gitwatch/gitwatch.git, ~/dev/vendor, {|| ln -f -s ~/dev/vendor/gitwatch/gitwatch.sh ~/.local/bin/gitwatch }]
-		[git@github.com:codethread/alfred.git, ~/sync, {|| }]
-	]
-
-	$tools | par-each { |t|
-		cd $t.dir
-		let project = ($t.git | parse --regex '.*?:(?<owner>.+?)/(?<repo>.+?).git' | first)
-		let is_cloned = ($project.repo | path exists)
-
-		print $"(ansi green)Cloning(ansi reset) ($t.git) into ($t.dir)"
-
-		if $clean and $is_cloned {
-			print $"(ansi cyan)Cleaning(ansi reset) ($project.repo)"
-			cd $project.repo
-
-			if (git_is_dirty) and not $force {
-				print $"(ansi yellow)WARN(ansi reset) ($project.repo) has unstaged changes"
-				print "Uninstall manually first or run with --force"
-				print ""
-				return
-			}
-
-			cd -;
-			rm -rf $project.repo
-		}
-
-		if not $is_cloned {
-			git clone -q $t.git
-		}
-
-		print $"(ansi green)Running(ansi reset) install script for ($project.repo)"
-		do $t.install
-	}
+	# i'm not sure this really works
+	# envy
+	macos env-store
 }
 
 # Setup macos launchd processes as plist files
@@ -118,7 +38,10 @@ def clone_tools [
 # handy stuff from:
 # - https://www.youtube.com/watch?v=guBV0jftT40&ab_channel=AUC_ANZ
 # - https://www.launchd.info/
-def setup_background_items [] {
+def setup_background_items [
+	--force # if set, will rerun launch agent if already started
+] {
+	let bg_ps = (launchctl list | detect columns)
 	print $"(ansi green)Background:(ansi reset) setting up launchagents"
 	let files = ls ~/PersonalConfigs/.config/nushell/scripts/ct/boot/_LaunchAgents
 
@@ -135,11 +58,15 @@ def setup_background_items [] {
 		| str replace --all "{{LOGFILE}}" ([$log_dir std.log] | path join)
 		| str replace --all "{{PATH}}" ($env.PATH | str join ":")
 
+		if (not $force and ($bg_ps | where label starts-with $domain | is-not-empty)) {
+			log skip $domain process running
+			return
+		}
 		mkdir $log_dir
-		print dir $log_dir
+		# print dir $log_dir
 		# may not have been setup so will do these in try
 		print $"(ansi cyan)Creating(ansi reset) ($target_file)"
-		print $content
+		# print $content
 
 		try { launchctl unload $target_file }
 		try { rm $target_file }
@@ -206,24 +133,4 @@ def macos_set_defaults [] {
 	killall SystemUIServer
 	killall Finder
 	killall Dock
-}
-
-def setup_tooling [] {
-	log-step Tooling installing
-	let carapace = ("~/.cache/carapace/init.nu" | path expand)
-	if ($carapace | path exists | $in == false) {
-		log-tool carapace running setup
-		mkdir ~/.cache/carapace
-		carapace _carapace nushell | save --force ~/.cache/carapace/init.nu
-	}
-}
-
-def log-step [title: string, ...msg: string] {
-	print $"(ansi green)($title)(ansi reset) ($msg | str join ' ')"
-}
-def log-tool [title: string, ...msg: string] {
-	print $"	(ansi cyan)($title)(ansi reset) ($msg| str join ' ')"
-}
-def log-skip [title: string, ...msg: string] {
-	print $"	(ansi magenta)($title)(ansi reset) ($msg| str join ' ')"
 }

@@ -1,4 +1,4 @@
-use ct/core [clog]
+use ct/core [clog hide-all]
 
 # check if the currently running terminal program has full disk access
 # TODO: could be extended to take an application if required
@@ -26,4 +26,15 @@ export def macos_toggle_reduce_motion [] {
 		"1" => { defaults write com.apple.universalaccess reduceMotion -bool false }
 	})
 	killall Dock
+}
+
+export def env-store [] {
+	hide-all {||
+		let path_str = $env.PATH | str join ""
+		$env
+		| upsert PATH $path_str
+		| reject "PWD"
+		| to json
+	}
+	| save (echo ~/.config/envy/envs.json | path expand) --force
 }

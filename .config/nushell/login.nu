@@ -6,7 +6,7 @@ alias als = scope aliases
 const atuin = ("~/.local/share/atuin/init.nu" | path expand)
 source (if ($atuin | path exists) { $atuin } else { null })
 
-const carapace = ("~/.cache/carapace/init.nu" | path expand)
+const carapace = ("~/.local/cache/carapace/init.nu" | path expand)
 source (if ($carapace | path exists) { $carapace } else { null })
 
 def get-package-scripts [] {

@@ -70,3 +70,41 @@ export def dedent [str: string] {
 export def md-list []: list<string> -> string {
 	str join "\n- " | "- " ++ $in
 }
+
+# run a closure and hide nearly all environment variables
+export def hide-all [closure: closure] {
+	let allow = [TMUX
+		TERM
+		SHELL
+		PWD
+		USER
+		XPC
+		PATH
+		HOME
+		DOTFILES
+		EDITOR
+
+		CT_USER
+		CT_NOTES
+
+		WAKATIME_HOME
+
+		FZF
+
+		GOBIN
+		GOPATH
+
+		VOLTA
+		HUSKY
+	]
+
+	let hidden = ($env
+		| transpose name value
+		| filter {|e|
+			$allow | any {|s| $e.name starts-with $s } | $in == false
+		}
+		| get name)
+
+	hide-env ...$hidden
+	do $closure
+}
