@@ -72,8 +72,8 @@ export alias ghh = git help
 
 # export alias gignore = git update-index --assume-unchanged
 
-export alias gl = git log --oneline
-export alias gll = git log --oneline $"(git_main_branch)..HEAD"
+export alias gl = git log --oneline --no-merges
+export alias gll = git log --oneline $"(git_main_branch)..HEAD" --no-merges
 export alias glg = git log --stat
 export alias glgp = git log --stat --patch
 export alias glgg = git log --graph
