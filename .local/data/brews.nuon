@@ -126,6 +126,8 @@
 
 	brew "ical-buddy"
 
+	brew "podman"
+
 	# native??
 	brew "rbenv"
 	brew "ruby-build"
@@ -138,6 +140,8 @@
 	cask "logseq"
 	cask "obsidian"
 
+	cask "licecap" # screen capture
+	cask "figma"
 	cask "google-drive"
 	cask "obs"
 	cask "proxyman"
