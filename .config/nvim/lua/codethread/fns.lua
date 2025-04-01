@@ -27,17 +27,18 @@ end
 function M.save_buffer()
 	local ft = vim.bo.filetype
 	if ft == 'oil' then
-		require('oil').save(nil, function(err)
+		local ok, oil = pcall(require, 'oil')
+		assert(ok, 'no oil!')
+		oil.save(nil, function(err)
 			if err then
 				vim.notify(err, vim.log.levels.ERROR, { title = 'Oil' })
 			else
 				require('codethread.dotty').dotty_link()
-
 				local path = string.gsub(vim.fn.expand '%', 'oil://', '')
-
 				require('plugins.notes.backup').update_and_push('renames', path)
 			end
 		end)
+
 		-- too annoying as it alters jump list
 		-- elseif vim.tbl_contains({ 'typescript', 'typescriptreact', 'javascript' }, ft) then
 		-- 	require('vtsls').commands.remove_unused_imports(

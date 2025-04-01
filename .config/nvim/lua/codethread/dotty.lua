@@ -18,7 +18,7 @@ end
 
 ---Run dotty test to check if the current file is a dotty file
 ---@return boolean
-M.dotty_test = function(file)
+function M.dotty_test(file)
 	if not in_dotfiles then return false end
 	log.info('running test for', file)
 
@@ -29,7 +29,7 @@ end
 
 ---Run dotty link
 ---@return nil
-M.dotty_link = function()
+function M.dotty_link()
 	if not in_dotfiles then return nil end
 	log.info 'link running'
 
@@ -77,29 +77,32 @@ local function setup_autocmds()
 	})
 end
 
-if vim.fn.executable 'nu' == 1 then
-	log.info 'nu available'
-	local root = vim.fs.root(0, '.git')
-	if not root then
-		log.info 'not in git project'
-		return
-	end
-
-	U.nush([[use ct/dotty; dotty is-cwd ]] .. root .. [[ --exit]], {}, function(res)
-		log.debug('is-cwd res:', res)
-		if res.code == 0 then
-			log.info 'in dotfiles'
-			in_dotfiles = true
-			vim.schedule(setup_autocmds)
+function M.init()
+	if vim.fn.executable 'nu' == 1 then
+		log.info 'nu available'
+		local root = vim.fs.root(0, '.git')
+		if not root then
+			log.info 'not in git project'
+			return
 		end
-	end)
-else
-	log.warn 'nu not present in PATH for dotty'
+
+		U.nush([[use ct/dotty; dotty is-cwd ]] .. root .. [[ --exit]], {}, function(res)
+			log.debug('is-cwd res:', res)
+			if res.code == 0 then
+				log.info 'in dotfiles'
+				in_dotfiles = true
+				vim.schedule(setup_autocmds)
+			end
+		end)
+	else
+		log.warn 'nu not present in PATH for dotty'
+	end
 end
 
 --test
 -- require('plenary.reload').reload_module 'codethread.dotty'
 -- require('plenary.reload').reload_module 'codethread.log'
+-- require('codethread.dotty').init()
 -- log.info '------------restart'
 
 return M
