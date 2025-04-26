@@ -2,7 +2,8 @@
 	dirs: [
 		~/
 		~/dev ~/dev/*
-		~/work/app # fe worktrees
+		~/work/app # fe worktrees TODO: figure out worktrees
+		~/work/app/docs # messed up by above
 		~/.local/share/nvim/lazy ~/.local/share/nvim/mason/packages
 		# `~/Library/Mobile Documents/com~apple~CloudDocs/Books/The_DynamoDB_Book_-_Plus_Package/Code examples`
 		`~/Library/Mobile Documents/iCloud~md~obsidian/Documents`
