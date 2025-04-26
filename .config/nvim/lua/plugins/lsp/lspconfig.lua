@@ -25,6 +25,7 @@ return {
 				{ path = 'wezterm-types', mods = { 'wezterm' } },
 				'snacks.nvim',
 				'lazy.nvim',
+				'nvim-dap-ui',
 			},
 			enabled = function(root_dir)
 				-- disable when a .luarc.json file is found
@@ -117,7 +118,7 @@ return {
 						settings = {
 							-- TODO: turn this off based on project, probably needs to look for the tailwind config
 							tailwindCSS = {
-								enable = true,
+								enable = false,
 								experimental = {
 									classRegex = {
 										-- {
@@ -154,6 +155,7 @@ return {
 								autoUseWorkspaceTsdk = true,
 							},
 							typescript = {
+								tsdk = vim.fs.root(0, '.git') .. '/node_modules/typescript/lib',
 								preferences = {
 									-- includeCompletionsForModuleExports = true,
 									-- includeCompletionsForImportStatements = true,
@@ -161,6 +163,7 @@ return {
 									-- TODO: handle project based settings
 									importModuleSpecifier = 'non-relative',
 									preferTypeOnlyAutoImports = true,
+									includePackageJsonAutoImports = 'on', -- TRIAL
 								},
 								tsserver = {
 									maxTsServerMemory = 8192,

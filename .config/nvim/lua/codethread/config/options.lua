@@ -52,6 +52,8 @@ vim.o.smartcase = true
 
 vim.opt.showmode = false -- We don't need to see things like -- INSERT -- anymore
 
+vim.opt.diffopt:append 'inline:word'
+
 -- can use abolish-grep with this
 -- e.g. :S /plugin/ *
 -- e.g. :S /plugin/ *.lua (globs other than * don't seem to work with ripgrep, but that's probably just my config)

@@ -16,9 +16,10 @@ return {
 	{
 		'iamcco/markdown-preview.nvim',
 		cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },
-		build = 'sh -c "cd app yarn install"',
+		-- build = 'sh -c "cd app yarn install"',
+		build = 'sh -c "cd app && yarn install"',
 		init = function()
-			vim.g.mkdp_browser = 'firefox'
+			-- vim.g.mkdp_browser = 'firefox'
 			vim.g.mkdp_filetypes = { 'markdown' }
 			vim.g.mkdp_refresh_slow = 1 -- too much jumping around, refresh on save or insert leave
 		end,

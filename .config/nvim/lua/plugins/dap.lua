@@ -7,7 +7,7 @@ local js_based_languages = {
 return {
 	{
 		'mfussenegger/nvim-dap',
-		enabled = false, -- come back to this one day
+		-- enabled = false, -- come back to this one day
 		lazy = false,
 		dependencies = {
 			{
@@ -53,6 +53,10 @@ return {
 			},
 			{
 				'rcarriga/nvim-dap-ui',
+				dependencies = {
+					'mfussenegger/nvim-dap',
+					'nvim-neotest/nvim-nio',
+				},
 				keys = {
 					{ '<leader>du', function() require('dapui').toggle {} end, desc = 'Dap UI' },
 					{
@@ -103,11 +107,11 @@ return {
 						function() require('osv').launch { port = 8086 } end,
 						desc = 'Adapter Lua Server',
 					},
-					{
-						'<leader>dal',
-						function() require('osv').run_this() end,
-						desc = 'Adapter Lua',
-					},
+					-- {
+					-- 	'<leader>dal',
+					-- 	function() require('osv').run_this() end,
+					-- 	desc = 'Adapter Lua',
+					-- },
 				},
 				config = function()
 					local dap = require 'dap'
@@ -142,14 +146,14 @@ return {
 			{
 				'<leader>dc',
 				function()
-					if vim.fn.filereadable '.vscode/launch.json' then
-						local dap_vscode = require 'dap.ext.vscode'
-						dap_vscode.load_launchjs(nil, {
-							['pwa-node'] = js_based_languages,
-							['chrome'] = js_based_languages,
-							['pwa-chrome'] = js_based_languages,
-						})
-					end
+					-- if vim.fn.filereadable '.vscode/launch.json' then
+					-- 	local dap_vscode = require 'dap.ext.vscode'
+					-- 	dap_vscode.load_launchjs(nil, {
+					-- 		['pwa-node'] = js_based_languages,
+					-- 		['chrome'] = js_based_languages,
+					-- 		['pwa-chrome'] = js_based_languages,
+					-- 	})
+					-- end
 					require('dap').continue()
 				end,
 				desc = 'Continue',

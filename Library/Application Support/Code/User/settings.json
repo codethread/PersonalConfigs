@@ -95,6 +95,8 @@
   /** this is the default, but I can't decide if I like this or not */
   "workbench.editor.revealIfOpen": false,
 
+  "yaml.customTags": ["!reference sequence"],
+
   // ---------------------------------------------------------------------------------
   // PLUGINS
   // ---------------------------------------------------------------------------------

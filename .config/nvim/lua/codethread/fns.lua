@@ -200,4 +200,62 @@ function M.toggle_quickfix()
 	vim.cmd.copen()
 end
 
+---take raw ripgrep --vimgrp output and convert to quickfix items
+---@param stdout string
+---@return vim.quickfix.entry[]?
+function M.ripgrep_to_quickfix(stdout)
+	local root = vim.fn.getcwd()
+	local s = vim.trim(stdout)
+	if not s or s == '' then return nil end
+	return vim
+		.iter(vim.split(s, '\n'))
+		:map(function(item)
+			local file, line, col, text = unpack(vim.split(item, ':'))
+			return {
+				text = text,
+				col = tonumber(col),
+				end_col = #text,
+				filename = file,
+				lnum = tonumber(line),
+				user_data = {
+					uri = 'file://' .. vim.fs.joinpath(root, file), -- for use with LSP results
+				},
+			} --[[@as vim.quickfix.entry]]
+		end)
+		:totable()
+end
+
+---append items to quickfix, dedupes. This will be slow on a large list
+---@param entries vim.quickfix.entry[]
+function M.append_to_quickfix(entries)
+	---@type vim.quickfix.entry[]
+	local existing = vim.fn.getqflist()
+	local lsp_result = vim.tbl_get(entries[1], 'user_data', 'uri') and true or false
+
+	---@type vim.quickfix.entry[]
+	local append = {}
+
+	for _, e in ipairs(entries) do
+		local should_add = true
+		for _, ex in ipairs(existing) do
+			if
+				ex.lnum == e.lnum --
+				-- and ex.col == e.col -- tends to be different by source
+				and ex.end_col == e.end_col -- currently using as use case works, but may need to expand, or make the ripgrep_to_quickfix take a col adjustment fn
+				and (
+					lsp_result -- lsp results don't store filename, instead nest it as uri
+						and ex.user_data.uri == e.user_data.uri
+					or (ex.filename == e.filename)
+				)
+				-- and ex.text == e.text
+			then
+				should_add = false
+				break
+			end
+		end
+		if should_add then table.insert(append, e) end
+	end
+	vim.fn.setqflist({}, 'a', { items = append })
+end
+
 return M

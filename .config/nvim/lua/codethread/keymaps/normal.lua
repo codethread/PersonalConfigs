@@ -26,7 +26,8 @@ Keys.list({}, {
 --[[stylua: ignore]] --format
 Keys.list({ mode = 'v' }, {
 	{ 'ss', 'live'        , function() require('telescope-live-grep-args.shortcuts').grep_visual_selection() end },
-	{ 'sr', 'find-replace', function() require('spectre').open_visual { select_word = true } end                 },
+	-- { 'sr', 'find-replace', function() require('spectre').open_visual { select_word = true } end                 },
+	{ 'sr', 'find-replace', function () require('grug-far').open({ visualSelectionUsage = 'operate-within-range' }) end },
 })
 
 -- overrides marks, these get lost by most formatters making them pretty much useless

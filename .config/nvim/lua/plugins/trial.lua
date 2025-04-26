@@ -14,7 +14,7 @@ return {
 		'OXY2DEV/markview.nvim',
 		-- lazy = false, -- Recommended
 		ft = 'markdown',
-		enabled = true, -- this is sexy, play with later
+		-- enabled = false, -- this is sexy, play with later
 		-- ft = "markdown" -- If you decide to lazy-load anyway
 		opts = {},
 		-- config = function()

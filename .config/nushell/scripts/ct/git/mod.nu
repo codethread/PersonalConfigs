@@ -30,7 +30,7 @@ export def gignore [] {
 }
 
 export def grb [] {
-	let count = (git log --oneline $"(git_main_branch)..HEAD" | lines | length)
+	let count = (git log --oneline $"(git_main_branch)...HEAD" | lines | length)
 	git rebase -i $"HEAD~($count)"
 }
 
@@ -115,8 +115,8 @@ export def gchanged [
 ] {
 	match [$commit, $branch] {
 	[true, _] => { git diff --name-only --diff-filter=d },
-	[_, $b] if $b != null => { git diff --name-only --diff-filter=d $"($b)..HEAD" },
-	_ => { git diff --name-only --diff-filter=d $"origin/(git_main_branch)..HEAD" },
+	[_, $b] if $b != null => { git diff --name-only --diff-filter=d $"($b)...HEAD" },
+	_ => { git diff --name-only --diff-filter=d $"origin/(git_main_branch)...HEAD" },
 }
 }
 

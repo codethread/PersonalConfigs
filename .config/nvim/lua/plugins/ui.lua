@@ -124,7 +124,18 @@ return {
 	},
 
 	-- makes vim.ui.input and vim.ui.select nice
-	{ 'stevearc/dressing.nvim', opts = {} },
+	{
+		'stevearc/dressing.nvim',
+		opts = {
+			select = {
+				telescope = {
+					layout_config = {
+						width = { padding = 2 },
+					},
+				},
+			},
+		},
+	},
 
 	{ -- just keep around for pairing
 		'nvim-neo-tree/neo-tree.nvim',
