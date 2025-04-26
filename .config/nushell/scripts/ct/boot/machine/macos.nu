@@ -20,12 +20,22 @@ export def main [] {
 	macos_set_defaults
 	print $"(ansi cyan)Done(ansi reset) some settings may require log in and out"
 
+	setup_keybindings
 	setup_background_items
 
 	# setup paths and envs for gui programs like wezterm
 	# i'm not sure this really works
 	# envy
 	macos env-store
+}
+
+def setup_keybindings [] {
+	# more here https://gist.github.com/trusktr/1e5e516df4e8032cbc3d
+	print $"(ansi green)Setting up MacOS keybindings(ansi reset)"
+	if not ("~/Library/KeyBindings" | path exists) { mkdir /Library/KeyBindings }
+	('{
+  "§" = ("insertText:", "#");
+}' | save --force ~/Library/KeyBindings/DefaultkeyBinding.dict)
 }
 
 # Setup macos launchd processes as plist files
@@ -92,6 +102,7 @@ def macos_set_defaults [] {
 	defaults write NSGlobalDomain KeyRepeat -int 2
 	defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
 	defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+	defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 
 	defaults write com.apple.dock autohide -bool true
 	defaults write com.apple.dock mru-spaces -bool false
