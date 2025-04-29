@@ -139,6 +139,12 @@ export def teardown [] {
 	}
 }
 
+export def chmod [] {
+	ls ([$env.DOTFILES .local/bin] | path join)
+	| where type == file
+	| par-each {|f| run-external chmod +x $f.name }
+}
+
 def err_format [ title, files ] {
 	$"($title):\n($files | to text)"
 }

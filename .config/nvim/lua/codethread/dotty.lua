@@ -44,6 +44,11 @@ function M.dotty_link()
 			local changes = vim.json.decode(res.stdout)
 			if changes.changes then dotty_info(changes.diff) end
 		end
+
+		U.nush([[use ct/dotty; dotty chmod]], {}, function(chmod_res)
+			if chmod_res.code ~= 0 then log.error(chmod_res.stderr) end
+			log.debug('chmod res:', chmod_res)
+		end)
 	end)
 end
 
