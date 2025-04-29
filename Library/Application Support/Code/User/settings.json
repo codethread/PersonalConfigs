@@ -310,5 +310,10 @@
     "~/PersonalConfigs/.config/nushell/scripts"
   ],
   "zig.zls.enabled": "on",
-  "redhat.telemetry.enabled": true
+  "redhat.telemetry.enabled": true,
+  "github.copilot.chat.followUps": "never",
+  "github.copilot.chat.reviewSelection.enabled": false,
+  "github.copilot.chat.languageContext.fix.typescript.enabled": true,
+  "github.copilot.chat.languageContext.inline.typescript.enabled": true,
+  "github.copilot.chat.languageContext.typescript.enabled": true
 }
