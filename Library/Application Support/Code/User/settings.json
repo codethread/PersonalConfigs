@@ -1,4 +1,5 @@
 {
+  // OG vscode settings
   "breadcrumbs.filePath": "on",
   "breadcrumbs.symbolPath": "off",
 
@@ -29,7 +30,7 @@
   "editor.wordWrap": "on",
 
   "explorer.autoReveal": false,
-  "explorer.confirmDragAndDrop": true,
+  "explorer.confirmDragAndDrop": false,
   "explorer.openEditors.visible": 0,
 
   "files.autoSave": "onWindowChange",
@@ -78,7 +79,7 @@
   "window.titleBarStyle": "custom",
 
   "workbench.activityBar.location": "hidden",
-  "workbench.colorTheme": "Rosé Pine Moon",
+  "workbench.colorTheme": "Cursor Dark Midnight",
   "workbench.fontAliasing": "auto",
   "workbench.iconTheme": "rose-pine-icons",
   "workbench.startupEditor": "newUntitledFile",
@@ -295,6 +296,11 @@
       "commands": ["editor.action.refactor"],
       "when": "editorHasCodeActionsProvider && editorTextFocus && !editorReadonly"
     },
+    // open
+    {
+      "before": ["<leader>", "o", "a"],
+      "commands": ["outline.focus"]
+    },
     // marks
     {
       "before": ["m", "a"],
@@ -315,5 +321,26 @@
   "github.copilot.chat.reviewSelection.enabled": false,
   "github.copilot.chat.languageContext.fix.typescript.enabled": true,
   "github.copilot.chat.languageContext.inline.typescript.enabled": true,
-  "github.copilot.chat.languageContext.typescript.enabled": true
+  "github.copilot.chat.languageContext.typescript.enabled": true,
+  "terminal.integrated.defaultProfile.osx": "nu",
+  "terminal.integrated.profiles.osx": {
+    "zsh": {
+      "path": "zsh",
+      "args": ["-l"]
+    },
+    "tmux": {
+      "path": "tmux",
+      "icon": "terminal-tmux"
+    },
+    "nu": {
+      "path": "${env:HOME}/.local/bin/nu",
+      "args": ["-l", "-i"],
+      "env": {
+        "XDG_CONFIG_HOME": "${env:HOME}/.config",
+        "XDG_DATA_HOME": "${env:HOME}/.local/share",
+        "XDG_STATE_HOME": "${env:HOME}/.local/state",
+        "XDG_CACHE_HOME": "${env:HOME}/.local/cache"
+      }
+    }
+  }
 }
