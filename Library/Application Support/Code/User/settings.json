@@ -25,13 +25,13 @@
     "strings": true
   },
   "editor.renderLineHighlight": "all",
-  "editor.rulers": [100],
+  // "editor.rulers": [100],
   "editor.scrollBeyondLastLine": false,
   "editor.wordWrap": "on",
 
   "explorer.autoReveal": false,
   "explorer.confirmDragAndDrop": false,
-  "explorer.openEditors.visible": 0,
+  "explorer.openEditors.visible": 1,
 
   "files.autoSave": "onWindowChange",
   "files.exclude": {
@@ -52,7 +52,7 @@
     "*.svg": "html"
   },
 
-  "git.confirmSync": false,
+  "git.confirmSync": true,
   "git.enableSmartCommit": true,
   "git.openRepositoryInParentFolders": "always",
 
@@ -77,17 +77,14 @@
   "window.restoreWindows": "all",
   "window.title": "${rootName}${separator}${activeEditorMedium}",
   "window.titleBarStyle": "custom",
-
-  "workbench.activityBar.location": "hidden",
   "workbench.fontAliasing": "auto",
   "workbench.iconTheme": "rose-pine-icons",
   "workbench.startupEditor": "newUntitledFile",
-  "workbench.statusBar.visible": true,
 
   "workbench.editor.enablePreview": false,
   "workbench.editor.labelFormat": "short",
   "workbench.editor.openPositioning": "last",
-  "workbench.editor.showTabs": "single",
+  "workbench.editor.showTabs": "none",
   "workbench.editor.enablePreviewFromQuickOpen": false,
   "workbench.editor.customLabels.patterns": {
     "**/index.*": "(${dirname}) ${filename}.${extname}"
@@ -356,5 +353,8 @@
   "vim.cursorStylePerMode.insert": "line",
   "explorer.confirmDelete": false,
   "github.copilot.nextEditSuggestions.enabled": true,
-  "github.copilot.chat.codesearch.enabled": true
+  "github.copilot.chat.codesearch.enabled": true,
+  "workbench.activityBar.location": "top",
+  "files.autoSaveWhenNoErrors": true,
+  "files.autoSaveWorkspaceFilesOnly": true
 }
