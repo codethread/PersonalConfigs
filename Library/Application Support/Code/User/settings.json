@@ -79,7 +79,6 @@
   "window.titleBarStyle": "custom",
 
   "workbench.activityBar.location": "hidden",
-  "workbench.colorTheme": "Cursor Dark Midnight",
   "workbench.fontAliasing": "auto",
   "workbench.iconTheme": "rose-pine-icons",
   "workbench.startupEditor": "newUntitledFile",
@@ -91,7 +90,7 @@
   "workbench.editor.showTabs": "single",
   "workbench.editor.enablePreviewFromQuickOpen": false,
   "workbench.editor.customLabels.patterns": {
-    "**/index.*": "/${dirname}/${filename}.${extname}"
+    "**/index.*": "(${dirname}) ${filename}.${extname}"
   },
   /** this is the default, but I can't decide if I like this or not */
   "workbench.editor.revealIfOpen": false,
@@ -172,6 +171,15 @@
     "plaintext": false,
     "markdown": true
   },
+
+  "flash-vscode.dimColor": "#908caa",
+  "flash-vscode.matchColor": "#3e8fb0",
+  "flash-vscode.matchFontWeight": "normal",
+  "flash-vscode.labelColor": "white",
+  "flash-vscode.labelBackgroundColor": "#232136",
+  "flash-vscode.labelQuestionBackgroundColor": "#ebcb8b",
+  "flash-vscode.labelFontWeight": "bold",
+
   // ---------------------------------------------------------------------------------
   // VIM
   // ---------------------------------------------------------------------------------
@@ -196,8 +204,9 @@
       "commands": ["workbench.action.quickOpen"]
     },
     {
-      "before": ["s"],
-      "commands": ["extension.aceJump"]
+      "before": ["ctrl+f"],
+      "commands": ["flash-vscode.start"]
+      //   "commands": ["extension.aceJump"]
     },
     // buffers
     {
@@ -239,7 +248,7 @@
     // files
     {
       "before": ["<leader>", "f", "r"],
-      "commands": ["fileutils.renameFile"]
+      "commands": ["renameFile"]
     },
     // utils
     {
@@ -322,7 +331,7 @@
   "github.copilot.chat.languageContext.fix.typescript.enabled": true,
   "github.copilot.chat.languageContext.inline.typescript.enabled": true,
   "github.copilot.chat.languageContext.typescript.enabled": true,
-  "terminal.integrated.defaultProfile.osx": "nu",
+  "terminal.integrated.defaultProfile.osx": "zsh",
   "terminal.integrated.profiles.osx": {
     "zsh": {
       "path": "zsh",
@@ -342,5 +351,10 @@
         "XDG_CACHE_HOME": "${env:HOME}/.local/cache"
       }
     }
-  }
+  },
+  "workbench.colorTheme": "Rosé Pine Moon",
+  "vim.cursorStylePerMode.insert": "line",
+  "explorer.confirmDelete": false,
+  "github.copilot.nextEditSuggestions.enabled": true,
+  "github.copilot.chat.codesearch.enabled": true
 }
