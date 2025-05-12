@@ -1,8 +1,5 @@
 {
-  // OG vscode settings
-  "breadcrumbs.filePath": "on",
-  "breadcrumbs.symbolPath": "off",
-
+  // helps to turn on minimap for this file only
   "editor.cursorBlinking": "phase",
   "editor.cursorStyle": "block",
   "editor.defaultFormatter": "esbenp.prettier-vscode",
@@ -18,7 +15,7 @@
   "editor.inlineSuggest.enabled": true,
   "editor.lineHeight": 1.8,
   "editor.lineNumbers": "relative",
-  "editor.minimap.enabled": false,
+  "editor.minimap.enabled": true,
   "editor.quickSuggestions": {
     "other": "on",
     "comments": "off",
@@ -95,7 +92,7 @@
   "yaml.customTags": ["!reference sequence"],
 
   // ---------------------------------------------------------------------------------
-  // PLUGINS
+  // MARK: PLUGINS
   // ---------------------------------------------------------------------------------
   "extensions.ignoreRecommendations": true,
 
@@ -178,7 +175,7 @@
   "flash-vscode.labelFontWeight": "bold",
 
   // ---------------------------------------------------------------------------------
-  // VIM
+  // MARK: VIM
   // ---------------------------------------------------------------------------------
   "vim.showmodename": true,
   "vim.ignorecase": true,
@@ -190,6 +187,9 @@
   "vim.hlsearch": true,
   "vim.leader": "<space>",
   "vim.insertModeKeyBindings": [{ "before": ["j", "k"], "after": ["<Esc>"] }],
+  // ---------------------------------------------------------------------------------
+  // MARK: VIM Normal
+  // ---------------------------------------------------------------------------------
   "vim.normalModeKeyBindingsNonRecursive": [
     // global
     {
@@ -242,10 +242,15 @@
       "before": ["<leader>", "e", "l"],
       "commands": ["workbench.action.showErrorsWarnings"]
     },
-    // files
+    // ──────────────────────────────────────────────────────────────────────*
+    //   FILES
     {
       "before": ["<leader>", "f", "r"],
       "commands": ["renameFile"]
+    },
+    {
+      "before": ["<leader>", "f", "s"],
+      "commands": ["workbench.action.files.save"]
     },
     // utils
     {
@@ -354,7 +359,14 @@
   "explorer.confirmDelete": false,
   "github.copilot.nextEditSuggestions.enabled": true,
   "github.copilot.chat.codesearch.enabled": true,
-  "workbench.activityBar.location": "top",
   "files.autoSaveWhenNoErrors": true,
-  "files.autoSaveWorkspaceFilesOnly": true
+  "files.autoSaveWorkspaceFilesOnly": true,
+  "cursor.cpp.enablePartialAccepts": true,
+  "workbench.sideBar.location": "right",
+  "workbench.activityBar.location": "top",
+  "breadcrumbs.symbolPath": "off",
+  "workbench.editor.editorActionsLocation": "hidden",
+  "editor.minimap.sectionHeaderFontSize": 13,
+  "editor.minimap.size": "fit",
+  "editor.minimap.maxColumn": 99999
 }
