@@ -7,15 +7,6 @@
 .scratchpads/
 .log/
 
-.github
-.github/copilot-instructions.md
-.github/info/
-.github/prompts/
-
-.cursorignore
-.cursorindexingignore
-.cursor/
-
 ## EMACS
 *~
 \#*\#

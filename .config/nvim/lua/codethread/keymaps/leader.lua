@@ -139,7 +139,8 @@ Keys.tbl('<leader>', {
 		a = { 'Aerial', Cmd 'AerialToggle! left' },
 		f = { 'Open finder', function() vim.ui.open(vim.fn.expand '%:p:h') end },
 		-- if you can't beat 'em
-		c = { 'VSCode', Cmd 'silent !code %' },
+		-- c = { 'VSCode', Cmd 'silent !code %' },
+		c = { 'Cursor', Cmd 'silent !cursor %' }, -- controversial
 		d = { 'Dir', Cmd 'Oil' },
 		l = { 'open log file', function() require('codethread.logger').select() end },
 		n = { 'Notifcation History', Cmd 'LogOpen notifications' },

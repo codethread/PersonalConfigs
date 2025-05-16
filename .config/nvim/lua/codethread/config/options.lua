@@ -88,5 +88,6 @@ vim.filetype.add {
 		nuon = 'nu',
 		tmux = 'tmux',
 		['tsconfig.json'] = 'jsonc',
+		mdc = 'markdown',
 	},
 }

@@ -10,6 +10,7 @@ use ct/core *
 use ct/tmux
 use ct/brew
 use ct/dotty
+use ct/cursor *
 use ct/macos *
 use ct/git *
 

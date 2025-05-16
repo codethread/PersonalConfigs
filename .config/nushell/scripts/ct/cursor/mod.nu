@@ -1,27 +1,23 @@
 
+# TODO: might nuke all user settings
 const USER_CONF: path = (echo `~/Library/Application Support/Cursor/User` | path expand)
 
 export alias _cursor_open_config = nvim $USER_CONF
 
 # script to walk through linking cursor config to vscode.
 export def _cursor_link [] {
-	let base = [Library `Application Support`]
-	let p = {|parts: list<string> | $parts | path join | path expand }
 	let cursor_files = [
 		[cursor, code];
-		[(do $p [~ ...base Cursor/User/settings.json]) (do $p [$env.DOTFILES ...base Code/User/settings.json]) ]
-		[(do $p [~ ...base Cursor/User/keybindings.json]) (do $p [$env.DOTFILES ...base Code/User/keybindings.json]) ]
+		[(get-file cursor settings.json) (get-file dots settings.json)]
+		[(get-file cursor keybindings.json) (get-file dots keybindings.json)]
 	]
-
-	print $cursor_files
-	exit 0
 
 	# check-assumptions $cursor_files
 
 	prompt-to-close
 	echo "Removing existing settings to avoid code settings getting altered"
 
-	($cursor_files | filter { $in | path exists } | each {|f|
+	($cursor_files | get cursor | filter { $in | path exists } | each {|f|
 		print $"(ansi green)Removing(ansi reset) ($f)"
 		rm $f
 	})
@@ -35,11 +31,12 @@ export def _cursor_link [] {
 	echo "Linking settings and keybindings"
 
 	($cursor_files | each {|f|
-		print $"(ansi magenta)Deleting(ansi reset) ($f)"
-		rm $f
-		let $vscode_original = $f | str replace "Cursor" "Code"
-		print $"(ansi green)Linking(ansi reset) ($f) ($vscode_original)"
-		ln -s $vscode_original $f
+		let cursor = $f.cursor
+		let code = $f.code
+		print $"(ansi magenta)Deleting(ansi reset) ($cursor)"
+		rm $cursor
+		print $"(ansi green)Linking(ansi reset) ($cursor) ($code)"
+		ln -s $code $cursor
 	})
 
 	ignore
@@ -83,4 +80,14 @@ def check-assumptions [files: list<string>] {
 		print "Existing" $existing
 		print "Expected" $files
 	}
+}
+
+# app dots | cursor
+# file settings | keybindings
+def get-file [app: string file: string] {
+	let base = [Library `Application Support`]
+	match $app {
+		dots => ([$env.DOTFILES ...$base Code User $file])
+		cursor => ([~ ...$base Cursor User $file])
+	} | path join | path expand -n
 }

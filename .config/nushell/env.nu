@@ -38,7 +38,8 @@ $env.CT_NOTES = (match $env.CT_USER {
 $env.WAKATIME_HOME = (home ".config/wakatime")
 $env.ZDOTDIR = (home ".config/zsh")
 
-path add "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+path add -a "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+path add -a "/Applications/Cursor.app/Contents/Resources/app/bin"
 
 path add "/opt/podman/bin"
 
@@ -101,7 +102,7 @@ path add "/opt/homebrew/lib/ruby/gems/3.1.0/bin"
 path add "~/.volta/bin"
 $env.VOLTA_HOME = (home ".volta")
 $env.VOLTA_FEATURE_PNPM = "1"
-$env.HUSKY = "0" # don"t hold my hand
+# $env.HUSKY = "0" # don"t hold my hand
 
 path add "~/.bun/bin"
 
