@@ -1,7 +1,13 @@
 {
   // helps to turn on minimap for this file only
+  // MARK: cursor
+  "cursor.cpp.disabledLanguages": ["yaml", "plaintext"],
+  "cursor.composer.cmdPFilePicker2": true,
+  "cursor.cpp.enablePartialAccepts": true,
+  "cursor.composer.collapsePaneInputBoxPills": true,
 
   // MARK: vscode
+  "breadcrumbs.symbolPath": "off",
   "editor.cursorBlinking": "phase",
   "editor.cursorStyle": "block",
   "editor.defaultFormatter": "esbenp.prettier-vscode",
@@ -184,9 +190,14 @@
       "commands": ["outline.focus"]
     },
     {
-      "before": ["<leader>", "o", "d"],
+      "before": ["<leader>", "o", "f"],
       "when": "editorFocus",
       "commands": ["workbench.files.action.showActiveFileInExplorer"]
+    },
+    {
+      "before": ["<leader>", "o", "d"],
+      "when": "editorFocus",
+      "commands": ["oil-code.open"]
     },
     // ────────────────────────────────────────────────────────────────*
     // MARK: v.errors
@@ -215,6 +226,12 @@
     {
       "before": ["<leader>", "f", "s"],
       "commands": ["workbench.action.files.save"]
+    },
+    // ────────────────────────────────────────────────────────────────*
+    // MARK: v.search
+    {
+      "before": ["<leader>", "s", "w"],
+      "commands": ["extension.searchUnderCursor"]
     },
     // ────────────────────────────────────────────────────────────────*
     // MARK: v.utils
@@ -298,6 +315,8 @@
   "flash-vscode.labelQuestionBackgroundColor": "#ebcb8b",
   "flash-vscode.matchColor": "#3e8fb0",
   "flash-vscode.matchFontWeight": "normal",
+
+  "oil-code.disableVimKeymaps": true,
 
   "github.copilot.chat.codesearch.enabled": true,
   "github.copilot.chat.followUps": "never",

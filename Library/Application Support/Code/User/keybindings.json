@@ -76,5 +76,37 @@
     "key": "enter",
     "when": "filesExplorerFocus",
     "command": "list.select"
+  },
+
+  // MARK: oil
+  {
+    "command": "oil-code.close",
+    "key": "c",
+    "when": "editorTextFocus && editorLangId == oil"
+  },
+  {
+    "command": "oil-code.select",
+    "key": "enter",
+    "when": "editorTextFocus && editorLangId == oil"
+  },
+  {
+    "command": "oil-code.selectVertical",
+    "key": "ctrl+s",
+    "when": "editorTextFocus && editorLangId == oil"
+  },
+  {
+    "command": "oil-code.openParent",
+    "key": "-",
+    "when": "editorTextFocus && editorLangId == oil && vim.mode == 'Normal'"
+  },
+  {
+    "command": "oil-code.preview",
+    "key": "tab",
+    "when": "editorTextFocus && editorLangId == oil"
+  },
+  {
+    "command": "oil-code.refresh",
+    "key": "ctrl+r",
+    "when": "editorTextFocus && editorLangId == oil"
   }
 ]
