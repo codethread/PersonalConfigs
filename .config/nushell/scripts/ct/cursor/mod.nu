@@ -19,14 +19,15 @@ export def _cursor_link [
 	# check-assumptions $cursor_files
 
 	prompt-to-close
-	echo "Removing existing settings to avoid code settings getting altered"
-
-	($cursor_files | get cursor | filter { $in | path exists } | each {|f|
-		print $"(ansi green)Removing(ansi reset) ($f)"
-		rm $f
-	})
 
 	if ($with_import) {
+		echo "Removing existing settings to avoid code settings getting altered"
+
+		($cursor_files | get cursor | filter { $in | path exists } | each {|f|
+			print $"(ansi green)Removing(ansi reset) ($f)"
+			rm $f --force
+		})
+
 		prompt-to-import
 		input "Confirm you have imported settings <enter>:"
 		input "Sure?"
@@ -40,7 +41,7 @@ export def _cursor_link [
 		let cursor = $f.cursor
 		let code = $f.code
 		print $"(ansi magenta)Deleting(ansi reset) ($cursor)"
-		rm $cursor
+		rm $cursor --force
 		print $"(ansi green)Linking(ansi reset) ($cursor) ($code)"
 		ln -s $code $cursor
 	})
