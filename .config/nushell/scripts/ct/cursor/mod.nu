@@ -5,11 +5,15 @@ const USER_CONF: path = (echo `~/Library/Application Support/Cursor/User` | path
 export alias _cursor_open_config = nvim $USER_CONF
 
 # script to walk through linking cursor config to vscode.
-export def _cursor_link [] {
+export def _cursor_link [
+	--with-import # will prompt to import via cursor
+] {
 	let cursor_files = [
 		[cursor, code];
 		[(get-file cursor settings.json) (get-file dots settings.json)]
 		[(get-file cursor keybindings.json) (get-file dots keybindings.json)]
+		[(get-file insider settings.json) (get-file dots settings.json)]
+		[(get-file insider keybindings.json) (get-file dots keybindings.json)]
 	]
 
 	# check-assumptions $cursor_files
@@ -22,11 +26,13 @@ export def _cursor_link [] {
 		rm $f
 	})
 
-	prompt-to-import
-	input "Confirm you have imported settings <enter>:"
-	input "Sure?"
+	if ($with_import) {
+		prompt-to-import
+		input "Confirm you have imported settings <enter>:"
+		input "Sure?"
 
-	prompt-to-close
+		prompt-to-close
+	}
 
 	echo "Linking settings and keybindings"
 
@@ -89,5 +95,6 @@ def get-file [app: string file: string] {
 	match $app {
 		dots => ([$env.DOTFILES ...$base Code User $file])
 		cursor => ([~ ...$base Cursor User $file])
+		insider => ([~ ...$base "Code - Insiders" User $file])
 	} | path join | path expand -n
 }

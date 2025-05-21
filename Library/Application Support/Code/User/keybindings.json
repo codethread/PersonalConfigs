@@ -10,9 +10,14 @@
     "command": "workbench.action.terminal.toggleTerminal"
   },
   {
+    "key": "cmd+t",
+    "command": "workbench.action.terminal.toggleTerminal"
+  },
+  {
     "key": "ctrl+`",
     "command": "-workbench.action.terminal.toggleTerminal"
   },
+
   // {
   //   "key": "cmd+B",
   //   "command": "workbench.action.toggleSidebarVisibility"
@@ -108,5 +113,48 @@
     "command": "oil-code.refresh",
     "key": "ctrl+r",
     "when": "editorTextFocus && editorLangId == oil"
+  },
+  {
+    "key": "cmd+n",
+    "command": "-workbench.action.files.newUntitledFile"
+  },
+  {
+    "key": "cmd+n",
+    "command": "composer.newAgentChat"
+  },
+  {
+    "key": "shift+cmd+i",
+    "command": "-composer.newAgentChat"
+  },
+  {
+    "key": "cmd+m",
+    "command": "workbench.action.toggleSidebarVisibility"
+  },
+  {
+    "key": "cmd+b",
+    "command": "-workbench.action.toggleSidebarVisibility"
+  },
+  {
+    "key": "shift+cmd+d",
+    "command": "workbench.view.debug",
+    "when": "viewContainer.workbench.view.debug.enabled"
+  },
+  {
+    "key": "shift+cmd+d",
+    "command": "-workbench.view.debug",
+    "when": "viewContainer.workbench.view.debug.enabled"
+  },
+  {
+    "key": "cmd+.",
+    "command": "-editor.action.quickFix",
+    "when": "editorHasCodeActionsProvider && textInputFocus && !editorReadonly"
+  },
+  {
+    "key": "cmd+.",
+    "command": "workbench.action.toggleAuxiliaryBar"
+  },
+  {
+    "key": "alt+cmd+b",
+    "command": "-workbench.action.toggleAuxiliaryBar"
   }
 ]

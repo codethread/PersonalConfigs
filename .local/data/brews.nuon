@@ -68,6 +68,7 @@
 	cask "jordanbaird-ice" # Menu bar manager
 	cask "kitty"
 	cask "visual-studio-code"
+	cask "visual-studio-code@insiders"
 	cask "spotify"
 
 	# Fonts
@@ -152,8 +153,5 @@
 	##################################
 	#             TEMP               #
 	##################################
-
-	tap "jesseduffield/lazygit"
-	brew "jesseduffield/lazygit/lazygit"
 	'
 }

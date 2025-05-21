@@ -1,7 +1,7 @@
 {
   // helps to turn on minimap for this file only
   // MARK: cursor
-  "cursor.cpp.disabledLanguages": ["yaml", "plaintext"],
+  "cursor.cpp.disabledLanguages": ["yaml", "plaintext", "oil"],
   "cursor.composer.cmdPFilePicker2": true,
   "cursor.cpp.enablePartialAccepts": true,
   "cursor.composer.collapsePaneInputBoxPills": true,
@@ -58,8 +58,7 @@
     ".tags": true,
     ".vscode/": false,
     "**/*.swp": true,
-    "**/*~": true,
-    "node_modules/": true
+    "**/*~": true
   },
   "files.insertFinalNewline": true,
 
@@ -84,7 +83,6 @@
   "window.titleBarStyle": "custom",
 
   "workbench.activityBar.location": "top",
-  "workbench.colorTheme": "Rosé Pine Moon",
   "workbench.editor.customLabels.patterns": {
     "**/index.*": "(${dirname}) ${filename}.${extname}"
   },
@@ -96,7 +94,7 @@
   "workbench.editor.showTabs": "none",
   "workbench.fontAliasing": "auto",
   "workbench.iconTheme": "rose-pine-icons",
-  "workbench.sideBar.location": "right",
+  "workbench.colorTheme": "Cursor Dark Midnight",
   "workbench.startupEditor": "newUntitledFile",
 
   // MARK: Language
@@ -132,6 +130,7 @@
     "nu": {
       "path": "${env:HOME}/.local/bin/nu",
       "args": ["-l", "-i"],
+      "icon": "chevron-right",
       "env": {
         "XDG_CONFIG_HOME": "${env:HOME}/.config",
         "XDG_DATA_HOME": "${env:HOME}/.local/share",
@@ -170,17 +169,17 @@
       "commands": ["flash-vscode.start"]
     },
     // ────────────────────────────────────────────────────────────────*
-    // MARK: v.buffers
+    // MARK: v.files
     {
-      "before": ["<leader>", "b", "l"],
+      "before": ["<leader>", "f", "l"],
       "commands": ["workbench.action.showAllEditorsByMostRecentlyUsed"]
     },
     {
-      "before": ["<leader>", "b", "k"],
+      "before": ["<leader>", "f", "k"],
       "commands": ["workbench.action.closeActiveEditor"]
     },
     {
-      "before": ["<leader>", "b", "u"],
+      "before": ["<leader>", "f", "u"],
       "commands": ["unsaved-files.show"]
     },
     // ────────────────────────────────────────────────────────────────*
@@ -368,5 +367,10 @@
 
   "yaml.customTags": ["!reference sequence"],
 
-  "zig.zls.enabled": "on"
+  "zig.zls.enabled": "on",
+  "yaml.schemas": {
+    "file:///Users/adamhall/.cursor/extensions/atlassian.atlascode-3.8.0/resources/schemas/pipelines-schema.json": "bitbucket-pipelines.yml"
+  },
+  "atlascode.jira.enabled": true,
+  "atlascode.bitbucket.enabled": false
 }
