@@ -30,24 +30,23 @@
   { "key": "ctrl+k", "command": "workbench.action.navigateUp" },
   { "key": "ctrl+j", "command": "workbench.action.navigateDown" },
 
-  // { "key": "ctrl+w shift+l", "command": "workbench.action.moveEditorToRightGroup" },
-  { "key": "ctrl+y", "command": "workbench.action.toggleCenteredLayout" },
+  // { "key": "ctrl+y", "command": "workbench.action.toggleCenteredLayout" },
 
   // selection
   {
     "key": "ctrl+j",
     "command": "selectNextSuggestion",
-    "when": "editorTextFocus && suggestWidgetMultipleSuggestions && suggestWidgetVisible"
+    "when": "editorTextFocus && suggestWidgetVisible"
   },
   {
     "key": "ctrl+k",
     "command": "selectPrevSuggestion",
-    "when": "editorTextFocus && suggestWidgetMultipleSuggestions && suggestWidgetVisible"
+    "when": "editorTextFocus && suggestWidgetVisible"
   },
   {
     "key": "ctrl+l",
     "command": "acceptSelectedSuggestion",
-    "when": "editorTextFocus && suggestWidgetMultipleSuggestions && suggestWidgetVisible"
+    "when": "editorTextFocus && suggestWidgetVisible"
   },
   {
     "key": "ctrl+j",
@@ -59,19 +58,24 @@
     "command": "workbench.action.quickOpenNavigatePrevious",
     "when": "inQuickOpen"
   },
+  {
+    "key": "ctrl+l",
+    "command": "workbench.action.acceptSelectedQuickOpenItem",
+    "when": "inQuickOpen"
+  },
 
   // file tree
-  {
-    "key": "ctrl+n",
-    "when": "editorTextFocus",
-    "command": "workbench.files.action.focusFilesExplorer"
-  },
-  {
-    "key": "ctrl+n",
-    "when": "!editorTextFocus",
-    // "when": "filesExplorerFocus",
-    "command": "workbench.action.focusActiveEditorGroup"
-  },
+  // {
+  //   "key": "ctrl+n",
+  //   "when": "editorTextFocus",
+  //   "command": "workbench.files.action.focusFilesExplorer"
+  // },
+  // {
+  //   "key": "ctrl+n",
+  //   "when": "!editorTextFocus",
+  //   // "when": "filesExplorerFocus",
+  //   "command": "workbench.action.focusActiveEditorGroup"
+  // },
   {
     "key": "tab",
     "when": "filesExplorerFocus",
@@ -84,36 +88,7 @@
   },
 
   // MARK: oil
-  {
-    "command": "oil-code.close",
-    "key": "c",
-    "when": "editorTextFocus && editorLangId == oil"
-  },
-  {
-    "command": "oil-code.select",
-    "key": "enter",
-    "when": "editorTextFocus && editorLangId == oil"
-  },
-  {
-    "command": "oil-code.selectVertical",
-    "key": "ctrl+s",
-    "when": "editorTextFocus && editorLangId == oil"
-  },
-  {
-    "command": "oil-code.openParent",
-    "key": "-",
-    "when": "editorTextFocus && editorLangId == oil && vim.mode == 'Normal'"
-  },
-  {
-    "command": "oil-code.preview",
-    "key": "tab",
-    "when": "editorTextFocus && editorLangId == oil"
-  },
-  {
-    "command": "oil-code.refresh",
-    "key": "ctrl+r",
-    "when": "editorTextFocus && editorLangId == oil"
-  },
+  // MARK: general
   {
     "key": "cmd+n",
     "command": "-workbench.action.files.newUntitledFile"

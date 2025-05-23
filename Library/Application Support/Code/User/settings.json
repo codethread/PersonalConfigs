@@ -151,6 +151,7 @@
   "vim.smartcase": true,
   "vim.sneak": false,
   "vim.useSystemClipboard": true,
+  "vim.highlightedyank.enable": true,
 
   "vim.normalModeKeyBindingsNonRecursive": [
     // ────────────────────────────────────────────────────────────────*
@@ -168,6 +169,11 @@
       "when": "editorTextFocus",
       "commands": ["flash-vscode.start"]
     },
+    {
+      "before": ["#"], // annoyingly can't figure out how to not clash with %
+      "when": "editorTextFocus",
+      "commands": ["editor.emmet.action.matchTag"]
+    },
     // ────────────────────────────────────────────────────────────────*
     // MARK: v.files
     {
@@ -181,6 +187,10 @@
     {
       "before": ["<leader>", "f", "u"],
       "commands": ["unsaved-files.show"]
+    },
+    {
+      "before": ["<leader>", "f", "s"],
+      "commands": ["workbench.action.files.save"]
     },
     // ────────────────────────────────────────────────────────────────*
     // MARK: v.open
@@ -196,7 +206,16 @@
     {
       "before": ["<leader>", "o", "d"],
       "when": "editorFocus",
-      "commands": ["oil-code.open"]
+      // "commands": ["oil-code.open"]
+      "commands": ["vsnetrw.open"]
+    },
+    {
+      "before": ["<leader>", "o", "v", "s"],
+      "commands": ["workbench.action.openSettingsJson"]
+    },
+    {
+      "before": ["<leader>", "o", "v", "k"],
+      "commands": ["workbench.action.openGlobalKeybindingsFile"]
     },
     // ────────────────────────────────────────────────────────────────*
     // MARK: v.errors
@@ -260,6 +279,11 @@
       "before": ["ctrl+w", "o"],
       "commands": ["workbench.action.editorLayoutSingle"]
     },
+    // {
+    //   "before": ["ctrl+w", "o"],
+    //   "when": "editorTextFocus",
+    //   "commands": ["workbench.action.closeEditorsInOtherGroups"]
+    // },
     {
       "before": ["<leader>", "w", "w"],
       "commands": ["workbench.action.splitEditor"]
@@ -304,6 +328,38 @@
       "before": ["m", "l"],
       "commands": ["bookmarks.listFromAllFiles"]
     }
+    // ────────────────────────────────────────────────────────────────*
+    // MARK: v.oil
+    // {
+    //   "before": ["c"],
+    //   "commands": ["oil-code.close"],
+    //   "when": "editorTextFocus && editorLangId == oil"
+    // },
+    // {
+    //   "before": ["enter"],
+    //   "commands": ["oil-code.select"],
+    //   "when": "editorTextFocus && editorLangId == oil"
+    // },
+    // {
+    //   "before": ["ctrl+s"],
+    //   "commands": ["oil-code.selectVertical"],
+    //   "when": "editorTextFocus && editorLangId == oil"
+    // },
+    // {
+    //   "before": ["-"],
+    //   "commands": ["oil-code.openParent"],
+    //   "when": "editorTextFocus && editorLangId == oil && vim.mode == 'Normal'"
+    // },
+    // {
+    //   "before": ["tab"],
+    //   "commands": ["oil-code.preview"],
+    //   "when": "editorTextFocus && editorLangId == oil"
+    // },
+    // {
+    //   "before": ["ctrl+r"],
+    //   "commands": ["oil-code.refresh"],
+    //   "when": "editorTextFocus && editorLangId == oil"
+    // }
   ],
 
   // MARK: small plugins
@@ -372,5 +428,6 @@
     "file:///Users/adamhall/.cursor/extensions/atlassian.atlascode-3.8.0/resources/schemas/pipelines-schema.json": "bitbucket-pipelines.yml"
   },
   "atlascode.jira.enabled": true,
-  "atlascode.bitbucket.enabled": false
+  "atlascode.bitbucket.enabled": false,
+  "github.copilot.selectedCompletionModel": ""
 }
