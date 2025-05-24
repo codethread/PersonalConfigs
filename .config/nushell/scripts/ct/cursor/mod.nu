@@ -43,7 +43,7 @@ export def _cursor_link [
 		print $"(ansi magenta)Deleting(ansi reset) ($cursor)"
 		rm $cursor --force
 		print $"(ansi green)Linking(ansi reset) ($cursor) ($code)"
-		ln -s $code $cursor
+		try { ln -s $code $cursor }
 	})
 
 	ignore

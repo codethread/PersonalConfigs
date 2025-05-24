@@ -93,7 +93,7 @@
   "workbench.editor.revealIfOpen": false,
   "workbench.editor.showTabs": "none",
   "workbench.fontAliasing": "auto",
-  "workbench.iconTheme": "rose-pine-icons",
+  // "workbench.iconTheme": "rose-pine-icons",
   "workbench.colorTheme": "Cursor Dark Midnight",
   "workbench.startupEditor": "newUntitledFile",
 
@@ -429,5 +429,5 @@
   },
   "atlascode.jira.enabled": true,
   "atlascode.bitbucket.enabled": false,
-  "github.copilot.selectedCompletionModel": ""
+  "workbench.iconTheme": "Monokai Pro (Filter Ristretto) Icons"
 }
