@@ -147,12 +147,13 @@ Keys.tbl('<leader>', {
 		N = { 'Hide Notifications', function() Snacks.notifier.hide() end },
 		S = { 'Sessions', function() require('persistence').select() end },
 	},
-	T = {
+	t = {
 		group = 'Toggle',
 		i = { 'Inlay Hints', Cmd "lua print'nothing setup'" },
 		m = { 'Markdown Preview', Cmd 'Markview Toggle' },
 		['>'] = { 'IndentScope', fns.toggle_indent_scope },
 		[' '] = { 'Whitespace', fns.toggle_listchars },
+		l = { 'Linewrap', fns.toggle_linewrap },
 	},
 
 	u = {

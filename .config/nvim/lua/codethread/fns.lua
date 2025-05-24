@@ -115,6 +115,18 @@ function M.toggle_listchars()
 	end
 end
 
+function M.toggle_linewrap()
+	if vim.opt_local.wrap:get() then
+		vim.opt_local.wrap = false
+		vim.keymap.del('n', 'j')
+		vim.keymap.del('n', 'k')
+	else
+		vim.opt_local.wrap = true
+		vim.keymap.set('n', 'j', 'gj')
+		vim.keymap.set('n', 'k', 'gk')
+	end
+end
+
 function M.toggle_diagnostics()
 	local state = vim.b.ct_diagnostics_off or true
 	if state then
