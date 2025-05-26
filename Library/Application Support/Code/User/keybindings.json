@@ -4,19 +4,7 @@
 // https://code.visualstudio.com/api/references/commands
 // https://code.visualstudio.com/docs/getstarted/keybindings#_keyboard-shortcuts-reference
 [
-  // global
-  {
-    "key": "ctrl+\\",
-    "command": "workbench.action.terminal.toggleTerminal"
-  },
-  {
-    "key": "cmd+t",
-    "command": "workbench.action.terminal.toggleTerminal"
-  },
-  {
-    "key": "ctrl+`",
-    "command": "-workbench.action.terminal.toggleTerminal"
-  },
+  // Terminal
 
   // {
   //   "key": "cmd+B",
@@ -87,49 +75,36 @@
     "command": "list.select"
   },
 
-  // MARK: oil
-  // MARK: general
+  // MARK: Views
+  // j k l ;
   {
-    "key": "cmd+n",
-    "command": "-workbench.action.files.newUntitledFile"
+    "key": "cmd+;",
+    "command": "Close Panels"
   },
   {
-    "key": "cmd+n",
-    "command": "composer.newAgentChat"
-  },
-  {
-    "key": "shift+cmd+i",
-    "command": "-composer.newAgentChat"
-  },
-  {
-    "key": "cmd+m",
+    "key": "cmd+h",
     "command": "workbench.action.toggleSidebarVisibility"
   },
   {
-    "key": "cmd+b",
-    "command": "-workbench.action.toggleSidebarVisibility"
+    "key": "cmd+l",
+    "command": "workbench.action.toggleAuxiliaryBar",
+    "when": "activeViewlet === 'terminal'" // keep send to chat
+  },
+
+  // MARK: Terminal
+  {
+    "key": "cmd+t",
+    "command": "workbench.action.terminal.focus"
   },
   {
-    "key": "shift+cmd+d",
-    "command": "workbench.view.debug",
-    "when": "viewContainer.workbench.view.debug.enabled"
+    "key": "cmd+n",
+    "command": "workbench.action.terminal.newWithProfile",
+    "args": { "profileName": "nu" },
+    "when": "panelFocus" // keep send to chat
   },
   {
-    "key": "shift+cmd+d",
-    "command": "-workbench.view.debug",
-    "when": "viewContainer.workbench.view.debug.enabled"
-  },
-  {
-    "key": "cmd+.",
-    "command": "-editor.action.quickFix",
-    "when": "editorHasCodeActionsProvider && textInputFocus && !editorReadonly"
-  },
-  {
-    "key": "cmd+.",
-    "command": "workbench.action.toggleAuxiliaryBar"
-  },
-  {
-    "key": "alt+cmd+b",
-    "command": "-workbench.action.toggleAuxiliaryBar"
+    "key": "cmd+w",
+    "command": "workbench.action.terminal.kill",
+    "when": "panelFocus"
   }
 ]

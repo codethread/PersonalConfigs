@@ -76,13 +76,52 @@
 	cask "font-fira-code"
 	cask "font-iosevka"
 	cask "font-symbols-only-nerd-font"
+	cask "ticktick"
 
 	mas "DaisyDisk", id: 411643860
-	mas "Key Codes", id: 414568915
-	mas "Vimari", id: 1480933944
-	mas "TickTick:To-Do List, Calendar", id: 966085870
+	mas "Magnet", id: 441258766
+	mas "Perplexity", id: 6714467650
+
 	mas "Dark Reader for Safari", id: 1438243180
-	mas "Perplexity: Ask Anything", id: 6714467650
+	mas "Vimari", id: 1480933944
+
+	# vs-vim
+	vscode "cunbidun.flash-vscode"
+	vscode "lucax88x.codeacejumper"
+	vscode "danprince.vsnetrw"
+	vscode "haphazarddev.oil-code"
+	vscode "vscodevim.vim"
+
+	# format
+	vscode "dbaeumer.vscode-eslint"
+	vscode "esbenp.prettier-vscode"
+
+	# quality of life
+	vscode "davidsanders.search-under-cursor"
+	vscode "jgclark.vscode-todo-highlight"
+	vscode "kamikillerto.vscode-colorize"
+	vscode "usernamehw.commands"
+	vscode "wraith13.unsaved-files-vscode"
+
+	vscode "formulahendry.auto-close-tag"
+	vscode "formulahendry.auto-rename-tag"
+
+	# theme
+	vscode "mvllow.rose-pine"
+
+	# vscode "github.copilot"
+	# vscode "github.copilot-chat"
+
+
+	# vscode typescript
+	vscode "mylesmurphy.prettify-ts"
+	vscode "orta.vscode-twoslash"
+	vscode "orta.vscode-twoslash-queries"
+	vscode "yoavbls.pretty-ts-errors"
+
+	vscode "wakatime.vscode-wakatime"
+
+	# vscode "rust-lang.rust-analyzer"
 	',
 
 	home : '
@@ -104,6 +143,11 @@
 	brew "qmk/qmk/qmk"
 
 	mas "Paprika Recipe Manager 3", id: 1303222628
+	mas "Prime Video", id: 545519333
+
+	vscode "biomejs.biome"
+	vscode "bradlc.vscode-tailwindcss"
+	vscode "ms-playwright.playwright"
 	',
 
 	work : '
@@ -148,6 +192,17 @@
 	cask "proxyman"
 	cask "firefox@developer-edition"
 	cask "slack"
+
+	mas "Xcode", id: 497799835
+	mas "Key Codes", id: 414568915
+
+	vscode "apollographql.vscode-apollo"
+vscode "rohit-gohri.format-code-action"
+    vscode "gitlab.gitlab-workflow"
+vscode "redhat.vscode-yaml"
+vscode "golang.go"
+vscode "styled-components.vscode-styled-components"
+vscode "stylelint.vscode-stylelint"
 	',
 	temp: '
 	##################################

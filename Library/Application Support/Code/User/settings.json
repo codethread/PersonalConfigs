@@ -406,6 +406,16 @@
   "rust-analyzer.inlayHints.renderColons": false,
   "rust-analyzer.inlayHints.typeHints.enable": false,
 
+  "commands.commands": {
+    "Close Panels": {
+      "sequence": [
+        "workbench.action.closePanel",
+        "workbench.action.closeSidebar"
+        // TODO: figure out auxilary panel
+      ]
+    }
+  },
+
   "todohighlight.defaultStyle": {
     "color": "#ffab00",
     "backgroundColor": "#2a2c2d",
@@ -429,5 +439,11 @@
   },
   "atlascode.jira.enabled": true,
   "atlascode.bitbucket.enabled": false,
-  "workbench.iconTheme": "Monokai Pro (Filter Ristretto) Icons"
+  "git.blame.statusBarItem.enabled": true,
+  "cursor.composer.shouldChimeAfterChatFinishes": true,
+  "cursor.general.enableShadowWorkspace": true,
+  "playwright.reuseBrowser": false,
+  "playwright.showTrace": true,
+  "[typescript]": {},
+  "workbench.iconTheme": "material-icon-theme"
 }

@@ -7,18 +7,24 @@ export def sync [
 	--dry-run # output brewfile contents but don't save or run anything
 	--clean
 	--with-temp
+	--mas
 ] {
 	print $"(ansi green)Running Brew Sync(ansi reset)"
-	let conf = ( get_bundle_for_machine --with-temp=$with_temp)
+	let conf = (get_bundle_for_machine --with-temp=$with_temp)
 
 	if ($dry_run) {
 		$conf
 	} else if ($clean) {
 		echo $conf
-		| ^brew bundle --file=- --no-upgrade --cleanup --zap --verbose
+		| ^brew bundle --no-upgrade --cleanup --zap --verbose --file=-
 	} else {
-		echo $conf
-		| ^brew bundle --file=- --no-upgrade
+		with-env {
+			HOMEBREW_NO_AUTO_UPDATE: 1
+			HOMEBREW_BUNDLE_NO_UPGRADE: 1
+			HOMEBREW_BUNDLE_MAS_SKIP: (not $mas)
+		} {
+			echo $conf | ^brew bundle --no-upgrade --file=-
+		}
 	}
 }
 
@@ -32,12 +38,15 @@ export def install [...args] {
 
 export def diff [] {
 	let conf = get_bundle_for_machine | lines | strip-comments | sort
-	let actual = ^brew bundle dump --file=- --no-vscode | lines | strip-comments | sort
+	let actual = with-env {
+		HOMEBREW_NO_AUTO_UPDATE: 1
+		HOMEBREW_BUNDLE_NO_UPGRADE: 1
+		HOMEBREW_BUNDLE_MAS_SKIP: 1
+	} {
+		^brew bundle dump --vscode --file=- | lines | strip-comments | sort
+	}
 
-	({
-		unlisted: ($actual | where $it not-in $conf),
-		missing: ($conf | where $it not-in $actual)
-	})
+	$actual | where $it not-in $conf
 }
 
 def get_bundle_for_machine [

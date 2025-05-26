@@ -46,6 +46,12 @@ export def _cursor_link [
 		try { ln -s $code $cursor }
 	})
 
+	print $"(ansi green)Linking(ansi reset) extensions"
+	let cursor_ext = (echo "~/.cursor/extensions" | path expand)
+	let code_ext = (echo "~/.vscode/extensions" | path expand)
+	mkdir (dirname $code_ext) (dirname $cursor_ext)
+	ln -s $code_ext $cursor_ext
+
 	ignore
 }
 

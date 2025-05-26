@@ -1,5 +1,10 @@
 # vim:fileencoding=utf-8:foldmethod=marker:foldlevel=0
 
+export XDG_CONFIG_HOME=${HOME}/.config
+export XDG_DATA_HOME=${HOME}/.local/share
+export XDG_STATE_HOME=${HOME}/.local/state
+export XDG_CACHE_HOME=${HOME}/.local/cache
+
 # Only read by interactive shells
 # i.e only put in stuff that helps with typing commands etc
 # https://blog.flowblok.id.au/2013-02/shell-startup-scripts.html

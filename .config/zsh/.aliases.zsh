@@ -85,6 +85,7 @@ alias npc="rm -rf ./node_modules; npm cache clear; npm i"
 alias npl="npm -g ls --depth=0"
 alias yy="eval \$(cat package.json | jq -S '.scripts' | sed '1d;$d' | fzf -i --header='[run:]' | sed -E \"s/\\\"(.*)\\\":.*/yarn run \\1/\" )"
 alias rn-nuke="gnuke && yarn && cd ios && pod install && cd .. && yarn run-ios --reset-cache"
+alias pp="pnpm"
 
 #---------------------------------------------#
 # DOCKER
