@@ -4,13 +4,8 @@
 // https://code.visualstudio.com/api/references/commands
 // https://code.visualstudio.com/docs/getstarted/keybindings#_keyboard-shortcuts-reference
 [
+  { "key": "cmd+,", "command": "workbench.action.openSettingsJson" },
   // Terminal
-
-  // {
-  //   "key": "cmd+B",
-  //   "command": "workbench.action.toggleSidebarVisibility"
-  //   // workbench.action.toggleAuxiliaryBar
-  // },
 
   // windows
   { "key": "ctrl+h", "command": "workbench.action.navigateLeft" },
@@ -75,6 +70,28 @@
     "command": "list.select"
   },
 
+  // MARK: Editing
+  {
+    "key": "ctrl+e",
+    "command": "-extension.vim_ctrl+e" // allow ctrl+e to go to end of line
+  },
+  {
+    "key": "alt+f",
+    "command": "cursorMove",
+    "args": { "by": "character", "value": 1, "to": "right" },
+    "when": "vim.mode == 'Insert'"
+  },
+  {
+    "key": "alt+w",
+    "command": "cursorWordRight",
+    "when": "vim.mode == 'Insert'"
+  },
+  {
+    "key": "alt+b",
+    "command": "cursorWordLeft",
+    "when": "vim.mode == 'Insert'"
+  },
+
   // MARK: Views
   // j k l ;
   {
@@ -85,11 +102,17 @@
     "key": "cmd+h",
     "command": "workbench.action.toggleSidebarVisibility"
   },
+  { "key": "cmd+l", "command": "-expandLineSelection" },
   {
     "key": "cmd+l",
     "command": "workbench.action.toggleAuxiliaryBar",
-    "when": "activeViewlet === 'terminal'" // keep send to chat
+    "when": "activeViewlet != 'terminal'" // keep send to chat
   },
+  // {
+  //   "key": "cmd+B",
+  //   "command": "workbench.action.toggleSidebarVisibility"
+  //   // workbench.action.toggleAuxiliaryBar
+  // },
 
   // MARK: Terminal
   {

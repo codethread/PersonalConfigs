@@ -145,13 +145,18 @@
   "vim.easymotion": false,
   "vim.hlsearch": true,
   "vim.ignorecase": true,
-  "vim.insertModeKeyBindings": [{ "before": ["j", "k"], "after": ["<Esc>"] }],
   "vim.leader": "<space>",
   "vim.showmodename": true,
   "vim.smartcase": true,
   "vim.sneak": false,
   "vim.useSystemClipboard": true,
   "vim.highlightedyank.enable": true,
+  "vim.replaceWithRegister": true, // "xgr{motion} https://github.com/vim-scripts/ReplaceWithRegister
+
+  "vim.insertModeKeyBindings": [
+    { "before": ["j", "k"], "after": ["<Esc>"] }
+    // { "before": ["ctrl+e"], "after": ["cursorLineEnd"] } // not working
+  ],
 
   "vim.normalModeKeyBindingsNonRecursive": [
     // ────────────────────────────────────────────────────────────────*
@@ -173,6 +178,16 @@
       "before": ["#"], // annoyingly can't figure out how to not clash with %
       "when": "editorTextFocus",
       "commands": ["editor.emmet.action.matchTag"]
+    },
+    // ────────────────────────────────────────────────────────────────*
+    // Remap to regular undo, which is a shame but probably less risky https://github.com/VSCodeVim/Vim/issues/2007
+    {
+      "before": ["u"],
+      "commands": ["undo"]
+    },
+    {
+      "before": ["<C-r>"],
+      "commands": ["redo"]
     },
     // ────────────────────────────────────────────────────────────────*
     // MARK: v.files
@@ -415,7 +430,6 @@
       ]
     }
   },
-
   "todohighlight.defaultStyle": {
     "color": "#ffab00",
     "backgroundColor": "#2a2c2d",
@@ -445,5 +459,7 @@
   "playwright.reuseBrowser": false,
   "playwright.showTrace": true,
   "[typescript]": {},
-  "workbench.iconTheme": "material-icon-theme"
+  "workbench.iconTheme": "material-icon-theme",
+  "editor.minimap.enabled": false,
+  "github.copilot.nextEditSuggestions.fixes": true
 }

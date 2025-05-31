@@ -187,7 +187,6 @@
 
 	cask "licecap" # screen capture
 	cask "figma"
-	cask "google-drive"
 	cask "obs"
 	cask "proxyman"
 	cask "firefox@developer-edition"
@@ -197,12 +196,11 @@
 	mas "Key Codes", id: 414568915
 
 	vscode "apollographql.vscode-apollo"
-vscode "rohit-gohri.format-code-action"
+	vscode "rohit-gohri.format-code-action"
     vscode "gitlab.gitlab-workflow"
-vscode "redhat.vscode-yaml"
-vscode "golang.go"
-vscode "styled-components.vscode-styled-components"
-vscode "stylelint.vscode-stylelint"
+	vscode "golang.go"
+	vscode "styled-components.vscode-styled-components"
+	vscode "stylelint.vscode-stylelint"
 	',
 	temp: '
 	##################################

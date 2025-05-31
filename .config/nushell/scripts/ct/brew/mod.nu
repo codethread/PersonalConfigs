@@ -16,7 +16,7 @@ export def sync [
 		$conf
 	} else if ($clean) {
 		echo $conf
-		| ^brew bundle --no-upgrade --cleanup --zap --verbose --file=-
+		| ^brew bundle --cleanup --zap --verbose --file=-
 	} else {
 		with-env {
 			HOMEBREW_NO_AUTO_UPDATE: 1
