@@ -102,12 +102,14 @@
     "key": "cmd+h",
     "command": "workbench.action.toggleSidebarVisibility"
   },
-  { "key": "cmd+l", "command": "-expandLineSelection" },
-  {
-    "key": "cmd+l",
-    "command": "workbench.action.toggleAuxiliaryBar",
-    "when": "activeViewlet != 'terminal'" // keep send to chat
-  },
+  // missing send to chat
+  // { "key": "cmd+l", "command": "-expandLineSelection" },
+  // {
+  //   "key": "cmd+l",
+  //   "command": "workbench.action.toggleAuxiliaryBar",
+  //   "when": "activeViewlet != 'terminal'" // keep send to chat
+  // },
+
   // {
   //   "key": "cmd+B",
   //   "command": "workbench.action.toggleSidebarVisibility"
