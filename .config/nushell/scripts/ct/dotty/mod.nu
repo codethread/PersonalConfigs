@@ -44,7 +44,7 @@ export def link [
 		| rename --column { files: created, delete: deleted }
 		| select name root created deleted
 	}
-	| filter {|r| ($r.created | is-not-empty) or ($r.deleted | is-not-empty) }
+	| where {|r| ($r.created | is-not-empty) or ($r.deleted | is-not-empty) }
 }
 
 # Format the output from `dotty link` into something easier to read, e.g in an
@@ -109,7 +109,7 @@ export def test [...files] {
 
 	let files = $files | each {|f| [$env.PWD $f] | path join } | path expand
 
-	let non_files = $files | filter { $in | path exists | $in == false }
+	let non_files = $files | where { $in | path exists | $in == false }
 
 	if ($non_files | is-not-empty) {
 		error make -u { msg: (err_format "not real files" $non_files) }

@@ -100,7 +100,7 @@ export def hide-all [closure: closure] {
 
 	let hidden = ($env
 		| transpose name value
-		| filter {|e|
+		| where {|e|
 			$allow | any {|s| $e.name starts-with $s } | $in == false
 		}
 		| get name)

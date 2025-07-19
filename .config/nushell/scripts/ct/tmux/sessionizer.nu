@@ -52,7 +52,7 @@ export def main [
 def user-get-project [] {
 	get dirs
 	| path expand
-	| filter { || $in | path exists }
+	| where { || $in | path exists }
 	| each { |d| ls $d }
 	| flatten
 	| where type == 'dir'

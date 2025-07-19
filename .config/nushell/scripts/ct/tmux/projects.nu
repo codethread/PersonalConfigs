@@ -39,7 +39,7 @@ def get_work_projects [file: path] {
 	# fd -E src --type=dir --prune --hidden --case-sensitive --maxdepth 5 -F '.git' work
 	$file | open
 	| par-each {|| ([$env.HOME work $in.fullPath] | path join) }
-	| filter {|| $in | path exists }
+	| where {|| $in | path exists }
 	| where $it !~ '/work/app/'
 	| path dirname | uniq
 }

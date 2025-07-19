@@ -8,7 +8,7 @@
 export def main [] {
 	let purged = dirs
 	| path expand
-	| filter { path exists }
+	| where { path exists }
 	| each {|p| ls $p
 		| where type == "dir"
 		| get name

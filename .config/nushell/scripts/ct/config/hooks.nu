@@ -55,10 +55,10 @@ def be-stuff [] {
 
 def is-fe [dir?: path] {
 	if ($dir |is-empty) { return false }
-	$fes | path expand | filter {|p| $dir | str starts-with $p } | is-not-empty
+	$fes | path expand | where {|p| $dir | str starts-with $p } | is-not-empty
 }
 
 def is-be [dir?: path] {
 	if ($dir |is-empty) { return false }
-	glob ~/work/* --no-file --depth 1 --exclude [app] | filter {|p| $dir | str starts-with $p } | is-not-empty
+	glob ~/work/* --no-file --depth 1 --exclude [app] | where {|p| $dir | str starts-with $p } | is-not-empty
 }

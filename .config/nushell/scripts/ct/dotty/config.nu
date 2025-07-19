@@ -21,7 +21,7 @@ export def load []: nothing -> table<name: string, from: path, to: path, exclude
 
 	$config
 	| upsert excludes { |project| $project.excludes ++ $excludes }
-	| filter {|proj| $proj.from | path exists }
+	| where {|proj| $proj.from | path exists }
 	| clog --expand
 }
 

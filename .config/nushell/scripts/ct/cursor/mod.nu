@@ -23,7 +23,7 @@ export def _cursor_link [
 	if ($with_import) {
 		echo "Removing existing settings to avoid code settings getting altered"
 
-		($cursor_files | get cursor | filter { $in | path exists } | each {|f|
+		($cursor_files | get cursor | where { $in | path exists } | each {|f|
 			print $"(ansi green)Removing(ansi reset) ($f)"
 			rm $f --force
 		})
