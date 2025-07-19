@@ -46,8 +46,9 @@ return {
 			layout = {
 				min_width = 25,
 				default_direction = 'prefer_left',
-				placement = 'edge',
+				-- placement = 'edge',
 			},
+			close_automatic_events = { 'unfocus', 'switch_buffer' },
 
 			manage_folds = false,
 			link_folds_to_tree = false,
