@@ -55,6 +55,7 @@ return {
 		end,
 		opts = {
 			log_level = 'warn',
+			-- disable_multiplexer_nav_when_zoomed = true,
 		},
 	},
 	{
