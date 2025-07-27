@@ -22,9 +22,9 @@ export def finger-other-pane [] {
 	}
 
 	match ([
-		($panes | where cmd in $pss | get -i 0?.index)
-		($panes | where lastActive == true | get -i 0?.index)
-		($panes | where cmd != nvim | get -i 0?.index)
+		($panes | where cmd in $pss | get -o 0?.index)
+		($panes | where lastActive == true | get -o 0?.index)
+		($panes | where cmd != nvim | get -o 0?.index)
 	] | compact) {
 		[] => { tmux display-message "no-match" }
 		[$pane, ..] => {

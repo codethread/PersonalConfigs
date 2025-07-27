@@ -3,7 +3,7 @@ use log.nu
 export def main [] {
 	log step "Rustup"
 
-	if ($env |get --ignore-errors  RUSTUP_HOME|is-empty) {
+	if ($env |get --optional  RUSTUP_HOME|is-empty) {
 		log warn RUSTUP_HOME not defined, skipping rustup installation
 		return
 	}
