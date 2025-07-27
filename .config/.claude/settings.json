@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "additionalDirectories": ["../.local"]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "nush \"use ct/dotty; dotty link | ignore\""
+          }
+        ]
+      }
+    ]
+  }
+}

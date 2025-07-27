@@ -1,0 +1,48 @@
+{
+  "permissions": {
+    "defaultMode": "acceptEdits",
+    "allow": [
+      "Bash(MANPAGER:*)",
+      "Bash(grep:*)",
+      "Bash(kitten:*)",
+      "Bash(kitty @:*)",
+      "Bash(mkdir:*)",
+      "Bash(ls:*)",
+      "WebFetch(domain:docs.anthropic.com)",
+      "WebFetch(domain:sw.kovidgoyal.net)",
+      "mcp__context7__get-library-docs",
+      "mcp__context7__resolve-library-id",
+      "Bash(npm run:*)",
+      "Bash(pnpm run:*)",
+      "Bash(yarn run:*)"
+    ],
+    "deny": []
+  },
+  "env": {
+    "CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": true,
+    "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": false
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node ~/.config/claude/use_npm_redirect.js"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "kitten notify --expire-after 10s \"Claude Code\" \"Ready for new input\""
+          }
+        ]
+      }
+    ]
+  }
+}
