@@ -1,0 +1,23 @@
+{
+  "name": "kitty-session-manager",
+  "version": "1.0.0",
+  "description": "Project-based session management for kitty terminal",
+  "type": "module",
+  "main": "./src/session-manager.ts",
+  "bin": {
+    "ksm": "./ksm"
+  },
+  "scripts": {
+    "dev": "node --experimental-strip-types ./src/session-manager.ts",
+    "session": "node --experimental-strip-types ./src/session-manager.ts",
+    "ts": "tsc --noEmit"
+  },
+  "dependencies": {
+    "commander": "^14.0.0",
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "typescript": "^5.7.3"
+  }
+}

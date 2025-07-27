@@ -1,0 +1,19 @@
+# QMK Firmware Development Session
+new_tab Firmware
+cd ~/dev/projects/qmk_firmware
+layout tall
+launch nvim
+
+new_tab Nuphy
+cd ~/dev/projects/nuphy_firmware
+layout stack
+launch nvim
+launch --location=hsplit --title "Build" zsh
+
+new_tab DAO Config
+cd ~/dev/projects/dao-zmk-config
+launch nvim config/dao.keymap
+
+new_tab Compile
+cd ~/dev/projects/qmk_firmware
+launch --title "QMK Compile" --hold qmk compile -kb preonic/rev3/drop -km codethread

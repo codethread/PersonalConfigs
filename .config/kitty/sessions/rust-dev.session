@@ -1,0 +1,19 @@
+# Rust Development Session
+new_tab Pomo
+cd ~/dev/projects/pomo
+layout tall
+launch nvim
+
+new_tab Barman
+cd ~/dev/projects/barman
+layout stack
+launch nvim src/main.rs
+launch --location=hsplit cargo run
+
+new_tab Dotty
+cd ~/dev/projects/dotty
+launch nvim src/main.rs
+
+new_tab Build
+cd ~/dev/projects/pomo
+launch --title "Cargo Watch" cargo watch -x check -x test

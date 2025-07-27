@@ -1,0 +1,19 @@
+# Web Development Session
+new_tab Git Tools
+cd ~/dev/projects/git-buddy
+layout tall
+launch nvim
+
+new_tab Git Nudge
+cd ~/dev/projects/git-nudge
+layout stack
+launch nvim
+launch --location=hsplit --title "Dev Server" bun run dev
+
+new_tab PhotoSyncer
+cd ~/dev/projects/PhotoSyncer
+launch nvim
+
+new_tab Terminal
+cd ~/dev/projects
+launch zsh
