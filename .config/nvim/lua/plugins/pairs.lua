@@ -1,5 +1,12 @@
 return U.F {
-	{ 'echasnovski/mini.surround', opts = {} },
+	{ 'echasnovski/mini.surround', enabled = false, opts = {} },
+	-- I like mini but surround is more compatible with other vim emulation
+	{
+		'kylechui/nvim-surround',
+		version = 'v1.*',
+		event = 'VeryLazy',
+		config = true,
+	},
 
 	--use i_ctrl_v for literal inserts
 	{

@@ -105,6 +105,8 @@ return {
 					['@keyword.export'] = { fg = 'love' },
 					['@keyword.default'] = { fg = 'love', bold = true },
 
+					['@lsp.mod.async.typescript'] = { bold = true, undercurl = true },
+
 					-- markdown
 					-- @markup.italic.markdown_inline
 					['@markup'] = { fg = 'rose' },
