@@ -2,19 +2,25 @@
   "permissions": {
     "defaultMode": "acceptEdits",
     "allow": [
-      "Bash(MANPAGER:*)",
+      "mcp__context7__get-library-docs",
+      "mcp__context7__resolve-library-id",
+      "WebFetch(domain:docs.anthropic.com)",
+      "WebFetch(domain:sw.kovidgoyal.net)",
+      "Bash(MANPAGER='cat' man:*)",
       "Bash(grep:*)",
       "Bash(kitten:*)",
       "Bash(kitty @:*)",
       "Bash(mkdir:*)",
       "Bash(ls:*)",
-      "WebFetch(domain:docs.anthropic.com)",
-      "WebFetch(domain:sw.kovidgoyal.net)",
-      "mcp__context7__get-library-docs",
-      "mcp__context7__resolve-library-id",
       "Bash(npm run:*)",
       "Bash(pnpm run:*)",
-      "Bash(yarn run:*)"
+      "Bash(yarn run:*)",
+      "Bash(go mod:*)",
+      "Bash(go build:*)",
+      "Bash(cargo check:*)",
+      "Bash(cargo test:*)",
+      "Bash(cargo build:*)",
+      "Bash(cargo run:*)"
     ],
     "deny": []
   },
