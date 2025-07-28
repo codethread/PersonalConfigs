@@ -131,5 +131,40 @@
     "key": "cmd+w",
     "command": "workbench.action.terminal.kill",
     "when": "panelFocus"
+  },
+  {
+    "key": "shift+enter",
+    "command": "workbench.action.terminal.sendSequence",
+    "args": {
+      "text": "\\\r\n"
+    },
+    "when": "terminalFocus"
+  },
+
+  // MARK: Folding
+  {
+    "key": "shift+=",
+    "command": "-flash-vscode.jump.+",
+    "when": "editorTextFocus && flash-vscode.active && vim.mode == 'Normal'"
+  },
+  {
+    "key": "-",
+    "command": "editor.foldRecursively",
+    "when": "editorTextFocus && foldingEnabled && vim.mode == 'Normal'"
+  },
+  {
+    "key": "cmd+r cmd+[",
+    "command": "-editor.foldRecursively",
+    "when": "editorTextFocus && foldingEnabled && vim.mode == 'Normal'"
+  },
+  {
+    "key": "shift+=",
+    "command": "editor.unfoldRecursively",
+    "when": "editorTextFocus && foldingEnabled && vim.mode == 'Normal'"
+  },
+  {
+    "key": "cmd+r cmd+]",
+    "command": "-editor.unfoldRecursively",
+    "when": "editorTextFocus && foldingEnabled"
   }
 ]

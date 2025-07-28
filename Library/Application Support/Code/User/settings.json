@@ -1,7 +1,7 @@
 {
   // helps to turn on minimap for this file only
   // MARK: cursor
-  "cursor.cpp.disabledLanguages": ["yaml", "plaintext", "oil"],
+  "cursor.cpp.disabledLanguages": ["yaml", "plaintext", "oil", "vsnetrw"],
   "cursor.composer.cmdPFilePicker2": true,
   "cursor.cpp.enablePartialAccepts": true,
   "cursor.composer.collapsePaneInputBoxPills": true,
@@ -47,7 +47,8 @@
     ".eslintrc": "jsonc",
     "*.css": "tailwindcss",
     "*.xml": "html",
-    "*.svg": "html"
+    "*.svg": "html",
+    "*.snapshot": "json"
   },
   "files.autoSave": "onWindowChange",
   "files.autoSaveWhenNoErrors": true,
@@ -81,21 +82,22 @@
   "window.restoreWindows": "all",
   "window.title": "${rootName}${separator}${activeEditorMedium}",
   "window.titleBarStyle": "custom",
-
-  "workbench.activityBar.location": "top",
   "workbench.editor.customLabels.patterns": {
     "**/index.*": "(${dirname}) ${filename}.${extname}"
   },
-  "workbench.editor.enablePreview": false,
-  "workbench.editor.enablePreviewFromQuickOpen": false,
+  // these settings get a bit upset between vscode and cursor so sometimes comment out and retry
   "workbench.editor.labelFormat": "short",
-  "workbench.editor.openPositioning": "last",
-  "workbench.editor.revealIfOpen": false,
-  "workbench.editor.showTabs": "none",
   "workbench.fontAliasing": "auto",
-  // "workbench.iconTheme": "rose-pine-icons",
-  "workbench.colorTheme": "Cursor Dark Midnight",
-  "workbench.startupEditor": "newUntitledFile",
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.editor.showTabs": "none", // this hides cursor settings :P so use command pallete
+  "workbench.editor.revealIfOpen": false,
+  "workbench.editor.enablePreviewFromQuickOpen": false,
+  "workbench.editor.openPositioning": "last",
+  "workbench.editor.enablePreview": false,
+  // "workbench.activityBar.location": "top",
+  // "workbench.activityBar.orientation": "vertical", // this looks a bit funky but allows search to live on the auxilary panel
+  // "workbench.editor.editorActionsLocation": "titleBar",
+  // "workbench.startupEditor": "newUntitledFile",
 
   // MARK: Language
 
@@ -463,7 +465,6 @@
   "playwright.reuseBrowser": false,
   "playwright.showTrace": true,
   "[typescript]": {},
-  "workbench.iconTheme": "material-icon-theme",
   "github.copilot.nextEditSuggestions.fixes": true,
   "npm.keybindingsChangedWarningShown": true,
   "xstate.nestTypegenFiles": false,
@@ -474,5 +475,28 @@
     "*.tsx": "${capture}.ts",
     "tsconfig.json": "tsconfig.*.json",
     "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml, bun.lockb"
-  }
+  },
+  "chat.tools.autoApprove": true,
+  "json.schemaDownload.enable": true,
+  "go.toolsManagement.autoUpdate": true,
+  "cursor.semanticSearch.includePullRequests": false,
+  "auto-close-tag.excludedTags": [
+    "area",
+    "base",
+    "br",
+    "col",
+    "command",
+    "embed",
+    "hr",
+    "img",
+    "input",
+    "keygen",
+    "link",
+    "meta",
+    "param",
+    "source",
+    "track",
+    "wbr"
+  ],
+  "workbench.colorTheme": "One Dark Pro Night Flat"
 }
