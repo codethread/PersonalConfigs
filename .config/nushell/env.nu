@@ -30,6 +30,8 @@ $env.CT_USER = (match (whoami) {
 	_ => { error make { msg: $"unkown user '(whoami)'; please update env.nu with user"}},
 })
 
+$env.KSM_WORK = ($env.CT_USER == 'work')
+
 $env.CT_NOTES = (match $env.CT_USER {
 	"work" => (home 'gdrive/perks'),
 	_ => (home 'Library/Mobile Documents/com~apple~CloudDocs/Documents/Notes'),

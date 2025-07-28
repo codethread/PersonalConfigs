@@ -11,6 +11,7 @@
 	brew "go"
 	brew "rustup"
 	brew "zig"
+	brew "just"
 
 	## NODE JS
 	tap "oven-sh/bun"
