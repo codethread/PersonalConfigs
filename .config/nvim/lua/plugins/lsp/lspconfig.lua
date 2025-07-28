@@ -43,7 +43,7 @@ return {
 		dependencies = {
 			'j-hui/fidget.nvim',
 			'williamboman/mason.nvim',
-			'williamboman/mason-lspconfig.nvim',
+			{ 'williamboman/mason-lspconfig.nvim', version = '^1.31.0' },
 			'hrsh7th/cmp-nvim-lsp',
 			{ 'folke/neoconf.nvim', cmd = 'Neoconf', opts = {} }, -- adds lspconfig type
 		},
@@ -74,6 +74,7 @@ return {
 						},
 					},
 					nushell = {
+						mason = false,
 						cmd = {
 							'nu',
 							'--lsp',
@@ -276,6 +277,7 @@ return {
 				if server_opts then
 					server_opts = server_opts == true and {} or server_opts
 					-- run manual setup if mason=false or if this is a server that cannot be installed with mason-lspconfig
+					-- if server_opts.mason == false then
 					if server_opts.mason == false or not vim.tbl_contains(all_mslp_servers, server) then
 						setup(server)
 					else

@@ -2,6 +2,7 @@ return {
 	{
 		'williamboman/mason.nvim',
 		cmd = 'Mason',
+		version = '^1.11.0',
 		opts = {
 			ensure_installed = {},
 		},
