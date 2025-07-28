@@ -26,6 +26,7 @@
 	brew "terminal-notifier" # Send macOS User Notifications from the command-line
 	brew "neovim" # this is just to have a version, but latest is built via $install-neovim
 
+
 	# neovim (build dependencies)
 	brew "ninja"
 	brew "cmake"
@@ -60,6 +61,10 @@
 	# needed for gitwatch stuff
 	brew "coreutils"
 	brew "fswatch"
+
+	# apple containers
+	brew "socat" # needed till --publish released
+	cask "container"
 
 	# Apps
 	cask "1password"
@@ -173,6 +178,10 @@
 	brew "ical-buddy"
 
 	brew "podman"
+	brew "podman-compose"
+
+	# logs
+	brew "miller"
 
 	# native??
 	brew "rbenv"
@@ -181,6 +190,9 @@
 	brew "watchman"
 	cask "zulu@17" # handles android stuff
 	# cask "flipper"
+
+	tap "facebook/fb"
+	brew "facebook/fb/idb-companion"
 
 	# TODO: migrate notes
 	cask "logseq"
@@ -207,6 +219,9 @@
 	##################################
 	#             TEMP               #
 	##################################
+	brew "git-lfs"
 	cask "zed"
+	tap "d12frosted/emacs-plus"
+	brew "d12frosted/emacs-plus/emacs-plus", args: ["with-xwidgets"]
 	'
 }
