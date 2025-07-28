@@ -30,10 +30,10 @@ return {
 				enable = true,
 				keymaps = {
 					--TODO figure this out
-					init_selection = '<Enter>',
-					node_incremental = '<Enter>',
-					scope_incremental = '<Enter>',
-					node_decremental = '<S-Tab>',
+					-- init_selection = '<Enter>',
+					-- node_incremental = '<Enter>',
+					-- scope_incremental = '<Enter>',
+					-- node_decremental = '<S-Tab>',
 				},
 			},
 
