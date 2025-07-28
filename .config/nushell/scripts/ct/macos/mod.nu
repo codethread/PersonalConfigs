@@ -38,3 +38,17 @@ export def env-store [] {
 	}
 	| save (echo ~/.config/envy/envs.json | path expand) --force
 }
+
+# Expose apple container port
+export def container-port-forward [
+	container_tag: string # tag, e.g 'learn-docker' from `container run learn-docker`
+	local_port: int # port to use, e.g `curl localhost:3000`
+	image_port: int # port to expose from container
+] {
+	let container_id = container list | detect columns | where IMAGE =~ learn-docker | first | get ID
+	let port 	= container inspect $container_id | jq -r ".[0].networks[0].address" | cut -d'/' -f1
+	print $"(ansi green)listening to ($container_tag)(ansi reset)"
+	# might need sudo?
+	socat TCP-LISTEN:($local_port),fork TCP:($port):($image_port)
+}
+

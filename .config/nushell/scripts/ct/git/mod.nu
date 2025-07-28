@@ -88,12 +88,13 @@ export def gnew [name: string] {
 		print $"fetching ($target)"
 		git fetch origin $target
 	}
-	git checkout -b $name $trunk
-	git branch --unset-upstream err+out> /dev/null
+	git checkout --no-track -b $name $trunk
+	# git branch --unset-upstream err+out> /dev/null
 }
 
 export def gmm [] {
 	let main = (git_main_branch)
+	# fetch and update main
 	git fetch origin $"($main):($main)"
 	git rebase $main
 }
@@ -134,7 +135,7 @@ export def git_pick_files [branch: string]: list<string> -> nothing {
 		print $c
 		zsh -c $c
 	}
-	null
+	ignore
 }
 
 export def git_squash [

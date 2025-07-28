@@ -150,5 +150,6 @@ $env.NU_PLUGIN_DIRS = [$env.CARGO_BIN]
 
 #: }}}
 # keep this at the end
+path add -a "/usr/local/bin"
 path add "~/.local/bin"
 $env.path = ($env.path | uniq)

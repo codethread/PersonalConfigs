@@ -12,8 +12,6 @@ export def _cursor_link [
 		[cursor, code];
 		[(get-file cursor settings.json) (get-file dots settings.json)]
 		[(get-file cursor keybindings.json) (get-file dots keybindings.json)]
-		[(get-file insider settings.json) (get-file dots settings.json)]
-		[(get-file insider keybindings.json) (get-file dots keybindings.json)]
 	]
 
 	# check-assumptions $cursor_files
@@ -102,6 +100,5 @@ def get-file [app: string file: string] {
 	match $app {
 		dots => ([$env.DOTFILES ...$base Code User $file])
 		cursor => ([~ ...$base Cursor User $file])
-		insider => ([~ ...$base "Code - Insiders" User $file])
 	} | path join | path expand -n
 }
