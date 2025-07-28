@@ -33,6 +33,8 @@
 	command = ~/.tooling/git-diff-image/git_diff_image
 [init]
 	defaultBranch = main
+[merge]
+	conflictstyle = diff3 # The diff3 conflict style adds a third section to your conflict markers showing the common ancestor's version of the conflicting lines. This can be incredibly helpful for understanding the context of the conflict and resolving it accurately.
 [rerere]
 	enabled = true
 [worktree]
