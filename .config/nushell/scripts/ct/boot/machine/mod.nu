@@ -12,6 +12,7 @@ export def main [
 	--skip-brew # skip installation and syncing of brew packages
 	--clean # install fresh dirs
 	--force # clean even with uncommitted changes
+	--shell # rebuild shell tools like carapace
 ] {
 	macos_has_full_disk_access
 
@@ -31,7 +32,7 @@ export def main [
 
 	rustup
 
-	setup_tooling
+	setup_tooling --force=$shell
 
 	macos
 }
@@ -49,6 +50,11 @@ def clone_tools [
 		[git@github.com:nushell/nu_scripts.git, ~/dev/vendor, {||}]
 		[git@github.com:gitwatch/gitwatch.git, ~/dev/vendor, {|| ln -f -s ~/dev/vendor/gitwatch/gitwatch.sh ~/.local/bin/gitwatch }]
 		[git@github.com:codethread/alfred.git, ~/sync, {|| }]
+		[git@github.com:apple/container.git, ~/dev/vendor, {||
+			# only needed till they fix --publish and stopping
+			kitty @ launch --type=os-window sh -c "BUILD_CONFIGURATION=release make all test integration && BUILD_CONFIGURATION=release make install"
+			# echo "DONE!" | save --append ~/.container.log;
+		}]
 	]
 
 	$tools | par-each { |t|
@@ -76,23 +82,25 @@ def clone_tools [
 			git clone -q $t.git
 		}
 
-		print $"(ansi green)Running(ansi reset) install script for ($project.repo)"
+		cd $project.repo
+		print $"(ansi green)Running(ansi reset) install script for ($project.repo) at ($env.PWD)"
 		do $t.install
+		# job spawn -t $project.repo $t.install
 	}
 }
 
-def setup_tooling [] {
+def setup_tooling [--force] {
 	log step Tooling installing
 
 	let carapace = ("~/.local/cache/carapace/init.nu" | path expand)
-	if not ($carapace | path exists) {
+	if not ($carapace | path exists) or $force {
 		log tool carapace setup
 		mkdir ($carapace | path dirname)
 		carapace _carapace nushell | save --force $carapace
 	}
 
 	let atuin = ("~/.local/share/atuin/init.nu" | path expand)
-	if not ($atuin | path exists) {
+	if not ($atuin | path exists) or $force {
 		log tool atuin setup
 		mkdir ($atuin | path dirname)
 		atuin init nu | save --force $atuin

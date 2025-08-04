@@ -498,5 +498,21 @@
     "track",
     "wbr"
   ],
-  "workbench.colorTheme": "One Dark Pro Night Flat"
+  "workbench.colorTheme": "Catppuccin Mocha",
+  "colorize.languages": [
+    "css",
+    "sass",
+    "scss",
+    "less",
+    "postcss",
+    "sss",
+    "stylus",
+    "xml",
+    "svg",
+    "typescript",
+    "typescriptreact"
+  ],
+  "editor.minimap.enabled": false,
+  "containers.containerClient": "com.microsoft.visualstudio.containers.docker",
+  "containers.orchestratorClient": "com.microsoft.visualstudio.orchestrators.dockercompose"
 }

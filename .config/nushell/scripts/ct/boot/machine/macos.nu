@@ -2,19 +2,19 @@ use log.nu
 use ct/macos
 
 export def main [] {
-	if not ("/etc/pam.d/sudo_local" | path exists) {
-		print $"(ansi green)Setting up touchid(ansi reset)"
-
-		# be very very careful here, you can corrupt the sudo_local file and then have a pain resetting it
-		(dedent "
-			# auth       optional       /opt/homebrew/Cellar/pam-reattach/1.3/lib/pam/pam_reattach.so
-			auth       sufficient     pam_tid.so
-			" | save --force ~/.tmp)
-
-		zsh -c $"sudo mv ~/.tmp /etc/pam.d/sudo_local"
-	} else {
-		print $"(ansi cyan)[cached] Touchid(ansi reset)"
-	}
+	# if not ("/etc/pam.d/sudo_local" | path exists) {
+	# 	print $"(ansi green)Setting up touchid(ansi reset)"
+	#
+	# 	# be very very careful here, you can corrupt the sudo_local file and then have a pain resetting it
+	# 	(dedent "
+	# 		# auth       optional       /opt/homebrew/Cellar/pam-reattach/1.3/lib/pam/pam_reattach.so
+	# 		auth       sufficient     pam_tid.so
+	# 		" | save --force ~/.tmp)
+	#
+	# 	zsh -c $"sudo mv ~/.tmp /etc/pam.d/sudo_local"
+	# } else {
+	# 	print $"(ansi cyan)[cached] Touchid(ansi reset)"
+	# }
 
 	print $"(ansi green)Setting up MacOS defaults(ansi reset)"
 	macos_set_defaults

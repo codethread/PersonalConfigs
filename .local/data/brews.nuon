@@ -64,7 +64,7 @@
 
 	# apple containers
 	brew "socat" # needed till --publish released
-	cask "container"
+	# cask "container" #building from source
 
 	# Apps
 	cask "1password"
@@ -74,7 +74,6 @@
 	cask "jordanbaird-ice" # Menu bar manager
 	cask "kitty"
 	cask "visual-studio-code"
-	cask "visual-studio-code@insiders"
 	cask "spotify"
 
 	# Fonts
