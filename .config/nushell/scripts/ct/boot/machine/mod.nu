@@ -52,7 +52,7 @@ def clone_tools [
 		[git@github.com:codethread/alfred.git, ~/sync, {|| }]
 		[git@github.com:apple/container.git, ~/dev/vendor, {||
 			# only needed till they fix --publish and stopping
-			kitty @ launch --type=os-window sh -c "BUILD_CONFIGURATION=release make all test integration && BUILD_CONFIGURATION=release make install"
+			# kitty @ launch --type=os-window sh -c "BUILD_CONFIGURATION=release make all test integration && BUILD_CONFIGURATION=release make install"
 			# echo "DONE!" | save --append ~/.container.log;
 		}]
 	]
