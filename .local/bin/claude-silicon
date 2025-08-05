@@ -1,0 +1,12 @@
+#!/bin/bash
+
+PROJECT_DIR="$1"
+PROJECT_NAME=(basename "$PROJECT_DIR")
+
+# requires:
+# container build --tag claude-silicon
+container run -it --rm --name "claude-${PROJECT_NAME}" \
+	-v "${PROJECT_DIR}":/workspace \
+	-u node \
+	-w /workspace \
+	claude-silicon-22:latest /bin/zsh

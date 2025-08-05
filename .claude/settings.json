@@ -1,6 +1,9 @@
 {
+  "env": {
+    "CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "true",
+    "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "false"
+  },
   "permissions": {
-    "defaultMode": "acceptEdits",
     "allow": [
       "mcp__context7__get-library-docs",
       "mcp__context7__resolve-library-id",
@@ -22,11 +25,8 @@
       "Bash(cargo build:*)",
       "Bash(cargo run:*)"
     ],
-    "deny": []
-  },
-  "env": {
-    "CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": true,
-    "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": false
+    "deny": [],
+    "defaultMode": "acceptEdits"
   },
   "hooks": {
     "PreToolUse": [
@@ -50,5 +50,9 @@
         ]
       }
     ]
-  }
+  },
+  "feedbackSurveyState": {
+    "lastShownTime": 1754031481441
+  },
+  "$schema": "https://json.schemastore.org/claude-code-settings.json"
 }

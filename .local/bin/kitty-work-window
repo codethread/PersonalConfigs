@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# check current dir argument
+kitten @ launch --location=after --cwd=current --copy-env yarn graph
+kitten @ launch --location=after --cwd=current --copy-env yarn workspace @graphql/irati typegen:watch
+yarn start
