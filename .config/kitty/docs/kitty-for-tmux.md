@@ -209,6 +209,7 @@ kitten @ detach-window --match id:1 new-tab
 - kitty OS windows are always attached to a GUI process
 - No equivalent to `tmux attach/detach`
 - Use multiple OS windows instead of detached sessions
+- There seem to be limitations on the api control between OS windows
 
 ### 2. **Richer Process Information**
 

@@ -29,8 +29,10 @@
 	required = true
 [github]
 	user = codethread
-[diff "image"]
-	command = ~/.tooling/git-diff-image/git_diff_image
+[diff]
+    tool = kitty
+    guitool = kitty.gui
+	; command = ~/.tooling/git-diff-image/git_diff_image
 [init]
 	defaultBranch = main
 [merge]
@@ -45,3 +47,12 @@
 
 [includeIf "gitdir:~/workfiles/"] # job needs, like workspace/* so all included projects
 	path = ~/work/.gitconfig
+
+[difftool]
+    prompt = false
+    trustExitCode = true
+# > git difftool --no-symlinks --dir-diff
+[difftool "kitty"]
+    cmd = kitten diff $LOCAL $REMOTE
+[difftool "kitty.gui"]
+    cmd = kitten diff $LOCAL $REMOTE
