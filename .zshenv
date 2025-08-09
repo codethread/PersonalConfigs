@@ -4,4 +4,7 @@ export XDG_STATE_HOME=${HOME}/.local/state
 export XDG_CACHE_HOME=${HOME}/.local/cache
 
 export ZDOTDIR=$HOME/.config/zsh
+if [[ -f "$ZDOTDIR/.envs" ]]; then
+  . $ZDOTDIR/.envs
+fi
 . $ZDOTDIR/.zshenv

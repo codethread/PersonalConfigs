@@ -87,6 +87,10 @@ export def hide-all [closure: closure] {
 		CT_USER
 		CT_NOTES
 
+		RUSTUP_HOME
+		CARGO_HOME
+		CARGO_BIN
+
 		WAKATIME_HOME
 
 		FZF
@@ -107,4 +111,9 @@ export def hide-all [closure: closure] {
 
 	hide-env ...$hidden
 	do $closure
+}
+
+# export most common envs to a zsh file for compatibility
+export def dump-env [] {
+	hide-all {|| zsh -c 'export' | rg "(.*)" --replace "export $0" | save -f ~/.config/zsh/.envs }
 }
