@@ -57,6 +57,7 @@
 	brew "tree"
 	brew "grc"
 	brew "yt-dlp"
+	brew "imagemagick"
 
 	# needed for gitwatch stuff
 	brew "coreutils"
