@@ -10,28 +10,25 @@
 	# LANGS
 	brew "go"
 	brew "rustup"
-	brew "zig"
 	brew "just"
 
 	## NODE JS
 	tap "oven-sh/bun"
 	brew "oven-sh/bun/bun"
 	brew "volta"
-	brew "deno"
 	brew "prettierd"
 
 	# SHELL
 	brew "atuin"
 	brew "starship"
 	brew "terminal-notifier" # Send macOS User Notifications from the command-line
-	brew "neovim" # this is just to have a version, but latest is built via $install-neovim
-
+	brew "neovim"
 
 	# neovim (build dependencies)
-	brew "ninja"
-	brew "cmake"
-	brew "gettext"
-	brew "curl"
+	# brew "ninja"
+	# brew "cmake"
+	# brew "gettext"
+	# brew "curl"
 
 	# TMUX
 	brew "tmux"
@@ -56,15 +53,13 @@
 	brew "tokei"
 	brew "tree"
 	brew "grc"
-	brew "yt-dlp"
-	brew "imagemagick"
 
 	# needed for gitwatch stuff
 	brew "coreutils"
 	brew "fswatch"
 
 	# apple containers
-	brew "socat" # needed till --publish released
+	# brew "socat" # needed till --publish released
 	# cask "container" #building from source
 
 	# Apps
@@ -75,12 +70,13 @@
 	cask "jordanbaird-ice" # Menu bar manager
 	cask "kitty"
 	cask "visual-studio-code"
+	cask "cursor"
 	cask "spotify"
+	cask "zed"
 
 	# Fonts
 	cask "font-fira-code-nerd-font"
 	cask "font-fira-code"
-	cask "font-iosevka"
 	cask "font-symbols-only-nerd-font"
 	cask "ticktick"
 
@@ -126,8 +122,10 @@
 	vscode "yoavbls.pretty-ts-errors"
 
 	vscode "wakatime.vscode-wakatime"
-
-	# vscode "rust-lang.rust-analyzer"
+	vscode "rust-lang.rust-analyzer"
+	vscode "bradlc.vscode-tailwindcss"
+	vscode "ms-playwright.playwright"
+	vscode "biomejs.biome"
 	',
 
 	home : '
@@ -137,8 +135,10 @@
 	cask "discord"
 	cask "whatsapp"
 
+	brew "yt-dlp"
+
 	# Fast, disk space efficient package manager
-	brew "pnpm"
+	# brew "pnpm"
 
 	# Run arbitrary commands when files change
 	brew "entr"
@@ -151,9 +151,6 @@
 	mas "Paprika Recipe Manager 3", id: 1303222628
 	mas "Prime Video", id: 545519333
 
-	vscode "biomejs.biome"
-	vscode "bradlc.vscode-tailwindcss"
-	vscode "ms-playwright.playwright"
 	',
 
 	work : '
@@ -184,15 +181,16 @@
 	brew "miller"
 
 	# native??
-	brew "rbenv"
-	brew "ruby-build"
-	brew "ruby@3.1"
-	brew "watchman"
-	cask "zulu@17" # handles android stuff
+	# brew "watchman"
+	# brew "rbenv"
+	# brew "ruby-build"
+	# brew "ruby@3.1"
+	# cask "zulu@17" # handles android stuff
 	# cask "flipper"
 
-	tap "facebook/fb"
-	brew "facebook/fb/idb-companion"
+	# simulator MCP
+	# tap "facebook/fb"
+	# brew "facebook/fb/idb-companion"
 
 	# TODO: migrate notes
 	cask "logseq"
@@ -203,14 +201,12 @@
 	cask "obs"
 	cask "proxyman"
 	cask "firefox@developer-edition"
-	cask "slack"
 
-	mas "Xcode", id: 497799835
 	mas "Key Codes", id: 414568915
 
 	vscode "apollographql.vscode-apollo"
 	vscode "rohit-gohri.format-code-action"
-    vscode "gitlab.gitlab-workflow"
+	# vscode "gitlab.gitlab-workflow"
 	vscode "golang.go"
 	vscode "styled-components.vscode-styled-components"
 	vscode "stylelint.vscode-stylelint"
@@ -220,7 +216,6 @@
 	#             TEMP               #
 	##################################
 	brew "git-lfs"
-	cask "zed"
 	tap "d12frosted/emacs-plus"
 	brew "d12frosted/emacs-plus/emacs-plus", args: ["with-xwidgets"]
 	'
