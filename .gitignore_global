@@ -1,7 +1,5 @@
 ## GENERAL
 .devcontainer
-.claude
-CLAUDE.md
 .nenv
 .DS_Store
 .idea/
