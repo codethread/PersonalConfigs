@@ -5,6 +5,7 @@ vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
 -- TODO:
 -- clipboard
 -- shortcuts
+-- https://sw.kovidgoyal.net/kitty/launch/#the-piping-environment
 
 local function load_plugins()
 	local lazypath = vim.fn.stdpath 'data' .. '/lazy'

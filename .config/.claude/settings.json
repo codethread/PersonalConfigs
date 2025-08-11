@@ -1,6 +1,6 @@
 {
   "permissions": {
-    "additionalDirectories": ["../.local"]
+    "additionalDirectories": ["../.local", "../../dev/vendor/kitty"]
   },
   "hooks": {
     "PostToolUse": [
