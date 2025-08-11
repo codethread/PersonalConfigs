@@ -80,14 +80,13 @@ Keys.tbl('<leader>', {
 	l = {
 		group = 'Lsp',
 		a = { 'Code Action', Cmd 'lua vim.lsp.buf.code_action()' },
+		c = { 'CodeLens Action', Cmd 'lua vim.lsp.codelens.run()' },
 		d = { 'Declaration', Cmd 'lua vim.lsp.buf.declaration({ reuse_win = true })' },
 		i = { 'Info', Cmd 'LspInfo' },
-		I = { 'Installer Info', Cmd 'LspInstallInfo' },
-		l = { 'CodeLens Action', Cmd 'lua vim.lsp.codelens.run()' },
+		l = { 'Workspace Symbols', Cmd 'Telescope lsp_dynamic_workspace_symbols' },
 		r = { 'Rename', Cmd 'lua vim.lsp.buf.rename()' },
 		s = { 'Document Symbols', Cmd 'Telescope aerial' },
-		-- s = { 'Document Symbols', Cmd 'Telescope lsp_document_symbols' },
-		S = { 'Workspace Symbols', Cmd 'Telescope lsp_dynamic_workspace_symbols' },
+		I = { 'Installer Info', Cmd 'LspInstallInfo' },
 	},
 	---
 	m = { '🐉 Mover', function() require('codethread.movement').mover_hydra:activate() end },

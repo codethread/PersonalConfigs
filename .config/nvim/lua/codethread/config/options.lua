@@ -52,7 +52,8 @@ vim.o.smartcase = true
 
 vim.opt.showmode = false -- We don't need to see things like -- INSERT -- anymore
 
-vim.opt.diffopt:append 'inline:word'
+-- vim.opt.diffopt:append 'inline:word'
+vim.opt.diffopt = 'internal,filler,closeoff,indent-heuristic,linematch:60,algorithm:histogram'
 
 -- can use abolish-grep with this
 -- e.g. :S /plugin/ *

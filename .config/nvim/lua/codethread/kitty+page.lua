@@ -97,4 +97,9 @@ return function(INPUT_LINE_NUMBER, CURSOR_LINE, CURSOR_COLUMN)
 			vim.schedule(load_plugins)
 		end,
 	})
+
+	vim.api.nvim_create_autocmd('TextYankPost', {
+		group = group,
+		callback = function() vim.highlight.on_yank() end,
+	})
 end
