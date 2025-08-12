@@ -7,7 +7,7 @@ local js_based_languages = {
 return {
 	{
 		'mfussenegger/nvim-dap',
-		-- enabled = false, -- come back to this one day
+		enabled = false, -- come back to this one day
 		lazy = false,
 		dependencies = {
 			{
