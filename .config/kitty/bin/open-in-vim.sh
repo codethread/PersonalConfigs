@@ -99,7 +99,7 @@ main() {
   log "INFO" "Looking for nvim window..."
   local kitty_output nvim_window_id
 
-  if ! kitty_output=$(kitty @ ls 2>&1); then
+  if ! kitty_output=$(kitten @ ls --match 'var:IS_NVIM and state:parent_active' 2>&1); then
     log "ERROR" "Failed to list kitty windows: $kitty_output"
     exit 5
   fi
