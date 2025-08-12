@@ -39,6 +39,7 @@ $env.CT_NOTES = (match $env.CT_USER {
 
 $env.WAKATIME_HOME = (home ".config/wakatime")
 $env.ZDOTDIR = (home ".config/zsh")
+$env.STARSHIP_CACHE = ($env.XDG_CACHE_HOME | path join "starship")
 
 path add -a "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 path add -a "/Applications/Cursor.app/Contents/Resources/app/bin"
