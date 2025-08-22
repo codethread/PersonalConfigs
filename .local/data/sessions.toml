@@ -8,7 +8,7 @@ version = "1.0"
 dirs = [
   "~/PersonalConfigs",
   "~/workfiles",
-  "~/.local/share/nvim/llazy/*",
+  "~/.local/share/nvim/lazy/*",
   "~/.local/share/nvim/mason/packages/*",
   "~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Notes"
 ]
@@ -45,6 +45,7 @@ fe_native = "~/work/app/fe-native"
 inspect_package = "~/work/libraries/inspect-my-package"
 workfiles = "~/workfiles"
 protobuf = "~/work/perkbox-services/protobuf"
+karen = "~/dev/projects/claude-karen"
 
 [profiles.work.keys]
 P2 = "deals_ui"
@@ -52,6 +53,19 @@ P3 = "fe_review"
 P4 = "flexi_points"
 P5 = "fe_native"
 # P6 =
-P7 = "inspect_package"
+P7 = "karen"
 P8 = "workfiles"
 P9 = "protobuf"
+
+# ============================================================================
+# PROFILE SELECTION RULES
+# ============================================================================
+[auto_profile]
+
+[[auto_profile.rules]]
+hostname_regex = "^PB-.*"
+profile = "work"
+
+[[auto_profile.rules]]
+env = { CT_USER = "work" }
+profile = "work"
