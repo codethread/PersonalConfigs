@@ -1,0 +1,57 @@
+# KSM Config v1.0
+# Migrated from sessions.json
+
+[global]
+version = "1.0"
+
+[search]
+dirs = [
+  "~/PersonalConfigs",
+  "~/workfiles",
+  "~/.local/share/nvim/llazy/*",
+  "~/.local/share/nvim/mason/packages/*",
+  "~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Notes"
+]
+vsc = ["~/dev", "~/work"]
+cmd = []
+
+[projects]
+dots = "~/PersonalConfigs"
+qmk = "~/dev/projects/qmk_firmware/keyboards/preonic/keymaps/codethread"
+ct_nvim = "~/dev/projects/ct.nvim"
+pomo = "~/dev/projects/pomo"
+qmk_nvim = "~/dev/projects/qmk.nvim"
+git_tools = "~/dev/projects/git-tools"
+git_nudge = "~/dev/projects/git-nudge"
+nuphy = "~/dev/projects/nuphy_firmware/keyboards/nuphy/halo75v2/ansi"
+notes = "~/Library/Mobile Documents/com~apple~CloudDocs/Documents/Notes"
+
+[keys]
+P0 = "qmk"
+P1 = "dots"
+P2 = "ct_nvim"
+P3 = "pomo"
+P4 = "qmk_nvim"
+P5 = "git_tools"
+P6 = "git_nudge"
+P8 = "nuphy"
+P9 = "notes"
+
+[profiles.work.projects]
+deals_ui = "~/work/app/deals-light-ui"
+fe_review = "~/work/app/fe-review"
+flexi_points = "~/work/perkbox-services/flexi-points/flexi-points-app"
+fe_native = "~/work/app/fe-native"
+inspect_package = "~/work/libraries/inspect-my-package"
+workfiles = "~/workfiles"
+protobuf = "~/work/perkbox-services/protobuf"
+
+[profiles.work.keys]
+P2 = "deals_ui"
+P3 = "fe_review"
+P4 = "flexi_points"
+P5 = "fe_native"
+# P6 =
+P7 = "inspect_package"
+P8 = "workfiles"
+P9 = "protobuf"
