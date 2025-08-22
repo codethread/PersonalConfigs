@@ -27,12 +27,10 @@
       "Bash(cargo run:*)"
     ],
     "deny": [],
-    "defaultMode": "acceptEdits"
-  },
-  "statusLine": {
-    "type": "command",
-    "command": "bun x ccusage statusline",
-    "padding": 0
+    "defaultMode": "acceptEdits",
+    "additionalDirectories": [
+      "~/.local/cache/docs"
+    ]
   },
   "hooks": {
     "PreToolUse": [
@@ -44,9 +42,28 @@
             "command": "node ~/.config/claude/use_npm_redirect.js"
           }
         ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "claude-code-wakatime"
+          }
+        ]
       }
     ],
-    "PostToolUse": [],
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "claude-code-wakatime"
+          }
+        ]
+      }
+    ],
     "Notification": [],
     "Stop": [
       {
@@ -56,10 +73,47 @@
             "command": "kitten notify --expire-after 10s \"Claude Code\" \"Ready for new input\""
           }
         ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "claude-code-wakatime"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "claude-code-wakatime"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "claude-code-wakatime"
+          }
+        ]
       }
     ]
   },
+  "statusLine": {
+    "type": "command",
+    "command": "bun x ccusage statusline",
+    "padding": 0
+  },
   "feedbackSurveyState": {
     "lastShownTime": 1754027278114
-  }
+  },
+  "model": "sonnet"
 }
