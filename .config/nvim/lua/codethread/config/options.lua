@@ -19,6 +19,8 @@ vim.opt.autoindent = true -- Good auto indent
 vim.opt.softtabstop = 2 -- Set the behavior of tab
 vim.opt.smarttab = true -- Makes tabbing smarter will realize you have 2 vs 4
 vim.opt.expandtab = false -- Converts tabs to spaces
+-- vim.opt.inccommand = 'split'
+vim.opt.confirm = true
 
 -- if wanting to show white space in some way
 vim.opt.listchars = {
@@ -52,8 +54,11 @@ vim.o.smartcase = true
 
 vim.opt.showmode = false -- We don't need to see things like -- INSERT -- anymore
 
--- vim.opt.diffopt:append 'inline:word'
-vim.opt.diffopt = 'internal,filler,closeoff,indent-heuristic,linematch:60,algorithm:histogram'
+if vim.version().minor < 12 then
+	vim.opt.diffopt = 'internal,filler,closeoff,indent-heuristic,linematch:60,algorithm:histogram'
+else
+	vim.op.diffopt:append 'inline:word'
+end
 
 -- can use abolish-grep with this
 -- e.g. :S /plugin/ *
