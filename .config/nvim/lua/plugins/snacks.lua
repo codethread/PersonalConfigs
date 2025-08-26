@@ -16,7 +16,17 @@ return {
 	},
 	---@type snacks.Config
 	---@diagnostic disable-next-line: missing-fields
-	opts = {
+	opts = vim.g.vscode and {
+		bigfile = { enabled = false },
+		dashboard = { enabled = false },
+		indent = { enabled = false },
+		input = { enabled = false },
+		notifier = { enabled = false },
+		picker = { enabled = false },
+		quickfile = { enabled = false },
+		scroll = { enabled = false },
+		statuscolumn = { enabled = false },
+	} or {
 		bigfile = { enabled = true },
 		quickfile = {},
 		notifier = {

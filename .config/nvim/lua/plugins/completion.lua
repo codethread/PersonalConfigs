@@ -7,7 +7,6 @@ return {
 		'L3MON4D3/LuaSnip',
 		dependencies = 'rafamadriz/friendly-snippets',
 		build = 'make install_jsregexp',
-		lazy = true,
 		config = function()
 			local ls = require 'luasnip'
 			ls.setup {
@@ -31,7 +30,6 @@ return {
 	-- cmp and friends
 	{
 		'onsails/lspkind.nvim',
-		lazy = true,
 		config = function()
 			local lspkind = require 'lspkind'
 			lspkind.init {

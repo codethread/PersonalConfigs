@@ -1,7 +1,6 @@
 return {
 	{
 		'codethread/qmk.nvim',
-		lazy = false,
 		init = function()
 			vim.filetype.add {
 				extension = {

@@ -1,3 +1,5 @@
+if true then return {} end
+
 local constants = require 'plugins.notes.constants'
 
 vim.filetype.add {
@@ -8,38 +10,6 @@ vim.filetype.add {
 }
 
 return {
-	{
-		'mzlogin/vim-markdown-toc',
-		ft = { 'markdown' },
-		init = function() vim.cmd [[let g:vmt_auto_update_on_save = 0]] end,
-	},
-	{
-		'3rd/image.nvim',
-		ft = { 'markdown' },
-		build = false, -- so that it doesn't build the rock https://github.com/3rd/image.nvim/issues/91#issuecomment-2453430239
-		opts = {
-			processor = 'magick_cli',
-			backend = 'kitty',
-			integrations = {
-				html = {
-					enabled = true,
-				},
-			},
-		},
-	},
-
-	{
-		'iamcco/markdown-preview.nvim',
-		cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },
-		-- build = 'sh -c "cd app yarn install"',
-		build = 'sh -c "cd app && yarn install"',
-		init = function()
-			-- vim.g.mkdp_browser = 'firefox'
-			vim.g.mkdp_filetypes = { 'markdown' }
-			vim.g.mkdp_refresh_slow = 1 -- too much jumping around, refresh on save or insert leave
-		end,
-		ft = { 'markdown' },
-	},
 
 	{
 		'epwalsh/obsidian.nvim',
@@ -152,18 +122,5 @@ return {
 				},
 			},
 		},
-	},
-	{
-		'lukas-reineke/headlines.nvim',
-		enabled = false,
-		ft = 'markdown',
-		dependencies = {
-			'nvim-treesitter/nvim-treesitter',
-			U.highlights {
-				Headline = { bg = 'surface' },
-				CodeBlock = { bg = 'surface' },
-			},
-		},
-		config = false, -- or `opts = {}`
 	},
 }

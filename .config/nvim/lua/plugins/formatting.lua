@@ -7,6 +7,8 @@
 ---
 ---end
 
+if vim.g.vscode then return {} end
+
 local prettier_format = {
 	-- 'biome',
 	'prettierd',

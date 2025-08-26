@@ -1,62 +1,14 @@
 return {
-	{
-		'mawkler/jsx-element.nvim',
-		dependencies = {
-			'nvim-treesitter/nvim-treesitter',
-			'nvim-treesitter/nvim-treesitter-textobjects',
-		},
-		ft = { 'typescriptreact', 'javascriptreact', 'javascript' },
-		opts = {},
-	},
-	'ThePrimeagen/vim-be-good',
+	-- 'ThePrimeagen/vim-be-good',
 	-- use { 'bennypowers/nvim-regexplainer', requires = 'MunifTanjim/nui.nvim' }
-	{
-		'OXY2DEV/markview.nvim',
-		-- lazy = false, -- Recommended
-		ft = 'markdown',
-		-- enabled = false, -- this is sexy, play with later
-		-- ft = "markdown" -- If you decide to lazy-load anyway
-		opts = {},
-		-- config = function()
-		-- 	local presets = require 'markview.presets'
-		-- 	local mm = require 'markview'
-		-- 	mm.setup {
-		-- 		hybrid_modes = { 'i' }, -- Uses this feature on normal mode
-		-- 		-- This is nice to have
-		-- 		callbacks = {
-		-- 			on_enable = function(_, win)
-		-- 				vim.wo[win].conceallevel = 2
-		-- 				vim.wo[win].concealcursor = 'nc'
-		-- 			end,
-		-- 		},
-		--
-		-- 		-- ui
-		-- 		code_blocks = {
-		-- 			icons = 'devicons',
-		-- 			style = 'simple',
-		-- 			-- pad_amount = 3,
-		-- 		},
-		--
-		-- 		list_items = {
-		-- 			marker_minus = {
-		-- 				text = '•',
-		-- 			},
-		-- 			marker_plus = {
-		-- 				text = '',
-		-- 			},
-		-- 			marker_star = {
-		-- 				text = '',
-		-- 			},
-		-- 		},
-		-- 	}
-		-- end,
-	},
 
 	{
+		-- lsp features and a code completion source for code embedded in other documents
 		'jmbuhr/otter.nvim',
 		dependencies = {
 			'nvim-treesitter/nvim-treesitter',
 		},
+		cond = not vim.g.vscode,
 		lazy = true,
 		opts = {},
 	},

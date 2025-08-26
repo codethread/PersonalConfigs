@@ -9,45 +9,22 @@ end
 
 -- interesting stuff here to steal
 -- https://github.com/noib3/dotfiles/blob/master/modules/home/neovim/lua/diagnostic/rust.lua
+--
+			--[[stylua: ignore]] --format
+-- 		Keys.localleader_ft('rust', {
+-- { 'h' , 'hover actions', Lua "require('rust-tools').hover_actions.hover_actions()"         },
+-- { 'a' , 'code actions' , Lua "require('rust-tools').code_action_group.code_action_group()" },
+-- { 'l' , 'Code Lens'    , function() vim.lsp.codelens.run() end                             },
+-- { 'e' , 'Runnables'    , Cmd 'RustRunnables'                                               },
+-- { 'd' , 'Runnables'    , Cmd 'RustDebuggables'                                             },
+-- { 't' , 'Cargo test'   , Cmd 'Cargo test'                                                  },
+-- { 'R' , 'Cargo run'    , Cmd 'Cargo run'                                                   },
+-- { 'cc', 'Clear logs'   , Cmd '%g/println/norm dd'                                          },
+-- 		})
 
 return U.F {
 	{
 		'neovim/nvim-lspconfig',
-		dependencies = {
-			'rust-lang/rust.vim', -- why here?
-			{
-				'simrat39/rust-tools.nvim',
-				init = function()
-					U.lsp_attach('rust_analyzer', function(client, bufnr)
-						if client.supports_method 'textDocument/codeLens' then
-							local rt = require 'rust-tools'
-							rt.inlay_hints.enable()
-
-							vim.api.nvim_create_autocmd(
-								{ 'BufWritePost', 'BufEnter', 'CursorHold', 'InsertLeave' },
-								{
-									buffer = bufnr,
-									callback = function() vim.lsp.codelens.refresh() end,
-								}
-							)
-						end
-					end)
-
-			--[[stylua: ignore]] --format
-			Keys.localleader_ft('rust', {
-	{ 'h' , 'hover actions', Lua "require('rust-tools').hover_actions.hover_actions()"         },
-	{ 'a' , 'code actions' , Lua "require('rust-tools').code_action_group.code_action_group()" },
-	{ 'l' , 'Code Lens'    , function() vim.lsp.codelens.run() end                             },
-	{ 'e' , 'Runnables'    , Cmd 'RustRunnables'                                               },
-	{ 'd' , 'Runnables'    , Cmd 'RustDebuggables'                                             },
-	{ 't' , 'Cargo test'   , Cmd 'Cargo test'                                                  },
-	{ 'R' , 'Cargo run'    , Cmd 'Cargo run'                                                   },
-	{ 'cc', 'Clear logs'   , Cmd '%g/println/norm dd'                                          },
-			})
-				end,
-			},
-			-- 'nvim-dap'
-		},
 		ft = 'rust',
 		opts = {
 			servers = {
@@ -61,34 +38,14 @@ return U.F {
 									'target/check',
 								},
 							},
+							inlayHints = { renderColons = false, chainingHints = { enabled = false },
+								closingBraceHints = { enabled = false },
+								parameterHints = { enabled = false },
+								typeHints = { enabled = false },
+							},
 						},
 					},
 				},
-			},
-			setup = {
-				rust_analyzer = function(_, opts)
-					local codelldb_path, liblldb_path = get_codelldb()
-
-					require('rust-tools').setup {
-						tools = {
-							hover_actions = { border = 'solid' },
-						},
-						server = opts,
-						-- dap = {
-						-- 	adapter = require('rust-tools.dap').get_codelldb_adapter(
-						-- 		codelldb_path,
-						-- 		liblldb_path
-						-- 	),
-						-- },
-					}
-
-					-- the adapter inside rusttools expects rt_lldb, despite us changing it to codelldb
-					-- hopefully gets fixed but for now this works
-					-- local a = require('dap').adapters
-					-- require('dap').adapters.rt_lldb = a.codelldb
-
-					return true
-				end,
 			},
 		},
 	},

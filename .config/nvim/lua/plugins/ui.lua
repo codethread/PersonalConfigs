@@ -1,3 +1,5 @@
+if vim.g.vscode then return {} end
+
 return {
 
 	{
@@ -75,7 +77,7 @@ return {
 		config = function(_, opts)
 			require('rose-pine').setup(vim.tbl_deep_extend('force', opts, {
 				variant = 'moon',
-				styles = { italic = false, transparency = false },
+				styles = { italic = true, transparency = true },
 				enable = {
 					terminal = true,
 					-- Improve compatibility for previous versions of Neovim
@@ -84,7 +86,7 @@ return {
 					migrations = false,
 				},
 				-- calls to nvim_set_hl()
-				dim_inactive_windows = true,
+				dim_inactive_windows = false,
 				extend_background_behind_borders = true,
 				---@type table<string, ct.RoseColor>
 				highlight_groups = {

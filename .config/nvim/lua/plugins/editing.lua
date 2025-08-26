@@ -23,11 +23,8 @@ vim.cmd [[
 	vnoremap <Up> :m '<-2<CR>gv=gv
 ]]
 
----@return LazySpec[]
-return {
-	'wellle/targets.vim',
-	{ 'echasnovski/mini.align', opts = {} },
-	{ 'echasnovski/mini.ai', opts = {} },
+return U.F {
+	{ 'echasnovski/mini.ai', event = U.LazyFile, opts = {} },
 
 	{ 'tpope/vim-rsi', event = { 'InsertEnter', 'CmdlineEnter' } }, -- readline movement, e.g C-f is forward char
 
@@ -36,6 +33,7 @@ return {
 		-- command on your buffer contents live. Preview macros, the :norm command & more!
 		'smjonas/live-command.nvim',
 		main = 'live-command',
+		event = 'CmdlineEnter',
 		opts = {
 			-- 	inline_highlighting = false,
 			-- break_undo = false,
@@ -60,32 +58,12 @@ return {
 	-- Want to turn fooBar into foo_bar? Press crs (coerce to snake_case). MixedCase
 	-- (crm), camelCase (crc), snake_case (crs), UPPER_CASE (cru), dash-case (cr-),
 	-- dot.case (cr.), space case (cr<space>), and Title Case (crt) are all just 3 keystrokes away.
-	'tpope/vim-abolish',
+	{ 'tpope/vim-abolish', event = U.LazyFile },
 	-- also https://github.com/gregorias/coerce.nvim/tree/main if wanting lua api
 
-	{
-		'junegunn/vim-easy-align',
-		init = function()
-			-- TODO move
-			vim.cmd [[
-		" nmap ga <Plug>(EasyAlign)
-		" xmap ga <Plug>(EasyAlign)
-		]]
-			vim.api.nvim_create_user_command(
-				'CsvFormat',
-				':EasyAlign *,<CR>',
-				{ desc = 'Align a csv file' }
-			)
-		end,
-	},
+	{ 'xlboy/swap-ternary.nvim', ft = U.ecma_ft }, -- seems over engineered but works
 
-	{ 'xlboy/swap-ternary.nvim' }, -- seems over engineered but works
-
-	{
-		'folke/ts-comments.nvim',
-		opts = {},
-		event = 'VeryLazy',
-	},
+	{ 'folke/ts-comments.nvim', opts = {}, event = 'VeryLazy' },
 
 	-- printf style debugging
 	-- normal mode g? , e.g g?p g?v

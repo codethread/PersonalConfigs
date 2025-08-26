@@ -53,28 +53,7 @@ return {
 			manage_folds = false,
 			link_folds_to_tree = false,
 			link_tree_to_folds = false,
-
 			on_attach = function(b) require('aerial').tree_close_all(b) end,
-
-			-- backends = {
-			-- 	-- ['_'] = { 'lsp', 'treesitter' },
-			-- 	['_'] = { 'lsp' },
-			-- 	-- ['_'] = { 'treesitter' },
-			-- 	python = { 'treesitter' },
-			-- 	rust = { 'lsp' },
-			-- },
-			-- filter_kind = {
-			-- 	'Class',
-			-- 	'Constructor',
-			-- 	'Enum',
-			-- 	'Function',
-			-- 	'Interface',
-			-- 	'Module',
-			-- 	'Method',
-			-- 	'Struct',
-			-- 	-- default end
-			-- 	'Constant', -- want this for js, will update other things later
-			-- },
 		},
 	},
 
@@ -159,42 +138,13 @@ return {
 				},
 			},
 		},
+        --[[stylua: ignore]] --format
 		keys = {
-			{
-				'<C-f>',
-				mode = { 'n', 'x', 'o' },
-				function()
-					-- default options: exact mode, multi window, all directions, with a backdrop
-					require('flash').jump()
-				end,
-				desc = 'Flash',
-			},
-			-- TODO: disable for now while playing with surround stuff
-			-- 	{
-			-- 		'S',
-			-- 		mode = { 'n', 'o', 'x' },
-			-- 		-- function() require('flash').treesitter() end,
-			-- 		function() require('flash').jump { search = { multi_window = true } } end,
-			-- 		desc = 'Flash Treesitter',
-			-- 	},
-			-- 	{
-			-- 		'r',
-			-- 		mode = 'o',
-			-- 		function() require('flash').remote() end,
-			-- 		desc = 'Remote Flash',
-			-- 	},
-			-- 	{
-			-- 		'R',
-			-- 		mode = { 'o', 'x' },
-			-- 		function() require('flash').treesitter_search() end,
-			-- 		desc = 'Treesitter Search',
-			-- 	},
-			-- 	{
-			-- 		'<c-s>',
-			-- 		mode = { 'c' },
-			-- 		function() require('flash').toggle() end,
-			-- 		desc = 'Toggle Flash Search',
-			-- 	},
+			{ "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
+			{ "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
+			{ "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
+			{ "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
+			{ "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
 		},
 	},
 }

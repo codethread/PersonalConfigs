@@ -245,6 +245,8 @@ return {
 						desc = 'Clear All the References',
 					})
 				end
+				-- inlay
+				vim.lsp.inlay_hint.enable(false, { bufnr = bufnr })
 			end)
 
 			local servers = opts.servers

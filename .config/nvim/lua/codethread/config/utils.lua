@@ -163,6 +163,8 @@ end
 
 M.ecma_ft = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' }
 
+M.LazyFile = { 'BufReadPost', 'BufNewFile', 'BufWritePre' }
+
 ---@param specs LazyPluginSpec[]
 function M.F(specs) return specs end
 

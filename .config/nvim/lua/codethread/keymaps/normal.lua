@@ -4,6 +4,27 @@ local fns = require 'codethread.fns'
 -- nnoremap <silent> } :<C-u>execute "keepjumps norm! " . v:count1 . "}"<CR>
 -- nnoremap <silent> { :<C-u>execute "keepjumps norm! " . v:count1 . "{"<CR>
 
+if vim.g.vscode then
+	local vscode = require 'vscode'
+
+	vim.keymap.set('n', '*', function()
+		vim.cmd ':silent! norm! *'
+		local curline = vim.fn.line '.'
+		vscode.call('revealLine', { args = { lineNumber = curline, at = 'center' } })
+	end, { noremap = true, silent = true })
+
+	vim.keymap.set('n', 'n', function()
+		vim.cmd ':silent! norm! n'
+		local curline = vim.fn.line '.'
+		vscode.call('revealLine', { args = { lineNumber = curline, at = 'center' } })
+	end, { noremap = true, silent = true })
+
+	vim.keymap.set('n', 'N', function()
+		vim.cmd ':silent! norm! N'
+		local curline = vim.fn.line '.'
+		vscode.call('revealLine', { args = { lineNumber = curline, at = 'center' } })
+	end, { noremap = true, silent = true })
+else
 --[[stylua: ignore]] --format
 Keys.list({}, {
 	{ 'jk'   , 'esc'            , '<ESC>'                                     , mode = 'i' },
@@ -22,11 +43,13 @@ Keys.list({}, {
 	{ '<C-d>', 'Center Up'      , '<C-d>zz'                                    },
 	{ '<C-q>', 'Toggle quickfix', fns.toggle_quickfix                          },
 })
+end
+
 
 --[[stylua: ignore]] --format
 Keys.list({ mode = 'v' }, {
 	{ 'ss', 'live'        , function() require('telescope-live-grep-args.shortcuts').grep_visual_selection() end },
-	-- { 'sr', 'find-replace', function() require('spectre').open_visual { select_word = true } end                 },
+	 { 'sr', 'find-replace', function() require('spectre').open_visual { select_word = true } end                 },
 	{ 'sr', 'find-replace', function () require('grug-far').open({ visualSelectionUsage = 'operate-within-range' }) end },
 })
 
@@ -54,6 +77,29 @@ Keys.list({}, {
 })
 
 --Fold related
+if vim.g.vscode then
+	vim.api.nvim_set_keymap('n', 'j', 'gj', { noremap = false, silent = true })
+	vim.api.nvim_set_keymap('n', 'k', 'gk', { noremap = false, silent = true })
+
+	local vscode = require 'vscode'
+
+	local function map(mode, lhs, rhs)
+		vim.keymap.set(mode, lhs, function() vscode.call(rhs) end, { silent = true, noremap = true })
+	end
+
+	-- Remap folding keys
+	map('n', 'zM', 'editor.foldAll')
+	map('n', 'zR', 'editor.unfoldAll')
+	map('n', '-', 'editor.fold')
+	map('n', 'zc', 'editor.fold')
+	map('n', '_', 'editor.foldRecursively')
+	map('n', 'zC', 'editor.foldRecursively')
+	map('n', '=', 'editor.unfold')
+	map('n', 'zo', 'editor.unfold')
+	map('n', '+', 'editor.unfoldRecursively')
+	map('n', 'zO', 'editor.unfoldRecursively')
+	map('n', 'za', 'editor.toggleFold')
+else
 --[[stylua: ignore]] --format
 Keys.list({}, {
 	{ '-' , 'open fold under cursor'      , 'zc'                                                       },
@@ -64,5 +110,6 @@ Keys.list({}, {
 	{ 'zM', 'close all folds'             , function() require('ufo').closeAllFolds() end              },
 	{ 'zp', 'peak fold'                   , function() require('ufo').peekFoldedLinesUnderCursor() end },
 	{ 'zc', 'open fold under cursor'      , function() require 'ufo' end                               },
-	{ 'zs', 'set fold level'              , require('codethread.fold').set_fold_level                  },
+	{ 'zs', 'set fold level'              , function() require('codethread.fold').set_fold_level() end },
 })
+end

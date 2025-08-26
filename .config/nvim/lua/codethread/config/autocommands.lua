@@ -1,4 +1,5 @@
 -- This file is automatically loaded by plugins.init
+if vim.g.vscode then return end
 
 local function augroup(name)
 	return vim.api.nvim_create_augroup('codethread_' .. name, { clear = true })

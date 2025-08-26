@@ -1,32 +1,11 @@
+if vim.g.vscode then return {} end
+
 return {
 	{ 'xorid/swap-split.nvim', cmd = 'SwapSplit' },
 
 	{ 'shortcuts/no-neck-pain.nvim', cmd = { 'NoNeckPain' } },
 
 	{ 'declancm/maximize.nvim', opts = {}, cmd = { 'Maximize' } },
-
-	-- TODO: why do i have three things here
-	-- TODO: make <C-/> expand main window when moving back
-	{
-		'christoomey/vim-tmux-navigator',
-		enabled = false,
-		init = function()
-			vim.cmd [[
-			" nnoremap <silent> <C-h> :wincmd h<CR>
-			" nnoremap <silent> <C-j> :wincmd j<CR>
-			" nnoremap <silent> <C-k> :wincmd k<CR>
-			" nnoremap <silent> <C-l> :wincmd l<CR>
-
-			" Disable tmux navigator when zooming the Vim pane
-			let g:tmux_navigator_disable_when_zoomed = 1
-			let g:tmux_navigator_no_mappings = 1
-			nnoremap <silent> <C-h> :TmuxNavigateLeft<cr>
-			nnoremap <silent> <C-j> :TmuxNavigateDown<cr>
-			nnoremap <silent> <C-k> :TmuxNavigateUp<cr>
-			nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
-			]]
-		end,
-	},
 
 	{
 		'mrjones2014/smart-splits.nvim',
@@ -57,22 +36,5 @@ return {
 			log_level = 'warn',
 			-- disable_multiplexer_nav_when_zoomed = true,
 		},
-	},
-	{
-		'alexghergh/nvim-tmux-navigation',
-		enabled = false,
-		config = function()
-			require('nvim-tmux-navigation').setup {
-				disable_when_zoomed = true, -- defaults to false
-				keybindings = {
-					left = '<C-h>',
-					down = '<C-j>',
-					up = '<C-k>',
-					right = '<C-l>',
-					last_active = '<C-\\>',
-					-- next = '<C-Space>',
-				},
-			}
-		end,
 	},
 }

@@ -38,10 +38,18 @@ function M.fold_decrease()
 	vim.fn.winrestview(l)
 end
 
+function M.set_fold_level()
+	if not vim.v.count then
+		vim.notify('No foldlevel given to set!', vim.log.levels.WARN)
+	else
+		M.fold_setlevel(vim.v.count)
+	end
+end
+
 local hydra_ok, Hydra = pcall(require, 'hydra')
 if not hydra_ok then
 	print 'could not load hydra'
-	return
+	return {}
 end
 
 M.fold_hyrda = Hydra {
@@ -66,14 +74,6 @@ M.fold_hyrda = Hydra {
 		{ 'l', function() M.fold_decrease() end },
 	},
 }
-
-function M.set_fold_level()
-	if not vim.v.count then
-		vim.notify('No foldlevel given to set!', vim.log.levels.WARN)
-	else
-		M.fold_setlevel(vim.v.count)
-	end
-end
 
 -- TODO: some more cool plugins:
 -- https://github.com/mfussenegger/nvim-treehopper

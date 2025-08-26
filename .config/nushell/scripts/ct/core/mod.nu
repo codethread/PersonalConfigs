@@ -117,3 +117,9 @@ export def hide-all [closure: closure] {
 export def dump-env [] {
 	hide-all {|| zsh -c 'export' | rg "(.*)" --replace "export $0" | save -f ~/.config/zsh/.envs }
 }
+
+export def lv [...arg: string] {
+	with-env {NVIM_APPNAME: Lazyvim} {
+		nvim ...$arg
+	}
+}

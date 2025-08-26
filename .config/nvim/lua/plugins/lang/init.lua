@@ -1,3 +1,5 @@
+if vim.g.vscode then return {} end
+
 return U.flatten {
 	require 'plugins.lang.go',
 	-- require 'plugins.lang.typescript',

@@ -27,6 +27,8 @@ local function mode_color()
 	if hydra.is_active() then return { bg = 'love' } end
 end
 
+if vim.g.vscode then return {} end
+
 return {
 	{
 		'nvim-lualine/lualine.nvim',

@@ -2,10 +2,11 @@ return U.F {
 	{ 'farmergreg/vim-lastplace' },
 	{ 'anuvyklack/hydra.nvim' },
 
-	{ 'echasnovski/mini.bufremove', lazy = true },
+	{ 'echasnovski/mini.bufremove', cond = not vim.g.vscode },
 
 	{
 		'mbbill/undotree',
+		event = U.LazyFile,
 		init = function()
 			vim.cmd [[
 				" add undo break points on key stroke to make undo more granular
@@ -39,16 +40,11 @@ return U.F {
 
 	{
 		'wakatime/vim-wakatime',
-		cond = os.getenv 'WAKATIME_HOME' ~= nil,
-		lazy = false,
-		-- event = { 'BufReadPre', 'BufNewFile' },
-		-- event = { 'InsertEnter' },
+		cond = os.getenv 'WAKATIME_HOME' ~= nil and not vim.g.vscode,
+		event = U.LazyFile,
 	},
 
-	{
-		'AndrewRadev/bufferize.vim',
-		cmd = 'Bufferize',
-	},
+	{ 'AndrewRadev/bufferize.vim', cmd = 'Bufferize' },
 
 	{
 		-- store clipboard for easy recall
@@ -56,44 +52,23 @@ return U.F {
 		event = 'TextYankPost',
 		config = function()
 			require('neoclip').setup()
-			require('telescope').load_extension 'neoclip'
+			if vim.g.vscode then
+				vim.api.nvim_create_user_command('Yanks', function()
+					local _storage = require('neoclip.storage').get().yanks
+					vim.ui.select(_storage, {
+						prompt = 'hey',
+						format_item = function(item) return table.concat(item.contents, '\\n') end,
+					}, function(choice) vim.print(choice) end)
+				end, {})
+			else
+				require('telescope').load_extension 'neoclip'
+			end
 		end,
 	},
 
-	{ -- find/replace
-		'windwp/nvim-spectre',
-		enabled = false,
-		build = 'brew install gnu-sed',
-		cmd = 'Spectre',
-		opts = {
-			find_engine = {
-				rg = {
-					args = {
-						'--color=never',
-						'--no-heading',
-						'--with-filename',
-						'--line-number',
-						'--glob',
-						'!.git',
-						'--column',
-					},
-				},
-			},
-			default = {
-				find = {
-					options = {
-						'ignore-case',
-						'hidden',
-					},
-				},
-				replace = {
-					cmd = 'sd',
-				},
-			},
-		},
-	},
 	{
 		'MagicDuck/grug-far.nvim',
+		cond = not vim.g.vscode,
 		config = function()
 			-- optional setup call to override plugin options
 			-- alternatively you can set options with vim.g.grug_far = { ... }
@@ -129,6 +104,7 @@ return U.F {
 	-- Lua
 	{
 		'folke/persistence.nvim',
+		cond = not vim.g.vscode,
 		event = 'BufReadPre', -- this will only start session saving when an actual file was opened
 		opts = {
 			branch = false,

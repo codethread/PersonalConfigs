@@ -1,5 +1,17 @@
+if _G.ts2 then return {} end
+
 ---@diagnostic disable: missing-fields
 return {
+	{
+		'folke/which-key.nvim',
+		opts = {
+			spec = {
+				{ '<BS>', desc = 'Decrement Selection', mode = 'x' },
+				{ '<c-space>', desc = 'Increment Selection', mode = { 'x', 'n' } },
+			},
+		},
+	},
+
 	{
 		'nvim-treesitter/nvim-treesitter',
 		event = { 'BufReadPost', 'BufNewFile' },
@@ -16,24 +28,22 @@ return {
 		cmd = { 'TSUpdateSync', 'TSUpdate', 'TSInstall' },
 		build = ':TSUpdate',
 		dependencies = { 'andymass/vim-matchup' },
+		keys = {
+			{ '<c-space>', desc = 'Increment Selection' },
+			{ '<bs>', desc = 'Decrement Selection', mode = 'x' },
+		},
 		---@type TSConfig
 		opts = {
-			highlight = {
-				enable = true,
-				additional_vim_regex_highlighting = false,
-			},
+			highlight = { enable = not vim.g.vscode },
 			indent = { enable = true },
-			matchup = {
-				enable = true,
-			},
+			matchup = { enable = true },
 			incremental_selection = {
 				enable = true,
 				keymaps = {
-					--TODO figure this out
-					-- init_selection = '<Enter>',
-					-- node_incremental = '<Enter>',
-					-- scope_incremental = '<Enter>',
-					-- node_decremental = '<S-Tab>',
+					init_selection = '<C-space>',
+					node_incremental = '<C-space>',
+					scope_incremental = false,
+					node_decremental = '<bs>',
 				},
 			},
 
@@ -156,6 +166,16 @@ return {
 			lazy = true,
 			cmd = 'TSPlaygroundToggle',
 		},
+	},
+
+	{
+		'mawkler/jsx-element.nvim',
+		dependencies = {
+			'nvim-treesitter/nvim-treesitter',
+			'nvim-treesitter/nvim-treesitter-textobjects',
+		},
+		ft = { 'typescriptreact', 'javascriptreact', 'javascript' },
+		opts = {},
 	},
 
 	{ 'fei6409/log-highlight.nvim', event = 'BufRead *.log', ft = 'log', opts = {} },
