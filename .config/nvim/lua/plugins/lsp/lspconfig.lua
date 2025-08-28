@@ -1,8 +1,6 @@
 return {
 	{
 		'j-hui/fidget.nvim',
-		lazy = true,
-		-- tag = 'legacy',
 		opts = { progress = { ignore = {}, display = { done_icon = '✓' } } },
 	},
 

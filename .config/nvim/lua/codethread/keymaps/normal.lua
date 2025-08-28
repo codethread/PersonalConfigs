@@ -33,7 +33,7 @@ Keys.list({}, {
 	{ '}'    , 'next'           , Cmd 'AerialPrev'                             },
 	{ '{'    , 'prev'           , Cmd 'AerialNex'                              },
 	{ 'ga'   , 'alt file'       , Cmd 'Other'                                  },
-	{ 'gx'   , 'Go to link'     , function() require('codethread.gx').gx() end },
+	-- { 'gx'   , 'Go to link'     , function() require('codethread.gx').gx() end },
 	{ 'n'    , 'Center next'    , 'nzzzv'                                      },
 	{ 'N'    , 'Center prev'    , 'Nzzzv'                                      },
 	{ 'J'    , 'Center join'    , 'mzJ`z'                                      },

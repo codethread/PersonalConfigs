@@ -1,7 +1,7 @@
 use ct/dotty
 use ct/macos [macos_has_full_disk_access ]
 use ct/brew
-use ct/core [dedent]
+use ct/core [dedent nvim-sync]
 use ct/git [git_is_dirty]
 use homebrew.nu
 use log.nu
@@ -35,6 +35,8 @@ export def main [
 	setup_tooling --force=$shell
 
 	macos
+
+	nvim-sync
 }
 
 # Install various projects I use either for boot or general use (not available

@@ -27,6 +27,14 @@ return {
 		scroll = { enabled = false },
 		statuscolumn = { enabled = false },
 	} or {
+		---@type table<string, snacks.win.Config>
+		styles = {
+			dashboard = {
+				wo = {
+					statusline = '',
+				},
+			},
+		},
 		bigfile = { enabled = true },
 		quickfile = {},
 		notifier = {

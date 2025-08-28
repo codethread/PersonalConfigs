@@ -69,16 +69,8 @@ return U.F {
 	{
 		'MagicDuck/grug-far.nvim',
 		cond = not vim.g.vscode,
-		config = function()
-			-- optional setup call to override plugin options
-			-- alternatively you can set options with vim.g.grug_far = { ... }
-			require('grug-far').setup {
-				-- options, see Configuration section below
-				-- there are no required options atm
-				-- engine = 'ripgrep' is default, but 'astgrep' or 'astgrep-rules' can
-				-- be specified
-			}
-		end,
+		cmd = { 'GrugFar' },
+		opts = {},
 	},
 
 	{
@@ -109,5 +101,16 @@ return U.F {
 		opts = {
 			branch = false,
 		},
+	},
+
+	{
+		'chrishrb/gx.nvim',
+		dependencies = { 'nvim-lua/plenary.nvim' }, -- Required for Neovim < 0.10.0
+		keys = { { 'gx', '<cmd>Browse<cr>', mode = { 'n', 'x' } } },
+		cmd = { 'Browse' },
+		init = function()
+			vim.g.netrw_nogx = 1 -- disable netrw gx
+		end,
+		opts = {},
 	},
 }

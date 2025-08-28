@@ -123,6 +123,10 @@ export def lv [...arg: string] {
 		nvim ...$arg
 	}
 }
+export def nvim-sync [] {
+	nvim --headless "+Lazy! clean" +qa
+	nvim --headless "+Lazy! install" +qa
+}
 
 export alias cd0 = cd (ksm key -p P0)
 export alias cd1 = cd (ksm key -p P1)

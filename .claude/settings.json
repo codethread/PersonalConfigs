@@ -6,7 +6,6 @@
   },
   "permissions": {
     "allow": [
-      "mcp__context7__get-library-docs",
       "mcp__context7__resolve-library-id",
       "WebFetch(domain:docs.anthropic.com)",
       "WebFetch(domain:sw.kovidgoyal.net)",
@@ -32,6 +31,7 @@
       "~/.local/cache/docs"
     ]
   },
+  "model": "opusplan",
   "hooks": {
     "PreToolUse": [
       {
@@ -114,6 +114,5 @@
   },
   "feedbackSurveyState": {
     "lastShownTime": 1754027278114
-  },
-  "model": "sonnet"
+  }
 }

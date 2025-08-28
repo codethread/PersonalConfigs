@@ -141,30 +141,14 @@ return {
 	},
 
 	{
-		'nvim-treesitter/nvim-treesitter',
-		lazy = true,
-		dependencies = {
-			'nvim-treesitter/nvim-treesitter-context',
-			opts = {
-				multiline_threshold = 1,
-				max_lines = 2, -- How many lines the window should span. Values <= 0 mean no limit.
-				-- trim_scope = 'inner', -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
-			},
-		},
-	},
-
-	{
-		'nvim-treesitter/nvim-treesitter',
-		lazy = true,
+		'nvim-treesitter/nvim-treesitter-context',
+		event = { 'BufReadPost', 'BufNewFile' },
+		cmd = 'TSContext',
+		dependencies = { 'nvim-treesitter/nvim-treesitter' },
 		opts = {
-			playground = {
-				enable = true,
-			},
-		},
-		dependencies = {
-			'nvim-treesitter/playground',
-			lazy = true,
-			cmd = 'TSPlaygroundToggle',
+			multiline_threshold = 1,
+			max_lines = 2, -- How many lines the window should span. Values <= 0 mean no limit.
+			-- trim_scope = 'inner', -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
 		},
 	},
 

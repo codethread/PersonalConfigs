@@ -9,7 +9,6 @@ return U.F {
 	{
 		'iamcco/markdown-preview.nvim',
 		cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },
-		-- build = 'sh -c "cd app yarn install"',
 		build = 'sh -c "cd app && yarn install"',
 		init = function()
 			-- vim.g.mkdp_browser = 'firefox'
@@ -20,58 +19,24 @@ return U.F {
 	},
 
 	{
-		'lukas-reineke/headlines.nvim',
-		enabled = false,
-		ft = 'markdown',
-		dependencies = {
-			'nvim-treesitter/nvim-treesitter',
-			U.highlights {
-				Headline = { bg = 'surface' },
-				CodeBlock = { bg = 'surface' },
-			},
-		},
-		config = false, -- or `opts = {}`
+		'toppair/peek.nvim',
+		build = 'deno task --quiet build:fast',
+		opts = {},
+		init = function()
+			vim.api.nvim_create_user_command('PeekOpen', function() require('peek').open() end, {})
+			vim.api.nvim_create_user_command('PeekClose', function() require('peek').close() end, {})
+		end,
 	},
 
 	{
-		'OXY2DEV/markview.nvim',
-		-- lazy = false, -- Recommended
+		'MeanderingProgrammer/render-markdown.nvim',
+		-- also 'OXY2DEV/markview.nvim',
+		dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
 		ft = 'markdown',
-		-- enabled = false, -- this is sexy, play with later
-		-- ft = "markdown" -- If you decide to lazy-load anyway
-		opts = {},
-		-- config = function()
-		-- 	local presets = require 'markview.presets'
-		-- 	local mm = require 'markview'
-		-- 	mm.setup {
-		-- 		hybrid_modes = { 'i' }, -- Uses this feature on normal mode
-		-- 		-- This is nice to have
-		-- 		callbacks = {
-		-- 			on_enable = function(_, win)
-		-- 				vim.wo[win].conceallevel = 2
-		-- 				vim.wo[win].concealcursor = 'nc'
-		-- 			end,
-		-- 		},
-		--
-		-- 		-- ui
-		-- 		code_blocks = {
-		-- 			icons = 'devicons',
-		-- 			style = 'simple',
-		-- 			-- pad_amount = 3,
-		-- 		},
-		--
-		-- 		list_items = {
-		-- 			marker_minus = {
-		-- 				text = '•',
-		-- 			},
-		-- 			marker_plus = {
-		-- 				text = '',
-		-- 			},
-		-- 			marker_star = {
-		-- 				text = '',
-		-- 			},
-		-- 		},
-		-- 	}
-		-- end,
+		---@module 'render-markdown'
+		---@type render.md.UserConfig
+		opts = {
+			completions = { lsp = { enabled = true } },
+		},
 	},
 }
