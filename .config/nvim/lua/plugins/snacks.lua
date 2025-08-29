@@ -48,5 +48,7 @@ return {
 		},
 		---@type snacks.dashboard.Config
 		dashboard = {},
+		input = {},
+		picker = { enabled = false },
 	},
 }

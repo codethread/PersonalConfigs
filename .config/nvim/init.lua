@@ -63,6 +63,26 @@ local opts = {
 	install = {
 		colorscheme = { 'rose-pine' },
 	},
+	performance = {
+		rtp = {
+			disabled_plugins = {
+				'gzip',
+				'matchit',
+				'matchparen',
+				'netrwPlugin',
+				'tarPlugin',
+				'tohtml',
+				'tutor',
+				'zipPlugin',
+				'shada',
+				'rplugin',
+			},
+		},
+	},
+	profiling = {
+		loader = true,
+		require = true,
+	},
 }
 require('lazy').setup(opts)
 

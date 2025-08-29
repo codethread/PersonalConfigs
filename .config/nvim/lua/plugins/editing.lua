@@ -63,7 +63,7 @@ return U.F {
 
 	{ 'xlboy/swap-ternary.nvim', ft = U.ecma_ft }, -- seems over engineered but works
 
-	{ 'folke/ts-comments.nvim', opts = {}, event = 'VeryLazy' },
+	{ 'folke/ts-comments.nvim', opts = {}, event = U.LazyFile },
 
 	-- printf style debugging
 	-- normal mode g? , e.g g?p g?v

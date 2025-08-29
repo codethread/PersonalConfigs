@@ -1,31 +1,10 @@
 if vim.g.vscode then return {} end
 
 return {
-
-	{
-		'folke/todo-comments.nvim',
-		event = 'VimEnter',
-		dependencies = { 'nvim-lua/plenary.nvim' },
-		opts = {
-			signs = false,
-
-			search = {
-				args = {
-					'--color=never',
-					'--no-heading',
-					'--with-filename',
-					'--line-number',
-					'--column',
-					'--hidden',
-				},
-			},
-		},
-	},
-
 	{
 		'lukas-reineke/indent-blankline.nvim',
 		main = 'ibl',
-		event = { 'BufReadPost', 'BufNewFile' },
+		event = U.LazyFile,
 		dependencies = {
 			U.highlights {
 				IblIndent = { fg = 'overlay' },
@@ -49,7 +28,7 @@ return {
 
 	{
 		'echasnovski/mini.indentscope',
-		event = { 'BufReadPre', 'BufNewFile' },
+		event = U.LazyFile,
 		dependencies = {
 			U.highlights {
 				MiniIndentscopeSymbol = { fg = 'iris' },
@@ -125,20 +104,6 @@ return {
 			}))
 			vim.cmd [[colorscheme rose-pine]]
 		end,
-	},
-
-	-- makes vim.ui.input and vim.ui.select nice
-	{
-		'stevearc/dressing.nvim',
-		opts = {
-			select = {
-				telescope = {
-					layout_config = {
-						width = { padding = 2 },
-					},
-				},
-			},
-		},
 	},
 
 	{ -- just keep around for pairing

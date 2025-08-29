@@ -5,6 +5,17 @@ return {
 		'nvim-telescope/telescope.nvim',
 		cmd = 'Telescope',
 		dependencies = {
+			{
+				'nvim-telescope/telescope-ui-select.nvim',
+				init = function()
+					-- handle vim.ui.select being invoked and lazy triggering our input
+					---@diagnostic disable-next-line: duplicate-set-field
+					vim.ui.select = function(...)
+						require 'telescope'
+						vim.ui.select(...)
+					end
+				end,
+			},
 			{ 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
 			{ 'nvim-telescope/telescope-live-grep-args.nvim' },
 			{ 'catgoose/telescope-helpgrep.nvim' },
@@ -216,6 +227,11 @@ return {
 						-- },
 						-- default_grep = builtin.live_grep,
 					},
+					['ui-select'] = {
+						require('telescope.themes').get_dropdown {
+							-- even more opts
+						},
+					},
 				},
 			})
 
@@ -224,6 +240,7 @@ return {
 			telescope.load_extension 'live_grep_args'
 			telescope.load_extension 'fzf'
 			telescope.load_extension 'helpgrep'
+			telescope.load_extension 'ui-select'
 		end,
 	},
 }
