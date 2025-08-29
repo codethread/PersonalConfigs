@@ -37,6 +37,79 @@ local function filename_and_parent(path, sep)
 	end
 end
 
+local mode_maps = {
+	['INSERT'] = '',
+	['NORMAL'] = '',
+	['VISUAL'] = '',
+	['V-BLOCK'] = '',
+	['V-LINE'] = '',
+	['TERMINAL'] = '❯',
+	-- ["TERMINAL"] = "",
+}
+
+M.mode_map = function(str) return mode_maps[str] or str end
+
+M.theme = function()
+	-- local theme = require 'lualine.themes.rose-pine-alt'
+	local p = require 'rose-pine.palette'
+	local config = require 'rose-pine.config'
+
+	local bg_base = 'NONE'
+	local bg = 'NONE' or p.surface
+	-- theme.normal.c.gui = 'none'
+	-- theme.normal.c.gui = 'none'
+
+	do
+		-- transparent
+		local base_statusline_highlights = {
+			'StatusLine',
+			'StatusLineNC',
+			'Tabline',
+			'TabLineFill',
+			'TabLineSel',
+			'Winbar',
+			'WinbarNC',
+		}
+		for _, hl_group in pairs(base_statusline_highlights) do
+			vim.api.nvim_set_hl(0, hl_group, { bg = 'none' })
+		end
+	end
+	return {
+		normal = {
+			a = { bg = bg, fg = p.rose, gui = 'bold' },
+			b = { bg = bg, fg = p.text },
+			c = { bg = bg, fg = p.subtle, gui = 'italic' },
+		},
+		insert = {
+			a = { bg = bg, fg = p.foam, gui = 'bold' },
+		},
+		visual = {
+			a = { bg = bg, fg = p.iris, gui = 'bold' },
+		},
+		replace = {
+			a = { bg = bg, fg = p.pine, gui = 'bold' },
+		},
+		command = {
+			a = { bg = bg, fg = p.love, gui = 'bold' },
+		},
+		inactive = {
+			a = { bg = bg_base, fg = p.subtle, gui = 'bold' },
+			b = { bg = bg_base, fg = p.subtle },
+			c = { bg = bg_base, fg = p.subtle, gui = 'italic' },
+		},
+		inactive_winbar = {
+			a = { bg = bg_base, fg = p.pine, gui = 'bold' },
+			b = { bg = bg_base, fg = p.pine },
+			c = { bg = bg_base, fg = p.pine, gui = 'italic' },
+		},
+		winbar = {
+			a = { bg = bg_base, fg = p.pine, gui = 'bold' },
+			b = { bg = bg_base, fg = p.pine },
+			c = { bg = bg_base, fg = p.pine, gui = 'italic' },
+		},
+	}
+end
+
 M.update_status = function()
 	local path_separator = '/'
 	local data
@@ -95,6 +168,17 @@ M.filename_winbar = function()
 	if #paths == 1 then return paths[1] .. modified end
 	if #paths == 2 then return paths[#paths - 1] .. '/' .. paths[#paths] .. modified end
 	return '.../' .. paths[#paths - 1] .. '/' .. paths[#paths] .. modified
+end
+
+M.unsaved_buffers = function()
+	for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+		local is_modified = vim.api.nvim_buf_get_option(buf, 'modified')
+		local cur = vim.api.nvim_get_current_buf()
+		if is_modified and cur ~= buf then
+			return 'Unsaved buffers' -- any message or icon
+		end
+	end
+	return ''
 end
 
 return M
