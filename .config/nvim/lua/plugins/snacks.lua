@@ -5,10 +5,14 @@ return {
 	dependencies = {
 		U.highlights {
 			SnacksDebugPrint = { bg = 'surface', fg = 'white' },
+			SnacksIndent = { fg = 'overlay' },
+			SnacksIndentChunk = { fg = 'iris' },
+			SnacksIndentScope = { fg = 'iris' },
 		},
 	},
 	priority = 1000,
 	lazy = false,
+	init = function() vim.g.snacks_animate = false end,
 	--[[stylua: ignore]] --format
 	keys = {
 	{ '<leader>.', function() Snacks.scratch() end       , desc = 'Toggle Scratch Buffer' },
@@ -47,8 +51,17 @@ return {
 			-- }
 		},
 		---@type snacks.dashboard.Config
-		dashboard = {},
+		dashboard = { enabled = true },
 		input = {},
-		picker = { enabled = false },
+		---@class snacks.indent.Config
+		indent = {
+			enabled = true,
+			indent = {
+				char = '┊',
+			},
+			chunk = {
+				enabled = true,
+			},
+		},
 	},
 }

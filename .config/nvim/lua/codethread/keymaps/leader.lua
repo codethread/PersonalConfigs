@@ -150,7 +150,6 @@ Keys.tbl('<leader>', {
 		group = 'Toggle',
 		i = { 'Inlay Hints', Cmd "lua print'nothing setup'" },
 		m = { 'Markdown Preview', Cmd 'Markview Toggle' },
-		['>'] = { 'IndentScope', fns.toggle_indent_scope },
 		[' '] = { 'Whitespace', fns.toggle_listchars },
 		l = { 'Linewrap', fns.toggle_linewrap },
 	},

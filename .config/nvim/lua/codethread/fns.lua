@@ -102,16 +102,12 @@ function M.toggle_listchars()
 	local state = vim.b.ct_debug_spacing or false
 	if state then
 		vim.b.ct_debug_spacing = false
-		vim.b.miniindentscope_disable = false
 		vim.cmd 'set nolist'
 		vim.api.nvim_set_hl(0, 'Whitespace', { fg = U.hl 'base' })
-		require('ibl').setup_buffer(0, { enabled = true })
 	else
 		vim.b.ct_debug_spacing = true
-		vim.b.miniindentscope_disable = true
 		vim.cmd 'set list'
 		vim.api.nvim_set_hl(0, 'Whitespace', { fg = U.hl 'leaf' })
-		require('ibl').setup_buffer(0, { enabled = false })
 	end
 end
 
@@ -144,24 +140,6 @@ function M.toggle_file_history()
 		vim.cmd [[DiffviewClose]]
 	else
 		vim.cmd [[DiffviewFileHistory % --no-merges]]
-	end
-end
-
-function M.toggle_indent_scope()
-	local state = vim.b.ct_indent_scope or 'scope'
-	if state == 'indent' then
-		require('ibl').setup_buffer(0, {
-			scope = { enabled = true },
-		})
-
-		vim.b.miniindentscope_disable = true
-		vim.b.ct_indent_scope = 'scope'
-	else
-		require('ibl').setup_buffer(0, {
-			scope = { enabled = false },
-		})
-		vim.b.miniindentscope_disable = false
-		vim.b.ct_indent_scope = 'indent'
 	end
 end
 

@@ -1,50 +1,9 @@
 if vim.g.vscode then return {} end
 
 return {
-	{
-		'lukas-reineke/indent-blankline.nvim',
-		main = 'ibl',
-		event = U.LazyFile,
-		dependencies = {
-			U.highlights {
-				IblIndent = { fg = 'overlay' },
-				IblScope = { fg = 'iris' },
-			},
-		},
-		---@module "ibl"
-		---@type ibl.config
-		opts = {
-			indent = {
-				char = '┊',
-			},
-			scope = {
-				enabled = true, --
-				char = '│',
-				show_start = false,
-				show_end = false,
-			},
-		},
-	},
-
-	{
-		'echasnovski/mini.indentscope',
-		event = U.LazyFile,
-		dependencies = {
-			U.highlights {
-				MiniIndentscopeSymbol = { fg = 'iris' },
-			},
-		},
-		init = function()
-			vim.api.nvim_create_autocmd(
-				'BufNew',
-				{ callback = function(opts) vim.b[opts.buf].miniindentscope_disable = true end }
-			)
-		end,
-		opts = {
-			symbol = '│',
-			options = { try_as_border = true },
-		},
-	},
+	-- Keeping these around if moving to a termainl without builtin smear
+	-- { 'DanilaMihailov/beacon.nvim' },
+	-- { 'sphamba/smear-cursor.nvim', opts = {}, },
 
 	{ 'norcalli/nvim-colorizer.lua', cmd = 'ColorizerToggle' },
 
@@ -113,8 +72,4 @@ return {
 		cmd = 'Neotree',
 		opts = { window = { mappings = { ['Z'] = 'expand_all_nodes' } } },
 	},
-
-	-- Keeping these around if moving to a termainl without builtin smear
-	-- { 'DanilaMihailov/beacon.nvim' },
-	-- { 'sphamba/smear-cursor.nvim', opts = {}, },
 }
