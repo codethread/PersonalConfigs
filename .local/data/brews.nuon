@@ -54,6 +54,7 @@
 	brew "tokei"
 	brew "tree"
 	brew "grc"
+	brew "ast-grep"
 
 	# needed for gitwatch stuff
 	brew "coreutils"
