@@ -1,74 +1,4 @@
-local mode_maps = {
-	['INSERT'] = '',
-	['NORMAL'] = '',
-	['VISUAL'] = '',
-	['V-BLOCK'] = '',
-	['V-LINE'] = '',
-	['TERMINAL'] = '❯',
-	-- ["TERMINAL"] = "",
-}
-
-local function mode_map(str)
-	if mode_maps[str] == nil then return str end
-	return mode_maps[str]
-
-	-- local hydra_status_ok, hydra = pcall(require, 'hydra.statusline')
-	-- if not hydra_status_ok then
-	-- 	if mode_maps[str] == nil then return str end
-	-- 	return mode_maps[str]
-	-- end
-	--
-	-- if hydra.is_active() then return hydra.get_name() end
-	-- if mode_maps[str] == nil then return str end
-	-- return mode_maps[str]
-end
-
 if vim.g.vscode then return {} end
-local function theme()
-	-- local theme = require 'lualine.themes.rose-pine-alt'
-	local p = require 'rose-pine.palette'
-	local config = require 'rose-pine.config'
-
-	local bg_base = 'NONE'
-	local bg = 'NONE' or p.surface
-	-- theme.normal.c.gui = 'none'
-	-- theme.normal.c.gui = 'none'
-
-	return {
-		normal = {
-			a = { bg = bg, fg = p.rose, gui = 'bold' },
-			b = { bg = bg, fg = p.text },
-			c = { bg = bg, fg = p.subtle, gui = 'italic' },
-		},
-		insert = {
-			a = { bg = bg, fg = p.foam, gui = 'bold' },
-		},
-		visual = {
-			a = { bg = bg, fg = p.iris, gui = 'bold' },
-		},
-		replace = {
-			a = { bg = bg, fg = p.pine, gui = 'bold' },
-		},
-		command = {
-			a = { bg = bg, fg = p.love, gui = 'bold' },
-		},
-		inactive = {
-			a = { bg = bg_base, fg = p.subtle, gui = 'bold' },
-			b = { bg = bg_base, fg = p.subtle },
-			c = { bg = bg_base, fg = p.subtle, gui = 'italic' },
-		},
-		inactive_winbar = {
-			a = { bg = bg_base, fg = p.pine, gui = 'bold' },
-			b = { bg = bg_base, fg = p.pine },
-			c = { bg = bg_base, fg = p.pine, gui = 'italic' },
-		},
-		winbar = {
-			a = { bg = bg_base, fg = p.pine, gui = 'bold' },
-			b = { bg = bg_base, fg = p.pine },
-			c = { bg = bg_base, fg = p.pine, gui = 'italic' },
-		},
-	}
-end
 
 return {
 	{
@@ -105,36 +35,20 @@ return {
 				})
 			end, 1000)
 
-			local components = {
-				left = '',
-				right = '',
-				-- section_separators = { right = '', left = '' },
-			}
-
-			local base_statusline_highlights = {
-				'StatusLine',
-				'StatusLineNC',
-				'Tabline',
-				'TabLineFill',
-				'TabLineSel',
-				'Winbar',
-				'WinbarNC',
-			}
-			for _, hl_group in pairs(base_statusline_highlights) do
-				vim.api.nvim_set_hl(0, hl_group, { bg = 'none' })
-			end
+			local utils = require 'plugins.statusline.filename'
 
 			return {
 				options = {
-					theme = theme(),
+					theme = utils.theme(),
 					icons_enabled = true,
 					globalstatus = true,
 					disabled_filetypes = {
-						-- statusline = { 'alpha' },
+						statusline = { 'snacks_dashboard' },
+						tabline = { 'snacks_dashboard' },
 						winbar = {
+							'snacks_dashboard',
 							'help',
 							'no-neck-pain',
-							'dashboard',
 							'neogitstatus',
 							'Outline',
 						},
@@ -150,24 +64,14 @@ return {
 				},
 				sections = {
 					lualine_a = {
-						{
-							'mode',
-							icons_enabled = true,
-							-- separator = { left = ' ', right = '' },
-							fmt = mode_map,
-						},
+						{ 'mode', icons_enabled = true, fmt = utils.mode_map },
 					},
 					lualine_b = {
-						{
-							'branch',
-							-- separator = { right = ' ', left = '' },
-							-- left_padding = 2,
-						},
+						{ 'branch' },
 						'%=',
-						{
-							require('plugins.statusline.filename').update_status,
-						},
+						{ utils.update_status },
 					},
+					lualine_c = {},
 					lualine_x = {
 						{
 							function() return '  ' .. require('dap').status() end,
@@ -194,9 +98,13 @@ return {
 					},
 				},
 				winbar = {
-					lualine_c = {
+					lualine_a = {
 						{ 'diagnostics' },
-						{ require('plugins.statusline.filename').filename_winbar },
+					},
+					lualine_b = {
+						{ utils.filename_winbar },
+					},
+					lualine_c = {
 						{
 							function() return require('nvim-navic').get_location() end,
 							cond = function()
@@ -206,10 +114,7 @@ return {
 					},
 				},
 				inactive_winbar = {
-					lualine_c = {
-						{ 'diagnostics' },
-						{ require('plugins.statusline.filename').filename_winbar },
-					},
+					lualine_c = { { 'diagnostics' }, { utils.filename_winbar } },
 				},
 				tabline = {
 					lualine_a = {
@@ -218,8 +123,6 @@ return {
 							max_length = vim.o.columns / 2,
 							mode = 1, -- realtive name
 							-- mode = 2, -- tab name and number
-							-- separator = { left = ' ', right = '' },
-							-- right_padding = 2,
 							tabs_color = {
 								inactive = 'lualine_a_inactive',
 							},
@@ -234,18 +137,7 @@ return {
 						},
 					},
 					lualine_z = {
-						{
-							function()
-								for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-									local is_modified = vim.api.nvim_buf_get_option(buf, 'modified')
-									local cur = vim.api.nvim_get_current_buf()
-									if is_modified and cur ~= buf then
-										return 'Unsaved buffers' -- any message or icon
-									end
-								end
-								return ''
-							end,
-						},
+						{ utils.unsaved_buffers },
 					},
 				},
 				extensions = {
