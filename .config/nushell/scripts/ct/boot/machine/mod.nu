@@ -20,7 +20,7 @@ export def main [
 	dotty link;
 
 	# setup some folder structures how I like them
-	mkdir -v ~/dev/vendor/ ~/dev/learn/ ~/dev/projects/
+	mkdir -v ~/dev/vendor/ ~/dev/learn/ ~/dev/projects/ ~/.local/cache/docs
 
 	clone_tools --clean=$clean --force=$force
 

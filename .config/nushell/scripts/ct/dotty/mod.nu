@@ -174,6 +174,9 @@ def list-dirs-to-make []: list<string> -> list<string>  {
 }
 
 def get-project-files-to-link [proj, no_cache] {
+	# this may not have linked yet, so just to be sure
+	$env.GIT_CONFIG_GLOBAL = ([$env.DOTFILES ".config/git/config"] | path join)
+
 	# cd in order to get all the gitignores correct
 	cd $proj.from
 	let cache = cache load $proj.name

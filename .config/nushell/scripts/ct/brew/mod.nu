@@ -1,3 +1,6 @@
+# This brew module wraps macos `brew`, this then prevents accidental installs (which will be stopped)
+# inspired by nix - all installs are managed through `brew sync` via a brewfile
+
 use ct/core [dedent]
 
 # Remove all brew related packages not listed on the current menu
