@@ -84,8 +84,6 @@ function M.store_to_clipboard(str)
 	vim.cmd([[let @*="]] .. str .. '"')
 end
 
-function M.copy_filepath_relative() local p = vim.fn.expand '%:p' end
-
 function M.debounce(ms, fn)
 	local timer = vim.uv.new_timer()
 	return function(...)

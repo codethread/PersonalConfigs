@@ -52,7 +52,7 @@ Keys.tbl('<leader>', {
 		p = { 'Preview Hunk', function() require('gitsigns').preview_hunk() end },
 		r = { 'Reset Hunk', function() require('gitsigns').reset_hunk() end },
 		s = { '(un)Stage Hunk', function() require('gitsigns').stage_hunk() end },
-		v = { 'Ghub view', Cmd 'silent !gh repo view --web' },
+		v = { 'Ghub view', Snacks.gitbrowse.open },
 
 		w = {
 			group = 'Worktree',
@@ -163,7 +163,7 @@ Keys.tbl('<leader>', {
 	},
 	y = {
 		group = 'Yank',
-		l = { 'path [gitlab]', fns.copy_filepath_relative },
+		l = { 'path [gitlab]', Snacks.gitbrowse.get_url },
 		r = { 'path [root]', Cmd 'let @*=@%' }, -- TODO:
 		y = { 'path [relative]', Cmd 'let @*=@%' }, -- TODO:
 		s = { 'Search', Cmd 'Telescope neoclip' },

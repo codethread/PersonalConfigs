@@ -26,12 +26,24 @@ return {
 					target = '%1.%2',
 				},
 			},
+			hooks = {
+				-- TODO: not quite working
+				-- This hook is called whenever a file is about to be opened.
+				---@param filename (string) the full-path of the file
+				---@param exists (boolean) doess the file already exist
+				---@return (boolean) When true (default) the plugin takes care of opening the file, when the function returns false this indicated that opening of the file is done in the hook.
+				onOpenFile = function(filename, exists)
+					if not vim.g.vscode then return true end
+					local vscode = require 'vscode'
+					vscode.action('vscode.open', { uri = filename })
+					return
+				end,
+			},
 		},
 	},
 
 	{
 		'ThePrimeagen/harpoon',
-		lazy = true,
 		opts = {
 			menu = {
 				width = vim.api.nvim_win_get_width(0) - 4,
@@ -59,7 +71,6 @@ return {
 
 	{
 		'stevearc/oil.nvim',
-		dependencies = { 'nvim-tree/nvim-web-devicons' },
 		cmd = 'Oil',
 		opts = {
 			default_file_explorer = true,
@@ -67,7 +78,7 @@ return {
 				show_hidden = true,
 			},
 			columns = {
-				'icon', -- charming but as these can be edited, its annoying
+				'icon',
 				-- 'permissions',
 				-- 'size',
 				-- 'mtime',
@@ -81,8 +92,6 @@ return {
 				autosave_changes = true,
 			},
 			keymaps = {
-				['g?'] = 'actions.show_help',
-				['<CR>'] = 'actions.select',
 				['<C-s>'] = false,
 				['<C-h>'] = false,
 				['<C-t>'] = false,
@@ -113,38 +122,13 @@ return {
 	},
 
 	{
-		'folke/flash.nvim',
-		event = 'VeryLazy',
-		dependencies = {
-			U.highlights {
-				FlashLabel = { bg = 'surface', fg = 'white' },
-			},
-		},
-		---@type Flash.Config
-		opts = {
-			label = {
-				exclude = 'xb',
-			},
-			search = {
-				multi_window = false,
-			},
-			modes = {
-				search = {
-					enabled = false, -- i do like this but it's annoying on large files
-				},
-				char = {
-					-- can set to false, but can actually just use f/F r t/T to repeat motions, in case of overshooting
-					multi_line = true,
-				},
-			},
-		},
-        --[[stylua: ignore]] --format
-		keys = {
-			{ "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
-			{ "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
-			{ "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
-			{ "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
-			{ "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
-		},
+		{ folke / flash.nvim },
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
 	},
 }

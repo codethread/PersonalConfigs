@@ -7,6 +7,10 @@ return {
 
 	{ 'norcalli/nvim-colorizer.lua', cmd = 'ColorizerToggle' },
 
+	{ 'nvim-tree/nvim-web-devicons', opts = {}, cmd = 'NvimWebDeviconsHiTest' },
+	-- TODO: i actually prefer mini.icons but telescrope needs devicons, so migrate at some point
+	-- { 'nvim-mini/mini.icons', opts = {} },
+
 	{
 		'rose-pine/neovim',
 		name = 'rose-pine',

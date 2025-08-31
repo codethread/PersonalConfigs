@@ -80,8 +80,8 @@ local opts = {
 		},
 	},
 	profiling = {
-		loader = true,
-		require = true,
+		-- loader = true,
+		-- require = true,
 	},
 }
 require('lazy').setup(opts)
