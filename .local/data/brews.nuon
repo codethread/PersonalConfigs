@@ -75,12 +75,12 @@
 	cask "cursor"
 	cask "spotify"
 	cask "zed"
-
-	# Fonts
-	cask "font-fira-code-nerd-font"
-	cask "font-fira-code"
-	cask "font-symbols-only-nerd-font"
 	cask "ticktick"
+
+	# Fonts: i seem to find using nerd symbols standalone with kitty works better than nerd fonts
+	cask "font-fira-code"
+	cask "font-victor-mono"
+	cask "font-symbols-only-nerd-font"
 
 	mas "DaisyDisk", id: 411643860
 	mas "Magnet", id: 441258766
