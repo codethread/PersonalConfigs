@@ -5,9 +5,8 @@
 	email = adamhalldesigns@gmail.com
 	name = codethread
 [core]
-	excludesfile = ~/.gitignore_global
+	excludesfile = ~/.config/git/ignore
 	editor = nvim
-	attributesfile = ~/.gitattributes
 [pull]
 	rebase = true
 [push]

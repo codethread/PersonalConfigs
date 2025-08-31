@@ -1,4 +1,0 @@
-.ideavimrc linguist-language=Vim-Script
-.tmux.conf linguist-language=shell
-tmux.conf linguist-language=shell
-*.nu linguist-language=Nushell

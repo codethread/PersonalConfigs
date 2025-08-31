@@ -1,6 +1,0 @@
-*.lock.json
-bun.lockb
-Cargo.lock
-.yarn
-.git/
-.zig-cache/

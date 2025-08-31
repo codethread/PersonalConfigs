@@ -1,0 +1,7 @@
+--hidden
+-g=!.git
+-g=!.zig-cache
+-g=!.yarn
+-g=!Cargo.lock
+-g=!*.lock.json
+-g=!bun.lockb

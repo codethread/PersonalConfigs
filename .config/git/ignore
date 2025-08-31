@@ -79,4 +79,8 @@ project/metals.sbt
 # nu
 scratch.nu
 
+# zig
 .zig-cache/
+
+# ai
+**/.claude.local.json

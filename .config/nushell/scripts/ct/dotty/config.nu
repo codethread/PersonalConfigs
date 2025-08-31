@@ -11,7 +11,7 @@ export def load []: nothing -> table<name: string, from: path, to: path, exclude
 	let config = [
 		[name, from, to, excludes];
 
-		[dots, (dir ~/PersonalConfigs), (dir ~), [ "**/.luacheckrc" "**/.stylua.toml" ] ]
+		[dots, (dir ~/PersonalConfigs), (dir ~), [ "**/.stylua.toml" "**/.gitattributes" ] ]
 
 		[work, (dir ~/workfiles), (dir ~), []]
 

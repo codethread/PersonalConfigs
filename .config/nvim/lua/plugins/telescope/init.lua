@@ -155,12 +155,6 @@ return {
 
 					-- these are lua patterns
 					file_ignore_patterns = U.flatten {
-						{
-							'^.git/',
-							'^.yarn/',
-							-- '/vendor/',
-							-- '%.lock',
-						},
 						U.project('~/dev/projects/qmk.nvim', { 'lua/qmk/lib/' }),
 					},
 					vimgrep_arguments = {
@@ -181,18 +175,8 @@ return {
 					find_files = {
 						find_command = {
 							'rg',
-							'--hidden',
-							'--glob',
-							'!.git',
 							'--files',
 						},
-					},
-					live_grep = {
-						hidden = true,
-						glob_pattern = '!.git',
-					},
-					live_grep_args = {
-						glob_pattern = '!.git',
 					},
 					diagnostics = {
 						path_display = 'hidden',

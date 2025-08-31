@@ -74,7 +74,6 @@ M.live_grepper = function(opts)
 					cmd = {
 						'rg',
 						'--vimgrep',
-						'--hidden',
 						'--smart-case',
 						'--glob-case-insensitive',
 						-- TODO: -e/--regexp for handling flags
