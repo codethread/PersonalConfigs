@@ -122,13 +122,38 @@ return {
 	},
 
 	{
-		{ folke / flash.nvim },
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
+		'folke/flash.nvim',
+		event = U.LazyFile,
+		dependencies = {
+			U.highlights {
+				FlashLabel = { bg = 'surface', fg = 'white' },
+			},
+		},
+		---@type Flash.Config
+		opts = {
+			label = {
+				exclude = 'xb',
+			},
+			search = {
+				multi_window = false,
+			},
+			modes = {
+				search = {
+					enabled = false, -- i do like this but it's annoying on large files
+				},
+				char = {
+					-- can set to false, but can actually just use f/F r t/T to repeat motions, in case of overshooting
+					multi_line = true,
+				},
+			},
+		},
+        --[[stylua: ignore]]
+		keys = {
+			{ "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
+			{ "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
+			{ "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
+			{ "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
+			{ "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
+		},
 	},
 }
