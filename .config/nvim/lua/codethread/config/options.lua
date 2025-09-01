@@ -50,6 +50,7 @@ vim.opt.timeoutlen = 500 -- By default timeoutlen is 1000 ms
 vim.opt.signcolumn = 'yes'
 -- always keep some space around the window
 vim.opt.scrolloff = 4
+vim.o.winblend = 0
 
 vim.opt.hlsearch = false -- don't keep / highlights after searching
 vim.o.smartcase = true

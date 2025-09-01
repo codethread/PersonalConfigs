@@ -17,6 +17,10 @@ return {
 		end,
 		---@type BqfConfig
 		opts = {
+			---@diagnostic disable-next-line: missing-fields
+			preview = {
+				winblend = 0,
+			},
 			func_map = {
 				filter = '<C-o>', -- create new list for signed items
 				filterr = '<C-b>', -- create new list for non-signed items
