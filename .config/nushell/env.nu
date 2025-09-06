@@ -63,6 +63,8 @@ $env.HOMEBREW_REPOSITORY = "/opt/homebrew"
 # not sure if these matter?
 # $env.INFOPATH = "/opt/homebrew/share/info:"
 # $env.MANPATH = ([$env.MANPATH "/opt/homebrew/share/man:"] | str join)
+let kitty = "/Applications/kitty.app/Contents/Resources/man"
+if ($kitty | path exists) { $env.MANPATH = ([($env | get --optional MANPATH) $"($kitty):"] | str join) }
 
 #: }}}
 #: emacs {{{
