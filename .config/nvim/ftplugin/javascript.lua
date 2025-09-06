@@ -1,7 +1,10 @@
-local keymapper = require 'codethread.keymaps.keymapper'
 vim.opt_local.spell = true
 vim.opt_local.spelloptions:append 'camel'
 vim.opt_local.spellcapcheck = ''
+
+if vim.g.vscode then return end
+
+local keymapper = require 'codethread.keymaps.keymapper'
 
 -- map <leader>ll yiwoconsole.log('\n<C-r>0:', <C-r>0);<C-[>k
 -- map <leader>ld :%s/.*console.log.*\n//g<CR>

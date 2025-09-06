@@ -4,6 +4,31 @@ local fns = require 'codethread.fns'
 -- nnoremap <silent> } :<C-u>execute "keepjumps norm! " . v:count1 . "}"<CR>
 -- nnoremap <silent> { :<C-u>execute "keepjumps norm! " . v:count1 . "{"<CR>
 
+vim.cmd [[
+	" paste in visual selection without adding to register
+	xnoremap <leader>p "_dP
+
+	" delete but without adding to register
+	nnoremap x "_d
+	nnoremap X "_D
+
+	" Copy to clipboard
+	vnoremap  <leader>y "+y
+	" nnoremap  <leader>Y "+yg_
+	" nnoremap  <leader>y "+y
+	" nnoremap  <leader>yy "+yy
+
+	" Paste from clipboard
+	" nnoremap <leader>v "+p
+	" nnoremap <leader>v "+P
+	" vnoremap <leader>v "+p
+	" vnoremap <leader>v "+P
+
+	" move text
+	vnoremap <Down> :m '>+1<CR>gv=gv
+	vnoremap <Up> :m '<-2<CR>gv=gv
+]]
+
 if vim.g.vscode then
 	local vscode = require 'vscode'
 
@@ -25,6 +50,8 @@ if vim.g.vscode then
 		vscode.call('revealLine', { args = { lineNumber = curline, at = 'center' } })
 	end, { noremap = true, silent = true })
 else
+
+
 --[[stylua: ignore]] --format
 Keys.list({}, {
 	{ 'jk'   , 'esc'            , '<ESC>'                                     , mode = 'i' },

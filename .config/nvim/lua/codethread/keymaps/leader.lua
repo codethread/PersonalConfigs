@@ -136,19 +136,27 @@ Keys.tbl('<leader>', {
 	o = {
 		group = 'Open',
 		a = { 'Aerial', Cmd 'AerialToggle! left' },
-		f = { 'Open finder', function() vim.ui.open(vim.fn.expand '%:p:h') end },
 		-- if you can't beat 'em
 		-- c = { 'VSCode', Cmd 'silent !code %' },
 		c = { 'Cursor', Cmd 'silent !cursor %' }, -- controversial
 		d = { 'Dir', Cmd 'Oil' },
+		f = { 'Open finder', function() vim.ui.open(vim.fn.expand '%:p:h') end },
+		g = { 'git remote', function() Snacks.gitbrowse.open() end },
 		l = { 'open log file', function() require('codethread.logger').select() end },
 		n = { 'Notifcation History', Cmd 'LogOpen notifications' },
 		N = { 'Hide Notifications', function() Snacks.notifier.hide() end },
+		o = {
+			'Notes',
+			function()
+				Snacks.scratch.open { ft = 'markdown', template = '# Notes', win = { position = 'right' } }
+			end,
+		},
 		S = { 'Sessions', function() require('persistence').select() end },
 	},
 	t = {
 		group = 'Toggle',
-		i = { 'Inlay Hints', Cmd "lua print'nothing setup'" },
+		i = { 'Inlay Hints', Snacks.toggle.indent },
+		-- i = { 'Inlay Hints', Cmd "lua print'nothing setup'" },
 		m = { 'Markdown Preview', Cmd 'Markview Toggle' },
 		[' '] = { 'Whitespace', fns.toggle_listchars },
 		l = { 'Linewrap', fns.toggle_linewrap },
@@ -163,9 +171,9 @@ Keys.tbl('<leader>', {
 	},
 	y = {
 		group = 'Yank',
-		l = { 'path [gitlab]', Snacks.gitbrowse.get_url },
-		r = { 'path [root]', Cmd 'let @*=@%' }, -- TODO:
-		y = { 'path [relative]', Cmd 'let @*=@%' }, -- TODO:
+		y = { 'path [root]', fns.yank_current_file },
+		l = { 'last', fns.save_register_to_clipboard },
+		-- r = { 'path [root]', Cmd 'let @*=@%' },
 		s = { 'Search', Cmd 'Telescope neoclip' },
 	},
 })

@@ -75,6 +75,7 @@ project/metals.sbt
 
 # neovim
 **/scratch.lua
+**/.brain.md
 
 # nu
 scratch.nu
@@ -84,3 +85,4 @@ scratch.nu
 
 # ai
 **/.claude.local.json
+.playwright-mcp

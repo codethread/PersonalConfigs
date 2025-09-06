@@ -10,10 +10,14 @@ local in_dotfiles = false
 ---@param msg string
 local function dotty_info(msg)
 	log.info('info msg:', msg)
-	vim.notify(msg, vim.log.levels.INFO, {
-		title = 'Dotty',
-		hide_from_history = true,
-	})
+	vim.schedule(
+		function()
+			vim.notify(msg, vim.log.levels.INFO, {
+				title = 'Dotty',
+				hide_from_history = true,
+			})
+		end
+	)
 end
 
 ---Run dotty test to check if the current file is a dotty file

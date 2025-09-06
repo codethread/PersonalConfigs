@@ -1,7 +1,18 @@
 return {
 	{
 		'j-hui/fidget.nvim',
-		opts = { progress = { ignore = {}, display = { done_icon = '✓' } } },
+		opts = {
+			progress = {
+				ignore = {},
+				display = { done_icon = '✓' },
+			},
+			notification = {
+				window = {
+					winblend = 0,
+					border = 'rounded',
+				},
+			},
+		},
 	},
 
 	{ 'b0o/SchemaStore.nvim', lazy = true },

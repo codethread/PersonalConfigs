@@ -1,28 +1,3 @@
-vim.cmd [[
-	" paste in visual selection without adding to register
-	xnoremap <leader>p "_dP
-
-	" delete but without adding to register
-	nnoremap x "_d
-	nnoremap X "_D
-
-	" Copy to clipboard
-	vnoremap  <leader>y "+y
-	nnoremap  <leader>Y "+yg_
-	nnoremap  <leader>y "+y
-	nnoremap  <leader>yy "+yy
-
-	" Paste from clipboard
-	nnoremap <leader>v "+p
-	nnoremap <leader>v "+P
-	vnoremap <leader>v "+p
-	vnoremap <leader>v "+P
-
-	" move text
-	vnoremap <Down> :m '>+1<CR>gv=gv
-	vnoremap <Up> :m '<-2<CR>gv=gv
-]]
-
 return U.F {
 	{ 'echasnovski/mini.ai', event = U.LazyFile, opts = {} },
 

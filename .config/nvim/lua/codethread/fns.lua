@@ -82,6 +82,7 @@ function M.store_to_clipboard(str)
 		return
 	end
 	vim.cmd([[let @*="]] .. str .. '"')
+	vim.notify 'saved to clipboard'
 end
 
 function M.debounce(ms, fn)
@@ -244,6 +245,24 @@ function M.append_to_quickfix(entries)
 		if should_add then table.insert(append, e) end
 	end
 	vim.fn.setqflist({}, 'a', { items = append })
+end
+
+function M.yank_current_file()
+	local root = vim.fs.root(0, '.git')
+	local cur = vim.fn.expand '%:p'
+	if not root or not cur then return end
+	local str = vim.fs.relpath(root, cur, {})
+	M.store_to_clipboard(str)
+	return str
+end
+
+function M.save_register_to_clipboard()
+	-- Get it as a list of lines
+	-- local lines = vim.fn.getreg('"', 1, 1)
+	-- Get the register type as well (characterwise, linewise, blockwise)
+	local type, content = vim.fn.getregtype '"', vim.fn.getreg '"'
+	if type ~= 'v' then vim.notify 'hmm' end
+	M.store_to_clipboard(content)
 end
 
 return M

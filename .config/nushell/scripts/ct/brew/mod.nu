@@ -39,6 +39,18 @@ export def install [...args] {
 	err
 }
 
+# show everything currently installed in brewfile format
+export def show [] {
+	with-env {
+		HOMEBREW_NO_AUTO_UPDATE: 1
+		HOMEBREW_BUNDLE_NO_UPGRADE: 1
+		HOMEBREW_BUNDLE_MAS_SKIP: 1
+	} {
+		^brew bundle dump --file=- | lines | strip-comments | sort
+	}
+}
+
+# TODO: fix
 export def diff [] {
 	let conf = get_bundle_for_machine | lines | strip-comments | sort
 	let actual = with-env {
@@ -46,7 +58,7 @@ export def diff [] {
 		HOMEBREW_BUNDLE_NO_UPGRADE: 1
 		HOMEBREW_BUNDLE_MAS_SKIP: 1
 	} {
-		^brew bundle dump --vscode --file=- | lines | strip-comments | sort
+		^brew bundle dump --file=- | lines | strip-comments | sort
 	}
 
 	$actual | where $it not-in $conf

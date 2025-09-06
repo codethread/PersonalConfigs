@@ -31,7 +31,7 @@
       "~/.local/cache/docs"
     ]
   },
-  "model": "opusplan",
+  "model": "sonnet",
   "hooks": {
     "PreToolUse": [
       {

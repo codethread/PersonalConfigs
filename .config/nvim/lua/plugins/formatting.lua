@@ -1,3 +1,5 @@
+if vim.g.vscode then return {} end
+
 ---@type conform.FiletypeFormatter
 ------Create a table of formatters for conform
 ------@param formatters conform.FiletypeFormatter
