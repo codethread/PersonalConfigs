@@ -64,6 +64,9 @@
 	# brew "socat" # needed till --publish released
 	# cask "container" #building from source
 
+	tap "nikitabobko/tap"
+	cask "aerospace"
+
 	# Apps
 	cask "1password"
 	cask "1password-cli"
@@ -89,11 +92,11 @@
 	# mas "Vimari", id: 1480933944
 
 	# vs-vim
-	#vscode "cunbidun.flash-vscode"
+	vscode "cunbidun.flash-vscode"
 	#vscode "lucax88x.codeacejumper"
 	#vscode "danprince.vsnetrw"
 	vscode "haphazarddev.oil-code"
-	#vscode "vscodevim.vim"
+	vscode "vscodevim.vim"
 
 	# format
 	vscode "dbaeumer.vscode-eslint"
@@ -106,8 +109,8 @@
 	vscode "usernamehw.commands"
 	vscode "wraith13.unsaved-files-vscode"
 
-	# vscode "formulahendry.auto-close-tag"
-	# vscode "formulahendry.auto-rename-tag"
+	vscode "formulahendry.auto-close-tag"
+	vscode "formulahendry.auto-rename-tag"
 
 	# theme
 	vscode "mvllow.rose-pine"
@@ -181,14 +184,6 @@
 	# logs
 	brew "miller"
 
-	# native??
-	# brew "watchman"
-	# brew "rbenv"
-	# brew "ruby-build"
-	# brew "ruby@3.1"
-	# cask "zulu@17" # handles android stuff
-	# cask "flipper"
-
 	# simulator MCP
 	# tap "facebook/fb"
 	# brew "facebook/fb/idb-companion"
@@ -206,7 +201,7 @@
 	# mas "Key Codes", id: 414568915
 
 	# vscode "apollographql.vscode-apollo"
-	# vscode "rohit-gohri.format-code-action"
+	vscode "rohit-gohri.format-code-action"
 	# vscode "gitlab.gitlab-workflow"
 	vscode "golang.go"
 	vscode "styled-components.vscode-styled-components"
