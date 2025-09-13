@@ -31,10 +31,10 @@ def wezterm_hooks [] {
 def fe-stuff [] {
 	[
 		{|before, after| if (is-fe $before) { print $"(ansi yellow) FE environment unloaded(ansi reset)"}  },
-		{
-			condition: {|before, after| is-fe $after },
-			code: 'alias "git push" = gitlab push'
-		},
+		# {
+		# 	condition: {|before, after| is-fe $after },
+		# 	code: 'alias "git push" = gitlab push'
+		# },
 		{|before, after| if (is-fe $after) { print $"(ansi blue) FE environment loaded(ansi reset)"}  },
 	]
 }

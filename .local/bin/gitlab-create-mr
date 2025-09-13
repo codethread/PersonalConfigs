@@ -1,0 +1,77 @@
+#!/bin/bash
+
+# Pre-push hook converted from Nushell script
+# Automatically creates GitLab MR for feature branches
+
+description='### Brief
+
+### Work done
+
+### Screenshots
+| title | title |
+| ------ | ------ |
+| image | image |'
+
+info() {
+    echo -e "\033[32m$1\033[0m"
+}
+
+git_current_branch() {
+    git rev-parse --abbrev-ref HEAD
+}
+
+has_mr() {
+    glab mr view >/dev/null 2>&1
+    return $?
+}
+
+get_first_commit_since_main() {
+    local main_branch
+    main_branch=$(git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@')
+    git rev-list --reverse "origin/$main_branch..HEAD" | head -n 1
+}
+
+create_mr_if_none() {
+    if ! has_mr; then
+        info "Creating MR"
+        local first_commit_title
+        first_commit_title=$(git log --format="%s" "$(get_first_commit_since_main)" -n 1)
+        glab mr create \
+            --draft \
+            --assignee @me \
+            --title "$first_commit_title" \
+            --description "$description" \
+            --remove-source-branch \
+            --yes
+        return $?
+    fi
+    return 0
+}
+
+main() {
+    current_branch=$(git_current_branch)
+
+    case "$current_branch" in
+        "master")
+            # Allow normal push
+            exit 0
+            ;;
+        "develop")
+            # Allow normal push
+            exit 0
+            ;;
+        "main")
+            # Allow normal push
+            exit 0
+            ;;
+        *)
+            # For feature branches, create MR if none exists
+            create_mr_if_none
+            exit $?
+            ;;
+    esac
+}
+
+# Run main function
+main
+

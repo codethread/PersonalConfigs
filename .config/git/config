@@ -18,6 +18,8 @@
 	lg = !"git lg1"
 	diff-image = "!f() { cd -- \"${GIT_PREFIX:-.}\"; GIT_DIFF_IMAGE_ENABLED=1 git diff \"$@\"; }; f"
 	add-commit = !git add -A && git commit
+	push = "!f() { command git push \"$@\" && gitlab-create-mr 2>/dev/null || true; }; f"
+	push-mr = !gitlab-create-mr
 [merge "npm-merge-driver"]
 	name = automatically merge npm lockfiles
 	driver = npx npm-merge-driver merge %A %O %B %P

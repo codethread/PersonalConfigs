@@ -7,6 +7,10 @@
 .history/
 .scratchpads/
 .log/
+.logs/
+
+# ai workbench
+.wip/
 
 ## EMACS
 *~
@@ -86,3 +90,5 @@ scratch.nu
 # ai
 **/.claude.local.json
 .playwright-mcp
+
+**/.claude/settings.local.json
