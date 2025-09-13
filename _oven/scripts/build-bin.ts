@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 
 import { $ } from "bun";
-import { chmod, readdir, readFile, writeFile } from "fs/promises";
+import { chmod, readdir } from "fs/promises";
 import { basename, join } from "path";
 
 const BIN_SRC_DIR = join(import.meta.dir, "..", "bin");
@@ -14,66 +14,94 @@ async function buildExecutables() {
   const files = await readdir(BIN_SRC_DIR);
   const tsFiles = files.filter((f) => f.endsWith(".ts"));
 
-  for (const file of tsFiles) {
+  console.log(`Found ${tsFiles.length} TypeScript files to build\n`);
+
+  // Build all files in parallel
+  const buildPromises = tsFiles.map(async (file) => {
     const srcPath = join(BIN_SRC_DIR, file);
     const destName = basename(file, ".ts"); // Remove .ts extension
     const destPath = join(BIN_DEST_DIR, destName);
 
-    console.log(`Building ${file} -> ${destName}`);
-
     try {
-      // Read the source file
-      const content = await readFile(srcPath, "utf-8");
+      // Use Bun.build API to create standalone executable
+      const result = await Bun.build({
+        entrypoints: [srcPath],
+        compile: {
+          target:
+            process.platform === "darwin"
+              ? process.arch === "arm64"
+                ? "bun-darwin-arm64"
+                : "bun-darwin-x64"
+              : process.platform === "linux"
+                ? "bun-linux-x64"
+                : "bun-linux-x64", // fallback
+          outfile: destPath,
+        },
+        // Optimization options
+        minify: true,
+        bytecode: true, // Faster startup
+        sourcemap: "inline",
+      });
 
-      // Check the shebang to determine the runtime
-      let shebang = "#!/usr/bin/env bun";
-      const firstLine = content.split("\n")[0];
-      if (firstLine.startsWith("#!")) {
-        shebang = firstLine;
-      }
-
-      // For bun files, we can use bun build to create a standalone executable
-      if (shebang.includes("bun")) {
-        // Build with bun
-        await $`bun build ${srcPath} --compile --outfile ${destPath}`.quiet();
-      } else if (shebang.includes("node")) {
-        // For node files, just copy them as-is (they're already JavaScript compatible)
-        await writeFile(destPath, content);
-      } else {
-        // Default to copying the file
-        await writeFile(destPath, content);
+      if (!result.success) {
+        const errors = result.logs.map((msg) => `  ${msg}`).join("\n");
+        return {
+          file,
+          destName,
+          success: false,
+          error: `Build failed:\n${errors}`,
+        };
       }
 
       // Make the file executable
       await chmod(destPath, 0o755);
+      return { file, destName, success: true };
     } catch (error) {
-      console.error(`Error building ${file}:`, error);
+      return {
+        file,
+        destName,
+        success: false,
+        error: `Exception: ${error}`,
+      };
+    }
+  });
+
+  // Wait for all builds to complete
+  const results = await Promise.all(buildPromises);
+
+  // Separate successes and failures
+  const successes = results.filter((r) => r.success);
+  const failures = results.filter((r) => !r.success);
+
+  // Display results
+  if (successes.length > 0) {
+    console.log("✅ Successfully built:");
+    for (const { file, destName } of successes) {
+      console.log(`  • ${file} -> ${destName}`);
     }
   }
 
-  // Also copy any shared modules that might be needed
-  const sharedSrcDir = join(BIN_SRC_DIR, "shared");
-  const sharedDestDir = join(BIN_DEST_DIR, "shared");
-
-  try {
-    await $`mkdir -p ${sharedDestDir}`.quiet();
-    await $`cp -r ${sharedSrcDir}/* ${sharedDestDir}/`.quiet();
-    console.log("Copied shared modules");
-  } catch (error) {
-    console.log("No shared modules to copy or error copying:", error.message);
+  if (failures.length > 0) {
+    console.log("\n❌ Failed to build:");
+    for (const { file, destName, error } of failures) {
+      console.log(`  • ${file} -> ${destName}`);
+      console.error(`    ${error}`);
+    }
   }
+
+  console.log(`\nSummary: ${successes.length} succeeded, ${failures.length} failed`);
 
   console.log("Cleaning build artifacts");
   const ovenDir = join(import.meta.dir, "..");
   const ovenFiles = await readdir(ovenDir);
   const buildArtifacts = ovenFiles.filter((f) => f.endsWith(".bun-build"));
-  
+
   for (const artifact of buildArtifacts) {
     const artifactPath = join(ovenDir, artifact);
     await $`rm ${artifactPath}`.quiet();
     console.log(`  Removed: ${artifact}`);
   }
-  
+
   if (buildArtifacts.length === 0) {
     console.log("  No build artifacts to clean");
   }

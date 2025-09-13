@@ -6,22 +6,26 @@ import {fzf} from "./shared/fzf";
 // try to remove remote/<blah> if it exists
 const remoteRegex = /remotes\/[^/]*\//;
 
-try {
-	const branches = (await $`git branch --all | grep -v HEAD`.text("utf-8")).split("\n");
+async function main() {
+	try {
+		const branches = (await $`git branch --all | grep -v HEAD`.text("utf-8")).split("\n");
 
-	const behind = branches.filter((b) => b.startsWith("+"));
-	const out = await fzf(branches, {tmux: true});
+		const behind = branches.filter((b) => b.startsWith("+"));
+		const out = await fzf(branches, {tmux: true});
 
-	const branch = out.trim().replace(remoteRegex, "").replace("+ ", "").replace("* ", "");
+		const branch = out.trim().replace(remoteRegex, "").replace("+ ", "").replace("* ", "");
 
-	// TODO: this also means checkedout in a worktree
-	if (false && behind.length > 1) {
-		console.log("the following are behind their remote");
-		console.log(behind);
-		console.log("");
+		// TODO: this also means checkedout in a worktree
+		if (false && behind.length > 1) {
+			console.log("the following are behind their remote");
+			console.log(behind);
+			console.log("");
+		}
+		await $`git checkout ${branch}`;
+	} catch (e) {
+		console.error(e);
+		process.exit(1);
 	}
-	await $`git checkout ${branch}`;
-} catch (e) {
-	console.error(e);
-	process.exit(1);
 }
+
+main();
