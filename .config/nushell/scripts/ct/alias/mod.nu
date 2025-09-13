@@ -1,6 +1,7 @@
 use git.nu *
 use node.nu *
 use tmux.nu *
+use claude.nu *
 
 # print out a table where each cell is clearly marked, helpful when understanding empty lists
 alias table-debug = table --theme thin
