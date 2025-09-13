@@ -60,6 +60,7 @@ cmd-ctrl-i = 'workspace 2'
 cmd-ctrl-o = 'workspace 3'
 cmd-ctrl-p = 'workspace 4'
 cmd-ctrl-y = 'workspace 5'
+cmd-ctrl-n = 'workspace other'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
 alt-tab = 'workspace-back-and-forth'
@@ -77,11 +78,12 @@ r = ['reload-config', 'mode main'] # reset layout
 shift-r = ['flatten-workspace-tree', 'mode main'] # reset layout
 backspace = ['close-all-windows-but-current', 'mode main']
 
+f = ['layout floating tiling', 'mode main']
+a = ['layout h_accordion', 'mode main']
+t = ['layout tiling', 'mode main']
+
 [mode.move.binding]
 esc = 'mode main'
-
-f = ['layout floating tiling', 'mode main']
-a = ['layout h_accordion tiling', 'mode main']
 
 h = ['move left', 'mode main']
 j = ['move down', 'mode main']
@@ -98,15 +100,11 @@ i = ['move-node-to-workspace --focus-follows-window 2', 'mode main']
 o = ['move-node-to-workspace --focus-follows-window 3', 'mode main']
 p = ['move-node-to-workspace --focus-follows-window 4', 'mode main']
 y = ['move-node-to-workspace --focus-follows-window 5', 'mode main']
+n = ['move-node-to-workspace --focus-follows-window other', 'mode main']
 
 # https://nikitabobko.github.io/AeroSpace/guide#on-window-detected-callback
 #####################################
 # Main
-[[on-window-detected]]
-if.app-id = 'net.kovidgoyal.kitty'
-if.during-aerospace-startup = true
-run = 'move-node-to-workspace 1'
-
 [[on-window-detected]]
 if.app-id = 'net.kovidgoyal.kitty'
 if.during-aerospace-startup = true
@@ -122,18 +120,17 @@ if.app-id = 'company.thebrowser.Browser'
 if.during-aerospace-startup = true
 run = 'move-node-to-workspace 2'
 
-
 [[on-window-detected]]
-if.app-id = 'com.github.wez.wezterm'
-if.during-aerospace-startup = true
-run = 'move-node-to-workspace 2'
+if.app-id = 'com.figma.Desktop'
+run = 'move-node-to-workspace 5'
+
+# deno markdown preview
+[[on-window-detected]]
+if.window-title-regex-substring = 'Peek preview'
+run = 'layout tiling'
 
 #####################################
 # Alt
-[[on-window-detected]]
-if.app-id = 'com.figma.Desktop'
-if.during-aerospace-startup = true
-run = 'move-node-to-workspace 2'
 # [[on-window-detected]]
 # if.app-id = 'com.TickTick.task.mac'
 # run = 'move-node-to-workspace 2'
@@ -154,16 +151,11 @@ run = 'move-node-to-workspace 3'
 #####################################
 # Media
 [[on-window-detected]]
-if.app-id = 'com.apple.Music'
-run = 'move-node-to-workspace 4'
-
-# youtube music
-[[on-window-detected]]
-if.app-id = 'com.google.Chrome.app.cinhimbnkkaeohfgghhklpknlkffjgod'
-run = 'move-node-to-workspace 4'
-
-[[on-window-detected]]
 if.app-id = 'com.spotify.client'
+run = 'move-node-to-workspace 4'
+
+[[on-window-detected]]
+if.app-id = 'com.TickTick.task.mac'
 run = 'move-node-to-workspace 4'
 
 #####################################
