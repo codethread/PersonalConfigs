@@ -55,6 +55,8 @@
 	brew "tree"
 	brew "grc"
 	brew "ast-grep"
+	brew "ffmpeg"
+	brew "yt-dlp"
 
 	# needed for gitwatch stuff
 	brew "coreutils"
@@ -138,8 +140,6 @@
 	##################################
 	cask "discord"
 	cask "whatsapp"
-
-	brew "yt-dlp"
 
 	# Fast, disk space efficient package manager
 	# brew "pnpm"
