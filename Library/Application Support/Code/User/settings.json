@@ -514,5 +514,6 @@
   ],
   "editor.minimap.enabled": false,
   "containers.containerClient": "com.microsoft.visualstudio.containers.docker",
-  "containers.orchestratorClient": "com.microsoft.visualstudio.orchestrators.dockercompose"
+  "containers.orchestratorClient": "com.microsoft.visualstudio.orchestrators.dockercompose",
+  "accessibility.voice.autoSynthesize": "on"
 }
