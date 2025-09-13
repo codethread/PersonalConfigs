@@ -1,17 +1,19 @@
 {
-  "name": "dots",
-  "workspaces": [
-    "lib",
-    "cmds"
-  ],
-  "scripts": {
-    "setup": "bun --filter '*' setup"
-  },
-  "devDependencies": {
-    "@total-typescript/ts-reset": "^0.6.1",
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
-  }
+	"name": "dots",
+	"private": true,
+	"scripts": {
+		"format": "biome format --write .",
+		"lint": "biome lint .",
+		"check": "biome check .",
+		"fix": "biome check --write --unsafe .",
+		"build": "bun run ./scripts/build-bin.ts"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.2.4",
+		"@total-typescript/ts-reset": "^0.6.1",
+		"@types/bun": "latest"
+	},
+	"peerDependencies": {
+		"typescript": "^5.0.0"
+	}
 }

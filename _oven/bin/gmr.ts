@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const { assert } = require("console");
+const {assert} = require("console");
 
 const tokenUrl =
 	"https://git.perkbox.io/-/profile/personal_access_tokens?name=Example+Access+token&scopes=read_api,read_user";
@@ -34,9 +34,9 @@ async function main() {
 	const body = {
 		query: `query MRsBranch {
 currentUser { name }
-project(fullPath: \"${repoName}\") {
+project(fullPath: "${repoName}") {
 name
-mergeRequests(state: opened, sourceBranches: \"${branch}\") {
+mergeRequests(state: opened, sourceBranches: "${branch}") {
 count
 nodes {
 title
@@ -58,27 +58,24 @@ webUrl
 		.then((d) => {
 			return d.json();
 		})
-		.then(({ data, errors }) => {
+		.then(({data, errors}) => {
 			if (errors) throw errors;
 			if (!data.currentUser)
-				throw new Error(
-					`Look like your token has expired, create a new one with ${tokenUrl}`,
-				);
+				throw new Error(`Look like your token has expired, create a new one with ${tokenUrl}`);
 			return data;
 		});
 
 	const mergeRequests = d?.project?.mergeRequests;
-	if (mergeRequests?.count == 0) {
+	if (mergeRequests?.count === 0) {
 		console.log("no open MRs");
 		process.exit(1);
 	}
 
 	const mrs = mergeRequests?.nodes;
 
-	if (!mrs)
-		throw new Error(`no mrs in payload\n\n${JSON.stringify(d, null, 2)}`);
+	if (!mrs) throw new Error(`no mrs in payload\n\n${JSON.stringify(d, null, 2)}`);
 
-	mrs.forEach(({ webUrl }) => {
+	mrs.forEach(({webUrl}) => {
 		console.log(webUrl);
 		shell(`open ${webUrl}`);
 	});
@@ -87,19 +84,15 @@ webUrl
 /* --------------------------------------------------------------- */
 /*                      NOTIFCATIONS                               */
 /* --------------------------------------------------------------- */
-function notify(msg, title) {
-	shell(
-		`osascript -e 'display notification "${msg}"${
-			title ? ` with title "${title}"` : ""
-		}'`,
-	);
+function _notify(msg, title) {
+	shell(`osascript -e 'display notification "${msg}"${title ? ` with title "${title}"` : ""}'`);
 }
 
 /* --------------------------------------------------------------- */
 /*                      HELPERS                                    */
 /* --------------------------------------------------------------- */
 
-function returnOrErr({ stderr, stdout }) {
+function returnOrErr({stderr, stdout}) {
 	if (stderr) throw stderr;
 	return stdout;
 }
@@ -114,10 +107,10 @@ function returnOrErr({ stderr, stdout }) {
  * @returns {Promise<{ stdout: string; stderr: string }>}
  */
 async function shell(cmd) {
-	const { spawn } = require("child_process");
+	const {spawn} = require("child_process");
 	return new Promise((resolve, reject) => {
 		const [exe, ...args] = cmd.split(" ");
-		const spawned = spawn(exe, args, { shell: true });
+		const spawned = spawn(exe, args, {shell: true});
 
 		let stdout = "";
 		let stderr = "";
@@ -134,13 +127,9 @@ async function shell(cmd) {
 
 		spawned.on("close", (code) => {
 			if (code === 0) {
-				resolve({ stdout: stdout.trim(), stderr });
+				resolve({stdout: stdout.trim(), stderr});
 			} else {
-				reject(
-					new Error(
-						`spawned process ${cmd} exited with code ${code}, stderr ${stderr}`,
-					),
-				);
+				reject(new Error(`spawned process ${cmd} exited with code ${code}, stderr ${stderr}`));
 			}
 		});
 

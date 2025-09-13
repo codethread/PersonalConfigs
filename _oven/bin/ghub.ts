@@ -7,9 +7,7 @@ async function main() {
 	]);
 
 	const remote = remoteStr.split("\n")[0].split("\t")[1].split(" ")[0];
-	const { domain, repo } = /^git@(?<domain>.*):(?<repo>.*).git$/.exec(
-		remote,
-	).groups;
+	const {domain, repo} = /^git@(?<domain>.*):(?<repo>.*).git$/.exec(remote).groups;
 
 	if (domain === "github.com") {
 		await shell(`open https://${domain}/${repo}`);
@@ -21,7 +19,7 @@ async function main() {
 	}
 }
 
-function returnOrErr({ stderr, stdout }) {
+function returnOrErr({stderr, stdout}) {
 	if (stderr) throw stderr;
 	return stdout;
 }
@@ -34,10 +32,10 @@ main().catch(console.error);
  * @returns {Promise<{ stdout: string; stderr: string }>}
  */
 async function shell(cmd) {
-	const { spawn } = require("child_process");
+	const {spawn} = require("child_process");
 	return new Promise((resolve, reject) => {
 		const [exe, ...args] = cmd.split(" ");
-		const spawned = spawn(exe, args, { shell: true });
+		const spawned = spawn(exe, args, {shell: true});
 
 		let stdout = "";
 		let stderr = "";
@@ -54,13 +52,9 @@ async function shell(cmd) {
 
 		spawned.on("close", (code) => {
 			if (code === 0) {
-				resolve({ stdout: stdout.trim(), stderr });
+				resolve({stdout: stdout.trim(), stderr});
 			} else {
-				reject(
-					new Error(
-						`spawned process ${cmd} exited with code ${code}, stderr ${stderr}`,
-					),
-				);
+				reject(new Error(`spawned process ${cmd} exited with code ${code}, stderr ${stderr}`));
 			}
 		});
 
