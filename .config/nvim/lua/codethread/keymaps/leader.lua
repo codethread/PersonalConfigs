@@ -7,7 +7,8 @@ Keys.tbl('<leader>', {
 	['<leader>'] = { 'Files', Cmd 'Telescope find_files' },
 	[';'] = { 'M-x', Cmd 'Telescope commands' },
 	[':'] = { 'M-x [hist]', Cmd 'Telescope command_history' },
-	['/'] = { '/ [hist]', Cmd 'Telescope search_history' },
+	-- ['/'] = { '/ [hist]', Cmd 'Telescope search_history' },
+	['/'] = { 'Claude', function() require('codethread.claude').claude_query() end },
 	[','] = { '🔭', Cmd 'Telescope resume' },
 
 	e = {
