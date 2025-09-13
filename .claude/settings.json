@@ -2,7 +2,9 @@
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "env": {
     "CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "true",
-    "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "false"
+    "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "false",
+    "DISABLE_AUTOUPDATER": "1",
+    "RIPGREP_CONFIG_PATH": "dont-be-using-my-ignores"
   },
   "permissions": {
     "allow": [
@@ -31,7 +33,7 @@
       "~/.local/cache/docs"
     ]
   },
-  "model": "sonnet",
+  "model": "opus",
   "hooks": {
     "PreToolUse": [
       {
@@ -44,33 +46,61 @@
         ]
       },
       {
-        "matcher": "*",
         "hooks": [
           {
             "type": "command",
-            "command": "claude-code-wakatime"
+            "command": "claude-code-logger"
+          },
+          {
+            "type": "command",
+            "command": "bun ~/.config/claude/claude-notifier.js"
           }
         ]
       }
     ],
     "PostToolUse": [
       {
-        "matcher": "*",
+        "matcher": "Edit|MultiEdit|Write",
         "hooks": [
           {
             "type": "command",
-            "command": "claude-code-wakatime"
+            "command": "jq -r '.tool_input.file_path' | { read file_path; if echo \"$file_path\" | grep -qE '\\.(json|md)$'; then bunx prettier --print-width=120 --write \"$file_path\"; fi; }"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "claude-code-logger"
+          },
+          {
+            "type": "command",
+            "command": "bun ~/.config/claude/claude-notifier.js"
           }
         ]
       }
     ],
-    "Notification": [],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "claude-code-logger"
+          },
+          {
+            "type": "command",
+            "command": "bun ~/.config/claude/claude-notifier.js"
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "hooks": [
           {
             "type": "command",
-            "command": "kitten notify --expire-after 10s \"Claude Code\" \"Ready for new input\""
+            "command": "bun ~/.config/claude/claude-notifier.js"
           }
         ]
       },
@@ -79,29 +109,73 @@
         "hooks": [
           {
             "type": "command",
-            "command": "claude-code-wakatime"
+            "command": "claude-code-logger"
           }
         ]
       }
     ],
     "UserPromptSubmit": [
       {
-        "matcher": "*",
         "hooks": [
           {
             "type": "command",
-            "command": "claude-code-wakatime"
+            "command": "claude-code-logger"
+          },
+          {
+            "type": "command",
+            "command": "bun ~/.config/claude/claude-notifier.js"
           }
         ]
       }
     ],
     "SessionStart": [
       {
-        "matcher": "*",
         "hooks": [
           {
             "type": "command",
-            "command": "claude-code-wakatime"
+            "command": "claude-code-logger"
+          },
+          {
+            "type": "command",
+            "command": "bun ~/.config/claude/claude-notifier.js"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "claude-code-logger"
+          },
+          {
+            "type": "command",
+            "command": "bun ~/.config/claude/claude-notifier.js"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "claude-code-logger"
+          },
+          {
+            "type": "command",
+            "command": "bun ~/.config/claude/claude-notifier.js"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "claude-code-logger"
           }
         ]
       }
