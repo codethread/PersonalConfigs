@@ -140,6 +140,15 @@
             "command": "bun ~/.config/claude/claude-notifier.js"
           }
         ]
+      },
+      {
+        "matcher": "(startup|resume)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.config/claude/append_agentsmd_context.sh"
+          }
+        ]
       }
     ],
     "SessionEnd": [

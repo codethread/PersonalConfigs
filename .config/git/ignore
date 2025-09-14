@@ -92,3 +92,4 @@ scratch.nu
 .playwright-mcp
 
 **/.claude/settings.local.json
+**/CLAUDE.local.md
