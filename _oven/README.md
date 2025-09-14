@@ -1,6 +1,6 @@
 # Oven Workspace
 
-Bun workspace for managing TypeScript/JavaScript executables.
+Bun workspace for managing TypeScript/JavaScript executables, all `bin` files will be built to `~/local/bin/*`
 
 ## Structure
 
@@ -12,7 +12,7 @@ Bun workspace for managing TypeScript/JavaScript executables.
 
 ```bash
 # Format all code with Biome
-bun run format
+bun run fmt
 
 # Lint code
 bun run lint
@@ -30,17 +30,29 @@ bun run build
 ## Adding New Tools
 
 1. Create a new `.ts` file in `bin/` directory
-2. Add appropriate shebang (e.g., `#!/usr/bin/env bun`)
-3. Run `bun run format` to format the code
-4. Run `bun run build` to compile to executable
+2. Run `bun run fmt` to format the code
+3. Run `bun run build` to compile to executable
 
 ## Tools Included
 
-- `analyze-subagents` - Analyze Claude Code subagents
-- `bra` - Git branch switcher with fzf
-- `claude-code-logger` - Claude Code session logger
-- `fromPhrase` - Search phrases in locale files
-- `ghub` - Open GitHub/GitLab repo in browser
-- `gitlab-pipeline-watcher` - Monitor GitLab pipelines
-- `gmr` - GitLab merge request helper
-- `isPhrase` - Check if string is a valid phrase key
+- **analyze-subagents** - Analyze Claude Code subagent usage from session logs
+- **bra** - Git branch switcher with fzf
+- **claude-code-logger** - No description available
+- **extract-commit-dialogue** - Extract Claude Code dialogue for a specific commit
+- **extract-dialogue** - Extract Claude Code session dialogue from log files
+- **fromPhrase** - No description available
+- **ghub** - Open GitHub/GitLab repository in browser
+- **gitlab-pipeline-watcher** - Monitor GitLab pipelines and send notifications
+- **gmr** - GitLab merge request helper
+- **isPhrase** - No description available
+- **notif** - Show macOS native notifications
+
+### Quick Usage
+
+All tools support the `-h` or `--help` flag to display usage information:
+
+```bash
+# Get help for any tool
+analyze-subagents -h
+bra --help
+```

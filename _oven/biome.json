@@ -27,7 +27,7 @@
 	},
 	"json": {
 		"formatter": {
-			"trailingCommas": "all"
+			"trailingCommas": "none"
 		}
 	},
 	"files": {

@@ -4,6 +4,28 @@ const {assert} = require("console");
 const tokenUrl =
 	"https://git.perkbox.io/-/profile/personal_access_tokens?name=Example+Access+token&scopes=read_api,read_user";
 
+function showHelp() {
+	console.log(`
+gmr - GitLab merge request helper
+
+Usage: gmr [options]
+
+Options:
+  -h, --help      Show this help message
+
+Description:
+  Opens GitLab merge requests for the current branch in the browser.
+  Requires CLI_GITLAB_TOKEN environment variable to be set.
+
+Prerequisites:
+  Set CLI_GITLAB_TOKEN environment variable with a GitLab personal access token.
+  Create token at: ${tokenUrl}
+
+Examples:
+  gmr             # Open merge requests for current branch
+`);
+}
+
 main().catch((e) => {
 	console.log("FAILED\n\n");
 	console.error(e);
@@ -11,6 +33,13 @@ main().catch((e) => {
 });
 
 async function main() {
+	// Check for help flag
+	const args = process.argv.slice(2);
+	if (args.includes("-h") || args.includes("--help")) {
+		showHelp();
+		process.exit(0);
+	}
+
 	const token = process.env.CLI_GITLAB_TOKEN;
 
 	assert(

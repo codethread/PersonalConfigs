@@ -3,9 +3,39 @@
 import {$} from "bun";
 import {parseArgs} from "util";
 
+function showHelp() {
+	console.log(`
+fromPhrase - Search for phrases in locale files
+
+Usage: fromPhrase <search-term> [options]
+
+Arguments:
+  search-term     The phrase or text to search for in locale files
+
+Options:
+  --web           Open the found phrase in vim (for web locale files)
+  -h, --help      Show this help message
+
+Description:
+  Searches for phrases in locale files (apps/web/app/public/locale) and can
+  optionally open the result in vim.
+
+Examples:
+  fromPhrase "user settings"       # Search for phrase in locale files
+  fromPhrase "login" --web         # Search and open in vim
+`);
+}
+
 async function main() {
+	// Check for help first
+	const args = Bun.argv.slice(2);
+	if (args.includes("-h") || args.includes("--help")) {
+		showHelp();
+		process.exit(0);
+	}
+
 	const {positionals, values} = parseArgs({
-		args: Bun.argv.slice(2),
+		args: args,
 		strict: true,
 		options: {
 			web: {

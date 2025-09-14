@@ -12,7 +12,6 @@ export async function fzf<Opts extends Options>(
 		.map(([flag]) => `--${flag}`);
 
 	const fzf = Bun.spawn(["fzf", ...flags], {
-		encoding: "utf-8",
 		stdio: ["pipe", "pipe", "inherit"],
 	});
 

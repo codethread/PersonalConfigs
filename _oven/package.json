@@ -2,7 +2,8 @@
 	"name": "dots",
 	"private": true,
 	"scripts": {
-		"format": "biome format --write .",
+		"fmt": "biome format --write .",
+		"syncup": "bun run ./scripts/sync-readme.ts",
 		"lint": "biome lint .",
 		"check": "biome check .",
 		"fix": "biome check --write --unsafe .",

@@ -125,7 +125,14 @@ function _formatPipelineInfo(pipeline: any): string {
 // Function to get currently running pipelines
 async function getRunningPipelines(): Promise<any[]> {
 	try {
-		const args = [`glab`, `pipeline`, `list`, `--username=${USERNAME}`, `--status=running`, `--output=json`];
+		const args = [
+			`glab`,
+			`pipeline`,
+			`list`,
+			`--username=${USERNAME}`,
+			`--status=running`,
+			`--output=json`,
+		];
 		if (BRANCH) {
 			args.push(`--ref=${BRANCH}`);
 		}
@@ -288,31 +295,27 @@ async function monitorPipelines() {
 
 // Show help
 function showHelp() {
-	console.log(`GitLab Pipeline Watcher
+	console.log(`
+gitlab-pipeline-watcher - Monitor GitLab pipelines and send notifications
 
-USAGE:
-    gitlab-pipeline-watcher.ts [OPTIONS]
+Usage: gitlab-pipeline-watcher [options]
 
-OPTIONS:
+Options:
     -h, --help              Show this help message
     -i, --interval SECONDS  Set polling interval (default: 30)
     -u, --username USER     Set GitLab username (default: adam.hall)
     -b, --branch BRANCH     Filter pipelines by branch name
 
-EXAMPLES:
-    gitlab-pipeline-watcher.ts                    # Start monitoring with default settings
-    gitlab-pipeline-watcher.ts -i 60             # Check every 60 seconds
-    gitlab-pipeline-watcher.ts -u john.doe       # Monitor different user
-    gitlab-pipeline-watcher.ts -b master         # Watch only master branch pipelines
-    gitlab-pipeline-watcher.ts -b main -i 45     # Watch main branch, check every 45 seconds
-
-DESCRIPTION:
+Description:
     Monitors GitLab pipelines for the specified user and sends desktop notifications
     when pipelines complete. Uses 'kitten notify' for notifications and 'glab' CLI
     for GitLab API access.
 
-    The script tracks running pipelines and notifies when they finish with their
-    final status (success, failed, canceled, etc.).
+Examples:
+    gitlab-pipeline-watcher                    # Start monitoring with default settings
+    gitlab-pipeline-watcher -i 60             # Check every 60 seconds
+    gitlab-pipeline-watcher -u john.doe       # Monitor different user
+    gitlab-pipeline-watcher -b master         # Watch only master branch pipelines
 `);
 }
 

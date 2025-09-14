@@ -1,6 +1,31 @@
 #!/usr/bin/env node
 
+function showHelp() {
+	console.log(`
+ghub - Open GitHub/GitLab repository in browser
+
+Usage: ghub [options]
+
+Options:
+  -h, --help      Show this help message
+
+Description:
+  Opens the current git repository in the browser. Automatically detects
+  GitHub and GitLab repositories and opens the appropriate URL.
+
+Examples:
+  ghub            # Open current repo in browser
+`);
+}
+
 async function main() {
+	// Check for help flag
+	const args = process.argv.slice(2);
+	if (args.includes("-h") || args.includes("--help")) {
+		showHelp();
+		process.exit(0);
+	}
+
 	const [remoteStr, branch] = await Promise.all([
 		shell("git remote -v").then(returnOrErr),
 		shell("git rev-parse --abbrev-ref HEAD").then(returnOrErr),

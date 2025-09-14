@@ -1,339 +1,385 @@
 #!/usr/bin/env bun
 
-import { readFile, access, mkdtemp, writeFile, rm } from "fs/promises";
-import { join } from "path";
-import { existsSync } from "fs";
-import { tmpdir } from "os";
+import {readFile, access, mkdtemp, writeFile, rm} from "fs/promises";
+import {join} from "path";
+import {existsSync} from "fs";
+import {tmpdir} from "os";
 
 interface LogEvent {
-    timestamp: string;
-    unix_timestamp: number;
-    event: string;
-    session_id: string;
-    cwd: string;
-    transcript_path: string;
-    tool_name?: string;
-    tool_input?: {
-        subagent_type: string;
-        description: string;
-    };
-    raw_data?: {
-        transcript_path?: string;
-        tool_response?: {
-            totalDurationMs: number;
-            totalTokens: number;
-            totalToolUseCount: number;
-        };
-    };
+	timestamp: string;
+	unix_timestamp: number;
+	event: string;
+	session_id: string;
+	cwd: string;
+	transcript_path: string;
+	tool_name?: string;
+	tool_input?: {
+		subagent_type: string;
+		description: string;
+	};
+	raw_data?: {
+		transcript_path?: string;
+		tool_response?: {
+			totalDurationMs: number;
+			totalTokens: number;
+			totalToolUseCount: number;
+		};
+	};
 }
 
 interface TranscriptEvent {
-    isSidechain?: boolean;
-    type?: string;
-    message?: {
-        model?: string;
-        content?: Array<{
-            type: string;
-            name?: string;
-        }>;
-    };
-    toolUseResult?: {
-        totalDurationMs: number;
-        totalTokens: number;
-        totalToolUseCount: number;
-    };
+	isSidechain?: boolean;
+	type?: string;
+	message?: {
+		model?: string;
+		content?: Array<{
+			type: string;
+			name?: string;
+		}>;
+	};
+	toolUseResult?: {
+		totalDurationMs: number;
+		totalTokens: number;
+		totalToolUseCount: number;
+	};
 }
 
 interface PairedCall {
-    call_id: string;
-    agent_type: string;
-    description: string;
-    start_time: string;
-    end_time?: string;
-    duration_ms?: number;
-    transcript_path?: string;
-    tool_response?: {
-        totalDurationMs: number;
-        totalTokens: number;
-        totalToolUseCount: number;
-    };
-    status?: string;
+	call_id: string;
+	agent_type: string;
+	description: string;
+	start_time: string;
+	end_time?: string;
+	duration_ms?: number;
+	transcript_path?: string;
+	tool_response?: {
+		totalDurationMs: number;
+		totalTokens: number;
+		totalToolUseCount: number;
+	};
+	status?: string;
 }
 
 class SubagentAnalyzer {
-    private logFile: string;
-    private tempDir: string = "";
+	private logFile: string;
+	private tempDir: string = "";
 
-    constructor(logFile: string) {
-        this.logFile = logFile;
-    }
+	constructor(logFile: string) {
+		this.logFile = logFile;
+	}
 
-    async analyze(): Promise<void> {
-        await this.checkFile();
-        await this.setupTempDir();
+	async analyze(): Promise<void> {
+		await this.checkFile();
+		await this.setupTempDir();
 
-        try {
-            console.log("=== Claude Code Subagent Analysis ===");
-            console.log(`Log file: ${this.logFile}`);
-            console.log("");
+		try {
+			console.log("=== Claude Code Subagent Analysis ===");
+			console.log(`Log file: ${this.logFile}`);
+			console.log("");
 
-            const { preEvents, postEvents } = await this.extractEvents();
-            const agentCalls = preEvents.length;
-            
-            console.log(`Total subagent calls: ${agentCalls}`);
-            console.log("");
+			const {preEvents, postEvents} = await this.extractEvents();
+			const agentCalls = preEvents.length;
 
-            if (agentCalls === 0) {
-                console.log("No subagents were used in this session.");
-                return;
-            }
+			console.log(`Total subagent calls: ${agentCalls}`);
+			console.log("");
 
-            const pairedCalls = await this.pairEvents(preEvents, postEvents);
-            
-            this.showTimeline(pairedCalls);
-            await this.showDetailedAnalysis(pairedCalls);
-            this.showSummaryStats(pairedCalls, agentCalls);
+			if (agentCalls === 0) {
+				console.log("No subagents were used in this session.");
+				return;
+			}
 
-        } finally {
-            await this.cleanup();
-        }
-    }
+			const pairedCalls = await this.pairEvents(preEvents, postEvents);
 
-    private async checkFile(): Promise<void> {
-        try {
-            await access(this.logFile);
-        } catch {
-            console.error(`Error: Log file not found: ${this.logFile}`);
-            process.exit(1);
-        }
-    }
+			this.showTimeline(pairedCalls);
+			await this.showDetailedAnalysis(pairedCalls);
+			this.showSummaryStats(pairedCalls, agentCalls);
+		} finally {
+			await this.cleanup();
+		}
+	}
 
-    private async setupTempDir(): Promise<void> {
-        this.tempDir = await mkdtemp(join(tmpdir(), 'analyze-subagents-'));
-    }
+	private async checkFile(): Promise<void> {
+		try {
+			await access(this.logFile);
+		} catch {
+			console.error(`Error: Log file not found: ${this.logFile}`);
+			process.exit(1);
+		}
+	}
 
-    private async cleanup(): Promise<void> {
-        if (this.tempDir) {
-            await rm(this.tempDir, { recursive: true, force: true });
-        }
-    }
+	private async setupTempDir(): Promise<void> {
+		this.tempDir = await mkdtemp(join(tmpdir(), "analyze-subagents-"));
+	}
 
-    private async extractEvents(): Promise<{ preEvents: LogEvent[], postEvents: LogEvent[] }> {
-        const content = await readFile(this.logFile, 'utf-8');
-        const lines = content.trim().split('\n').filter(line => line.trim());
-        
-        const preEvents: LogEvent[] = [];
-        const postEvents: LogEvent[] = [];
+	private async cleanup(): Promise<void> {
+		if (this.tempDir) {
+			await rm(this.tempDir, {recursive: true, force: true});
+		}
+	}
 
-        for (const line of lines) {
-            try {
-                const event = JSON.parse(line) as LogEvent;
-                if (event.tool_name === "Task") {
-                    if (event.event === "PreToolUse") {
-                        preEvents.push(event);
-                    } else if (event.event === "PostToolUse") {
-                        postEvents.push(event);
-                    }
-                }
-            } catch (error) {
-                // Skip invalid JSON lines
-                continue;
-            }
-        }
+	private async extractEvents(): Promise<{preEvents: LogEvent[]; postEvents: LogEvent[]}> {
+		const content = await readFile(this.logFile, "utf-8");
+		const lines = content
+			.trim()
+			.split("\n")
+			.filter((line) => line.trim());
 
-        return { preEvents, postEvents };
-    }
+		const preEvents: LogEvent[] = [];
+		const postEvents: LogEvent[] = [];
 
-    private async pairEvents(preEvents: LogEvent[], postEvents: LogEvent[]): Promise<PairedCall[]> {
-        const pairedCalls: PairedCall[] = [];
+		for (const line of lines) {
+			try {
+				const event = JSON.parse(line) as LogEvent;
+				if (event.tool_name === "Task") {
+					if (event.event === "PreToolUse") {
+						preEvents.push(event);
+					} else if (event.event === "PostToolUse") {
+						postEvents.push(event);
+					}
+				}
+			} catch (error) {
+				// Skip invalid JSON lines
+				continue;
+			}
+		}
 
-        for (let i = 0; i < preEvents.length; i++) {
-            const pre = preEvents[i];
-            const callId = (i + 1).toString();
+		return {preEvents, postEvents};
+	}
 
-            // Find matching PostToolUse event
-            const matchingPost = postEvents.find(post => 
-                post.unix_timestamp > pre.unix_timestamp &&
-                post.tool_input?.subagent_type === pre.tool_input?.subagent_type
-            );
+	private async pairEvents(preEvents: LogEvent[], postEvents: LogEvent[]): Promise<PairedCall[]> {
+		const pairedCalls: PairedCall[] = [];
 
-            if (matchingPost) {
-                const durationMs = matchingPost.unix_timestamp - pre.unix_timestamp;
-                
-                pairedCalls.push({
-                    call_id: callId,
-                    agent_type: pre.tool_input!.subagent_type,
-                    description: pre.tool_input!.description,
-                    start_time: pre.timestamp,
-                    end_time: matchingPost.timestamp,
-                    duration_ms: durationMs,
-                    transcript_path: matchingPost.raw_data?.transcript_path,
-                    tool_response: matchingPost.raw_data?.tool_response
-                });
-            } else {
-                // Handle unpaired PreToolUse
-                pairedCalls.push({
-                    call_id: callId,
-                    agent_type: pre.tool_input!.subagent_type,
-                    description: pre.tool_input!.description,
-                    start_time: pre.timestamp,
-                    status: "running_or_failed"
-                });
-            }
-        }
+		for (let i = 0; i < preEvents.length; i++) {
+			const pre = preEvents[i];
+			const callId = (i + 1).toString();
 
-        return pairedCalls;
-    }
+			// Find matching PostToolUse event
+			const matchingPost = postEvents.find(
+				(post) =>
+					post.unix_timestamp > pre.unix_timestamp &&
+					post.tool_input?.subagent_type === pre.tool_input?.subagent_type,
+			);
 
-    private showTimeline(pairedCalls: PairedCall[]): void {
-        console.log("=== Agent Execution Timeline ===");
-        console.log("");
+			if (matchingPost) {
+				const durationMs = matchingPost.unix_timestamp - pre.unix_timestamp;
 
-        pairedCalls.forEach(call => {
-            const formattedTime = call.start_time.replace('T', ' ').replace(/\.[0-9]*Z$/, '');
-            
-            if (call.status === "running_or_failed") {
-                console.log(`${formattedTime} | Call ${call.call_id} | ${call.agent_type} | ${call.description} | [INCOMPLETE/FAILED]`);
-            } else {
-                const durationSec = Math.floor((call.duration_ms || 0) / 1000);
-                console.log(`${formattedTime} | Call ${call.call_id} | ${call.agent_type} | ${call.description} | Duration: ${durationSec}s`);
-            }
-        });
+				pairedCalls.push({
+					call_id: callId,
+					agent_type: pre.tool_input!.subagent_type,
+					description: pre.tool_input!.description,
+					start_time: pre.timestamp,
+					end_time: matchingPost.timestamp,
+					duration_ms: durationMs,
+					transcript_path: matchingPost.raw_data?.transcript_path,
+					tool_response: matchingPost.raw_data?.tool_response,
+				});
+			} else {
+				// Handle unpaired PreToolUse
+				pairedCalls.push({
+					call_id: callId,
+					agent_type: pre.tool_input!.subagent_type,
+					description: pre.tool_input!.description,
+					start_time: pre.timestamp,
+					status: "running_or_failed",
+				});
+			}
+		}
 
-        console.log("");
-    }
+		return pairedCalls;
+	}
 
-    private async showDetailedAnalysis(pairedCalls: PairedCall[]): Promise<void> {
-        console.log("=== Detailed Agent Analysis ===");
-        console.log("");
+	private showTimeline(pairedCalls: PairedCall[]): void {
+		console.log("=== Agent Execution Timeline ===");
+		console.log("");
 
-        for (const call of pairedCalls) {
-            console.log(`═══ Agent Call #${call.call_id}: ${call.agent_type} ═══`);
-            console.log(`Description: ${call.description}`);
-            console.log(`Start Time: ${call.start_time.replace('T', ' ').replace(/\.[0-9]*Z$/, '')}`);
+		pairedCalls.forEach((call) => {
+			const formattedTime = call.start_time.replace("T", " ").replace(/\.[0-9]*Z$/, "");
 
-            if (call.status === "running_or_failed") {
-                console.log("Status: INCOMPLETE/FAILED");
-                console.log("");
-                continue;
-            }
+			if (call.status === "running_or_failed") {
+				console.log(
+					`${formattedTime} | Call ${call.call_id} | ${call.agent_type} | ${call.description} | [INCOMPLETE/FAILED]`,
+				);
+			} else {
+				const durationSec = Math.floor((call.duration_ms || 0) / 1000);
+				console.log(
+					`${formattedTime} | Call ${call.call_id} | ${call.agent_type} | ${call.description} | Duration: ${durationSec}s`,
+				);
+			}
+		});
 
-            const endTime = call.end_time!.replace('T', ' ').replace(/\.[0-9]*Z$/, '');
-            const durationSec = Math.floor((call.duration_ms || 0) / 1000);
-            
-            console.log(`End Time: ${endTime}`);
-            console.log(`Duration: ${call.duration_ms}ms (${durationSec}s)`);
+		console.log("");
+	}
 
-            if (call.tool_response) {
-                const agentDurationSec = Math.floor(call.tool_response.totalDurationMs / 1000);
-                console.log(`Agent Execution Time: ${call.tool_response.totalDurationMs}ms (${agentDurationSec}s)`);
-                console.log(`Tokens Used: ${call.tool_response.totalTokens}`);
-                console.log(`Tools Called: ${call.tool_response.totalToolUseCount}`);
-            }
+	private async showDetailedAnalysis(pairedCalls: PairedCall[]): Promise<void> {
+		console.log("=== Detailed Agent Analysis ===");
+		console.log("");
 
-            // Get detailed info from transcript if available
-            if (call.transcript_path && existsSync(call.transcript_path)) {
-                await this.analyzeTranscript(call.transcript_path);
-            }
+		for (const call of pairedCalls) {
+			console.log(`═══ Agent Call #${call.call_id}: ${call.agent_type} ═══`);
+			console.log(`Description: ${call.description}`);
+			console.log(`Start Time: ${call.start_time.replace("T", " ").replace(/\.[0-9]*Z$/, "")}`);
 
-            console.log("");
-        }
-    }
+			if (call.status === "running_or_failed") {
+				console.log("Status: INCOMPLETE/FAILED");
+				console.log("");
+				continue;
+			}
 
-    private async analyzeTranscript(transcriptPath: string): Promise<void> {
-        try {
-            const content = await readFile(transcriptPath, 'utf-8');
-            const lines = content.trim().split('\n').filter(line => line.trim());
-            
-            let model = "";
-            const toolCounts: Record<string, number> = {};
+			const endTime = call.end_time!.replace("T", " ").replace(/\.[0-9]*Z$/, "");
+			const durationSec = Math.floor((call.duration_ms || 0) / 1000);
 
-            for (const line of lines) {
-                try {
-                    const event = JSON.parse(line) as TranscriptEvent;
-                    
-                    if (event.isSidechain && event.type === "assistant" && event.message?.model && !model) {
-                        model = event.message.model;
-                    }
+			console.log(`End Time: ${endTime}`);
+			console.log(`Duration: ${call.duration_ms}ms (${durationSec}s)`);
 
-                    if (event.isSidechain && event.message?.content) {
-                        for (const content of event.message.content) {
-                            if (content.type === "tool_use" && content.name) {
-                                toolCounts[content.name] = (toolCounts[content.name] || 0) + 1;
-                            }
-                        }
-                    }
-                } catch {
-                    continue;
-                }
-            }
+			if (call.tool_response) {
+				const agentDurationSec = Math.floor(call.tool_response.totalDurationMs / 1000);
+				console.log(
+					`Agent Execution Time: ${call.tool_response.totalDurationMs}ms (${agentDurationSec}s)`,
+				);
+				console.log(`Tokens Used: ${call.tool_response.totalTokens}`);
+				console.log(`Tools Called: ${call.tool_response.totalToolUseCount}`);
+			}
 
-            if (model) {
-                console.log(`Model Used: ${model}`);
-            }
+			// Get detailed info from transcript if available
+			if (call.transcript_path && existsSync(call.transcript_path)) {
+				await this.analyzeTranscript(call.transcript_path);
+			}
 
-            if (Object.keys(toolCounts).length > 0) {
-                console.log("Tool Usage Breakdown:");
-                Object.entries(toolCounts)
-                    .sort(([, a], [, b]) => b - a)
-                    .forEach(([tool, count]) => {
-                        console.log(`  ${count.toString().padStart(3)} x ${tool}`);
-                    });
-            }
-        } catch (error) {
-            // Skip transcript analysis if there's an error
-        }
-    }
+			console.log("");
+		}
+	}
 
-    private showSummaryStats(pairedCalls: PairedCall[], totalCalls: number): void {
-        console.log("=== Summary Statistics ===");
-        console.log("");
+	private async analyzeTranscript(transcriptPath: string): Promise<void> {
+		try {
+			const content = await readFile(transcriptPath, "utf-8");
+			const lines = content
+				.trim()
+				.split("\n")
+				.filter((line) => line.trim());
 
-        // Summary by agent type
-        console.log("Agents Used:");
-        const agentCounts: Record<string, number> = {};
-        pairedCalls.forEach(call => {
-            agentCounts[call.agent_type] = (agentCounts[call.agent_type] || 0) + 1;
-        });
+			let model = "";
+			const toolCounts: Record<string, number> = {};
 
-        Object.entries(agentCounts)
-            .sort(([, a], [, b]) => b - a)
-            .forEach(([type, count]) => {
-                console.log(`  ${count.toString().padStart(2)} x ${type}`);
-            });
+			for (const line of lines) {
+				try {
+					const event = JSON.parse(line) as TranscriptEvent;
 
-        console.log("");
+					if (event.isSidechain && event.type === "assistant" && event.message?.model && !model) {
+						model = event.message.model;
+					}
 
-        // Overall statistics
-        const completedCalls = pairedCalls.filter(call => call.status !== "running_or_failed");
-        const totalDuration = completedCalls.reduce((sum, call) => sum + (call.tool_response?.totalDurationMs || 0), 0);
-        const totalTokens = completedCalls.reduce((sum, call) => sum + (call.tool_response?.totalTokens || 0), 0);
-        const totalTools = completedCalls.reduce((sum, call) => sum + (call.tool_response?.totalToolUseCount || 0), 0);
+					if (event.isSidechain && event.message?.content) {
+						for (const content of event.message.content) {
+							if (content.type === "tool_use" && content.name) {
+								toolCounts[content.name] = (toolCounts[content.name] || 0) + 1;
+							}
+						}
+					}
+				} catch {
+					continue;
+				}
+			}
 
-        console.log(`Completed Calls: ${completedCalls.length}/${totalCalls}`);
-        console.log(`Total Agent Time: ${totalDuration}ms (${Math.floor(totalDuration / 1000)}s)`);
-        console.log(`Total Tokens: ${totalTokens}`);
-        console.log(`Total Tools Called: ${totalTools}`);
-        
-        if (completedCalls.length > 0) {
-            const avgDuration = Math.floor(totalDuration / completedCalls.length);
-            const avgTokens = Math.floor(totalTokens / completedCalls.length);
-            console.log(`Average per Call: ${avgDuration}ms, ${avgTokens} tokens`);
-        } else {
-            console.log("Average per Call: N/A");
-        }
-    }
+			if (model) {
+				console.log(`Model Used: ${model}`);
+			}
+
+			if (Object.keys(toolCounts).length > 0) {
+				console.log("Tool Usage Breakdown:");
+				Object.entries(toolCounts)
+					.sort(([, a], [, b]) => b - a)
+					.forEach(([tool, count]) => {
+						console.log(`  ${count.toString().padStart(3)} x ${tool}`);
+					});
+			}
+		} catch (error) {
+			// Skip transcript analysis if there's an error
+		}
+	}
+
+	private showSummaryStats(pairedCalls: PairedCall[], totalCalls: number): void {
+		console.log("=== Summary Statistics ===");
+		console.log("");
+
+		// Summary by agent type
+		console.log("Agents Used:");
+		const agentCounts: Record<string, number> = {};
+		pairedCalls.forEach((call) => {
+			agentCounts[call.agent_type] = (agentCounts[call.agent_type] || 0) + 1;
+		});
+
+		Object.entries(agentCounts)
+			.sort(([, a], [, b]) => b - a)
+			.forEach(([type, count]) => {
+				console.log(`  ${count.toString().padStart(2)} x ${type}`);
+			});
+
+		console.log("");
+
+		// Overall statistics
+		const completedCalls = pairedCalls.filter((call) => call.status !== "running_or_failed");
+		const totalDuration = completedCalls.reduce(
+			(sum, call) => sum + (call.tool_response?.totalDurationMs || 0),
+			0,
+		);
+		const totalTokens = completedCalls.reduce(
+			(sum, call) => sum + (call.tool_response?.totalTokens || 0),
+			0,
+		);
+		const totalTools = completedCalls.reduce(
+			(sum, call) => sum + (call.tool_response?.totalToolUseCount || 0),
+			0,
+		);
+
+		console.log(`Completed Calls: ${completedCalls.length}/${totalCalls}`);
+		console.log(`Total Agent Time: ${totalDuration}ms (${Math.floor(totalDuration / 1000)}s)`);
+		console.log(`Total Tokens: ${totalTokens}`);
+		console.log(`Total Tools Called: ${totalTools}`);
+
+		if (completedCalls.length > 0) {
+			const avgDuration = Math.floor(totalDuration / completedCalls.length);
+			const avgTokens = Math.floor(totalTokens / completedCalls.length);
+			console.log(`Average per Call: ${avgDuration}ms, ${avgTokens} tokens`);
+		} else {
+			console.log("Average per Call: N/A");
+		}
+	}
+}
+
+function showHelp() {
+	console.log(`
+analyze-subagents - Analyze Claude Code subagent usage from session logs
+
+Usage: analyze-subagents [logfile]
+
+Arguments:
+  logfile         Path to Claude session log file (default: .logs/claude-session-current.jsonl)
+
+Options:
+  -h, --help      Show this help message
+
+Examples:
+  analyze-subagents
+  analyze-subagents .logs/claude-session-2024-01-01.jsonl
+`);
 }
 
 async function main() {
-    const args = process.argv.slice(2);
-    const logFile = args[0] || ".logs/claude-session-current.jsonl";
-    
-    const analyzer = new SubagentAnalyzer(logFile);
-    await analyzer.analyze();
+	const args = process.argv.slice(2);
+
+	// Check for help flag
+	if (args.includes("-h") || args.includes("--help")) {
+		showHelp();
+		process.exit(0);
+	}
+
+	const logFile = args[0] || ".logs/claude-session-current.jsonl";
+
+	const analyzer = new SubagentAnalyzer(logFile);
+	await analyzer.analyze();
 }
 
 // Run if called directly
 if (import.meta.main) {
-    main().catch(console.error);
+	main().catch(console.error);
 }
