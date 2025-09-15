@@ -89,5 +89,6 @@ scratch.nu
 
 # ai
 .playwright-mcp
-**/.claude/settings.local.json
 **/CLAUDE.local.md
+
+**/.claude/settings.local.json
