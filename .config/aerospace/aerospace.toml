@@ -61,6 +61,7 @@ cmd-ctrl-o = 'workspace 3'
 cmd-ctrl-p = 'workspace 4'
 cmd-ctrl-y = 'workspace 5'
 cmd-ctrl-n = 'workspace other'
+cmd-ctrl-t = 'workspace test'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
 alt-tab = 'workspace-back-and-forth'
@@ -77,6 +78,7 @@ esc = ['exec-and-forget notif --clear service-help', 'mode main', 'exec-and-forg
 r = ['exec-and-forget notif --clear service-help', 'reload-config', 'mode main', 'exec-and-forget notif --aerospace reloaded config']
 shift-r = ['exec-and-forget notif --clear service-help', 'flatten-workspace-tree', 'mode main', 'exec-and-forget notif --aerospace flattened layout'] # reset layout
 backspace = ['exec-and-forget notif --clear service-help', 'close-all-windows-but-current', 'mode main', 'exec-and-forget notif --aerospace closed all other windows']
+equal = ['exec-and-forget notif --clear service-help', 'balance-sizes', 'mode main', 'exec-and-forget notif --aerospace balanced']
 
 f = ['exec-and-forget notif --clear service-help', 'layout floating tiling', 'mode main', 'exec-and-forget notif --aerospace switched to floating layout']
 a = ['exec-and-forget notif --clear service-help', 'layout h_accordion', 'mode main', 'exec-and-forget notif --aerospace switched to accordion layout']
@@ -106,6 +108,7 @@ o = ['exec-and-forget notif --clear move-help', 'move-node-to-workspace --focus-
 p = ['exec-and-forget notif --clear move-help', 'move-node-to-workspace --focus-follows-window 4', 'mode main']
 y = ['exec-and-forget notif --clear move-help', 'move-node-to-workspace --focus-follows-window 5', 'mode main']
 n = ['exec-and-forget notif --clear move-help', 'move-node-to-workspace --focus-follows-window other', 'mode main']
+t = ['exec-and-forget notif --clear move-help', 'move-node-to-workspace --focus-follows-window test', 'mode main']
 
 # https://nikitabobko.github.io/AeroSpace/guide#on-window-detected-callback
 #####################################
@@ -127,12 +130,24 @@ run = 'move-node-to-workspace 2'
 
 [[on-window-detected]]
 if.app-id = 'com.figma.Desktop'
+if.during-aerospace-startup = true
 run = 'move-node-to-workspace 5'
 
-# deno markdown preview
+# always own screen and flexible for ui testing
 [[on-window-detected]]
-if.window-title-regex-substring = 'Peek preview'
-run = 'layout tiling'
+if.app-id = 'org.mozilla.firefox'
+run = ['layout floating', 'move-node-to-workspace test']
+[[on-window-detected]]
+if.app-id = 'org.mozilla.firefoxdeveloperedition'
+run = ['layout floating', 'move-node-to-workspace test']
+[[on-window-detected]]
+if.app-id = 'org.mozilla.nightly'
+run = ['layout floating', 'move-node-to-workspace test']
+
+# deno markdown preview
+# [[on-window-detected]]
+# if.window-title-regex-substring = 'Peek preview'
+# run = 'layout tiling'
 
 #####################################
 # Alt
@@ -151,6 +166,10 @@ run = 'move-node-to-workspace 3'
 
 [[on-window-detected]]
 if.app-name-regex-substring = '(Slack|Teams)'
+run = 'move-node-to-workspace 3'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.mail'
 run = 'move-node-to-workspace 3'
 
 #####################################
@@ -184,10 +203,6 @@ run = 'layout floating'
 if.app-id = 'com.1password.1password'
 run = 'layout floating'
 
-[[on-window-detected]] # Everything else float (opt IN behaviour)
-if.app-name-regex-substring = '.'
-run = 'layout floating'
-
-# [[on-window-detected]] # Everything else to 'other'
+# [[on-window-detected]] # Everything else float (opt IN behaviour)
 # if.app-name-regex-substring = '.'
-# run = 'move-node-to-workspace 5'
+# run = 'layout floating'
