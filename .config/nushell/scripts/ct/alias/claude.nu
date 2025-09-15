@@ -1,7 +1,15 @@
-export alias cl = with-env { DISABLE_AUTOUPDATER: 1 } { claude }
+export def cl --wrapped [...rest] { with-env { DISABLE_AUTOUPDATER: 1 } { claude ...$rest } }
 
 # Start up claude with access to heavy duty mcps like figma and playwright
-export alias clui = with-env { DISABLE_AUTOUPDATER: 1 } { claude --strict-mcp-config --mcp-config ~/.claude/mcp/ui.json }
+export def clui --wrapped [ ...rest ] {
+with-env { DISABLE_AUTOUPDATER: 1 } {
+		(claude
+			--strict-mcp-config
+			--mcp-config ~/.claude/mcp/ui.json
+			...$rest
+		)
+	}
+}
 
 #
 export alias _claude-session = jq 'select(.event == "PreToolUse")' .logs/claude-session-*.jsonl

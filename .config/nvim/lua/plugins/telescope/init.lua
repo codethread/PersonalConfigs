@@ -176,6 +176,8 @@ return {
 						find_command = {
 							'rg',
 							'--files',
+							'--follow', -- this might break so be caerful, adding to view symlinked ingored code like claude.md
+							'--hidden', -- this might break so be caerful, adding to view symlinked ingored code like claude.md
 						},
 					},
 					diagnostics = {
