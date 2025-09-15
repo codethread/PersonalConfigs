@@ -30,9 +30,11 @@ export def main [
 		log skip  "Homebrew"
 	}
 
+	setup-bins
+
 	rustup
 
-	setup_tooling --force=$shell
+	setup-tooling --force=$shell
 
 	macos
 
@@ -91,7 +93,7 @@ def clone_tools [
 	}
 }
 
-def setup_tooling [--force] {
+def setup-tooling [--force] {
 	log step Tooling installing
 
 	let carapace = ("~/.local/cache/carapace/init.nu" | path expand)
@@ -107,4 +109,11 @@ def setup_tooling [--force] {
 		mkdir ($atuin | path dirname)
 		atuin init nu | save --force $atuin
 	}
+}
+
+def setup-bins [] {
+	log step Bins building bun binaries
+	cd $env.DOTFILES
+	cd _oven
+	bun run build
 }
