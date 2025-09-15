@@ -3,8 +3,10 @@
     "playwright": {
       "type": "stdio",
       "command": "bunx",
-      "args": ["@playwright/mcp@latest"],
-      "env": {}
+      "args": ["@playwright/mcp@latest", "--browser", "firefox"],
+      "env": {
+        "PLAYWRIGHT_BROWSER": "firefox"
+      }
     },
     "figma-dev-mode-mcp-server": {
       "type": "http",
