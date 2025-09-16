@@ -1,3 +1,7 @@
+# Don't let ripgrep vomit really long lines to my terminal, and show a preview.
+--max-columns=150
+--max-columns-preview
+
 --hidden
 -g=!.git
 -g=!.zig-cache
