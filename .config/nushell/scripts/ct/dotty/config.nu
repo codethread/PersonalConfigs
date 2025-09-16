@@ -1,7 +1,7 @@
 use ct/core clog
 
 # load in dotty config, currently in code but could be a nuon file
-export def load []: nothing -> table<name: string, from: path, to: path, excludes: list<path>> {
+export def load []: nothing -> table<name: string, real: path, symlink: path, excludes: list<path>> {
 	let excludes = [
 		"**/_?*/**" # files/folder starting with an underscore (but not just a single underscore)
 		"**/.gitignore"
@@ -9,19 +9,20 @@ export def load []: nothing -> table<name: string, from: path, to: path, exclude
 	]
 
 	let config = [
-		[name, from, to, excludes];
+		[name, real, symlink, excludes];
 
-		[dots, (dir ~/PersonalConfigs), (dir ~), [ "**/.stylua.toml" "**/.gitattributes" ] ]
+		# [dots, (dir ~/PersonalConfigs), (dir ~), [ "**/.stylua.toml" "**/.gitattributes" ] ]
+		[home, (dir ~/PersonalConfigs/home), (dir ~), [ "**/.stylua.toml" "**/.gitattributes" ] ]
 
-		[work, (dir ~/workfiles), (dir ~), []]
+		# [work, (dir ~/workfiles), (dir ~), []]
 
 		# as a bit of a hack, can reference git dirs directly
-		[deals, (dir ~/workfiles/work/app/deals-light-ui/_git), (dir ~/work/app/deals-light-ui/.git), []]
+		# [deals, (dir ~/workfiles/work/app/deals-light-ui/_git), (dir ~/work/app/deals-light-ui/.git), []]
 	]
 
 	$config
 	| upsert excludes { |project| $project.excludes ++ $excludes }
-	| where {|proj| $proj.from | path exists }
+	| where {|proj| $proj.real | path exists }
 	| clog --expand
 }
 

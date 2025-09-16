@@ -8,7 +8,7 @@
 # - `dotty test ...files` can check if saving a file should trigger a re-sync
 # - `dotty format` can display the output of `dotty link` in a nicer view for editors
 
-use ct/core [dedent is-not-empty md-list]
+use ct/core [clog dedent is-not-empty md-list]
 export use cache.nu
 export use config.nu
 use helpers.nu [assert-no-conflicts]
@@ -20,19 +20,20 @@ export def link [
 ]: nothing -> table<name: string, created: table, deleted: table> {
 	config load
 	| par-each { |proj| get-project-files-to-link $proj $no_cache  }
+	| clog 'files' --expand
 	| assert-no-conflicts --force=$force
 	| par-each {|proj|
 		# delete
 		$proj.delete | each {|f| rm -f $f }
 
 		# create
-		$proj.files | get to | list-dirs-to-make | par-each {|dir| mkdir $dir }
+		$proj.files | get symlink | list-dirs-to-make | par-each {|dir| mkdir $dir }
 
 		$proj.files
 		| par-each {|f|
 			# `try` because sometimes cache isn't up-to-date, so a link might
 			# be recreated. This is trusting assert-no-conflicts to do it's job
-			ln -s $f.from $f.to | complete | ignore
+			ln -sf $f.real $f.symlink | complete | ignore
 		}
 
 		# update cache
@@ -77,7 +78,7 @@ export def is-cwd [
 	--exit # returns an exit code rather than true/false
 ] {
 	let target = if ($dir | is-not-empty) { $dir } else $env.PWD
-	let proj = (config load | where from == $target)
+	let proj = (config load | where real == $target)
 	match ([$exit, ($proj | is-empty)]) {
 		[true, true] => { exit 1 },
 		[true, false] => { exit 0 }
@@ -92,7 +93,7 @@ export def prune [target: glob = ~/.config/**/*] {
 	| where ($it.target | path exists | $in == false)
 	| each { |f|
 		print $"removing ($f.name)";
-		rm $f.name
+		try { rm $f.name }
 	}
 }
 
@@ -100,7 +101,7 @@ export def prune [target: glob = ~/.config/**/*] {
 # Files are compared against the dotty project of the PWD.
 # Expected to be called by other tools, so throws errors
 export def test [...files] {
-	let proj = config load | where from == $env.PWD
+	let proj = config load | where real == $env.PWD
 	if ($proj | is-empty) {
 		error make -u { msg: "not a project" }
 	}
@@ -117,7 +118,7 @@ export def test [...files] {
 
 	let files = $files | path relative-to $env.PWD
 
-	let all_files = list-files $proj.from --excludes $proj.excludes
+	let all_files = list-files $proj.real --excludes $proj.excludes
 
 	let invalid = $files | where { $in not-in $all_files }
 
@@ -129,7 +130,7 @@ export def test [...files] {
 export def teardown [] {
 	config load
 	| par-each {|proj|
-		cd $proj.to
+		cd $proj.symlink
 		let files = cache load $proj.name
 
 		$files | par-each {|f| rm -f $f }
@@ -178,10 +179,10 @@ def get-project-files-to-link [proj, no_cache] {
 	$env.GIT_CONFIG_GLOBAL = ([$env.DOTFILES ".config/git/config"] | path join)
 
 	# cd in order to get all the gitignores correct
-	cd $proj.from
+	cd $proj.real
 	let cache = cache load $proj.name
 
-	let files = list-files $proj.from --excludes $proj.excludes
+	let files = list-files $proj.real --excludes $proj.excludes
 
 	let $new_files = $files | match ($no_cache) {
 		true => { $in },
@@ -194,16 +195,16 @@ def get-project-files-to-link [proj, no_cache] {
 
 	{
 		name: $proj.name,
-		root: $proj.from,
+		root: $proj.real,
 		files:
 		($new_files | each {|file|
 			{
 				file: $file,
-				from:  ($proj.from | path join $file),
-				to: ($proj.to | path join $file)
+				real:  ($proj.real | path join $file),
+				symlink: ($proj.symlink | path join $file)
 			}
 		})
-		delete: ($to_delete | each {|f| $proj.to | path join $f | path relative-to $env.HOME })
+		delete: ($to_delete | each {|f| $proj.symlink | path join $f | path relative-to $env.HOME })
 		existing: $existing,
 	}
 }

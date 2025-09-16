@@ -35,13 +35,13 @@ export def clog [
 ] {
 	let val = $in;
 
-	if ($env.CT_LOG? | default false) {
+	if ($env.CT_LOG? | default '0' | into bool) {
 		print $"---- ($title) -----"
 
 		$args | each { print $in }
 
 		if $expand {
-			print ($val | table --expand)
+			print ($val | table --expand --flatten)
 		} else {
 			print $val
 		}

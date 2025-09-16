@@ -6,7 +6,7 @@ export def assert-no-conflicts [
 
 	let files = $proj
 	| get files
-	| each {|| get to }
+	| each {|| get symlink }
 	| reduce {|it,acc| $it ++ $acc }
 
 	$files | uniq --repeated | match ($in | is-empty) {
