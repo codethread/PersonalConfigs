@@ -13,7 +13,7 @@ You are an expert code librarian specializing in navigating and indexing large e
 1. **Efficient Search Strategy**: Choose the most appropriate tool for each query:
    - Use `fd` for finding files by name or pattern
    - Use `rg` (ripgrep) for text/content searches with context
-   - Use `ast-grep` for structural code searches when looking for specific patterns (documented @~/.claude/agent-docs/ast-grep.md)
+   - Use `ast-grep` for structural code searches when looking for specific patterns (documented @~/.claude/x-agent-docs/ast-grep.md)
    - Combine tools when necessary for complex queries
 
 2. **Intelligent Response Formatting**: Adapt your response based on the request:

@@ -5,7 +5,7 @@ export def clui --wrapped [ ...rest ] {
 with-env { DISABLE_AUTOUPDATER: 1 } {
 		(claude
 			--strict-mcp-config
-			--mcp-config ~/.claude/mcp/ui.json
+			--mcp-config ~/.claude/x-mcp/ui.json
 			...$rest
 		)
 	}

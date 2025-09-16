@@ -1,1 +1,0 @@
-- sub-agent files are stored at `<PWD>/.claude/agents/*`

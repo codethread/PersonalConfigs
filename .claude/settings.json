@@ -33,7 +33,7 @@
       "~/.local/cache/docs"
     ]
   },
-  "model": "opus",
+  "model": "sonnet",
   "hooks": {
     "PreToolUse": [
       {
@@ -41,7 +41,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node ~/.config/claude/use_npm_redirect.js"
+            "command": "node ~/.claude/x-hooks/use_npm_redirect.js"
           }
         ]
       },
@@ -53,7 +53,7 @@
           },
           {
             "type": "command",
-            "command": "bun ~/.config/claude/claude-notifier.js"
+            "command": "bun ~/.claude/x-hooks/claude-notifier.js"
           }
         ]
       }
@@ -76,7 +76,7 @@
           },
           {
             "type": "command",
-            "command": "bun ~/.config/claude/claude-notifier.js"
+            "command": "bun ~/.claude/x-hooks/claude-notifier.js"
           }
         ]
       }
@@ -90,7 +90,7 @@
           },
           {
             "type": "command",
-            "command": "bun ~/.config/claude/claude-notifier.js"
+            "command": "bun ~/.claude/x-hooks/claude-notifier.js"
           }
         ]
       }
@@ -100,7 +100,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bun ~/.config/claude/claude-notifier.js"
+            "command": "bun ~/.claude/x-hooks/claude-notifier.js"
           }
         ]
       },
@@ -123,7 +123,7 @@
           },
           {
             "type": "command",
-            "command": "bun ~/.config/claude/claude-notifier.js"
+            "command": "bun ~/.claude/x-hooks/claude-notifier.js"
           }
         ]
       }
@@ -137,7 +137,7 @@
           },
           {
             "type": "command",
-            "command": "bun ~/.config/claude/claude-notifier.js"
+            "command": "bun ~/.claude/x-hooks/claude-notifier.js"
           }
         ]
       },
@@ -146,7 +146,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.config/claude/append_agentsmd_context.sh"
+            "command": "~/.claude/x-hooks/append_agentsmd_context.sh"
           }
         ]
       }
@@ -160,7 +160,7 @@
           },
           {
             "type": "command",
-            "command": "bun ~/.config/claude/claude-notifier.js"
+            "command": "bun ~/.claude/x-hooks/claude-notifier.js"
           }
         ]
       }
@@ -174,7 +174,7 @@
           },
           {
             "type": "command",
-            "command": "bun ~/.config/claude/claude-notifier.js"
+            "command": "bun ~/.claude/x-hooks/claude-notifier.js"
           }
         ]
       }
