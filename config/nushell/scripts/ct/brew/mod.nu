@@ -67,7 +67,7 @@ export def diff [] {
 def get_bundle_for_machine [
 	--with-temp
 ] {
-	let brews = (open ([$env.DOTFILES ".local/data/brews.nuon"] | path join))
+	let brews = (open ([$env.DOTFILES "home/.local/data/brews.nuon"] | path join))
 
 	dedent ($brews.core
 		++ (match $env.CT_USER {

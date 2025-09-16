@@ -84,7 +84,7 @@ export FZF_ALT_C_COMMAND="fd --hidden --type d --exclude '{Library,Music,Applica
 #: }}}
 #: TMUX {{{
 
-source "${DOTFILES}/.config/zsh/tmux_projects.sh"
+source "${DOTFILES}/config/zsh/tmux_projects.sh"
 
 #: }}}
 #: Language specific {{{

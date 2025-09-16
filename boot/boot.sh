@@ -29,7 +29,7 @@ else
   echo "( ◕ ◡ ◕ ) Dotfiles present, skipping clone"
 fi
 
-export XDG_CONFIG_HOME="${DOTFILES}/.config"
+export XDG_CONFIG_HOME="${DOTFILES}/config"
 export XDG_DATA_HOME="${HOME}/.local/share"
 export XDG_STATE_HOME="${HOME}/.local/state"
 export XDG_CACHE_HOME="${HOME}/.local/cache"
@@ -41,14 +41,14 @@ mkdir -p "$XDG_STATE_HOME"
 mkdir -p "$XDG_CACHE_HOME"
 
 echo "( ◕ ◡ ◕ ) Installing nushell"
-"${DOTFILES}/.local/bin/install-nushell"
+echo "${DOTFILES}/home/.local/bin/install-nushell"
 
 echo "( ◕ ◡ ◕ ) Booting machine"
 echo "available again with 'boot machine --help'"
 
 ~/.local/bin/nu \
-  --env-config "${DOTFILES}/.config/nushell/env.nu" \
-  --config "${DOTFILES}/.config/nushell/config.nu" \
+  --env-config "${DOTFILES}/config/nushell/env.nu" \
+  --config "${DOTFILES}/config/nushell/config.nu" \
   --commands "boot machine"
 
 echo "( ◕ ◡ ◕ ) complete, open new shell"

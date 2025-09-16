@@ -43,7 +43,7 @@ def setup_background_items [
 ] {
 	let bg_ps = (launchctl list | detect columns)
 	print $"(ansi green)Background:(ansi reset) setting up launchagents"
-	let files = ls ~/.config/nushell/scripts/ct/boot/_LaunchAgents
+	let files = ls ([$env.DOTFILES config/nushell/scripts/ct/boot/_LaunchAgents] | path join)
 
 	$files
 	| each {|f|
