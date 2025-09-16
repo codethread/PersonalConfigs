@@ -1,0 +1,201 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "env": {
+    "CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "true",
+    "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "false",
+    "DISABLE_AUTOUPDATER": "1",
+    "RIPGREP_CONFIG_PATH": "dont-be-using-my-ignores"
+  },
+  "permissions": {
+    "allow": [
+      "mcp__context7__resolve-library-id",
+      "WebFetch(domain:docs.anthropic.com)",
+      "WebFetch(domain:sw.kovidgoyal.net)",
+      "Bash(MANPAGER='cat' man:*)",
+      "Bash(grep:*)",
+      "Bash(kitten:*)",
+      "Bash(kitty @:*)",
+      "Bash(mkdir:*)",
+      "Bash(ls:*)",
+      "Bash(npm run:*)",
+      "Bash(pnpm run:*)",
+      "Bash(yarn run:*)",
+      "Bash(go mod:*)",
+      "Bash(go build:*)",
+      "Bash(cargo check:*)",
+      "Bash(cargo test:*)",
+      "Bash(cargo build:*)",
+      "Bash(cargo run:*)"
+    ],
+    "deny": [],
+    "defaultMode": "acceptEdits",
+    "additionalDirectories": [
+      "~/.local/cache/docs"
+    ]
+  },
+  "model": "opus",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node ~/.claude/x-hooks/use_npm_redirect.js"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "claude-code-logger"
+          },
+          {
+            "type": "command",
+            "command": "bun ~/.claude/x-hooks/claude-notifier.js"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|MultiEdit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path' | { read file_path; if echo \"$file_path\" | grep -qE '\\.(json|md)$'; then bunx prettier --print-width=120 --write \"$file_path\"; fi; }"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "claude-code-logger"
+          },
+          {
+            "type": "command",
+            "command": "bun ~/.claude/x-hooks/claude-notifier.js"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "claude-code-logger"
+          },
+          {
+            "type": "command",
+            "command": "bun ~/.claude/x-hooks/claude-notifier.js"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun ~/.claude/x-hooks/claude-notifier.js"
+          }
+        ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "claude-code-logger"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "claude-code-logger"
+          },
+          {
+            "type": "command",
+            "command": "bun ~/.claude/x-hooks/claude-notifier.js"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "claude-code-logger"
+          },
+          {
+            "type": "command",
+            "command": "bun ~/.claude/x-hooks/claude-notifier.js"
+          }
+        ]
+      },
+      {
+        "matcher": "(startup|resume)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/x-hooks/append_agentsmd_context.sh"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "claude-code-logger"
+          },
+          {
+            "type": "command",
+            "command": "bun ~/.claude/x-hooks/claude-notifier.js"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "claude-code-logger"
+          },
+          {
+            "type": "command",
+            "command": "bun ~/.claude/x-hooks/claude-notifier.js"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "claude-code-logger"
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bun x ccusage statusline",
+    "padding": 0
+  },
+  "feedbackSurveyState": {
+    "lastShownTime": 1754027278114
+  }
+}

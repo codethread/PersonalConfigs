@@ -1,0 +1,208 @@
+after-startup-command = []
+start-at-login = false
+enable-normalization-flatten-containers = true
+enable-normalization-opposite-orientation-for-nested-containers = true
+accordion-padding = 30
+default-root-container-layout = 'tiles'
+
+# Possible values: horizontal|vertical|auto
+# 'auto' means: wide monitor (anything wider than high) gets horizontal orientation,
+#               tall monitor (anything higher than wide) gets vertical orientation
+default-root-container-orientation = 'auto'
+on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+
+# prevent cmd+h
+automatically-unhide-macos-hidden-apps = true
+
+[exec]
+inherit-env-vars = true
+[exec.env-vars]
+PATH = '${PATH}:/opt/homebrew/bin:/opt/homebrew/sbin:~/.local/bin:~/PersonalConfigs/oven/bin'
+
+[key-mapping]
+preset = 'qwerty'
+
+[gaps]
+inner.horizontal = 5
+inner.vertical =   5
+outer.left =       5
+outer.bottom =     5
+outer.top =        5
+outer.right =      5
+
+# 'main' binding mode declaration
+# See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
+# 'main' binding mode must be always presented
+# Fallback value (if you omit the key): mode.main.binding = {}
+[mode.main.binding]
+
+# cmd-h = [] # Disable "hide application"
+cmd-m = [] # Disables "minimise application"
+cmd-alt-h = [] # Disable "hide others", i only hit this by accident
+
+# See: https://nikitabobko.github.io/AeroSpace/commands#layout
+cmd-ctrl-space = 'fullscreen'
+# cmd-ctrl-space = 'layout h_tiles h_accordion'
+
+# See: https://nikitabobko.github.io/AeroSpace/commands#focus
+cmd-ctrl-h = 'focus --boundaries-action wrap-around-the-workspace left'
+cmd-ctrl-j = 'focus --boundaries-action wrap-around-the-workspace down'
+cmd-ctrl-k = 'focus --boundaries-action wrap-around-the-workspace up'
+cmd-ctrl-l = 'focus --boundaries-action wrap-around-the-workspace right'
+
+cmd-ctrl-m = ['mode move', 'exec-and-forget notif --id move-help move-mode "<hjkl>move <ctrl-hjkl>resize<><HJLK>join <uiopy>workspace1-5<><n>other"']
+cmd-ctrl-comma = 'exec-and-forget ~/.local/bin/a-full'
+# cmd-ctrl-comma = 'exec-and-forget ~/.config/aerospace/full.sh'
+
+# See: https://nikitabobko.github.io/AeroSpace/commands#workspace
+cmd-ctrl-u = 'workspace 1'
+cmd-ctrl-i = 'workspace 2'
+cmd-ctrl-o = 'workspace 3'
+cmd-ctrl-p = 'workspace 4'
+cmd-ctrl-y = 'workspace 5'
+cmd-ctrl-n = 'workspace other'
+cmd-ctrl-t = 'workspace test'
+
+# See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
+alt-tab = 'workspace-back-and-forth'
+# See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
+alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
+
+# See: https://nikitabobko.github.io/AeroSpace/commands#mode
+cmd-ctrl-semicolon = ['mode service', 'exec-and-forget notif --id service-help --aerospace "<r>reload <shift-r>flatten<><backspace>close <f>float <a>accordion<><t>tile"']
+
+# 'service' binding mode declaration.
+# See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
+[mode.service.binding]
+esc = ['exec-and-forget notif --clear service-help', 'mode main', 'exec-and-forget notif --aerospace exited service mode']
+r = ['exec-and-forget notif --clear service-help', 'reload-config', 'mode main', 'exec-and-forget notif --aerospace reloaded config']
+shift-r = ['exec-and-forget notif --clear service-help', 'flatten-workspace-tree', 'mode main', 'exec-and-forget notif --aerospace flattened layout'] # reset layout
+backspace = ['exec-and-forget notif --clear service-help', 'close-all-windows-but-current', 'mode main', 'exec-and-forget notif --aerospace closed all other windows']
+equal = ['exec-and-forget notif --clear service-help', 'balance-sizes', 'mode main', 'exec-and-forget notif --aerospace balanced']
+
+f = ['exec-and-forget notif --clear service-help', 'layout floating tiling', 'mode main', 'exec-and-forget notif --aerospace switched to floating layout']
+a = ['exec-and-forget notif --clear service-help', 'layout h_accordion', 'mode main', 'exec-and-forget notif --aerospace switched to accordion layout']
+t = ['exec-and-forget notif --clear service-help', 'layout tiling', 'mode main', 'exec-and-forget notif --aerospace switched to tiling layout']
+
+[mode.move.binding]
+esc = ['exec-and-forget notif --clear move-help', 'mode main']
+
+h = ['exec-and-forget notif --clear move-help', 'move left', 'mode main']
+j = ['exec-and-forget notif --clear move-help', 'move down', 'mode main']
+k = ['exec-and-forget notif --clear move-help', 'move up', 'mode main']
+l = ['exec-and-forget notif --clear move-help', 'move right', 'mode main']
+
+ctrl-h = ['exec-and-forget notif --clear move-help', 'resize width +50']
+ctrl-l = ['exec-and-forget notif --clear move-help', 'resize width -50']
+ctrl-j = ['exec-and-forget notif --clear move-help', 'resize height -50']
+ctrl-k = ['exec-and-forget notif --clear move-help', 'resize height +50']
+
+shift-h = ['exec-and-forget notif --clear move-help', 'join-with left']
+shift-j = ['exec-and-forget notif --clear move-help', 'join-with down']
+shift-k = ['exec-and-forget notif --clear move-help', 'join-with up']
+shift-l = ['exec-and-forget notif --clear move-help', 'join-with right']
+
+u = ['exec-and-forget notif --clear move-help', 'move-node-to-workspace --focus-follows-window 1', 'mode main']
+i = ['exec-and-forget notif --clear move-help', 'move-node-to-workspace --focus-follows-window 2', 'mode main']
+o = ['exec-and-forget notif --clear move-help', 'move-node-to-workspace --focus-follows-window 3', 'mode main']
+p = ['exec-and-forget notif --clear move-help', 'move-node-to-workspace --focus-follows-window 4', 'mode main']
+y = ['exec-and-forget notif --clear move-help', 'move-node-to-workspace --focus-follows-window 5', 'mode main']
+n = ['exec-and-forget notif --clear move-help', 'move-node-to-workspace --focus-follows-window other', 'mode main']
+t = ['exec-and-forget notif --clear move-help', 'move-node-to-workspace --focus-follows-window test', 'mode main']
+
+# https://nikitabobko.github.io/AeroSpace/guide#on-window-detected-callback
+#####################################
+# Main
+[[on-window-detected]]
+if.app-id = 'net.kovidgoyal.kitty'
+if.during-aerospace-startup = true
+run = 'move-node-to-workspace 1'
+
+[[on-window-detected]]
+if.app-id = 'com.google.Chrome'
+if.during-aerospace-startup = true
+run = 'move-node-to-workspace 2'
+
+[[on-window-detected]]
+if.app-id = 'company.thebrowser.Browser'
+if.during-aerospace-startup = true
+run = 'move-node-to-workspace 2'
+
+[[on-window-detected]]
+if.app-id = 'com.figma.Desktop'
+if.during-aerospace-startup = true
+run = 'move-node-to-workspace 5'
+
+# always own screen and flexible for ui testing
+[[on-window-detected]]
+if.app-id = 'org.mozilla.firefox'
+run = ['layout floating', 'move-node-to-workspace test']
+[[on-window-detected]]
+if.app-id = 'org.mozilla.firefoxdeveloperedition'
+run = ['layout floating', 'move-node-to-workspace test']
+[[on-window-detected]]
+if.app-id = 'org.mozilla.nightly'
+run = ['layout floating', 'move-node-to-workspace test']
+
+# deno markdown preview
+# [[on-window-detected]]
+# if.window-title-regex-substring = 'Peek preview'
+# run = 'layout tiling'
+
+#####################################
+# Alt
+# [[on-window-detected]]
+# if.app-id = 'com.TickTick.task.mac'
+# run = 'move-node-to-workspace 2'
+# [[on-window-detected]]
+# if.app-id = 'md.obsidian'
+# run = 'move-node-to-workspace 2'
+
+#####################################
+# Social
+[[on-window-detected]]
+if.app-id = 'net.whatsapp.WhatsApp'
+run = 'move-node-to-workspace 3'
+
+[[on-window-detected]]
+if.app-name-regex-substring = '(Slack|Teams)'
+run = 'move-node-to-workspace 3'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.mail'
+run = 'move-node-to-workspace 3'
+
+#####################################
+# Media
+[[on-window-detected]]
+if.app-id = 'com.spotify.client'
+run = 'move-node-to-workspace 4'
+
+[[on-window-detected]]
+if.app-id = 'com.TickTick.task.mac'
+run = 'move-node-to-workspace 4'
+
+#####################################
+# Tiles Floats
+
+# TODO: annoyingly this goes mental as the emulator wants to resize itself too
+# Android emulator
+
+# [[on-window-detected]]
+# if.window-title-regex-substring='Android Emulator'
+# if.during-aerospace-startup = false #set it to false explicitly
+# run = 'layout tiling'  # The callback itself
+
+#####################################
+# Floats
+[[on-window-detected]]
+if.app-name-regex-substring = 'Simulator'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.1password.1password'
+run = 'layout floating'
+
+# [[on-window-detected]] # Everything else float (opt IN behaviour)
+# if.app-name-regex-substring = '.'
+# run = 'layout floating'
