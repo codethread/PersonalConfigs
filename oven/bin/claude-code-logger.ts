@@ -1,5 +1,5 @@
 /** biome-ignore-all lint/correctness/noUnusedVariables: types kept as docs */
-import {existsSync, mkdirSync} from "fs";
+import {existsSync, mkdirSync, readdirSync} from "fs";
 import {appendFile, symlink, unlink, readlink} from "fs/promises";
 import {join} from "path";
 
@@ -159,12 +159,12 @@ Options:
 Description:
   A Claude Code hook script that logs session events to JSONL files.
   Typically used as a hook in Claude Code settings, not called directly.
-  
+
   Creates logs in .logs/ directory:
-  - claude-session-<timestamp>.jsonl - Session-specific logs
-  - claude-session-current.jsonl - Symlink to current session
-  - claude-session-last.jsonl - Symlink to previous session
-  - claude-daily-<date>.jsonl - Daily aggregate logs
+  - cc-session-<timestamp>-<session-id>.jsonl - Session-specific logs
+  - cc-session-current.jsonl - Symlink to current session
+  - cc-session-last.jsonl - Symlink to previous session
+  - cc-daily-<date>.jsonl - Daily aggregate logs
 
 Examples:
   # Usually configured as a Claude Code hook
@@ -205,15 +205,33 @@ async function main() {
 		mkdirSync(logsDir, {recursive: true});
 	}
 
-	// Generate filename based on session start time
-	// Use session_id as it typically contains timestamp info, or create new timestamp
-	const timestamp = sessionId.includes("-") ? sessionId.split("-")[0] : Date.now().toString();
-	const logFile = join(logsDir, `claude-session-${timestamp}.jsonl`);
-	const logFileName = `claude-session-${timestamp}.jsonl`;
+	// Generate filename - check if session file already exists
+	let logFile: string;
+	let logFileName: string;
+
+	// Look for existing session file
+	const sessionPattern = `cc-session-*-${sessionId}.jsonl`;
+	const existingFiles = existsSync(logsDir)
+		? readdirSync(logsDir).filter(
+				(f) => f.endsWith(`-${sessionId}.jsonl`) && f.startsWith("cc-session-"),
+			)
+		: [];
+
+	if (existingFiles.length > 0) {
+		// Use existing session file
+		logFileName = existingFiles[0];
+		logFile = join(logsDir, logFileName);
+	} else {
+		// Create new session file with timestamp for first event
+		const now = new Date();
+		const timestamp = now.toISOString().replace(/[:.]/g, "-").replace("T", "-").slice(0, -5); // Format: YYYY-MM-DD-HH-MM-SS
+		logFileName = `cc-session-${timestamp}-${sessionId}.jsonl`;
+		logFile = join(logsDir, logFileName);
+	}
 
 	// Symlink paths
-	const currentSymlink = join(logsDir, "claude-session-current.jsonl");
-	const lastSymlink = join(logsDir, "claude-session-last.jsonl");
+	const currentSymlink = join(logsDir, "cc-session-current.jsonl");
+	const lastSymlink = join(logsDir, "cc-session-last.jsonl");
 
 	// Create log entry with all available information
 	const logEntry: LogEntry = {
@@ -270,7 +288,7 @@ async function main() {
 		await appendFile(logFile, `${JSON.stringify(logEntry)}\n`);
 
 		// Optional: Also log to a daily aggregate file for easier analysis
-		const dailyFile = join(logsDir, `claude-daily-${new Date().toISOString().split("T")[0]}.jsonl`);
+		const dailyFile = join(logsDir, `cc-daily-${new Date().toISOString().split("T")[0]}.jsonl`);
 		await appendFile(dailyFile, `${JSON.stringify(logEntry)}\n`);
 
 		// Handle symlinks based on hook event

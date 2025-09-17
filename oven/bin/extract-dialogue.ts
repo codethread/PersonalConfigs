@@ -313,8 +313,9 @@ Description:
   including user prompts, assistant responses, and tool usage.
 
 Examples:
-  extract-dialogue .logs/claude-session-current.jsonl
-  extract-dialogue .logs/claude-session-a53e19af.jsonl
+  extract-dialogue .logs/cc-session-current.jsonl
+  extract-dialogue .logs/cc-session-2025-09-16-14-30-00-a53e19af.jsonl
+  extract-dialogue .logs/claude-session-a53e19af.jsonl  # old format still supported
 `);
 }
 
@@ -331,7 +332,10 @@ async function main() {
 
 		if (args.length === 0) {
 			console.error("Usage: extract-dialogue.ts <log-file>");
-			console.error("Example: extract-dialogue.ts .logs/claude-session-a53e19af.jsonl");
+			console.error("Example: extract-dialogue.ts .logs/cc-session-current.jsonl");
+			console.error(
+				"Example: extract-dialogue.ts .logs/cc-session-2025-09-16-14-30-00-a53e19af.jsonl",
+			);
 			process.exit(1);
 		}
 

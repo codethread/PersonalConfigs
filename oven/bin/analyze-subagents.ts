@@ -353,14 +353,14 @@ analyze-subagents - Analyze Claude Code subagent usage from session logs
 Usage: analyze-subagents [logfile]
 
 Arguments:
-  logfile         Path to Claude session log file (default: .logs/claude-session-current.jsonl)
+  logfile         Path to Claude session log file (default: .logs/cc-session-current.jsonl)
 
 Options:
   -h, --help      Show this help message
 
 Examples:
   analyze-subagents
-  analyze-subagents .logs/claude-session-2024-01-01.jsonl
+  analyze-subagents .logs/cc-session-2025-09-16-14-30-00-a53e19af.jsonl
 `);
 }
 
@@ -373,7 +373,7 @@ async function main() {
 		process.exit(0);
 	}
 
-	const logFile = args[0] || ".logs/claude-session-current.jsonl";
+	const logFile = args[0] || ".logs/cc-session-current.jsonl";
 
 	const analyzer = new SubagentAnalyzer(logFile);
 	await analyzer.analyze();

@@ -3,8 +3,6 @@
   "env": {
     "CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "true",
     "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "false",
-    "DISABLE_AUTOUPDATER": "1",
-    "RIPGREP_CONFIG_PATH": "dont-be-using-my-ignores",
     "USE_BUILTIN_RIPGREP": "0"
   },
   "permissions": {

@@ -319,7 +319,13 @@ async function findLogFilesInTimeRange(
 	}
 
 	const files = await readdir(logsDir);
-	const logFiles = files.filter((f) => f.startsWith("claude-session-") && f.endsWith(".jsonl"));
+	const logFiles = files.filter(
+		(f) =>
+			(f.startsWith("cc-session-") || f.startsWith("claude-session-")) &&
+			f.endsWith(".jsonl") &&
+			!f.includes("current") &&
+			!f.includes("last"),
+	);
 
 	const relevantLogs: string[] = [];
 
