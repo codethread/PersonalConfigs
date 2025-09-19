@@ -36,17 +36,17 @@
 
 Location: `relative-to-cwd/path/to/component/directory`
 
-- [ ] **COMP-1**: [Task description] (delivers FR-X, NFR-Y)
+- [ ] **COMP-1**: [Task description] (delivers FR-X, NFR-Y) [TESTABLE]
   - Specific implementation details
   - Interfaces with: `relative-to-cwd/to/file.ext:line:col`
   - Creates: `relative-to-cwd/to/new/file.ext:1:1`
 
-- [ ] **COMP-2**: [Task description] (delivers FR-X)
+- [ ] **COMP-2**: [Task description] (delivers FR-X) [TESTABLE]
   - Specific implementation details
   - Updates: `relative-to-cwd/to/existing/file.ext:line:col`
   - Dependencies: COMP-1 must be complete
 
-### Component: [Another Component]
+### Component: [Another Component] [TEST AFTER COMPONENT]
 
 Location: `relative-to-cwd/to/another/component`
 
@@ -57,6 +57,9 @@ Location: `relative-to-cwd/to/another/component`
 - [ ] **AUTH-2**: [Session management] (delivers FR-2)
   - Implementation specifics
   - Updates: `relative-to-cwd/to/session/manager.ts:45:12`
+  - Note: AUTH-1 must be complete before AUTH-2
+
+Note: Test AUTH-1 and AUTH-2 together after both are implemented
 
 ## Technical Specifications
 

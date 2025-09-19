@@ -74,7 +74,51 @@ Starting from the approved specification:
 
 ### Phase 3: Technical Requirements Document
 
-Ultrathink and create the `TECH_SPEC` using the `specs/TECH_SPEC_TEMPLATE.md` as a starting point, ensuring all implementation tasks are numbered checklists with file:line:col references per COMMUNICATION_PROTOCOL.
+**CRITICAL: Task Decomposition for Testability**
+
+When creating the `TECH_SPEC`, you MUST structure tasks to enable the tight build-test cycles defined in prime-build. Follow these principles:
+
+1. **Prefer Independently Testable Tasks**:
+   - Each task should produce a testable outcome when possible
+   - Example: "Create validation function" can be tested immediately
+   - Example: "Add error handling to validation" can be tested after the first task
+
+2. **Mark Testing Boundaries Clearly**:
+   For each component, use one of these patterns:
+
+   **Pattern A: Task-Level Testing (Preferred)**
+
+   ```markdown
+   ### Component: User Validation
+
+   - [ ] **VAL-1**: Create email validation function (delivers FR-1) [TESTABLE]
+   - [ ] **VAL-2**: Add password strength checker (delivers FR-2) [TESTABLE]
+   - [ ] **VAL-3**: Create validation error messages (delivers NFR-1) [TESTABLE]
+   ```
+
+   **Pattern B: Component-Level Testing (When Tasks are Interdependent)**
+
+   ```markdown
+   ### Component: OAuth Integration [TEST AFTER COMPONENT]
+
+   - [ ] **OAUTH-1**: Setup OAuth client configuration (delivers FR-3)
+   - [ ] **OAUTH-2**: Implement token exchange (delivers FR-3)
+   - [ ] **OAUTH-3**: Add refresh token logic (delivers FR-3)
+         Note: These tasks are interdependent. QA should test after all three are complete.
+   ```
+
+3. **Task Sizing Guidelines**:
+   - A task should be completable in 1-2 hours of implementation
+   - If a task is larger, break it down further
+   - Each task must have a clear deliverable (function, endpoint, component)
+
+4. **Avoid These Anti-Patterns**:
+   - ❌ "Implement entire authentication system" (too large)
+   - ❌ "Add a comment" (too trivial, combine with related work)
+   - ❌ Tasks with no clear testable outcome
+   - ❌ Tasks that require extensive mocking to test (indicates poor boundaries)
+
+Create the `TECH_SPEC` using the `specs/TECH_SPEC_TEMPLATE.md` as a starting point, ensuring all implementation tasks are numbered checklists with file:line:col references per COMMUNICATION_PROTOCOL.
 
 ### Phase 4: Technical Review and Refinement
 
