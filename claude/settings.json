@@ -29,7 +29,9 @@
     ],
     "deny": [],
     "defaultMode": "acceptEdits",
-    "additionalDirectories": ["~/.local/cache/docs"]
+    "additionalDirectories": [
+      "~/.local/cache/docs"
+    ]
   },
   "model": "opus",
   "hooks": {
@@ -140,15 +142,6 @@
           {
             "type": "command",
             "command": "~/.claude/x-hooks/agent-docs-injection.ts"
-          }
-        ]
-      },
-      {
-        "matcher": "(startup|resume)",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/x-hooks/append_agentsmd_context.sh"
           }
         ]
       }
