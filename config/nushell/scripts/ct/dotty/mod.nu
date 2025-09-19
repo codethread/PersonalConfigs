@@ -11,15 +11,26 @@
 use ct/core [clog dedent is-not-empty md-list]
 export use cache.nu
 export use config.nu
-use helpers.nu [assert-no-conflicts]
+use helpers.nu [assert-no-conflicts detect-path-overlaps]
 use list-files.nu
 
 export def link [
 	--no-cache(-c)
 	--force(-f)
 ]: nothing -> table<name: string, created: table, deleted: table> {
-	config load
-	| par-each { |proj| get-project-files-to-link $proj $no_cache  }
+	let configs = config load
+
+	# Check for path overlaps before processing any files
+	detect-path-overlaps $configs
+
+	$configs
+	| par-each { |proj|
+		if $proj.link_directory {
+			get-project-dirs-to-link $proj $no_cache
+		} else {
+			get-project-files-to-link $proj $no_cache
+		}
+	}
 	| clog 'files' --expand
 	| assert-no-conflicts --force=$force
 	| par-each {|proj|
@@ -31,9 +42,25 @@ export def link [
 
 		$proj.files
 		| par-each {|f|
-			# `try` because sometimes cache isn't up-to-date, so a link might
-			# be recreated. This is trusting assert-no-conflicts to do it's job
-			ln -sf $f.real $f.symlink | complete | ignore
+			# For directory symlinks, we need different handling
+			if ($f.file == ".") {
+				# Directory symlink: remove existing target and create directory symlink
+				if ($f.symlink | path exists) {
+					rm -rf $f.symlink
+				}
+				# Create parent directory if needed
+				let parent_dir = ($f.symlink | path dirname)
+				if not ($parent_dir | path exists) {
+					mkdir $parent_dir
+				}
+				# Use ln -sf to create the directory symlink atomically
+				ln -sf $f.real $f.symlink | complete | ignore
+			} else {
+				# File symlink: existing behavior
+				# `try` because sometimes cache isn't up-to-date, so a link might
+				# be recreated. This is trusting assert-no-conflicts to do it's job
+				ln -sf $f.real $f.symlink | complete | ignore
+			}
 		}
 
 		# update cache
@@ -88,12 +115,59 @@ export def is-cwd [
 
 # Remove symlinks that don't point to anything
 export def prune [target: glob = ~/.config/**/*] {
-	ls -all --long ...(glob $target)
-	| where type == symlink
-	| where ($it.target | path exists | $in == false)
-	| each { |f|
-		print $"removing ($f.name)";
+	# Find broken filesystem symlinks (existing behavior)
+	let broken_fs_symlinks = (
+		ls -all --long ...(glob $target)
+		| where type == symlink
+		| where ($it.target | path exists | $in == false)
+	)
+
+	# Find broken directory symlinks from dotty cache
+	let broken_dotty_symlinks = (
+		config load
+		| par-each {|proj|
+			let cached_files = cache load $proj.name
+			let directory_entries = ($cached_files | where { $in == "." })
+
+			if ($directory_entries | is-not-empty) {
+				# This project has directory symlinks
+				if not ($proj.symlink | path exists) {
+					# Directory symlink target doesn't exist
+					{ name: $proj.symlink, project: $proj.name, type: "missing" }
+				} else if ($proj.symlink | path type) != "symlink" {
+					# Target exists but is not a symlink
+					null
+				} else if not ($proj.real | path exists) {
+					# Directory symlink exists but source doesn't exist
+					{ name: $proj.symlink, project: $proj.name, type: "broken" }
+				} else {
+					null
+				}
+			} else {
+				null
+			}
+		}
+		| compact
+	)
+
+	# Remove broken filesystem symlinks
+	$broken_fs_symlinks | each { |f|
+		print $"removing broken filesystem symlink ($f.name)";
 		try { rm $f.name }
+	}
+
+	# Remove broken directory symlinks and update cache
+	$broken_dotty_symlinks | each { |f|
+		print $"removing broken directory symlink ($f.name) from project ($f.project)";
+		try {
+			if ($f.name | path exists) {
+				rm $f.name
+			}
+			# Remove the directory entry from cache
+			let current_cache = cache load $f.project
+			let updated_cache = ($current_cache | where { $in != "." })
+			$updated_cache | cache store $f.project
+		}
 	}
 }
 
@@ -130,11 +204,29 @@ export def test [...files] {
 export def teardown [] {
 	config load
 	| par-each {|proj|
-		cd $proj.symlink
 		let files = cache load $proj.name
 
-		$files | par-each {|f| rm -f $f }
-		$files | delete-empty-dirs
+		$files | par-each {|f|
+			if ($f == ".") {
+				# Directory symlink: remove the symlink itself, not its contents
+				if ($proj.symlink | path exists) and ($proj.symlink | path type) == "symlink" {
+					print $"removing directory symlink ($proj.symlink)"
+					rm $proj.symlink
+				}
+			} else {
+				# File symlink: remove the individual file symlink
+				let file_path = ($proj.symlink | path join $f)
+				if ($file_path | path exists) {
+					rm -f $file_path
+				}
+			}
+		}
+
+		# Only delete empty dirs for file symlinks, not directory symlinks
+		let file_entries = ($files | where { $in != "." })
+		if ($file_entries | is-not-empty) {
+			$file_entries | each {|f| $proj.symlink | path join $f } | delete-empty-dirs
+		}
 
 		cache delete $proj.name
 	}
@@ -205,6 +297,54 @@ def get-project-files-to-link [proj, no_cache] {
 			}
 		})
 		delete: ($to_delete | each {|f| $proj.symlink | path join $f | path relative-to $env.HOME })
+		existing: $existing,
+	}
+}
+
+def get-project-dirs-to-link [proj, no_cache] {
+	# Emit warning if excludes are specified for directory symlinks
+	if ($proj.excludes | is-not-empty) {
+		print $"Warning: excludes are ignored for directory symlink project '($proj.name)'"
+	}
+
+	let cache = cache load $proj.name
+	let dir_path = "."  # For directory symlinks, we track just the directory itself
+
+	# For directory symlinks, we either need to create the link or it's already cached
+	let needs_link = if $no_cache {
+		true
+	} else {
+		$dir_path not-in $cache
+	}
+
+	# Check if there's anything to delete (if transitioning from file to directory mode)
+	let to_delete = if $no_cache {
+		[]
+	} else {
+		$cache | where { $in != $dir_path }
+	}
+
+	let existing = if $no_cache { [] } else { if ($dir_path in $cache) { [$dir_path] } else { [] } }
+
+	{
+		name: $proj.name,
+		root: $proj.real,
+		files: (if $needs_link {
+			[{
+				file: $dir_path,
+				real: $proj.real,
+				symlink: $proj.symlink
+			}]
+		} else {
+			[]
+		})
+		delete: ($to_delete | each {|f|
+			if ($f == ".") {
+				$proj.symlink | path relative-to $env.HOME
+			} else {
+				$proj.symlink | path join $f | path relative-to $env.HOME
+			}
+		})
 		existing: $existing,
 	}
 }

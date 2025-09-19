@@ -41,5 +41,44 @@ def file-exists [file: path] {
 }
 
 def is-symlink [file:path] {
-	($file | path exists) and (do { ^test -L $file } | complete | get exit_code | into bool | not $in )
+	($file | path exists) and (do { ^test -L $file } | complete | get exit_code) == 0
+}
+
+# Detect overlapping paths between configurations (e.g., foo vs foo/bar)
+# This prevents conflicts between directory and file configurations
+export def detect-path-overlaps [configs] {
+	mut conflicts = []
+	let config_list = ($configs | enumerate)
+
+	for config_entry in $config_list {
+		let config = $config_entry.item
+		let config_idx = $config_entry.index
+
+		for other_entry in ($config_list | where index > $config_idx) {
+			let other = $other_entry.item
+			let config_path = ($config.symlink | path expand)
+			let other_path = ($other.symlink | path expand)
+
+			# Check if one path is a parent/child of another
+			if ($config_path | str starts-with $"($other_path)/") or ($other_path | str starts-with $"($config_path)/") {
+				let conflict_entry = {
+					config1: $config.name,
+					path1: $config_path,
+					link_directory1: $config.link_directory,
+					config2: $other.name,
+					path2: $other_path,
+					link_directory2: $other.link_directory
+				}
+				$conflicts = ($conflicts | append $conflict_entry)
+			}
+		}
+	}
+
+	if ($conflicts | is-not-empty) {
+		let msg = ($conflicts
+			| each {|c| $"Path overlap detected: '($c.config1)' \(($c.path1), link_directory=($c.link_directory1)) conflicts with '($c.config2)' \(($c.path2), link_directory=($c.link_directory2))" }
+			| str join "\n"
+		)
+		error make -u { msg: $"Configuration conflicts found:\n($msg)" }
+	}
 }

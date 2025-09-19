@@ -1,7 +1,7 @@
 use ct/core clog
 
 # load in dotty config, currently in code but could be a nuon file
-export def load []: nothing -> table<name: string, real: path, symlink: path, excludes: list<path>> {
+export def load []: nothing -> table<name: string, real: path, symlink: path, excludes: list<path>, link_directory: bool> {
 	let excludes = [
 		"**/_?*/**" # files/folder starting with an underscore (but not just a single underscore)
 		"**/.gitignore"
@@ -9,16 +9,16 @@ export def load []: nothing -> table<name: string, real: path, symlink: path, ex
 	]
 
 	let config = [
-		[name, real, symlink, excludes];
+		[name, real, symlink, excludes, link_directory];
 
-		[home, (dir ~/PersonalConfigs/home), (dir ~), [ "**/.stylua.toml" "**/.gitattributes" ] ]
-		[config, (dir ~/PersonalConfigs/config), (dir ~/.config), [ "**/.stylua.toml" "**/.gitattributes" ] ]
-		[claude, (dir ~/PersonalConfigs/claude), (dir ~/.claude), [ "**/.stylua.toml" "**/.gitattributes" ] ]
+		[home, (dir ~/PersonalConfigs/home), (dir ~), [ "**/.stylua.toml" "**/.gitattributes" ], false]
+		[config, (dir ~/PersonalConfigs/config), (dir ~/.config), [ "**/.stylua.toml" "**/.gitattributes" ], false]
+		[claude, (dir ~/PersonalConfigs/claude/agents), (dir ~/.claude/agents), [], true]
 
-		[work, (dir ~/workfiles), (dir ~), []]
+		[work, (dir ~/workfiles), (dir ~), [], false]
 
 		# as a bit of a hack, can reference git dirs directly
-		[deals, (dir ~/workfiles/work/app/deals-light-ui/_git), (dir ~/work/app/deals-light-ui/.git), []]
+		[deals, (dir ~/workfiles/work/app/deals-light-ui/_git), (dir ~/work/app/deals-light-ui/.git), [], false]
 	]
 
 	$config
