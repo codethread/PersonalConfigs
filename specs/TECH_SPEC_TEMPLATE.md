@@ -91,3 +91,9 @@ Location: `relative-to-cwd/to/another/component`
 ## Dependencies and Prerequisites
 
 [External services, libraries, infrastructure requirements]
+
+## Regressions or missed requirements
+
+None found
+
+<!-- section for the future to document missed requirements and their resolution, with the intention being to prevent future mistakes -->
