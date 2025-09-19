@@ -62,3 +62,12 @@ vim.api.nvim_create_user_command(
 	require('codethread.fns').open_next_file,
 	{ desc = 'Open next file in directory' }
 )
+
+vim.api.nvim_create_user_command('EditAgent', function(opts)
+	local filepath = opts.args ~= '' and opts.args or nil
+	require('codethread.claude-agent').edit_agent_file(filepath)
+end, {
+	nargs = '?',
+	complete = 'file',
+	desc = 'Edit Claude agent file frontmatter',
+})
