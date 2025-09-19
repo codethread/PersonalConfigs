@@ -40,11 +40,9 @@ bun run build
 - **claude-code-logger** - Claude Code session hook for logging events
 - **extract-commit-dialogue** - Extract Claude Code dialogue for a specific commit
 - **extract-dialogue** - Extract Claude Code session dialogue from log files
-- **fromPhrase** - Search for phrases in locale files
 - **ghub** - Open GitHub/GitLab repository in browser
 - **gitlab-pipeline-watcher** - Monitor GitLab pipelines and send notifications
 - **gmr** - GitLab merge request helper
-- **isPhrase** - Check if a string is a valid phrase key
 - **notif** - Show macOS native notifications
 
 ### Quick Usage
