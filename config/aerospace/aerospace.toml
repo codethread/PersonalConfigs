@@ -50,18 +50,18 @@ cmd-ctrl-j = 'focus --boundaries-action wrap-around-the-workspace down'
 cmd-ctrl-k = 'focus --boundaries-action wrap-around-the-workspace up'
 cmd-ctrl-l = 'focus --boundaries-action wrap-around-the-workspace right'
 
-cmd-ctrl-m = ['mode move', 'exec-and-forget notif --id move-help move-mode "<hjkl>move <ctrl-hjkl>resize<><HJLK>join <uiopy>workspace1-5<><n>other"']
+cmd-ctrl-m = ['mode move', 'exec-and-forget notif --id move-help move-mode "<hjkl>move <ctrl-hjkl>resize<><HJLK>join <uiopynt>workspace1-5<><n>other"']
 cmd-ctrl-comma = 'exec-and-forget ~/.local/bin/a-full'
 # cmd-ctrl-comma = 'exec-and-forget ~/.config/aerospace/full.sh'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
-cmd-ctrl-u = 'workspace 1'
-cmd-ctrl-i = 'workspace 2'
-cmd-ctrl-o = 'workspace 3'
-cmd-ctrl-p = 'workspace 4'
-cmd-ctrl-y = 'workspace 5'
-cmd-ctrl-n = 'workspace other'
-cmd-ctrl-t = 'workspace test'
+cmd-ctrl-u = 'workspace primary'
+cmd-ctrl-i = 'workspace alt' # usually the browser
+cmd-ctrl-o = 'workspace social' # teams/slack/whatsapp etc
+cmd-ctrl-p = 'workspace planner' # things like calendar, notes, todos etc
+cmd-ctrl-y = 'workspace figma' # gets own space
+cmd-ctrl-n = 'workspace other' # all the other things i've dismissed
+cmd-ctrl-t = 'workspace test' # test should always allow floating windows for things like ui browser testing to run consistently
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
 alt-tab = 'workspace-back-and-forth'
@@ -102,11 +102,11 @@ shift-j = ['exec-and-forget notif --clear move-help', 'join-with down']
 shift-k = ['exec-and-forget notif --clear move-help', 'join-with up']
 shift-l = ['exec-and-forget notif --clear move-help', 'join-with right']
 
-u = ['exec-and-forget notif --clear move-help', 'move-node-to-workspace --focus-follows-window 1', 'mode main']
-i = ['exec-and-forget notif --clear move-help', 'move-node-to-workspace --focus-follows-window 2', 'mode main']
-o = ['exec-and-forget notif --clear move-help', 'move-node-to-workspace --focus-follows-window 3', 'mode main']
-p = ['exec-and-forget notif --clear move-help', 'move-node-to-workspace --focus-follows-window 4', 'mode main']
-y = ['exec-and-forget notif --clear move-help', 'move-node-to-workspace --focus-follows-window 5', 'mode main']
+u = ['exec-and-forget notif --clear move-help', 'move-node-to-workspace --focus-follows-window primary', 'mode main']
+i = ['exec-and-forget notif --clear move-help', 'move-node-to-workspace --focus-follows-window alt', 'mode main']
+o = ['exec-and-forget notif --clear move-help', 'move-node-to-workspace --focus-follows-window social', 'mode main']
+p = ['exec-and-forget notif --clear move-help', 'move-node-to-workspace --focus-follows-window planner', 'mode main']
+y = ['exec-and-forget notif --clear move-help', 'move-node-to-workspace --focus-follows-window figma', 'mode main']
 n = ['exec-and-forget notif --clear move-help', 'move-node-to-workspace --focus-follows-window other', 'mode main']
 t = ['exec-and-forget notif --clear move-help', 'move-node-to-workspace --focus-follows-window test', 'mode main']
 
@@ -115,23 +115,19 @@ t = ['exec-and-forget notif --clear move-help', 'move-node-to-workspace --focus-
 # Main
 [[on-window-detected]]
 if.app-id = 'net.kovidgoyal.kitty'
-if.during-aerospace-startup = true
-run = 'move-node-to-workspace 1'
+run = 'move-node-to-workspace primary'
 
 [[on-window-detected]]
 if.app-id = 'com.google.Chrome'
-if.during-aerospace-startup = true
-run = 'move-node-to-workspace 2'
+run = 'move-node-to-workspace alt'
 
 [[on-window-detected]]
 if.app-id = 'company.thebrowser.Browser'
-if.during-aerospace-startup = true
-run = 'move-node-to-workspace 2'
+run = 'move-node-to-workspace alt'
 
 [[on-window-detected]]
 if.app-id = 'com.figma.Desktop'
-if.during-aerospace-startup = true
-run = 'move-node-to-workspace 5'
+run = 'move-node-to-workspace figma'
 
 # always own screen and flexible for ui testing
 [[on-window-detected]]
@@ -153,34 +149,34 @@ run = ['layout floating', 'move-node-to-workspace test']
 # Alt
 # [[on-window-detected]]
 # if.app-id = 'com.TickTick.task.mac'
-# run = 'move-node-to-workspace 2'
-# [[on-window-detected]]
-# if.app-id = 'md.obsidian'
-# run = 'move-node-to-workspace 2'
+# run = 'move-node-to-workspace alt'
+[[on-window-detected]]
+if.app-id = 'md.obsidian'
+run = 'move-node-to-workspace planner'
 
 #####################################
 # Social
 [[on-window-detected]]
 if.app-id = 'net.whatsapp.WhatsApp'
-run = 'move-node-to-workspace 3'
+run = 'move-node-to-workspace social'
 
 [[on-window-detected]]
 if.app-name-regex-substring = '(Slack|Teams)'
-run = 'move-node-to-workspace 3'
+run = 'move-node-to-workspace social'
 
 [[on-window-detected]]
 if.app-id = 'com.apple.mail'
-run = 'move-node-to-workspace 3'
+run = 'move-node-to-workspace social'
 
 #####################################
 # Media
 [[on-window-detected]]
 if.app-id = 'com.spotify.client'
-run = 'move-node-to-workspace 4'
+run = 'move-node-to-workspace other'
 
 [[on-window-detected]]
 if.app-id = 'com.TickTick.task.mac'
-run = 'move-node-to-workspace 4'
+run = 'move-node-to-workspace planner'
 
 #####################################
 # Tiles Floats
@@ -201,6 +197,9 @@ run = 'layout floating'
 
 [[on-window-detected]]
 if.app-id = 'com.1password.1password'
+run = 'layout floating'
+[[on-window-detected]]
+if.app-id = 'com.paloaltonetworks.GlobalProtect.client'
 run = 'layout floating'
 
 # [[on-window-detected]] # Everything else float (opt IN behaviour)
