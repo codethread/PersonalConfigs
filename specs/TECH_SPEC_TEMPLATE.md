@@ -34,29 +34,29 @@
 
 ### Component: [Component Name]
 
-Location: `/full/path/to/component/directory`
+Location: `relative-to-cwd/path/to/component/directory`
 
 - [ ] **COMP-1**: [Task description] (delivers FR-X, NFR-Y)
   - Specific implementation details
-  - Interfaces with: `/full/path/to/file.ext:line:col`
-  - Creates: `/full/path/to/new/file.ext:1:1`
+  - Interfaces with: `relative-to-cwd/to/file.ext:line:col`
+  - Creates: `relative-to-cwd/to/new/file.ext:1:1`
 
 - [ ] **COMP-2**: [Task description] (delivers FR-X)
   - Specific implementation details
-  - Updates: `/full/path/to/existing/file.ext:line:col`
+  - Updates: `relative-to-cwd/to/existing/file.ext:line:col`
   - Dependencies: COMP-1 must be complete
 
 ### Component: [Another Component]
 
-Location: `/full/path/to/another/component`
+Location: `relative-to-cwd/to/another/component`
 
 - [ ] **AUTH-1**: [Authentication task] (delivers FR-1, NFR-3)
   - Implementation specifics
-  - File: `/full/path/to/auth/service.ts:1:1`
+  - File: `relative-to-cwd/to/auth/service.ts:1:1`
 
 - [ ] **AUTH-2**: [Session management] (delivers FR-2)
   - Implementation specifics
-  - Updates: `/full/path/to/session/manager.ts:45:12`
+  - Updates: `relative-to-cwd/to/session/manager.ts:45:12`
 
 ## Technical Specifications
 
@@ -64,17 +64,9 @@ Location: `/full/path/to/another/component`
 
 [Detailed endpoint specifications with request/response schemas]
 
-### Database Schema
+### Database Schema [optional]
 
 [Table definitions, indexes, relationships]
-
-### Security Architecture
-
-[Authentication flow, authorization model, data protection]
-
-### Performance Targets
-
-[Specific metrics and how to achieve them]
 
 ## Testing Strategy
 
@@ -82,33 +74,15 @@ Location: `/full/path/to/another/component`
 
 [Coverage targets, mocking strategy]
 
-### Integration Testing
+### Integration Testing [optional]
 
 [Test scenarios, environment setup]
 
-### Performance Testing
-
-[Load profiles, benchmarking approach]
-
 ## Operational Considerations
 
-### Deployment Strategy
+### Logging
 
-[Blue-green, canary, rolling updates]
-
-### Monitoring and Alerts
-
-[Key metrics, logging strategy, alert thresholds]
-
-### Scaling Strategy
-
-[Horizontal/vertical scaling triggers]
-
-## Risk Mitigation
-
-| Risk               | Impact       | Probability  | Mitigation |
-| ------------------ | ------------ | ------------ | ---------- |
-| [Risk description] | High/Med/Low | High/Med/Low | [Strategy] |
+[logging strategy]
 
 ## Technical Debt Considerations
 
