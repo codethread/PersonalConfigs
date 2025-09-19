@@ -11,9 +11,11 @@ export def load []: nothing -> table<name: string, real: path, symlink: path, ex
 	let config = [
 		[name, real, symlink, excludes, link_directory];
 
-		[home, (dir ~/PersonalConfigs/home), (dir ~), [ "**/.stylua.toml" "**/.gitattributes" ], false]
-		[config, (dir ~/PersonalConfigs/config), (dir ~/.config), [ "**/.stylua.toml" "**/.gitattributes" ], false]
-		[claude, (dir ~/PersonalConfigs/claude/agents), (dir ~/.claude/agents), [], true]
+		[home, (dir ~/PersonalConfigs/home), (dir ~), [], false]
+		[config, (dir ~/PersonalConfigs/config), (dir ~/.config), [], false]
+
+		[claude, (dir ~/PersonalConfigs/claude), (dir ~/.claude), [], false]
+		[claude-agents, (dir ~/PersonalConfigs/claude-agents), (dir ~/.claude/agents), [], true]
 
 		[work, (dir ~/workfiles), (dir ~), [], false]
 
@@ -28,5 +30,5 @@ export def load []: nothing -> table<name: string, real: path, symlink: path, ex
 }
 
 def dir [str: path] {
-	$str | path expand
+	$str | path expand -n
 }

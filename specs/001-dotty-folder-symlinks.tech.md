@@ -77,6 +77,12 @@ Location: `config/nushell/scripts/ct/dotty`
   - Add claude project with `link_directory: true`
   - Update type annotation in export def
 
+- [ ] **CONFIG-3**: Fix dir helper function to not follow symlinks (delivers FR-3)
+  - Updates: `config/nushell/scripts/ct/dotty/config.nu:32:34`
+  - Add `-n` flag to `path expand` in dir helper function
+  - Prevents existing symlinks from being resolved to their targets
+  - Ensures configuration paths remain as intended
+
 ### Component: Directory Symlink Processing
 
 Location: `config/nushell/scripts/ct/dotty`
@@ -108,6 +114,8 @@ Location: `config/nushell/scripts/ct/dotty`
   - Function to detect overlapping paths (e.g., foo vs foo/bar)
   - Check parent/child relationships between paths
   - Return clear error messages with conflicting entries
+  - **IMPORTANT**: Only flag conflicts when at least one config has `link_directory: true`
+  - File-based configs (link_directory: false) can safely overlap as they only link their source files
 
 - [ ] **CONFLICT-2**: Integrate overlap detection into assert-no-conflicts (delivers FR-3, NFR-3)
   - Updates: `config/nushell/scripts/ct/dotty/helpers.nu:2:37`
@@ -120,6 +128,12 @@ Location: `config/nushell/scripts/ct/dotty`
   - Extend is-symlink to properly detect directory symlinks
   - Handle force flag for directory symlink overwrites
   - Provide clear user prompts for directory conflicts
+
+- [ ] **CONFLICT-4**: Prevent symlink path expansion during conflict checks (delivers FR-3)
+  - Updates: `config/nushell/scripts/ct/dotty/helpers.nu:59:61`
+  - Use `path expand -n` flag to avoid following existing symlinks
+  - Ensures conflict detection uses intended paths, not resolved symlink targets
+  - Critical for correct overlap detection when symlinks already exist
 
 ### Component: Cache Management Updates
 

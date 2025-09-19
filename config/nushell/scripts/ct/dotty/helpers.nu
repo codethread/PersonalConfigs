@@ -56,11 +56,12 @@ export def detect-path-overlaps [configs] {
 
 		for other_entry in ($config_list | where index > $config_idx) {
 			let other = $other_entry.item
-			let config_path = ($config.symlink | path expand)
-			let other_path = ($other.symlink | path expand)
+			# Use str replace to expand ~ without following symlinks
+			let config_path = ($config.symlink | str replace "~" $env.HOME | path expand -n)
+			let other_path = ($other.symlink | str replace "~" $env.HOME | path expand -n)
 
-			# Check if one path is a parent/child of another
-			if ($config_path | str starts-with $"($other_path)/") or ($other_path | str starts-with $"($config_path)/") {
+			# Check for exact path matches (always a conflict)
+			if ($config_path == $other_path) {
 				let conflict_entry = {
 					config1: $config.name,
 					path1: $config_path,
@@ -70,6 +71,19 @@ export def detect-path-overlaps [configs] {
 					link_directory2: $other.link_directory
 				}
 				$conflicts = ($conflicts | append $conflict_entry)
+			} else if ($config.link_directory and $other.link_directory) {
+				# Two directory symlinks can't overlap
+				if ($config_path | str starts-with $"($other_path)/") or ($other_path | str starts-with $"($config_path)/") {
+					let conflict_entry = {
+						config1: $config.name,
+						path1: $config_path,
+						link_directory1: $config.link_directory,
+						config2: $other.name,
+						path2: $other_path,
+						link_directory2: $other.link_directory
+					}
+					$conflicts = ($conflicts | append $conflict_entry)
+				}
 			}
 		}
 	}

@@ -24,7 +24,8 @@
       "Bash(cargo check:*)",
       "Bash(cargo test:*)",
       "Bash(cargo build:*)",
-      "Bash(cargo run:*)"
+      "Bash(cargo run:*)",
+      "Bash(bun ~/.claude/x-hooks/agent-docs-injection.ts)"
     ],
     "deny": [],
     "defaultMode": "acceptEdits",
