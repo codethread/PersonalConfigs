@@ -135,6 +135,10 @@
           {
             "type": "command",
             "command": "bun ~/.claude/x-hooks/claude-notifier.js"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/x-hooks/agent-docs-injection.ts"
           }
         ]
       },
