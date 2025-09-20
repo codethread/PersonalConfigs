@@ -74,7 +74,7 @@
 	cask "1password-cli"
 	cask "alfred"
 	cask "google-chrome"
-	cask "jordanbaird-ice" # Menu bar manager
+	# cask "jordanbaird-ice" # Menu bar manager
 	cask "kitty"
 	cask "visual-studio-code"
 	cask "cursor"
