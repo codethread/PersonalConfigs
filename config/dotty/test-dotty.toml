@@ -1,0 +1,12 @@
+[global]
+# Global exclusion patterns applied to all projects
+excludes = [
+    "**/_?*/**",       # Files/folders starting with underscore
+    "**/.gitignore",   # Git ignore files
+    "**/README.md"     # README files
+]
+
+[[project]]
+name = "test"
+real = "~/PersonalConfigs/config/dotty"
+symlink = "~/dotty-test"

@@ -12,11 +12,6 @@ excludes = [
     "**/README.md"     # README files
 ]
 
-# [[project]]
-# name = "test"
-# real = "~/PersonalConfigs/config/dotty"
-# symlink = "~/dotty-test"
-
 [[project]]
 name = "home"
 real = "~/PersonalConfigs/home"

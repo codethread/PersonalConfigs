@@ -1,8 +1,24 @@
 use ct/core clog
 
-# load in dotty config from TOML file, fallback to hardcoded config for compatibility
-export def load []: nothing -> table<name: string, real: path, symlink: path, excludes: list<path>, link_directory: bool> {
-	# Determine the configuration file path using XDG specification
+# load in dotty config from TOML file
+# Checks XDG_CONFIG_HOME first, then falls back to ~/.config
+export def load [
+	config_path?: path # override config path for testing or bootstrapping a new system
+]: nothing -> table<name: string, real: path, symlink: path, excludes: list<path>, link_directory: bool> {
+	let config_file = $config_path | default (get-config-path)
+
+	# Check if the configuration file exists
+	if not ($config_file | path exists) {
+		error make {
+			msg: $"Error: Configuration file not found at ($config_file)"
+			help: "Create a TOML configuration file at ~/.config/dotty/dotty.toml"
+		}
+	}
+
+	load-config-from-toml $config_file | clog --expand
+}
+
+def get-config-path [] {
 	let config_dir = if ($env.XDG_CONFIG_HOME? | is-not-empty) {
 		$env.XDG_CONFIG_HOME
 	} else {
@@ -10,7 +26,7 @@ export def load []: nothing -> table<name: string, real: path, symlink: path, ex
 	}
 	let config_file = $config_dir | path join "dotty" "dotty.toml"
 
-	load-config-from-toml | clog --expand
+	$config_file
 }
 
 
@@ -83,26 +99,8 @@ def validate-toml-config [toml_config: record] {
 	$toml_config
 }
 
-# Load configuration from TOML file with optimized performance
-# Checks XDG_CONFIG_HOME first, then falls back to ~/.config
-def load-config-from-toml []: nothing -> table<name: string, real: path, symlink: path, excludes: list<path>, link_directory: bool> {
-	# Determine the configuration file path using XDG specification
-	let config_dir = if ($env.XDG_CONFIG_HOME? | is-not-empty) {
-		$env.XDG_CONFIG_HOME
-	} else {
-		"~/.config" | path expand
-	}
-
-	let config_file = $config_dir | path join "dotty" "dotty.toml"
-
-	# Check if the configuration file exists
-	if not ($config_file | path exists) {
-		error make {
-			msg: $"Error: Configuration file not found at ($config_file)"
-			help: "Create a TOML configuration file at ~/.config/dotty/dotty.toml based on the hardcoded configuration"
-		}
-	}
-
+# Load configuration from TOML file
+def load-config-from-toml [config_file: path]: nothing -> table<name: string, real: path, symlink: path, excludes: list<path>, link_directory: bool> {
 	# Load and parse the TOML file with enhanced error handling
 	try {
 		let raw_toml = open $config_file
