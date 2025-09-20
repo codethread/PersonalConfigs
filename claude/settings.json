@@ -33,7 +33,7 @@
       "~/.local/cache/docs"
     ]
   },
-  "model": "opus",
+  "model": "sonnet",
   "hooks": {
     "PreToolUse": [
       {
