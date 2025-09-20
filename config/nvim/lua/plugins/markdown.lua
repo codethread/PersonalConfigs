@@ -30,6 +30,7 @@ return U.F {
 
 	{
 		'MeanderingProgrammer/render-markdown.nvim',
+		enabled = false,
 		-- also 'OXY2DEV/markview.nvim',
 		ft = 'markdown',
 		---@module 'render-markdown'

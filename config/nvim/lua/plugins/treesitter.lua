@@ -34,7 +34,10 @@ return {
 		},
 		---@type TSConfig
 		opts = {
-			highlight = { enable = not vim.g.vscode },
+			highlight = {
+				enable = not vim.g.vscode,
+				additional_vim_regex_highlighting = { 'markdown' },
+			},
 			indent = { enable = true },
 			matchup = { enable = true },
 			incremental_selection = {
