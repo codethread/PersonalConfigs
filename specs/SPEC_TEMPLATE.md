@@ -1,5 +1,7 @@
 # <Feature Name>
 
+User Sign off: [REQUIRED - DO NOT BUILD WITHOUT THIS]
+
 ## Context and Problem Statement
 
 [Clear description of the business problem and why this feature is needed]

@@ -1,0 +1,50 @@
+# Dotty configuration file
+# Manually created from hardcoded configuration
+#
+# This file controls dotty's symlink management behavior.
+# You can customize paths, excludes, and project settings here.
+
+[global]
+# Global exclusion patterns applied to all projects
+excludes = [
+    "**/_?*/**",       # Files/folders starting with underscore
+    "**/.gitignore",   # Git ignore files
+    "**/README.md"     # README files
+]
+
+# [[project]]
+# name = "test"
+# real = "~/PersonalConfigs/config/dotty"
+# symlink = "~/dotty-test"
+
+[[project]]
+name = "home"
+real = "~/PersonalConfigs/home"
+symlink = "~"
+
+[[project]]
+name = "config"
+real = "~/PersonalConfigs/config"
+symlink = "~/.config"
+
+[[project]]
+name = "claude"
+real = "~/PersonalConfigs/claude"
+symlink = "~/.claude"
+excludes = ["**/agents/**"]
+
+[[project]]
+name = "claude-agents"
+real = "~/PersonalConfigs/claude/agents"
+symlink = "~/.claude/agents"
+link_directory = true
+
+[[project]]
+name = "work"
+real = "~/workfiles"
+symlink = "~"
+
+[[project]]
+name = "deals"
+real = "~/workfiles/work/app/deals-light-ui/_git"
+symlink = "~/work/app/deals-light-ui/.git"

@@ -1,5 +1,7 @@
 # [Feature Name] - Technical Requirements
 
+User Sign off: [REQUIRED - DO NOT BUILD WITHOUT THIS]
+
 ## Executive Summary
 
 [Brief overview of technical approach]
