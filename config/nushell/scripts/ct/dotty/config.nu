@@ -4,7 +4,7 @@ use ct/core clog
 # Checks XDG_CONFIG_HOME first, then falls back to ~/.config
 export def load [
 	config_path?: path # override config path for testing or bootstrapping a new system
-]: nothing -> table<name: string, real: path, symlink: path, excludes: list<path>, link_directory: bool> {
+]: nothing -> table<name: string, origin: path, target: path, excludes: list<path>, link_directory: bool> {
 	let config_file = $config_path | default (get-config-path)
 
 	# Check if the configuration file exists
@@ -55,17 +55,17 @@ def validate-toml-config [toml_config: record] {
 				}
 			}
 
-			if not ("real" in $proj) {
+			if not ("origin" in $proj) {
 				error make {
-					msg: $"Error: Missing required field 'real' in project '($proj.name)'"
-					help: "Each project must have a 'real' path field"
+					msg: $"Error: Missing required field 'origin' in project '($proj.name)'"
+					help: "Each project must have an 'origin' path field"
 				}
 			}
 
-			if not ("symlink" in $proj) {
+			if not ("target" in $proj) {
 				error make {
-					msg: $"Error: Missing required field 'symlink' in project '($proj.name)'"
-					help: "Each project must have a 'symlink' path field"
+					msg: $"Error: Missing required field 'target' in project '($proj.name)'"
+					help: "Each project must have a 'target' path field"
 				}
 			}
 
@@ -100,7 +100,7 @@ def validate-toml-config [toml_config: record] {
 }
 
 # Load configuration from TOML file
-def load-config-from-toml [config_file: path]: nothing -> table<name: string, real: path, symlink: path, excludes: list<path>, link_directory: bool> {
+def load-config-from-toml [config_file: path]: nothing -> table<name: string, origin: path, target: path, excludes: list<path>, link_directory: bool> {
 	# Load and parse the TOML file with enhanced error handling
 	try {
 		let raw_toml = open $config_file
@@ -118,15 +118,15 @@ def load-config-from-toml [config_file: path]: nothing -> table<name: string, re
 		let projects = if "project" in $toml_config {
 			$toml_config.project | each { |proj|
 				# Expand paths once (no validation yet)
-				let real_path = ($proj.real | path expand)
+				let origin_path = ($proj.origin | path expand)
 				# expand for things like `~` but don't resolve symlinks or we end up in a cycle.
 				# we want the target to be exactly as the config is saying
-				let symlink_path = ($proj.symlink | path expand --no-symlink)
+				let target_path = ($proj.target | path expand --no-symlink)
 
 				{
 					name: $proj.name,
-					real: $real_path,
-					symlink: $symlink_path,
+					origin: $origin_path,
+					target: $target_path,
 					excludes: (if "link_directory" in $proj and $proj.link_directory {
 						[]
 					} else if "excludes" in $proj {
@@ -152,7 +152,7 @@ def load-config-from-toml [config_file: path]: nothing -> table<name: string, re
 				}
 			}
 		}
-		| where {|proj| $proj.real | path exists }  # Filter only once at the end
+		| where {|proj| $proj.origin | path exists }  # Filter only once at the end
 
 	} catch { |err|
 		# Provide specific error messages based on the error type

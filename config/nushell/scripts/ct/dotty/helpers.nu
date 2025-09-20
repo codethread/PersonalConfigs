@@ -6,7 +6,7 @@ export def assert-no-conflicts [
 
 	let files = $proj
 	| get files
-	| each {|| get symlink }
+	| each {|| get target }
 	| reduce {|it,acc| $it ++ $acc }
 
 	$files | uniq --repeated | match ($in | is-empty) {
@@ -57,8 +57,8 @@ export def detect-path-overlaps [configs] {
 		for other_entry in ($config_list | where index > $config_idx) {
 			let other = $other_entry.item
 			# Use str replace to expand ~ without following symlinks
-			let config_path = ($config.symlink | str replace "~" $env.HOME | path expand -n)
-			let other_path = ($other.symlink | str replace "~" $env.HOME | path expand -n)
+			let config_path = ($config.target | str replace "~" $env.HOME | path expand -n)
+			let other_path = ($other.target | str replace "~" $env.HOME | path expand -n)
 
 			# Check for exact path matches (always a conflict)
 			if ($config_path == $other_path) {

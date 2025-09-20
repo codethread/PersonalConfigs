@@ -144,7 +144,7 @@ Create the `TECH_SPEC` using the `specs/TECH_SPEC_TEMPLATE.md` as a starting poi
 
 ### Phase 5: Final architectural review.
 
-Think deeply about the final `TECH_SPEC` and ensure it comprehensively covers the outlined `SPEC`, with the work appropriately broken down into manageable chunks that are clear and, where appropriate, identified as concurrent work streams.
+Think harder about the final `TECH_SPEC` and ensure it comprehensively covers the outlined `SPEC`, with the work appropriately broken down into manageable chunks that are clear and, where appropriate, identified as concurrent work streams.
 
 ## Report
 

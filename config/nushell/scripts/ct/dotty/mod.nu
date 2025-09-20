@@ -38,28 +38,28 @@ export def link [
 		$proj.delete | each {|f| rm -f $f }
 
 		# create
-		$proj.files | get symlink | list-dirs-to-make | par-each {|dir| mkdir $dir }
+		$proj.files | get target | list-dirs-to-make | par-each {|dir| mkdir $dir }
 
 		$proj.files
 		| par-each {|f|
 			# For directory symlinks, we need different handling
 			if ($f.file == ".") {
 				# Directory symlink: remove existing target and create directory symlink
-				if ($f.symlink | path exists) {
-					rm -rf $f.symlink
+				if ($f.target | path exists) {
+					rm -rf $f.target
 				}
 				# Create parent directory if needed
-				let parent_dir = ($f.symlink | path dirname)
+				let parent_dir = ($f.target | path dirname)
 				if not ($parent_dir | path exists) {
 					mkdir $parent_dir
 				}
 				# Use ln -sf to create the directory symlink atomically
-				ln -sf $f.real $f.symlink | complete | ignore
+				ln -sf $f.origin $f.target | complete | ignore
 			} else {
 				# File symlink: existing behavior
 				# `try` because sometimes cache isn't up-to-date, so a link might
 				# be recreated. This is trusting assert-no-conflicts to do it's job
-				ln -sf $f.real $f.symlink | complete | ignore
+				ln -sf $f.origin $f.target | complete | ignore
 			}
 		}
 
@@ -105,7 +105,7 @@ export def is-cwd [
 	--exit # returns an exit code rather than true/false
 ] {
 	let target = if ($dir | is-not-empty) { $dir } else $env.PWD
-	let proj = (config load | where real == $target)
+	let proj = (config load | where origin == $target)
 	match ([$exit, ($proj | is-empty)]) {
 		[true, true] => { exit 1 },
 		[true, false] => { exit 0 }
@@ -131,15 +131,15 @@ export def prune [target: glob = ~/.config/**/*] {
 
 			if ($directory_entries | is-not-empty) {
 				# This project has directory symlinks
-				if not ($proj.symlink | path exists) {
+				if not ($proj.target | path exists) {
 					# Directory symlink target doesn't exist
-					{ name: $proj.symlink, project: $proj.name, type: "missing" }
-				} else if ($proj.symlink | path type) != "symlink" {
+					{ name: $proj.target, project: $proj.name, type: "missing" }
+				} else if ($proj.target | path type) != "symlink" {
 					# Target exists but is not a symlink
 					null
-				} else if not ($proj.real | path exists) {
+				} else if not ($proj.origin | path exists) {
 					# Directory symlink exists but source doesn't exist
-					{ name: $proj.symlink, project: $proj.name, type: "broken" }
+					{ name: $proj.target, project: $proj.name, type: "broken" }
 				} else {
 					null
 				}
@@ -175,7 +175,7 @@ export def prune [target: glob = ~/.config/**/*] {
 # Files are compared against the dotty project of the PWD.
 # Expected to be called by other tools, so throws errors
 export def test [...files] {
-	let proj = config load | where real == $env.PWD
+	let proj = config load | where origin == $env.PWD
 	if ($proj | is-empty) {
 		error make -u { msg: "not a project" }
 	}
@@ -187,12 +187,12 @@ export def test [...files] {
 	let non_files = $files | where { $in | path exists | $in == false }
 
 	if ($non_files | is-not-empty) {
-		error make -u { msg: (err_format "not real files" $non_files) }
+		error make -u { msg: (err_format "not origin files" $non_files) }
 	}
 
 	let files = $files | path relative-to $env.PWD
 
-	let all_files = list-files $proj.real --excludes $proj.excludes
+	let all_files = list-files $proj.origin --excludes $proj.excludes
 
 	let invalid = $files | where { $in not-in $all_files }
 
@@ -209,13 +209,13 @@ export def teardown [] {
 		$files | par-each {|f|
 			if ($f == ".") {
 				# Directory symlink: remove the symlink itself, not its contents
-				if ($proj.symlink | path exists) and ($proj.symlink | path type) == "symlink" {
-					print $"removing directory symlink ($proj.symlink)"
-					rm $proj.symlink
+				if ($proj.target | path exists) and ($proj.target | path type) == "symlink" {
+					print $"removing directory symlink ($proj.target)"
+					rm $proj.target
 				}
 			} else {
 				# File symlink: remove the individual file symlink
-				let file_path = ($proj.symlink | path join $f)
+				let file_path = ($proj.target | path join $f)
 				if ($file_path | path exists) {
 					rm -f $file_path
 				}
@@ -225,7 +225,7 @@ export def teardown [] {
 		# Only delete empty dirs for file symlinks, not directory symlinks
 		let file_entries = ($files | where { $in != "." })
 		if ($file_entries | is-not-empty) {
-			$file_entries | each {|f| $proj.symlink | path join $f } | delete-empty-dirs
+			$file_entries | each {|f| $proj.target | path join $f } | delete-empty-dirs
 		}
 
 		cache delete $proj.name
@@ -271,10 +271,10 @@ def get-project-files-to-link [proj, no_cache] {
 	$env.GIT_CONFIG_GLOBAL = ([$env.DOTFILES "config/git/config"] | path join)
 
 	# cd in order to get all the gitignores correct
-	cd $proj.real
+	cd $proj.origin
 	let cache = cache load $proj.name
 
-	let files = list-files $proj.real --excludes $proj.excludes
+	let files = list-files $proj.origin --excludes $proj.excludes
 
 	let $new_files = $files | match ($no_cache) {
 		true => { $in },
@@ -287,16 +287,16 @@ def get-project-files-to-link [proj, no_cache] {
 
 	{
 		name: $proj.name,
-		root: $proj.real,
+		root: $proj.origin,
 		files:
 		($new_files | each {|file|
 			{
 				file: $file,
-				real:  ($proj.real | path join $file),
-				symlink: ($proj.symlink | path join $file)
+				origin:  ($proj.origin | path join $file),
+				target: ($proj.target | path join $file)
 			}
 		})
-		delete: ($to_delete | each {|f| $proj.symlink | path join $f | path relative-to $env.HOME })
+		delete: ($to_delete | each {|f| $proj.target | path join $f | path relative-to $env.HOME })
 		existing: $existing,
 	}
 }
@@ -304,7 +304,7 @@ def get-project-files-to-link [proj, no_cache] {
 def get-project-dirs-to-link [proj, no_cache] {
 	# Emit warning if excludes are specified for directory symlinks
 	if ($proj.excludes | is-not-empty) {
-		print $"Warning: excludes are ignored for directory symlink project '($proj.name)'"
+		print $"Warning: excludes are ignored for directory target project '($proj.name)'"
 	}
 
 	let cache = cache load $proj.name
@@ -328,21 +328,21 @@ def get-project-dirs-to-link [proj, no_cache] {
 
 	{
 		name: $proj.name,
-		root: $proj.real,
+		root: $proj.origin,
 		files: (if $needs_link {
 			[{
 				file: $dir_path,
-				real: $proj.real,
-				symlink: $proj.symlink
+				origin: $proj.origin,
+				target: $proj.target
 			}]
 		} else {
 			[]
 		})
 		delete: ($to_delete | each {|f|
 			if ($f == ".") {
-				$proj.symlink | path relative-to $env.HOME
+				$proj.target | path relative-to $env.HOME
 			} else {
-				$proj.symlink | path join $f | path relative-to $env.HOME
+				$proj.target | path join $f | path relative-to $env.HOME
 			}
 		})
 		existing: $existing,
