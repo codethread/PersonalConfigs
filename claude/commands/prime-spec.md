@@ -9,16 +9,16 @@ Read the following `Brief`, using the outlined `Workflow` and `Report` the outpu
 
 ## Variables
 
-- FEATURE_BRIEF: $ARGUMENTS
-- SPEC_PATTERNS: `specs/SPEC_PATTERNS.md` (defines document structure and naming conventions)
-- COMMUNICATION_PROTOCOL: `specs/COMMUNICATION_PROTOCOL.md` (defines agent handover and reference standards)
-- AGENTS:
+- `FEATURE_BRIEF`: $ARGUMENTS
+- `SPEC_PATTERNS`: `specs/SPEC_PATTERNS.md` (defines document structure and naming conventions)
+- `COMMUNICATION_PROTOCOL`: `specs/COMMUNICATION_PROTOCOL.md` (defines agent handover and reference standards)
+- `AGENTS`:
   - **librarian**: Expert at navigating codebases, finding implementations, and understanding system structure
   - **researcher**: Technical researcher who investigates best practices, documentation, and architectural patterns
-- SPEC: `specs/<numerical-id>-<kebab-cased-feature>.md` (per SPEC_PATTERNS)
+- `SPEC`: `specs/<numerical-id>-<kebab-cased-feature>.md` (per `SPEC_PATTERNS`)
   - Example: `specs/001-user-authentication.md`
   - Template: `specs/SPEC_TEMPLATE.md`
-- TECH_NOTES: `specs/<numerical-id>-<kebab-cased-feature>.notes.md` (per SPEC_PATTERNS)
+- `TECH_NOTES`: `specs/<numerical-id>-<kebab-cased-feature>.notes.md` (per `SPEC_PATTERNS`)
   - Example: `specs/001-user-authentication.notes.md`
 
 ## Brief
@@ -52,8 +52,8 @@ When given a task from the user:
    - What is the migration strategy for any breaking changes to PUBLIC APIs? (Internal APIs can be refactored freely)
 
 2. **Technical Discovery**:
-   - Use the librarian agent to find existing similar implementations in our codebase (provide full context per COMMUNICATION_PROTOCOL)
-   - Use the researcher agent to investigate industry best practices for the feature (provide full context per COMMUNICATION_PROTOCOL)
+   - Use the librarian agent to find existing similar implementations in our codebase (provide full context per `COMMUNICATION_PROTOCOL`)
+   - Use the researcher agent to investigate industry best practices for the feature (provide full context per `COMMUNICATION_PROTOCOL`)
 
 3. **Spike Work** (Small POCs):
    - Create minimal proof-of-concepts to validate feasibility
@@ -104,7 +104,7 @@ Think deeply about the final `SPEC` and try to identify edge cases or implicit a
 
 ## Report
 
-- Specification completeness as per `SPEC` with numbered requirements (FR-X, NFR-X) per COMMUNICATION_PROTOCOL
+- Specification completeness as per `SPEC` with numbered requirements (FR-X, NFR-X) per `COMMUNICATION_PROTOCOL`
 - Technical feasibility validated and documented as per `TECH_NOTES`
 - User satisfaction with specification clarity
 - Identified risks and mitigation strategies

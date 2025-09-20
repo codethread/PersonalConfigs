@@ -9,14 +9,14 @@ Read the following `Brief`, using the outlined `Workflow` and `Report` the outpu
 
 ## Variables
 
-- SPEC: $ARGUMENTS
-- SPEC_PATTERNS: `specs/SPEC_PATTERNS.md` (defines document structure and naming conventions)
-- COMMUNICATION_PROTOCOL: `specs/COMMUNICATION_PROTOCOL.md` (defines agent handover and reference standards)
-- AGENTS:
+- `SPEC`: $ARGUMENTS
+- `SPEC_PATTERNS`: `specs/SPEC_PATTERNS.md` (defines document structure and naming conventions)
+- `COMMUNICATION_PROTOCOL`: `specs/COMMUNICATION_PROTOCOL.md` (defines agent handover and reference standards)
+- `AGENTS`:
   - **librarian**: Expert at navigating codebases, finding implementations, and understanding system structure
   - **researcher**: Technical researcher who investigates best practices, documentation, and architectural patterns
-- TECH_NOTES: Derived from SPEC by replacing `.md` with `.notes.md` (per SPEC_PATTERNS)
-- TECH_SPEC: Derived from SPEC by replacing `.md` with `.tech.md` (per SPEC_PATTERNS)
+- `TECH_NOTES`: Derived from `SPEC` by replacing `.md` with `.notes.md` (per `SPEC_PATTERNS`)
+- `TECH_SPEC`: Derived from `SPEC` by replacing `.md` with `.tech.md` (per `SPEC_PATTERNS`)
 
 ## Brief
 
@@ -24,7 +24,7 @@ You are a Senior System Architect with 15+ years of experience in distributed sy
 
 The `SPEC` is a comprehensive "WHAT" as per the user's feature request, and technical notes to accompany this will have been captured in `TECH_NOTES`.
 
-IMPORTANT: This is the TECHNICAL DESIGN phase - we're defining HOW to build what was specified, but no implementation will be built yet. Our `TECH_SPEC` must be clear enough for junior (but capable) developers to follow, with numbered implementation tasks (COMPONENT-N) that reference feature requirements (FR-X, NFR-X) per COMMUNICATION_PROTOCOL.
+IMPORTANT: This is the TECHNICAL DESIGN phase - we're defining HOW to build what was specified, but no implementation will be built yet. Our `TECH_SPEC` must be clear enough for junior (but capable) developers to follow, with numbered implementation tasks (COMPONENT-N) that reference feature requirements (FR-X, NFR-X) per `COMMUNICATION_PROTOCOL`.
 
 You will coordinate with your team of `AGENTS` to delegate work as appropriate, following the `COMMUNICATION_PROTOCOL` for all agent interactions.
 
@@ -58,9 +58,9 @@ Starting from the approved specification:
 
 2. **Technology Stack Decisions**:
 
-   > Use the researcher agent to compare framework options for [specific need] (provide full context per COMMUNICATION_PROTOCOL)
-   > Use the librarian agent to analyze how existing systems handle similar patterns (provide full context per COMMUNICATION_PROTOCOL)
-   > Use the researcher agent to investigate performance characteristics of [technology choice] (provide full context per COMMUNICATION_PROTOCOL)
+   > Use the researcher agent to compare framework options for [specific need] (provide full context per `COMMUNICATION_PROTOCOL`)
+   > Use the librarian agent to analyze how existing systems handle similar patterns (provide full context per `COMMUNICATION_PROTOCOL`)
+   > Use the researcher agent to investigate performance characteristics of [technology choice] (provide full context per `COMMUNICATION_PROTOCOL`)
 
 3. **Implementation Strategy**:
    - Development sequence and dependencies
@@ -118,7 +118,7 @@ When creating the `TECH_SPEC`, you MUST structure tasks to enable the tight buil
    - ❌ Tasks with no clear testable outcome
    - ❌ Tasks that require extensive mocking to test (indicates poor boundaries)
 
-Create the `TECH_SPEC` using the `specs/TECH_SPEC_TEMPLATE.md` as a starting point, ensuring all implementation tasks are numbered checklists with file:line:col references per COMMUNICATION_PROTOCOL.
+Create the `TECH_SPEC` using the `specs/TECH_SPEC_TEMPLATE.md` as a starting point, ensuring all implementation tasks are numbered checklists with file:line:col references per `COMMUNICATION_PROTOCOL`.
 
 ### Phase 4: Technical Review and Refinement
 
