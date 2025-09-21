@@ -1,3 +1,4 @@
+-- Extends Neovim's link handling with custom behavior for various file and URL types
 local M = {}
 
 M.gx = function()

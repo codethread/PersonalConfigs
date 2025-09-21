@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+// CLI tool to extract and format Claude Code dialogue for a specific git commit
 
 import {existsSync} from "fs";
 import {readdir, readFile, writeFile} from "fs/promises";

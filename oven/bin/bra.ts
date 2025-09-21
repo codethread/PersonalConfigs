@@ -1,3 +1,4 @@
+// Interactive git branch switcher that uses fzf for easy branch selection
 import {$} from "bun";
 import {fzf} from "./shared/fzf";
 

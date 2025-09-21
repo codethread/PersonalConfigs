@@ -1,3 +1,4 @@
+// Provides a fuzzy-finder function for interactive selection of strings using fzf
 interface Options {
 	multi?: boolean;
 	tmux?: boolean;

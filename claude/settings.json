@@ -29,9 +29,7 @@
     ],
     "deny": [],
     "defaultMode": "acceptEdits",
-    "additionalDirectories": [
-      "~/.local/cache/docs"
-    ]
+    "additionalDirectories": ["~/.local/cache/docs"]
   },
   "model": "opus",
   "hooks": {
@@ -50,10 +48,6 @@
           {
             "type": "command",
             "command": "claude-code-logger"
-          },
-          {
-            "type": "command",
-            "command": "bun ~/.claude/x-hooks/claude-notifier.js"
           }
         ]
       }
@@ -73,10 +67,6 @@
           {
             "type": "command",
             "command": "claude-code-logger"
-          },
-          {
-            "type": "command",
-            "command": "bun ~/.claude/x-hooks/claude-notifier.js"
           }
         ]
       }
@@ -87,23 +77,11 @@
           {
             "type": "command",
             "command": "claude-code-logger"
-          },
-          {
-            "type": "command",
-            "command": "bun ~/.claude/x-hooks/claude-notifier.js"
           }
         ]
       }
     ],
     "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bun ~/.claude/x-hooks/claude-notifier.js"
-          }
-        ]
-      },
       {
         "matcher": "*",
         "hooks": [
@@ -120,10 +98,6 @@
           {
             "type": "command",
             "command": "claude-code-logger"
-          },
-          {
-            "type": "command",
-            "command": "bun ~/.claude/x-hooks/claude-notifier.js"
           }
         ]
       }
@@ -134,10 +108,6 @@
           {
             "type": "command",
             "command": "claude-code-logger"
-          },
-          {
-            "type": "command",
-            "command": "bun ~/.claude/x-hooks/claude-notifier.js"
           },
           {
             "type": "command",
@@ -152,10 +122,6 @@
           {
             "type": "command",
             "command": "claude-code-logger"
-          },
-          {
-            "type": "command",
-            "command": "bun ~/.claude/x-hooks/claude-notifier.js"
           }
         ]
       }
@@ -166,10 +132,6 @@
           {
             "type": "command",
             "command": "claude-code-logger"
-          },
-          {
-            "type": "command",
-            "command": "bun ~/.claude/x-hooks/claude-notifier.js"
           }
         ]
       }

@@ -1,7 +1,7 @@
 ---
 name: librarian
 description: PROACTIVELY use this agent when you need to locate specific code elements, understand codebase structure, or find implementation details in a large codebase. This includes finding function definitions, type declarations, usage examples, file locations, or understanding how different parts of the codebase connect. <example>\nContext: The user needs to find where a specific function is implemented in the codebase.\nuser: "Where is the authentication logic implemented?"\nassistant: "I'll use the librarian agent to locate the authentication implementation."\n<commentary>\nSince we need to search through the codebase to find specific implementation details, the librarian agent is the appropriate choice.\n</commentary>\n</example>\n<example>\nContext: An agent needs to understand how a feature works by examining its code.\nuser: "How does the wallet allocation system work?"\nassistant: "Let me use the librarian agent to find and analyze the wallet allocation implementation."\n<commentary>\nThe librarian agent can efficiently search for and retrieve the relevant code sections.\n</commentary>\n</example>\n<example>\nContext: Need to find all usages of a particular API or function.\nuser: "Show me all the places where the GraphQL mutation for user updates is called"\nassistant: "I'll deploy the librarian agent to search for all GraphQL mutation usages."\n<commentary>\nThe librarian specializes in finding code patterns and usages across the entire codebase.\n</commentary>\n</example>
-tools: Bash, Glob, Grep, LS, Read, WebFetch, TodoWrite, WebSearch, BashOutput, KillBash
+tools: Bash, Glob, Grep, LS, Read, TodoWrite 
 model: haiku
 color: green
 ---
