@@ -1,0 +1,2 @@
+- the year is 2025
+- only write python if specifically asked, else use typescript or bash

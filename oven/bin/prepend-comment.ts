@@ -1,94 +1,94 @@
 #!/usr/bin/env bun
-import { readFileSync, writeFileSync } from "fs";
-import { resolve, extname } from "path";
+import {readFileSync, writeFileSync} from "fs";
+import {resolve, extname} from "path";
 
 // Map file extensions to their comment syntax
 const COMMENT_SYNTAX: Record<string, string> = {
-  // Shell scripts and configs
-  ".sh": "#",
-  ".bash": "#",
-  ".zsh": "#",
-  ".fish": "#",
-  ".nu": "#",
-  ".env": "#",
-  ".gitignore": "#",
-  ".dockerignore": "#",
+	// Shell scripts and configs
+	".sh": "#",
+	".bash": "#",
+	".zsh": "#",
+	".fish": "#",
+	".nu": "#",
+	".env": "#",
+	".gitignore": "#",
+	".dockerignore": "#",
 
-  // JavaScript/TypeScript
-  ".js": "//",
-  ".jsx": "//",
-  ".ts": "//",
-  ".tsx": "//",
-  ".mjs": "//",
-  ".cjs": "//",
+	// JavaScript/TypeScript
+	".js": "//",
+	".jsx": "//",
+	".ts": "//",
+	".tsx": "//",
+	".mjs": "//",
+	".cjs": "//",
 
-  // Rust
-  ".rs": "//",
+	// Rust
+	".rs": "//",
 
-  // Go
-  ".go": "//",
+	// Go
+	".go": "//",
 
-  // C/C++
-  ".c": "//",
-  ".cpp": "//",
-  ".cc": "//",
-  ".cxx": "//",
-  ".h": "//",
-  ".hpp": "//",
+	// C/C++
+	".c": "//",
+	".cpp": "//",
+	".cc": "//",
+	".cxx": "//",
+	".h": "//",
+	".hpp": "//",
 
-  // Java/Kotlin/Scala
-  ".java": "//",
-  ".kt": "//",
-  ".scala": "//",
+	// Java/Kotlin/Scala
+	".java": "//",
+	".kt": "//",
+	".scala": "//",
 
-  // Python
-  ".py": "#",
-  ".pyi": "#",
+	// Python
+	".py": "#",
+	".pyi": "#",
 
-  // Ruby
-  ".rb": "#",
+	// Ruby
+	".rb": "#",
 
-  // PHP
-  ".php": "//",
+	// PHP
+	".php": "//",
 
-  // CSS/SCSS/LESS
-  ".css": "/*",
-  ".scss": "//",
-  ".sass": "//",
-  ".less": "//",
+	// CSS/SCSS/LESS
+	".css": "/*",
+	".scss": "//",
+	".sass": "//",
+	".less": "//",
 
-  // SQL
-  ".sql": "--",
+	// SQL
+	".sql": "--",
 
-  // YAML/TOML
-  ".yml": "#",
-  ".yaml": "#",
-  ".toml": "#",
+	// YAML/TOML
+	".yml": "#",
+	".yaml": "#",
+	".toml": "#",
 
-  // Configuration files
-  ".conf": "#",
-  ".config": "#",
-  ".ini": "#",
+	// Configuration files
+	".conf": "#",
+	".config": "#",
+	".ini": "#",
 
-  // Web
-  ".html": "<!--",
-  ".htm": "<!--",
-  ".xml": "<!--",
+	// Web
+	".html": "<!--",
+	".htm": "<!--",
+	".xml": "<!--",
 
-  // Markdown
-  ".md": "<!--",
-  ".markdown": "<!--",
+	// Markdown
+	".md": "<!--",
+	".markdown": "<!--",
 
-  // Vim
-  ".vim": '"',
-  ".vimrc": '"',
+	// Vim
+	".vim": '"',
+	".vimrc": '"',
 
-  // Lua
-  ".lua": "--",
+	// Lua
+	".lua": "--",
 };
 
 function showHelp() {
-  console.log(`
+	console.log(`
 prepend-comment - Add a module documentation comment to a file
 
 Usage: prepend-comment [options] <file-path> <comment-text>
@@ -138,163 +138,165 @@ Files without extensions are treated as shell scripts (#).
 }
 
 function getCommentPrefix(filePath: string): string {
-  const ext = extname(filePath).toLowerCase();
+	const ext = extname(filePath).toLowerCase();
 
-  // If no extension, assume shell script
-  if (!ext) {
-    return "#";
-  }
+	// If no extension, assume shell script
+	if (!ext) {
+		return "#";
+	}
 
-  const prefix = COMMENT_SYNTAX[ext];
-  if (!prefix) {
-    console.warn(`Warning: Unknown file extension '${ext}', using '#' comment syntax`);
-    return "#";
-  }
+	const prefix = COMMENT_SYNTAX[ext];
+	if (!prefix) {
+		console.warn(`Warning: Unknown file extension '${ext}', using '#' comment syntax`);
+		return "#";
+	}
 
-  return prefix;
+	return prefix;
 }
 
 function formatComment(prefix: string, text: string): string {
-  // Add the :module: keyword identifier before the text
-  const commentWithKeyword = `:module: ${text}`;
+	// Add the :module: keyword identifier before the text
+	const commentWithKeyword = `:module: ${text}`;
 
-  switch (prefix) {
-    case "/*":
-      return `/* ${commentWithKeyword} */`;
-    case "<!--":
-      return `<!-- ${commentWithKeyword} -->`;
-    case "--":
-      return `-- ${commentWithKeyword}`;
-    case '"':
-      return `" ${commentWithKeyword}`;
-    default:
-      return `${prefix} ${commentWithKeyword}`;
-  }
+	switch (prefix) {
+		case "/*":
+			return `/* ${commentWithKeyword} */`;
+		case "<!--":
+			return `<!-- ${commentWithKeyword} -->`;
+		case "--":
+			return `-- ${commentWithKeyword}`;
+		case '"':
+			return `" ${commentWithKeyword}`;
+		default:
+			return `${prefix} ${commentWithKeyword}`;
+	}
 }
 
 function isCommentLine(line: string, prefix: string): boolean {
-  const trimmed = line.trim();
+	const trimmed = line.trim();
 
-  // Check if the line contains our :module: keyword identifier
-  const hasModuleKeyword = trimmed.includes(":module:");
+	// Check if the line contains our :module: keyword identifier
+	const hasModuleKeyword = trimmed.includes(":module:");
 
-  switch (prefix) {
-    case "/*":
-      return (trimmed.startsWith("/*") && trimmed.endsWith("*/")) && hasModuleKeyword;
-    case "<!--":
-      return (trimmed.startsWith("<!--") && trimmed.endsWith("-->")) && hasModuleKeyword;
-    case "--":
-      return trimmed.startsWith("--") && hasModuleKeyword;
-    case '"':
-      return trimmed.startsWith('"') && hasModuleKeyword;
-    default:
-      return trimmed.startsWith(prefix) && hasModuleKeyword;
-  }
+	switch (prefix) {
+		case "/*":
+			return trimmed.startsWith("/*") && trimmed.endsWith("*/") && hasModuleKeyword;
+		case "<!--":
+			return trimmed.startsWith("<!--") && trimmed.endsWith("-->") && hasModuleKeyword;
+		case "--":
+			return trimmed.startsWith("--") && hasModuleKeyword;
+		case '"':
+			return trimmed.startsWith('"') && hasModuleKeyword;
+		default:
+			return trimmed.startsWith(prefix) && hasModuleKeyword;
+	}
 }
 
 function isAnyCommentLine(line: string, prefix: string): boolean {
-  const trimmed = line.trim();
+	const trimmed = line.trim();
 
-  switch (prefix) {
-    case "/*":
-      return trimmed.startsWith("/*") && trimmed.endsWith("*/");
-    case "<!--":
-      return trimmed.startsWith("<!--") && trimmed.endsWith("-->");
-    case "--":
-      return trimmed.startsWith("--");
-    case '"':
-      return trimmed.startsWith('"');
-    default:
-      return trimmed.startsWith(prefix);
-  }
+	switch (prefix) {
+		case "/*":
+			return trimmed.startsWith("/*") && trimmed.endsWith("*/");
+		case "<!--":
+			return trimmed.startsWith("<!--") && trimmed.endsWith("-->");
+		case "--":
+			return trimmed.startsWith("--");
+		case '"':
+			return trimmed.startsWith('"');
+		default:
+			return trimmed.startsWith(prefix);
+	}
 }
 
 function main() {
-  const args = process.argv.slice(2);
+	const args = process.argv.slice(2);
 
-  // Check for help flag
-  if (args.length === 0 || args.includes("-h") || args.includes("--help")) {
-    showHelp();
-    process.exit(args.length === 0 ? 1 : 0);
-  }
+	// Check for help flag
+	if (args.length === 0 || args.includes("-h") || args.includes("--help")) {
+		showHelp();
+		process.exit(args.length === 0 ? 1 : 0);
+	}
 
-  // Parse --module flag
-  let moduleFlag = false;
-  let filteredArgs = args;
+	// Parse --module flag
+	let moduleFlag = false;
+	let filteredArgs = args;
 
-  if (args.includes("--module") || args.includes("-m")) {
-    moduleFlag = true;
-    filteredArgs = args.filter(arg => arg !== "--module" && arg !== "-m");
-  }
+	if (args.includes("--module") || args.includes("-m")) {
+		moduleFlag = true;
+		filteredArgs = args.filter((arg) => arg !== "--module" && arg !== "-m");
+	}
 
-  if (filteredArgs.length !== 2) {
-    console.error(`Error: Expected exactly 2 arguments (plus optional --module flag), got ${filteredArgs.length}`);
-    showHelp();
-    process.exit(1);
-  }
+	if (filteredArgs.length !== 2) {
+		console.error(
+			`Error: Expected exactly 2 arguments (plus optional --module flag), got ${filteredArgs.length}`,
+		);
+		showHelp();
+		process.exit(1);
+	}
 
-  const [filePath, commentText] = filteredArgs;
-  const resolvedPath = resolve(filePath);
+	const [filePath, commentText] = filteredArgs;
+	const resolvedPath = resolve(filePath);
 
-  try {
-    // Read the existing file content
-    const originalContent = readFileSync(resolvedPath, "utf-8");
-    const lines = originalContent.split("\n");
+	try {
+		// Read the existing file content
+		const originalContent = readFileSync(resolvedPath, "utf-8");
+		const lines = originalContent.split("\n");
 
-    // Get the appropriate comment syntax
-    const commentPrefix = getCommentPrefix(resolvedPath);
-    const commentLine = formatComment(commentPrefix, commentText);
+		// Get the appropriate comment syntax
+		const commentPrefix = getCommentPrefix(resolvedPath);
+		const commentLine = formatComment(commentPrefix, commentText);
 
-    let newContent: string;
-    let action: string;
-    let insertIndex = 0;
+		let newContent: string;
+		let action: string;
+		let insertIndex = 0;
 
-    // Check if the first line is a shebang
-    const hasShebang = lines.length > 0 && lines[0].startsWith("#!");
-    if (hasShebang) {
-      insertIndex = 1;
-    }
+		// Check if the first line is a shebang
+		const hasShebang = lines.length > 0 && lines[0].startsWith("#!");
+		if (hasShebang) {
+			insertIndex = 1;
+		}
 
-    // Determine if we should replace the existing comment
-    let shouldReplace = false;
+		// Determine if we should replace the existing comment
+		let shouldReplace = false;
 
-    if (lines.length > insertIndex) {
-      // Check if line has :module: marker
-      if (isCommentLine(lines[insertIndex], commentPrefix)) {
-        shouldReplace = true;
-      }
-      // With --module flag, replace any comment line (treating it as module comment)
-      else if (moduleFlag && isAnyCommentLine(lines[insertIndex], commentPrefix)) {
-        shouldReplace = true;
-      }
-    }
+		if (lines.length > insertIndex) {
+			// Check if line has :module: marker
+			if (isCommentLine(lines[insertIndex], commentPrefix)) {
+				shouldReplace = true;
+			}
+			// With --module flag, replace any comment line (treating it as module comment)
+			else if (moduleFlag && isAnyCommentLine(lines[insertIndex], commentPrefix)) {
+				shouldReplace = true;
+			}
+		}
 
-    if (shouldReplace) {
-      // Replace the existing comment
-      lines[insertIndex] = commentLine;
-      newContent = lines.join("\n");
-      action = "Replaced comment in";
-    } else {
-      // Insert the comment after shebang (if present) or at the beginning
-      if (hasShebang) {
-        lines.splice(1, 0, commentLine);
-        newContent = lines.join("\n");
-      } else {
-        newContent = commentLine + "\n" + originalContent;
-      }
-      action = "Added comment to";
-    }
+		if (shouldReplace) {
+			// Replace the existing comment
+			lines[insertIndex] = commentLine;
+			newContent = lines.join("\n");
+			action = "Replaced comment in";
+		} else {
+			// Insert the comment after shebang (if present) or at the beginning
+			if (hasShebang) {
+				lines.splice(1, 0, commentLine);
+				newContent = lines.join("\n");
+			} else {
+				newContent = commentLine + "\n" + originalContent;
+			}
+			action = "Added comment to";
+		}
 
-    // Write back to the file
-    writeFileSync(resolvedPath, newContent, "utf-8");
-  } catch (error) {
-    if (error instanceof Error) {
-      console.error(`Error: ${error.message}`);
-    } else {
-      console.error("An unknown error occurred");
-    }
-    process.exit(1);
-  }
+		// Write back to the file
+		writeFileSync(resolvedPath, newContent, "utf-8");
+	} catch (error) {
+		if (error instanceof Error) {
+			console.error(`Error: ${error.message}`);
+		} else {
+			console.error("An unknown error occurred");
+		}
+		process.exit(1);
+	}
 }
 
 main();
