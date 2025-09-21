@@ -1,3 +1,4 @@
+-- :module: Neovim Lua module for automatically aligning nested table structures in code, with special support for stylua ignore formatting
 local M = {}
 
 local log = require('codethread.logger.init').new { plugin = 'tbl_align' }

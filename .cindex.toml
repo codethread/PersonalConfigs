@@ -1,0 +1,104 @@
+# ripgrep --iglob args
+iglobs = [
+	"**.json",
+	"**/.claude/**",
+	"**/x-*/**",
+	"**.lock",
+]
+
+# Top-level directory descriptions
+[descriptions]
+config = "All application configuration files and dotfiles"
+oven = "Custom TypeScript/Bun utilities and scripts"
+specs = "Feature specifications and technical documentation"
+claude = "Claude AI agents, commands, and integration tools"
+home = "User home directory configurations and local binaries"
+boot = "System bootstrap and initialization scripts"
+
+[[subdivisions]]
+dir = "config"
+
+[[subdivisions]]
+dir = "home"
+
+[[subdivisions]]
+dir = "claude"
+
+[subdivisions.descriptions]
+nvim = "Neovim configuration with extensive custom plugins, LSP setup, and keybindings (see claude.lua for AI integration)"
+kitty = "Kitty terminal emulator configuration with custom actions and session management"
+nushell = "Nushell modern shell configuration with custom scripts and commands (see dotty/ for symlink management)"
+dotty = "Intelligent dotfile symlink management system configuration (main implementation in nushell/scripts/ct/dotty/)"
+wezterm = "WezTerm terminal multiplexer configuration with custom Lua modules"
+zsh = "Z shell configuration with plugins, aliases, and environment setup"
+tmux = "Terminal multiplexer configuration for session management"
+aerospace = "MacOS window manager configuration"
+alacritty = "Fast GPU-accelerated terminal emulator configuration"
+git = "Git version control configuration with aliases and ignore patterns"
+
+# Key file descriptions for cross-referencing
+[files]
+"config/nvim/lua/codethread/claude.lua" = "Claude AI integration in Neovim - handles AI-powered code assistance"
+"oven/bin/notif.ts" = "Desktop notification system - sends alerts via macOS notification center"
+"config/nushell/scripts/ct/dotty/mod.nu" = "Main dotfile symlink manager - creates/prunes/validates project symlinks"
+"oven/bin/cindex.ts" = "Project indexer CLI - generates this project summary you're reading"
+
+# Summarize patterns to reduce noise
+[[summarise]]
+dir = "specs"
+pattern = "^specs/\\d{3}-.*\\.md$"
+desc = "[summary] `[000-999]-feature-name.md`: Numbered specification documents for features and implementations"
+
+[[summarise]]
+dir = "home/Library"
+desc = "[summary] MacOS Library symlinks (Application Support, Preferences, etc.)"
+
+[[summarise]]
+dir = "config/nvim/lua/plugins"
+pattern = "^config/nvim/lua/plugins/.*\\.lua$"
+desc = "[summary] Neovim plugin configurations (completion, lsp, git, navigation, etc.)"
+
+[[summarise]]
+dir = "config/nvim/lua/codethread"
+pattern = "^config/nvim/lua/codethread/.*\\.lua$"
+desc = "[summary] Custom Neovim modules for specialized functionality (claude integration, kitty support, diagnostics, etc.)"
+
+[[summarise]]
+dir = "config/nushell/scripts/ct"
+pattern = "^config/nushell/scripts/ct/.*/.*\\.nu$"
+desc = "[summary] Nushell custom command modules organized by category (git, tmux, brew, dotty, etc.)"
+
+[[summarise]]
+dir = "claude/agents"
+pattern = "^claude/agents/.*\\.md$"
+desc = "[summary] Specialized agent definitions (librarian, researcher, tdd-developer, qa-spec-tester)"
+
+[[summarise]]
+dir = "claude/commands"
+pattern = "^claude/commands/.*\\.md$"
+desc = "[summary] Claude code slash commands (prime-build, prime-spec, refine-spec for spec-driven development)"
+
+[[summarise]]
+dir = "oven/bin"
+pattern = "^oven/bin/.*\\.ts$"
+desc = "[summary] CLI tools: notif (notifications), gmr (GitLab MRs), bra (branch selector), cindex (project indexer), extract-dialogue (conversation parser)"
+
+[[summarise]]
+dir = "oven/scripts"
+pattern = "^oven/scripts/.*\\.ts$"
+desc = "[summary] TypeScript utilities to build and clean the project, invoked from package.json"
+
+[[summarise]]
+dir = "config/nvim/queries"
+pattern = "^config/nvim/queries/.*/.*\\.scm$"
+desc = "[summary] Treesitter query files for syntax highlighting and code analysis"
+
+[[summarise]]
+dir = "config/kitty/bin"
+pattern = "^config/kitty/bin/.*\\.sh$"
+desc = "[summary] Kitty terminal helper scripts for vim integration and window management"
+
+[[summarise]]
+dir = "config/wezterm"
+pattern = "^config/wezterm/.*\\.lua$"
+desc = "[summary] WezTerm Lua configuration modules for terminal customization"

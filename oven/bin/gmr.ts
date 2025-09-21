@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// :module: GitLab Merge Request CLI Helper - Opens merge requests for the current branch in a GitLab repository
 const {assert} = require("console");
 
 const tokenUrl =

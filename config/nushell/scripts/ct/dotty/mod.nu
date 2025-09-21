@@ -1,4 +1,5 @@
-# The dotty module exposes tools to sync directories to a target directory, i.e
+# :module: Intelligent dotfile symlink management with comprehensive project-based synchronization and pruning capabilities
+# Manages directory and file synchronization through intelligent symlink operations
 # dotfiles from ~/some_dir into ~/
 #
 # `link` is the main command of interest
