@@ -44,6 +44,7 @@ bun run build
 - **gitlab-pipeline-watcher** - Monitor GitLab pipelines and send notifications
 - **gmr** - GitLab merge request helper
 - **notif** - Show macOS native notifications
+- **speak-ts** - Convert text files (especially markdown) to speech using ElevenLabs API
 
 ### Quick Usage
 

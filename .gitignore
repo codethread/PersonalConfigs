@@ -10,3 +10,4 @@ reports
 
 node_modules
 bun.lockb
+.audio/

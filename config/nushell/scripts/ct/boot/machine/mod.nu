@@ -38,6 +38,8 @@ export def main [
 
 	macos
 
+	setup-speech-whisper-model
+
 	nvim-sync
 }
 
@@ -116,4 +118,25 @@ def setup-bins [] {
 	cd $env.DOTFILES
 	cd oven
 	bun run build
+}
+
+def setup-speech-whisper-model [] {
+	log step "Whisper model setup"
+
+	let models_dir = ("~/dev/models" | path expand)
+	let whisper_model = ($models_dir | path join "ggml-medium.bin")
+
+	# Create models directory if it doesn't exist
+	if not ($models_dir | path exists) {
+		log tool "Creating models directory"
+		mkdir $models_dir
+	}
+
+	# Download whisper model if it doesn't exist
+	if not ($whisper_model | path exists) {
+		log tool "Downloading whisper medium model"
+		http get "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin" | save $whisper_model
+	} else {
+		log tool "Whisper medium model already exists"
+	}
 }
