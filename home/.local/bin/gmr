@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+# :module: GitLab Merge Request CLI Helper - Opens merge requests for the current branch using glab
+
+set -e
+
+show_help() {
+    cat <<EOF
+gmr - GitLab merge request helper
+
+Usage: gmr [options]
+
+Options:
+  -h, --help      Show this help message
+
+Description:
+  Opens GitLab merge requests for the current branch in the browser.
+  Uses the glab CLI tool.
+
+Prerequisites:
+  - Install glab: brew install glab
+  - Authenticate: glab auth login
+
+Examples:
+  gmr             # Open merge requests for current branch
+EOF
+}
+
+# Check for help flag
+if [[ "$1" == "-h" ]] || [[ "$1" == "--help" ]]; then
+    show_help
+    exit 0
+fi
+
+# Get current branch
+branch=$(git rev-parse --abbrev-ref HEAD)
+
+# Get MRs for current branch
+mrs=$(glab mr list --source-branch "$branch" --output json 2>/dev/null || echo "[]")
+
+# Check if any MRs exist
+if [[ "$mrs" == "[]" ]] || [[ -z "$mrs" ]]; then
+    echo "no open MRs"
+    exit 1
+fi
+
+# Open each MR in browser
+echo "$mrs" | jq -r '.[].web_url' | while read -r url; do
+    if [[ -n "$url" ]]; then
+        echo "$url"
+        open "$url"
+    fi
+done
