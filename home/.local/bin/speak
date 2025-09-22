@@ -3,7 +3,7 @@
 set -euo pipefail
 
 # Python venv location - this is the only Python thing we care about
-VENV="/Users/codethread/PersonalConfigs/.py_venv"
+VENV="${DOTFILES}/.py_venv"
 
 # Parse arguments
 TEXT=""
@@ -42,9 +42,10 @@ trap "rm -f $TMPFILE" EXIT
 
 # Generate and play audio (suppress ALL output)
 {
-"$VENV/bin/python" -c "
+SPEAK_TEXT="$TEXT" "$VENV/bin/python" -c "
 import sys
 import os
+import re
 
 # Silence everything
 os.environ['HF_HUB_DISABLE_PROGRESS_BARS'] = '1'
@@ -60,13 +61,49 @@ sys.stderr = io.StringIO()
 import warnings
 warnings.filterwarnings('ignore')
 
+def clean_markdown(text):
+    # Remove code blocks but keep their content description
+    text = re.sub(r'\`\`\`[\w]*\n(.*?)\`\`\`', r'Code block: \1', text, flags=re.DOTALL)
+
+    # Convert headers to spoken format
+    text = re.sub(r'^#{1,6}\s+(.+)$', r'\1.', text, flags=re.MULTILINE)
+
+    # Remove markdown formatting
+    text = re.sub(r'\*\*(.+?)\*\*', r'\1', text)  # Bold
+    text = re.sub(r'\*(.+?)\*', r'\1', text)  # Italic
+    text = re.sub(r'\`(.+?)\`', r'\1', text)  # Inline code
+
+    # Convert lists to spoken format
+    text = re.sub(r'^[-*+]\s+', '• ', text, flags=re.MULTILINE)
+    text = re.sub(r'^\d+\.\s+', '', text, flags=re.MULTILINE)
+
+    # Remove URLs from link text
+    text = re.sub(r'\[([^\]]+)\]\([^\)]+\)', r'\1', text)
+
+    # Remove image references
+    text = re.sub(r'!\[([^\]]*)\]\([^\)]+\)', r'Image: \1', text)
+
+    # Clean up tables
+    text = text.replace('|', ' ')
+    text = re.sub(r'^[-\s]+$', '', text, flags=re.MULTILINE)
+
+    # Remove multiple blank lines
+    text = re.sub(r'\n{3,}', '\n\n', text)
+
+    return text.strip()
+
 try:
     # Import with output suppressed
     from mlx_audio.tts.generate import generate_audio
     import logging
     logging.disable(logging.CRITICAL)
 
-    text = '''${TEXT//\'/\'\\\'\'}'''
+    # Get text from environment variable to avoid escaping issues
+    text = os.environ.get('SPEAK_TEXT', '')
+
+    # Check if input looks like markdown (simple heuristic)
+    if '#' in text or '\`\`\`' in text or '**' in text or '[' in text:
+        text = clean_markdown(text)
 
     # Generate audio
     output = generate_audio(
