@@ -10,6 +10,7 @@ Keys.tbl('<leader>', {
 	-- ['/'] = { '/ [hist]', Cmd 'Telescope search_history' },
 	['/'] = { 'Claude', function() require('codethread.claude').claude_query() end },
 	[','] = { '🔭', Cmd 'Telescope resume' },
+	['.'] = { 'cc', function() require('codethread.claude-chat').claude_chat() end },
 
 	e = {
 		group = 'Errors',

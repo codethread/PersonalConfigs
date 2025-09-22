@@ -1,0 +1,26 @@
+#!/bin/bash
+# send-to-claude - Send text to the most recent Claude window
+
+TEXT="$1"
+if [ -z "$TEXT" ]; then
+  echo "Usage: $0 'text to send'"
+  exit 1
+fi
+
+# Find the most recent Claude window (by creation time)
+CLAUDE_ID=$(kitty @ ls --match-tab=recent:-1 | jq -r '
+  [.[].tabs[].windows[] |
+   select(.foreground_processes[]?.cmdline[]? | test("/claude$"))] |
+  sort_by(.created_at) |
+  reverse |
+  .[0].id'
+)
+
+if [ -z "$CLAUDE_ID" ] || [ "$CLAUDE_ID" = "null" ]; then
+  echo "Error: No Claude windows found"
+  exit 1
+fi
+
+# Send the text then simulate Enter key press
+kitty @ send-text --match id:$CLAUDE_ID "$TEXT"
+kitty @ send-text --match id:$CLAUDE_ID '\x0d'

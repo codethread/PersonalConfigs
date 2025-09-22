@@ -2,7 +2,7 @@
 
 # record-and-transcribe - Record audio and transcribe using whisper
 # Usage: record-and-transcribe
-# Press Ctrl+C to stop recording
+# Press Escape to stop recording
 
 set -e
 
@@ -18,15 +18,32 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
+# Terminal settings cleanup
+restore_terminal() {
+    if [ -n "$SAVED_STTY" ]; then
+        stty "$SAVED_STTY" </dev/tty 2>/dev/null
+    fi
+}
+
 # Cleanup function
 cleanup() {
+    # Stop any background sox process
+    if [ -n "$SOX_PID" ]; then
+        kill "$SOX_PID" 2>/dev/null
+        wait "$SOX_PID" 2>/dev/null
+    fi
+
+    # Restore terminal settings
+    restore_terminal
+
+    # Clean up temp file
     if [ -f "$TEMP_AUDIO" ]; then
         rm -f "$TEMP_AUDIO"
     fi
 }
 
 # Set trap for cleanup on exit
-trap cleanup EXIT
+trap cleanup EXIT INT TERM
 
 # Check dependencies
 check_dependencies() {
@@ -54,31 +71,58 @@ check_dependencies() {
     fi
 }
 
+# Function to wait for Escape key
+wait_for_escape() {
+    # Save current terminal settings
+    SAVED_STTY=$(stty -g </dev/tty)
+
+    # Set terminal to raw mode for single keypress detection
+    stty -icanon -echo </dev/tty
+
+    echo -e "${GREEN}🎤 Recording... Press Escape to stop${NC}" >&2
+
+    while true; do
+        # Read single character from terminal (not stdin)
+        KEY=$(dd bs=1 count=1 </dev/tty 2>/dev/null)
+
+        # Check if it's escape key (ASCII 27, hex 1b)
+        if [ "$(printf "%d" "'$KEY")" = "27" ]; then
+            echo -e "\n${GREEN}✓ Recording stopped${NC}" >&2
+            break
+        fi
+    done
+
+    # Restore terminal settings
+    restore_terminal
+}
+
 # Main recording function
 record_audio() {
-    echo -e "${GREEN}🎤 Recording... Press Ctrl+C to stop${NC}"
-
-    # Use sox to record audio
+    # Start sox recording in background
     # -d: default audio device
     # -r 16000: sample rate 16kHz (good for speech)
     # -c 1: mono channel
     # -b 16: 16-bit depth
-    sox -d -r 16000 -c 1 -b 16 "$TEMP_AUDIO" 2>/dev/null || {
-        # Catch the interrupt gracefully
-        if [ $? -eq 130 ] || [ $? -eq 2 ]; then
-            echo -e "\n${GREEN}✓ Recording stopped${NC}"
-            return 0
-        else
-            echo -e "${RED}Error during recording${NC}"
-            return 1
-        fi
-    }
+    sox -d -r 16000 -c 1 -b 16 "$TEMP_AUDIO" 2>/dev/null &
+    SOX_PID=$!
+
+    # Wait for escape key
+    wait_for_escape
+
+    # Stop the recording
+    if [ -n "$SOX_PID" ]; then
+        kill "$SOX_PID" 2>/dev/null
+        wait "$SOX_PID" 2>/dev/null
+        SOX_PID=""
+    fi
+
+    return 0
 }
 
 # Transcribe the audio
 transcribe_audio() {
     if [ ! -f "$TEMP_AUDIO" ]; then
-        echo -e "${RED}No audio file found to transcribe${NC}"
+        echo -e "${RED}No audio file found to transcribe${NC}" >&2
         return 1
     fi
 
@@ -86,13 +130,13 @@ transcribe_audio() {
     local file_size=$(stat -f%z "$TEMP_AUDIO" 2>/dev/null || stat -c%s "$TEMP_AUDIO" 2>/dev/null)
 
     if [ "$file_size" -lt 1000 ]; then
-        echo -e "${YELLOW}Recording too short or empty${NC}"
+        echo -e "${YELLOW}Recording too short or empty${NC}" >&2
         return 1
     fi
 
-    echo -e "${YELLOW}📝 Transcribing...${NC}"
+    echo -e "${YELLOW}📝 Transcribing...${NC}" >&2
 
-    # Run whisper with minimal output
+    # Run whisper with minimal output, send transcription to stdout
     whisper-cli -m "$WHISPER_MODEL" -nt -np "$TEMP_AUDIO" 2>/dev/null
 }
 
@@ -100,13 +144,7 @@ transcribe_audio() {
 main() {
     check_dependencies
 
-    # Trap Ctrl+C during recording
-    trap 'echo -e "\n${GREEN}✓ Recording stopped${NC}"; transcribe_audio; exit 0' INT
-
     record_audio
-
-    # Reset trap for normal cleanup
-    trap cleanup EXIT
 
     transcribe_audio
 }
