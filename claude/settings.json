@@ -27,13 +27,14 @@
       "Bash(cargo run:*)",
       "Bash(bun ~/.claude/x-hooks/agent-docs-injection.ts)",
       "Bash(speak:*)",
+      "Bash(cc-speak:*)",
       "Bash(glab:*)"
     ],
     "deny": ["Bash(git push:*)", "Bash(git rebase:*)"],
     "defaultMode": "acceptEdits",
     "additionalDirectories": ["~/.local/cache/docs", "~/.local/bin"]
   },
-  "model": "opus",
+  "model": "sonnet",
   "hooks": {
     "PreToolUse": [
       {
@@ -158,3 +159,4 @@
     "lastShownTime": 1754027278114
   }
 }
+

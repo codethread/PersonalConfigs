@@ -2,6 +2,7 @@ source ct/alias/mod.nu
 
 alias p = ^p
 alias als = scope aliases
+alias talk = send-to-claude (record-and-transcribe)
 
 const atuin = ("~/.local/share/atuin/init.nu" | path expand)
 source (if ($atuin | path exists) { $atuin } else { null })

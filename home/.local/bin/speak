@@ -2,134 +2,96 @@
 
 set -euo pipefail
 
-# Python venv location - this is the only Python thing we care about
-VENV="${DOTFILES}/.py_venv"
+# Default delay in seconds
+DELAY=1
 
 # Parse arguments
-TEXT=""
 while [[ $# -gt 0 ]]; do
     case $1 in
-        --text|-t)
-            TEXT="$2"
+        --delay|-d)
+            DELAY="$2"
             shift 2
             ;;
-        *)
-            echo "Usage: speak [--text 'text'] or pipe text to stdin"
+        --help|-h)
+            echo "Usage: speak [options] [audio_file_path]"
+            echo "       echo '/path/to/audio.wav' | speak [options]"
+            echo "       echo 'text' | tts | speak [options]"
+            echo ""
+            echo "Plays audio files with media pause/resume functionality."
+            echo ""
+            echo "Options:"
+            echo "  --delay, -d SECONDS  Delay before and after playback (default: 1)"
+            echo "  --help, -h          Show this help"
+            echo ""
             echo "Examples:"
-            echo "  echo 'Hello' | speak"
-            echo "  speak --text 'Hello world'"
+            echo "  echo 'hello world' | tts | speak"
+            echo "  echo 'hello world' | tts | speak --delay 2"
+            echo "  speak /path/to/audio.wav"
+            echo "  speak --delay 0.5 /path/to/audio.wav"
+            exit 0
+            ;;
+        -*)
+            echo "Unknown option: $1. Use --help for usage." >&2
             exit 1
+            ;;
+        *)
+            # First non-option argument is the audio file path
+            AUDIO_FILE="$1"
+            shift
             ;;
     esac
 done
 
-# Get text from argument or stdin
-if [[ -z "$TEXT" ]]; then
+# Get audio file path from argument or stdin
+if [[ -z "${AUDIO_FILE:-}" ]]; then
     if [[ -t 0 ]]; then
-        echo "Error: No input. Pipe text or use --text" >&2
+        echo "Error: No audio file path provided. Pipe path or provide as argument." >&2
         exit 1
     fi
-    TEXT=$(cat)
+    AUDIO_FILE=$(cat)
+    AUDIO_FILE=$(echo "$AUDIO_FILE" | tr -d '\n\r' | xargs)  # Clean whitespace
 fi
 
-if [[ -z "$TEXT" ]]; then
-    exit 0  # Nothing to speak
+if [[ -z "$AUDIO_FILE" ]]; then
+    echo "Error: No audio file path provided." >&2
+    exit 1
 fi
 
-# Create temp file for audio
-TMPFILE=$(mktemp /tmp/speak.XXXXXX.wav)
-trap "rm -f $TMPFILE" EXIT
-
-# Generate and play audio (suppress ALL output)
-{
-SPEAK_TEXT="$TEXT" "$VENV/bin/python" -c "
-import sys
-import os
-import re
-
-# Silence everything
-os.environ['HF_HUB_DISABLE_PROGRESS_BARS'] = '1'
-os.environ['HF_HUB_DISABLE_TELEMETRY'] = '1'
-os.environ['TRANSFORMERS_VERBOSITY'] = 'error'
-os.environ['TORCH_LOGS'] = '-all'
-
-# Redirect all output
-import io
-sys.stdout = io.StringIO()
-sys.stderr = io.StringIO()
-
-import warnings
-warnings.filterwarnings('ignore')
-
-def clean_markdown(text):
-    # Remove code blocks but keep their content description
-    text = re.sub(r'\`\`\`[\w]*\n(.*?)\`\`\`', r'Code block: \1', text, flags=re.DOTALL)
-
-    # Convert headers to spoken format
-    text = re.sub(r'^#{1,6}\s+(.+)$', r'\1.', text, flags=re.MULTILINE)
-
-    # Remove markdown formatting
-    text = re.sub(r'\*\*(.+?)\*\*', r'\1', text)  # Bold
-    text = re.sub(r'\*(.+?)\*', r'\1', text)  # Italic
-    text = re.sub(r'\`(.+?)\`', r'\1', text)  # Inline code
-
-    # Convert lists to spoken format
-    text = re.sub(r'^[-*+]\s+', '• ', text, flags=re.MULTILINE)
-    text = re.sub(r'^\d+\.\s+', '', text, flags=re.MULTILINE)
-
-    # Remove URLs from link text
-    text = re.sub(r'\[([^\]]+)\]\([^\)]+\)', r'\1', text)
-
-    # Remove image references
-    text = re.sub(r'!\[([^\]]*)\]\([^\)]+\)', r'Image: \1', text)
-
-    # Clean up tables
-    text = text.replace('|', ' ')
-    text = re.sub(r'^[-\s]+$', '', text, flags=re.MULTILINE)
-
-    # Remove multiple blank lines but keep paragraph breaks
-    text = re.sub(r'\n{3,}', '\n\n', text)
-
-    # Don't strip - preserve all the whitespace/newlines
-    return text
-
-try:
-    # Import with output suppressed
-    from mlx_audio.tts.generate import generate_audio
-    import logging
-    logging.disable(logging.CRITICAL)
-
-    # Get text from environment variable to avoid escaping issues
-    text = os.environ.get('SPEAK_TEXT', '')
-
-    # Check if input looks like markdown (simple heuristic)
-    if '#' in text or '\`\`\`' in text or '**' in text or '[' in text:
-        text = clean_markdown(text)
-
-    # Replace newlines with periods and spaces for better TTS flow
-    text = text.replace('\n\n', '. ').replace('\n', '. ')
-
-    # Generate audio
-    output = generate_audio(
-        text=text,
-        model_path='prince-canuma/Kokoro-82M',
-        voice='af_heart',
-        speed=1.0,
-        file_prefix='$TMPFILE'.replace('.wav', ''),
-        audio_format='wav'
-    )
-except:
-    pass
-"
-} &>/dev/null
-
-# Find the generated file (mlx-audio adds suffix)
-GENERATED=$(ls ${TMPFILE%.wav}_*.wav 2>/dev/null | head -1)
-if [[ -z "$GENERATED" ]] && [[ -f "$TMPFILE" ]]; then
-    GENERATED="$TMPFILE"
+if [[ ! -f "$AUDIO_FILE" ]]; then
+    echo "Error: Audio file not found: $AUDIO_FILE" >&2
+    exit 1
 fi
 
-if [[ -n "$GENERATED" ]] && [[ -f "$GENERATED" ]]; then
-    afplay "$GENERATED" 2>/dev/null
-    rm -f "$GENERATED"
+# Media control functions
+check_spotify_playing() {
+    local state=$(osascript -e 'tell application "Spotify" to player state as string' 2>/dev/null || echo "stopped")
+    [[ "$state" == "playing" ]]
+}
+
+pause_media() {
+    osascript -e 'tell application "Spotify" to pause' 2>/dev/null || true
+}
+
+resume_media() {
+    osascript -e 'tell application "Spotify" to play' 2>/dev/null || true
+}
+
+# Check if Spotify is currently playing
+WAS_PLAYING=false
+if check_spotify_playing; then
+    WAS_PLAYING=true
+    pause_media
+    sleep "$DELAY"
 fi
+
+# Play the audio file
+afplay "$AUDIO_FILE" 2>/dev/null
+
+# Resume music only if it was playing before
+if [[ "$WAS_PLAYING" == "true" ]]; then
+    sleep "$DELAY"
+    resume_media
+fi
+
+# Pass the audio file path to stdout for further pipeline processing (e.g., cleanup)
+echo "$AUDIO_FILE"

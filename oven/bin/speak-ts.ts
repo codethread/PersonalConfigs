@@ -16,6 +16,7 @@ const { values, positionals } = parseArgs({
     voice: { type: "string", default: "Jessica" },
     "no-play": { type: "boolean", default: false },
     stdin: { type: "boolean", default: false },
+    "strip-markdown": { type: "boolean", short: "s", default: false },
     help: { type: "boolean", short: "h", default: false },
   },
   strict: false,
@@ -32,53 +33,24 @@ Usage:
     cat file.txt | speak-ts --stdin
 
 Options:
-    --voice VOICE     Voice name (default: Jessica)
-    --no-play         Don't play audio after generation
-    --stdin           Read from standard input instead of file
-    -h, --help        Show this help
+    --voice VOICE         Voice name (default: Jessica)
+    --no-play            Don't play audio after generation
+    --stdin              Read from standard input instead of file
+    -s, --strip-markdown Strip markdown formatting before speaking
+    -h, --help           Show this help
 
 Examples:
     speak-ts README.md
     speak-ts specs/document.md --voice Brian
     echo "Hello world" | speak-ts --stdin
-    cat article.txt | speak-ts --stdin --voice Liam
+    cat README.md | strip-markdown | speak-ts --stdin
+    speak-ts document.md --strip-markdown
 
 Available voices:
     Jessica, Rachel, Brian, Liam, Sarah, Charlie, Alice, Matilda, Will, Eric, Chris, Daniel, Lily, Bill
 `);
 }
 
-function cleanMarkdown(text: string): string {
-  // Remove code blocks but keep their content description
-  text = text.replace(/```[\w]*\n(.*?)```/gs, "Code block: $1");
-
-  // Convert headers to spoken format
-  text = text.replace(/^#{1,6}\s+(.+)$/gm, "$1.");
-
-  // Remove markdown formatting
-  text = text.replace(/\*\*(.+?)\*\*/g, "$1"); // Bold
-  text = text.replace(/\*(.+?)\*/g, "$1"); // Italic
-  text = text.replace(/`(.+?)`/g, "$1"); // Inline code
-
-  // Convert lists to spoken format
-  text = text.replace(/^[-*+]\s+/gm, "• ");
-  text = text.replace(/^\d+\.\s+/gm, "");
-
-  // Remove URLs from link text
-  text = text.replace(/\[([^\]]+)\]\([^\)]+\)/g, "$1");
-
-  // Remove image references
-  text = text.replace(/!\[([^\]]*)\]\([^\)]+\)/g, "Image: $1");
-
-  // Clean up tables
-  text = text.replace(/\|/g, " ");
-  text = text.replace(/^[-\s]+$/gm, "");
-
-  // Remove multiple blank lines
-  text = text.replace(/\n{3,}/g, "\n\n");
-
-  return text.trim();
-}
 
 function chunkText(text: string, maxChars = 2500): string[] {
   const paragraphs = text.split("\n\n");
@@ -160,12 +132,6 @@ async function main() {
 
     text = decoder.decode(Buffer.concat(chunks));
     inputName = "stdin";
-
-    // Check if input looks like markdown (simple heuristic)
-    if (text.includes("#") || text.includes("```") || text.includes("**")) {
-      console.log("Detected markdown formatting, cleaning...");
-      text = cleanMarkdown(text);
-    }
   } else {
     // Check if file provided
     const filePath = positionals[0];
@@ -184,11 +150,31 @@ async function main() {
     }
 
     inputName = filePath.split("/").pop()?.replace(/\.[^.]+$/, "") || "output";
+  }
 
-    // Clean markdown if it's a .md file
-    if (resolvedPath.endsWith(".md")) {
-      console.log("Cleaning markdown formatting...");
-      text = cleanMarkdown(text);
+  // Optionally strip markdown if requested
+  if (values["strip-markdown"]) {
+    // Try to use the strip-markdown command if available
+    try {
+      const proc = Bun.spawn(["strip-markdown"], {
+        stdin: "pipe",
+        stdout: "pipe",
+        stderr: "pipe",
+      });
+
+      const writer = proc.stdin.getWriter();
+      await writer.write(new TextEncoder().encode(text));
+      await writer.close();
+
+      const stripped = await new Response(proc.stdout).text();
+      if (proc.exitCode === 0 && stripped) {
+        console.log("Stripped markdown formatting...");
+        text = stripped;
+      } else {
+        console.warn("Warning: strip-markdown command failed, proceeding with original text");
+      }
+    } catch (e) {
+      console.warn("Warning: strip-markdown not found in PATH, proceeding with original text");
     }
   }
 
