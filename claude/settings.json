@@ -25,11 +25,13 @@
       "Bash(cargo test:*)",
       "Bash(cargo build:*)",
       "Bash(cargo run:*)",
-      "Bash(bun ~/.claude/x-hooks/agent-docs-injection.ts)"
+      "Bash(bun ~/.claude/x-hooks/agent-docs-injection.ts)",
+      "Bash(speak:*)",
+      "Bash(glab:*)"
     ],
-    "deny": [],
+    "deny": ["Bash(git push:*)", "Bash(git rebase:*)"],
     "defaultMode": "acceptEdits",
-    "additionalDirectories": ["~/.local/cache/docs"]
+    "additionalDirectories": ["~/.local/cache/docs", "~/.local/bin"]
   },
   "model": "opus",
   "hooks": {
