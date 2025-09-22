@@ -60,27 +60,36 @@ export def detect-path-overlaps [configs] {
 			let config_path = ($config.target | str replace "~" $env.HOME | path expand -n)
 			let other_path = ($other.target | str replace "~" $env.HOME | path expand -n)
 
-			# Check for exact path matches (always a conflict)
+			# Only check for conflicts if at least one project has link_directory = true
+			let config_is_dir = ($config.link_directory? | default false)
+			let other_is_dir = ($other.link_directory? | default false)
+
+			# Skip if both are individual file links (not directory links)
+			if (not $config_is_dir) and (not $other_is_dir) {
+				continue
+			}
+
+			# Check for exact path matches (conflict when at least one is a directory link)
 			if ($config_path == $other_path) {
 				let conflict_entry = {
 					config1: $config.name,
 					path1: $config_path,
-					link_directory1: $config.link_directory,
+					link_directory1: $config_is_dir,
 					config2: $other.name,
 					path2: $other_path,
-					link_directory2: $other.link_directory
+					link_directory2: $other_is_dir
 				}
 				$conflicts = ($conflicts | append $conflict_entry)
-			} else if ($config.link_directory and $other.link_directory) {
-				# Two directory symlinks can't overlap
+			} else {
+				# Check for path overlaps (parent/child relationships)
 				if ($config_path | str starts-with $"($other_path)/") or ($other_path | str starts-with $"($config_path)/") {
 					let conflict_entry = {
 						config1: $config.name,
 						path1: $config_path,
-						link_directory1: $config.link_directory,
+						link_directory1: $config_is_dir,
 						config2: $other.name,
 						path2: $other_path,
-						link_directory2: $other.link_directory
+						link_directory2: $other_is_dir
 					}
 					$conflicts = ($conflicts | append $conflict_entry)
 				}

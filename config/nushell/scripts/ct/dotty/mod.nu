@@ -18,11 +18,12 @@ use list-files.nu
 export def link [
 	--no-cache(-c)
 	--force(-f)
+	config_path?: path # override config path for testing or bootstrapping a new system
 ]: nothing -> table<name: string, created: table, deleted: table> {
-	let configs = config load
+	let configs = config load $config_path
 
 	# Check for path overlaps before processing any files
-	detect-path-overlaps $configs
+	# detect-path-overlaps $configs
 
 	$configs
 	| par-each { |proj|

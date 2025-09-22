@@ -36,7 +36,7 @@ link_directory = true
 
 [[project]]
 name = "work"
-origin = "~/workfiles"
+origin = "~/workfiles/home"
 target = "~"
 
 [[project]]
