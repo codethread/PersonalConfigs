@@ -1,5 +1,5 @@
 use log.nu
-use ct/macos
+use ct/macos.nu
 
 export def main [] {
 	# if not ("/etc/pam.d/sudo_local" | path exists) {

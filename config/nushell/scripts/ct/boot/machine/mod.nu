@@ -1,7 +1,8 @@
 use ct/dotty
-use ct/macos [macos_has_full_disk_access ]
+use ct/macos.nu [macos_has_full_disk_access ]
 use ct/brew
-use ct/core [dedent nvim-sync]
+use ct/core [dedent]
+use ct/editor.nu [nvim-sync]
 use ct/git [git_is_dirty]
 use homebrew.nu
 use log.nu

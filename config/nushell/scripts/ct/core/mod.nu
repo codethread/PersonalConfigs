@@ -113,21 +113,8 @@ export def hide-all [closure: closure] {
 	do $closure
 }
 
-# export most common envs to a zsh file for compatibility
-export def dump-env [] {
-	hide-all {|| zsh -c 'export' | rg "(.*)" --replace "export $0" | save -f ~/.config/zsh/.envs }
-}
 
-export def lv [...arg: string] {
-	with-env {NVIM_APPNAME: Lazyvim} {
-		nvim ...$arg
-	}
-}
-export def nvim-sync [] {
-	nvim --headless "+Lazy! clean" +qa
-	nvim --headless "+Lazy! install" +qa
-}
-
+# Directory shortcuts - keeping these in core as they're fundamental navigation aids
 export alias cd0 = cd (ksm key -p P0)
 export alias cd1 = cd (ksm key -p P1)
 export alias cd2 = cd (ksm key -p P2)

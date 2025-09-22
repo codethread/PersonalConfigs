@@ -2,18 +2,18 @@ use ct/boot
 use ct/themes.nu themes
 use ct/config [keybindings menus hooks]
 use ct/core *
-# use ct/ical
-
-# alias open = open
-# alias open = ^open
-
 use ct/tmux
 use ct/brew
 use ct/dotty
-use ct/cursor *
-use ct/macos *
+use ct/cursor.nu *
+use ct/macos.nu *
 use ct/git *
-
+use ct/homebrew.nu *
+use ct/editor.nu *
+use ct/terminal.nu *
+use ct/onepassword.nu *
+use ct/system.nu *
+use ct/search.nu *
 use ct/purge.nu
 
 # $ config nu --doc | nu-highlight | less -R

@@ -149,12 +149,11 @@ $env.PIP_REQUIRE_VIRTUALENV = "false"  # Allow pip outside virtualenv (set to "t
 $env.CARAPACE_BRIDGES = 'zsh,fish,bash,inshellisense' # optional
 
 # Directories to search for scripts when calling source or use
-# const NU_LIB_DIRS = [
-#     $nu.default-config-dir
-#     ("~/PersonalConfigs/.config/nu" | path expand)
-#     ("~/workfiles/nu" | path expand)
-#     ("~/dev/vendor/nu_scripts/sourced" | path expand)
-# ]
+$env.NU_LIB_DIRS = [
+    ($nu.default-config-dir | path join "scripts")
+    ("~/PersonalConfigs/config/nushell/scripts" | path expand)
+    ("~/dev/vendor/nu_scripts/sourced" | path expand)
+]
 
 # Directories to search for plugin binaries when calling register
 $env.NU_PLUGIN_DIRS = [$env.CARGO_BIN]
