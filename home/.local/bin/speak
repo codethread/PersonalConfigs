@@ -87,10 +87,11 @@ def clean_markdown(text):
     text = text.replace('|', ' ')
     text = re.sub(r'^[-\s]+$', '', text, flags=re.MULTILINE)
 
-    # Remove multiple blank lines
+    # Remove multiple blank lines but keep paragraph breaks
     text = re.sub(r'\n{3,}', '\n\n', text)
 
-    return text.strip()
+    # Don't strip - preserve all the whitespace/newlines
+    return text
 
 try:
     # Import with output suppressed
@@ -104,6 +105,9 @@ try:
     # Check if input looks like markdown (simple heuristic)
     if '#' in text or '\`\`\`' in text or '**' in text or '[' in text:
         text = clean_markdown(text)
+
+    # Replace newlines with periods and spaces for better TTS flow
+    text = text.replace('\n\n', '. ').replace('\n', '. ')
 
     # Generate audio
     output = generate_audio(

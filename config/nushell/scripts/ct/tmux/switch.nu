@@ -2,7 +2,7 @@
 export def main [] {
 	let attatched = (tmux list-session
 		| lines
-		| find "(attached)"
+		| find -i "(attached)"
 		| parse "{name}:{rest}"
 		| get name
 		| first)
