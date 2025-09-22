@@ -38,9 +38,14 @@ export def main [
 
 	macos
 
+	nvim-sync
+
 	setup-speech-whisper-model
 
-	nvim-sync
+	setup-speech-tts-mlx
+
+
+	job spawn { speak --text "setup complete" }
 }
 
 # Install various projects I use either for boot or general use (not available
@@ -139,4 +144,28 @@ def setup-speech-whisper-model [] {
 	} else {
 		log tool "Whisper medium model already exists"
 	}
+}
+
+# sets up the python env in dotfiles so that python code runs
+# then sets up the install for https://github.com/Blaizzy/mlx-audio
+def setup-speech-tts-mlx [] {
+	log step "MLX TTS setup"
+
+	let venv_dir = ($env.DOTFILES | path join ".py_venv")
+
+	# Check if speak command exists and venv is set up
+	if ($venv_dir | path exists) {
+		log tool "MLX TTS already set up"
+		return
+	}
+
+	# Create venv with Python 3.11 (3.13 is too new for dependencies)
+	if not ($venv_dir | path exists) {
+		log tool "Creating Python venv for MLX audio"
+		/opt/homebrew/opt/python@3.11/bin/python3.11 -m venv $venv_dir
+	}
+
+	# Install mlx-audio in the venv
+	log tool "Installing mlx-audio (this may take a while)"
+	bash -c $"source ($venv_dir)/bin/activate && pip install --quiet mlx-audio"
 }

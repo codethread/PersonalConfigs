@@ -1,0 +1,94 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# Python venv location - this is the only Python thing we care about
+VENV="/Users/codethread/PersonalConfigs/.py_venv"
+
+# Parse arguments
+TEXT=""
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --text|-t)
+            TEXT="$2"
+            shift 2
+            ;;
+        *)
+            echo "Usage: speak [--text 'text'] or pipe text to stdin"
+            echo "Examples:"
+            echo "  echo 'Hello' | speak"
+            echo "  speak --text 'Hello world'"
+            exit 1
+            ;;
+    esac
+done
+
+# Get text from argument or stdin
+if [[ -z "$TEXT" ]]; then
+    if [[ -t 0 ]]; then
+        echo "Error: No input. Pipe text or use --text" >&2
+        exit 1
+    fi
+    TEXT=$(cat)
+fi
+
+if [[ -z "$TEXT" ]]; then
+    exit 0  # Nothing to speak
+fi
+
+# Create temp file for audio
+TMPFILE=$(mktemp /tmp/speak.XXXXXX.wav)
+trap "rm -f $TMPFILE" EXIT
+
+# Generate and play audio (suppress ALL output)
+{
+"$VENV/bin/python" -c "
+import sys
+import os
+
+# Silence everything
+os.environ['HF_HUB_DISABLE_PROGRESS_BARS'] = '1'
+os.environ['HF_HUB_DISABLE_TELEMETRY'] = '1'
+os.environ['TRANSFORMERS_VERBOSITY'] = 'error'
+os.environ['TORCH_LOGS'] = '-all'
+
+# Redirect all output
+import io
+sys.stdout = io.StringIO()
+sys.stderr = io.StringIO()
+
+import warnings
+warnings.filterwarnings('ignore')
+
+try:
+    # Import with output suppressed
+    from mlx_audio.tts.generate import generate_audio
+    import logging
+    logging.disable(logging.CRITICAL)
+
+    text = '''${TEXT//\'/\'\\\'\'}'''
+
+    # Generate audio
+    output = generate_audio(
+        text=text,
+        model_path='prince-canuma/Kokoro-82M',
+        voice='af_heart',
+        speed=1.0,
+        file_prefix='$TMPFILE'.replace('.wav', ''),
+        audio_format='wav'
+    )
+except:
+    pass
+"
+} &>/dev/null
+
+# Find the generated file (mlx-audio adds suffix)
+GENERATED=$(ls ${TMPFILE%.wav}_*.wav 2>/dev/null | head -1)
+if [[ -z "$GENERATED" ]] && [[ -f "$TMPFILE" ]]; then
+    GENERATED="$TMPFILE"
+fi
+
+if [[ -n "$GENERATED" ]] && [[ -f "$GENERATED" ]]; then
+    afplay "$GENERATED" 2>/dev/null
+    rm -f "$GENERATED"
+fi

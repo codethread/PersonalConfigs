@@ -136,6 +136,13 @@ path add "~/.luarocks/bin"
 $env.JAVA_HOME = "/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home"
 
 #: }}}
+#: python {{{
+
+# Python environment variables
+$env.PYTHONDONTWRITEBYTECODE = "1"  # Don't create .pyc files
+$env.PIP_REQUIRE_VIRTUALENV = "false"  # Allow pip outside virtualenv (set to "true" to be stricter)
+
+#: }}}
 #: nushell {{{
 
 # not sure if needed

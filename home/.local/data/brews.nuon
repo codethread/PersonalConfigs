@@ -11,6 +11,7 @@
 	brew "go"
 	brew "rustup"
 	brew "just"
+	brew "python@3.11"
 
 	## NODE JS
 	tap "oven-sh/bun"
@@ -41,6 +42,7 @@
 	brew "rsteube/tap/carapace"
 
 	# UTILS
+	brew "git-lfs"
 	brew "dust"
 	brew "bat"
 	brew "fd"
@@ -214,7 +216,6 @@
 	##################################
 	#             TEMP               #
 	##################################
-	brew "git-lfs"
 	tap "d12frosted/emacs-plus"
 	brew "d12frosted/emacs-plus/emacs-plus", args: ["with-xwidgets"]
 	'
