@@ -1,3 +1,4 @@
 #!/usr/bin/env zsh --login
+# :module: Quick Vim file opening utility
 
 nu -l -c "tmux open-link $@"

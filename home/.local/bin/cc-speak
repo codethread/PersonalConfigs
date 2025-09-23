@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# :module: Converts text to speech and plays audio in a single pipeline
 
 set -euo pipefail
 

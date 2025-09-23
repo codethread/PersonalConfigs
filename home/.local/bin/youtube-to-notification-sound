@@ -1,4 +1,5 @@
 #!/bin/bash
+# :module: Converts YouTube video to system notification sound
 
 # youtube-to-notification-sound
 # Downloads a YouTube video and converts it to AIFF format for macOS notifications

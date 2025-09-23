@@ -1,3 +1,4 @@
+-- :module: Telescope fuzzy finder plugin configuration
 if vim.g.vscode then return {} end
 
 return {

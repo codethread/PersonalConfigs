@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# :module: Fuzzy finder integrated with ripgrep for advanced file searching
 
 INITIAL_QUERY=""
 RG_PREFIX="rg --column --line-number --no-heading --hidden --color=always -g '!.git' --smart-case "

@@ -1,4 +1,5 @@
 #!/bin/bash
+# :module: Custom tmux keybinding configuration script
 
 # $HOME/bin/vim-edit-tmux-output
 

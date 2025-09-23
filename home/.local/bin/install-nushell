@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# :module: Comprehensive Nushell installation and setup utility
 
 # This is the bootstrap Unix installer for nushell adapted from `https://get.volta.sh`.
 # Its responsibility is to query the system to determine what OS the system

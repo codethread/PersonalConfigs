@@ -1,3 +1,5 @@
+// :module: Logging utility for Claude Code interactions
+
 /** biome-ignore-all lint/correctness/noUnusedVariables: types kept as docs */
 import {existsSync, mkdirSync, readdirSync} from "fs";
 import {appendFile, symlink, unlink, readlink} from "fs/promises";

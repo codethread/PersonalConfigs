@@ -1,4 +1,5 @@
 #!/usr/bin/env nu
+# :module: Resets Nushell configuration to default state
 
 # if nushell runs (maybe background) when a `config.nu` doesn't exist, then it will create a default one. This puts things back
 

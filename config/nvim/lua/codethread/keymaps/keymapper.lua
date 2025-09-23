@@ -1,3 +1,4 @@
+-- :module: Custom keymapping utility functions
 local obj = require 'lib.obj'
 local M = {}
 

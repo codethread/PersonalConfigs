@@ -1,3 +1,4 @@
+-- :module: WezTerm session management and restoration
 local wezterm = require 'wezterm' --[[@as Wezterm]]
 local utils = require 'ct.utils'
 

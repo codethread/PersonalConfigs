@@ -1,3 +1,4 @@
+-- :module: Logging and notification system configuration
 local M = {}
 
 local log = require 'codethread.logger.plenarylog'

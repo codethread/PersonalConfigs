@@ -1,3 +1,5 @@
+# :module: Manage local cache for tracking previously linked files
+
 # get a list of previously linked files
 export def load [name: string]: nothing -> list<string> {
 	let conf = $"~/.local/data/dotty-cache-($name).nuon" | path expand

@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+// :module: Extract dialogue context from transcripts
 
 import {existsSync} from "fs";
 import {readFile} from "fs/promises";

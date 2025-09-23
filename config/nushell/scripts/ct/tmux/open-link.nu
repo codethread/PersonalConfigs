@@ -1,3 +1,5 @@
+# :module: Intelligent file opening utility for tmux and neovim with dynamic path resolution
+
 use utils.nu get-panes
 
 # Open a file path in nvim if nvim is open in the main pane

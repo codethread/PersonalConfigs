@@ -1,3 +1,5 @@
+# :module: Interactive tmux session switching utility with preview support
+
 # alternative to fzf scripts which seem to fallover a lot
 export def main [] {
 	let attatched = (tmux list-session

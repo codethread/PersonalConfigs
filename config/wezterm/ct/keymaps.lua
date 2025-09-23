@@ -1,3 +1,4 @@
+-- :module: WezTerm custom keybinding configurations
 ---@diagnostic disable: param-type-mismatch
 local wezterm = require 'wezterm' --[[@as Wezterm]]
 local actions = require 'ct.actions'

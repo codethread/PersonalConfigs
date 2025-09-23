@@ -1,3 +1,5 @@
+# :module: Tmux project session management with dynamic project selection and session creation
+
 use ct/core *
 use ct/tmux/utils.nu to-session
 use ct/tmux/projects.nu [get-projects load-config]

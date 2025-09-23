@@ -1,4 +1,5 @@
 #!/bin/zsh
+# :module: Quick web search utility from command line
 
 local cols sep google_history open
 cols=$((COLUMNS / 3))

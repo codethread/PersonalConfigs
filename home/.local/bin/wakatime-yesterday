@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# :module: WakaTime productivity tracking for previous day
 
 # Check for --raw flag
 RAW_MODE=false

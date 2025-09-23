@@ -1,3 +1,4 @@
+-- :module: WezTerm color theme and styling configuration
 local M = {}
 
 M.palette = {

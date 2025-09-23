@@ -1,3 +1,4 @@
+-- :module: Main WezTerm terminal emulator configuration
 -- NOTE: examples:
 -- https://github.com/emretuna/.dotfiles/tree/main/wezterm/.config/wezterm
 -- https://github.com/joshmedeski/dotfiles/blob/main/.config/wezterm/wezterm.lua

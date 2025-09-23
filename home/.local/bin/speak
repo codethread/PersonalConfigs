@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# :module: Text-to-speech conversion utility
 
 set -euo pipefail
 

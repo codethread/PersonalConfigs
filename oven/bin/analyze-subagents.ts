@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+// :module: Subagents performance and interaction analysis
 
 import {readFile, access, mkdtemp, writeFile, rm} from "fs/promises";
 import {join} from "path";

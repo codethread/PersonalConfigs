@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+// :module: System notification command-line utility
 
 import {execSync} from "child_process";
 import {existsSync, unlinkSync, writeFileSync, readFileSync} from "fs";

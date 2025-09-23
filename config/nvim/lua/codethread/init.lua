@@ -1,3 +1,4 @@
+-- :module: Neovim configuration entry point and module loader
 -- require 'codethread.alt'
 require 'codethread.keymaps.leader'
 require 'codethread.keymaps.normal'

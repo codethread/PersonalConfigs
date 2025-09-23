@@ -1,3 +1,5 @@
+# :module: Tmux utility functions for session and pane management
+
 export def to-session [] {
 	str replace '.' '_'
 }

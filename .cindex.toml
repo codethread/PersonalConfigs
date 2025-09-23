@@ -79,11 +79,6 @@ pattern = "^claude/commands/.*\\.md$"
 desc = "[summary] Claude code slash commands (prime-build, prime-spec, refine-spec for spec-driven development)"
 
 [[summarise]]
-dir = "oven/bin"
-pattern = "^oven/bin/.*\\.ts$"
-desc = "[summary] CLI tools: notif (notifications), gmr (GitLab MRs), bra (branch selector), cindex (project indexer), extract-dialogue (conversation parser)"
-
-[[summarise]]
 dir = "oven/scripts"
 pattern = "^oven/scripts/.*\\.ts$"
 desc = "[summary] TypeScript utilities to build and clean the project, invoked from package.json"

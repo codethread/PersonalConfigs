@@ -1,4 +1,5 @@
 #!/usr/bin/env nu
+# :module: Advanced multi-file text searching tool
 
 const args = [
 	"--hidden"

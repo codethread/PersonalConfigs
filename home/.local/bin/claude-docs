@@ -1,4 +1,5 @@
 #!/bin/bash
+# :module: Generates and manages Claude documentation resources
 set -euo pipefail
 
 # Simple claude-code-docs installer for local repos

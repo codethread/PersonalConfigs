@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+// :module: Text-to-speech command-line utility
 
 import { ElevenLabsClient } from "elevenlabs";
 import { promises as fs } from "fs";

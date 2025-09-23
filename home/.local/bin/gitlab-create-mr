@@ -1,4 +1,5 @@
 #!/bin/bash
+# :module: Automates GitLab merge request creation
 
 # Pre-push hook converted from Nushell script
 # Automatically creates GitLab MR for feature branches

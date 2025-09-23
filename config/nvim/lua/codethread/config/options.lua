@@ -1,3 +1,4 @@
+-- :module: Neovim global editor configuration settings
 -- TODO: change cursor, line is easy to miss
 -- terminal
 vim.opt.shell = 'zsh'

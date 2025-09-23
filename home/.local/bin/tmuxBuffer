@@ -1,4 +1,5 @@
 #!/bin/bash
+# :module: tmux clipboard and buffer management utility
 
 # $HOME/bin/vim-edit-tmux-output
 

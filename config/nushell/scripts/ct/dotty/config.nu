@@ -1,3 +1,5 @@
+# :module: TOML configuration loader and validator for dotty symlink projects
+
 use ct/core clog
 
 # load in dotty config from TOML file

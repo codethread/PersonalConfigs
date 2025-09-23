@@ -1,4 +1,5 @@
 #!/bin/bash
+# :module: Sends text or files to Claude for processing
 # send-to-claude - Send text to the most recent Claude window
 
 TEXT="$1"

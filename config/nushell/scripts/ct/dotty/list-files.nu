@@ -1,3 +1,5 @@
+# :module: File listing utility with git ignore awareness and custom excludes
+
 # glob all files at a given `path`, allowing for additional excludes. Results
 # are returned as relative paths
 export def main [path, --excludes = []]: nothing -> list<string> {

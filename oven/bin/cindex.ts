@@ -1,3 +1,5 @@
+// :module: Generate comprehensive file index with advanced filtering and markdown output
+
 import {$, TOML} from "bun";
 import {parseArgs} from "util";
 import {join, dirname} from "path";
@@ -42,6 +44,7 @@ Options:
   -c, --config <path>   Path to cindex.toml config file (default: .cindex.toml)
   -p, --path <path>     Limit index to specific directory path
   -m, --markdown        Output in markdown format with directory grouping
+      --missing-doc     Show only files missing :module: comments (diagnostic mode)
   -h, --help            Show this help message
 
 Description:
@@ -83,6 +86,8 @@ Examples:
   cindex -m                 # Output in markdown format
   cindex -p src/            # Index only the src/ directory
   cindex -c ~/my.toml       # Use custom config file
+  cindex --missing-doc           # Show files missing :module: comments
+  cindex --missing-doc -p oven/  # Show undocumented files in oven/ directory
 `);
 }
 
@@ -104,6 +109,10 @@ async function main() {
 				short: "m",
 				default: false,
 			},
+			"missing-doc": {
+				type: "boolean",
+				default: false,
+			},
 			help: {
 				type: "boolean",
 				short: "h",
@@ -115,6 +124,12 @@ async function main() {
 	if (values.help) {
 		showHelp();
 		process.exit(0);
+	}
+
+	// Validate incompatible options
+	if (values["missing-doc"] && values.markdown) {
+		console.error("Error: --missing-doc cannot be used with --markdown");
+		process.exit(1);
 	}
 
 	const configPath = values.config as string;
@@ -189,15 +204,24 @@ async function main() {
 	// Get subdivision configurations
 	const subdivisionConfigs = getSubdivisionConfigs(config);
 
+	const allFilesList = allFiles.split("\n").filter(Boolean);
+
+	if (values["missing-doc"]) {
+		// Find files without :module: comments
+		const filesWithoutComments = allFilesList.filter(file => !commentedFiles.has(file));
+		console.log(filesWithoutComments.join("\n"));
+		return;
+	}
+
 	const output = values.markdown
 		? formatMarkdown(
-				allFiles.split("\n").filter(Boolean),
+				allFilesList,
 				commentedFiles,
 				subdivisionConfigs,
 				config.descriptions,
 				config.summarise,
 			)
-		: formatList(allFiles.split("\n").filter(Boolean), commentedFiles);
+		: formatList(allFilesList, commentedFiles);
 
 	console.log(output);
 }

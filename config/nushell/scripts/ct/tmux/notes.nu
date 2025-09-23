@@ -1,3 +1,5 @@
+# :module: Tmux popup utility for searching and opening notes in neovim
+
 # Open a fzy find notes file in a popup (no selection starts in notes root file)
 export def main [] {
 	let f = (rg --files-with-matches . $env.CT_NOTES

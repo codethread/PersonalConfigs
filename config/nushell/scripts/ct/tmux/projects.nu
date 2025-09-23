@@ -1,3 +1,5 @@
+# :module: Project configuration loader with work/personal context switching
+
 export def get-projects [] {
 	let projects = if ($in | is-empty) { load-config } else { $in }
 

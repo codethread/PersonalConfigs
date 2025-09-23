@@ -1,3 +1,4 @@
+-- :module: Autocommand configurations for Neovim behavior
 -- This file is automatically loaded by plugins.init
 if vim.g.vscode then return end
 

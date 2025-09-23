@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// :module: GitHub CLI utility for repository interactions
 
 function showHelp() {
 	console.log(`

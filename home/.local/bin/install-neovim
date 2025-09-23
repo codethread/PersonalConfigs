@@ -1,4 +1,5 @@
 #!/usr/bin/env nu
+# :module: Automated Neovim installation and configuration script
 
 def main [--clean] {
 	print $"(ansi green)\( ◕ ◡ ◕ \)(ansi reset)"

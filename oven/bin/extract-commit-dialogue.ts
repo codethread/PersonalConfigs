@@ -1,4 +1,6 @@
 #!/usr/bin/env bun
+// :module: Extract dialogue from git commit messages
+
 // CLI tool to extract and format Claude Code dialogue for a specific git commit
 
 import {existsSync} from "fs";

@@ -1,3 +1,5 @@
+# :module: Utility functions for preventing symlink conflicts and path overlaps
+
 # Check that files won't be overriten during the linking stage, exit with an error if not
 export def assert-no-conflicts [
 	--force # delete existing files without confirmation

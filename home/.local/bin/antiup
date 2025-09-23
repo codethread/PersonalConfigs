@@ -1,4 +1,5 @@
 #!/bin/zsh
+# :module: Zsh plugin manager that updates and sorts zsh plugin configurations
 
 # embeds a check for compinit taken from
 # https://gist.github.com/ctechols/ca1035271ad134841284

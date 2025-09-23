@@ -1,3 +1,4 @@
+-- :module: Language Server Protocol (LSP) plugin configuration
 if vim.g.vscode then return {} end
 
 return U.flatten {

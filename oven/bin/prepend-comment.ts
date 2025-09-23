@@ -1,4 +1,6 @@
 #!/usr/bin/env bun
+// :module: Tool for adding and updating module-level documentation comments across programming languages
+
 import {readFileSync, writeFileSync} from "fs";
 import {resolve, extname} from "path";
 
@@ -89,51 +91,57 @@ const COMMENT_SYNTAX: Record<string, string> = {
 
 function showHelp() {
 	console.log(`
-prepend-comment - Add a module documentation comment to a file
+prepend-comment - Add or update module documentation comments
 
 Usage: prepend-comment [options] <file-path> <comment-text>
 
 Arguments:
   file-path     Path to the file (absolute or relative to current directory)
-  comment-text  Text to add as a comment (will be quoted appropriately)
+  comment-text  Description text (without :module: prefix - added automatically)
 
 Options:
   -h, --help    Show this help message
-  -m, --module  Replace first comment line even without :module: marker
-                (treats existing comment as module documentation)
+  -m, --module  Replace the first comment line, treating it as module-level
+                documentation (for languages like Nushell, Python, etc.)
 
-Description:
-  Adds a comment with ':module:' keyword identifier to the top of files.
-  Preserves shebang lines and replaces existing :module: comments.
+Behavior:
 
-  With --module flag: Replaces ANY first comment line, treating it as
-  module documentation. Useful for files with pre-existing module comments
-  in languages like Nushell, Python, etc.
+  DEFAULT (no flags):
+    - If file has :module: comment → replaces it with new text
+    - If file has no :module: comment → adds new :module: comment at top
+    - Preserves shebang lines and other comments
+
+  WITH --module FLAG:
+    - Replaces the FIRST comment line with new :module: comment
+    - Use when file has existing module-level documentation without :module:
+    - Common in Nushell/Python files with module docstrings
 
 Examples:
+
+  # Add/update :module: comment (most common usage)
   prepend-comment script.sh "Shell script for automation"
     → # :module: Shell script for automation
 
-  prepend-comment --module file.nu "Updated module description"
-    → Replaces first comment line with: # :module: Updated module description
+  # Replace existing module comment that lacks :module: marker
+  prepend-comment --module utils.nu "Utility functions for file operations"
+    → Replaces first comment with: # :module: Utility functions for file operations
 
-  prepend-comment main.rs "Entry point for the application"
-    → // :module: Entry point for the application
+  # Update existing :module: comment (no flag needed)
+  prepend-comment main.rs "Application entry point with CLI parsing"
+    → Updates existing :module: line
 
-Search for module comments:
-  rg ":module:"              # Find all module documentation
+Decision Guide:
+  - File has :module: comment? → Use WITHOUT --module flag
+  - File has module comment without :module:? → Use WITH --module flag
+  - File has no module comment? → Use WITHOUT --module flag
+
+Search for existing module comments:
+  rg ":module:"              # Find all :module: documentation
   grep -r ":module:" .       # Alternative using grep
 
 Supported file types:
-  - Shell scripts (.sh, .bash, .zsh, .fish, .nu)
-  - JavaScript/TypeScript (.js, .ts, .jsx, .tsx)
-  - Rust (.rs)
-  - Python (.py)
-  - Go (.go)
-  - C/C++ (.c, .cpp, .h, .hpp)
-  - And many more...
-
-Files without extensions are treated as shell scripts (#).
+  Shell scripts, JavaScript/TypeScript, Rust, Python, Go, C/C++, and more.
+  Files without extensions are treated as shell scripts (#).
 `);
 }
 
@@ -274,15 +282,29 @@ function main() {
 		if (shouldReplace) {
 			// Replace the existing comment
 			lines[insertIndex] = commentLine;
+			// Add blank line after module comment if next line exists and isn't blank
+			if (lines.length > insertIndex + 1 && lines[insertIndex + 1].trim() !== "") {
+				lines.splice(insertIndex + 1, 0, "");
+			}
 			newContent = lines.join("\n");
 			action = "Replaced comment in";
 		} else {
 			// Insert the comment after shebang (if present) or at the beginning
 			if (hasShebang) {
+				// Add module comment after shebang
 				lines.splice(1, 0, commentLine);
+				// Add blank line if next line exists and isn't blank
+				if (lines.length > 2 && lines[2].trim() !== "") {
+					lines.splice(2, 0, "");
+				}
 				newContent = lines.join("\n");
 			} else {
-				newContent = commentLine + "\n" + originalContent;
+				// Add at beginning with blank line if content follows
+				if (originalContent.trim() !== "") {
+					newContent = commentLine + "\n\n" + originalContent;
+				} else {
+					newContent = commentLine + "\n" + originalContent;
+				}
 			}
 			action = "Added comment to";
 		}

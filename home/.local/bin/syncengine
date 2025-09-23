@@ -1,4 +1,5 @@
 #!/usr/bin/env nu
+# :module: Synchronization and file backup management script
 
 print "hello!"
 error make {msg: 'oh dear'}

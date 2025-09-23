@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# :module: GitLab Merge Request CLI Helper - Opens merge requests for the current branch using glab
+# :module: Git merge request helper script
 
 set -e
 

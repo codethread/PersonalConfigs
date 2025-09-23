@@ -1,3 +1,4 @@
+-- :module: WezTerm event handling and custom event listeners
 local wezterm = require 'wezterm' --[[@as Wezterm]]
 
 local M = {}

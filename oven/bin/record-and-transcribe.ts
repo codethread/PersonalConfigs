@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+// :module: Audio recording and transcription utility
 
 import { spawn, spawnSync, type Subprocess } from 'bun';
 import { existsSync } from 'fs';
