@@ -8,33 +8,76 @@
   "permissions": {
     "allow": [
       "mcp__context7__resolve-library-id",
+      "WebSearch",
       "WebFetch(domain:docs.anthropic.com)",
+      "WebFetch(domain:github.com)",
       "WebFetch(domain:sw.kovidgoyal.net)",
-      "Bash(MANPAGER='cat' man:*)",
-      "Bash(grep:*)",
-      "Bash(kitten:*)",
-      "Bash(kitty @:*)",
-      "Bash(mkdir:*)",
+      "WebFetch(domain:www.nushell.sh)",
       "Bash(ls:*)",
+      "Bash(fd:*)",
+      "Bash(find:*)",
+      "Bash(rg:*)",
+      "Bash(grep:*)",
+      "Bash(echo \"Exit code: $?\")",
+      "Bash(time:*)",
+      "Bash(MANPAGER='cat' man:*)",
+      "Read(//Users/codethread/.local/share/docs/claude-code-docs/**)",
+      "Read(//Users/codethread/.claude/**)",
       "Bash(npm run:*)",
       "Bash(pnpm run:*)",
       "Bash(yarn run:*)",
-      "Bash(go mod:*)",
-      "Bash(go build:*)",
+      "Bash(bun run:*)",
+      "Bash(bun check:*)",
       "Bash(cargo check:*)",
       "Bash(cargo test:*)",
       "Bash(cargo build:*)",
       "Bash(cargo run:*)",
-      "Bash(bun ~/.claude/x-hooks/agent-docs-injection.ts)",
+      "Bash(go mod:*)",
+      "Bash(go build:*)",
+      "Bash(git diff:*)",
+      "Bash(git add:*)",
+      "Bash(git lfs pull:*)",
+      "Bash(glab:*)",
+      "Bash(mkdir:*)",
+      "Bash(chmod:*)",
+      "Bash(kitten:*)",
+      "Bash(kitty @:*)",
       "Bash(speak:*)",
+      "Bash(speak-ts:*)",
       "Bash(cc-speak:*)",
-      "Bash(glab:*)"
+      "Bash(whisper-cli:*)",
+      "Bash(chatterbox-tts:*)",
+      "Bash(cindex:*)",
+      "Bash(prepend-comment:*)",
+      "Bash(~/.local/bin/bra:*)",
+      "Bash(/Users/codethread/PersonalConfigs/.local/bin/notif:*)",
+      "Bash(/Users/codethread/PersonalConfigs/.local/bin/notif test:*)",
+      "Bash(nu:*)",
+      "Bash(~/.local/bin/nu:*)",
+      "Bash(bun ~/.claude/x-hooks/agent-docs-injection.ts)",
+      "Bash(/Users/codethread/PersonalConfigs/oven/bin/claude-memory-loader.ts)",
+      "Bash(/Users/codethread/PersonalConfigs/oven/bin/claude-memory-loader.ts --help)",
+      "Read(//tmp/**)"
     ],
-    "deny": ["Bash(git push:*)", "Bash(git rebase:*)"],
+    "deny": [
+      "Bash(git push:*)",
+      "Bash(git rebase:*)",
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(**/.env)",
+      "Read(**/.env.*)",
+      "Read(**/secrets/**)",
+      "Read(**/*.key)",
+      "Read(**/*.pem)",
+      "Read(**/id_rsa*)"
+    ],
     "defaultMode": "acceptEdits",
-    "additionalDirectories": ["~/.local/cache/docs", "~/.local/bin"]
+    "additionalDirectories": [
+      "~/.local/cache/docs",
+      "~/.local/bin"
+    ]
   },
-  "model": "sonnet",
+  "model": "opus",
   "hooks": {
     "PreToolUse": [
       {
@@ -159,4 +202,3 @@
     "lastShownTime": 1754027278114
   }
 }
-
