@@ -1,119 +1,11 @@
 // :module: Logging utility for Claude Code interactions
 
-/** biome-ignore-all lint/correctness/noUnusedVariables: types kept as docs */
 import {existsSync, mkdirSync, readdirSync} from "fs";
-import {appendFile, symlink, unlink, readlink} from "fs/promises";
+import {appendFile, readlink, symlink, unlink} from "fs/promises";
 import {join} from "path";
+import type {HookInput} from "../shared/claude-hooks";
 
-// Claude Code Hook Event Types
-interface BaseHookInput {
-	session_id: string;
-	transcript_path: string;
-	cwd: string;
-	hook_event_name: string;
-}
-
-interface PreToolUseInput extends BaseHookInput {
-	hook_event_name: "PreToolUse";
-	tool_name: string;
-	tool_input: Record<string, any>; // Schema depends on the tool
-}
-
-interface PostToolUseInput extends BaseHookInput {
-	hook_event_name: "PostToolUse";
-	tool_name: string;
-	tool_input: Record<string, any>; // Schema depends on the tool
-	tool_response: Record<string, any>; // Schema depends on the tool
-}
-
-interface NotificationInput extends BaseHookInput {
-	hook_event_name: "Notification";
-	message: string;
-}
-
-interface UserPromptSubmitInput extends BaseHookInput {
-	hook_event_name: "UserPromptSubmit";
-	prompt: string;
-}
-
-interface StopInput extends BaseHookInput {
-	hook_event_name: "Stop" | "SubagentStop";
-	stop_hook_active: boolean; // True when Claude is already continuing from a stop hook
-}
-
-interface PreCompactInput extends BaseHookInput {
-	hook_event_name: "PreCompact";
-	trigger: "manual" | "auto";
-	custom_instructions: string; // Empty for auto, user-provided for manual
-}
-
-interface SessionStartInput extends BaseHookInput {
-	hook_event_name: "SessionStart";
-	source: "startup" | "resume" | "clear" | "compact";
-}
-
-interface SessionEndInput extends BaseHookInput {
-	hook_event_name: "SessionEnd";
-	reason: "clear" | "logout" | "prompt_input_exit" | "other";
-}
-
-type HookInput =
-	| PreToolUseInput
-	| PostToolUseInput
-	| NotificationInput
-	| UserPromptSubmitInput
-	| StopInput
-	| PreCompactInput
-	| SessionStartInput
-	| SessionEndInput;
-
-// Hook Output Types (JSON stdout)
-interface BaseHookOutput {
-	continue?: boolean; // Whether Claude should continue (default: true)
-	stopReason?: string; // Message shown when continue is false
-	suppressOutput?: boolean; // Hide stdout from transcript mode (default: false)
-	systemMessage?: string; // Optional warning shown to user
-}
-
-interface PreToolUseOutput extends BaseHookOutput {
-	decision?: "approve" | "block"; // Deprecated, use hookSpecificOutput
-	reason?: string; // Deprecated
-	hookSpecificOutput?: {
-		hookEventName: "PreToolUse";
-		permissionDecision: "allow" | "deny" | "ask";
-		permissionDecisionReason: string;
-	};
-}
-
-interface PostToolUseOutput extends BaseHookOutput {
-	decision?: "block"; // Automatically prompts Claude with reason
-	reason?: string; // Explanation for decision
-	hookSpecificOutput?: {
-		hookEventName: "PostToolUse";
-		additionalContext: string; // Additional info for Claude
-	};
-}
-
-interface UserPromptSubmitOutput extends BaseHookOutput {
-	decision?: "block"; // Prevents prompt processing
-	reason?: string; // Shown to user, not added to context
-	hookSpecificOutput?: {
-		hookEventName: "UserPromptSubmit";
-		additionalContext: string; // Added to context if not blocked
-	};
-}
-
-interface StopOutput extends BaseHookOutput {
-	decision?: "block"; // Prevents Claude from stopping
-	reason?: string; // Must be provided when blocking
-}
-
-interface SessionStartOutput extends BaseHookOutput {
-	hookSpecificOutput?: {
-		hookEventName: "SessionStart";
-		additionalContext: string; // Added to context
-	};
-}
+// Logger-specific types and interfaces
 
 // Custom Log Entry Structure
 interface LogEntry {
@@ -212,7 +104,7 @@ async function main() {
 	let logFileName: string;
 
 	// Look for existing session file
-	const sessionPattern = `cc-session-*-${sessionId}.jsonl`;
+	const _sessionPattern = `cc-session-*-${sessionId}.jsonl`;
 	const existingFiles = existsSync(logsDir)
 		? readdirSync(logsDir).filter(
 				(f) => f.endsWith(`-${sessionId}.jsonl`) && f.startsWith("cc-session-"),

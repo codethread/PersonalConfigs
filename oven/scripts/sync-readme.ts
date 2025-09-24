@@ -1,9 +1,6 @@
-#!/usr/bin/env bun
 import {$} from "bun";
-import {readdir, readFile, writeFile, mkdtemp, rm} from "fs/promises";
-import {join, basename} from "path";
-import {tmpdir} from "os";
-import {cleanBuilds} from "./clean";
+import {readdir, readFile, writeFile} from "fs/promises";
+import {basename, join} from "path";
 
 interface ToolInfo {
 	name: string;
@@ -11,19 +8,16 @@ interface ToolInfo {
 	usage?: string;
 }
 
-async function extractHelpInfo(toolPath: string, tempDir: string): Promise<ToolInfo | null> {
-	const toolName = basename(toolPath, ".ts");
-	// Add a random suffix to avoid collisions when running in parallel
-	const randomSuffix = Math.random().toString(36).substring(7);
-	const tempBuildPath = join(tempDir, `${toolName}-${randomSuffix}`);
-
+async function extractHelpInfo(toolName: string): Promise<ToolInfo | null> {
 	try {
-		// Build the tool to a temporary location
-		await $`bun build ${toolPath} --compile --outfile ${tempBuildPath}`.quiet();
-
 		// Run the tool with -h flag to get help text
 		// Use nothrow() to prevent errors from stopping execution
-		const result = await $`${tempBuildPath} -h`.nothrow();
+		const result = await $`${toolName} -h`.nothrow();
+
+		// Check if the command was found
+		if (result.stderr?.toString().includes("command not found")) {
+			throw new Error(`Command '${toolName}' not found. Please run 'bun run build' first.`);
+		}
 
 		// Get output regardless of exit code (some tools might exit with 1 on help)
 		const helpOutput = result.stdout?.toString() || result.stderr?.toString() || "";
@@ -39,7 +33,7 @@ async function extractHelpInfo(toolPath: string, tempDir: string): Promise<ToolI
 
 			// Extract usage if available
 			const usageIndex = lines.findIndex((line) => line.toLowerCase().includes("usage:"));
-			let usage = undefined;
+			let usage;
 			if (usageIndex !== -1 && usageIndex + 1 < lines.length) {
 				usage = lines[usageIndex + 1].trim();
 			}
@@ -57,7 +51,11 @@ async function extractHelpInfo(toolPath: string, tempDir: string): Promise<ToolI
 			description: "No description available",
 		};
 	} catch (error) {
-		// Silently handle errors - tool might not support -h
+		// Re-throw specific errors about missing commands
+		if (error instanceof Error && error.message.includes("not found")) {
+			throw error;
+		}
+		// Silently handle other errors - tool might not support -h
 		return {
 			name: toolName,
 			description: "No description available",
@@ -118,57 +116,49 @@ async function updateReadme(tools: ToolInfo[]): Promise<void> {
 
 async function main() {
 	try {
-		// Create a temporary directory for builds
-		const tempDir = await mkdtemp(join(tmpdir(), "sync-readme-"));
+		// Get all TypeScript files in bin directory
+		const binDir = join(process.cwd(), "bin");
+		const files = await readdir(binDir);
+		const tsFiles = files
+			.filter((file) => file.endsWith(".ts"))
+			.filter((file) => !file.includes(".test.")) // Exclude test files
+			.map((file) => basename(file, ".ts")); // Remove .ts extension to get executable names
 
-		try {
-			// Get all TypeScript files in bin directory
-			const binDir = join(process.cwd(), "bin");
-			const files = await readdir(binDir);
-			const tsFiles = files.filter((file) => file.endsWith(".ts"));
+		console.log(`Found ${tsFiles.length} TypeScript files in bin/`);
+		console.log("Extracting help information from built executables...");
 
-			console.log(`Found ${tsFiles.length} TypeScript files in bin/`);
-			console.log("Building and extracting help information in parallel...");
+		// Extract help information from all tools in parallel
+		const toolPromises = tsFiles.map((toolName) => {
+			return extractHelpInfo(toolName);
+		});
 
-			// Extract help information from all tools in parallel
-			const toolPromises = tsFiles.map((file) => {
-				const toolPath = join(binDir, file);
-				return extractHelpInfo(toolPath, tempDir);
-			});
+		// Wait for all tools to be processed
+		const toolResults = await Promise.all(toolPromises);
 
-			// Wait for all tools to be processed
-			const toolResults = await Promise.all(toolPromises);
+		// Filter out null results
+		const validTools = toolResults.filter((tool): tool is ToolInfo => tool !== null);
 
-			// Filter out null results
-			const validTools = toolResults.filter((tool): tool is ToolInfo => tool !== null);
+		// Deduplicate tools by name (in case multiple files produce the same tool)
+		const toolMap = new Map<string, ToolInfo>();
+		validTools.forEach((tool) => {
+			// Only keep the first occurrence of each tool name
+			if (!toolMap.has(tool.name)) {
+				toolMap.set(tool.name, tool);
+			}
+		});
 
-			// Deduplicate tools by name (in case multiple files produce the same tool)
-			const toolMap = new Map<string, ToolInfo>();
-			validTools.forEach((tool) => {
-				// Only keep the first occurrence of each tool name
-				if (!toolMap.has(tool.name)) {
-					toolMap.set(tool.name, tool);
-				}
-			});
+		const tools = Array.from(toolMap.values());
 
-			const tools = Array.from(toolMap.values());
+		console.log("\nExtracted help information:");
+		tools.forEach((tool) => {
+			console.log(`  ✓ ${tool.name}: ${tool.description}`);
+		});
 
-			console.log("\nExtracted help information:");
-			tools.forEach((tool) => {
-				console.log(`  ✓ ${tool.name}: ${tool.description}`);
-			});
-
-			// Update README with the extracted information
-			await updateReadme(tools);
-		} finally {
-			// Clean up temporary directory
-			await rm(tempDir, {recursive: true, force: true});
-		}
+		// Update README with the extracted information
+		await updateReadme(tools);
 	} catch (error) {
 		console.error("Error:", error);
 		process.exit(1);
-	} finally {
-		await cleanBuilds();
 	}
 }
 

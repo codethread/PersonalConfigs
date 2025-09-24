@@ -1,12 +1,11 @@
-#!/usr/bin/env bun
 // :module: Extract dialogue from git commit messages
 
 // CLI tool to extract and format Claude Code dialogue for a specific git commit
 
+import {$} from "bun";
 import {existsSync} from "fs";
 import {readdir, readFile, writeFile} from "fs/promises";
 import {join, relative} from "path";
-import {$} from "bun";
 
 // Import types from extract-dialogue
 type LogEntry = {
@@ -401,7 +400,7 @@ function cleanContentForMarkdown(content: string): string {
 	if (!content) return "";
 
 	// Remove command wrapper tags
-	let cleaned = content
+	const cleaned = content
 		.replace(/<command-message>.*?<\/command-message>/g, "")
 		.replace(/<command-name>.*?<\/command-name>/g, "")
 		.replace(/<command-args>(.*?)<\/command-args>/g, "$1")
@@ -414,7 +413,7 @@ function cleanContentForMarkdown(content: string): string {
 // Generate markdown content from ExtractedCommitDialogue
 function generateMarkdown(data: ExtractedCommitDialogue): string {
 	const shortSha = data.commit_sha.slice(0, 7);
-	const commitDate = new Date(data.end_time);
+	const _commitDate = new Date(data.end_time);
 	const duration = Math.round(
 		(new Date(data.end_time).getTime() - new Date(data.start_time).getTime()) / 1000 / 60,
 	);
@@ -440,7 +439,7 @@ function generateMarkdown(data: ExtractedCommitDialogue): string {
 			const isDiscussion = interaction.type === "discussion";
 			markdown += `### ${isDiscussion ? "Discussion" : "Interjection"} ${index + 1}\n\n`;
 
-			interaction.events.forEach((event, eventIndex) => {
+			interaction.events.forEach((event, _eventIndex) => {
 				const cleanContent = cleanContentForMarkdown(event.content || "");
 				if (cleanContent.trim()) {
 					const sender = event.sender === "user" ? "👤 **User**" : "🤖 **Agent**";
@@ -534,7 +533,7 @@ async function extractCommitDialogue(commitSha: string): Promise<ExtractedCommit
 		const parentResult = await $`git rev-parse ${commitSha}^`.text();
 		const parentSha = parentResult.trim();
 		startTime = await getCommitTimestamp(parentSha);
-	} catch (error) {
+	} catch (_error) {
 		// If no parent (first commit), use a reasonable default (1 hour before)
 		startTime = new Date(endTime.getTime() - 60 * 60 * 1000);
 		console.warn(`No parent commit found for ${commitSha}, using 1 hour before as start time`);
@@ -599,7 +598,7 @@ async function main() {
 		// Validate it's a valid commit
 		try {
 			await $`git rev-parse ${cliArgs.commitSha}`.quiet();
-		} catch (error) {
+		} catch (_error) {
 			console.error(`Invalid commit: ${cliArgs.commitSha}`);
 			console.error(
 				"Usage: extract-commit-dialogue.ts [commit-sha] [--markdown|-m] [--path <output-path>]",

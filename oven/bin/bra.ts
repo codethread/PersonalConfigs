@@ -2,7 +2,7 @@
 
 // Interactive git branch switcher that uses fzf for easy branch selection
 import {$} from "bun";
-import {fzf} from "./shared/fzf";
+import {fzf} from "../shared/fzf";
 
 // try to remove remote/<blah> if it exists
 const remoteRegex = /remotes\/[^/]*\//;
@@ -43,7 +43,7 @@ async function main() {
 		const branch = out.trim().replace(remoteRegex, "").replace("+ ", "").replace("* ", "");
 
 		// TODO: this also means checkedout in a worktree
-		if (false && behind.length > 1) {
+		if (behind.length > 1) {
 			console.log("the following are behind their remote");
 			console.log(behind);
 			console.log("");

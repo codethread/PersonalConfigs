@@ -1,4 +1,3 @@
-#!/usr/bin/env bun
 // :module: GitLab pipeline status monitoring tool
 
 // GitLab Pipeline Watcher
@@ -10,7 +9,7 @@ import {existsSync, readFileSync, unlinkSync, writeFileSync} from "fs";
 // Configuration
 let POLL_INTERVAL = 30;
 let USERNAME = "adam.hall";
-let BRANCH: string | undefined = undefined;
+let BRANCH: string | undefined;
 const TRACKED_PIPELINES_FILE = "/tmp/gitlab-pipeline-watcher-tracked-ts.txt";
 
 // Colors for terminal output

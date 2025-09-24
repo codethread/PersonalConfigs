@@ -5,26 +5,24 @@ Bun workspace for managing TypeScript/JavaScript executables, all `bin` files wi
 ## Structure
 
 - `bin/` - Source TypeScript files for CLI tools
-- `bin/shared/` - Shared modules used by CLI tools
+- `shared/` - Shared modules used by CLI tools
+- `tests/` - Tests for `bin` files, following rails convention of `bin/myBin.ts` -> `tests/myBin.test.ts`
 - `scripts/` - Build and utility scripts
 
 ## Commands
 
 ```bash
-# Format all code with Biome
-bun run fmt
+# Format and lint all code with Biome
+bun run fix
 
-# Lint code
-bun run lint
-
-# Check formatting and linting
-bun run check
-
-# Fix formatting and linting issues (with unsafe fixes)
+# Check type definitions are correct
 bun run fix
 
 # Build all executables to ~/.local/bin
 bun run build
+
+# Run the full verification and build process
+bun run verify
 ```
 
 ## Adding New Tools
@@ -37,14 +35,17 @@ bun run build
 
 - **analyze-subagents** - Analyze Claude Code subagent usage from session logs
 - **bra** - Git branch switcher with fzf
+- **cindex** - Generate an index of files in the current project
 - **claude-code-logger** - Claude Code session hook for logging events
 - **extract-commit-dialogue** - Extract Claude Code dialogue for a specific commit
 - **extract-dialogue** - Extract Claude Code session dialogue from log files
 - **ghub** - Open GitHub/GitLab repository in browser
 - **gitlab-pipeline-watcher** - Monitor GitLab pipelines and send notifications
-- **gmr** - GitLab merge request helper
 - **notif** - Show macOS native notifications
-- **speak-ts** - Convert text files (especially markdown) to speech using ElevenLabs API
+- **prepend-comment** - Add or update module documentation comments
+- **record-and-transcribe** - Record audio and transcribe using Whisper
+- **speak-ts** - No description available
+- **tts** - Optimized for text-to-speech (adds spoken indicators)
 
 ### Quick Usage
 

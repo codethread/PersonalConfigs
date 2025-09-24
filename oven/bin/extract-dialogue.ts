@@ -1,9 +1,8 @@
-#!/usr/bin/env bun
 // :module: Extract dialogue context from transcripts
 
 import {existsSync} from "fs";
 import {readFile} from "fs/promises";
-import {join, relative} from "path";
+import {relative} from "path";
 
 // Import types from logger (we'll export these from the logger file)
 type LogEntry = {

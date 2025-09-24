@@ -1,8 +1,7 @@
-#!/usr/bin/env bun
 // :module: Tool for adding and updating module-level documentation comments across programming languages
 
 import {readFileSync, writeFileSync} from "fs";
-import {resolve, extname} from "path";
+import {extname, resolve} from "path";
 
 // Map file extensions to their comment syntax
 const COMMENT_SYNTAX: Record<string, string> = {
@@ -256,7 +255,7 @@ function main() {
 		const commentLine = formatComment(commentPrefix, commentText);
 
 		let newContent: string;
-		let action: string;
+		let _action: string;
 		let insertIndex = 0;
 
 		// Check if the first line is a shebang
@@ -287,7 +286,7 @@ function main() {
 				lines.splice(insertIndex + 1, 0, "");
 			}
 			newContent = lines.join("\n");
-			action = "Replaced comment in";
+			_action = "Replaced comment in";
 		} else {
 			// Insert the comment after shebang (if present) or at the beginning
 			if (hasShebang) {
@@ -301,12 +300,12 @@ function main() {
 			} else {
 				// Add at beginning with blank line if content follows
 				if (originalContent.trim() !== "") {
-					newContent = commentLine + "\n\n" + originalContent;
+					newContent = `${commentLine}\n\n${originalContent}`;
 				} else {
-					newContent = commentLine + "\n" + originalContent;
+					newContent = `${commentLine}\n${originalContent}`;
 				}
 			}
-			action = "Added comment to";
+			_action = "Added comment to";
 		}
 
 		// Write back to the file

@@ -1,6 +1,6 @@
 import {$} from "bun";
-import {chmod, readdir} from "fs/promises";
-import {basename, join} from "path";
+import {readdir} from "fs/promises";
+import {join} from "path";
 
 export async function cleanBuilds() {
 	console.log("Cleaning build artifacts");

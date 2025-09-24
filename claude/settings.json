@@ -109,6 +109,15 @@
         ]
       },
       {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "agent-context-provider read"
+          }
+        ]
+      },
+      {
         "hooks": [
           {
             "type": "command",
@@ -134,6 +143,10 @@
           {
             "type": "command",
             "command": "claude-code-logger"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/x-hooks/check-claude-md.sh"
           }
         ]
       }
@@ -157,6 +170,10 @@
           },
           {
             "type": "command",
+            "command": "agent-context-provider session-start"
+          },
+          {
+            "type": "command",
             "command": "~/.claude/x-hooks/agent-docs-injection.ts"
           }
         ]
@@ -168,6 +185,10 @@
           {
             "type": "command",
             "command": "claude-code-logger"
+          },
+          {
+            "type": "command",
+            "command": "agent-context-provider session-end"
           }
         ]
       }

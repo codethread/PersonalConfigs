@@ -1,6 +1,5 @@
 #!/usr/bin/env bun
 
-import {$} from "bun";
 import {chmod, readdir} from "fs/promises";
 import {basename, join} from "path";
 import {cleanBuilds} from "./clean";

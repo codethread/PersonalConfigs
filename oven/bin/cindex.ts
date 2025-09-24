@@ -1,9 +1,9 @@
 // :module: Generate comprehensive file index with advanced filtering and markdown output
 
-import {$, TOML} from "bun";
+import {TOML} from "bun";
+import {appendFileSync, existsSync, mkdirSync} from "fs";
+import {join} from "path";
 import {parseArgs} from "util";
-import {join, dirname} from "path";
-import {existsSync, mkdirSync, appendFileSync} from "fs";
 
 interface SubdivisionConfig {
 	/** Name of the top-level directory to subdivide */
@@ -188,7 +188,7 @@ async function main() {
 		const [fileWithComment, comment] = l.split(":module: ");
 		const [file] = fileWithComment.split(":");
 
-		if (!file) throw new Error("no file: " + JSON.stringify({file, comment, line: l}));
+		if (!file) throw new Error(`no file: ${JSON.stringify({file, comment, line: l})}`);
 		if (!comment) continue; // TODO log these for update
 
 		if (
@@ -208,7 +208,7 @@ async function main() {
 
 	if (values["missing-doc"]) {
 		// Find files without :module: comments
-		const filesWithoutComments = allFilesList.filter(file => !commentedFiles.has(file));
+		const filesWithoutComments = allFilesList.filter((file) => !commentedFiles.has(file));
 		console.log(filesWithoutComments.join("\n"));
 		return;
 	}
@@ -230,7 +230,7 @@ function formatList(allFiles: string[], commentedFiles: Map<string, string>) {
 	return allFiles
 		.map((f) => {
 			const comment = commentedFiles.get(f);
-			return "- " + (comment ? f + ": " + comment : f);
+			return `- ${comment ? `${f}: ${comment}` : f}`;
 		})
 		.join("\n");
 }
@@ -255,7 +255,7 @@ function shouldSummarise(
 
 	for (const config of summariseConfigs) {
 		// Check if path starts with the summarise dir
-		if (path.startsWith(config.dir + "/") || path === config.dir) {
+		if (path.startsWith(`${config.dir}/`) || path === config.dir) {
 			// If no pattern specified, summarise all files in this dir
 			if (!config.pattern) return config;
 
@@ -263,7 +263,7 @@ function shouldSummarise(
 			try {
 				const regex = new RegExp(config.pattern);
 				if (regex.test(path)) return config;
-			} catch (e) {
+			} catch (_e) {
 				console.error(`Invalid regex pattern: ${config.pattern}`);
 			}
 		}

@@ -1,10 +1,9 @@
-#!/usr/bin/env bun
 // :module: Subagents performance and interaction analysis
 
-import {readFile, access, mkdtemp, writeFile, rm} from "fs/promises";
-import {join} from "path";
 import {existsSync} from "fs";
+import {access, mkdtemp, readFile, rm} from "fs/promises";
 import {tmpdir} from "os";
+import {join} from "path";
 
 interface LogEvent {
 	timestamp: string;
@@ -138,10 +137,7 @@ class SubagentAnalyzer {
 						postEvents.push(event);
 					}
 				}
-			} catch (error) {
-				// Skip invalid JSON lines
-				continue;
-			}
+			} catch (_error) {}
 		}
 
 		return {preEvents, postEvents};
@@ -276,9 +272,7 @@ class SubagentAnalyzer {
 							}
 						}
 					}
-				} catch {
-					continue;
-				}
+				} catch {}
 			}
 
 			if (model) {
@@ -293,7 +287,7 @@ class SubagentAnalyzer {
 						console.log(`  ${count.toString().padStart(3)} x ${tool}`);
 					});
 			}
-		} catch (error) {
+		} catch (_error) {
 			// Skip transcript analysis if there's an error
 		}
 	}
