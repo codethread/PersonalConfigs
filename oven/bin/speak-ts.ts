@@ -166,9 +166,8 @@ async function main() {
 				stderr: "pipe",
 			});
 
-			const writer = proc.stdin.getWriter();
-			await writer.write(new TextEncoder().encode(text));
-			await writer.close();
+			await proc.stdin.write(text);
+			proc.stdin.end();
 
 			const stripped = await new Response(proc.stdout).text();
 			if (proc.exitCode === 0 && stripped) {
@@ -183,11 +182,13 @@ async function main() {
 	}
 
 	// Chunk text if needed (2500 char limit for free tier)
-	const chunks =
-		text.length > 2500
-			? (console.log(`Text is ${text.length} characters, splitting into chunks...`),
-				chunkText(text))
-			: [text];
+	let chunks: string[];
+	if (text.length > 2500) {
+		console.log(`Text is ${text.length} characters, splitting into chunks...`);
+		chunks = chunkText(text);
+	} else {
+		chunks = [text];
+	}
 
 	if (chunks.length > 1) {
 		console.log(`Processing ${chunks.length} chunks...`);

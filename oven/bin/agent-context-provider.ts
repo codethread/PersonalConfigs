@@ -149,7 +149,7 @@ IMPORTANT: Ensure you read related documentation when working in nested areas of
 
 	try {
 		findAllAgentsFiles(options.projectRoot);
-	} catch (e) {
+	} catch (_e) {
 		// Ignore errors in finding files
 	}
 
@@ -157,7 +157,7 @@ IMPORTANT: Ensure you read related documentation when working in nested areas of
 		const sortedFiles = agentsFiles.sort();
 		console.log(`${introMessage}
 Project documentation:
-${sortedFiles.map(f => `- ${f}`).join("\n")}
+${sortedFiles.map((f) => `- ${f}`).join("\n")}
 </project-context>`);
 	}
 

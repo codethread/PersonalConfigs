@@ -33,6 +33,7 @@ bun run verify
 
 ## Tools Included
 
+- **agent-context-provider** - Provide contextual AGENTS.md documentation to Claude Code
 - **analyze-subagents** - Analyze Claude Code subagent usage from session logs
 - **bra** - Git branch switcher with fzf
 - **cindex** - Generate an index of files in the current project

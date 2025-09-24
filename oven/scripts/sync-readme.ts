@@ -33,7 +33,7 @@ async function extractHelpInfo(toolName: string): Promise<ToolInfo | null> {
 
 			// Extract usage if available
 			const usageIndex = lines.findIndex((line) => line.toLowerCase().includes("usage:"));
-			let usage;
+			let usage: string | undefined;
 			if (usageIndex !== -1 && usageIndex + 1 < lines.length) {
 				usage = lines[usageIndex + 1].trim();
 			}

@@ -1,5 +1,6 @@
 import {describe, expect, test} from "bun:test";
 import {spawn} from "bun";
+import {dirname, resolve} from "path";
 
 // Helper function to run strip-markdown and capture output
 async function runStripMarkdown(
@@ -9,7 +10,7 @@ async function runStripMarkdown(
 ): Promise<string> {
 	const args = [
 		"run",
-		"/Users/adamhall/PersonalConfigs/oven/bin/strip-markdown.ts",
+		resolve(dirname(import.meta.dir), "bin", "strip-markdown.ts"),
 		"--format",
 		format,
 	];
@@ -18,8 +19,8 @@ async function runStripMarkdown(
 	}
 
 	const proc = spawn({
-		cmd: ["bun", ...args],
-		cwd: "/Users/adamhall/PersonalConfigs/oven",
+		cmd: [process.execPath, ...args],
+		cwd: dirname(import.meta.dir),
 		stdin: "pipe",
 		stdout: "pipe",
 		stderr: "pipe",
@@ -438,8 +439,13 @@ code block
 
 		test("handles help flag", async () => {
 			const proc = spawn({
-				cmd: ["bun", "run", "/Users/adamhall/PersonalConfigs/oven/bin/strip-markdown.ts", "--help"],
-				cwd: "/Users/adamhall/PersonalConfigs/oven",
+				cmd: [
+					process.execPath,
+					"run",
+					resolve(dirname(import.meta.dir), "bin", "strip-markdown.ts"),
+					"--help",
+				],
+				cwd: dirname(import.meta.dir),
 				stdout: "pipe",
 			});
 

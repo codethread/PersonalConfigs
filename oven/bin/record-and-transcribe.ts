@@ -104,7 +104,9 @@ function checkDependencies(): void {
 
 	if (missing.length > 0) {
 		console.error(`${colors.RED}Error: Missing dependencies:${colors.RESET}`);
-		missing.forEach((dep) => console.error(`  - ${dep}`));
+		for (const dep of missing) {
+			console.error(`  - ${dep}`);
+		}
 		console.error(`${colors.YELLOW}Install sox with: brew install sox${colors.RESET}`);
 		console.error(
 			`${colors.YELLOW}Install whisper-cli with: brew install whisper-cpp${colors.RESET}`,
@@ -200,7 +202,7 @@ async function transcribeAudio(audioFile: string): Promise<void> {
 	});
 
 	// Stream stdout directly
-	if (whisperProcess.stdout) {
+	if (whisperProcess.stdout && typeof whisperProcess.stdout !== "number") {
 		for await (const chunk of whisperProcess.stdout) {
 			process.stdout.write(chunk);
 		}

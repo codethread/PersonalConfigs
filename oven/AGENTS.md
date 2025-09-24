@@ -45,16 +45,52 @@ The build process uses Bun's native compilation to create standalone executables
    - Mock external dependencies when needed but favour fake implementations, e.g create temporary directories and use real IO calls wherever possible
    - Make use of bun snapshot tests to verify outputs
    - Test the exported lib function directly, not the CLI wrapper
+
+   **CRITICAL Testing Anti-patterns to Avoid:**
+   - **Never use conditional assertions** - Don't write `if ("prop" in obj) expect(obj.prop)...`
+   - **Always assert the contract** - Use `expect(obj).toHaveProperty('prop')` before accessing
+   - **Never hard-code system paths** - Use `process.execPath` for Bun, `import.meta.dir` for paths
+   - **Avoid "testing the mocks"** - Tests should verify behavior, not mock implementations
+
+   **Portable Path Patterns:**
+
+   ```typescript
+   // ❌ BAD: Hard-coded paths
+   const binPath = "/opt/homebrew/bin/bun";
+   const projectPath = "/Users/username/project/bin/tool.ts";
+
+   // ✅ GOOD: Portable paths
+   const binPath = process.execPath;
+   const projectPath = resolve(dirname(import.meta.dir), "bin", "tool.ts");
+   ```
+
+   **Proper Assertion Patterns:**
+
+   ```typescript
+   // ❌ BAD: Conditional assertions that can silently pass
+   if ("message" in result) {
+     expect(result.message).toContain("expected");
+   }
+
+   // ✅ GOOD: Explicit contract assertions
+   expect(result).toHaveProperty("message");
+   expect(result.message).toContain("expected");
+   ```
+
    - Example test structure:
 
    ```typescript
    import { describe, test, expect } from "bun:test";
+   import { resolve, dirname } from "path";
    import { myToolLib } from "../bin/my-tool";
 
    describe("myToolLib", () => {
      test("should handle valid input", async () => {
        const result = await myToolLib({ option: "value" });
        expect(result.success).toBe(true);
+       // Assert expected properties exist before using them
+       expect(result).toHaveProperty("data");
+       expect(result.data).toBeDefined();
      });
 
      test("should throw on invalid input", async () => {

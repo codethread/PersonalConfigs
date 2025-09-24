@@ -65,7 +65,10 @@ describe("agentContextProviderLib", () => {
 			});
 
 			expect(result.success).toBe(true);
-			expect(result.message).toContain(testSessionId);
+			expect(result).toHaveProperty("message");
+			if ("message" in result) {
+				expect(result.message).toContain(testSessionId);
+			}
 			expect(existsSync(sessionFile)).toBe(true);
 
 			const sessionData = await Bun.file(sessionFile).json();
@@ -111,7 +114,10 @@ describe("agentContextProviderLib", () => {
 			});
 
 			expect(result.success).toBe(true);
-			expect(result.message).toContain(testSessionId);
+			expect(result).toHaveProperty("message");
+			if ("message" in result) {
+				expect(result.message).toContain(testSessionId);
+			}
 			expect(existsSync(sessionFile)).toBe(false);
 		});
 
@@ -122,7 +128,10 @@ describe("agentContextProviderLib", () => {
 			});
 
 			expect(result.success).toBe(true);
-			expect(result.message).toContain(testSessionId);
+			expect(result).toHaveProperty("message");
+			if ("message" in result) {
+				expect(result.message).toContain(testSessionId);
+			}
 		});
 
 		test("should require session ID", async () => {
@@ -165,7 +174,7 @@ describe("agentContextProviderLib", () => {
 					sessionId: testSessionId,
 					filePath: join(testProjectRoot, "src", "components", "Button.tsx"),
 				});
-			} catch (e) {
+			} catch (_e) {
 				// Expected to throw due to process.exit
 			}
 
@@ -196,7 +205,7 @@ describe("agentContextProviderLib", () => {
 					sessionId: testSessionId,
 					filePath: join(testProjectRoot, "src", "index.ts"),
 				});
-			} catch (e) {
+			} catch (_e) {
 				// Expected to throw due to process.exit
 			}
 
@@ -227,7 +236,7 @@ describe("agentContextProviderLib", () => {
 					sessionId: testSessionId,
 					filePath: join(testProjectRoot, "README.md"),
 				});
-			} catch (e) {
+			} catch (_e) {
 				// Expected to throw due to process.exit
 			}
 
@@ -259,13 +268,13 @@ describe("agentContextProviderLib", () => {
 					sessionId: testSessionId,
 					filePath: join(testProjectRoot, "src", "components", "Button.tsx"),
 				});
-			} catch (e) {
+			} catch (_e) {
 				// Expected to throw due to process.exit
 			}
 
 			expect(exitCode).toBe(2);
 			expect(output).toMatchSnapshot();
-			const firstOutput = output;
+			const _firstOutput = output;
 			output = ""; // Reset output capture
 			exitCode = undefined;
 
@@ -280,7 +289,10 @@ describe("agentContextProviderLib", () => {
 			process.exit = originalExit;
 
 			expect(result2.success).toBe(true);
-			expect(result2.agentsFound).toBe(0); // No new files found
+			expect(result2).toHaveProperty("agentsFound");
+			if ("agentsFound" in result2) {
+				expect(result2.agentsFound).toBe(0); // No new files found
+			}
 			expect(exitCode).toBeUndefined(); // Should not have called exit
 			expect(output.trim()).toBe("");
 		});
@@ -306,7 +318,7 @@ describe("agentContextProviderLib", () => {
 					sessionId: testSessionId,
 					filePath: join(testProjectRoot, "src", "components", "Button.tsx"),
 				});
-			} catch (e) {
+			} catch (_e) {
 				// Expected to throw due to process.exit
 			}
 
@@ -324,7 +336,10 @@ describe("agentContextProviderLib", () => {
 			console.error = originalError;
 			process.exit = originalExit;
 
-			expect(result2.agentsFound).toBe(0); // All already seen
+			expect(result2).toHaveProperty("agentsFound");
+			if ("agentsFound" in result2) {
+				expect(result2.agentsFound).toBe(0); // All already seen
+			}
 			expect(output.trim()).toBe(""); // No new output
 			expect(exitCode).toBeUndefined(); // Should not have called exit
 		});
@@ -342,7 +357,10 @@ describe("agentContextProviderLib", () => {
 			});
 
 			expect(result.success).toBe(true);
-			expect(result.agentsFound).toBe(0);
+			expect(result).toHaveProperty("agentsFound");
+			if ("agentsFound" in result) {
+				expect(result.agentsFound).toBe(0);
+			}
 		});
 
 		test("should handle files outside project root", async () => {
@@ -353,7 +371,10 @@ describe("agentContextProviderLib", () => {
 			});
 
 			expect(result.success).toBe(true);
-			expect(result.agentsFound).toBe(0);
+			expect(result).toHaveProperty("agentsFound");
+			if ("agentsFound" in result) {
+				expect(result.agentsFound).toBe(0);
+			}
 		});
 
 		test("should require session ID", async () => {

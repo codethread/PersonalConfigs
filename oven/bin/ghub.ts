@@ -57,6 +57,9 @@ export async function ghubLib(_options: GhubOptions): Promise<{url: string}> {
 	return {url};
 }
 
+// Alias for more semantic naming
+export const openRepo = ghubLib;
+
 interface RemoteInfo {
 	domain: string;
 	repo: string;
