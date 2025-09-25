@@ -267,8 +267,10 @@ async function main(): Promise<void> {
 }
 
 // Run the main function
-main().catch(async (error) => {
-	console.error(`${colors.RED}Fatal error:`, error, colors.RESET);
-	await cleanup(true);
-	process.exit(2);
-});
+if (import.meta.main) {
+	main().catch(async (error) => {
+		console.error(`${colors.RED}Fatal error:`, error, colors.RESET);
+		await cleanup(true);
+		process.exit(2);
+	});
+}

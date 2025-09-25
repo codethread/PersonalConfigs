@@ -410,4 +410,6 @@ function formatMarkdown(
 	return output.trimEnd();
 }
 
-main();
+if (import.meta.main) {
+	main();
+}
