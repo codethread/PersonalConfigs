@@ -2,29 +2,6 @@
 
 import {parseArgs} from "util";
 
-const {values} = parseArgs({
-	args: Bun.argv.slice(2),
-	options: {
-		format: {
-			type: "string",
-			default: "tts",
-			short: "f",
-		},
-		"preserve-structure": {
-			type: "boolean",
-			default: false,
-			short: "p",
-		},
-		help: {
-			type: "boolean",
-			default: false,
-			short: "h",
-		},
-	},
-	strict: false,
-	allowPositionals: true,
-});
-
 function showHelp() {
 	console.log(`
 Strip markdown formatting from text, optimized for text-to-speech or plain text output.
@@ -52,7 +29,7 @@ This is a Unix filter: reads from stdin, writes to stdout.
 `);
 }
 
-function stripMarkdownTTS(text: string, preserveStructure: boolean): string {
+export function stripMarkdownTTS(text: string, preserveStructure: boolean): string {
 	// Remove code blocks but keep their content description
 	text = text.replace(/```[\w]*\n(.*?)```/gs, preserveStructure ? "Code block:\n$1" : "Code block: $1");
 
@@ -139,6 +116,29 @@ function stripMarkdownPlain(text: string, preserveStructure: boolean): string {
 }
 
 async function main() {
+	const {values} = parseArgs({
+		args: Bun.argv.slice(2),
+		options: {
+			format: {
+				type: "string",
+				default: "tts",
+				short: "f",
+			},
+			"preserve-structure": {
+				type: "boolean",
+				default: false,
+				short: "p",
+			},
+			help: {
+				type: "boolean",
+				default: false,
+				short: "h",
+			},
+		},
+		strict: false,
+		allowPositionals: true,
+	});
+
 	if (values.help) {
 		showHelp();
 		process.exit(0);
@@ -185,7 +185,10 @@ async function main() {
 	}
 }
 
-main().catch((err) => {
-	console.error(`Fatal error: ${err}`);
-	process.exit(1);
-});
+// Only run main if this file is executed directly, not when imported
+if (import.meta.main) {
+	main().catch((err) => {
+		console.error(`Fatal error: ${err}`);
+		process.exit(1);
+	});
+}

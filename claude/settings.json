@@ -77,7 +77,7 @@
       "~/.local/bin"
     ]
   },
-  "model": "opusplan",
+  "model": "opus",
   "hooks": {
     "PreToolUse": [
       {

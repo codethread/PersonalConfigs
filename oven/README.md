@@ -33,6 +33,7 @@ bun run verify
 
 ## Tools Included
 
+- **** - Line numbers are 1-indexed and inclusive
 - **bra** - Git branch switcher with fzf
 - **cc-hook--context-injector** - Claude Code hook that provides contextual AGENTS.md documentation
 - **cc-hook--npm-redirect** - Claude Code hook that redirects npm/npx/node commands to detected package manager

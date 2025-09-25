@@ -70,6 +70,7 @@ existing domains:
    - this is an organizational pattern for readability
    - help > CoreInterface > const definitions > main > lib > functions > execute main
    - main function should focus on cli parsing, lib invocation, reporting and error reporting. All 'logic' belongs in the 'lib' function
+   - **IMPORTANT**: Never put executable code at the module level (outside of functions). This includes parseArgs calls - they should be inside main(), not at the top level
 
 2. **Use Bun native APIs**
    - Use `import {$} from "bun"` for shell commands instead of Node's child_process
@@ -100,10 +101,22 @@ existing domains:
    }
    ```
 
-6. **Testability**
+6. **Testability and Module Safety**
    - Export core logic as function separate from CLI wrapper
-   - Use `if (import.meta.main)` to conditionally run CLI code
+   - **CRITICAL**: Always use `if (import.meta.main)` to conditionally run CLI code
+   - **Never call main() at the top level without this guard** - it will execute when imported and can cause the importing script to hang
    - This allows function to be imported and tested independently
+   - Example of the issue: If main() reads from stdin or starts async operations, importing the file will trigger these operations
+
+   ```typescript
+   // ❌ BAD: Will run when imported, causing hangs
+   main().catch(console.error);
+
+   // ✅ GOOD: Only runs when executed directly
+   if (import.meta.main) {
+     main().catch(console.error);
+   }
+   ```
 
 ### Testing Best Practices
 
@@ -157,6 +170,49 @@ test.each([
 ])("should redirect $input to $expected", ({ input, expected }) => {
   const result = redirectCommand(input);
   expect(result).toBe(expected);
+});
+```
+
+#### Dependency Injection for Testing Shell Commands
+
+Since Bun's `$` operator cannot be directly mocked, use dependency injection for testable shell command execution:
+
+```typescript
+// Define an interface for shell commands
+export interface ShellExecutor {
+  runCommand: (cmd: string) => Promise<string>;
+  // Add other shell operations as needed
+}
+
+// Default implementation using Bun's $ operator
+export const defaultShellExecutor: ShellExecutor = {
+  async runCommand(cmd: string): Promise<string> {
+    return await $`${cmd}`.text();
+  },
+};
+
+// In your function, accept the executor as a parameter
+export async function myToolLib(options: MyOptions & { executor?: ShellExecutor }) {
+  const executor = options.executor ?? defaultShellExecutor;
+  const result = await executor.runCommand("some-command");
+  // ... rest of implementation
+}
+
+// In tests, provide a mock executor
+test("should handle command execution", async () => {
+  const mockExecutor: ShellExecutor = {
+    async runCommand(cmd: string): Promise<string> {
+      expect(cmd).toBe("expected-command");
+      return "mocked output";
+    },
+  };
+
+  const result = await myToolLib({
+    someOption: "value",
+    executor: mockExecutor,
+  });
+
+  expect(result.success).toBe(true);
 });
 ```
 
