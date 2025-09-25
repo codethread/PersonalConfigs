@@ -1,4 +1,4 @@
-// :module: Extract dialogue context from transcripts
+// :module: Extract Claude Code dialogue context from session logs and transcripts
 
 import {existsSync} from "fs";
 import {readFile} from "fs/promises";
@@ -171,11 +171,7 @@ async function extractDialogue(logFilePath: string): Promise<ExtractedDialogue> 
 				notificationEvent = entry;
 			}
 
-			if (
-				notificationEvent &&
-				entry.event === "Stop" &&
-				entry.timestamp < notificationEvent.timestamp
-			) {
+			if (notificationEvent && entry.event === "Stop" && entry.timestamp < notificationEvent.timestamp) {
 				stopEvent = entry;
 				break;
 			}
@@ -196,9 +192,7 @@ async function extractDialogue(logFilePath: string): Promise<ExtractedDialogue> 
 			const agentTranscript = transcriptEntries
 				.filter(
 					(t) =>
-						t.type === "assistant" &&
-						t.timestamp &&
-						new Date(t.timestamp) < new Date(stopEvent.timestamp),
+						t.type === "assistant" && t.timestamp && new Date(t.timestamp) < new Date(stopEvent.timestamp),
 				)
 				.sort((a, b) => new Date(b.timestamp!).getTime() - new Date(a.timestamp!).getTime())[0];
 
@@ -265,9 +259,7 @@ async function extractDialogue(logFilePath: string): Promise<ExtractedDialogue> 
 			// Find agent response after user prompt
 			const agentResponse = transcriptEntries.find(
 				(t) =>
-					t.type === "assistant" &&
-					t.timestamp &&
-					new Date(t.timestamp) > new Date(userPrompt.timestamp),
+					t.type === "assistant" && t.timestamp && new Date(t.timestamp) > new Date(userPrompt.timestamp),
 			);
 
 			if (agentResponse) {
@@ -298,9 +290,9 @@ async function extractDialogue(logFilePath: string): Promise<ExtractedDialogue> 
 
 function showHelp() {
 	console.log(`
-extract-dialogue - Extract Claude Code session dialogue from log files
+cc-logs--extract-dialogue - Extract Claude Code session dialogue from log files
 
-Usage: extract-dialogue <log-file> [options]
+Usage: cc-logs--extract-dialogue <log-file> [options]
 
 Arguments:
   log-file        Path to Claude Code session log file (JSONL format)
@@ -313,9 +305,9 @@ Description:
   including user prompts, assistant responses, and tool usage.
 
 Examples:
-  extract-dialogue .logs/cc-session-current.jsonl
-  extract-dialogue .logs/cc-session-2025-09-16-14-30-00-a53e19af.jsonl
-  extract-dialogue .logs/claude-session-a53e19af.jsonl  # old format still supported
+  cc-logs--extract-dialogue .logs/cc-session-current.jsonl
+  cc-logs--extract-dialogue .logs/cc-session-2025-09-16-14-30-00-a53e19af.jsonl
+  cc-logs--extract-dialogue .logs/claude-session-a53e19af.jsonl  # old format still supported
 `);
 }
 
@@ -331,11 +323,9 @@ async function main() {
 		}
 
 		if (args.length === 0) {
-			console.error("Usage: extract-dialogue.ts <log-file>");
-			console.error("Example: extract-dialogue.ts .logs/cc-session-current.jsonl");
-			console.error(
-				"Example: extract-dialogue.ts .logs/cc-session-2025-09-16-14-30-00-a53e19af.jsonl",
-			);
+			console.error("Usage: cc-logs--extract-dialogue <log-file>");
+			console.error("Example: cc-logs--extract-dialogue .logs/cc-session-current.jsonl");
+			console.error("Example: cc-logs--extract-dialogue .logs/cc-session-2025-09-16-14-30-00-a53e19af.jsonl");
 			process.exit(1);
 		}
 

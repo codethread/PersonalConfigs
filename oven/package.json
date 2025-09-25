@@ -1,11 +1,11 @@
 {
-	"name": "dots",
+	"name": "oven",
 	"private": true,
 	"scripts": {
 		"fmt": "biome format --write .",
 		"lint": "biome lint .",
 		"check": "biome check .",
-		"fix": "biome check --write --unsafe .",
+		"fix": "biome check --write --unsafe --log-level=error .",
 		"test": "bun test tests",
 		"typecheck": "tsc --noEmit",
 		"build": "bun run ./scripts/build-bin.ts",

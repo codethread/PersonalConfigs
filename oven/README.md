@@ -33,13 +33,14 @@ bun run verify
 
 ## Tools Included
 
-- **agent-context-provider** - Provide contextual AGENTS.md documentation to Claude Code
-- **analyze-subagents** - Analyze Claude Code subagent usage from session logs
 - **bra** - Git branch switcher with fzf
+- **cc-hook--context-injector** - Claude Code hook that provides contextual AGENTS.md documentation
+- **cc-hook--npm-redirect** - Claude Code hook that redirects npm/npx/node commands to detected package manager
+- **cc-hook--session-logger** - Claude Code hook for logging session events
+- **cc-logs--analyze-subagents** - Analyze Claude Code subagent usage from session logs
+- **cc-logs--extract-commit-dialogue** - Extract Claude Code dialogue for a specific commit
+- **cc-logs--extract-dialogue** - Extract Claude Code session dialogue from log files
 - **cindex** - Generate an index of files in the current project
-- **claude-code-logger** - Claude Code session hook for logging events
-- **extract-commit-dialogue** - Extract Claude Code dialogue for a specific commit
-- **extract-dialogue** - Extract Claude Code session dialogue from log files
 - **ghub** - Open GitHub/GitLab repository in browser
 - **gitlab-pipeline-watcher** - Monitor GitLab pipelines and send notifications
 - **notif** - Show macOS native notifications

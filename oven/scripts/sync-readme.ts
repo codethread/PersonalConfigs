@@ -1,6 +1,7 @@
 import {$} from "bun";
 import {readdir, readFile, writeFile} from "fs/promises";
 import {basename, join} from "path";
+import {parseArgs} from "util";
 
 interface ToolInfo {
 	name: string;
@@ -8,11 +9,63 @@ interface ToolInfo {
 	usage?: string;
 }
 
+async function main(verbose = false) {
+	try {
+		// Get all TypeScript files in bin directory
+		const binDir = join(process.cwd(), "bin");
+		const files = await readdir(binDir);
+		const tsFiles = files
+			.filter((file) => file.endsWith(".ts"))
+			.filter((file) => !file.includes(".test.")) // Exclude test files
+			.map((file) => basename(file, ".ts")); // Remove .ts extension to get executable names
+
+		if (verbose) {
+			console.log(`Found ${tsFiles.length} TypeScript files in bin/`);
+			console.log("Extracting help information from built executables...");
+		}
+
+		// Extract help information from all tools in parallel
+		const toolPromises = tsFiles.map((toolName) => {
+			return extractHelpInfo(toolName);
+		});
+
+		// Wait for all tools to be processed
+		const toolResults = await Promise.all(toolPromises);
+
+		// Filter out null results
+		const validTools = toolResults.filter((tool): tool is ToolInfo => tool !== null);
+
+		// Deduplicate tools by name (in case multiple files produce the same tool)
+		const toolMap = new Map<string, ToolInfo>();
+		validTools.forEach((tool) => {
+			// Only keep the first occurrence of each tool name
+			if (!toolMap.has(tool.name)) {
+				toolMap.set(tool.name, tool);
+			}
+		});
+
+		const tools = Array.from(toolMap.values());
+
+		if (verbose) {
+			console.log("\nExtracted help information:");
+			tools.forEach((tool) => {
+				console.log(`  ✓ ${tool.name}: ${tool.description}`);
+			});
+		}
+
+		// Update README with the extracted information
+		await updateReadme(tools, verbose);
+	} catch (error) {
+		console.error("Error:", error);
+		process.exit(1);
+	}
+}
+
 async function extractHelpInfo(toolName: string): Promise<ToolInfo | null> {
 	try {
 		// Run the tool with -h flag to get help text
-		// Use nothrow() to prevent errors from stopping execution
-		const result = await $`${toolName} -h`.nothrow();
+		// Use nothrow() and suppress output to prevent it from showing during extraction
+		const result = await $`${toolName} -h`.nothrow().quiet();
 
 		// Check if the command was found
 		if (result.stderr?.toString().includes("command not found")) {
@@ -63,7 +116,7 @@ async function extractHelpInfo(toolName: string): Promise<ToolInfo | null> {
 	}
 }
 
-async function updateReadme(tools: ToolInfo[]): Promise<void> {
+async function updateReadme(tools: ToolInfo[], verbose = false): Promise<void> {
 	const readmePath = join(process.cwd(), "README.md");
 
 	// Read current README
@@ -94,8 +147,7 @@ async function updateReadme(tools: ToolInfo[]): Promise<void> {
 
 	// Add additional section for usage examples if needed
 	newToolsSection += "\n### Quick Usage\n\n";
-	newToolsSection +=
-		"All tools support the `-h` or `--help` flag to display usage information:\n\n";
+	newToolsSection += "All tools support the `-h` or `--help` flag to display usage information:\n\n";
 	newToolsSection += "```bash\n";
 	newToolsSection += "# Get help for any tool\n";
 	newToolsSection += "analyze-subagents -h\n";
@@ -111,58 +163,19 @@ async function updateReadme(tools: ToolInfo[]): Promise<void> {
 	// Write updated README
 	await writeFile(readmePath, newReadmeContent, "utf-8");
 
-	console.log(`✅ Updated README.md with ${tools.length} tools`);
-}
-
-async function main() {
-	try {
-		// Get all TypeScript files in bin directory
-		const binDir = join(process.cwd(), "bin");
-		const files = await readdir(binDir);
-		const tsFiles = files
-			.filter((file) => file.endsWith(".ts"))
-			.filter((file) => !file.includes(".test.")) // Exclude test files
-			.map((file) => basename(file, ".ts")); // Remove .ts extension to get executable names
-
-		console.log(`Found ${tsFiles.length} TypeScript files in bin/`);
-		console.log("Extracting help information from built executables...");
-
-		// Extract help information from all tools in parallel
-		const toolPromises = tsFiles.map((toolName) => {
-			return extractHelpInfo(toolName);
-		});
-
-		// Wait for all tools to be processed
-		const toolResults = await Promise.all(toolPromises);
-
-		// Filter out null results
-		const validTools = toolResults.filter((tool): tool is ToolInfo => tool !== null);
-
-		// Deduplicate tools by name (in case multiple files produce the same tool)
-		const toolMap = new Map<string, ToolInfo>();
-		validTools.forEach((tool) => {
-			// Only keep the first occurrence of each tool name
-			if (!toolMap.has(tool.name)) {
-				toolMap.set(tool.name, tool);
-			}
-		});
-
-		const tools = Array.from(toolMap.values());
-
-		console.log("\nExtracted help information:");
-		tools.forEach((tool) => {
-			console.log(`  ✓ ${tool.name}: ${tool.description}`);
-		});
-
-		// Update README with the extracted information
-		await updateReadme(tools);
-	} catch (error) {
-		console.error("Error:", error);
-		process.exit(1);
+	if (verbose) {
+		console.log(`✅ Updated README.md with ${tools.length} tools`);
 	}
 }
 
 // Run if called directly
 if (import.meta.main) {
-	main();
+	const {values} = parseArgs({
+		args: Bun.argv.slice(2),
+		options: {
+			verbose: {type: "boolean", short: "v"},
+		},
+	});
+
+	main(values.verbose);
 }

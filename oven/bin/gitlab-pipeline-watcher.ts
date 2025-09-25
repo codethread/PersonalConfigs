@@ -125,14 +125,7 @@ function _formatPipelineInfo(pipeline: any): string {
 // Function to get currently running pipelines
 async function getRunningPipelines(): Promise<any[]> {
 	try {
-		const args = [
-			`glab`,
-			`pipeline`,
-			`list`,
-			`--username=${USERNAME}`,
-			`--status=running`,
-			`--output=json`,
-		];
+		const args = [`glab`, `pipeline`, `list`, `--username=${USERNAME}`, `--status=running`, `--output=json`];
 		if (BRANCH) {
 			args.push(`--ref=${BRANCH}`);
 		}
@@ -234,10 +227,7 @@ async function monitorPipelines() {
 				const pipeline = currentRunning.find((p) => p.id.toString() === pipelineId);
 				if (pipeline) {
 					const ref = pipeline.ref.replace(/refs\/merge-requests\//, "").replace(/\/head/, "");
-					log(
-						"INFO",
-						`${getStatusEmoji("running")} New pipeline started: ${pipelineId} (MR ${ref})`,
-					);
+					log("INFO", `${getStatusEmoji("running")} New pipeline started: ${pipelineId} (MR ${ref})`);
 				}
 			}
 		}
@@ -249,9 +239,7 @@ async function monitorPipelines() {
 				const completedPipeline = await getPipelineById(pipelineId);
 				if (completedPipeline) {
 					const status = completedPipeline.status;
-					const ref = completedPipeline.ref
-						.replace(/refs\/merge-requests\//, "")
-						.replace(/\/head/, "");
+					const ref = completedPipeline.ref.replace(/refs\/merge-requests\//, "").replace(/\/head/, "");
 					const webUrl = completedPipeline.web_url;
 
 					// Send notification (non-blocking)

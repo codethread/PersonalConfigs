@@ -1,4 +1,4 @@
-// :module: Provides contextual AGENTS.md documentation to Claude Code based on file reads with session-based deduplication
+// :module: Claude Code hook that provides contextual AGENTS.md documentation based on file reads with session-based deduplication
 
 import {existsSync, readFileSync, unlinkSync, writeFileSync} from "fs";
 import {dirname, join, resolve} from "path";
@@ -8,9 +8,9 @@ import {report, reportError} from "../shared/report";
 
 function showHelp() {
 	console.log(`
-agent-context-provider - Provide contextual AGENTS.md documentation to Claude Code
+cc-hook--context-injector - Claude Code hook that provides contextual AGENTS.md documentation
 
-Usage: agent-context-provider <command> [options]
+Usage: cc-hook--context-injector <command> [options]
 
 Commands:
   session-start    Initialize session tracking (called from SessionStart hook)
@@ -85,12 +85,24 @@ async function main() {
 			filePath = toolInput?.file_path;
 		}
 
-		const result = await agentContextProviderLib({
+		const result = await ccHookContextInjectorLib({
 			command,
 			sessionId,
 			filePath,
 			projectRoot,
 		});
+
+		// Handle special case for session-start contextOutput
+		if (
+			command === "session-start" &&
+			result &&
+			typeof result === "object" &&
+			"contextOutput" in result &&
+			result.contextOutput
+		) {
+			// Output context directly to stdout for Claude to see
+			console.log(result.contextOutput);
+		}
 
 		report(result);
 	} catch (err) {
@@ -99,7 +111,7 @@ async function main() {
 	}
 }
 
-export async function agentContextProviderLib(options: AgentContextOptions) {
+export async function ccHookContextInjectorLib(options: AgentContextOptions): Promise<HandlerResult> {
 	switch (options.command) {
 		case "session-start":
 			return await handleSessionStart(options);
@@ -112,9 +124,25 @@ export async function agentContextProviderLib(options: AgentContextOptions) {
 	}
 }
 
-async function handleSessionStart(
-	options: AgentContextOptions,
-): Promise<{success: boolean; message: string}> {
+type SessionStartResult = {
+	success: boolean;
+	message: string;
+	contextOutput?: string;
+};
+
+type SessionEndResult = {
+	success: boolean;
+	message: string;
+};
+
+type ReadResult = {
+	success: boolean;
+	agentsFound: number;
+};
+
+type HandlerResult = SessionStartResult | SessionEndResult | ReadResult;
+
+async function handleSessionStart(options: AgentContextOptions): Promise<SessionStartResult> {
 	if (!options.sessionId) {
 		throw new Error("Session ID is required for session-start");
 	}
@@ -153,23 +181,23 @@ IMPORTANT: Ensure you read related documentation when working in nested areas of
 		// Ignore errors in finding files
 	}
 
+	let contextOutput: string | undefined;
 	if (agentsFiles.length > 0) {
 		const sortedFiles = agentsFiles.sort();
-		console.log(`${introMessage}
+		contextOutput = `${introMessage}
 Project documentation:
 ${sortedFiles.map((f) => `- ${f}`).join("\n")}
-</project-context>`);
+</project-context>`;
 	}
 
 	return {
 		success: true,
 		message: `Initialized agent context session: ${options.sessionId}`,
+		contextOutput,
 	};
 }
 
-async function handleSessionEnd(
-	options: AgentContextOptions,
-): Promise<{success: boolean; message: string}> {
+async function handleSessionEnd(options: AgentContextOptions): Promise<SessionEndResult> {
 	if (!options.sessionId) {
 		throw new Error("Session ID is required for session-end");
 	}
@@ -185,9 +213,7 @@ async function handleSessionEnd(
 	};
 }
 
-async function handleRead(
-	options: AgentContextOptions,
-): Promise<{success: boolean; agentsFound: number}> {
+async function handleRead(options: AgentContextOptions): Promise<ReadResult> {
 	if (!options.sessionId) {
 		throw new Error("Session ID is required for read command");
 	}

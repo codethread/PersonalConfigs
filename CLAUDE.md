@@ -26,7 +26,7 @@ cindex --path <dir>  # List all files recursively at path (with less relavent fi
 ### Makefile (Root)
 
 ```bash
-make         # Run link then build (default)
+make         # Run link then build (default) - quiet output, errors only
 make link    # Link dotfiles via dotty
 make build   # Build oven executables
 ```
@@ -38,9 +38,9 @@ cd oven
 bun run fmt      # Format code
 bun run lint     # Lint code
 bun run check    # Check formatting and linting
-bun run fix      # Fix issues
-bun run build    # Build executables to ~/.local/bin
-bun run sync-docs   # Update documentation
+bun run fix      # Fix issues (quiet by default)
+bun run build    # Build executables to ~/.local/bin (quiet by default, use -v for verbose)
+bun run sync-docs   # Update documentation (quiet by default, use -v for verbose)
 bun run ./bin/<filename>  # Test before building
 ```
 
@@ -79,6 +79,7 @@ Build tools in order of increasing complexity:
      - Full development environment with testing
      - **Shared modules**: Use `oven/shared/*.ts` for reusable types and utilities
      - **Claude Code hooks**: Import types from `oven/shared/claude-hooks.ts` for hook development
+     - **Quiet by default**: Build scripts support `--verbose` flag for detailed output
 
 ### Script Evolution Path
 
@@ -92,13 +93,30 @@ Start simple → Graduate as needed:
 
 ## Claude Code Integration
 
-### Automatic Context Provision
+### Naming Convention for Claude Code Tools
 
-The project includes an intelligent context system that automatically provides relevant AGENTS.md documentation to Claude Code:
+Claude Code specific tools follow the `cc-<context>--<action>` naming pattern:
 
-- **`agent-context-provider`** - Hook-based system that discovers and provides contextual documentation
-- **Session-based deduplication** - Tracks seen AGENTS.md files per session to avoid spam
-- **Recursive discovery** - Finds all AGENTS.md files from current file location up to project root
-- **Smart integration** - Hooks into SessionStart, SessionEnd, and PostToolUse (Read) events
+- **cc-hook--**: Tools that run as Claude Code hooks (e.g., `cc-hook--context-injector`, `cc-hook--session-logger`)
+- **cc-logs--**: Tools that process Claude Code session logs (e.g., `cc-logs--analyze-subagents`, `cc-logs--extract-dialogue`)
 
-When Claude Code reads any file, it automatically receives relevant AGENTS.md context in XML tags without duplication.
+### Available Claude Code Hooks
+
+The project includes several Claude Code hooks in the `oven/bin/` directory:
+
+- **`cc-hook--context-injector`** - Automatically provides relevant AGENTS.md documentation when files are read
+  - Session-based deduplication to avoid spam
+  - Recursive discovery from file location up to project root
+  - Hooks into SessionStart, SessionEnd, and PostToolUse (Read) events
+  - Provides contextual documentation in XML tags
+
+- **`cc-hook--npm-redirect`** - Redirects npm/npx/node commands to the detected package manager
+  - Detects project package manager from lock files (pnpm-lock.yaml, bun.lock, bun.lockb, yarn.lock, package-lock.json)
+  - Redirects node commands to bun in Bun projects (with compatibility warnings)
+  - Blocks mismatched commands with exit code 2 and suggests correct alternative
+  - Supports commands with `cd` directory changes
+  - Ignores package manager names inside quoted strings
+
+- **`cc-hook--session-logger`** - Logs Claude Code session activities for analysis
+
+All hooks are built as standalone executables to `~/.local/bin/` and follow the oven development patterns with comprehensive unit tests.

@@ -54,10 +54,7 @@ This is a Unix filter: reads from stdin, writes to stdout.
 
 function stripMarkdownTTS(text: string, preserveStructure: boolean): string {
 	// Remove code blocks but keep their content description
-	text = text.replace(
-		/```[\w]*\n(.*?)```/gs,
-		preserveStructure ? "Code block:\n$1" : "Code block: $1",
-	);
+	text = text.replace(/```[\w]*\n(.*?)```/gs, preserveStructure ? "Code block:\n$1" : "Code block: $1");
 
 	// Convert headers to spoken format
 	if (preserveStructure) {

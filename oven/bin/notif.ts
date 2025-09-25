@@ -75,9 +75,7 @@ const parseCliArgs = (): {options: NotifOptions; title?: string; message?: strin
 		help: values.help ?? false,
 	};
 
-	logMessage(
-		`notif called with options: ${JSON.stringify(options)} positionals: ${positionals.join(" ")}`,
-	);
+	logMessage(`notif called with options: ${JSON.stringify(options)} positionals: ${positionals.join(" ")}`);
 
 	let title: string | undefined;
 	let message: string | undefined;

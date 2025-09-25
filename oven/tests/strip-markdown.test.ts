@@ -8,12 +8,7 @@ async function runStripMarkdown(
 	format: "tts" | "plain" = "tts",
 	preserveStructure: boolean = false,
 ): Promise<string> {
-	const args = [
-		"run",
-		resolve(dirname(import.meta.dir), "bin", "strip-markdown.ts"),
-		"--format",
-		format,
-	];
+	const args = ["run", resolve(dirname(import.meta.dir), "bin", "strip-markdown.ts"), "--format", format];
 	if (preserveStructure) {
 		args.push("--preserve-structure");
 	}
@@ -51,9 +46,7 @@ describe("strip-markdown utility", () => {
 
 			test("removes bold formatting", async () => {
 				expect(await runStripMarkdown("**bold text**")).toBe("bold text");
-				expect(await runStripMarkdown("This is **very important** text")).toBe(
-					"This is very important text",
-				);
+				expect(await runStripMarkdown("This is **very important** text")).toBe("This is very important text");
 			});
 
 			test("removes italic formatting", async () => {
@@ -117,9 +110,9 @@ describe("strip-markdown utility", () => {
 		describe("link and image handling", () => {
 			test("extracts link text and removes URLs", async () => {
 				expect(await runStripMarkdown("[Google](https://google.com)")).toBe("Google");
-				expect(
-					await runStripMarkdown("Visit [our website](https://example.com) for more info"),
-				).toBe("Visit our website for more info");
+				expect(await runStripMarkdown("Visit [our website](https://example.com) for more info")).toBe(
+					"Visit our website for more info",
+				);
 			});
 
 			test("converts images to descriptions", async () => {
@@ -205,9 +198,7 @@ describe("strip-markdown utility", () => {
 
 			test("removes italic formatting", async () => {
 				expect(await runStripMarkdown("*italic text*", "plain")).toBe("italic text");
-				expect(await runStripMarkdown("This is *emphasized* text", "plain")).toBe(
-					"This is emphasized text",
-				);
+				expect(await runStripMarkdown("This is *emphasized* text", "plain")).toBe("This is emphasized text");
 			});
 
 			test("removes inline code formatting", async () => {
@@ -219,9 +210,7 @@ describe("strip-markdown utility", () => {
 
 			test("removes strikethrough formatting", async () => {
 				expect(await runStripMarkdown("~~deleted text~~", "plain")).toBe("deleted text");
-				expect(await runStripMarkdown("This is ~~wrong~~ correct", "plain")).toBe(
-					"This is wrong correct",
-				);
+				expect(await runStripMarkdown("This is ~~wrong~~ correct", "plain")).toBe("This is wrong correct");
 			});
 		});
 
@@ -337,9 +326,7 @@ describe("strip-markdown utility", () => {
 		});
 
 		test("handles special characters", async () => {
-			expect(await runStripMarkdown("Text with émojis 🎉 and ñiño")).toBe(
-				"Text with émojis 🎉 and ñiño",
-			);
+			expect(await runStripMarkdown("Text with émojis 🎉 and ñiño")).toBe("Text with émojis 🎉 and ñiño");
 			expect(await runStripMarkdown("Symbols: @#$%^&*()", "plain")).toBe("Symbols: @#$%^&*()");
 		});
 
@@ -360,9 +347,7 @@ describe("strip-markdown utility", () => {
 		});
 
 		test("handles links with special characters in URLs", async () => {
-			expect(await runStripMarkdown("[Test](https://example.com/path?q=test&foo=bar)")).toBe(
-				"Test",
-			);
+			expect(await runStripMarkdown("[Test](https://example.com/path?q=test&foo=bar)")).toBe("Test");
 			expect(await runStripMarkdown("[Test](mailto:test@example.com)", "plain")).toBe("Test");
 		});
 	});

@@ -214,13 +214,7 @@ async function main() {
 	}
 
 	const output = values.markdown
-		? formatMarkdown(
-				allFilesList,
-				commentedFiles,
-				subdivisionConfigs,
-				config.descriptions,
-				config.summarise,
-			)
+		? formatMarkdown(allFilesList, commentedFiles, subdivisionConfigs, config.descriptions, config.summarise)
 		: formatList(allFilesList, commentedFiles);
 
 	console.log(output);
@@ -247,10 +241,7 @@ function getSubdivisionConfigs(config: Config): Map<string, SubdivisionConfig> {
 	return configs;
 }
 
-function shouldSummarise(
-	path: string,
-	summariseConfigs?: SummariseConfig[],
-): SummariseConfig | undefined {
+function shouldSummarise(path: string, summariseConfigs?: SummariseConfig[]): SummariseConfig | undefined {
 	if (!summariseConfigs) return undefined;
 
 	for (const config of summariseConfigs) {

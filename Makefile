@@ -3,7 +3,7 @@
 all: link build
 
 link:
-	nu -l -c 'dotty link --no-cache | ignore'
+	@nu -l -c 'dotty link --no-cache | ignore'
 
 build:
-	cd oven && bun run verify
+	@cd oven && bun run verify

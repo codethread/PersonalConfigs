@@ -1,4 +1,4 @@
-// :module: Subagents performance and interaction analysis
+// :module: Claude Code subagent performance and interaction analysis from session logs
 
 import {existsSync} from "fs";
 import {access, mkdtemp, readFile, rm} from "fs/promises";
@@ -230,9 +230,7 @@ class SubagentAnalyzer {
 
 			if (call.tool_response) {
 				const agentDurationSec = Math.floor(call.tool_response.totalDurationMs / 1000);
-				console.log(
-					`Agent Execution Time: ${call.tool_response.totalDurationMs}ms (${agentDurationSec}s)`,
-				);
+				console.log(`Agent Execution Time: ${call.tool_response.totalDurationMs}ms (${agentDurationSec}s)`);
 				console.log(`Tokens Used: ${call.tool_response.totalTokens}`);
 				console.log(`Tools Called: ${call.tool_response.totalToolUseCount}`);
 			}
@@ -317,10 +315,7 @@ class SubagentAnalyzer {
 			(sum, call) => sum + (call.tool_response?.totalDurationMs || 0),
 			0,
 		);
-		const totalTokens = completedCalls.reduce(
-			(sum, call) => sum + (call.tool_response?.totalTokens || 0),
-			0,
-		);
+		const totalTokens = completedCalls.reduce((sum, call) => sum + (call.tool_response?.totalTokens || 0), 0);
 		const totalTools = completedCalls.reduce(
 			(sum, call) => sum + (call.tool_response?.totalToolUseCount || 0),
 			0,
@@ -343,9 +338,9 @@ class SubagentAnalyzer {
 
 function showHelp() {
 	console.log(`
-analyze-subagents - Analyze Claude Code subagent usage from session logs
+cc-logs--analyze-subagents - Analyze Claude Code subagent usage from session logs
 
-Usage: analyze-subagents [logfile]
+Usage: cc-logs--analyze-subagents [logfile]
 
 Arguments:
   logfile         Path to Claude session log file (default: .logs/cc-session-current.jsonl)
@@ -354,8 +349,8 @@ Options:
   -h, --help      Show this help message
 
 Examples:
-  analyze-subagents
-  analyze-subagents .logs/cc-session-2025-09-16-14-30-00-a53e19af.jsonl
+  cc-logs--analyze-subagents
+  cc-logs--analyze-subagents .logs/cc-session-2025-09-16-14-30-00-a53e19af.jsonl
 `);
 }
 

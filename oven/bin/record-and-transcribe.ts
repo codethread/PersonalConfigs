@@ -108,9 +108,7 @@ function checkDependencies(): void {
 			console.error(`  - ${dep}`);
 		}
 		console.error(`${colors.YELLOW}Install sox with: brew install sox${colors.RESET}`);
-		console.error(
-			`${colors.YELLOW}Install whisper-cli with: brew install whisper-cpp${colors.RESET}`,
-		);
+		console.error(`${colors.YELLOW}Install whisper-cli with: brew install whisper-cpp${colors.RESET}`);
 		console.error(
 			`${colors.YELLOW}Download model: Run your nushell boot script or manually download to ~/dev/models/${colors.RESET}`,
 		);

@@ -3,7 +3,8 @@
   "env": {
     "CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "true",
     "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "false",
-    "USE_BUILTIN_RIPGREP": "0"
+    "USE_BUILTIN_RIPGREP": "0",
+    "CLAUDECODE": "1"
   },
   "permissions": {
     "allow": [
@@ -72,12 +73,9 @@
       "Read(**/id_rsa*)"
     ],
     "defaultMode": "acceptEdits",
-    "additionalDirectories": [
-      "~/.local/cache/docs",
-      "~/.local/bin"
-    ]
+    "additionalDirectories": ["~/.local/cache/docs", "~/.local/bin"]
   },
-  "model": "opus",
+  "model": "opusplan",
   "hooks": {
     "PreToolUse": [
       {
@@ -93,7 +91,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "claude-code-logger"
+            "command": "cc-hook--session-logger"
           }
         ]
       }
@@ -113,7 +111,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "agent-context-provider read"
+            "command": "cc-hook--context-injector read"
           }
         ]
       },
@@ -121,7 +119,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "claude-code-logger"
+            "command": "cc-hook--session-logger"
           }
         ]
       }
@@ -131,7 +129,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "claude-code-logger"
+            "command": "cc-hook--session-logger"
           }
         ]
       }
@@ -142,7 +140,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "claude-code-logger"
+            "command": "cc-hook--session-logger"
           },
           {
             "type": "command",
@@ -156,7 +154,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "claude-code-logger"
+            "command": "cc-hook--session-logger"
           }
         ]
       }
@@ -166,11 +164,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "claude-code-logger"
+            "command": "cc-hook--session-logger"
           },
           {
             "type": "command",
-            "command": "agent-context-provider session-start"
+            "command": "cc-hook--context-injector session-start"
           },
           {
             "type": "command",
@@ -184,11 +182,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "claude-code-logger"
+            "command": "cc-hook--session-logger"
           },
           {
             "type": "command",
-            "command": "agent-context-provider session-end"
+            "command": "cc-hook--context-injector session-end"
           }
         ]
       }
@@ -198,7 +196,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "claude-code-logger"
+            "command": "cc-hook--session-logger"
           }
         ]
       }
@@ -208,7 +206,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "claude-code-logger"
+            "command": "cc-hook--session-logger"
           }
         ]
       }

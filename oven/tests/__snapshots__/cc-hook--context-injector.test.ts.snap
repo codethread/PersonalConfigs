@@ -1,0 +1,55 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`ccHookContextInjectorLib read should find and return AGENTS.md files for deeply nested file 1`] = `
+"<agent-documentation-context file="src/components/AGENTS.md">
+# Components Agent Documentation
+Component specific guidance.
+</agent-documentation-context>
+
+<agent-documentation-context file="src/AGENTS.md">
+# Src Agent Documentation
+Source code guidance.
+</agent-documentation-context>
+
+<agent-documentation-context file="AGENTS.md">
+# Root Agent Documentation
+Root level guidance.
+</agent-documentation-context>
+"
+`;
+
+exports[`ccHookContextInjectorLib read should find AGENTS.md files for file in src directory 1`] = `
+"<agent-documentation-context file="src/AGENTS.md">
+# Src Agent Documentation
+Source code guidance.
+</agent-documentation-context>
+
+<agent-documentation-context file="AGENTS.md">
+# Root Agent Documentation
+Root level guidance.
+</agent-documentation-context>"
+`;
+
+exports[`ccHookContextInjectorLib read should find only root AGENTS.md for file in project root 1`] = `
+"<agent-documentation-context file="AGENTS.md">
+# Root Agent Documentation
+Root level guidance.
+</agent-documentation-context>"
+`;
+
+exports[`ccHookContextInjectorLib read should not return same AGENTS.md files twice 1`] = `
+"<agent-documentation-context file="src/components/AGENTS.md">
+# Components Agent Documentation
+Component specific guidance.
+</agent-documentation-context>
+
+<agent-documentation-context file="src/AGENTS.md">
+# Src Agent Documentation
+Source code guidance.
+</agent-documentation-context>
+
+<agent-documentation-context file="AGENTS.md">
+# Root Agent Documentation
+Root level guidance.
+</agent-documentation-context>"
+`;

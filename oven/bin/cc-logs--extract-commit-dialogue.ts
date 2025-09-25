@@ -1,4 +1,4 @@
-// :module: Extract dialogue from git commit messages
+// :module: Extract Claude Code dialogue from git commit messages and session logs
 
 // CLI tool to extract and format Claude Code dialogue for a specific git commit
 
@@ -179,11 +179,7 @@ async function extractDialogueFromLog(logFilePath: string): Promise<ExtractedDia
 				notificationEvent = entry;
 			}
 
-			if (
-				notificationEvent &&
-				entry.event === "Stop" &&
-				entry.timestamp < notificationEvent.timestamp
-			) {
+			if (notificationEvent && entry.event === "Stop" && entry.timestamp < notificationEvent.timestamp) {
 				stopEvent = entry;
 				break;
 			}
@@ -202,9 +198,7 @@ async function extractDialogueFromLog(logFilePath: string): Promise<ExtractedDia
 			const agentTranscript = transcriptEntries
 				.filter(
 					(t) =>
-						t.type === "assistant" &&
-						t.timestamp &&
-						new Date(t.timestamp) < new Date(stopEvent.timestamp),
+						t.type === "assistant" && t.timestamp && new Date(t.timestamp) < new Date(stopEvent.timestamp),
 				)
 				.sort((a, b) => new Date(b.timestamp!).getTime() - new Date(a.timestamp!).getTime())[0];
 
@@ -267,9 +261,7 @@ async function extractDialogueFromLog(logFilePath: string): Promise<ExtractedDia
 
 			const agentResponse = transcriptEntries.find(
 				(t) =>
-					t.type === "assistant" &&
-					t.timestamp &&
-					new Date(t.timestamp) > new Date(userPrompt.timestamp),
+					t.type === "assistant" && t.timestamp && new Date(t.timestamp) > new Date(userPrompt.timestamp),
 			);
 
 			if (agentResponse) {
@@ -311,11 +303,7 @@ async function getCommitMessage(commitSha: string): Promise<string> {
 }
 
 // Find log files within a time range
-async function findLogFilesInTimeRange(
-	startTime: Date,
-	endTime: Date,
-	logsDir: string,
-): Promise<string[]> {
+async function findLogFilesInTimeRange(startTime: Date, endTime: Date, logsDir: string): Promise<string[]> {
 	if (!existsSync(logsDir)) {
 		return [];
 	}
@@ -374,11 +362,7 @@ function formatDateYYMMDD(date: Date): string {
 }
 
 // Helper function to generate markdown filename
-function generateMarkdownFilename(
-	commitMessage: string,
-	commitDate: Date,
-	shortSha: string,
-): string {
+function generateMarkdownFilename(commitMessage: string, commitDate: Date, shortSha: string): string {
 	const firstLine = commitMessage.split("\n")[0];
 	const dateStr = formatDateYYMMDD(commitDate);
 	const kebabTitle = toKebabCase(firstLine);
@@ -459,9 +443,9 @@ function generateMarkdown(data: ExtractedCommitDialogue): string {
 
 function showHelp() {
 	console.log(`
-extract-commit-dialogue - Extract Claude Code dialogue for a specific commit
+cc-logs--extract-commit-dialogue - Extract Claude Code dialogue for a specific commit
 
-Usage: extract-commit-dialogue [commit-sha] [options]
+Usage: cc-logs--extract-commit-dialogue [commit-sha] [options]
 
 Arguments:
   commit-sha      Git commit SHA to extract dialogue for (default: HEAD)
@@ -476,10 +460,10 @@ Description:
   log entries and transcripts within the commit's time window.
 
 Examples:
-  extract-commit-dialogue                    # Extract dialogue for HEAD commit (JSON)
-  extract-commit-dialogue HEAD --markdown    # Extract dialogue for HEAD (markdown)
-  extract-commit-dialogue abc123f -m         # Extract dialogue for specific commit
-  extract-commit-dialogue HEAD -m --path ./commit.md  # Custom output path
+  cc-logs--extract-commit-dialogue                    # Extract dialogue for HEAD commit (JSON)
+  cc-logs--extract-commit-dialogue HEAD --markdown    # Extract dialogue for HEAD (markdown)
+  cc-logs--extract-commit-dialogue abc123f -m         # Extract dialogue for specific commit
+  cc-logs--extract-commit-dialogue HEAD -m --path ./commit.md  # Custom output path
 `);
 }
 
@@ -601,12 +585,12 @@ async function main() {
 		} catch (_error) {
 			console.error(`Invalid commit: ${cliArgs.commitSha}`);
 			console.error(
-				"Usage: extract-commit-dialogue.ts [commit-sha] [--markdown|-m] [--path <output-path>]",
+				"Usage: cc-logs--extract-commit-dialogue [commit-sha] [--markdown|-m] [--path <output-path>]",
 			);
 			console.error("Examples:");
-			console.error("  extract-commit-dialogue.ts HEAD");
-			console.error("  extract-commit-dialogue.ts abc123f --markdown");
-			console.error("  extract-commit-dialogue.ts HEAD -m --path ./my-commit.md");
+			console.error("  cc-logs--extract-commit-dialogue HEAD");
+			console.error("  cc-logs--extract-commit-dialogue abc123f --markdown");
+			console.error("  cc-logs--extract-commit-dialogue HEAD -m --path ./my-commit.md");
 			process.exit(1);
 		}
 

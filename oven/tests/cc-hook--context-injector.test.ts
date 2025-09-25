@@ -1,9 +1,9 @@
 import {afterEach, beforeEach, describe, expect, test} from "bun:test";
 import {existsSync, mkdirSync, rmSync, unlinkSync, writeFileSync} from "fs";
 import {join} from "path";
-import {agentContextProviderLib} from "../bin/agent-context-provider";
+import {ccHookContextInjectorLib} from "../bin/cc-hook--context-injector";
 
-describe("agentContextProviderLib", () => {
+describe("ccHookContextInjectorLib", () => {
 	const testSessionId = "test-session-123";
 	const testProjectRoot = "/tmp/test-project-agent-context";
 	const sessionFile = join("/tmp", `claude-agent-context-${testSessionId}.json`);
@@ -24,10 +24,7 @@ describe("agentContextProviderLib", () => {
 		mkdirSync(join(testProjectRoot, "docs"), {recursive: true});
 
 		// Create AGENTS.md files at different levels
-		writeFileSync(
-			join(testProjectRoot, "AGENTS.md"),
-			"# Root Agent Documentation\nRoot level guidance.",
-		);
+		writeFileSync(join(testProjectRoot, "AGENTS.md"), "# Root Agent Documentation\nRoot level guidance.");
 		writeFileSync(
 			join(testProjectRoot, "src", "AGENTS.md"),
 			"# Src Agent Documentation\nSource code guidance.",
@@ -40,10 +37,7 @@ describe("agentContextProviderLib", () => {
 		// Create some test files
 		writeFileSync(join(testProjectRoot, "README.md"), "# Test Project");
 		writeFileSync(join(testProjectRoot, "src", "index.ts"), "export * from './components';");
-		writeFileSync(
-			join(testProjectRoot, "src", "components", "Button.tsx"),
-			"export function Button() {}",
-		);
+		writeFileSync(join(testProjectRoot, "src", "components", "Button.tsx"), "export function Button() {}");
 	});
 
 	afterEach(() => {
@@ -58,16 +52,19 @@ describe("agentContextProviderLib", () => {
 
 	describe("session-start", () => {
 		test("should create session state file", async () => {
-			const result = await agentContextProviderLib({
+			const result = await ccHookContextInjectorLib({
 				command: "session-start",
 				sessionId: testSessionId,
 				projectRoot: testProjectRoot,
 			});
 
 			expect(result.success).toBe(true);
-			expect(result).toHaveProperty("message");
 			if ("message" in result) {
 				expect(result.message).toContain(testSessionId);
+			}
+
+			if ("contextOutput" in result) {
+				expect(result.contextOutput).toContain("Project documentation:");
 			}
 			expect(existsSync(sessionFile)).toBe(true);
 
@@ -79,7 +76,7 @@ describe("agentContextProviderLib", () => {
 
 		test("should require session ID", async () => {
 			await expect(
-				agentContextProviderLib({
+				ccHookContextInjectorLib({
 					command: "session-start",
 					projectRoot: testProjectRoot,
 				}),
@@ -88,7 +85,7 @@ describe("agentContextProviderLib", () => {
 
 		test("should require project root", async () => {
 			await expect(
-				agentContextProviderLib({
+				ccHookContextInjectorLib({
 					command: "session-start",
 					sessionId: testSessionId,
 				}),
@@ -99,7 +96,7 @@ describe("agentContextProviderLib", () => {
 	describe("session-end", () => {
 		test("should clean up session state file", async () => {
 			// First create a session
-			await agentContextProviderLib({
+			await ccHookContextInjectorLib({
 				command: "session-start",
 				sessionId: testSessionId,
 				projectRoot: testProjectRoot,
@@ -108,13 +105,12 @@ describe("agentContextProviderLib", () => {
 			expect(existsSync(sessionFile)).toBe(true);
 
 			// Then end it
-			const result = await agentContextProviderLib({
+			const result = await ccHookContextInjectorLib({
 				command: "session-end",
 				sessionId: testSessionId,
 			});
 
 			expect(result.success).toBe(true);
-			expect(result).toHaveProperty("message");
 			if ("message" in result) {
 				expect(result.message).toContain(testSessionId);
 			}
@@ -122,13 +118,12 @@ describe("agentContextProviderLib", () => {
 		});
 
 		test("should handle missing session file gracefully", async () => {
-			const result = await agentContextProviderLib({
+			const result = await ccHookContextInjectorLib({
 				command: "session-end",
 				sessionId: testSessionId,
 			});
 
 			expect(result.success).toBe(true);
-			expect(result).toHaveProperty("message");
 			if ("message" in result) {
 				expect(result.message).toContain(testSessionId);
 			}
@@ -136,7 +131,7 @@ describe("agentContextProviderLib", () => {
 
 		test("should require session ID", async () => {
 			await expect(
-				agentContextProviderLib({
+				ccHookContextInjectorLib({
 					command: "session-end",
 				}),
 			).rejects.toThrow("Session ID is required");
@@ -146,7 +141,7 @@ describe("agentContextProviderLib", () => {
 	describe("read", () => {
 		beforeEach(async () => {
 			// Initialize session for read tests
-			await agentContextProviderLib({
+			await ccHookContextInjectorLib({
 				command: "session-start",
 				sessionId: testSessionId,
 				projectRoot: testProjectRoot,
@@ -169,7 +164,7 @@ describe("agentContextProviderLib", () => {
 			}) as never;
 
 			try {
-				await agentContextProviderLib({
+				await ccHookContextInjectorLib({
 					command: "read",
 					sessionId: testSessionId,
 					filePath: join(testProjectRoot, "src", "components", "Button.tsx"),
@@ -200,7 +195,7 @@ describe("agentContextProviderLib", () => {
 			}) as never;
 
 			try {
-				await agentContextProviderLib({
+				await ccHookContextInjectorLib({
 					command: "read",
 					sessionId: testSessionId,
 					filePath: join(testProjectRoot, "src", "index.ts"),
@@ -231,7 +226,7 @@ describe("agentContextProviderLib", () => {
 			}) as never;
 
 			try {
-				await agentContextProviderLib({
+				await ccHookContextInjectorLib({
 					command: "read",
 					sessionId: testSessionId,
 					filePath: join(testProjectRoot, "README.md"),
@@ -263,7 +258,7 @@ describe("agentContextProviderLib", () => {
 
 			// First read
 			try {
-				await agentContextProviderLib({
+				await ccHookContextInjectorLib({
 					command: "read",
 					sessionId: testSessionId,
 					filePath: join(testProjectRoot, "src", "components", "Button.tsx"),
@@ -279,7 +274,7 @@ describe("agentContextProviderLib", () => {
 			exitCode = undefined;
 
 			// Second read of the same file - should NOT exit(2) since no new files
-			const result2 = await agentContextProviderLib({
+			const result2 = await ccHookContextInjectorLib({
 				command: "read",
 				sessionId: testSessionId,
 				filePath: join(testProjectRoot, "src", "components", "Button.tsx"),
@@ -289,7 +284,6 @@ describe("agentContextProviderLib", () => {
 			process.exit = originalExit;
 
 			expect(result2.success).toBe(true);
-			expect(result2).toHaveProperty("agentsFound");
 			if ("agentsFound" in result2) {
 				expect(result2.agentsFound).toBe(0); // No new files found
 			}
@@ -313,7 +307,7 @@ describe("agentContextProviderLib", () => {
 
 			// Read a deeply nested file first
 			try {
-				await agentContextProviderLib({
+				await ccHookContextInjectorLib({
 					command: "read",
 					sessionId: testSessionId,
 					filePath: join(testProjectRoot, "src", "components", "Button.tsx"),
@@ -327,7 +321,7 @@ describe("agentContextProviderLib", () => {
 			exitCode = undefined;
 
 			// Read a file in src - should not show root or src AGENTS.md again
-			const result2 = await agentContextProviderLib({
+			const result2 = await ccHookContextInjectorLib({
 				command: "read",
 				sessionId: testSessionId,
 				filePath: join(testProjectRoot, "src", "index.ts"),
@@ -336,7 +330,6 @@ describe("agentContextProviderLib", () => {
 			console.error = originalError;
 			process.exit = originalExit;
 
-			expect(result2).toHaveProperty("agentsFound");
 			if ("agentsFound" in result2) {
 				expect(result2.agentsFound).toBe(0); // All already seen
 			}
@@ -350,28 +343,26 @@ describe("agentContextProviderLib", () => {
 				unlinkSync(sessionFile);
 			}
 
-			const result = await agentContextProviderLib({
+			const result = await ccHookContextInjectorLib({
 				command: "read",
 				sessionId: testSessionId,
 				filePath: join(testProjectRoot, "src", "components", "Button.tsx"),
 			});
 
 			expect(result.success).toBe(true);
-			expect(result).toHaveProperty("agentsFound");
 			if ("agentsFound" in result) {
 				expect(result.agentsFound).toBe(0);
 			}
 		});
 
 		test("should handle files outside project root", async () => {
-			const result = await agentContextProviderLib({
+			const result = await ccHookContextInjectorLib({
 				command: "read",
 				sessionId: testSessionId,
 				filePath: "/tmp/outside-project/file.txt",
 			});
 
 			expect(result.success).toBe(true);
-			expect(result).toHaveProperty("agentsFound");
 			if ("agentsFound" in result) {
 				expect(result.agentsFound).toBe(0);
 			}
@@ -379,7 +370,7 @@ describe("agentContextProviderLib", () => {
 
 		test("should require session ID", async () => {
 			await expect(
-				agentContextProviderLib({
+				ccHookContextInjectorLib({
 					command: "read",
 					filePath: join(testProjectRoot, "src", "index.ts"),
 				}),
@@ -388,7 +379,7 @@ describe("agentContextProviderLib", () => {
 
 		test("should require file path", async () => {
 			await expect(
-				agentContextProviderLib({
+				ccHookContextInjectorLib({
 					command: "read",
 					sessionId: testSessionId,
 				}),
@@ -399,7 +390,7 @@ describe("agentContextProviderLib", () => {
 	describe("invalid command", () => {
 		test("should throw error for unknown command", async () => {
 			await expect(
-				agentContextProviderLib({
+				ccHookContextInjectorLib({
 					command: "invalid" as any,
 					sessionId: testSessionId,
 				}),

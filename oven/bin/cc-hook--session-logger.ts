@@ -1,4 +1,4 @@
-// :module: Logging utility for Claude Code interactions
+// :module: Claude Code hook for logging session events and interactions
 
 import {existsSync, mkdirSync, readdirSync} from "fs";
 import {appendFile, readlink, symlink, unlink} from "fs/promises";
@@ -43,9 +43,9 @@ interface LogEntry {
 
 function showHelp() {
 	console.log(`
-claude-code-logger - Claude Code session hook for logging events
+cc-hook--session-logger - Claude Code hook for logging session events
 
-Usage: claude-code-logger [options]
+Usage: cc-hook--session-logger [options]
 
 Options:
   -h, --help      Show this help message
@@ -62,7 +62,7 @@ Description:
 
 Examples:
   # Usually configured as a Claude Code hook
-  echo '{"hook_event_name":"SessionStart"}' | claude-code-logger
+  echo '{"hook_event_name":"SessionStart"}' | cc-hook--session-logger
 `);
 }
 
@@ -106,9 +106,7 @@ async function main() {
 	// Look for existing session file
 	const _sessionPattern = `cc-session-*-${sessionId}.jsonl`;
 	const existingFiles = existsSync(logsDir)
-		? readdirSync(logsDir).filter(
-				(f) => f.endsWith(`-${sessionId}.jsonl`) && f.startsWith("cc-session-"),
-			)
+		? readdirSync(logsDir).filter((f) => f.endsWith(`-${sessionId}.jsonl`) && f.startsWith("cc-session-"))
 		: [];
 
 	if (existingFiles.length > 0) {
@@ -146,8 +144,7 @@ async function main() {
 		prompt: "prompt" in hookData ? hookData.prompt : undefined,
 		stop_hook_active: "stop_hook_active" in hookData ? hookData.stop_hook_active : undefined,
 		trigger: "trigger" in hookData ? hookData.trigger : undefined,
-		custom_instructions:
-			"custom_instructions" in hookData ? hookData.custom_instructions : undefined,
+		custom_instructions: "custom_instructions" in hookData ? hookData.custom_instructions : undefined,
 		source: "source" in hookData ? hookData.source : undefined,
 		reason: "reason" in hookData ? hookData.reason : undefined,
 

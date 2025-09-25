@@ -18,7 +18,17 @@
     "ask": []
   },
   "hooks": {
-    "Stop": [],
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/x-hooks/check-make.sh"
+          }
+        ]
+      }
+    ],
     "SubagentStop": []
   },
   "outputStyle": "default"

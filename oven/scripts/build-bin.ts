@@ -2,19 +2,24 @@
 
 import {chmod, readdir} from "fs/promises";
 import {basename, join} from "path";
+import {parseArgs} from "util";
 import {cleanBuilds} from "./clean";
 
 const BIN_SRC_DIR = join(import.meta.dir, "..", "bin");
 const BIN_DEST_DIR = join(import.meta.dir, "..", "..", "..", ".local", "bin");
 
-async function buildExecutables() {
-	console.log("Building executables from oven/bin to ~/.local/bin...");
+async function buildExecutables(verbose = false) {
+	if (verbose) {
+		console.log("Building executables from oven/bin to ~/.local/bin...");
+	}
 
 	// Get all .ts files from bin directory
 	const files = await readdir(BIN_SRC_DIR);
 	const tsFiles = files.filter((f) => f.endsWith(".ts"));
 
-	console.log(`Found ${tsFiles.length} TypeScript files to build\n`);
+	if (verbose) {
+		console.log(`Found ${tsFiles.length} TypeScript files to build\n`);
+	}
 
 	// Build all files in parallel
 	const buildPromises = tsFiles.map(async (file) => {
@@ -74,7 +79,7 @@ async function buildExecutables() {
 	const failures = results.filter((r) => !r.success);
 
 	// Display results
-	if (successes.length > 0) {
+	if (verbose && successes.length > 0) {
 		console.log("✅ Successfully built:");
 		for (const {file, destName} of successes) {
 			console.log(`  • ${file} -> ${destName}`);
@@ -82,19 +87,35 @@ async function buildExecutables() {
 	}
 
 	if (failures.length > 0) {
-		console.log("\n❌ Failed to build:");
+		console.log(failures.length > 0 && !verbose ? "❌ Failed to build:" : "\n❌ Failed to build:");
 		for (const {file, destName, error} of failures) {
 			console.log(`  • ${file} -> ${destName}`);
 			console.error(`    ${error}`);
 		}
 	}
 
-	console.log(`\nSummary: ${successes.length} succeeded, ${failures.length} failed`);
+	if (verbose || failures.length > 0) {
+		console.log(
+			`${failures.length > 0 && !verbose ? "" : "\n"}Summary: ${successes.length} succeeded, ${failures.length} failed`,
+		);
+	}
 
-	await cleanBuilds();
+	await cleanBuilds(verbose);
 
-	console.log("Build complete!");
+	if (verbose) {
+		console.log("Build complete!");
+	}
 }
 
-// Run the build
-await buildExecutables();
+// Parse command line arguments
+if (import.meta.main) {
+	const {values} = parseArgs({
+		args: Bun.argv.slice(2),
+		options: {
+			verbose: {type: "boolean", short: "v"},
+		},
+	});
+
+	// Run the build
+	await buildExecutables(values.verbose);
+}

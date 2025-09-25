@@ -182,12 +182,8 @@ export function isHookInputOfType<T extends HookInput>(
 /**
  * Type guard specifically for PostToolUse with Read tool
  */
-export function isPostToolUseRead(
-	input: HookInput,
-): input is PostToolUseInput & {tool_name: "Read"} {
-	return (
-		input.hook_event_name === "PostToolUse" && "tool_name" in input && input.tool_name === "Read"
-	);
+export function isPostToolUseRead(input: HookInput): input is PostToolUseInput & {tool_name: "Read"} {
+	return input.hook_event_name === "PostToolUse" && "tool_name" in input && input.tool_name === "Read";
 }
 
 /**
