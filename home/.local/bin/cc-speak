@@ -1,6 +1,162 @@
 #!/usr/bin/env bash
-# :module: Converts text to speech and plays audio in a single pipeline
+# :module: Advanced text-to-speech tool with file and section reading support
 
 set -euo pipefail
 
-echo "$1" | tts | speak | xargs rm -f
+usage() {
+    cat << 'EOF'
+Usage: cc-speak [OPTIONS]
+
+Enable audio communication mode with flexible input options.
+
+OPTIONS:
+    --text TEXT, -t TEXT     Speak the provided text
+    --file FILE, -f FILE     Speak the entire file contents
+    --start NUM              Start reading from line NUM (1-indexed, inclusive)
+    --end NUM                End reading at line NUM (1-indexed, inclusive)
+    --help, -h               Show this help message
+
+EXAMPLES:
+    cc-speak --text "Hello world"
+    cc-speak --file README.md
+    cc-speak --file README.md --start=5 --end=20
+    cc-speak -f docs.md -s 1 -e 10
+
+NOTES:
+    - Line numbers are 1-indexed and inclusive
+    - --start without --end reads from start line to end of file
+    - --end without --start reads from beginning to end line
+    - Markdown formatting is automatically stripped for better TTS
+    - Files are processed through markdown stripping before speech
+EOF
+}
+
+# Initialize variables
+text=""
+file=""
+start_line=""
+end_line=""
+
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --text=*|-t=*)
+            text="${1#*=}"
+            shift
+            ;;
+        --text|-t)
+            text="$2"
+            shift 2
+            ;;
+        --file=*|-f=*)
+            file="${1#*=}"
+            shift
+            ;;
+        --file|-f)
+            file="$2"
+            shift 2
+            ;;
+        --start=*|-s=*)
+            start_line="${1#*=}"
+            shift
+            ;;
+        --start|-s)
+            start_line="$2"
+            shift 2
+            ;;
+        --end=*|-e=*)
+            end_line="${1#*=}"
+            shift
+            ;;
+        --end|-e)
+            end_line="$2"
+            shift 2
+            ;;
+        --help|-h)
+            usage
+            exit 0
+            ;;
+        *)
+            echo "Error: Unknown option '$1'" >&2
+            echo "Use --help for usage information" >&2
+            exit 1
+            ;;
+    esac
+done
+
+# Validate input
+if [[ -z "$text" && -z "$file" ]]; then
+    echo "Error: Must provide either --text or --file option" >&2
+    echo "Use --help for usage information" >&2
+    exit 1
+fi
+
+if [[ -n "$text" && -n "$file" ]]; then
+    echo "Error: Cannot use both --text and --file options" >&2
+    exit 1
+fi
+
+# Validate line numbers
+if [[ -n "$start_line" && ! "$start_line" =~ ^[0-9]+$ ]]; then
+    echo "Error: --start must be a positive integer" >&2
+    exit 1
+fi
+
+if [[ -n "$end_line" && ! "$end_line" =~ ^[0-9]+$ ]]; then
+    echo "Error: --end must be a positive integer" >&2
+    exit 1
+fi
+
+# Validate that line range options are only used with --file
+if [[ (-n "$start_line" || -n "$end_line") && -z "$file" ]]; then
+    echo "Error: --start and --end can only be used with --file" >&2
+    exit 1
+fi
+
+# Process input
+content=""
+
+if [[ -n "$text" ]]; then
+    # Direct text input
+    content="$text"
+elif [[ -n "$file" ]]; then
+    # File input
+    if [[ ! -f "$file" ]]; then
+        echo "Error: File '$file' not found" >&2
+        exit 1
+    fi
+
+    if [[ -n "$start_line" || -n "$end_line" ]]; then
+        # Extract specific line range
+        total_lines=$(wc -l < "$file")
+
+        # Set defaults if not specified
+        start_line=${start_line:-1}
+        end_line=${end_line:-$total_lines}
+
+        # Validate line range
+        if [[ $start_line -lt 1 ]]; then
+            echo "Error: --start must be >= 1" >&2
+            exit 1
+        fi
+
+        if [[ $end_line -gt $total_lines ]]; then
+            echo "Error: --end ($end_line) exceeds file length ($total_lines lines)" >&2
+            exit 1
+        fi
+
+        if [[ $start_line -gt $end_line ]]; then
+            echo "Error: --start ($start_line) cannot be greater than --end ($end_line)" >&2
+            exit 1
+        fi
+
+        # Extract the specified line range
+        content=$(sed -n "${start_line},${end_line}p" "$file")
+    else
+        # Read entire file
+        content=$(cat "$file")
+    fi
+fi
+
+# Process through TTS pipeline with markdown stripping
+echo "$content" | strip-markdown | tts | speak | xargs rm -f
