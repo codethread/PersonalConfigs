@@ -10,9 +10,14 @@ return {
 		name = 'other-nvim',
 		cmd = 'Other',
 		opts = {
+			showMissingFiles = false,
 			mappings = {
 				{ pattern = 'lua/(.*)/(.*).lua$', target = 'test/%1/%2.lua' },
 				{ pattern = 'test/(.*)/(.*).lua$', target = 'lua/%1/%2.lua' },
+
+				-- Rails-style pattern for oven/ directory
+				{ pattern = 'oven/bin/(.*)%.ts$', target = 'oven/tests/%1.test.ts' },
+				{ pattern = 'oven/tests/(.*)%.test%.ts$', target = 'oven/bin/%1.ts' },
 
 				{
 					---@param path string
