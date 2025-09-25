@@ -75,6 +75,7 @@
 	brew "whisper-cpp" # audio to text
 
 	# Apps
+	cask "obsidian"
 	cask "1password"
 	cask "1password-cli"
 	cask "alfred"
@@ -195,7 +196,6 @@
 
 	# TODO: migrate notes
 	cask "logseq"
-	cask "obsidian"
 
 	cask "licecap" # screen capture
 	cask "figma"

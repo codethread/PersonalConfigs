@@ -55,7 +55,6 @@
       "Bash(/Users/codethread/PersonalConfigs/.local/bin/notif test:*)",
       "Bash(nu:*)",
       "Bash(~/.local/bin/nu:*)",
-      "Bash(bun ~/.claude/x-hooks/agent-docs-injection.ts)",
       "Bash(/Users/codethread/PersonalConfigs/oven/bin/claude-memory-loader.ts)",
       "Bash(/Users/codethread/PersonalConfigs/oven/bin/claude-memory-loader.ts --help)",
       "Read(//tmp/**)"
@@ -73,9 +72,12 @@
       "Read(**/id_rsa*)"
     ],
     "defaultMode": "acceptEdits",
-    "additionalDirectories": ["~/.local/cache/docs", "~/.local/bin"]
+    "additionalDirectories": [
+      "~/.local/cache/docs",
+      "~/.local/bin"
+    ]
   },
-  "model": "opusplan",
+  "model": "opus",
   "hooks": {
     "PreToolUse": [
       {
@@ -83,7 +85,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node ~/.claude/x-hooks/use_npm_redirect.js"
+            "command": "cc-hook--npm-redirect"
           }
         ]
       },
@@ -169,10 +171,6 @@
           {
             "type": "command",
             "command": "cc-hook--context-injector session-start"
-          },
-          {
-            "type": "command",
-            "command": "~/.claude/x-hooks/agent-docs-injection.ts"
           }
         ]
       }

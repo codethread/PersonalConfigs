@@ -34,8 +34,10 @@ describe("ccHookContextInjectorLib", () => {
 			"# Components Agent Documentation\nComponent specific guidance.",
 		);
 
-		// Create some test files
+		// Create some test files including additional README.md files
 		writeFileSync(join(testProjectRoot, "README.md"), "# Test Project");
+		writeFileSync(join(testProjectRoot, "src", "README.md"), "# Src Documentation");
+		writeFileSync(join(testProjectRoot, "docs", "README.md"), "# Docs Section");
 		writeFileSync(join(testProjectRoot, "src", "index.ts"), "export * from './components';");
 		writeFileSync(join(testProjectRoot, "src", "components", "Button.tsx"), "export function Button() {}");
 	});
@@ -90,6 +92,27 @@ describe("ccHookContextInjectorLib", () => {
 					sessionId: testSessionId,
 				}),
 			).rejects.toThrow("Project root is required");
+		});
+
+		test("should include only README.md files in context output", async () => {
+			const result = await ccHookContextInjectorLib({
+				command: "session-start",
+				sessionId: testSessionId,
+				projectRoot: testProjectRoot,
+			});
+
+			expect(result.success).toBe(true);
+			expect(result).toHaveProperty("contextOutput");
+
+			const contextOutput = (result as any).contextOutput as string;
+			expect(contextOutput).toContain("Project documentation:");
+			expect(contextOutput).toContain("README.md");
+			expect(contextOutput).toContain("src/README.md");
+			expect(contextOutput).toContain("docs/README.md");
+			// Should NOT contain AGENTS.md files (they are injected contextually)
+			expect(contextOutput).not.toContain("AGENTS.md");
+			expect(contextOutput).not.toContain("src/AGENTS.md");
+			expect(contextOutput).not.toContain("src/components/AGENTS.md");
 		});
 	});
 

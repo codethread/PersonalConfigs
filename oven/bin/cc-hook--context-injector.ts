@@ -164,29 +164,29 @@ async function handleSessionStart(options: AgentContextOptions): Promise<Session
 	const introMessage = `<project-context>
 IMPORTANT: Ensure you read related documentation when working in nested areas of the codebase`;
 
-	// Find all AGENTS.md files in the project to list them
-	const agentsFiles: string[] = [];
-	function findAllAgentsFiles(dir: string) {
-		const glob = new Bun.Glob("**/AGENTS.md");
-		for (const file of glob.scanSync({cwd: dir, absolute: false})) {
+	// Find all README.md files in the project to list them (AGENTS.md files are injected contextually)
+	const readmeFiles: string[] = [];
+	function findAllReadmeFiles(dir: string) {
+		const readmeGlob = new Bun.Glob("**/README.md");
+		for (const file of readmeGlob.scanSync({cwd: dir, absolute: false})) {
 			if (!file.includes("node_modules") && !file.includes(".git")) {
-				agentsFiles.push(file);
+				readmeFiles.push(file);
 			}
 		}
 	}
 
 	try {
-		findAllAgentsFiles(options.projectRoot);
+		findAllReadmeFiles(options.projectRoot);
 	} catch (_e) {
 		// Ignore errors in finding files
 	}
 
 	let contextOutput: string | undefined;
-	if (agentsFiles.length > 0) {
-		const sortedFiles = agentsFiles.sort();
+	if (readmeFiles.length > 0) {
+		const sortedReadmeFiles = readmeFiles.sort();
 		contextOutput = `${introMessage}
 Project documentation:
-${sortedFiles.map((f) => `- ${f}`).join("\n")}
+${sortedReadmeFiles.map((f) => `- ${f}`).join("\n")}
 </project-context>`;
 	}
 
