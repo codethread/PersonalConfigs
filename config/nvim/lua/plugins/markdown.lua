@@ -19,9 +19,12 @@ return U.F {
 	},
 
 	{
-		'toppair/peek.nvim',
+		'codethread/peek.nvim',
+		branch = 'mermaids',
 		build = 'deno task --quiet build:fast',
-		opts = {},
+		opts = {
+			-- app = 'browser',
+		},
 		init = function()
 			vim.api.nvim_create_user_command('PeekOpen', function() require('peek').open() end, {})
 			vim.api.nvim_create_user_command('PeekClose', function() require('peek').close() end, {})

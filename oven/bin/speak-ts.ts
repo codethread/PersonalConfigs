@@ -23,7 +23,8 @@ const {values, positionals} = parseArgs({
 });
 
 function showHelp() {
-	console.log(`
+	console.log(`speak-ts - Text-to-speech wrapper optimized for TTS markers and better audio output
+
 ElevenLabs Text-to-Speech CLI tool for reading text files.
 
 Usage:

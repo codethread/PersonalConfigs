@@ -2,8 +2,9 @@
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "env": {
     "CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "true",
-    "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "false",
+    "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "true",
     "USE_BUILTIN_RIPGREP": "0",
+    "DISABLE_AUTOUPDATER": "1",
     "CLAUDECODE": "1"
   },
   "permissions": {
@@ -100,15 +101,6 @@
     ],
     "PostToolUse": [
       {
-        "matcher": "Edit|MultiEdit|Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "jq -r '.tool_input.file_path' | { read file_path; if echo \"$file_path\" | grep -qE '\\.(json|md)$'; then bunx prettier --print-width=120 --write \"$file_path\"; fi; }"
-          }
-        ]
-      },
-      {
         "matcher": "Read",
         "hooks": [
           {
@@ -143,10 +135,6 @@
           {
             "type": "command",
             "command": "cc-hook--session-logger"
-          },
-          {
-            "type": "command",
-            "command": "~/.claude/x-hooks/check-claude-md.sh"
           }
         ]
       }

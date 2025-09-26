@@ -33,7 +33,6 @@ bun run verify
 
 ## Tools Included
 
-- **** - Line numbers are 1-indexed and inclusive
 - **bra** - Git branch switcher with fzf
 - **cc-hook--context-injector** - Claude Code hook that provides contextual AGENTS.md documentation
 - **cc-hook--npm-redirect** - Claude Code hook that redirects npm/npx/node commands to detected package manager
@@ -41,13 +40,14 @@ bun run verify
 - **cc-logs--analyze-subagents** - Analyze Claude Code subagent usage from session logs
 - **cc-logs--extract-commit-dialogue** - Extract Claude Code dialogue for a specific commit
 - **cc-logs--extract-dialogue** - Extract Claude Code session dialogue from log files
+- **cc-speak** - Advanced text-to-speech tool with file and section reading support
 - **cindex** - Generate an index of files in the current project
 - **ghub** - Open GitHub/GitLab repository in browser
 - **gitlab-pipeline-watcher** - Monitor GitLab pipelines and send notifications
 - **notif** - Show macOS native notifications
 - **prepend-comment** - Add or update module documentation comments
 - **record-and-transcribe** - Record audio and transcribe using Whisper
-- **speak-ts** - No description available
+- **speak-ts** - Text-to-speech wrapper optimized for TTS markers and better audio output
 - **tts** - Optimized for text-to-speech (adds spoken indicators)
 
 ### Quick Usage

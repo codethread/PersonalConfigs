@@ -71,3 +71,7 @@ Start simple → Graduate as needed:
 3. Create bash script in `home/.local/bin/` for standalone tools
 4. Migrate to `oven/` when exceeding 200 lines or needing TypeScript
 5. Build with `make build` (or `bun run build` inside `oven/`) to create executable
+
+## Claude code integrations
+
+This repo defined claude code configurations such as commands and agents at `claude/`. These include hooks, commands and agents, and the `claude/README.md` gives a compressive overview of all aspects, including the dependencies on any scripts from the `oven` module.

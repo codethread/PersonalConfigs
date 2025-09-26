@@ -72,21 +72,28 @@ existing domains:
    - main function should focus on cli parsing, lib invocation, reporting and error reporting. All 'logic' belongs in the 'lib' function
    - **IMPORTANT**: Never put executable code at the module level (outside of functions). This includes parseArgs calls - they should be inside main(), not at the top level
 
-2. **Use Bun native APIs**
+2. **Help documentation format**
+   - **CRITICAL**: The first line of help output MUST be `toolname - description`
+   - This format is required for the `sync-docs` script to extract tool descriptions
+   - Example: `cc-speak - Advanced text-to-speech tool with file and section reading support`
+   - The description appears in README.md automatically when you run `bun run sync-docs`
+   - Without this format, your tool won't be documented properly
+
+3. **Use Bun native APIs**
    - Use `import {$} from "bun"` for shell commands instead of Node's child_process
    - Use Bun's built-in APIs wherever possible
    - Proactively use @bun-runtime-expert agent to check for alternatives to Node APIs
 
-3. **Argument parsing**
+4. **Argument parsing**
    - Use `import {parseArgs} from "util"` for CLI argument parsing
    - Define clear option types and provide help documentation
 
-4. **Output**
+5. **Output**
    - All cli functions (unless using interactive tty utils) should capture information and then pass this to a final `report` function which is common across `bin` modules
    - `report` can then write to stdout in typical scenarios, but be extended to support other outputs if appropriate.
    - this allows for consistent testing and a more functional style of avoiding IO
 
-5. **Error handling patterns**
+6. **Error handling patterns**
    - Use specific error types when possible: `throw new Error("Descriptive message")`
    - For async operations, always catch and re-throw with context
    - Use `reportError()` to ensure consistent error formatting
@@ -101,7 +108,7 @@ existing domains:
    }
    ```
 
-6. **Testability and Module Safety**
+7. **Testability and Module Safety**
    - Export core logic as function separate from CLI wrapper
    - **CRITICAL**: Always use `if (import.meta.main)` to conditionally run CLI code
    - **Never call main() at the top level without this guard** - it will execute when imported and can cause the importing script to hang
@@ -249,7 +256,9 @@ import { report, reportError } from "../shared/report";
 
 // always first for easy discoverability
 function showHelp() {
-  console.log(`
+  // IMPORTANT: First line MUST be "toolname - description" for sync-docs script
+  console.log(`my-tool - Brief description of what this tool does
+
 Usage: my-tool [options]
 
 Options:

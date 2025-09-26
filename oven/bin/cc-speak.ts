@@ -23,7 +23,8 @@ export const defaultShellExecutor: ShellExecutor = {
 };
 
 function showHelp() {
-	console.log(`
+	console.log(`cc-speak - Advanced text-to-speech tool with file and section reading support
+
 Usage: cc-speak [OPTIONS]
 
 Enable audio communication mode with flexible input options.
