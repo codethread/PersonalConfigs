@@ -1,6 +1,10 @@
 # <Feature Name>
 
+<!-- This is a **living document**, it can and should be updated as implementation reveals insights requiring spec updates. These should be validated with the architect and user  -->
+
 User Sign off: [REQUIRED - DO NOT BUILD WITHOUT THIS]
+
+[where appropriate, diagrams, flowcharts, and visual aids significantly improve specification comprehension**. System context diagrams showing how new components fit within existing architecture prove especially valuable. Data flow illustrations clarify complex processes better than verbose descriptions. Visual elements should complement, not replace, textual specifications - they provide the high-level understanding that makes detailed requirements meaningful]
 
 ## Context and Problem Statement
 

@@ -43,11 +43,20 @@ export interface NpmRedirectResult {
 }
 
 async function main() {
+	// Handle both direct execution and Claude Code invocation
+	// Claude Code passes the command name as first argument after the script
+	let args = Bun.argv.slice(2);
+	if (args[0] === "cc-hook--npm-redirect") {
+		args = args.slice(1);
+	}
+
 	const {values} = parseArgs({
-		args: Bun.argv.slice(2),
+		args,
 		options: {
 			help: {type: "boolean", short: "h"},
 		},
+		strict: true,
+		allowPositionals: false,
 	});
 
 	if (values.help) {
