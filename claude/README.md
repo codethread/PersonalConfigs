@@ -20,7 +20,7 @@ graph LR
     Start[Session Start] -->|cc-hook--context-injector| Init[List README.md files]
     UserPrompt[User Prompt]
     PreTool[Pre Tool Use] -->|cc-hook--npm-redirect| NPM[Redirect npm/npx/node commands]
-    PostTool[Post Tool Use] -->|prettier| Format[Format JSON/MD files]
+    PostTool[Post Tool Use]
     Stop[Stop Event]
     End[Session End] -->|cc-hook--context-injector| Cleanup[Cleanup session state]
 ```
@@ -118,6 +118,7 @@ To help find commands amongst, there are some common patterns:
 
 - `prime-*`: Set up context for a specific task, allowing for more direct context loading than relying on a cross cutting CLAUDE.md file for implicit understanding
 - `refine-*`: Have claude code undertake repetitive improvements like updating documentation
+- `teach-*`: Inject context for a specific topic, e.g a specific api, tool or framework
 
 ### Available Commands
 
@@ -149,16 +150,6 @@ To help find commands amongst, there are some common patterns:
 - **Location**: `claude/commands/prime-build.md`
 - **Purpose**: Architect coordinates implementation team to build approved specification
 
-#### /refine-docs [sha1] [sha2] ...
-
-- **Location**: `claude/commands/refine-docs.md`
-- **Purpose**: Review and refine documentation based on code changes
-- **Usage**:
-  - Without arguments: Reviews documentation against current session changes
-  - With git SHAs: Reviews documentation against specific commits (for retrospective updates)
-- **Example**: `/refine-docs cdaa1fb 79f8137` - reviews changes from those two commits
-- **Created from**: Migrated from `cc-hook--check-claude-md` hook for manual invocation
-
 #### /refine-spec [improvement to make]
 
 - **Location**: `claude/commands/refine-spec.md`
@@ -174,7 +165,11 @@ To help find commands amongst, there are some common patterns:
   - Without arguments: Reviews documentation against current session changes
   - With git SHAs: Reviews documentation against specific commits (for retrospective updates)
 - **Example**: `/refine-docs cdaa1fb 79f8137` - reviews changes from those two commits
-- **Created from**: Migrated from `cc-hook--check-claude-md` hook for manual invocation
+
+#### /teach-kitty
+
+- **Location**: `claude/commands/teach-kitty.md`
+- **Purpose**: Teach claude about kitty terminal information
 
 ## Spec-Driven Development
 
