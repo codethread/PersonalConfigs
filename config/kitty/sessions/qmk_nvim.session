@@ -1,0 +1,1 @@
+launch --title qmk_nvim --cwd ~/dev/projects/qmk.nvim

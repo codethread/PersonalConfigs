@@ -12,7 +12,7 @@ def home [p: string] {
 
 $env.DOTFILES = (home PersonalConfigs)
 $env.EDITOR = "nvim"
-# $env.VISUAL = "code --wait"
+# $env.VISUAL = "zed --wait"
 $env.SHELL = (home '.local/bin/nu')
 $env.MANPAGER = "nvim +Man! -c 'lua require(\"codethread.manpager\")'"
 $env.MANWIDTH = 80
@@ -63,8 +63,6 @@ $env.HOMEBREW_REPOSITORY = "/opt/homebrew"
 # not sure if these matter?
 # $env.INFOPATH = "/opt/homebrew/share/info:"
 # $env.MANPATH = ([$env.MANPATH "/opt/homebrew/share/man:"] | str join)
-let kitty = "/Applications/kitty.app/Contents/Resources/man"
-if ($kitty | path exists) { $env.MANPATH = ([($env | get --optional MANPATH) $"($kitty):"] | str join) }
 
 #: }}}
 #: emacs {{{
@@ -79,12 +77,7 @@ $env.FZF_ALT_C_COMMAND = "fd --hidden --type d --exclude '{Library,Movies,Music,
 $env.FZF_CTRL_T_COMMAND = "fd --type f --hidden --exclude '{.git}'"
 $env.FZF_DEFAULT_COMMAND = "fd --type f --hidden --exclude '{.git}'"
 # rose pine moon
-$env.FZF_DEFAULT_OPTS = "
---color=fg:#908caa,bg:#232136,hl:#ea9a97
---color=fg+:#e0def4,bg+:#393552,hl+:#ea9a97
---color=border:#44415a,header:#3e8fb0,gutter:#232136
---color=spinner:#f6c177,info:#9ccfd8
---color=pointer:#c4a7e7,marker:#eb6f92,prompt:#908caa"
+$env.FZF_DEFAULT_OPTS = "--color=fg+:#e0def4,bg+:#393552,hl+:#ea9a97,border:#44415a,header:#3e8fb0,gutter:#232136,spinner:#f6c177,info:#9ccfd8,pointer:#c4a7e7,marker:#eb6f92,prompt:#908caa"
 
 #: }}}
 #: go {{{
@@ -141,6 +134,17 @@ $env.JAVA_HOME = "/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home"
 # Python environment variables
 $env.PYTHONDONTWRITEBYTECODE = "1"  # Don't create .pyc files
 $env.PIP_REQUIRE_VIRTUALENV = "false"  # Allow pip outside virtualenv (set to "true" to be stricter)
+
+#: }}}
+
+#: kitty {{{
+
+let kitty = "/Applications/kitty.app"
+if ($kitty | path exists) {
+	path add ([$kitty, "Contents/MacOS"] | path join)
+    let kitty_man = "/Applications/kitty.app/Contents/Resources/man:"
+	$env.MANPATH = ([($env | get --optional MANPATH) $kitty_man] | str join)
+}
 
 #: }}}
 #: nushell {{{
