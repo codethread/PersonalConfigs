@@ -13,6 +13,7 @@
     "MANPAGER": "cat",
     "CLAUDECODE": "1"
   },
+  "includeCoAuthoredBy": false,
   "permissions": {
     "allow": [
       "mcp__context7__resolve-library-id",
@@ -79,9 +80,11 @@
       "Read(**/id_rsa*)"
     ],
     "defaultMode": "acceptEdits",
-    "additionalDirectories": ["~/.local/cache/docs", "~/.local/bin"]
+    "additionalDirectories": [
+      "~/.local/cache/docs",
+      "~/.local/bin"
+    ]
   },
-  "model": "sonnet",
   "hooks": {
     "PreToolUse": [
       {
@@ -206,7 +209,7 @@
     "command": "bun x ccusage statusline",
     "padding": 0
   },
-  "includeCoAuthoredBy": false,
+  "alwaysThinkingEnabled": false,
   "feedbackSurveyState": {
     "lastShownTime": 1754027278114
   }

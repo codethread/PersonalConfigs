@@ -1,18 +1,25 @@
 #!/usr/bin/env bun
 
-import {Glob} from "bun";
-import {spawn} from "child_process";
+// :module: Interactive git project session switcher using fzf
+
+import {$, Glob} from "bun";
 import {existsSync, mkdirSync, readdirSync, statSync, writeFileSync} from "fs";
 import {basename, join} from "path";
+import {parseArgs} from "util";
 
-interface Options {
+interface FinderOptions {
 	debug?: boolean;
-	test?: boolean;
-	verbose?: boolean;
 	maxDepth?: number;
-	searchRoot?: string;
-	includeGlobs?: boolean;
+	searchRoot: string;
 }
+
+interface DiscoverOptions {
+	debug?: boolean;
+	maxDepth?: number;
+}
+
+// Default search root directories for git projects
+const SEARCH_ROOTS = ["~/dev", "~/work"];
 
 // Directories to skip for performance
 const SKIP_DIRS = new Set([
@@ -26,7 +33,7 @@ const SKIP_DIRS = new Set([
 	".git", // Don't recurse into .git dirs themselves
 ]);
 
-// Directory globs to search for additional sessions (from interactive-session.sh)
+// Directory globs to search for additional sessions
 const SEARCH_GLOBS = [
 	"~/PersonalConfigs",
 	"~/workfiles",
@@ -39,22 +46,18 @@ class GitProjectFinder {
 	public searchRoot: string;
 	private maxDepth: number;
 	private debug: boolean;
-	private verbose: boolean;
-	private includeGlobs: boolean;
 	private projects: string[] = [];
 	private visitedDirs = 0;
 	private maxDepthReached = 0;
 
-	constructor(options: Options = {}) {
-		this.searchRoot = options.searchRoot || join(process.env.HOME || "", "dev");
+	constructor(options: FinderOptions) {
+		this.searchRoot = options.searchRoot;
 		this.maxDepth = options.maxDepth || 4;
 		this.debug = options.debug || false;
-		this.verbose = options.verbose || false;
-		this.includeGlobs = options.includeGlobs ?? true; // Default to true
 	}
 
 	private log(message: string) {
-		if (this.debug || this.verbose) {
+		if (this.debug) {
 			console.error(`[DEBUG] ${message}`);
 		}
 	}
@@ -67,39 +70,63 @@ class GitProjectFinder {
 		return SKIP_DIRS.has(dirName);
 	}
 
-	private async findGlobDirectories(): Promise<string[]> {
-		if (!this.includeGlobs) {
-			return [];
-		}
-
+	private async expandGlobs(): Promise<string[]> {
 		const directories: string[] = [];
 		const homeDir = process.env.HOME || "";
 
 		for (const globPattern of SEARCH_GLOBS) {
+			const expandedPattern = globPattern.startsWith("~/")
+				? join(homeDir, globPattern.slice(2))
+				: globPattern;
+
+			this.log(`Expanding glob: ${expandedPattern}`);
+
 			try {
-				// Expand tilde to home directory
-				const expandedPattern = globPattern.startsWith("~/")
-					? join(homeDir, globPattern.slice(2))
-					: globPattern;
+				// Check if pattern contains wildcards
+				if (expandedPattern.includes("*") || expandedPattern.includes("?")) {
+					// Extract base directory and pattern
+					const lastSlash = expandedPattern.lastIndexOf("/");
+					const baseDir = expandedPattern.substring(0, lastSlash);
+					const pattern = expandedPattern.substring(lastSlash + 1);
 
-				this.log(`Searching glob: ${expandedPattern}`);
+					if (!existsSync(baseDir)) {
+						this.log(`Base directory does not exist, skipping: ${baseDir}`);
+						continue;
+					}
 
-				const glob = new Glob(expandedPattern);
-
-				// Use Bun's glob scan from root directory
-				for await (const match of glob.scan("/")) {
-					try {
-						const stat = statSync(match);
-						if (stat.isDirectory()) {
-							directories.push(match);
-							this.log(`Found glob directory: ${match}`);
+					// Use Bun's Glob with onlyFiles: false to include directories
+					const glob = new Glob(pattern);
+					for await (const match of glob.scan({
+						cwd: baseDir,
+						onlyFiles: false,
+						absolute: true,
+					})) {
+						try {
+							const stat = statSync(match);
+							if (stat.isDirectory()) {
+								directories.push(match);
+								this.log(`Expanded to directory: ${match}`);
+							}
+						} catch (_error) {
+							this.log(`Cannot stat glob match, skipping: ${match}`);
 						}
-					} catch (error) {
-						this.log(`Cannot stat glob match: ${match} - ${error}`);
+					}
+				} else {
+					// No wildcards - just check if it's a directory
+					if (existsSync(expandedPattern)) {
+						const stat = statSync(expandedPattern);
+						if (stat.isDirectory()) {
+							directories.push(expandedPattern);
+							this.log(`Expanded to directory: ${expandedPattern}`);
+						} else {
+							this.log(`Path exists but is not a directory, skipping: ${expandedPattern}`);
+						}
+					} else {
+						this.log(`Directory does not exist, skipping: ${expandedPattern}`);
 					}
 				}
-			} catch (error) {
-				this.log(`Error processing glob ${globPattern}: ${error}`);
+			} catch (_error) {
+				this.log(`Error expanding glob, skipping: ${globPattern}`);
 			}
 		}
 
@@ -109,10 +136,6 @@ class GitProjectFinder {
 	private walkDirectory(dir: string, currentDepth = 0): void {
 		this.visitedDirs++;
 		this.maxDepthReached = Math.max(this.maxDepthReached, currentDepth);
-
-		if (this.verbose) {
-			this.log(`Visiting: ${dir} (depth: ${currentDepth})`);
-		}
 
 		// Check if current directory is a git project
 		if (this.isGitProject(dir)) {
@@ -168,8 +191,8 @@ class GitProjectFinder {
 		this.walkDirectory(this.searchRoot);
 		const gitProjects = [...this.projects];
 
-		// Find additional directories from globs
-		const globDirectories = await this.findGlobDirectories();
+		// Expand globs to get additional directories (trusted, no git check)
+		const globDirectories = await this.expandGlobs();
 
 		// Merge and deduplicate
 		const allProjects = [...new Set([...gitProjects, ...globDirectories])];
@@ -201,12 +224,10 @@ async function createAndSwitchSession(projectPath: string): Promise<void> {
 	const sessionsDir = join(process.env.HOME || "", ".config", "kitty", "sessions");
 	const sessionFile = join(sessionsDir, `${sessionName}.session`);
 
-	// Create sessions directory if it doesn't exist
 	if (!existsSync(sessionsDir)) {
 		mkdirSync(sessionsDir, {recursive: true});
 	}
 
-	// Create session file
 	const sessionContent = `launch --title ${sessionName} --cwd ${projectPath}\n`;
 	writeFileSync(sessionFile, sessionContent);
 
@@ -214,157 +235,122 @@ async function createAndSwitchSession(projectPath: string): Promise<void> {
 	console.log(`Directory: ${projectPath}`);
 	console.log(`Session file: ${sessionFile}`);
 
-	// Switch to the session
 	try {
-		const kittenProcess = spawn("kitten", ["@", "action", "goto_session", sessionFile]);
-
-		kittenProcess.stderr?.on("data", (data) => {
-			console.error(`Warning: ${data.toString()}`);
-		});
-
-		await new Promise((resolve, reject) => {
-			kittenProcess.on("close", (code) => {
-				if (code === 0) {
-					resolve(code);
-				} else {
-					reject(new Error(`Process exited with code ${code}`));
-				}
-			});
-		});
+		await $`kitten @ action goto_session ${sessionFile}`.quiet();
 	} catch (error) {
-		console.error(`Error switching to session: ${error}`);
-		process.exit(1);
+		throw new Error(`Failed to switch to session: ${error instanceof Error ? error.message : String(error)}`);
 	}
 }
 
 async function runFzf(projects: string[]): Promise<string | null> {
-	return new Promise((resolve) => {
-		const fzf = spawn("fzf", ["--prompt=Select git project: ", "--height=40%", "--reverse"], {
-			stdio: ["pipe", "pipe", "inherit"],
-		});
-
-		let selection = "";
-
-		fzf.stdout.on("data", (data) => {
-			selection += data.toString();
-		});
-
-		fzf.on("close", (code) => {
-			if (code === 0 && selection.trim()) {
-				resolve(selection.trim());
-			} else {
-				resolve(null);
-			}
-		});
-
-		// Write projects to fzf stdin
-		fzf.stdin.write(projects.join("\n"));
-		fzf.stdin.end();
-	});
+	try {
+		const result =
+			await $`echo ${projects.join("\n")} | fzf --prompt='Select git project: ' --height=40% --reverse`.text();
+		return result.trim() || null;
+	} catch (_error) {
+		return null;
+	}
 }
 
 function showHelp() {
-	console.log(`Usage: git-session.ts [options]
-Interactive git project session switcher
+	console.log(`git-session - Interactive git project session switcher using fzf
+
+Usage: git-session [options]
 
 Finds projects by:
-1. Walking ~/dev (or --search-root) recursively for git repositories
-2. Searching predefined glob patterns for additional directories
+1. Walking ~/dev and ~/work (if they exist) recursively for git repositories
+2. Expanding predefined glob patterns for additional trusted directories
 
 Options:
   -h, --help        Show this help message
-  --test           Test discovery speed without fzf
-  --debug          Show debug information during search
-  --verbose        Show verbose output (visited directories)
-  --max-depth N    Maximum search depth (default: 4)
-  --search-root P  Search root directory (default: ~/dev)
-  --no-globs       Disable glob pattern searching (git projects only)
+  -d, --debug       Show debug logs and output results as list instead of fzf
+  --max-depth N     Maximum search depth (default: 4)
 
 Examples:
-  git-session.ts                    # Interactive mode (git + globs)
-  git-session.ts --test             # Benchmark mode
-  git-session.ts --debug --test     # Debug benchmark
-  git-session.ts --no-globs         # Git projects only
-  git-session.ts --max-depth 2      # Limit search depth`);
+  git-session                    # Interactive mode with fzf
+  git-session --debug            # Debug mode with flat list output
+  git-session --max-depth 2      # Limit search depth`);
+}
+
+async function discoverAllProjects(options: DiscoverOptions): Promise<string[]> {
+	const homeDir = process.env.HOME || "";
+	const searchRoots = SEARCH_ROOTS.map((root) =>
+		root.startsWith("~/") ? join(homeDir, root.slice(2)) : root,
+	).filter((root) => existsSync(root));
+
+	if (searchRoots.length === 0) {
+		throw new Error(`None of the search roots exist: ${SEARCH_ROOTS.join(", ")}`);
+	}
+
+	const finders = searchRoots.map(
+		(searchRoot) =>
+			new GitProjectFinder({
+				...options,
+				searchRoot,
+			}),
+	);
+
+	const results = await Promise.all(finders.map((finder) => finder.findProjects()));
+
+	const allProjects = [...new Set(results.flat())].sort();
+
+	return allProjects;
 }
 
 async function main() {
-	const args = process.argv.slice(2);
-	const options: Options = {};
+	const {values} = parseArgs({
+		args: Bun.argv.slice(2),
+		options: {
+			help: {type: "boolean", short: "h"},
+			debug: {type: "boolean", short: "d"},
+			"max-depth": {type: "string"},
+		},
+		strict: false,
+	});
 
-	// Parse arguments
-	for (let i = 0; i < args.length; i++) {
-		switch (args[i]) {
-			case "-h":
-			case "--help":
-				showHelp();
-				process.exit(0);
-				break;
-			case "--test":
-				options.test = true;
-				break;
-			case "--debug":
-				options.debug = true;
-				break;
-			case "--verbose":
-				options.verbose = true;
-				break;
-			case "--max-depth":
-				options.maxDepth = parseInt(args[++i], 10);
-				break;
-			case "--search-root":
-				options.searchRoot = args[++i];
-				break;
-			case "--no-globs":
-				options.includeGlobs = false;
-				break;
-		}
+	if (values.help) {
+		showHelp();
+		process.exit(0);
 	}
 
-	const finder = new GitProjectFinder(options);
+	const options: DiscoverOptions = {
+		debug: values.debug === true,
+		maxDepth: typeof values["max-depth"] === "string" ? Number.parseInt(values["max-depth"], 10) : undefined,
+	};
 
 	try {
-		if (options.test) {
-			console.log("Testing git project discovery speed...");
-			console.log(`Search root: ${finder.searchRoot}`);
-
-			const startTime = Date.now();
-			const projects = await finder.findProjects();
-			const endTime = Date.now();
-
-			console.log(`Found ${projects.length} projects in ${endTime - startTime}ms`);
-
-			if (options.debug) {
-				console.log("\nFirst 10 projects:");
-				for (const p of projects.slice(0, 10)) {
-					console.log(`  ${p}`);
-				}
-				if (projects.length > 10) {
-					console.log(`  ... and ${projects.length - 10} more`);
-				}
-			}
-
-			process.exit(0);
+		if (options.debug) {
+			console.log("Discovering projects...");
+			console.log(`Search roots: ${SEARCH_ROOTS.join(", ")}`);
+		} else {
+			console.error("Discovering projects...");
 		}
 
-		// Interactive mode
-		console.error("Discovering projects...");
-		const projects = await finder.findProjects();
+		const startTime = Date.now();
+		const projects = await discoverAllProjects(options);
+		const endTime = Date.now();
 
 		if (projects.length === 0) {
-			console.error(`No git projects found in ${finder.searchRoot}`);
-			process.exit(1);
+			throw new Error(`No git projects found in any search roots: ${SEARCH_ROOTS.join(", ")}`);
+		}
+
+		if (options.debug) {
+			console.log(`\nFound ${projects.length} projects in ${endTime - startTime}ms\n`);
+			for (const p of projects) {
+				console.log(p);
+			}
+			process.exit(0);
 		}
 
 		const selected = await runFzf(projects);
 
 		if (!selected) {
-			process.exit(0); // User cancelled
+			process.exit(0);
 		}
 
 		await createAndSwitchSession(selected);
 	} catch (error) {
-		console.error(`Error: ${error}`);
+		console.error(`Error: ${error instanceof Error ? error.message : String(error)}`);
 		process.exit(1);
 	}
 }

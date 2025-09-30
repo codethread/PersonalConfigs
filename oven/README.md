@@ -43,7 +43,7 @@ bun run verify
 - **cc-speak** - Advanced text-to-speech tool with file and section reading support
 - **cindex** - Generate an index of files in the current project
 - **ghub** - Open GitHub/GitLab repository in browser
-- **git-session** - No description available
+- **git-session** - Interactive git project session switcher using fzf
 - **gitlab-pipeline-watcher** - Monitor GitLab pipelines and send notifications
 - **notif** - Show macOS native notifications
 - **prepend-comment** - Add or update module documentation comments
