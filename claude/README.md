@@ -4,11 +4,6 @@ This project is symlinked to `~/.claude` and allows sharing global Claude Code s
 
 ## Version Status
 
-Currently pinned to **Claude Code v1.0.88** due to significant regressions in later versions. This version appears more stable, but we should be mindful of newer features we may be missing:
-
-- v1.0.124: `CLAUDE_BASH_NO_LOGIN` environment variable, improved tool permissions
-- v1.0.126: `/context` command for Bedrock/Vertex, mTLS OpenTelemetry support
-
 Custom directories (i.e., those not carrying Claude Code significance like `agents/` or `commands/`) are prefixed with `x-` for clarity and to avoid accidental name collision.
 
 ## Hooks Architecture
@@ -22,13 +17,12 @@ Claude Code hooks are orchestrated through `settings.json` and implemented as ei
 
 ```mermaid
 graph LR
-    Start[Session Start] -->|cc-hook--context-injector| Init[Initialize context tracking]
+    Start[Session Start] -->|cc-hook--context-injector| Init[List README.md files]
     UserPrompt[User Prompt]
     PreTool[Pre Tool Use] -->|cc-hook--npm-redirect| NPM[Redirect npm/npx/node commands]
-    PostTool[Post Tool Use] -->|cc-hook--context-injector| Context[Inject AGENTS.md context]
-    PostTool -->|prettier| Format[Format JSON/MD files]
+    PostTool[Post Tool Use] -->|prettier| Format[Format JSON/MD files]
     Stop[Stop Event]
-    End[Session End] -->|cc-hook--context-injector| Cleanup[Cleanup context tracking]
+    End[Session End] -->|cc-hook--context-injector| Cleanup[Cleanup session state]
 ```
 
 ### Session Logging
@@ -68,9 +62,9 @@ The `oven/bin/cc-logs--*` commands provide analysis and aggregation of both hook
 
 #### 2. **cc-hook--context-injector**
 
-- **Summary**: Injects relevant AGENTS.md documentation when files are read, with session-based deduplication
-- **Events**: SessionStart (initialize), PostToolUse[Read] (inject context), SessionEnd (cleanup)
-- **Purpose**: Provides contextual documentation without repetition, tracks seen documentation per session
+- **Summary**: Lists all README.md files in the project at session start
+- **Events**: SessionStart (initialize and list READMEs), SessionEnd (cleanup)
+- **Purpose**: Provides project documentation overview at session start. Note: AGENTS.md files are now automatically loaded by Claude Code
 
 #### 3. **cc-hook--npm-redirect**
 
@@ -104,7 +98,7 @@ graph LR
 
 1. **Session State Sharing**:
    - `cc-hook--session-logger` creates session directories and transcript files
-   - `cc-hook--context-injector` uses session ID to track which documentation has been shown
+   - `cc-hook--context-injector` creates minimal session state for cleanup tracking
    - Both hooks use environment variables like `CLAUDE_PROJECT_DIR` and session IDs
 
 2. **Event Cascading**:
@@ -113,7 +107,7 @@ graph LR
 
 3. **File System Coordination**:
    - Session logs stored in `~/.local/share/claude-logs/sessions/<date>/<session-id>/`
-   - Context state stored in `/tmp/claude-context-<session-id>.json`
+   - Context state stored in `/tmp/claude-agent-context-<session-id>.json`
    - All hooks respect the project directory structure
 
 ## Custom Slash Commands

@@ -5,7 +5,7 @@
     "CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "true",
     "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "true",
     "USE_BUILTIN_RIPGREP": "0",
-    "DISABLE_AUTOUPDATER": "1",
+    "DISABLE_AUTOUPDATER": "0",
     "DISABLE_BUG_COMMAND": "1",
     "DISABLE_TELEMETRY": "1",
     "__CC_CUSTOM_ENVS_": "manpager so we can see files, CLAUDECODE tells bun.js to have less noisy cli output, ZDOTDIR avoids old shell stuff",
@@ -80,10 +80,7 @@
       "Read(**/id_rsa*)"
     ],
     "defaultMode": "acceptEdits",
-    "additionalDirectories": [
-      "~/.local/cache/docs",
-      "~/.local/bin"
-    ]
+    "additionalDirectories": ["~/.local/cache/docs", "~/.local/bin"]
   },
   "hooks": {
     "PreToolUse": [
@@ -106,15 +103,6 @@
       }
     ],
     "PostToolUse": [
-      {
-        "matcher": "Read",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "cc-hook--context-injector read"
-          }
-        ]
-      },
       {
         "hooks": [
           {

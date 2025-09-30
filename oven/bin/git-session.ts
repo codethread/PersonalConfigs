@@ -71,69 +71,71 @@ class GitProjectFinder {
 	}
 
 	private async expandGlobs(): Promise<string[]> {
-		const directories: string[] = [];
 		const homeDir = process.env.HOME || "";
 
-		for (const globPattern of SEARCH_GLOBS) {
-			const expandedPattern = globPattern.startsWith("~/")
-				? join(homeDir, globPattern.slice(2))
-				: globPattern;
+		const results = await Promise.all(
+			SEARCH_GLOBS.map(async (globPattern) => {
+				const expandedPattern = globPattern.startsWith("~/")
+					? join(homeDir, globPattern.slice(2))
+					: globPattern;
 
-			this.log(`Expanding glob: ${expandedPattern}`);
+				this.log(`Expanding glob: ${expandedPattern}`);
 
-			try {
-				// Check if pattern contains wildcards
-				if (expandedPattern.includes("*") || expandedPattern.includes("?")) {
-					// Extract base directory and pattern
-					const lastSlash = expandedPattern.lastIndexOf("/");
-					const baseDir = expandedPattern.substring(0, lastSlash);
-					const pattern = expandedPattern.substring(lastSlash + 1);
+				try {
+					// Check if pattern contains wildcards
+					if (expandedPattern.includes("*") || expandedPattern.includes("?")) {
+						// Extract base directory and pattern
+						const lastSlash = expandedPattern.lastIndexOf("/");
+						const baseDir = expandedPattern.substring(0, lastSlash);
+						const pattern = expandedPattern.substring(lastSlash + 1);
 
-					if (!existsSync(baseDir)) {
-						this.log(`Base directory does not exist, skipping: ${baseDir}`);
-						continue;
-					}
-
-					// Use Bun's Glob with onlyFiles: false to include directories
-					const glob = new Glob(pattern);
-					for await (const match of glob.scan({
-						cwd: baseDir,
-						onlyFiles: false,
-						absolute: true,
-					})) {
-						try {
-							const stat = statSync(match);
-							if (stat.isDirectory()) {
-								directories.push(match);
-								this.log(`Expanded to directory: ${match}`);
-							}
-						} catch (_error) {
-							this.log(`Cannot stat glob match, skipping: ${match}`);
+						if (!existsSync(baseDir)) {
+							this.log(`Base directory does not exist, skipping: ${baseDir}`);
+							return [];
 						}
+
+						// Use Bun's Glob with onlyFiles: false to include directories
+						const glob = new Glob(pattern);
+						const matches: string[] = [];
+						for await (const match of glob.scan({
+							cwd: baseDir,
+							onlyFiles: false,
+							absolute: true,
+						})) {
+							try {
+								const stat = statSync(match);
+								if (stat.isDirectory()) {
+									matches.push(match);
+									this.log(`Expanded to directory: ${match}`);
+								}
+							} catch (_error) {
+								this.log(`Cannot stat glob match, skipping: ${match}`);
+							}
+						}
+						return matches;
 					}
-				} else {
 					// No wildcards - just check if it's a directory
 					if (existsSync(expandedPattern)) {
 						const stat = statSync(expandedPattern);
 						if (stat.isDirectory()) {
-							directories.push(expandedPattern);
 							this.log(`Expanded to directory: ${expandedPattern}`);
-						} else {
-							this.log(`Path exists but is not a directory, skipping: ${expandedPattern}`);
+							return [expandedPattern];
 						}
+						this.log(`Path exists but is not a directory, skipping: ${expandedPattern}`);
 					} else {
 						this.log(`Directory does not exist, skipping: ${expandedPattern}`);
 					}
+				} catch (_error) {
+					this.log(`Error expanding glob, skipping: ${globPattern}`);
 				}
-			} catch (_error) {
-				this.log(`Error expanding glob, skipping: ${globPattern}`);
-			}
-		}
+				return [];
+			}),
+		);
 
-		return directories;
+		return results.flat();
 	}
 
-	private walkDirectory(dir: string, currentDepth = 0): void {
+	private async walkDirectory(dir: string, currentDepth = 0): Promise<void> {
 		this.visitedDirs++;
 		this.maxDepthReached = Math.max(this.maxDepthReached, currentDepth);
 
@@ -153,24 +155,27 @@ class GitProjectFinder {
 		try {
 			const entries = readdirSync(dir);
 
-			for (const entry of entries) {
-				if (this.shouldSkipDir(entry)) {
-					this.log(`Skipping: ${join(dir, entry)}`);
-					continue;
-				}
-
-				const fullPath = join(dir, entry);
-
-				try {
-					const stat = statSync(fullPath);
-					if (stat.isDirectory()) {
-						this.walkDirectory(fullPath, currentDepth + 1);
+			// Process directories in parallel
+			await Promise.all(
+				entries.map(async (entry) => {
+					if (this.shouldSkipDir(entry)) {
+						this.log(`Skipping: ${join(dir, entry)}`);
+						return;
 					}
-				} catch (error) {
-					// Skip directories we can't read (permissions, etc.)
-					this.log(`Cannot read: ${fullPath} - ${error}`);
-				}
-			}
+
+					const fullPath = join(dir, entry);
+
+					try {
+						const stat = statSync(fullPath);
+						if (stat.isDirectory()) {
+							await this.walkDirectory(fullPath, currentDepth + 1);
+						}
+					} catch (error) {
+						// Skip directories we can't read (permissions, etc.)
+						this.log(`Cannot read: ${fullPath} - ${error}`);
+					}
+				}),
+			);
 		} catch (error) {
 			this.log(`Cannot read directory: ${dir} - ${error}`);
 		}
@@ -187,12 +192,10 @@ class GitProjectFinder {
 
 		const startTime = Date.now();
 
-		// Find git projects by walking directory tree
-		this.walkDirectory(this.searchRoot);
-		const gitProjects = [...this.projects];
+		// Find git projects by walking directory tree and expand globs in parallel
+		const [, globDirectories] = await Promise.all([this.walkDirectory(this.searchRoot), this.expandGlobs()]);
 
-		// Expand globs to get additional directories (trusted, no git check)
-		const globDirectories = await this.expandGlobs();
+		const gitProjects = [...this.projects];
 
 		// Merge and deduplicate
 		const allProjects = [...new Set([...gitProjects, ...globDirectories])];

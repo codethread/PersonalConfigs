@@ -34,7 +34,7 @@ bun run verify
 ## Tools Included
 
 - **bra** - Git branch switcher with fzf
-- **cc-hook--context-injector** - Claude Code hook that provides contextual AGENTS.md documentation
+- **cc-hook--context-injector** - Claude Code hook that provides project context at session start
 - **cc-hook--npm-redirect** - Claude Code hook that redirects npm/npx/node commands to detected package manager
 - **cc-hook--session-logger** - Claude Code hook for logging session events
 - **cc-logs--analyze-subagents** - Analyze Claude Code subagent usage from session logs

@@ -1,14 +1,12 @@
-export def cl --wrapped [...rest] { with-env { DISABLE_AUTOUPDATER: 1 } { claude ...$rest } }
+export alias cl = claude
 
 # Start up claude with access to heavy duty mcps like figma and playwright
 export def clui --wrapped [ ...rest ] {
-with-env { DISABLE_AUTOUPDATER: 1 } {
-		(claude
-			--strict-mcp-config
-			--mcp-config ~/.claude/x-mcp/ui.json
-			...$rest
-		)
-	}
+	(claude
+		--strict-mcp-config
+		--mcp-config ~/.claude/x-mcp/ui.json
+		...$rest
+	)
 }
 
 #
