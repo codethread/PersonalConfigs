@@ -53,6 +53,7 @@
 	brew "stylua"
 	brew "wakatime-cli"
 	brew "jq"
+	brew "fx"
 	brew "tokei"
 	brew "tree"
 	brew "grc"
