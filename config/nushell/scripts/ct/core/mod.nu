@@ -114,14 +114,13 @@ export def hide-all [closure: closure] {
 }
 
 
-# Directory shortcuts - keeping these in core as they're fundamental navigation aids
-export alias cd0 = cd (ksm key -p P0)
-export alias cd1 = cd (ksm key -p P1)
-export alias cd2 = cd (ksm key -p P2)
-export alias cd3 = cd (ksm key -p P3)
-export alias cd4 = cd (ksm key -p P4)
-export alias cd5 = cd (ksm key -p P5)
-export alias cd6 = cd (ksm key -p P6)
-export alias cd7 = cd (ksm key -p P7)
-export alias cd8 = cd (ksm key -p P8)
-export alias cd9 = cd (ksm key -p P9)
+export alias cd0 = cd (~/.config/kitty/bin/switch-session.sh --print 0)
+export alias cd1 = cd (~/.config/kitty/bin/switch-session.sh --print 1)
+export alias cd2 = cd (~/.config/kitty/bin/switch-session.sh --print 2)
+export alias cd3 = cd (~/.config/kitty/bin/switch-session.sh --print 3)
+export alias cd4 = cd (~/.config/kitty/bin/switch-session.sh --print 4)
+export alias cd5 = cd (~/.config/kitty/bin/switch-session.sh --print 5)
+export alias cd6 = cd (~/.config/kitty/bin/switch-session.sh --print 6)
+export alias cd7 = cd (~/.config/kitty/bin/switch-session.sh --print 7)
+export alias cd8 = cd (~/.config/kitty/bin/switch-session.sh --print 8)
+export alias cd9 = cd (~/.config/kitty/bin/switch-session.sh --print 9)

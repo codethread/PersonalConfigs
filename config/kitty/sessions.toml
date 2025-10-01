@@ -51,6 +51,7 @@ karen = "~/dev/projects/claude-karen"
 ai_files = "~/dev/projects/ai-tools"
 
 [profiles.work.keys]
+P1 = "dots"
 P2 = "deals_ui"
 P3 = "fe_review"
 P4 = "flexi_points"

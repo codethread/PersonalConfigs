@@ -62,9 +62,4 @@ return {
 		'fladson/vim-kitty',
 		ft = 'kitty',
 	},
-	{
-		'codethread/ksm',
-		lazy = true,
-		build = 'just install',
-	},
 }
