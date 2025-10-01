@@ -24,14 +24,22 @@ export def assert-no-conflicts [
 	if (($existing_files | is-not-empty) and $force) {
 		$existing_files | each {|f| rm $f }
 	} else if ($existing_files | is-not-empty) {
-		print "A number of files already exist:"
-		$existing_files | to text | print
-		let choice = input $"would you like to remove these? [(ansi default_bold)Y(ansi reset)/n]: "
+		# Check if running in interactive mode (has TTY)
+		let is_interactive = (do -i { input --bytes-until-any "" | is-not-empty } | default false)
 
-		if ($choice != 'n') {
-			$existing_files | each {|f| rm $f }
+		if $is_interactive {
+			print "A number of files already exist:"
+			$existing_files | to text | print
+			let choice = input $"would you like to remove these? [(ansi default_bold)Y(ansi reset)/n]: "
+
+			if ($choice != 'n') {
+				$existing_files | each {|f| rm $f }
+			} else {
+				error make -u { msg: "you'll have to remove them manually or change some file to proceed, alternativly you can pass the --force flag to overwrite them" }
+			}
 		} else {
-			error make -u { msg: "you'll have to remove them manually or change some file to proceed, alternativly you can pass the --force flag to overwrite them" }
+			# Non-interactive mode: auto-remove (safe for hooks/CI)
+			$existing_files | each {|f| rm $f }
 		}
 	}
 
