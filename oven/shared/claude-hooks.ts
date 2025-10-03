@@ -10,6 +10,29 @@ export interface BaseHookInput {
 	hook_event_name: string;
 }
 
+export interface StatuslineInput extends BaseHookInput {
+	hook_event_name: "Status";
+	model: {
+		id: string;
+		display_name: string;
+	};
+	workspace: {
+		current_dir: string;
+		project_dir: string;
+	};
+	version: string;
+	output_style: {
+		name: string;
+	};
+	cost: {
+		total_cost_usd: number;
+		total_duration_ms: number;
+		total_api_duration_ms: number;
+		total_lines_added: number;
+		total_lines_removed: number;
+	};
+}
+
 /**
  * Hook input for PreToolUse events - fired before a tool is executed
  */
@@ -82,6 +105,7 @@ export interface SessionEndInput extends BaseHookInput {
  * Union type for all possible hook inputs
  */
 export type HookInput =
+	| StatuslineInput
 	| PreToolUseInput
 	| PostToolUseInput
 	| NotificationInput

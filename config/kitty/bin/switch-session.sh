@@ -89,9 +89,30 @@ fi
 # Session switching mode
 SESSION_FILE="$SESSIONS_DIR/$PROJECT.session"
 
+# Create session file if it doesn't exist
 if [[ ! -f "$SESSION_FILE" ]]; then
-  echo "Error: Session file not found: $SESSION_FILE" >&2
-  exit 1
+  # Get the project path from TOML
+  PROJECT_PATH=$(cat "$SESSIONS_TOML" | fx --toml ".$PROJECTS_SECTION.$PROJECT" 2>/dev/null || echo "")
+
+  # Fall back to main projects section if not found in profile-specific section
+  if [[ -z "${PROJECT_PATH:-}" ]] && [[ "$PROJECTS_SECTION" != "projects" ]]; then
+    PROJECT_PATH=$(cat "$SESSIONS_TOML" | fx --toml ".projects.$PROJECT" 2>/dev/null || echo "")
+  fi
+
+  if [[ -z "${PROJECT_PATH:-}" ]]; then
+    echo "Error: No project path found for '$PROJECT'" >&2
+    exit 1
+  fi
+
+  # Expand tilde to home directory
+  PROJECT_PATH="${PROJECT_PATH/#\~/$HOME}"
+
+  # Ensure sessions directory exists
+  mkdir -p "$SESSIONS_DIR"
+
+  # Create session file with launch command
+  echo "launch --title $PROJECT --cwd $PROJECT_PATH" > "$SESSION_FILE"
+  echo "Created session file: $SESSION_FILE" >&2
 fi
 
 # Switch to the session

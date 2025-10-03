@@ -80,7 +80,10 @@
       "Read(**/id_rsa*)"
     ],
     "defaultMode": "acceptEdits",
-    "additionalDirectories": ["~/.local/cache/docs", "~/.local/bin"]
+    "additionalDirectories": [
+      "~/.local/cache/docs",
+      "~/.local/bin"
+    ]
   },
   "hooks": {
     "PreToolUse": [
@@ -194,7 +197,7 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "bun x ccusage statusline",
+    "command": "cc-statusline",
     "padding": 0
   },
   "alwaysThinkingEnabled": false,

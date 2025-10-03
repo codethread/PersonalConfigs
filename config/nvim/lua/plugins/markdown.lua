@@ -4,18 +4,8 @@ return U.F {
 	{
 		'mzlogin/vim-markdown-toc',
 		init = function() vim.cmd [[let g:vmt_auto_update_on_save = 0]] end,
-	},
-
-	{
-		'iamcco/markdown-preview.nvim',
-		cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },
-		build = 'sh -c "cd app && yarn install"',
-		init = function()
-			-- vim.g.mkdp_browser = 'firefox'
-			vim.g.mkdp_filetypes = { 'markdown' }
-			vim.g.mkdp_refresh_slow = 1 -- too much jumping around, refresh on save or insert leave
-		end,
-		ft = { 'markdown' },
+		lazy = false,
+		cmd = { 'GenTocGFM', 'GenTocGitLab', 'UpdateToc' },
 	},
 
 	{
@@ -23,7 +13,7 @@ return U.F {
 		branch = 'mermaids',
 		build = 'deno task --quiet build:fast',
 		opts = {
-			-- app = 'browser',
+			app = 'browser',
 		},
 		init = function()
 			vim.api.nvim_create_user_command('PeekOpen', function() require('peek').open() end, {})

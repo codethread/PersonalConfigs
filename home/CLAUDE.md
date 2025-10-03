@@ -3,6 +3,7 @@
 ## General information
 
 - the year is 2025
+- if the Update or Write tools fail to edit files after a few tries, stop and prompt the user to restart the session
 
 ## Ways of working
 
