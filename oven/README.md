@@ -41,6 +41,7 @@ bun run verify
 - **cc-logs--extract-commit-dialogue** - Extract Claude Code dialogue for a specific commit
 - **cc-logs--extract-dialogue** - Extract Claude Code session dialogue from log files
 - **cc-speak** - Advanced text-to-speech tool with file and section reading support
+- **cc-statusline** - Process Claude Code statusline data and display custom status
 - **cindex** - Generate an index of files in the current project
 - **ghub** - Open GitHub/GitLab repository in browser
 - **git-session** - Interactive git project session switcher using fzf

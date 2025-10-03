@@ -74,6 +74,14 @@ return {
 					lualine_c = {},
 					lualine_x = {
 						{
+							function() return '🎤 Recording...' end,
+							cond = function() return _G.claude_recording_active == true end,
+						},
+						{
+							function() return '📝 Transcribing...' end,
+							cond = function() return _G.claude_transcription_active == true end,
+						},
+						{
 							function() return '  ' .. require('dap').status() end,
 							cond = function() return package.loaded['dap'] and require('dap').status() ~= '' end,
 							-- color = Util.fg("Debug"),

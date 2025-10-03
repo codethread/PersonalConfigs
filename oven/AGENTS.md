@@ -87,6 +87,8 @@ existing domains:
 4. **Argument parsing**
    - Use `import {parseArgs} from "util"` for CLI argument parsing
    - Define clear option types and provide help documentation
+   - Use `strict: false` when no positional arguments are used
+   - Example: `parseArgs({args: Bun.argv.slice(2), options: {...}, strict: false})`
 
 5. **Output**
    - All cli functions (unless using interactive tty utils) should capture information and then pass this to a final `report` function which is common across `bin` modules
@@ -294,6 +296,7 @@ async function main() {
       verbose: { type: "boolean", short: "v" },
       help: { type: "boolean", short: "h" },
     },
+    strict: false, // Prevent errors from unexpected positionals in compiled executables
   });
 
   if (values.help) {

@@ -2,7 +2,7 @@
 
 import {type Subprocess, spawn, spawnSync} from "bun";
 import {existsSync} from "fs";
-import {unlink} from "fs/promises";
+import {unlink, writeFile} from "fs/promises";
 import {homedir} from "os";
 import {join} from "path";
 import readline from "readline";
@@ -10,6 +10,7 @@ import readline from "readline";
 // Configuration
 const WHISPER_MODEL = join(homedir(), "dev/models/ggml-medium.bin");
 const TEMP_DIR = "/tmp";
+const PID_FILE = join(TEMP_DIR, "audio-recording.pid");
 
 // ANSI color codes
 const colors = {
@@ -67,6 +68,13 @@ async function cleanup(_cancelled = false): Promise<void> {
 			await unlink(tempAudioFile);
 		} catch {}
 		tempAudioFile = null;
+	}
+
+	// Clean up PID file
+	if (existsSync(PID_FILE)) {
+		try {
+			await unlink(PID_FILE);
+		} catch {}
 	}
 
 	// Restore terminal settings
@@ -171,6 +179,34 @@ async function recordAudio(): Promise<string | null> {
 	});
 }
 
+// Record audio in immediate mode (waits for SIGUSR1 signal to stop)
+async function recordAudioImmediate(): Promise<string | null> {
+	const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+	tempAudioFile = join(TEMP_DIR, `recording_${timestamp}.wav`);
+
+	// Write PID file for external control
+	await writeFile(PID_FILE, process.pid.toString());
+
+	// Start sox recording in background
+	soxProcess = spawn(["sox", "-d", "-r", "16000", "-c", "1", "-b", "16", tempAudioFile], {
+		stdout: "pipe",
+		stderr: "pipe",
+	});
+
+	console.error(
+		`${colors.GREEN}🎤 Recording started (PID: ${process.pid})... Send SIGUSR1 to stop${colors.RESET}`,
+	);
+
+	return new Promise((resolve) => {
+		const signalHandler = () => {
+			console.error(`\n${colors.GREEN}✓ Received stop signal${colors.RESET}`);
+			resolve(tempAudioFile);
+		};
+
+		process.on("SIGUSR1", signalHandler);
+	});
+}
+
 // Transcribe audio
 async function transcribeAudio(audioFile: string): Promise<void> {
 	// Stop sox recording first
@@ -217,15 +253,22 @@ async function main(): Promise<void> {
 	if (args.includes("-h") || args.includes("--help")) {
 		console.log("record-and-transcribe - Record audio and transcribe using Whisper");
 		console.log("");
-		console.log("Usage: record-and-transcribe");
+		console.log("Usage: record-and-transcribe [--immediate]");
 		console.log("");
 		console.log("Options:");
 		console.log("  -h, --help      Show this help message");
+		console.log("  --immediate     Start recording and wait for SIGUSR1 signal to stop");
 		console.log("");
 		console.log("Description:");
 		console.log("  Records audio from the default microphone and transcribes it using");
-		console.log("  OpenAI's Whisper model. Press Space to stop recording and start");
-		console.log("  transcription, or Escape/Ctrl+C to cancel.");
+		console.log("  OpenAI's Whisper model.");
+		console.log("");
+		console.log("  Interactive mode (default): Press Space to stop and transcribe,");
+		console.log("  or Escape/Ctrl+C to cancel.");
+		console.log("");
+		console.log("  Immediate mode (--immediate): Starts recording immediately and waits");
+		console.log("  for SIGUSR1 signal. Send 'kill -SIGUSR1 <pid>' to stop and transcribe.");
+		console.log("  PID is written to /tmp/audio-recording.pid");
 		console.log("");
 		console.log("Requirements:");
 		console.log("  - sox (brew install sox)");
@@ -233,9 +276,12 @@ async function main(): Promise<void> {
 		console.log("  - Whisper model at ~/dev/models/ggml-medium.bin");
 		console.log("");
 		console.log("Examples:");
-		console.log("  record-and-transcribe   # Start recording immediately");
+		console.log("  record-and-transcribe              # Interactive mode");
+		console.log("  record-and-transcribe --immediate  # Signal-based mode");
 		process.exit(0);
 	}
+
+	const immediateMode = args.includes("--immediate");
 
 	// Set up signal handlers for cleanup
 	const signalHandler = async (_signal: string) => {
@@ -249,7 +295,7 @@ async function main(): Promise<void> {
 	try {
 		checkDependencies();
 
-		const audioFile = await recordAudio();
+		const audioFile = immediateMode ? await recordAudioImmediate() : await recordAudio();
 
 		if (audioFile) {
 			await transcribeAudio(audioFile);

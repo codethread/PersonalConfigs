@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# :module: audio--kill-background
+# Kill background audio recording processes by finding and terminating them
+
+set -euo pipefail
+
+# Find and kill record-and-transcribe processes
+if ps aux | grep -i "record-and-transcribe" | grep -v grep > /dev/null; then
+  ps aux | grep -i "record-and-transcribe" | grep -v grep | awk '{print $2}' | xargs kill -9
+  echo "Killed record-and-transcribe processes"
+fi
+
+# Find and kill sox processes
+if ps aux | grep -E "(sox|whisper)" | grep -v grep > /dev/null; then
+  ps aux | grep -E "(sox|whisper)" | grep -v grep | awk '{print $2}' | xargs kill -9
+  echo "Killed sox and whisper processes"
+fi
+
+echo "All background audio processes killed"
