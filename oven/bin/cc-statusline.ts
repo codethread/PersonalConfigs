@@ -101,7 +101,7 @@ async function formatStatusline(input: StatuslineInput): Promise<string> {
 	// Last user prompt (truncated)
 	if (transcriptData.lastPrompt) {
 		const truncated = truncateText(transcriptData.lastPrompt, 100);
-		parts.push(colorize.dim(`"${truncated}"`));
+		parts.push(colorize.dimItalic(`"${truncated}"`));
 	}
 
 	// // Lines added (green with +, dimmed)

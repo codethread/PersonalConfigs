@@ -50,6 +50,7 @@ export const colorize = {
 	white: (text: string | number) => `${ANSI.white}${text}${ANSI.reset}`,
 	dim: (text: string | number) => `${ANSI.dim}${text}${ANSI.reset}`,
 	bold: (text: string | number) => `${ANSI.bold}${text}${ANSI.reset}`,
+	italic: (text: string | number) => `${ANSI.italic}${text}${ANSI.reset}`,
 	underline: (text: string | number) => `${ANSI.underline}${text}${ANSI.reset}`,
 	// Dimmed colors
 	dimRed: (text: string | number) => `${ANSI.dim}${ANSI.red}${text}${ANSI.reset}`,
@@ -58,4 +59,5 @@ export const colorize = {
 	dimBlue: (text: string | number) => `${ANSI.dim}${ANSI.blue}${text}${ANSI.reset}`,
 	dimMagenta: (text: string | number) => `${ANSI.dim}${ANSI.magenta}${text}${ANSI.reset}`,
 	dimCyan: (text: string | number) => `${ANSI.dim}${ANSI.cyan}${text}${ANSI.reset}`,
+	dimItalic: (text: string | number) => `${ANSI.dim}${ANSI.italic}${text}${ANSI.reset}`,
 } as const;

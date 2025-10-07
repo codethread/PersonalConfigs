@@ -4,3 +4,4 @@ export alias _kitty-ls-jq = jq 'map({ tabs: .tabs |= map(del(.enabled_layouts, .
 
 # install nighlty
 export def _kitty-upgrade [] { curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin installer=nightly }
+export alias _kitty-diff = git difftool --no-symlinks --dir-diff
