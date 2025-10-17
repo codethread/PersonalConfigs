@@ -146,9 +146,10 @@ run = ['layout floating', 'move-node-to-workspace test']
 # run = 'layout tiling'
 
 #####################################
-# Alt
-# [[on-window-detected]]
-# if.app-id = 'com.TickTick.task.mac'
+# Planning
+[[on-window-detected]]
+if.app-id = 'com.TickTick.task.mac'
+run = 'move-node-to-workspace planner'
 # run = 'move-node-to-workspace alt'
 [[on-window-detected]]
 if.app-id = 'md.obsidian'

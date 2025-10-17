@@ -105,7 +105,14 @@
   "javascript.updateImportsOnFileMove.enabled": "always",
   "javascript.validate.enable": false,
 
-  "stylelint.validate": ["css", "scss", "javascript", "javascriptreact", "typescript", "typescriptreact"],
+  "stylelint.validate": [
+    "css",
+    "scss",
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
 
   "scss.validate": false,
 

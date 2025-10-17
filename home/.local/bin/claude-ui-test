@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+#:module: Claude UI Testing Wrapper
+#:description: Invokes Claude Code with UI-specific MCP configuration for testing visual changes
+#:usage: echo "test the login form" | claude-ui-test
+
+set -euo pipefail
+
+# Read prompt from stdin
+PROMPT=$(cat)
+
+if [ -z "$PROMPT" ]; then
+  echo "Error: No prompt provided via stdin" >&2
+  echo "Usage: echo 'your prompt' | claude-ui-test" >&2
+  exit 1
+fi
+
+# MCP config file for UI testing (symlinked from PersonalConfigs/claude/x-mcp/ui.json)
+MCP_CONFIG="$HOME/.claude/x-mcp/ui.json"
+
+# System prompt focused on UI testing
+SYSTEM_PROMPT="You are a UI testing specialist. Your role is to:
+
+1. Analyze visual and interactive elements of user interfaces
+2. Verify that UI changes match design specifications
+3. Test responsive behavior and accessibility
+4. Check for visual regressions and layout issues
+5. Validate user interaction flows and edge cases
+
+When testing UI changes:
+- Use browser automation tools when available via MCP
+- Take screenshots and compare visual differences
+- Test across different viewport sizes
+- Verify accessibility standards (ARIA, keyboard navigation)
+- Check for console errors and warnings
+- Validate that interactive elements work as expected
+
+Provide clear, actionable feedback about what works and what needs fixing."
+
+# Check if MCP config exists
+if [ ! -f "$MCP_CONFIG" ]; then
+  echo "Warning: MCP config not found at $MCP_CONFIG" >&2
+  echo "Proceeding without custom MCP configuration..." >&2
+  MCP_CONFIG=""
+fi
+
+# Invoke Claude with UI testing configuration
+if [ -n "$MCP_CONFIG" ]; then
+  claude --print \
+    --mcp-config "$MCP_CONFIG" \
+    --append-system-prompt "$SYSTEM_PROMPT" \
+    --output-format text \
+    "$PROMPT"
+else
+  claude --print \
+    --append-system-prompt "$SYSTEM_PROMPT" \
+    --output-format text \
+    "$PROMPT"
+fi

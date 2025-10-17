@@ -35,6 +35,7 @@ async function main() {
 				short: "h",
 			},
 		},
+		strict: false,
 	});
 
 	if (values.help) {
