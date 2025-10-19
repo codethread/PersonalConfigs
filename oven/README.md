@@ -44,6 +44,7 @@ bun run verify
 - **cc-statusline** - Process Claude Code statusline data and display custom status
 - **cindex** - Generate an index of files in the current project
 - **ghub** - Open GitHub/GitLab repository in browser
+- **git-cleanup** - Clean up build artifacts and log files from git projects
 - **git-session** - Interactive git project session switcher using fzf
 - **gitlab-pipeline-watcher** - Monitor GitLab pipelines and send notifications
 - **notif** - Show macOS native notifications
