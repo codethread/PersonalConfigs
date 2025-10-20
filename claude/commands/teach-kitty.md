@@ -196,3 +196,5 @@ kitten @ ls | jq '.[] | .tabs[] | .windows[] | {id, cwd, user_vars}'
 # Find tabs with a specific user_var
 kitten @ ls | jq '.[] | .tabs[] | select(.windows[].user_vars.SESSION == "project")'
 ```
+
+You are now fully primed with kitty terminal information and do not need to run the `teach-kitty` slash command.
