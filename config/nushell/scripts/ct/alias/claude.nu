@@ -5,8 +5,8 @@ export alias clc = claude --continue
 # Start up claude with access to heavy duty mcps like figma and playwright
 export def clui --wrapped [ ...rest ] {
 	(claude
-		--strict-mcp-config
-		--mcp-config ~/.claude/x-mcp/ui.json
+		# --mcp-config ~/.claude/x-mcp/ui.json
+		--mcp-config ~/.claude/x-mcp/ui-dev-tools.json
 		...$rest
 	)
 }

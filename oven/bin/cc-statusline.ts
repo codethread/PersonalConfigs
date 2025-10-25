@@ -91,6 +91,11 @@ async function formatStatusline(input: StatuslineInput): Promise<string> {
 		parts.push(colorize.dimMagenta(`  ${branch}`));
 	}
 
+	// Model name (if not Sonnet)
+	if (!input.model.display_name.toLowerCase().includes("sonnet")) {
+		parts.push(colorize.dimYellow(`${input.model.display_name}`));
+	}
+
 	// Cost and token count formatted as ($0.77 | 132K +5K)
 	const cost = input.cost.total_cost_usd.toFixed(2);
 	const currentContext = formatTokenCount(transcriptData.contextSnapshot.currentContextSize);

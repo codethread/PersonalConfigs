@@ -117,9 +117,9 @@ t = ['exec-and-forget notif --clear move-help', 'move-node-to-workspace --focus-
 if.app-id = 'net.kovidgoyal.kitty'
 run = 'move-node-to-workspace primary'
 
-[[on-window-detected]]
-if.app-id = 'com.google.Chrome'
-run = 'move-node-to-workspace alt'
+# [[on-window-detected]]
+# if.app-id = 'com.google.Chrome'
+# run = 'move-node-to-workspace alt'
 
 [[on-window-detected]]
 if.app-id = 'company.thebrowser.Browser'
@@ -130,6 +130,9 @@ if.app-id = 'com.figma.Desktop'
 run = 'move-node-to-workspace figma'
 
 # always own screen and flexible for ui testing
+[[on-window-detected]]
+if.app-id = 'com.google.Chrome'
+run = ['layout floating', 'move-node-to-workspace test']
 [[on-window-detected]]
 if.app-id = 'org.mozilla.firefox'
 run = ['layout floating', 'move-node-to-workspace test']

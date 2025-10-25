@@ -1,7 +1,7 @@
 -- Extends Neovim's link handling with custom behavior for various file and URL types
 local M = {}
 
-M.gx = function()
+function M.gx()
 	local curFile = vim.fn.expand '%:t'
 	local file = vim.fn.expand '<cfile>'
 
@@ -13,7 +13,7 @@ M.gx = function()
 		-- can have syntax file:///foo/bar#L1 in the case of markdown in lsp hover
 		local _, _, path, line = file:find 'file://(.*)#L(.*)'
 		if not path then error('regex needs changing, likely no line number: ' .. file) end
-		vim.cmd.norm"q" -- close hover
+		vim.cmd.norm 'q' -- close hover
 		vim.cmd(string.format('keepjumps view +%s %s', line, path))
 	elseif curFile == 'package.json' then
 		M.open_npm_package()
