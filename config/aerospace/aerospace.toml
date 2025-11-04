@@ -134,6 +134,9 @@ run = 'move-node-to-workspace figma'
 if.app-id = 'com.google.Chrome'
 run = ['layout floating', 'move-node-to-workspace test']
 [[on-window-detected]]
+if.app-id = 'org.chromium.Chromium'
+run = ['layout floating', 'move-node-to-workspace test']
+[[on-window-detected]]
 if.app-id = 'org.mozilla.firefox'
 run = ['layout floating', 'move-node-to-workspace test']
 [[on-window-detected]]

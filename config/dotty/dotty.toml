@@ -26,13 +26,13 @@ target = "~/.config"
 name = "claude"
 origin = "~/PersonalConfigs/claude"
 target = "~/.claude"
-excludes = ["**/agents/**"]
-
-[[project]]
-name = "claude-agents"
-origin = "~/PersonalConfigs/claude/agents"
-target = "~/.claude/agents"
-link_directory = true
+# excludes = ["**/agents/**"]
+#
+# [[project]]
+# name = "claude-agents"
+# origin = "~/PersonalConfigs/claude/agents"
+# target = "~/.claude/agents"
+# link_directory = true
 
 [[project]]
 name = "work"

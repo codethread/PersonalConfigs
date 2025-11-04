@@ -50,7 +50,6 @@ bun run verify
 - **notif** - Show macOS native notifications
 - **prepend-comment** - Add or update module documentation comments
 - **record-and-transcribe** - Record audio and transcribe using Whisper
-- **speak-ts** - Text-to-speech wrapper optimized for TTS markers and better audio output
 - **tts** - Optimized for text-to-speech (adds spoken indicators)
 
 ### Quick Usage

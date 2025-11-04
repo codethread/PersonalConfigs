@@ -5,7 +5,6 @@
     "CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "true",
     "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "true",
     "USE_BUILTIN_RIPGREP": "0",
-    "DISABLE_AUTOUPDATER": "0",
     "DISABLE_BUG_COMMAND": "1",
     "DISABLE_TELEMETRY": "1",
     "__CC_CUSTOM_ENVS_": "manpager so we can see files, CLAUDECODE tells bun.js to have less noisy cli output, ZDOTDIR avoids old shell stuff",
@@ -16,7 +15,7 @@
   "includeCoAuthoredBy": false,
   "permissions": {
     "allow": [
-      "mcp__context7__resolve-library-id",
+      "mcp__context7",
       "WebSearch",
       "WebFetch(domain:docs.anthropic.com)",
       "WebFetch(domain:github.com)",
@@ -27,9 +26,8 @@
       "Bash(find:*)",
       "Bash(rg:*)",
       "Bash(grep:*)",
-      "Bash(echo \"Exit code: $?\")",
       "Bash(time:*)",
-      "Bash(MANPAGER='cat' man:*)",
+      "Bash(man:*)",
       "Read(//Users/codethread/.local/share/docs/claude-code-docs/**)",
       "Read(//Users/codethread/.claude/**)",
       "Bash(npm run:*)",
@@ -52,22 +50,15 @@
       "Bash(kitten:*)",
       "Bash(kitty @:*)",
       "Bash(speak:*)",
-      "Bash(speak-ts:*)",
       "Bash(cc-speak:*)",
       "Bash(whisper-cli:*)",
-      "Bash(chatterbox-tts:*)",
       "Bash(cindex:*)",
-      "Bash(prepend-comment:*)",
-      "Bash(~/.local/bin/bra:*)",
-      "Bash(/Users/codethread/PersonalConfigs/.local/bin/notif:*)",
-      "Bash(/Users/codethread/PersonalConfigs/.local/bin/notif test:*)",
       "Bash(nu:*)",
-      "Bash(~/.local/bin/nu:*)",
-      "Bash(/Users/codethread/PersonalConfigs/oven/bin/claude-memory-loader.ts)",
-      "Bash(/Users/codethread/PersonalConfigs/oven/bin/claude-memory-loader.ts --help)",
       "Read(//tmp/**)"
     ],
     "deny": [
+      "SlashCommand",
+      "NotebookEdit",
       "Bash(git push:*)",
       "Bash(git rebase:*)",
       "Read(.env)",
@@ -77,7 +68,10 @@
       "Read(**/secrets/**)",
       "Read(**/*.key)",
       "Read(**/*.pem)",
-      "Read(**/id_rsa*)"
+      "Read(**/id_rsa*)",
+      "Read(**/.env.local)",
+      "Read(**/.env.production)",
+      "Read(**/.git/hooks/**)"
     ],
     "defaultMode": "acceptEdits",
     "additionalDirectories": [
@@ -200,7 +194,12 @@
     "command": "cc-statusline",
     "padding": 0
   },
-  "alwaysThinkingEnabled": false,
+  "enabledPlugins": {
+    "playwright-skill@playwright-skill": true,
+    "spec-dev@personal-configs-plugins": true,
+    "skill-creator@personal-configs-plugins": true
+  },
+  "alwaysThinkingEnabled": true,
   "feedbackSurveyState": {
     "lastShownTime": 1754027278114
   }

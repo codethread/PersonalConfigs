@@ -51,6 +51,51 @@ The `oven/bin/cc-logs--*` commands provide analysis and aggregation of both hook
 - **cc-logs--extract-dialogue**: Extract conversation dialogues from session logs
 - **cc-logs--analyze-subagents**: Analyze subagent usage patterns and performance
 - **cc-logs--extract-commit-dialogue**: Extract dialogues related to git commits
+- **cc-logs--extract-agents**: Extract agent IDs with prompts and models for easy agent resumption
+
+### Agent Resumption Workflow
+
+Claude Code supports resuming Task agents from previous executions, allowing agents to continue work with full context. This is useful for:
+
+- Continuing analysis after reviewing initial findings
+- Adding follow-up work without re-executing expensive operations
+- Building upon previous research in stages
+
+#### Getting Agent IDs
+
+Use `cc-logs--extract-agents` to list all agents spawned in the current session:
+
+```bash
+# Get current session ID from session start message:
+# "Initialized agent context session: <session-id>"
+
+cc-logs--extract-agents 61a79fc9-2fac-4dc8-97ff-eee2a775e0a9
+```
+
+This outputs all agent IDs with their models, descriptions, and prompt previews, making it easy to identify which agent to resume.
+
+#### Resuming an Agent
+
+Pass the agent ID to the Task tool's `resume` parameter:
+
+```typescript
+Task({
+  subagent_type: "general-purpose",
+  description: "Continue previous analysis",
+  resume: "87cad6f3", // Agent ID from cc-logs--extract-agents
+  model: "haiku",
+  prompt: "Continue from where you left off and analyze the next file...",
+});
+```
+
+The resumed agent has full access to its previous execution transcript and can recall information without hints.
+
+#### Best Practices
+
+- **Always check for existing agents** before spawning new ones using `cc-logs--extract-agents`
+- **Maximize reuse** by resuming agents when adding follow-up work to previous tasks
+- **Match the model** when resuming (e.g., if original was haiku, resume with haiku)
+- **Provide context** in the new prompt about what additional work is needed
 
 ### Active Hooks
 
@@ -118,7 +163,6 @@ To help find commands amongst, there are some common patterns:
 
 - `prime-*`: Set up context for a specific task, allowing for more direct context loading than relying on a cross cutting CLAUDE.md file for implicit understanding
 - `refine-*`: Have claude code undertake repetitive improvements like updating documentation
-- `teach-*`: Inject context for a specific topic, e.g a specific api, tool or framework
 
 ### Available Commands
 
@@ -130,33 +174,6 @@ To help find commands amongst, there are some common patterns:
 - **Example**: `/speak` or `/speak Let's discuss the architecture`
 - **Features**: Voice input/output, automatic transcription, continuous conversation mode
 
-#### /prime-simple [feature you wish to build]
-
-- **Location**: `claude/commands/prime-simple.md`
-- **Purpose**: Prime the architect for a simple feature, but with clarity
-
-#### /prime-spec [feature you wish to build]
-
-- **Location**: `claude/commands/prime-spec.md`
-- **Purpose**: Architect engages with user to define comprehensive feature specification
-
-#### /prime-tech [specs/<spec>.md]
-
-- **Location**: `claude/commands/prime-tech.md`
-- **Purpose**: Architect leads technical design discussion to create implementation blueprint
-
-#### /prime-build [specs/<spec>.md]
-
-- **Location**: `claude/commands/prime-build.md`
-- **Purpose**: Architect coordinates implementation team to build approved specification
-
-#### /refine-spec [improvement to make]
-
-- **Location**: `claude/commands/refine-spec.md`
-- **Purpose**: Refine the prime commands for spec building
-- **Example**: `/speak` or `/speak Let's discuss the architecture`
-- **Features**: Voice input/output, automatic transcription, continuous conversation mode
-
 #### /refine-docs [sha1] [sha2] ...
 
 - **Location**: `claude/commands/refine-docs.md`
@@ -165,38 +182,6 @@ To help find commands amongst, there are some common patterns:
   - Without arguments: Reviews documentation against current session changes
   - With git SHAs: Reviews documentation against specific commits (for retrospective updates)
 - **Example**: `/refine-docs cdaa1fb 79f8137` - reviews changes from those two commits
-
-#### /teach-kitty
-
-- **Location**: `claude/commands/teach-kitty.md`
-- **Purpose**: Teach claude about kitty terminal information
-
-## Spec-Driven Development
-
-We use a multi-agent architecture with spec-driven development to build features systematically from requirements to verified implementation. The workflow follows these phases:
-
-1. **Requirements Gathering** - Architect agent clarifies and documents user needs
-2. **Specification Creation** - Detailed technical specs created in `specs/` directory
-3. **Implementation** - Senior Dev agent builds according to specifications
-4. **Verification** - QA agent validates against acceptance criteria
-
-See `claude/x-agent-docs/feature-building/ways-of-working.md` for detailed architecture.
-
-### Commands for Spec-Driven Development
-
-#### Simple features:
-
-- **`/prime-simple`** - Quick feature development with basic clarification
-
-#### Complex features:
-
-- **`/prime-spec`** - Full requirements gathering and specification creation
-- **`/prime-tech`** - Technical design discussion from existing spec
-- **`/prime-build`** - Coordinate implementation from approved specification
-
-#### Iterative improvements to the workflow itself
-
-- **`/refine-spec`** - Coordinate implementation from approved specification
 
 ### Hook Configuration Reference
 

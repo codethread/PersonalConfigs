@@ -3,18 +3,17 @@
   "permissions": {
     "allow": [
       "Read(//Users/codethread/PersonalConfigs/**)",
-      "Read(//Users/codethread/.claude/projects/-Users-codethread-PersonalConfigs/**)",
+      "Read(//Users/codethread/.claude/projects/**)",
+      "Read(//Users/codethread/.cache/cindex/**)",
       "Bash(bun:*)",
-      "Bash(timeout 5 bun run:*)",
       "Bash(./oven/bin/**)",
       "Bash(./oven/tests/**)",
       "Bash(bun bin/cindex.ts:*)",
-      "Read(//Users/codethread/.cache/cindex/**)",
       "Bash(specs/get-next-spec-id.sh:*)",
       "Bash(pip install --user:*)",
       "Bash(python3 -m pip install --user:*)"
     ],
-    "deny": ["Read(**/.env.local)", "Read(**/.env.production)", "Read(**/.git/hooks/**)"],
+    "deny": [],
     "ask": []
   },
   "hooks": {
@@ -30,6 +29,5 @@
       }
     ],
     "SubagentStop": []
-  },
-  "outputStyle": "default"
+  }
 }

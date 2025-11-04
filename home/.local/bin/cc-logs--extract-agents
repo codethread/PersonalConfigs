@@ -1,0 +1,88 @@
+#!/usr/bin/env bash
+#:module: Extract agent IDs from Claude Code session logs for resumption
+#:usage: cc-logs--extract-agents <session-id>
+#:description: Parses session logs to find all spawned agents with their IDs, models, and prompts for easy resumption
+
+set -euo pipefail
+
+show_help() {
+    cat <<EOF
+cc-logs--extract-agents - Extract agent IDs for resumption
+
+Usage:
+  cc-logs--extract-agents <session-id>
+
+Description:
+  Finds all Task agents spawned in a Claude Code session and displays their
+  IDs, models, descriptions, and prompt previews. This enables easy agent
+  resumption by identifying which agent to continue.
+
+Arguments:
+  <session-id>    The session UUID (shown at session start as "Initialized agent context session: <uuid>")
+
+Examples:
+  # Extract agents from current session
+  cc-logs--extract-agents 61a79fc9-2fac-4dc8-97ff-eee2a775e0a9
+
+  # Output shows agent IDs that can be used with Task tool's resume parameter
+
+Note:
+  Session ID is displayed when Claude Code starts a session. Look for:
+  "Initialized agent context session: <session-id>"
+
+EOF
+    exit 0
+}
+
+if [[ $# -eq 0 ]] || [[ "${1:-}" == "--help" ]] || [[ "${1:-}" == "-h" ]]; then
+    show_help
+fi
+
+SESSION_ID="$1"
+
+# Find log file matching the session ID pattern
+LOG_FILE=$(find .logs -maxdepth 1 -name "cc-session-*-${SESSION_ID}.jsonl" 2>/dev/null | head -n1)
+
+if [[ -z "$LOG_FILE" ]]; then
+    echo "Error: No log file found for session ID: $SESSION_ID" >&2
+    echo "" >&2
+    echo "Searched for: .logs/cc-session-*-${SESSION_ID}.jsonl" >&2
+    echo "" >&2
+    echo "Available session files:" >&2
+    ls -1t .logs/cc-session-*.jsonl 2>/dev/null | head -n5 | sed 's/^/  /' >&2 || echo "  (none found)" >&2
+    exit 1
+fi
+
+if ! command -v jq &> /dev/null; then
+    echo "Error: jq is required but not installed" >&2
+    exit 1
+fi
+
+echo "Agent IDs from: $LOG_FILE"
+echo "Session: $SESSION_ID"
+echo "================================"
+echo
+
+# Extract PostToolUse events for Task tool that have agentId
+while IFS= read -r line; do
+    # Check if this is a PostToolUse event for Task
+    if echo "$line" | jq -e '.event == "PostToolUse" and .tool_name == "Task" and .tool_response.agentId' > /dev/null 2>&1; then
+        agent_id=$(echo "$line" | jq -r '.tool_response.agentId')
+        model=$(echo "$line" | jq -r '.tool_input.model // "default"')
+        description=$(echo "$line" | jq -r '.tool_input.description')
+        prompt=$(echo "$line" | jq -r '.tool_input.prompt' | head -c 150)
+
+        # Check if this is a resumed task
+        is_resumed=$(echo "$line" | jq -r '.tool_input.resume // "none"')
+
+        echo "Agent ID: $agent_id"
+        echo "Model: $model"
+        echo "Description: $description"
+        if [[ "$is_resumed" != "none" ]]; then
+            echo "Resumed from: $is_resumed"
+        fi
+        echo "Prompt: $prompt..."
+        echo "---"
+        echo
+    fi
+done < "$LOG_FILE"

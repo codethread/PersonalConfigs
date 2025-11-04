@@ -1,6 +1,6 @@
 ---
-description: Teach claude about kitty terminal information
-allowed-tools: Bash(man:*)
+name: kitty-terminal
+description: Configure and control kitty terminal emulator using kitten commands, kitty.conf settings, remote control, and session automation. Use when working with kitty terminal, kittens, kitty.conf, terminal automation, or debugging kitty sessions.
 ---
 
 # Kitty Terminal Usage and Commands
@@ -9,7 +9,7 @@ kitty - The fast, feature rich terminal emulator
 
 ## About
 
-The kitty terminal is run as GUI and controlled through a config file at `~/.config/kitty/kitty.conf`. This config file can include additional files (often in the same directory for ease, but absolute paths are supported. The config file is a custom, but simple format, and most functionality is exposed via mappings to kitty 'actions' or from the cli via the `kitty` cli and self contained actions known as `kittens`.
+The kitty terminal is run as GUI and controlled through a config file at `~/.config/kitty/kitty.conf`. This config file can include additional files (often in the same directory for ease, but absolute paths are supported). The config file is a custom, but simple format, and most functionality is exposed via mappings to kitty 'actions' or from the cli via the `kitty` cli and self contained actions known as `kittens`.
 
 For example `kitten @ ls` will list all current os-windows, tabs and windows, with their foreground processes, ids etc. In fact all kitty behaviour can be controlled programmatically from `kitten` commands. See manpages and debugging below for more details.
 
@@ -142,11 +142,11 @@ kitten @ --to unix:/tmp/test-kitty-watcher launch --type=tab --cwd=/path/to/test
 kitten @ --to unix:/tmp/test-kitty-watcher ls | \
   jq '.[] | .tabs[] | .windows[] | {id: .id, cwd: .cwd, user_vars: .user_vars}'
 
-# 4. Manipulate the terminal with verious launch commands
+# 4. Manipulate the terminal with various launch commands
 kitten @ --to unix:/tmp/test-kitty-watcher launch --type=tab --cwd=/tmp
 kitten @ --to unix:/tmp/test-kitty-watcher launch --type=tab --cwd=/Users/username
 
-# 4. Clean up test instance when done
+# 5. Clean up test instance when done
 kitten @ --to unix:/tmp/test-kitty-watcher close-window --match all
 rm /tmp/test-kitty-watcher
 ```
@@ -197,4 +197,12 @@ kitten @ ls | jq '.[] | .tabs[] | .windows[] | {id, cwd, user_vars}'
 kitten @ ls | jq '.[] | .tabs[] | select(.windows[].user_vars.SESSION == "project")'
 ```
 
-You are now fully primed with kitty terminal information and do not need to run the `teach-kitty` slash command.
+## Instructions
+
+When users ask about kitty terminal, terminal configuration, automating terminal sessions, or debugging terminal issues:
+
+1. **Provide specific commands** - Give exact kitten @ commands with proper flags
+2. **Use man pages** - Reference the built-in man pages with the restricted path for quick lookups
+3. **Show debugging techniques** - Use socket-based debugging when appropriate
+4. **Explain windowing model** - Clarify the os-window > tab > window hierarchy when relevant
+5. **Provide jq examples** - Show how to parse JSON output from `kitten @ ls`

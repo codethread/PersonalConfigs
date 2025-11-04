@@ -78,7 +78,7 @@ graph TD
 
 ### For AI Agents
 
-- **Librarian Agent**: Can use `cindex -m` to understand project structure before searching
+- **Explore Agent**: Can use `cindex -m` to understand project structure before searching
 - **TDD Developer**: Can quickly locate test files and implementation areas
 - **Researcher Agent**: Can identify documentation and specification locations
 
@@ -119,7 +119,7 @@ find oven/bin -name "*.ts" -exec prepend-comment "CLI utility" {} \;
 
 **Action Required**: Update agent definitions to leverage cindex
 
-#### Librarian Agent (`claude/agents/librarian.md`)
+#### Explore Agent (`claude/agents/Explore.md`)
 
 ```markdown
 ## Project Discovery
@@ -178,7 +178,7 @@ module.exports = {
   event: "agent-invoke",
   action: (context) => {
     // Only for specific agents
-    const indexAgents = ["librarian", "tdd-developer", "researcher"];
+    const indexAgents = ["Explore", "tdd-developer", "researcher"];
 
     if (indexAgents.includes(context.agentType)) {
       return {

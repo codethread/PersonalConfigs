@@ -60,6 +60,7 @@
 	brew "ast-grep"
 	brew "ffmpeg"
 	brew "yt-dlp"
+	brew "ical-buddy"
 
 	# needed for gitwatch stuff
 	brew "coreutils"
@@ -72,11 +73,13 @@
 	tap "nikitabobko/tap"
 	cask "aerospace"
 
+	brew "opencode"
 	brew "sox" # audio recorder
 	brew "whisper-cpp" # audio to text
 
 	# Apps
 	cask "obsidian"
+	cask "todoist-app"
 	cask "1password"
 	cask "1password-cli"
 	cask "alfred"
@@ -183,7 +186,6 @@
 	tap "joemiller/taps"
 	brew "joemiller/taps/vault-token-helper"
 
-	brew "ical-buddy"
 
 	brew "podman"
 	brew "podman-compose"
