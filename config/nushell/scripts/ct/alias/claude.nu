@@ -1,7 +1,7 @@
-# export alias cl = claude
+# claude code wrapper with extra args
 export def cl --wrapped [
-	--dangerously-skip-permissions(-d)
-	--ui
+	--dangerously-skip-permissions(-d) # ahhhhh
+	--ui # add a ui based mcp config
 	...rest
 ] {
 	let args = {
@@ -21,18 +21,6 @@ export def cl --wrapped [
 	claude ...$all_args
 }
 
-export alias clc = claude --continue
-
-# Start up claude with access to heavy duty mcps like figma and playwright
-export def clui --wrapped [ ...rest ] {
-	(claude
-		--mcp-config ~/.claude/x-mcp/ui.json
-		# --mcp-config ~/.claude/x-mcp/ui-dev-tools.json
-		...$rest
-	)
-}
-
-#
 export alias _claude-session = jq 'select(.event == "PreToolUse")' .logs/claude-session-*.jsonl
 export alias _claude-prompts = jq 'select(.event == "UserPromptSubmit") | {prompt: .raw_data.prompt, transcript: .raw_data.transcript_path, timestamp}' .logs/claude-session-*.jsonl
 
