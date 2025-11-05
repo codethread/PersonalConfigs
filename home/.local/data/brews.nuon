@@ -53,7 +53,8 @@
 	brew "stylua"
 	brew "wakatime-cli"
 	brew "jq"
-	brew "fx"
+	brew "fx" # explore payloads
+	brew "uv" # darn python nerds
 	brew "tokei"
 	brew "tree"
 	brew "grc"

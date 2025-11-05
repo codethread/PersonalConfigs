@@ -45,7 +45,6 @@ export def main [
 
 	setup-speech-tts-mlx
 
-
 	job spawn { speak --text "setup complete" }
 }
 
@@ -62,6 +61,7 @@ def clone_tools [
 		[git@github.com:nushell/nu_scripts.git, ~/dev/vendor, {||}]
 		[git@github.com:gitwatch/gitwatch.git, ~/dev/vendor, {|| ln -f -s ~/dev/vendor/gitwatch/gitwatch.sh ~/.local/bin/gitwatch }]
 		[git@github.com:codethread/alfred.git, ~/sync, {|| }]
+		[git@github.com:codethread/todoist-cli.git, ~/dev/vendor, {|| go install }]
 		[git@github.com:apple/container.git, ~/dev/vendor, {||
 			# only needed till they fix --publish and stopping
 			# kitty @ launch --type=os-window sh -c "BUILD_CONFIGURATION=release make all test integration && BUILD_CONFIGURATION=release make install"
@@ -69,9 +69,9 @@ def clone_tools [
 		}]
 	]
 
-	$tools | par-each { |t|
+	$tools | each { |t|
 		cd $t.dir
-		let project = ($t.git | parse --regex '.*?:(?<owner>.+?)/(?<repo>.+?).git' | first)
+		let project = ($t.git | parse --regex '.*?:(?<owner>.+?)/(?<repo>.+?)(?:\.git)?$' | first)
 		let is_cloned = ($project.repo | path exists)
 
 		if $clean and $is_cloned {

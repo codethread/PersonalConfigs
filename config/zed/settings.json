@@ -7,6 +7,9 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "agent_buffer_font_size": 13.0,
+  "icon_theme": "Colored Zed Icons Theme Dark",
+  "theme": "Catppuccin Mocha",
   "features": {
     "edit_prediction_provider": "zed"
   },
@@ -18,8 +21,8 @@
     "metrics": false
   },
   "vim_mode": true,
-  "ui_font_size": 14,
-  "buffer_font_size": 14
+  "ui_font_size": 15.0,
+  "buffer_font_size": 15.0
   // "theme": {
   //   "mode": "dark",
   //   // "light": "Rosé Pine Moon",

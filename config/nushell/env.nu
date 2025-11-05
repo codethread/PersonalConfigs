@@ -35,7 +35,7 @@ $env.KSM_WORK = ($env.CT_USER == 'work')
 
 $env.CT_NOTES = (match $env.CT_USER {
 	"work" => (home 'gdrive/perks'),
-	_ => (home 'Library/Mobile Documents/com~apple~CloudDocs/Documents/Notes'),
+	_ => (home '~/Library/Mobile Documents/com~apple~CloudDocs/Documents/Notes'),
 })
 
 $env.WAKATIME_HOME = (home ".config/wakatime")
