@@ -11,6 +11,7 @@
 	},
 	"dependencies": {
 		"bun-plugin-tailwind": "^0.0.15",
+		"markdown-to-jsx": "^8.0.0",
 		"react": "^19",
 		"react-dom": "^19",
 		"tailwindcss": "^4.1.11"
