@@ -1,6 +1,7 @@
 // Parser for Claude Code session logs
 
 import {dirname, join} from "node:path";
+import type {ZodError} from "zod";
 import type {
 	AgentNode,
 	Event,
@@ -12,6 +13,41 @@ import type {
 	ToolResultContent,
 	ToolUseContent,
 } from "./types";
+import {LogEntrySchema} from "./types";
+
+/**
+ * Detailed error information for parse failures
+ */
+export class ParseError extends Error {
+	constructor(
+		message: string,
+		public readonly filePath: string,
+		public readonly lineNumber: number,
+		public readonly rawLine: string,
+		public readonly zodError?: ZodError,
+	) {
+		super(message);
+		this.name = "ParseError";
+	}
+
+	override toString(): string {
+		const lines = [
+			`${this.name}: ${this.message}`,
+			`  File: ${this.filePath}`,
+			`  Line: ${this.lineNumber}`,
+			`  Raw content: ${this.rawLine.substring(0, 100)}${this.rawLine.length > 100 ? "..." : ""}`,
+		];
+
+		if (this.zodError) {
+			lines.push(`  Validation errors:`);
+			for (const issue of this.zodError.issues) {
+				lines.push(`    - ${issue.path.join(".")}: ${issue.message}`);
+			}
+		}
+
+		return lines.join("\n");
+	}
+}
 
 export async function parseSessionLogs(sessionLogPath: string): Promise<SessionData> {
 	const logDirectory = dirname(sessionLogPath);
@@ -41,10 +77,50 @@ async function parseJsonlFile(filePath: string): Promise<LogEntry[]> {
 	const file = Bun.file(filePath);
 	const content = await file.text();
 
-	return content
-		.split("\n")
-		.filter((line) => line.trim())
-		.map((line) => JSON.parse(line) as LogEntry);
+	const lines = content.split("\n").filter((line) => line.trim());
+	const entries: LogEntry[] = [];
+
+	for (let i = 0; i < lines.length; i++) {
+		const line = lines[i];
+		if (!line) continue; // Type guard for TypeScript
+		const lineNumber = i + 1;
+
+		try {
+			// First parse JSON
+			const parsed = JSON.parse(line);
+
+			// Then validate with Zod
+			const result = LogEntrySchema.safeParse(parsed);
+
+			if (!result.success) {
+				throw new ParseError(
+					`Failed to validate log entry against schema`,
+					filePath,
+					lineNumber,
+					line,
+					result.error,
+				);
+			}
+
+			entries.push(result.data);
+		} catch (error: unknown) {
+			// If it's already a ParseError, rethrow it
+			if (error instanceof ParseError) {
+				throw error;
+			}
+
+			// If it's a JSON parse error, wrap it
+			if (error instanceof SyntaxError) {
+				throw new ParseError(`Failed to parse JSON: ${error.message}`, filePath, lineNumber, line);
+			}
+
+			// Unknown error
+			const errorMessage = error instanceof Error ? error.message : String(error);
+			throw new ParseError(`Unexpected error: ${errorMessage}`, filePath, lineNumber, line);
+		}
+	}
+
+	return entries;
 }
 
 function extractSessionId(logPath: string): string {
@@ -123,15 +199,29 @@ async function buildAgentTree(
 		const agentEntries = await parseJsonlFile(logPath);
 		const agentInfo = extractAgentInfo(mainLogEntries, agentId);
 
+		// Parse events from agent file
+		const agentFileEvents = parseEvents(agentEntries, sessionId, agentId);
+
+		// Also parse events from session log that belong to this agent (for resumed agents)
+		const sessionAgentEvents = parseSessionEventsForAgent(mainLogEntries, sessionId, agentId);
+
+		// Combine and sort events
+		const allAgentEvents = [...agentFileEvents, ...sessionAgentEvents].sort(
+			(a, b) => a.timestamp.getTime() - b.timestamp.getTime(),
+		);
+
 		const agentNode: AgentNode = {
 			id: agentId,
 			name: agentInfo.name,
 			model: agentInfo.model,
+			subagentType: agentInfo.subagentType,
 			description: agentInfo.description,
 			parent: sessionId,
 			children: [],
-			events: parseEvents(agentEntries, sessionId, agentId),
+			events: allAgentEvents,
 			logPath,
+			isResumed: agentInfo.isResumed,
+			resumedFrom: agentInfo.resumedFrom,
 		};
 
 		mainAgent.children.push(agentNode);
@@ -143,43 +233,123 @@ async function buildAgentTree(
 interface AgentInfo {
 	name: string | null;
 	model?: string;
+	subagentType?: string;
 	description?: string;
 }
 
-function extractAgentInfo(logEntries: LogEntry[], agentId: string): AgentInfo {
-	// Find the Task tool use that spawned this agent
-	for (const entry of logEntries) {
-		if (entry.type === "user" && entry.toolUseResult?.agentId === agentId) {
-			return {
-				name: entry.toolUseResult.prompt?.substring(0, 50) || null,
-				model: undefined,
-				description: entry.toolUseResult.prompt,
-			};
-		}
+interface ExtendedAgentInfo extends AgentInfo {
+	isResumed?: boolean;
+	resumedFrom?: string;
+}
 
-		// Also check for Task tool use in assistant messages
+function extractAgentInfo(logEntries: LogEntry[], agentId: string): ExtendedAgentInfo {
+	// First, find the result entry that contains this agentId
+	const resultEntry = logEntries.find((e) => e.type === "user" && e.toolUseResult?.agentId === agentId);
+
+	if (!resultEntry || !resultEntry.toolUseResult) {
+		return {name: agentId};
+	}
+
+	// Find the tool_result in the message content to get the tool_use_id
+	let toolUseId: string | undefined;
+	if (resultEntry.message?.content && Array.isArray(resultEntry.message.content)) {
+		for (const item of resultEntry.message.content) {
+			if (item.type === "tool_result") {
+				const toolResult = item as ToolResultContent;
+				toolUseId = toolResult.tool_use_id;
+				break;
+			}
+		}
+	}
+
+	if (!toolUseId) {
+		// Fallback to basic info from toolUseResult
+		return {
+			name: resultEntry.toolUseResult.prompt?.substring(0, 50) || null,
+			model: undefined,
+			description: resultEntry.toolUseResult.prompt,
+		};
+	}
+
+	// Now find the assistant message that contains the matching tool_use
+	for (const entry of logEntries) {
 		if (entry.type === "assistant" && entry.message?.content) {
 			const content = Array.isArray(entry.message.content) ? entry.message.content : [];
 			for (const item of content) {
-				if (item.type === "tool_use" && item.name === "Task") {
+				if (item.type === "tool_use" && item.id === toolUseId && item.name === "Task") {
 					const toolUse = item as ToolUseContent;
-					// Check if this tool use result contains our agentId
-					const resultEntry = logEntries.find(
-						(e) => e.type === "user" && e.toolUseResult?.agentId === agentId,
-					);
-					if (resultEntry) {
-						return {
-							name: (toolUse.input.description as string) || null,
-							model: toolUse.input.model as string | undefined,
-							description: toolUse.input.prompt as string | undefined,
-						};
+					// Check if this is a resume call
+					const isResume = "resume" in toolUse.input;
+					const resumesAgentId = isResume ? (toolUse.input.resume as string) : undefined;
+
+					return {
+						name: (toolUse.input.description as string) || null,
+						model: toolUse.input.model as string | undefined,
+						subagentType: toolUse.input.subagent_type as string | undefined,
+						description: toolUse.input.prompt as string | undefined,
+						isResumed: isResume && resumesAgentId === agentId,
+						resumedFrom: isResume && resumesAgentId === agentId ? toolUse.id : undefined,
+					};
+				}
+			}
+		}
+	}
+
+	// Fallback if we can't find the tool_use
+	return {
+		name: resultEntry.toolUseResult.prompt?.substring(0, 50) || null,
+		model: undefined,
+		description: resultEntry.toolUseResult.prompt,
+	};
+}
+
+// Parse events from session log that belong to a specific agent (after resume)
+function parseSessionEventsForAgent(logEntries: LogEntry[], sessionId: string, agentId: string): Event[] {
+	const events: Event[] = [];
+
+	// Look for tool results and assistant messages that belong to this agent
+	for (const entry of logEntries) {
+		// Skip events that would be in the agent's own log file
+		if (entry.agentId === agentId) continue;
+
+		// Check if this is a tool result for this agent (happens after resume)
+		if (entry.type === "user" && entry.toolUseResult?.agentId === agentId) {
+			const content = entry.message?.content;
+			if (Array.isArray(content)) {
+				for (const item of content) {
+					if (item.type === "tool_result") {
+						const toolResult = item as ToolResultContent;
+						let output = "";
+
+						if (typeof toolResult.content === "string") {
+							output = toolResult.content;
+						} else if (Array.isArray(toolResult.content)) {
+							output = toolResult.content.map((c) => c.text).join("\n");
+						}
+
+						events.push({
+							id: entry.uuid,
+							parentId: entry.parentUuid,
+							timestamp: new Date(entry.timestamp),
+							sessionId,
+							agentId,
+							agentName: null,
+							type: "tool-result" as EventType,
+							data: {
+								type: "tool-result",
+								toolUseId: toolResult.tool_use_id,
+								success: !toolResult.is_error,
+								output,
+								agentId,
+							},
+						});
 					}
 				}
 			}
 		}
 	}
 
-	return {name: agentId};
+	return events;
 }
 
 function parseEvents(logEntries: LogEntry[], sessionId: string, agentId: string | null): Event[] {
@@ -191,7 +361,9 @@ function parseEvents(logEntries: LogEntry[], sessionId: string, agentId: string 
 			parentId: entry.parentUuid,
 			timestamp: new Date(entry.timestamp),
 			sessionId,
-			agentId: agentId || entry.agentId || null,
+			// For main agent (agentId param is null), use sessionId as the agentId
+			// This ensures events can be looked up by agent ID since main agent's ID is sessionId
+			agentId: agentId || entry.agentId || sessionId,
 			agentName: null,
 		};
 
@@ -278,6 +450,9 @@ function parseEvents(logEntries: LogEntry[], sessionId: string, agentId: string 
 						});
 					} else if (item.type === "tool_use") {
 						const toolUse = item as ToolUseContent;
+						const isResume = toolUse.name === "Task" && "resume" in toolUse.input;
+						const resumesAgentId = isResume ? (toolUse.input.resume as string) : undefined;
+
 						events.push({
 							...baseEvent,
 							type: "tool-use" as EventType,
@@ -287,6 +462,8 @@ function parseEvents(logEntries: LogEntry[], sessionId: string, agentId: string 
 								toolId: toolUse.id,
 								input: toolUse.input,
 								description: (toolUse.input.description as string) || undefined,
+								isResume,
+								resumesAgentId,
 							},
 						});
 					}

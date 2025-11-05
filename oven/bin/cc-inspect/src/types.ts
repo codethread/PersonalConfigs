@@ -1,195 +1,282 @@
 // Types for Claude Code session logs
 
-export interface LogEntry {
-	type: "summary" | "user" | "assistant";
-	uuid: string;
-	parentUuid: string | null;
-	timestamp: string;
-	sessionId: string;
-	agentId?: string;
-	isSidechain: boolean;
-	userType?: string;
-	cwd?: string;
-	version?: string;
-	gitBranch?: string;
-	message?: Message;
-	toolUseResult?: ToolUseResult;
-	summary?: string;
-	leafUuid?: string;
-	thinkingMetadata?: ThinkingMetadata;
-	requestId?: string;
-}
+import {z} from "zod";
 
-export interface Message {
-	role: "user" | "assistant";
-	content: MessageContent[] | string;
-	model?: string;
-	id?: string;
-	type?: string;
-	stop_reason?: string | null;
-	stop_sequence?: string | null;
-	usage?: Usage;
-}
+// Base Zod schemas
+export const UsageSchema = z.object({
+	input_tokens: z.number(),
+	cache_creation_input_tokens: z.number().optional(),
+	cache_read_input_tokens: z.number().optional(),
+	cache_creation: z
+		.object({
+			ephemeral_5m_input_tokens: z.number().optional(),
+			ephemeral_1h_input_tokens: z.number().optional(),
+		})
+		.optional(),
+	output_tokens: z.number(),
+	service_tier: z.string().optional(),
+});
 
-export type MessageContent = TextContent | ThinkingContent | ToolUseContent | ToolResultContent;
+export const TextContentSchema = z.object({
+	type: z.literal("text"),
+	text: z.string(),
+});
 
-export interface TextContent {
-	type: "text";
-	text: string;
-}
+export const ThinkingContentSchema = z.object({
+	type: z.literal("thinking"),
+	thinking: z.string(),
+	signature: z.string().optional(),
+});
 
-export interface ThinkingContent {
-	type: "thinking";
-	thinking: string;
-	signature?: string;
-}
+export const ToolUseContentSchema = z.object({
+	type: z.literal("tool_use"),
+	id: z.string(),
+	name: z.string(),
+	input: z.record(z.string(), z.unknown()),
+});
 
-export interface ToolUseContent {
-	type: "tool_use";
-	id: string;
-	name: string;
-	input: Record<string, unknown>;
-}
+export const ToolResultContentSchema = z.object({
+	type: z.literal("tool_result"),
+	tool_use_id: z.string(),
+	content: z.union([z.string(), z.array(TextContentSchema)]),
+	is_error: z.boolean().optional(),
+});
 
-export interface ToolResultContent {
-	type: "tool_result";
-	tool_use_id: string;
-	content: string | TextContent[];
-	is_error?: boolean;
-}
+export const MessageContentSchema = z.discriminatedUnion("type", [
+	TextContentSchema,
+	ThinkingContentSchema,
+	ToolUseContentSchema,
+	ToolResultContentSchema,
+]);
 
-export interface ToolUseResult {
-	status?: string;
-	prompt?: string;
-	agentId?: string;
-	content?: TextContent[];
-	totalDurationMs?: number;
-	totalTokens?: number;
-	totalToolUseCount?: number;
-	usage?: Usage;
-	stdout?: string;
-	stderr?: string;
-	interrupted?: boolean;
-	isImage?: boolean;
-	type?: string;
-	file?: FileResult;
-}
+export const FileResultSchema = z.object({
+	filePath: z.string(),
+	content: z.string(),
+	numLines: z.number(),
+	startLine: z.number(),
+	totalLines: z.number(),
+});
 
-export interface FileResult {
-	filePath: string;
-	content: string;
-	numLines: number;
-	startLine: number;
-	totalLines: number;
-}
+export const ToolUseResultSchema = z.object({
+	status: z.string().optional(),
+	prompt: z.string().optional(),
+	agentId: z.string().optional(),
+	content: z.array(TextContentSchema).optional(),
+	totalDurationMs: z.number().optional(),
+	totalTokens: z.number().optional(),
+	totalToolUseCount: z.number().optional(),
+	usage: UsageSchema.optional(),
+	stdout: z.string().optional(),
+	stderr: z.string().optional(),
+	interrupted: z.boolean().optional(),
+	isImage: z.boolean().optional(),
+	type: z.string().optional(),
+	file: FileResultSchema.optional(),
+});
 
-export interface Usage {
-	input_tokens: number;
-	cache_creation_input_tokens?: number;
-	cache_read_input_tokens?: number;
-	cache_creation?: {
-		ephemeral_5m_input_tokens?: number;
-		ephemeral_1h_input_tokens?: number;
-	};
-	output_tokens: number;
-	service_tier?: string;
-}
+export const MessageSchema = z.object({
+	role: z.enum(["user", "assistant"]),
+	content: z.union([z.array(MessageContentSchema), z.string()]),
+	model: z.string().optional(),
+	id: z.string().optional(),
+	type: z.string().optional(),
+	stop_reason: z.string().nullable().optional(),
+	stop_sequence: z.string().nullable().optional(),
+	usage: UsageSchema.optional(),
+});
 
-export interface ThinkingMetadata {
-	level: string;
-	disabled: boolean;
-	triggers: unknown[];
-}
+export const ThinkingMetadataSchema = z.object({
+	level: z.string(),
+	disabled: z.boolean(),
+	triggers: z.array(z.unknown()),
+});
+
+export const LogEntrySchema = z.object({
+	type: z.enum(["summary", "user", "assistant"]),
+	uuid: z.string(),
+	parentUuid: z.string().nullable(),
+	timestamp: z.string(),
+	sessionId: z.string(),
+	agentId: z.string().optional(),
+	isSidechain: z.boolean(),
+	userType: z.string().optional(),
+	cwd: z.string().optional(),
+	version: z.string().optional(),
+	gitBranch: z.string().optional(),
+	message: MessageSchema.optional(),
+	toolUseResult: ToolUseResultSchema.optional(),
+	summary: z.string().optional(),
+	leafUuid: z.string().optional(),
+	thinkingMetadata: ThinkingMetadataSchema.optional(),
+	requestId: z.string().optional(),
+});
+
+// TypeScript types inferred from schemas
+export type Usage = z.infer<typeof UsageSchema>;
+export type TextContent = z.infer<typeof TextContentSchema>;
+export type ThinkingContent = z.infer<typeof ThinkingContentSchema>;
+export type ToolUseContent = z.infer<typeof ToolUseContentSchema>;
+export type ToolResultContent = z.infer<typeof ToolResultContentSchema>;
+export type MessageContent = z.infer<typeof MessageContentSchema>;
+export type FileResult = z.infer<typeof FileResultSchema>;
+export type ToolUseResult = z.infer<typeof ToolUseResultSchema>;
+export type Message = z.infer<typeof MessageSchema>;
+export type ThinkingMetadata = z.infer<typeof ThinkingMetadataSchema>;
+export type LogEntry = z.infer<typeof LogEntrySchema>;
 
 // Processed event types for visualization
-export interface Event {
-	id: string;
-	parentId: string | null;
-	timestamp: Date;
-	sessionId: string;
-	agentId: string | null;
-	agentName: string | null;
-	type: EventType;
-	data: EventData;
-}
+export const UserMessageDataSchema = z.object({
+	type: z.literal("user-message"),
+	text: z.string(),
+});
 
-export type EventType =
-	| "user-message"
-	| "assistant-message"
-	| "tool-use"
-	| "tool-result"
-	| "thinking"
-	| "agent-spawn"
-	| "summary";
+export const AssistantMessageDataSchema = z.object({
+	type: z.literal("assistant-message"),
+	text: z.string(),
+});
 
-export type EventData =
-	| UserMessageData
-	| AssistantMessageData
-	| ToolUseData
-	| ToolResultData
-	| ThinkingData
-	| AgentSpawnData
-	| SummaryData;
+export const ToolUseDataSchema = z.object({
+	type: z.literal("tool-use"),
+	toolName: z.string(),
+	toolId: z.string(),
+	input: z.record(z.string(), z.unknown()),
+	description: z.string().optional(),
+	isResume: z.boolean().optional(),
+	resumesAgentId: z.string().optional(),
+});
 
-export interface UserMessageData {
-	type: "user-message";
-	text: string;
-}
+export const ToolResultDataSchema = z.object({
+	type: z.literal("tool-result"),
+	toolUseId: z.string(),
+	success: z.boolean(),
+	output: z.string(),
+	agentId: z.string().optional(),
+});
 
-export interface AssistantMessageData {
-	type: "assistant-message";
-	text: string;
-}
+export const ThinkingDataSchema = z.object({
+	type: z.literal("thinking"),
+	content: z.string(),
+});
 
-export interface ToolUseData {
-	type: "tool-use";
-	toolName: string;
-	toolId: string;
-	input: Record<string, unknown>;
-	description?: string;
-}
+export const AgentSpawnDataSchema = z.object({
+	type: z.literal("agent-spawn"),
+	agentId: z.string(),
+	description: z.string(),
+	prompt: z.string(),
+	model: z.string().optional(),
+});
 
-export interface ToolResultData {
-	type: "tool-result";
-	toolUseId: string;
-	success: boolean;
-	output: string;
-	agentId?: string;
-}
+export const SummaryDataSchema = z.object({
+	type: z.literal("summary"),
+	summary: z.string(),
+});
 
-export interface ThinkingData {
-	type: "thinking";
-	content: string;
-}
+export const EventDataSchema = z.discriminatedUnion("type", [
+	UserMessageDataSchema,
+	AssistantMessageDataSchema,
+	ToolUseDataSchema,
+	ToolResultDataSchema,
+	ThinkingDataSchema,
+	AgentSpawnDataSchema,
+	SummaryDataSchema,
+]);
 
-export interface AgentSpawnData {
-	type: "agent-spawn";
-	agentId: string;
-	description: string;
-	prompt: string;
-	model?: string;
-}
+export const EventTypeSchema = z.enum([
+	"user-message",
+	"assistant-message",
+	"tool-use",
+	"tool-result",
+	"thinking",
+	"agent-spawn",
+	"summary",
+]);
 
-export interface SummaryData {
-	type: "summary";
-	summary: string;
-}
+export const EventSchema = z.object({
+	id: z.string(),
+	parentId: z.string().nullable(),
+	timestamp: z.date(),
+	sessionId: z.string(),
+	agentId: z.string().nullable(),
+	agentName: z.string().nullable(),
+	type: EventTypeSchema,
+	data: EventDataSchema,
+});
 
-// Agent tree structure
-export interface AgentNode {
+// Agent tree structure (recursive, so we need to use z.lazy)
+export type AgentNode = {
 	id: string;
 	name: string | null;
 	model?: string;
+	subagentType?: string;
 	description?: string;
 	parent: string | null;
 	children: AgentNode[];
 	events: Event[];
 	logPath: string;
-}
+	isResumed?: boolean;
+	resumedFrom?: string; // Tool use ID that resumed this agent
+};
 
-export interface SessionData {
-	sessionId: string;
-	mainAgent: AgentNode;
-	allEvents: Event[];
-	logDirectory: string;
-}
+export const AgentNodeSchema: z.ZodType<AgentNode> = z.lazy(() =>
+	z.object({
+		id: z.string(),
+		name: z.string().nullable(),
+		model: z.string().optional(),
+		subagentType: z.string().optional(),
+		description: z.string().optional(),
+		parent: z.string().nullable(),
+		children: z.array(AgentNodeSchema),
+		events: z.array(EventSchema),
+		logPath: z.string(),
+		isResumed: z.boolean().optional(),
+		resumedFrom: z.string().optional(),
+	}),
+);
+
+export const SessionDataSchema = z.object({
+	sessionId: z.string(),
+	mainAgent: AgentNodeSchema,
+	allEvents: z.array(EventSchema),
+	logDirectory: z.string(),
+});
+
+export const SessionSchema = z.object({
+	filename: z.string(),
+	path: z.string(),
+	sessionId: z.string(),
+	modifiedAt: z.string(),
+	size: z.number(),
+});
+
+// API Response Types (Discriminated Unions)
+export const DirectoriesResponseSchema = z.discriminatedUnion("status", [
+	z.object({status: z.literal("success"), directories: z.array(z.string())}),
+	z.object({status: z.literal("error"), error: z.string()}),
+]);
+
+export const SessionsResponseSchema = z.discriminatedUnion("status", [
+	z.object({status: z.literal("success"), sessions: z.array(SessionSchema)}),
+	z.object({status: z.literal("error"), error: z.string()}),
+]);
+
+export const SessionDataResponseSchema = z.discriminatedUnion("status", [
+	z.object({status: z.literal("success"), data: SessionDataSchema}),
+	z.object({status: z.literal("error"), error: z.string()}),
+]);
+
+// TypeScript types inferred from schemas
+export type UserMessageData = z.infer<typeof UserMessageDataSchema>;
+export type AssistantMessageData = z.infer<typeof AssistantMessageDataSchema>;
+export type ToolUseData = z.infer<typeof ToolUseDataSchema>;
+export type ToolResultData = z.infer<typeof ToolResultDataSchema>;
+export type ThinkingData = z.infer<typeof ThinkingDataSchema>;
+export type AgentSpawnData = z.infer<typeof AgentSpawnDataSchema>;
+export type SummaryData = z.infer<typeof SummaryDataSchema>;
+export type EventData = z.infer<typeof EventDataSchema>;
+export type EventType = z.infer<typeof EventTypeSchema>;
+export type Event = z.infer<typeof EventSchema>;
+export type SessionData = z.infer<typeof SessionDataSchema>;
+export type Session = z.infer<typeof SessionSchema>;
+export type DirectoriesResponse = z.infer<typeof DirectoriesResponseSchema>;
+export type SessionsResponse = z.infer<typeof SessionsResponseSchema>;
+export type SessionDataResponse = z.infer<typeof SessionDataResponseSchema>;

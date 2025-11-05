@@ -23,7 +23,7 @@ interface Connection {
   toIndex: number;
   fromLane: number;
   toLane: number;
-  type: "spawn" | "merge";
+  type: "spawn" | "merge" | "resume";
   color: string;
 }
 
@@ -68,7 +68,7 @@ export function GraphTimeline({ sessionData, onSelectEvent, selectedEvent }: Gra
     });
   }, [sessionData.allEvents, laneAssignments]);
 
-  // Calculate connections between events (spawn/merge lines)
+  // Calculate connections between events (spawn/merge/resume lines)
   const connections = useMemo(() => {
     const conns: Connection[] = [];
 
@@ -76,6 +76,10 @@ export function GraphTimeline({ sessionData, onSelectEvent, selectedEvent }: Gra
     for (let index = 0; index < eventsWithLanes.length; index++) {
       const event = eventsWithLanes[index];
       if (!event || event.data.type !== "tool-use" || event.data.toolName !== "Task") continue;
+
+      const toolData = event.data;
+      const isResume = toolData.isResume;
+      const resumesAgentId = toolData.resumesAgentId;
 
       // Find the corresponding tool-result
       const toolUseId = event.data.toolId;
@@ -98,15 +102,40 @@ export function GraphTimeline({ sessionData, onSelectEvent, selectedEvent }: Gra
             );
 
             if (firstAgentEventIndex !== -1) {
-              // Spawn line: from tool-use to first agent event
-              conns.push({
-                fromIndex: index,
-                toIndex: firstAgentEventIndex,
-                fromLane: event.lane,
-                toLane: spawnedLane.lane,
-                type: "spawn",
-                color: spawnedLane.color,
-              });
+              // If this is a resume, draw a dotted line from the last event of the resumed agent
+              if (isResume && resumesAgentId === spawnedAgentId) {
+                // Find the last event from this agent before the resume
+                let lastEventBeforeResume = -1;
+                for (let i = index - 1; i >= 0; i--) {
+                  const evt = eventsWithLanes[i];
+                  if (evt && evt.agentId === spawnedAgentId) {
+                    lastEventBeforeResume = i;
+                    break;
+                  }
+                }
+
+                if (lastEventBeforeResume !== -1) {
+                  // Resume line: from last event before resume to resume tool-use
+                  conns.push({
+                    fromIndex: lastEventBeforeResume,
+                    toIndex: index,
+                    fromLane: spawnedLane.lane,
+                    toLane: event.lane,
+                    type: "resume",
+                    color: spawnedLane.color,
+                  });
+                }
+              } else {
+                // Spawn line: from tool-use to first agent event
+                conns.push({
+                  fromIndex: index,
+                  toIndex: firstAgentEventIndex,
+                  fromLane: event.lane,
+                  toLane: spawnedLane.lane,
+                  type: "spawn",
+                  color: spawnedLane.color,
+                });
+              }
 
               // Merge line: from last agent event before result to result
               // Find all agent events between first and result
@@ -141,31 +170,33 @@ export function GraphTimeline({ sessionData, onSelectEvent, selectedEvent }: Gra
   const displayWidth = maxVisibleLanes * laneWidth + 40;
 
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-lg overflow-hidden">
-      {/* Lane header */}
-      <div className="sticky top-0 z-10 bg-gray-900 border-b border-gray-800 p-4">
-        <div className="flex" style={{ width: totalLaneWidth }}>
-          {laneAssignments.map((assignment) => {
-            const agent =
-              assignment.agentId === sessionData.mainAgent.id
-                ? sessionData.mainAgent
-                : sessionData.mainAgent.children.find((a) => a.id === assignment.agentId);
+    <div className="bg-gray-900 border border-gray-800 rounded-lg">
+      {/* Lane header - sticky, sticks to top when scrolling */}
+      <div className="sticky top-0 z-50 bg-gray-900 border-b border-gray-800 p-4 shadow-lg">
+        <div className="flex overflow-x-auto">
+          <div className="flex" style={{ width: totalLaneWidth }}>
+            {laneAssignments.map((assignment) => {
+              const agent =
+                assignment.agentId === sessionData.mainAgent.id
+                  ? sessionData.mainAgent
+                  : sessionData.mainAgent.children.find((a) => a.id === assignment.agentId);
 
-            return (
-              <div
-                key={assignment.agentId}
-                className="text-xs text-gray-400 flex-shrink-0"
-                style={{ width: laneWidth }}
-                title={agent?.name || assignment.agentId}
-              >
+              return (
                 <div
-                  className="w-2 h-2 rounded-full mx-auto mb-1"
-                  style={{ backgroundColor: assignment.color }}
-                />
-                <div className="truncate text-center text-[10px]">{assignment.lane}</div>
-              </div>
-            );
-          })}
+                  key={assignment.agentId}
+                  className="text-xs text-gray-400 flex-shrink-0"
+                  style={{ width: laneWidth }}
+                  title={agent?.name || assignment.agentId}
+                >
+                  <div
+                    className="w-2 h-2 rounded-full mx-auto mb-1"
+                    style={{ backgroundColor: assignment.color }}
+                  />
+                  <div className="truncate text-center text-[10px]">{assignment.lane}</div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
 
@@ -261,6 +292,8 @@ function EventRow({
                 const x1 = conn.fromLane * laneWidth + laneWidth / 2;
                 const x2 = conn.toLane * laneWidth + laneWidth / 2;
 
+                const dashArray = conn.type === "merge" ? "4 4" : conn.type === "resume" ? "2 2" : undefined;
+
                 return (
                   <path
                     key={`${conn.fromIndex}-${conn.toIndex}-${i}`}
@@ -269,7 +302,7 @@ function EventRow({
                     strokeWidth="2"
                     fill="none"
                     opacity="0.6"
-                    strokeDasharray={conn.type === "merge" ? "4 4" : undefined}
+                    strokeDasharray={dashArray}
                   />
                 );
               }

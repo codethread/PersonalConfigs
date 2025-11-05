@@ -11,7 +11,8 @@ export function EventDetailsPanel({ event, agents, onClose }: EventDetailsPanelP
   if (!event) return null;
 
   const agent = agents.find((a) => a.id === event.agentId);
-  const agentName = agent?.name || event.agentId || "main";
+  const agentName = agent?.name || event.agentId || "Main Agent";
+  const laneNumber = agents.findIndex((a) => a.id === event.agentId);
 
   return (
     <div className="fixed inset-y-0 right-0 w-[600px] bg-gray-900 border-l border-gray-800 shadow-2xl flex flex-col z-50">
@@ -31,15 +32,35 @@ export function EventDetailsPanel({ event, agents, onClose }: EventDetailsPanelP
           </button>
         </div>
 
+        {/* Agent Info Section */}
+        <div className="mb-4 p-3 bg-blue-950 border border-blue-800 rounded">
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-2 text-sm">
+              <span className="text-blue-300 font-semibold">Agent:</span>
+              <span className="text-blue-100">{agentName}</span>
+              <span className="text-blue-400 text-xs">(Lane #{laneNumber})</span>
+            </div>
+            {agent?.subagentType && (
+              <div className="flex items-center gap-2 text-sm">
+                <span className="text-blue-300 font-semibold">Type:</span>
+                <span className="text-blue-200 font-mono">{agent.subagentType}</span>
+                {agent.model && (
+                  <>
+                    <span className="text-blue-400">-</span>
+                    <span className="text-blue-300 font-semibold">Model:</span>
+                    <span className="text-blue-200 font-mono">{agent.model}</span>
+                  </>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+
         {/* Event metadata */}
         <div className="space-y-2">
           <div className="flex items-center gap-2 text-sm">
             <span className="text-gray-500">Time:</span>
             <span className="font-mono text-gray-300">{formatTime(event.timestamp)}</span>
-          </div>
-          <div className="flex items-center gap-2 text-sm">
-            <span className="text-gray-500">Agent:</span>
-            <span className="text-gray-300">{agentName}</span>
           </div>
           <div className="flex items-center gap-2 text-sm">
             <span className="text-gray-500">Type:</span>
@@ -97,6 +118,10 @@ function EventContent({ event }: { event: Event }) {
       );
 
     case "tool-use":
+      const isTaskTool = data.toolName === "Task";
+      const subagentType = isTaskTool ? (data.input.subagent_type as string | undefined) : undefined;
+      const model = isTaskTool ? (data.input.model as string | undefined) : undefined;
+
       return (
         <div className="space-y-4">
           <SectionHeader emoji="🔧">Tool Use</SectionHeader>
@@ -110,6 +135,18 @@ function EventContent({ event }: { event: Event }) {
               <div className="flex items-start gap-2">
                 <span className="text-sm text-gray-500">Description:</span>
                 <span className="text-sm text-gray-300">{data.description}</span>
+              </div>
+            )}
+            {subagentType && (
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-500">Type:</span>
+                <span className="text-sm text-purple-400 font-mono">{subagentType}</span>
+              </div>
+            )}
+            {model && (
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-500">Model:</span>
+                <span className="text-sm text-green-400 font-mono">{model}</span>
               </div>
             )}
             <div className="flex items-center gap-2">

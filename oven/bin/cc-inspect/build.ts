@@ -1,151 +1,99 @@
 #!/usr/bin/env bun
+// :module: Build script for cc-inspect - compiles TypeScript/React app into standalone executable
+
 import plugin from "bun-plugin-tailwind";
-import {existsSync} from "fs";
-import {rm} from "fs/promises";
-import path from "path";
+import {chmod} from "fs/promises";
+import {join} from "path";
+import {parseArgs} from "util";
 
-if (process.argv.includes("--help") || process.argv.includes("-h")) {
-	console.log(`
-🏗️  Bun Build Script
+const BIN_DEST_DIR = join(import.meta.dir, "..", "..", "..", "..", ".local", "bin");
+const ENTRY_POINT = join(import.meta.dir, "src", "index.tsx");
+const DEST_PATH = join(BIN_DEST_DIR, "cc-inspect");
 
-Usage: bun run build.ts [options]
-
-Common Options:
-  --outdir <path>          Output directory (default: "dist")
-  --minify                 Enable minification (or --minify.whitespace, --minify.syntax, etc)
-  --sourcemap <type>      Sourcemap type: none|linked|inline|external
-  --target <target>        Build target: browser|bun|node
-  --format <format>        Output format: esm|cjs|iife
-  --splitting              Enable code splitting
-  --packages <type>        Package handling: bundle|external
-  --public-path <path>     Public path for assets
-  --env <mode>             Environment handling: inline|disable|prefix*
-  --conditions <list>      Package.json export conditions (comma separated)
-  --external <list>        External packages (comma separated)
-  --banner <text>          Add banner text to output
-  --footer <text>          Add footer text to output
-  --define <obj>           Define global constants (e.g. --define.VERSION=1.0.0)
-  --help, -h               Show this help message
-
-Example:
-  bun run build.ts --outdir=dist --minify --sourcemap=linked --external=react,react-dom
-`);
-	process.exit(0);
-}
-
-const toCamelCase = (str: string): string => str.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
-
-const parseValue = (value: string): any => {
-	if (value === "true") return true;
-	if (value === "false") return false;
-
-	if (/^\d+$/.test(value)) return parseInt(value, 10);
-	if (/^\d*\.\d+$/.test(value)) return parseFloat(value);
-
-	if (value.includes(",")) return value.split(",").map((v) => v.trim());
-
-	return value;
-};
-
-function parseArgs(): Partial<Bun.BuildConfig> {
-	const config: Partial<Bun.BuildConfig> = {};
-	const args = process.argv.slice(2);
-
-	for (let i = 0; i < args.length; i++) {
-		const arg = args[i];
-		if (arg === undefined) continue;
-		if (!arg.startsWith("--")) continue;
-
-		if (arg.startsWith("--no-")) {
-			const key = toCamelCase(arg.slice(5));
-			config[key] = false;
-			continue;
-		}
-
-		if (!arg.includes("=") && (i === args.length - 1 || args[i + 1]?.startsWith("--"))) {
-			const key = toCamelCase(arg.slice(2));
-			config[key] = true;
-			continue;
-		}
-
-		let key: string;
-		let value: string;
-
-		if (arg.includes("=")) {
-			[key, value] = arg.slice(2).split("=", 2) as [string, string];
-		} else {
-			key = arg.slice(2);
-			value = args[++i] ?? "";
-		}
-
-		key = toCamelCase(key);
-
-		if (key.includes(".")) {
-			const [parentKey, childKey] = key.split(".");
-			config[parentKey] = config[parentKey] || {};
-			config[parentKey][childKey] = parseValue(value);
-		} else {
-			config[key] = parseValue(value);
-		}
+async function buildExecutable(verbose = false) {
+	if (verbose) {
+		console.log("Building cc-inspect executable...");
+		console.log(`  Entry: ${ENTRY_POINT}`);
+		console.log(`  Output: ${DEST_PATH}`);
 	}
 
-	return config;
-}
+	try {
+		if (verbose) {
+			console.log("  Starting Bun.build...");
+		}
 
-const formatFileSize = (bytes: number): string => {
-	const units = ["B", "KB", "MB", "GB"];
-	let size = bytes;
-	let unitIndex = 0;
+		const result = await Bun.build({
+			entrypoints: [ENTRY_POINT],
+			plugins: [plugin],
+			compile: {
+				target:
+					process.platform === "darwin"
+						? process.arch === "arm64"
+							? "bun-darwin-arm64"
+							: "bun-darwin-x64"
+						: process.platform === "linux"
+							? "bun-linux-x64"
+							: "bun-linux-x64", // fallback
+				outfile: DEST_PATH,
+			},
+			minify: true,
+			bytecode: true,
+			sourcemap: "inline",
+			define: {
+				"process.env.NODE_ENV": JSON.stringify("production"),
+			},
+		});
 
-	while (size >= 1024 && unitIndex < units.length - 1) {
-		size /= 1024;
-		unitIndex++;
+		if (verbose) {
+			console.log(`  Build result success: ${result.success}`);
+			console.log(`  Build logs count: ${result.logs.length}`);
+		}
+
+		if (!result.success) {
+			const errors = result.logs
+				.map((log) => {
+					if (typeof log === "string") return `  ${log}`;
+					return `  ${log.message || JSON.stringify(log)}`;
+				})
+				.join("\n");
+			console.error("Build failed with errors:");
+			console.error(errors);
+			throw new Error(`Bundle failed${errors ? `:\n${errors}` : ""}`);
+		}
+
+		// Make the file executable
+		await chmod(DEST_PATH, 0o755);
+
+		if (verbose) {
+			console.log("✅ cc-inspect built successfully");
+		}
+
+		return {success: true, outputPath: DEST_PATH};
+	} catch (error) {
+		if (verbose) {
+			console.error("  Exception caught during build:");
+			console.error(error);
+		}
+		throw new Error(`Failed to build cc-inspect: ${error instanceof Error ? error.message : String(error)}`);
 	}
-
-	return `${size.toFixed(2)} ${units[unitIndex]}`;
-};
-
-console.log("\n🚀 Starting build process...\n");
-
-const cliConfig = parseArgs();
-const outdir = cliConfig.outdir || path.join(process.cwd(), "dist");
-
-if (existsSync(outdir)) {
-	console.log(`🗑️ Cleaning previous build at ${outdir}`);
-	await rm(outdir, {recursive: true, force: true});
 }
 
-const start = performance.now();
+// Only run if executed directly
+if (import.meta.main) {
+	const {values} = parseArgs({
+		args: Bun.argv.slice(2),
+		options: {
+			verbose: {type: "boolean", short: "v"},
+		},
+		strict: false,
+	});
 
-const entrypoints = [...new Bun.Glob("**.html").scanSync("src")]
-	.map((a) => path.resolve("src", a))
-	.filter((dir) => !dir.includes("node_modules"));
-console.log(
-	`📄 Found ${entrypoints.length} HTML ${entrypoints.length === 1 ? "file" : "files"} to process\n`,
-);
+	try {
+		await buildExecutable(values.verbose);
+	} catch (error) {
+		console.error(error instanceof Error ? error.message : String(error));
+		process.exit(1);
+	}
+}
 
-const result = await Bun.build({
-	entrypoints,
-	outdir,
-	plugins: [plugin],
-	minify: true,
-	target: "browser",
-	sourcemap: "linked",
-	define: {
-		"process.env.NODE_ENV": JSON.stringify("production"),
-	},
-	...cliConfig,
-});
-
-const end = performance.now();
-
-const outputTable = result.outputs.map((output) => ({
-	File: path.relative(process.cwd(), output.path),
-	Type: output.kind,
-	Size: formatFileSize(output.size),
-}));
-
-console.table(outputTable);
-const buildTime = (end - start).toFixed(2);
-
-console.log(`\n✅ Build completed in ${buildTime}ms\n`);
+export {buildExecutable};
