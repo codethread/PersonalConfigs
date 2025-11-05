@@ -61,7 +61,7 @@ export const ToolUseResultSchema = z.object({
 	status: z.string().optional(),
 	prompt: z.string().optional(),
 	agentId: z.string().optional(),
-	content: z.array(TextContentSchema).optional(),
+	content: z.union([z.array(TextContentSchema), z.string()]).optional(),
 	totalDurationMs: z.number().optional(),
 	totalTokens: z.number().optional(),
 	totalToolUseCount: z.number().optional(),
@@ -72,6 +72,11 @@ export const ToolUseResultSchema = z.object({
 	isImage: z.boolean().optional(),
 	type: z.string().optional(),
 	file: FileResultSchema.optional(),
+	// Grep tool result fields
+	mode: z.string().optional(),
+	numFiles: z.number().optional(),
+	filenames: z.array(z.string()).optional(),
+	numLines: z.number().optional(),
 });
 
 export const MessageSchema = z.object({
@@ -93,18 +98,18 @@ export const ThinkingMetadataSchema = z.object({
 
 export const LogEntrySchema = z.object({
 	type: z.enum(["summary", "user", "assistant"]),
-	uuid: z.string(),
-	parentUuid: z.string().nullable(),
-	timestamp: z.string(),
-	sessionId: z.string(),
+	uuid: z.string().optional(),
+	parentUuid: z.string().nullable().optional(),
+	timestamp: z.string().optional(),
+	sessionId: z.string().optional(),
 	agentId: z.string().optional(),
-	isSidechain: z.boolean(),
+	isSidechain: z.boolean().optional(),
 	userType: z.string().optional(),
 	cwd: z.string().optional(),
 	version: z.string().optional(),
 	gitBranch: z.string().optional(),
 	message: MessageSchema.optional(),
-	toolUseResult: ToolUseResultSchema.optional(),
+	toolUseResult: z.union([ToolUseResultSchema, z.string()]).optional(),
 	summary: z.string().optional(),
 	leafUuid: z.string().optional(),
 	thinkingMetadata: ThinkingMetadataSchema.optional(),

@@ -3,7 +3,7 @@ import { parseArgs } from "util";
 import { join, basename, resolve } from "node:path";
 import { readdir, stat } from "node:fs/promises";
 import index from "./index.html";
-import { parseSessionLogs } from "./parser";
+import { parseSessionLogs, ParseError } from "./parser";
 import type { SessionData, DirectoriesResponse, SessionsResponse, SessionDataResponse } from "./types";
 
 // Get the default Claude projects directory
@@ -201,8 +201,22 @@ Examples:
             headers: { "Content-Type": "application/json" },
           });
         } catch (err) {
+          // Log detailed error information to console
+          if (err instanceof ParseError) {
+            console.error("❌ Parse error with detailed information:");
+            console.error(err.toString());
+            console.error("\n📄 Full raw log line:");
+            console.error(err.rawLine);
+          } else {
+            const message = err instanceof Error ? err.message : String(err);
+            console.error("❌ Failed to parse session:", message);
+            if (err instanceof Error && err.stack) {
+              console.error(err.stack);
+            }
+          }
+
+          // Send simple error message to frontend
           const message = err instanceof Error ? err.message : String(err);
-          console.error("Failed to parse session:", message);
           const response: SessionDataResponse = { status: "error", error: `Failed to parse session: ${message}` };
           return new Response(JSON.stringify(response), {
             status: 500,

@@ -35,13 +35,72 @@ export class ParseError extends Error {
 			`${this.name}: ${this.message}`,
 			`  File: ${this.filePath}`,
 			`  Line: ${this.lineNumber}`,
-			`  Raw content: ${this.rawLine.substring(0, 100)}${this.rawLine.length > 100 ? "..." : ""}`,
+			`  Raw content (first 200 chars): ${this.rawLine.substring(0, 200)}${this.rawLine.length > 200 ? "..." : ""}`,
 		];
 
 		if (this.zodError) {
 			lines.push(`  Validation errors:`);
+
+			// Parse the original JSON to show actual values
+			let parsedData: unknown;
+			try {
+				parsedData = JSON.parse(this.rawLine);
+			} catch {
+				parsedData = null;
+			}
+
 			for (const issue of this.zodError.issues) {
-				lines.push(`    - ${issue.path.join(".")}: ${issue.message}`);
+				const pathStr = issue.path.length > 0 ? issue.path.join(" → ") : "(root)";
+				lines.push(`\n    [${issue.code}] at ${pathStr}`);
+				lines.push(`      Message: ${issue.message}`);
+
+				// Show expected/received for type errors
+				if (issue.code === "invalid_type" && "expected" in issue && "received" in issue) {
+					lines.push(`      Expected: ${String(issue.expected)}`);
+					lines.push(`      Received: ${String(issue.received)}`);
+				}
+
+				// Show actual value if we can extract it
+				if (parsedData && issue.path.length > 0) {
+					try {
+						let value: unknown = parsedData;
+						for (const key of issue.path) {
+							if (value && typeof value === "object" && typeof key !== "symbol" && key in value) {
+								value = (value as Record<string | number, unknown>)[key];
+							}
+						}
+						const valueStr = JSON.stringify(value);
+						lines.push(
+							`      Actual value: ${valueStr.length > 100 ? `${valueStr.substring(0, 100)}...` : valueStr}`,
+						);
+					} catch {
+						// Can't extract value, skip it
+					}
+				}
+
+				// Show valid options for enums (checking property existence dynamically)
+				if ("options" in issue && Array.isArray(issue.options)) {
+					lines.push(`      Valid options: ${issue.options.join(", ")}`);
+				}
+
+				// Show constraints for size validations
+				if (issue.code === "too_small" && "minimum" in issue && "inclusive" in issue && "type" in issue) {
+					lines.push(
+						`      Minimum ${issue.inclusive ? "(inclusive)" : "(exclusive)"}: ${String(issue.minimum)}`,
+					);
+					lines.push(`      Validation type: ${String(issue.type)}`);
+				}
+				if (issue.code === "too_big" && "maximum" in issue && "inclusive" in issue && "type" in issue) {
+					lines.push(
+						`      Maximum ${issue.inclusive ? "(inclusive)" : "(exclusive)"}: ${String(issue.maximum)}`,
+					);
+					lines.push(`      Validation type: ${String(issue.type)}`);
+				}
+
+				// Show unrecognized keys
+				if (issue.code === "unrecognized_keys" && "keys" in issue && Array.isArray(issue.keys)) {
+					lines.push(`      Unrecognized keys: ${issue.keys.join(", ")}`);
+				}
 			}
 		}
 
@@ -133,8 +192,8 @@ async function findAgentLogs(logDirectory: string, mainLogEntries: LogEntry[]): 
 	const agentIds = new Set<string>();
 
 	for (const entry of mainLogEntries) {
-		// Check toolUseResult for agentId
-		if (entry.toolUseResult?.agentId) {
+		// Check toolUseResult for agentId (only if it's an object, not a string)
+		if (entry.toolUseResult && typeof entry.toolUseResult === "object" && entry.toolUseResult.agentId) {
 			agentIds.add(entry.toolUseResult.agentId);
 		}
 
@@ -147,7 +206,11 @@ async function findAgentLogs(logDirectory: string, mainLogEntries: LogEntry[]): 
 					// Check if content mentions agentId
 					if (typeof toolResult.content === "string") {
 						// For tool results from Task tool, agentId is in toolUseResult
-						if (entry.toolUseResult?.agentId) {
+						if (
+							entry.toolUseResult &&
+							typeof entry.toolUseResult === "object" &&
+							entry.toolUseResult.agentId
+						) {
 							agentIds.add(entry.toolUseResult.agentId);
 						}
 					}
@@ -244,9 +307,15 @@ interface ExtendedAgentInfo extends AgentInfo {
 
 function extractAgentInfo(logEntries: LogEntry[], agentId: string): ExtendedAgentInfo {
 	// First, find the result entry that contains this agentId
-	const resultEntry = logEntries.find((e) => e.type === "user" && e.toolUseResult?.agentId === agentId);
+	const resultEntry = logEntries.find(
+		(e) =>
+			e.type === "user" &&
+			e.toolUseResult &&
+			typeof e.toolUseResult === "object" &&
+			e.toolUseResult.agentId === agentId,
+	);
 
-	if (!resultEntry || !resultEntry.toolUseResult) {
+	if (!resultEntry || !resultEntry.toolUseResult || typeof resultEntry.toolUseResult !== "object") {
 		return {name: agentId};
 	}
 
@@ -313,7 +382,15 @@ function parseSessionEventsForAgent(logEntries: LogEntry[], sessionId: string, a
 		if (entry.agentId === agentId) continue;
 
 		// Check if this is a tool result for this agent (happens after resume)
-		if (entry.type === "user" && entry.toolUseResult?.agentId === agentId) {
+		if (
+			entry.type === "user" &&
+			entry.toolUseResult &&
+			typeof entry.toolUseResult === "object" &&
+			entry.toolUseResult.agentId === agentId
+		) {
+			// Skip entries missing required fields
+			if (!entry.uuid || !entry.timestamp) continue;
+
 			const content = entry.message?.content;
 			if (Array.isArray(content)) {
 				for (const item of content) {
@@ -329,7 +406,7 @@ function parseSessionEventsForAgent(logEntries: LogEntry[], sessionId: string, a
 
 						events.push({
 							id: entry.uuid,
-							parentId: entry.parentUuid,
+							parentId: entry.parentUuid ?? null,
 							timestamp: new Date(entry.timestamp),
 							sessionId,
 							agentId,
@@ -356,21 +433,15 @@ function parseEvents(logEntries: LogEntry[], sessionId: string, agentId: string 
 	const events: Event[] = [];
 
 	for (const entry of logEntries) {
-		const baseEvent = {
-			id: entry.uuid,
-			parentId: entry.parentUuid,
-			timestamp: new Date(entry.timestamp),
-			sessionId,
-			// For main agent (agentId param is null), use sessionId as the agentId
-			// This ensures events can be looked up by agent ID since main agent's ID is sessionId
-			agentId: agentId || entry.agentId || sessionId,
-			agentName: null,
-		};
-
-		// Handle summary type
+		// Handle summary type (which has minimal fields)
 		if (entry.type === "summary") {
 			events.push({
-				...baseEvent,
+				id: entry.leafUuid || entry.uuid || "unknown",
+				parentId: entry.parentUuid ?? null,
+				timestamp: entry.timestamp ? new Date(entry.timestamp) : new Date(),
+				sessionId,
+				agentId: agentId || entry.agentId || sessionId,
+				agentName: null,
 				type: "summary" as EventType,
 				data: {
 					type: "summary",
@@ -379,6 +450,23 @@ function parseEvents(logEntries: LogEntry[], sessionId: string, agentId: string 
 			});
 			continue;
 		}
+
+		// For non-summary entries, these fields should exist
+		if (!entry.uuid || !entry.timestamp) {
+			console.warn(`Skipping entry with missing required fields: ${JSON.stringify(entry)}`);
+			continue;
+		}
+
+		const baseEvent = {
+			id: entry.uuid,
+			parentId: entry.parentUuid ?? null,
+			timestamp: new Date(entry.timestamp),
+			sessionId,
+			// For main agent (agentId param is null), use sessionId as the agentId
+			// This ensures events can be looked up by agent ID since main agent's ID is sessionId
+			agentId: agentId || entry.agentId || sessionId,
+			agentName: null,
+		};
 
 		// Handle user messages
 		if (entry.type === "user" && entry.message) {
@@ -405,7 +493,10 @@ function parseEvents(logEntries: LogEntry[], sessionId: string, agentId: string 
 								toolUseId: toolResult.tool_use_id,
 								success: !toolResult.is_error,
 								output,
-								agentId: entry.toolUseResult?.agentId,
+								agentId:
+									entry.toolUseResult && typeof entry.toolUseResult === "object"
+										? entry.toolUseResult.agentId
+										: undefined,
 							},
 						});
 					}
