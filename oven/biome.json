@@ -1,5 +1,8 @@
 {
 	"$schema": "https://biomejs.dev/schemas/2.2.4/schema.json",
+	"files": {
+		"includes": ["bin/**/*.ts", "scripts/**/*.ts", "shared/**/*.ts", "tests/**/*.ts", "*.json", "*.ts"]
+	},
 	"linter": {
 		"enabled": true,
 		"rules": {
@@ -29,9 +32,5 @@
 		"formatter": {
 			"trailingCommas": "none"
 		}
-	},
-	"files": {
-		"includes": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.json"],
-		"ignoreUnknown": false
 	}
 }

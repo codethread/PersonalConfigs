@@ -1,16 +1,21 @@
 {
 	"name": "oven",
 	"private": true,
+	"workspaces": [
+		"bin/cc-inspect"
+	],
 	"scripts": {
 		"fmt": "biome format --write .",
 		"lint": "biome lint .",
 		"check": "biome check .",
 		"fix": "biome check --write --unsafe --log-level=error .",
 		"test": "bun test tests",
-		"typecheck": "tsc --noEmit",
+		"typecheck": "tsc --noEmit --project tsconfig.cli.json",
+		"typecheck:react": "bun --cwd bin/cc-inspect typecheck",
 		"build": "bun run ./scripts/build-bin.ts",
 		"sync-docs": "bun run ./scripts/sync-readme.ts",
-		"verify": "bun run fix && bun run test && bun run typecheck && bun run build && bun run sync-docs"
+		"verify": "bun run fix && bun run test && bun run typecheck && bun run typecheck:react && bun run build && bun run sync-docs",
+		"dev:cc-inspect": "bun --cwd bin/cc-inspect dev"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.2.4",

@@ -13,9 +13,9 @@ async function buildExecutables(verbose = false) {
 		console.log("Building executables from oven/bin to ~/.local/bin...");
 	}
 
-	// Get all .ts files from bin directory
-	const files = await readdir(BIN_SRC_DIR);
-	const tsFiles = files.filter((f) => f.endsWith(".ts"));
+	// Get all .ts files from bin directory (exclude workspace directories)
+	const files = await readdir(BIN_SRC_DIR, {withFileTypes: true});
+	const tsFiles = files.filter((f) => f.isFile() && f.name.endsWith(".ts")).map((f) => f.name);
 
 	if (verbose) {
 		console.log(`Found ${tsFiles.length} TypeScript files to build\n`);

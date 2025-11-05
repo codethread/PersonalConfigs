@@ -1,0 +1,19 @@
+{
+	"compilerOptions": {
+		// Core settings
+		"target": "ES2022",
+		"moduleDetection": "force",
+		"strict": true,
+		"skipLibCheck": true,
+		"esModuleInterop": true,
+		"isolatedModules": true,
+		"noEmit": true,
+
+		// Strictness
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitOverride": true,
+		"noUnusedLocals": false,
+		"noUnusedParameters": false,
+		"noPropertyAccessFromIndexSignature": false
+	}
+}

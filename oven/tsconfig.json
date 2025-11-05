@@ -1,25 +1,7 @@
 {
-	"compilerOptions": {
-		// Enable latest features
-		"lib": ["ESNext"],
-		"target": "ESNext",
-		"module": "ESNext",
-		"moduleDetection": "force",
-
-		// Bundler mode
-		"moduleResolution": "bundler",
-		"allowImportingTsExtensions": true,
-		"verbatimModuleSyntax": true,
-		"noEmit": true,
-
-		// Best practices
-		"strict": true,
-		"skipLibCheck": true,
-		"noFallthroughCasesInSwitch": true,
-
-		// Some stricter flags (disabled by default)
-		"noUnusedLocals": false,
-		"noUnusedParameters": false,
-		"noPropertyAccessFromIndexSignature": false
-	}
+	// Root config for IDE - actual typechecking uses tsconfig.cli.json and workspace configs
+	"extends": "./tsconfig.base.json",
+	"files": [],
+	"include": [],
+	"exclude": ["**/node_modules", "bin", "tests", "dist"]
 }
