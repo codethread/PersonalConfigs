@@ -16,11 +16,13 @@
 Before using the Task tool to spawn a new agent, you MUST:
 
 1. **Extract current session ID** from the session start message:
+
    ```
    Initialized agent context session: <session-id>
    ```
 
 2. **Check for existing agents** using `cc-logs--extract-agents`:
+
    ```bash
    cc-logs--extract-agents <session-id>
    ```
@@ -72,6 +74,7 @@ Task({
 ### Exceptions
 
 Only skip agent checking when:
+
 - This is the very first agent in the session
 - The task is completely unrelated to any previous work
 - Time-sensitive situations where checking would delay critical work

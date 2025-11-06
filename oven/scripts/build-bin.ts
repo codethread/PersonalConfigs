@@ -101,8 +101,6 @@ async function buildExecutables(verbose = false) {
 		);
 	}
 
-	await cleanBuilds(verbose);
-
 	// Build cc-inspect workspace executable
 	if (verbose) {
 		console.log("\nBuilding cc-inspect workspace...");
@@ -118,6 +116,8 @@ async function buildExecutables(verbose = false) {
 		console.error("\n❌ Failed to build cc-inspect workspace:");
 		console.error(`  ${error instanceof Error ? error.message : String(error)}`);
 	}
+
+	await cleanBuilds(verbose);
 
 	if (verbose) {
 		console.log("\nBuild complete!");

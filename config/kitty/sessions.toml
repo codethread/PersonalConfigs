@@ -26,17 +26,19 @@ git_tools = "~/dev/projects/git-tools"
 git_nudge = "~/dev/projects/git-nudge"
 nuphy = "~/dev/projects/nuphy_firmware/keyboards/nuphy/halo75v2/ansi"
 notes = "~/Library/Mobile Documents/com~apple~CloudDocs/Documents/Notes"
+claude-plugins = "~/dev/learn/claude-plugins"
+vault = "~/dev/Vault"
 
 [keys]
 P0 = "qmk"
 P1 = "dots"
-P2 = "ksm"
+P2 = "claude-plugins"
 P3 = "pomo"
 P4 = "qmk_nvim"
 P5 = "git_tools"
 P6 = "git_nudge"
 P8 = "nuphy"
-P9 = "notes"
+P9 = "vault"
 
 [profiles.work.projects]
 deals_ui = "~/work/app/deals-light-ui"
