@@ -199,10 +199,12 @@
   },
   "enabledPlugins": {
     "playwright-skill@playwright-skill": true,
-    "spec-dev@personal-configs-plugins": true,
-    "skill-creator@personal-configs-plugins": true
+    "spec-dev@personal-configs-plugins": false,
+    "skill-creator@personal-configs-plugins": true,
+    "doc-writer@personal-configs-plugins": true,
+    "claude-code-knowledge@personal-configs-plugins": true
   },
-  "alwaysThinkingEnabled": true,
+  "alwaysThinkingEnabled": false,
   "feedbackSurveyState": {
     "lastShownTime": 1754027278114
   }
