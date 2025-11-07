@@ -438,30 +438,112 @@ setItems(items);
 setItems([...items, newItem]);
 ```
 
+## Quick Reference Patterns
+
+### Component Props
+```tsx
+// Order: simple → complex (booleans, values, callbacks, render props)
+<Table
+  data={items}
+  loading={isLoading}
+  sortable
+  onSort={handleSort}
+  renderRow={(item) => <Row key={item.id}>{item.name}</Row>}
+/>
+
+// Prefer inline for type inference over extracted constants
+```
+
+### Pattern Matching
+```tsx
+// Use ts-pattern for variant rendering
+{match(state)
+  .with({_tag: "loading"}, () => <Spinner />)
+  .with({_tag: "success"}, (s) => <Data value={s.data} />)
+  .exhaustive()}
+```
+
+### Styling
+For CSS-in-JS patterns (styled-components, emotion, etc.), see `references/styling-patterns.md`:
+- Theme access patterns
+- Component consolidation vs CSS selectors
+- Spacing with gap
+- Responsive design
+
 ## When to Consult Detailed References
 
-For comprehensive information, read:
-- `references/best-practices-2025.md` - Full React best practices (adapted for SPAs)
+**Read these when you need deeper guidance on specific topics:**
 
-The reference includes:
+### Component Organization (`references/component-patterns.md`)
+Read when:
+- Organizing components with many props or render props
+- Deciding whether to split a large component
+- Determining what belongs in components vs hooks vs utils
+- Working with discriminated unions and variant rendering
+
+Covers:
+- Prop organization (simple→complex, inline vs extracted)
+- Component colocation and when to split
+- Separation of concerns (components vs hooks vs utils)
+- Pattern matching for variants
+
+### Styling Patterns (`references/styling-patterns.md`)
+Read when:
+- Building complex UI with styled-components (tables, cards, forms)
+- Unsure about theme access patterns
+- Creating responsive layouts
+- Deciding between consolidated styles vs separate components
+
+Covers:
+- Theme access (always via props, never direct imports)
+- Consolidating styles with CSS selectors
+- Spacing preferences (gap over margin)
+- Responsive layouts and media queries
+- Extending UI library components
+
+### React Best Practices (`references/best-practices-2025.md`)
+Read when:
+- Setting up state management architecture
+- Need comprehensive TypeScript patterns
+- Implementing testing strategy
+- Choosing between frameworks (Next.js, Remix)
+- Performance optimization strategies
+
+Covers:
 - Zustand store patterns and organization
 - XState machine design and testing
 - TanStack Query advanced patterns
 - Apollo Client integration
 - Testing strategies (unit tests for stores, E2E with Playwright)
-- Component composition patterns
+- Modern frameworks (Next.js, Remix)
+- Performance optimization (useMemo, useCallback, code splitting)
 
 ## Quality Checklist
 
 Before completing React code:
-- [ ] Components are declarative UI (logic in stores)
+
+**Architecture:**
+- [ ] Components are declarative UI (logic in stores/hooks)
 - [ ] External hooks at top (Zustand, XState, TanStack Query)
 - [ ] No useState/useReducer/useEffect for complex logic
 - [ ] Remote data uses TanStack Query (or Apollo)
 - [ ] Application state in Zustand stores (testable)
 - [ ] Complex state in XState machines (testable, visualizable)
+
+**Component Organization:**
+- [ ] Props ordered simple → complex (see `component-patterns.md`)
+- [ ] Render props inlined for type inference (extract only if reused)
+- [ ] Components colocated, split only when reused
+- [ ] Pattern matching used for discriminated unions
+
+**Styling:**
+- [ ] Styling patterns follow project conventions (see `styling-patterns.md` for CSS-in-JS)
+- [ ] Consistent spacing approach (prefer layout primitives like gap)
+- [ ] Responsive design implemented correctly
+
+**Performance & Quality:**
 - [ ] Inline actions (no useCallback unless repeated 2+ times)
-- [ ] Unit tests for stores and machines
-- [ ] E2E tests for critical flows (Playwright)
 - [ ] Immutable state updates
 - [ ] Unique, stable keys
+- [ ] Unit tests for stores and machines
+- [ ] E2E tests for critical flows (Playwright)

@@ -8,6 +8,13 @@
 ## Ways of working
 
 - read relavent README.md files when working in nested directories
+- always check CLAUDE.md files after completing work
+
+## Skills
+
+- Always load a Skill if you think it might be useful (better to not need it, than miss valuable context)
+- **IMPORTANT: always load `lang-*` skills when working inappropriate files**
+  - e.g `lang-react` Skill must be used when attempting to write/update/review React code
 
 ## Task Agent Workflow
 
