@@ -204,7 +204,7 @@
     "doc-writer@personal-configs-plugins": true,
     "claude-code-knowledge@personal-configs-plugins": true
   },
-  "alwaysThinkingEnabled": false,
+  "alwaysThinkingEnabled": true,
   "feedbackSurveyState": {
     "lastShownTime": 1754027278114
   }
