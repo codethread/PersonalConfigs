@@ -174,9 +174,10 @@ Keys.tbl('<leader>', {
 	},
 	y = {
 		group = 'Yank',
-		y = { 'path [root]', fns.yank_current_file },
+		a = { 'path [absolute]', fns.yank_absolute_path },
+		y = { 'path [project_root]', fns.yank_current_file },
 		l = { 'last', fns.save_register_to_clipboard },
-		-- r = { 'path [root]', Cmd 'let @*=@%' },
+		r = { 'path [home_root]', fns.yank_home_relative_path },
 		s = { 'Search', Cmd 'Telescope neoclip' },
 	},
 })

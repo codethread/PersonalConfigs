@@ -256,6 +256,22 @@ function M.yank_current_file()
 	return str
 end
 
+function M.yank_absolute_path()
+	local path = vim.fn.expand '%:p'
+	if not path or path == '' then return end
+	M.store_to_clipboard(path)
+	return path
+end
+
+function M.yank_home_relative_path()
+	local path = vim.fn.expand '%:p'
+	if not path or path == '' then return end
+	local home = vim.fn.expand '~'
+	local str = path:gsub('^' .. vim.pesc(home), '~')
+	M.store_to_clipboard(str)
+	return str
+end
+
 function M.save_register_to_clipboard()
 	-- Get it as a list of lines
 	-- local lines = vim.fn.getreg('"', 1, 1)

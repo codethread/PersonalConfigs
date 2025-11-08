@@ -12,6 +12,7 @@ import type {
 	ThinkingContent,
 	ToolResultContent,
 	ToolUseContent,
+	ToolUseResult,
 } from "./types";
 import {LogEntrySchema} from "./types";
 
@@ -187,14 +188,28 @@ function extractSessionId(logPath: string): string {
 	return filename.replace(".jsonl", "");
 }
 
+/**
+ * Normalizes toolUseResult to a single object.
+ * If it's an array, returns the first element.
+ * If it's a string, returns undefined.
+ * If it's an object, returns it as-is.
+ */
+function normalizeToolUseResult(toolUseResult: LogEntry["toolUseResult"]): ToolUseResult | undefined {
+	if (!toolUseResult || typeof toolUseResult === "string") {
+		return undefined;
+	}
+	return Array.isArray(toolUseResult) ? toolUseResult[0] : toolUseResult;
+}
+
 async function findAgentLogs(logDirectory: string, mainLogEntries: LogEntry[]): Promise<Map<string, string>> {
 	// Extract agent IDs that were actually spawned in this session
 	const agentIds = new Set<string>();
 
 	for (const entry of mainLogEntries) {
-		// Check toolUseResult for agentId (only if it's an object, not a string)
-		if (entry.toolUseResult && typeof entry.toolUseResult === "object" && entry.toolUseResult.agentId) {
-			agentIds.add(entry.toolUseResult.agentId);
+		// Check toolUseResult for agentId
+		const result = normalizeToolUseResult(entry.toolUseResult);
+		if (result?.agentId) {
+			agentIds.add(result.agentId);
 		}
 
 		// Also check message content for Task tool results
@@ -206,12 +221,9 @@ async function findAgentLogs(logDirectory: string, mainLogEntries: LogEntry[]): 
 					// Check if content mentions agentId
 					if (typeof toolResult.content === "string") {
 						// For tool results from Task tool, agentId is in toolUseResult
-						if (
-							entry.toolUseResult &&
-							typeof entry.toolUseResult === "object" &&
-							entry.toolUseResult.agentId
-						) {
-							agentIds.add(entry.toolUseResult.agentId);
+						const result = normalizeToolUseResult(entry.toolUseResult);
+						if (result?.agentId) {
+							agentIds.add(result.agentId);
 						}
 					}
 				}
@@ -307,15 +319,15 @@ interface ExtendedAgentInfo extends AgentInfo {
 
 function extractAgentInfo(logEntries: LogEntry[], agentId: string): ExtendedAgentInfo {
 	// First, find the result entry that contains this agentId
-	const resultEntry = logEntries.find(
-		(e) =>
-			e.type === "user" &&
-			e.toolUseResult &&
-			typeof e.toolUseResult === "object" &&
-			e.toolUseResult.agentId === agentId,
-	);
+	const resultEntry = logEntries.find((e) => {
+		if (e.type !== "user") return false;
+		const result = normalizeToolUseResult(e.toolUseResult);
+		return result?.agentId === agentId;
+	});
 
-	if (!resultEntry || !resultEntry.toolUseResult || typeof resultEntry.toolUseResult !== "object") {
+	const normalizedResult = resultEntry ? normalizeToolUseResult(resultEntry.toolUseResult) : undefined;
+
+	if (!resultEntry || !normalizedResult) {
 		return {name: agentId};
 	}
 
@@ -334,9 +346,9 @@ function extractAgentInfo(logEntries: LogEntry[], agentId: string): ExtendedAgen
 	if (!toolUseId) {
 		// Fallback to basic info from toolUseResult
 		return {
-			name: resultEntry.toolUseResult.prompt?.substring(0, 50) || null,
+			name: normalizedResult.prompt?.substring(0, 50) || null,
 			model: undefined,
-			description: resultEntry.toolUseResult.prompt,
+			description: normalizedResult.prompt,
 		};
 	}
 
@@ -366,9 +378,9 @@ function extractAgentInfo(logEntries: LogEntry[], agentId: string): ExtendedAgen
 
 	// Fallback if we can't find the tool_use
 	return {
-		name: resultEntry.toolUseResult.prompt?.substring(0, 50) || null,
+		name: normalizedResult.prompt?.substring(0, 50) || null,
 		model: undefined,
-		description: resultEntry.toolUseResult.prompt,
+		description: normalizedResult.prompt,
 	};
 }
 
@@ -382,12 +394,8 @@ function parseSessionEventsForAgent(logEntries: LogEntry[], sessionId: string, a
 		if (entry.agentId === agentId) continue;
 
 		// Check if this is a tool result for this agent (happens after resume)
-		if (
-			entry.type === "user" &&
-			entry.toolUseResult &&
-			typeof entry.toolUseResult === "object" &&
-			entry.toolUseResult.agentId === agentId
-		) {
+		const result = normalizeToolUseResult(entry.toolUseResult);
+		if (entry.type === "user" && result?.agentId === agentId) {
 			// Skip entries missing required fields
 			if (!entry.uuid || !entry.timestamp) continue;
 
@@ -401,7 +409,7 @@ function parseSessionEventsForAgent(logEntries: LogEntry[], sessionId: string, a
 						if (typeof toolResult.content === "string") {
 							output = toolResult.content;
 						} else if (Array.isArray(toolResult.content)) {
-							output = toolResult.content.map((c) => c.text).join("\n");
+							output = toolResult.content.map((c) => (c.type === "text" ? c.text : "[Image]")).join("\n");
 						}
 
 						events.push({
@@ -433,6 +441,14 @@ function parseEvents(logEntries: LogEntry[], sessionId: string, agentId: string 
 	const events: Event[] = [];
 
 	for (const entry of logEntries) {
+		// Skip unknown log entry types (e.g., "queue-operation")
+		if (entry.type !== "summary" && entry.type !== "user" && entry.type !== "assistant") {
+			continue;
+		}
+
+		// Normalize toolUseResult at the start of each iteration
+		const result = normalizeToolUseResult(entry.toolUseResult);
+
 		// Handle summary type (which has minimal fields)
 		if (entry.type === "summary") {
 			events.push({
@@ -482,7 +498,7 @@ function parseEvents(logEntries: LogEntry[], sessionId: string, agentId: string 
 						if (typeof toolResult.content === "string") {
 							output = toolResult.content;
 						} else if (Array.isArray(toolResult.content)) {
-							output = toolResult.content.map((c) => c.text).join("\n");
+							output = toolResult.content.map((c) => (c.type === "text" ? c.text : "[Image]")).join("\n");
 						}
 
 						events.push({
@@ -493,10 +509,7 @@ function parseEvents(logEntries: LogEntry[], sessionId: string, agentId: string 
 								toolUseId: toolResult.tool_use_id,
 								success: !toolResult.is_error,
 								output,
-								agentId:
-									entry.toolUseResult && typeof entry.toolUseResult === "object"
-										? entry.toolUseResult.agentId
-										: undefined,
+								agentId: result?.agentId,
 							},
 						});
 					}

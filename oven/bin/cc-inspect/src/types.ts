@@ -14,7 +14,7 @@ export const UsageSchema = z.object({
 		})
 		.optional(),
 	output_tokens: z.number(),
-	service_tier: z.string().optional(),
+	service_tier: z.string().nullable().optional(),
 });
 
 export const TextContentSchema = z.object({
@@ -35,10 +35,19 @@ export const ToolUseContentSchema = z.object({
 	input: z.record(z.string(), z.unknown()),
 });
 
+export const ImageContentSchema = z.object({
+	type: z.literal("image"),
+	source: z.object({
+		type: z.string(),
+		media_type: z.string(),
+		data: z.string(),
+	}),
+});
+
 export const ToolResultContentSchema = z.object({
 	type: z.literal("tool_result"),
 	tool_use_id: z.string(),
-	content: z.union([z.string(), z.array(TextContentSchema)]),
+	content: z.union([z.string(), z.array(z.union([TextContentSchema, ImageContentSchema]))]),
 	is_error: z.boolean().optional(),
 });
 
@@ -47,6 +56,7 @@ export const MessageContentSchema = z.discriminatedUnion("type", [
 	ThinkingContentSchema,
 	ToolUseContentSchema,
 	ToolResultContentSchema,
+	ImageContentSchema,
 ]);
 
 export const FileResultSchema = z.object({
@@ -55,6 +65,10 @@ export const FileResultSchema = z.object({
 	numLines: z.number(),
 	startLine: z.number(),
 	totalLines: z.number(),
+});
+
+export const ImageFileResultSchema = z.object({
+	base64: z.string(),
 });
 
 export const ToolUseResultSchema = z.object({
@@ -71,7 +85,7 @@ export const ToolUseResultSchema = z.object({
 	interrupted: z.boolean().optional(),
 	isImage: z.boolean().optional(),
 	type: z.string().optional(),
-	file: FileResultSchema.optional(),
+	file: z.union([FileResultSchema, ImageFileResultSchema]).optional(),
 	// Grep tool result fields
 	mode: z.string().optional(),
 	numFiles: z.number().optional(),
@@ -97,7 +111,7 @@ export const ThinkingMetadataSchema = z.object({
 });
 
 export const LogEntrySchema = z.object({
-	type: z.enum(["summary", "user", "assistant"]),
+	type: z.string(),
 	uuid: z.string().optional(),
 	parentUuid: z.string().nullable().optional(),
 	timestamp: z.string().optional(),
@@ -109,7 +123,7 @@ export const LogEntrySchema = z.object({
 	version: z.string().optional(),
 	gitBranch: z.string().optional(),
 	message: MessageSchema.optional(),
-	toolUseResult: z.union([ToolUseResultSchema, z.string()]).optional(),
+	toolUseResult: z.union([ToolUseResultSchema, z.array(ToolUseResultSchema), z.string()]).optional(),
 	summary: z.string().optional(),
 	leafUuid: z.string().optional(),
 	thinkingMetadata: ThinkingMetadataSchema.optional(),
@@ -122,8 +136,10 @@ export type TextContent = z.infer<typeof TextContentSchema>;
 export type ThinkingContent = z.infer<typeof ThinkingContentSchema>;
 export type ToolUseContent = z.infer<typeof ToolUseContentSchema>;
 export type ToolResultContent = z.infer<typeof ToolResultContentSchema>;
+export type ImageContent = z.infer<typeof ImageContentSchema>;
 export type MessageContent = z.infer<typeof MessageContentSchema>;
 export type FileResult = z.infer<typeof FileResultSchema>;
+export type ImageFileResult = z.infer<typeof ImageFileResultSchema>;
 export type ToolUseResult = z.infer<typeof ToolUseResultSchema>;
 export type Message = z.infer<typeof MessageSchema>;
 export type ThinkingMetadata = z.infer<typeof ThinkingMetadataSchema>;

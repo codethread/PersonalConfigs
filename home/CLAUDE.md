@@ -13,7 +13,7 @@
 ## Skills **IMPORTANT**
 
 - ALWAYS load a Skill if you think it might be useful (better to not need it, than miss valuable context)
-- ALWAYS load `lang-*` skills when working inappropriate files\*\*
+- ALWAYS load `lang-*` skills when working in appropriate files
   - e.g `lang-react` Skill must be used when attempting to write/update/review React code
 - ALWAYS use `claude-code-knowledge` Skill when answering questions about claude code specific topics, e.g slash commands, skills, or authoring such tools
 - ALWAYS use `doc-writer` Skill when authoring markdown files of any kind
