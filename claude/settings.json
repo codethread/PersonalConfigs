@@ -17,6 +17,7 @@
     "allow": [
       "mcp__context7",
       "WebSearch",
+      "Skill",
       "WebFetch(domain:docs.anthropic.com)",
       "WebFetch(domain:github.com)",
       "WebFetch(domain:sw.kovidgoyal.net)",
@@ -75,7 +76,12 @@
       "Read(**/.git/hooks/**)"
     ],
     "defaultMode": "acceptEdits",
-    "additionalDirectories": ["~/.local/cache/docs", "~/.local/bin", "~/.claude", "/tmp"]
+    "additionalDirectories": [
+      "~/.local/cache/docs",
+      "~/.local/bin",
+      "~/.claude",
+      "/tmp"
+    ]
   },
   "hooks": {
     "PreToolUse": [
@@ -196,7 +202,8 @@
     "playwright-skill@playwright-skill": true,
     "spec-dev@personal-configs-plugins": true,
     "doc-writer@personal-configs-plugins": true,
-    "claude-code-knowledge@personal-configs-plugins": true
+    "claude-code-knowledge@personal-configs-plugins": true,
+    "langs@personal-configs-plugins": true
   },
   "alwaysThinkingEnabled": true,
   "feedbackSurveyState": {

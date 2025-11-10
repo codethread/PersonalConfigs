@@ -455,4 +455,136 @@ describe("ccHookNpmRedirectLib", () => {
 			expect(typeof result.detectedPackageManager).toBe("string");
 		});
 	});
+
+	describe("Claude Code skill/plugin context filtering", () => {
+		test.each([
+			{
+				contextPath: "/tmp/test-user/.claude/plugins/playwright-skill",
+				description: ".claude/plugins path",
+			},
+			{
+				contextPath: "/tmp/test-user/.claude/skills/custom-skill",
+				description: ".claude/skills path",
+			},
+			{
+				contextPath: "/tmp/test-user/claude/plugins/some-plugin",
+				description: "claude/plugins path",
+			},
+			{
+				contextPath: "/tmp/test-user/claude/skills/user-skill",
+				description: "claude/skills path",
+			},
+			{
+				contextPath: "/tmp/test-user/.local/share/claude/plugins/marketplace-skill",
+				description: "nested plugin marketplace path",
+			},
+		])(
+			"should not redirect commands in $description even with package manager mismatch",
+			async ({contextPath}) => {
+				// Create a skill context directory with a bun.lock file
+				await mkdir(contextPath, {recursive: true});
+				await writeFile(join(contextPath, "bun.lock"), "");
+
+				// Try to run npm command (which would normally be blocked in a bun project)
+				const result = await ccHookNpmRedirectLib({
+					command: "npm install some-package",
+					cwd: contextPath,
+				});
+
+				// Should NOT block because we're in a skill context
+				expect(result.shouldBlock).toBe(false);
+				expect(result.blockedCommand).toBeNull();
+				expect(result.suggestedCommand).toBeNull();
+				// Package manager detection still happens, but blocking doesn't
+				expect(result.detectedPackageManager).toBe("bun");
+			},
+		);
+
+		test("should still redirect commands in non-skill contexts with same parent directory", async () => {
+			// Create a regular project directory that's NOT in a skill context
+			const regularProjectPath = "/tmp/test-regular-project";
+			await mkdir(regularProjectPath, {recursive: true});
+			await writeFile(join(regularProjectPath, "bun.lockb"), "");
+
+			const result = await ccHookNpmRedirectLib({
+				command: "npm install lodash",
+				cwd: regularProjectPath,
+			});
+
+			// Should block because we're NOT in a skill context
+			expect(result.shouldBlock).toBe(true);
+			expect(result.blockedCommand).toBe("npm install lodash");
+			expect(result.suggestedCommand).toBe("bun install lodash");
+			expect(result.detectedPackageManager).toBe("bun");
+
+			// Cleanup
+			if (existsSync(regularProjectPath)) {
+				rmSync(regularProjectPath, {recursive: true, force: true});
+			}
+		});
+
+		test("should handle missing cwd gracefully in skill context check", async () => {
+			// Without cwd, should fall back to normal behavior (not in skill context)
+			// The oven directory has bun.lock, so npm commands should be blocked
+			const result = await ccHookNpmRedirectLib({
+				command: "npm install",
+				// No cwd provided
+			});
+
+			// Should block because no cwd means no skill context detection
+			expect(result.shouldBlock).toBe(true);
+			expect(result.detectedPackageManager).toBe("bun");
+		});
+
+		test("should not be fooled by similar path names", async () => {
+			// Create a directory with 'plugins' or 'skills' in the name but not in the right location
+			const trickyPath = "/tmp/my-plugins-folder/test-project";
+			await mkdir(trickyPath, {recursive: true});
+			await writeFile(join(trickyPath, "pnpm-lock.yaml"), "");
+
+			const result = await ccHookNpmRedirectLib({
+				command: "npm run build",
+				cwd: trickyPath,
+			});
+
+			// Should still block because it's not actually a claude skill context
+			expect(result.shouldBlock).toBe(true);
+			expect(result.suggestedCommand).toBe("pnpm run build");
+
+			// Cleanup
+			if (existsSync(trickyPath)) {
+				rmSync(trickyPath, {recursive: true, force: true});
+			}
+		});
+
+		test("should handle npx commands in skill contexts", async () => {
+			const skillPath = "/tmp/test-user/.claude/plugins/test-skill";
+			await mkdir(skillPath, {recursive: true});
+			await writeFile(join(skillPath, "pnpm-lock.yaml"), "");
+
+			const result = await ccHookNpmRedirectLib({
+				command: "npx playwright test",
+				cwd: skillPath,
+			});
+
+			// Should NOT block npx in skill context
+			expect(result.shouldBlock).toBe(false);
+			expect(result.blockedCommand).toBeNull();
+		});
+
+		test("should handle node commands in skill contexts", async () => {
+			const skillPath = "/tmp/test-user/.claude/skills/bun-skill";
+			await mkdir(skillPath, {recursive: true});
+			await writeFile(join(skillPath, "bun.lockb"), "");
+
+			const result = await ccHookNpmRedirectLib({
+				command: "node script.js",
+				cwd: skillPath,
+			});
+
+			// Should NOT block node command in skill context
+			expect(result.shouldBlock).toBe(false);
+			expect(result.blockedCommand).toBeNull();
+		});
+	});
 });

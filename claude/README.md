@@ -59,43 +59,8 @@ Claude Code supports resuming Task agents from previous executions, allowing age
 
 - Continuing analysis after reviewing initial findings
 - Adding follow-up work without re-executing expensive operations
-- Building upon previous research in stages
-
-#### Getting Agent IDs
-
-Use `cc-logs--extract-agents` to list all agents spawned in the current session:
-
-```bash
-# Get current session ID from session start message:
-# "Initialized agent context session: <session-id>"
-
-cc-logs--extract-agents 61a79fc9-2fac-4dc8-97ff-eee2a775e0a9
-```
-
-This outputs all agent IDs with their models, descriptions, and prompt previews, making it easy to identify which agent to resume.
-
-#### Resuming an Agent
-
-Pass the agent ID to the Task tool's `resume` parameter:
-
-```typescript
-Task({
-  subagent_type: "general-purpose",
-  description: "Continue previous analysis",
-  resume: "87cad6f3", // Agent ID from cc-logs--extract-agents
-  model: "haiku",
-  prompt: "Continue from where you left off and analyze the next file...",
-});
-```
-
-The resumed agent has full access to its previous execution transcript and can recall information without hints.
-
-#### Best Practices
-
-- **Always check for existing agents** before spawning new ones using `cc-logs--extract-agents`
-- **Maximize reuse** by resuming agents when adding follow-up work to previous tasks
-- **Match the model** when resuming (e.g., if original was haiku, resume with haiku)
-- **Provide context** in the new prompt about what additional work is needed
+- Building upon previous
+- **IMPORTANT**: At this time claude code only resumes the initital context for an agent, i.e ask agent task A, then resume them and they will recall task A, but if you ask them task B, then resume again later, they won't remember task B, just task A. This is annoying!
 
 ### Active Hooks
 

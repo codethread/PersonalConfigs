@@ -23,6 +23,9 @@ The hook will redirect:
 - npm/npx commands to the detected package manager (pnpm, bun, yarn)
 - node commands to bun in Bun projects (with compatibility warnings)
 
+The hook ignores commands executed within Claude Code skill/plugin contexts to avoid interfering
+with plugin marketplace skills or user-defined skills.
+
 The hook reads stdin for the Claude Code hook input and will block the command with exit code 2
 if a package manager mismatch is detected, suggesting the correct command to use instead.
 `);
@@ -111,10 +114,38 @@ async function main() {
 	}
 }
 
+function isClaudeCodeSkillContext(cwd?: string): boolean {
+	if (!cwd) {
+		return false;
+	}
+
+	// Check if the path contains Claude Code skill/plugin markers
+	// Skills from the plugin marketplace typically run in:
+	// - .claude/plugins/* directories
+	// - .claude/skills/* directories (user-defined skills)
+	// - Plugin marketplace skills have paths like ~/.local/share/claude/plugins/
+	const skillPatterns = ["/.claude/plugins/", "/.claude/skills/", "/claude/plugins/", "/claude/skills/"];
+
+	return skillPatterns.some((pattern) => cwd.includes(pattern));
+}
+
 export async function ccHookNpmRedirectLib(
 	options: PackageManagerRedirectOptions,
 ): Promise<NpmRedirectResult> {
 	const {command, cwd} = options;
+
+	// Ignore commands executed within Claude Code skill/plugin contexts
+	// Skills from the plugin marketplace run in their own directory contexts
+	if (isClaudeCodeSkillContext(cwd)) {
+		// Detect the package manager but don't block
+		const detectedPM = detectPackageManager(command, cwd);
+		return {
+			shouldBlock: false,
+			blockedCommand: null,
+			suggestedCommand: null,
+			detectedPackageManager: detectedPM,
+		};
+	}
 
 	// Detect the appropriate package manager based on lock files
 	const detectedPM = detectPackageManager(command, cwd);
