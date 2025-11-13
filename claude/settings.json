@@ -62,7 +62,6 @@
       "SlashCommand",
       "NotebookEdit",
       "Bash(git push:*)",
-      "Bash(git rebase:*)",
       "Read(.env)",
       "Read(.env.*)",
       "Read(**/.env)",
@@ -76,12 +75,7 @@
       "Read(**/.git/hooks/**)"
     ],
     "defaultMode": "acceptEdits",
-    "additionalDirectories": [
-      "~/.local/cache/docs",
-      "~/.local/bin",
-      "~/.claude",
-      "/tmp"
-    ]
+    "additionalDirectories": ["~/.local/cache/docs", "~/.local/bin", "~/.claude", "/tmp"]
   },
   "hooks": {
     "PreToolUse": [
@@ -200,10 +194,10 @@
   },
   "enabledPlugins": {
     "playwright-skill@playwright-skill": true,
-    "spec-dev@personal-configs-plugins": true,
-    "doc-writer@personal-configs-plugins": true,
-    "claude-code-knowledge@personal-configs-plugins": true,
-    "langs@personal-configs-plugins": true
+    "spec-dev@codethread-plugins": true,
+    "doc-writer@codethread-plugins": true,
+    "claude-code-knowledge@codethread-plugins": true,
+    "langs@codethread-plugins": true
   },
   "alwaysThinkingEnabled": true,
   "feedbackSurveyState": {
