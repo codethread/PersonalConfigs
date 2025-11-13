@@ -29,3 +29,5 @@ export alias _claude-prompts = jq 'select(.event == "UserPromptSubmit") | {promp
 export alias _claude-session-stats = jq -s 'group_by(.tool_name) | map({tool: .[0].tool_name, count: length})' .logs/claude-session-*.jsonl
 
 export alias _claude-stable = claude install 1.0.88
+
+export alias oc = opencode
