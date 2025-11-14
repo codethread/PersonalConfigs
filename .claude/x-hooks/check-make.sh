@@ -15,4 +15,4 @@ if [ "$stop_hook_active" = "true" ]; then
 fi
 
 # run make
-make
+make >&2 || exit 2
