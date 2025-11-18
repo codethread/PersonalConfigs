@@ -18,8 +18,8 @@ interface LogEntry {
 
 	// Tool-specific fields (PreToolUse, PostToolUse)
 	tool_name?: string;
-	tool_input?: Record<string, any>;
-	tool_response?: Record<string, any>;
+	tool_input?: Record<string, unknown>;
+	tool_response?: Record<string, unknown>;
 
 	// Event-specific fields
 	message?: string; // Notification

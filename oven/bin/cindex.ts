@@ -214,7 +214,13 @@ async function main() {
 	}
 
 	const output = values.markdown
-		? formatMarkdown(allFilesList, commentedFiles, subdivisionConfigs, config.descriptions, config.summarise)
+		? formatMarkdown({
+				allFiles: allFilesList,
+				commentedFiles,
+				subdivisionConfigs,
+				topLevelDescriptions: config.descriptions,
+				summariseConfigs: config.summarise,
+			})
 		: formatList(allFilesList, commentedFiles);
 
 	console.log(output);
@@ -262,12 +268,13 @@ function shouldSummarise(path: string, summariseConfigs?: SummariseConfig[]): Su
 	return undefined;
 }
 
-function renderFileList(
-	files: string[],
-	commentedFiles: Map<string, string>,
-	summariseConfigs?: SummariseConfig[],
-	usedSummarises?: Set<SummariseConfig>,
-): string {
+function renderFileList(options: {
+	files: string[];
+	commentedFiles: Map<string, string>;
+	summariseConfigs?: SummariseConfig[];
+	usedSummarises?: Set<SummariseConfig>;
+}): string {
+	const {files, commentedFiles, summariseConfigs, usedSummarises} = options;
 	let output = "";
 	const summarisedGroups = new Map<SummariseConfig, string[]>();
 	const regularFiles: string[] = [];
@@ -279,7 +286,7 @@ function renderFileList(
 			if (!summarisedGroups.has(summariseConfig)) {
 				summarisedGroups.set(summariseConfig, []);
 			}
-			summarisedGroups.get(summariseConfig)!.push(file);
+			summarisedGroups.get(summariseConfig)?.push(file);
 			usedSummarises?.add(summariseConfig);
 		} else {
 			regularFiles.push(file);
@@ -302,13 +309,14 @@ function renderFileList(
 	return output;
 }
 
-function formatMarkdown(
-	allFiles: string[],
-	commentedFiles: Map<string, string>,
-	subdivisionConfigs: Map<string, SubdivisionConfig>,
-	topLevelDescriptions?: Record<string, string>,
-	summariseConfigs?: SummariseConfig[],
-) {
+function formatMarkdown(options: {
+	allFiles: string[];
+	commentedFiles: Map<string, string>;
+	subdivisionConfigs: Map<string, SubdivisionConfig>;
+	topLevelDescriptions?: Record<string, string>;
+	summariseConfigs?: SummariseConfig[];
+}) {
+	const {allFiles, commentedFiles, subdivisionConfigs, topLevelDescriptions, summariseConfigs} = options;
 	// Track which summarise configs have been used
 	const usedSummarises = new Set<SummariseConfig>();
 
@@ -327,7 +335,7 @@ function formatMarkdown(
 			if (!directories.has(firstDir)) {
 				directories.set(firstDir, []);
 			}
-			directories.get(firstDir)!.push(file);
+			directories.get(firstDir)?.push(file);
 		}
 	}
 
@@ -336,7 +344,7 @@ function formatMarkdown(
 	// Add root files if any
 	if (rootFiles.length > 0) {
 		output += "## Root files\n\n";
-		output += renderFileList(rootFiles, commentedFiles, summariseConfigs, usedSummarises);
+		output += renderFileList({files: rootFiles, commentedFiles, summariseConfigs, usedSummarises});
 		output += "\n";
 	}
 
@@ -351,7 +359,8 @@ function formatMarkdown(
 			output += `${topLevelDesc}\n\n`;
 		}
 
-		const files = directories.get(dir)!.sort();
+		const files = directories.get(dir)?.sort();
+		if (!files) continue;
 
 		// Check if this directory should be subdivided
 		const subdivisionConfig = subdivisionConfigs.get(dir);
@@ -373,13 +382,13 @@ function formatMarkdown(
 					if (!subdirs.has(subdir)) {
 						subdirs.set(subdir, []);
 					}
-					subdirs.get(subdir)!.push(file);
+					subdirs.get(subdir)?.push(file);
 				}
 			}
 
 			// Add direct files if any
 			if (directFiles.length > 0) {
-				output += renderFileList(directFiles, commentedFiles, summariseConfigs, usedSummarises);
+				output += renderFileList({files: directFiles, commentedFiles, summariseConfigs, usedSummarises});
 				if (subdirs.size > 0 && output.endsWith("\n")) {
 					output += "\n";
 				}
@@ -396,13 +405,13 @@ function formatMarkdown(
 					output += `${description}\n\n`;
 				}
 
-				const subdirFiles = subdirs.get(subdir)!.sort();
-				output += renderFileList(subdirFiles, commentedFiles, summariseConfigs, usedSummarises);
+				const subdirFiles = subdirs.get(subdir)?.sort() || [];
+				output += renderFileList({files: subdirFiles, commentedFiles, summariseConfigs, usedSummarises});
 				output += "\n";
 			}
 		} else {
 			// Normal listing without subdivision
-			output += renderFileList(files, commentedFiles, summariseConfigs, usedSummarises);
+			output += renderFileList({files, commentedFiles, summariseConfigs, usedSummarises});
 			output += "\n";
 		}
 	}

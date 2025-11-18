@@ -6,6 +6,15 @@
 import {$} from "bun";
 import {existsSync, readFileSync, unlinkSync, writeFileSync} from "fs";
 
+// Pipeline type from GitLab API
+interface Pipeline {
+	id: number;
+	status: string;
+	ref: string;
+	web_url: string;
+	updated_at: string;
+}
+
 // Configuration
 let POLL_INTERVAL = 30;
 let USERNAME = "adam.hall";
@@ -45,13 +54,14 @@ function log(level: string, message: string) {
 }
 
 // Function to send notification
-async function sendNotification(
-	title: string,
-	body: string,
-	icon: string = "info",
-	webUrl?: string,
-	expireAfter?: string,
-) {
+async function sendNotification(options: {
+	title: string;
+	body: string;
+	icon?: string;
+	webUrl?: string;
+	expireAfter?: string;
+}) {
+	const {title, body, icon = "info", webUrl, expireAfter} = options;
 	try {
 		const notifyCmd = ["kitten", "notify", `--icon=${icon}`];
 
@@ -112,7 +122,7 @@ function getStatusEmoji(status: string): string {
 }
 
 // Function to format pipeline info
-function _formatPipelineInfo(pipeline: any): string {
+function _formatPipelineInfo(pipeline: Pipeline): string {
 	const id = pipeline.id;
 	const status = pipeline.status;
 	const ref = pipeline.ref.replace(/refs\/merge-requests\//, "").replace(/\/head/, "");
@@ -123,29 +133,29 @@ function _formatPipelineInfo(pipeline: any): string {
 }
 
 // Function to get currently running pipelines
-async function getRunningPipelines(): Promise<any[]> {
+async function getRunningPipelines(): Promise<Pipeline[]> {
 	try {
 		const args = [`glab`, `pipeline`, `list`, `--username=${USERNAME}`, `--status=running`, `--output=json`];
 		if (BRANCH) {
 			args.push(`--ref=${BRANCH}`);
 		}
 		const result = await $`${args}`.quiet();
-		return JSON.parse(result.text());
+		return JSON.parse(result.text()) as Pipeline[];
 	} catch (_error) {
 		return [];
 	}
 }
 
 // Function to get pipeline by ID
-async function getPipelineById(pipelineId: string): Promise<any | null> {
+async function getPipelineById(pipelineId: string): Promise<Pipeline | null> {
 	try {
 		const args = [`glab`, `pipeline`, `list`, `--username=${USERNAME}`, `--output=json`];
 		if (BRANCH) {
 			args.push(`--ref=${BRANCH}`);
 		}
 		const result = await $`${args}`.quiet();
-		const pipelines = JSON.parse(result.text());
-		return pipelines.find((p: any) => p.id.toString() === pipelineId) || null;
+		const pipelines = JSON.parse(result.text()) as Pipeline[];
+		return pipelines.find((p) => p.id.toString() === pipelineId) || null;
 	} catch (_error) {
 		return null;
 	}
@@ -248,7 +258,7 @@ async function monitorPipelines() {
 					const body = `Pipeline ${pipelineId} (MR ${ref}) has ${status}`;
 					const expireAfter = status === "success" ? "10s" : undefined;
 
-					sendNotification(title, body, icon, webUrl, expireAfter);
+					sendNotification({title, body, icon, webUrl, expireAfter});
 
 					// Log completion
 					switch (status) {

@@ -170,7 +170,7 @@ export async function ccSpeakLib(options: CcSpeakOptions): Promise<ProcessResult
 
 		// Process file second if provided
 		if (file) {
-			const audioFile = await processFileToAudio(file, executor, startLine, endLine);
+			const audioFile = await processFileToAudio({filePath: file, executor, startLine, endLine});
 			if (audioFile) {
 				audioFiles.push(audioFile);
 				await playAudio(audioFile, executor);
@@ -196,12 +196,13 @@ async function processTextToAudio(text: string, executor: ShellExecutor): Promis
 	}
 }
 
-async function processFileToAudio(
-	filePath: string,
-	executor: ShellExecutor,
-	startLine?: number,
-	endLine?: number,
-): Promise<string | null> {
+async function processFileToAudio(options: {
+	filePath: string;
+	executor: ShellExecutor;
+	startLine?: number;
+	endLine?: number;
+}): Promise<string | null> {
+	const {filePath, executor, startLine, endLine} = options;
 	try {
 		// Check if file exists
 		const file = Bun.file(filePath);

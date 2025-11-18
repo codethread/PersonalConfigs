@@ -7,6 +7,14 @@ import {homedir} from "os";
 import {join} from "path";
 import readline from "readline";
 
+// Type for readline keypress event
+interface Key {
+	name: string;
+	ctrl: boolean;
+	meta: boolean;
+	shift: boolean;
+}
+
 // Configuration
 const WHISPER_MODEL = join(homedir(), "dev/models/ggml-medium.bin");
 const TEMP_DIR = "/tmp";
@@ -152,7 +160,7 @@ async function recordAudio(): Promise<string | null> {
 	);
 
 	return new Promise((resolve) => {
-		const keypressHandler = (_: string, key: any) => {
+		const keypressHandler = (_: string, key: Key) => {
 			if (key) {
 				// Space bar - stop and transcribe
 				if (key.name === "space") {

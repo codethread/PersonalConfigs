@@ -39,7 +39,7 @@ export interface StatuslineInput extends BaseHookInput {
 export interface PreToolUseInput extends BaseHookInput {
 	hook_event_name: "PreToolUse";
 	tool_name: string;
-	tool_input: Record<string, any>; // Schema depends on the specific tool
+	tool_input: Record<string, unknown>; // Schema depends on the specific tool
 }
 
 /**
@@ -48,8 +48,8 @@ export interface PreToolUseInput extends BaseHookInput {
 export interface PostToolUseInput extends BaseHookInput {
 	hook_event_name: "PostToolUse";
 	tool_name: string;
-	tool_input: Record<string, any>; // Schema depends on the specific tool
-	tool_response: Record<string, any>; // Schema depends on the specific tool
+	tool_input: Record<string, unknown>; // Schema depends on the specific tool
+	tool_response: Record<string, unknown>; // Schema depends on the specific tool
 }
 
 /**

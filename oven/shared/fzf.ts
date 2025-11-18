@@ -22,6 +22,7 @@ export async function fzf<Opts extends Options>(
 	const output = await new Response(fzf.stdout).text();
 	if (opts?.multi) {
 		const lines: string[] = output.split("\n").map((l) => l.trim());
-		return lines as any;
-	} else return output.trim() as any;
+		return lines as Opts["multi"] extends true ? string[] : string;
+	}
+	return output.trim() as Opts["multi"] extends true ? string[] : string;
 }

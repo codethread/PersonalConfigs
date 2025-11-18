@@ -6,7 +6,7 @@ import {dirname, resolve} from "path";
 async function runStripMarkdown(
 	input: string,
 	format: "tts" | "plain" = "tts",
-	preserveStructure: boolean = false,
+	preserveStructure = false,
 ): Promise<string> {
 	const args = ["run", resolve(dirname(import.meta.dir), "bin", "strip-markdown.ts"), "--format", format];
 	if (preserveStructure) {
@@ -415,7 +415,8 @@ code block
 	describe("CLI argument handling", () => {
 		test("handles unknown format gracefully", async () => {
 			try {
-				await runStripMarkdown("test", "invalid" as any);
+				// @ts-expect-error - intentionally passing invalid type to test error handling
+				await runStripMarkdown("test", "invalid");
 				expect(false).toBe(true); // Should not reach here
 			} catch (error) {
 				expect(error).toBeDefined();

@@ -85,13 +85,13 @@ async function main() {
 			process.exit(0);
 		}
 
-		const command = preToolUseInput.tool_input?.command || "";
-		if (!command) {
+		const commandValue = preToolUseInput.tool_input?.command;
+		if (!commandValue || typeof commandValue !== "string") {
 			process.exit(0);
 		}
 
 		const result = await ccHookNpmRedirectLib({
-			command,
+			command: commandValue,
 			cwd: hookInput.cwd,
 		});
 

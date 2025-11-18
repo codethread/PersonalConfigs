@@ -7,15 +7,41 @@
 		"enabled": true,
 		"rules": {
 			"recommended": true,
+			"nursery": {
+				"useMaxParams": {
+					"level": "error",
+					"options": { "max": 3 }
+				}
+			},
 			"style": {
-				"noNonNullAssertion": "off",
-				"useNodejsImportProtocol": "off"
+				"useNodejsImportProtocol": "off",
+				"useAtIndex": "error",
+				"noCommonJs": "error",
+				"noDefaultExport": "error",
+				"noInferrableTypes": "error",
+				"noNonNullAssertion": "error",
+				"noProcessEnv": "off",
+				"useAsConstAssertion": "error"
 			},
 			"suspicious": {
-				"noExplicitAny": "off"
+				"noConsole": "off",
+				"noFocusedTests": "error",
+				"noSkippedTests": "error"
 			}
 		}
 	},
+	"overrides": [
+		{
+			"includes": ["tests/**/*.test.ts"],
+			"linter": {
+				"rules": {
+					"style": {
+						"noNonNullAssertion": "off"
+					}
+				}
+			}
+		}
+	],
 	"formatter": {
 		"enabled": true,
 		"lineWidth": 110

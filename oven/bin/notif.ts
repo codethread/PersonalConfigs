@@ -149,12 +149,13 @@ const showNotification = (title: string, message: string): void => {
 	}
 };
 
-const createDelayedNotification = (
-	title: string,
-	message: string,
-	notificationId: string,
-	delay: number,
-): void => {
+const createDelayedNotification = (options: {
+	title: string;
+	message: string;
+	notificationId: string;
+	delay: number;
+}): void => {
+	const {title, message, notificationId, delay} = options;
 	const tmpFile = `/tmp/notif_${notificationId}.tmp`;
 
 	const data = JSON.stringify({
@@ -210,7 +211,12 @@ const main = () => {
 	const processedMessage = processMultilineMessage(message);
 
 	if (options.id) {
-		createDelayedNotification(title, processedMessage, options.id, options.delay);
+		createDelayedNotification({
+			title,
+			message: processedMessage,
+			notificationId: options.id,
+			delay: options.delay,
+		});
 	} else {
 		showNotification(title, processedMessage);
 	}

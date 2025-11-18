@@ -101,9 +101,13 @@ describe("ccHookContextInjectorLib", () => {
 			});
 
 			expect(result.success).toBe(true);
-			expect(result).toHaveProperty("contextOutput");
 
-			const contextOutput = (result as any).contextOutput as string;
+			// Type guard: session-start returns SessionStartResult which has contextOutput
+			if (!("contextOutput" in result)) {
+				throw new Error("Expected contextOutput in result");
+			}
+
+			const contextOutput = result.contextOutput as string;
 			expect(contextOutput).toContain("Project documentation:");
 			expect(contextOutput).toContain("README.md");
 			expect(contextOutput).toContain("src/README.md");
@@ -164,7 +168,8 @@ describe("ccHookContextInjectorLib", () => {
 		test("should throw error for unknown command", async () => {
 			await expect(
 				ccHookContextInjectorLib({
-					command: "invalid" as any,
+					// @ts-expect-error - intentionally passing invalid type to test error handling
+					command: "invalid",
 					sessionId: testSessionId,
 				}),
 			).rejects.toThrow("Unknown command: invalid");

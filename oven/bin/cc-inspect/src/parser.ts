@@ -20,15 +20,24 @@ import {LogEntrySchema} from "./types";
  * Detailed error information for parse failures
  */
 export class ParseError extends Error {
-	constructor(
-		message: string,
-		public readonly filePath: string,
-		public readonly lineNumber: number,
-		public readonly rawLine: string,
-		public readonly zodError?: ZodError,
-	) {
-		super(message);
+	public readonly filePath: string;
+	public readonly lineNumber: number;
+	public readonly rawLine: string;
+	public readonly zodError?: ZodError;
+
+	constructor(options: {
+		message: string;
+		filePath: string;
+		lineNumber: number;
+		rawLine: string;
+		zodError?: ZodError;
+	}) {
+		super(options.message);
 		this.name = "ParseError";
+		this.filePath = options.filePath;
+		this.lineNumber = options.lineNumber;
+		this.rawLine = options.rawLine;
+		this.zodError = options.zodError;
 	}
 
 	override toString(): string {
@@ -120,7 +129,7 @@ export async function parseSessionLogs(sessionLogPath: string): Promise<SessionD
 	const agentLogs = await findAgentLogs(logDirectory, mainLogEntries);
 
 	// Build agent tree
-	const mainAgent = await buildAgentTree(sessionId, mainLogEntries, agentLogs, logDirectory);
+	const mainAgent = await buildAgentTree({sessionId, mainLogEntries, agentLogs, logDirectory});
 
 	// Extract all events chronologically
 	const allEvents = extractAllEvents(mainAgent);
@@ -153,13 +162,13 @@ async function parseJsonlFile(filePath: string): Promise<LogEntry[]> {
 			const result = LogEntrySchema.safeParse(parsed);
 
 			if (!result.success) {
-				throw new ParseError(
-					`Failed to validate log entry against schema`,
+				throw new ParseError({
+					message: `Failed to validate log entry against schema`,
 					filePath,
 					lineNumber,
-					line,
-					result.error,
-				);
+					rawLine: line,
+					zodError: result.error,
+				});
 			}
 
 			entries.push(result.data);
@@ -171,12 +180,22 @@ async function parseJsonlFile(filePath: string): Promise<LogEntry[]> {
 
 			// If it's a JSON parse error, wrap it
 			if (error instanceof SyntaxError) {
-				throw new ParseError(`Failed to parse JSON: ${error.message}`, filePath, lineNumber, line);
+				throw new ParseError({
+					message: `Failed to parse JSON: ${error.message}`,
+					filePath,
+					lineNumber,
+					rawLine: line,
+				});
 			}
 
 			// Unknown error
 			const errorMessage = error instanceof Error ? error.message : String(error);
-			throw new ParseError(`Unexpected error: ${errorMessage}`, filePath, lineNumber, line);
+			throw new ParseError({
+				message: `Unexpected error: ${errorMessage}`,
+				filePath,
+				lineNumber,
+				rawLine: line,
+			});
 		}
 	}
 
@@ -253,12 +272,13 @@ async function findAgentLogs(logDirectory: string, mainLogEntries: LogEntry[]): 
 	return agentLogs;
 }
 
-async function buildAgentTree(
-	sessionId: string,
-	mainLogEntries: LogEntry[],
-	agentLogs: Map<string, string>,
-	logDirectory: string,
-): Promise<AgentNode> {
+async function buildAgentTree(options: {
+	sessionId: string;
+	mainLogEntries: LogEntry[];
+	agentLogs: Map<string, string>;
+	logDirectory: string;
+}): Promise<AgentNode> {
+	const {sessionId, mainLogEntries, agentLogs, logDirectory} = options;
 	// Create main agent node
 	const mainAgent: AgentNode = {
 		id: sessionId,
