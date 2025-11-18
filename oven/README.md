@@ -34,7 +34,6 @@ bun run verify
 ## Tools Included
 
 - **bra** - Git branch switcher with fzf
-- **cc-docs--sync-symlinks** - Bidirectional symlink management for CLAUDE.md and AGENTS.md files
 - **cc-hook--context-injector** - Claude Code hook that provides project context at session start
 - **cc-hook--npm-redirect** - Claude Code hook that redirects npm/npx/node commands to detected package manager
 - **cc-hook--session-logger** - Claude Code hook for logging session events
