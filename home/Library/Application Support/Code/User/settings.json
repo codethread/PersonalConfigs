@@ -14,6 +14,7 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.dragAndDrop": true,
   "editor.foldingImportsByDefault": true,
+  // https://github.com/mishamyrt/Lilex
   "editor.fontFamily": "'Victor Mono','FiraCode Nerd Font','Roboto Mono', Menlo, Monaco, 'Courier New', monospace",
   "editor.fontLigatures": true,
   "editor.fontSize": 13,
