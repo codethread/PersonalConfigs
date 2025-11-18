@@ -42,8 +42,8 @@ function M.on_list_fact(list_opts)
 			local w = list_opts.reuse_win and vim.fn.win_findbuf(b)[1] or win
 			vim.api.nvim_win_set_buf(w, b)
 			vim.api.nvim_win_set_cursor(w, { item.lnum, item.col - 1 })
-			vim._with({ win = w }, function()
-				-- Open folds under the cursor
+			-- Open folds under the cursor (nvim 0.11 compatible)
+			vim.api.nvim_win_call(w, function()
 				vim.cmd 'normal! zv'
 			end)
 		end

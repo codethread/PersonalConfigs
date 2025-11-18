@@ -52,7 +52,7 @@ return {
 		dependencies = {
 			'j-hui/fidget.nvim',
 			'williamboman/mason.nvim',
-			{ 'williamboman/mason-lspconfig.nvim', version = '^1.31.0' },
+			{ 'williamboman/mason-lspconfig.nvim' },
 			'hrsh7th/cmp-nvim-lsp',
 			{ 'folke/neoconf.nvim', cmd = 'Neoconf', opts = {} }, -- adds lspconfig type
 		},
@@ -159,37 +159,26 @@ return {
 					},
 					biome = {},
 					vtsls = {
-						root_dir = root 'tsconfig.json',
+						-- nvim-lspconfig provides excellent defaults in lsp/vtsls.lua
+						-- We only override settings here, letting it handle cmd, filetypes, and root_dir
 						settings = {
 							vtsls = {
 								autoUseWorkspaceTsdk = true,
+								experimental = {
+									completion = {
+										enableServerSideFuzzyMatch = true,
+									},
+								},
 							},
 							typescript = {
-								tsdk = vim.fs.root(0, '.git') .. '/node_modules/typescript/lib',
 								preferences = {
-									-- includeCompletionsForModuleExports = true,
-									-- includeCompletionsForImportStatements = true,
-
-									-- TODO: handle project based settings
 									importModuleSpecifier = 'non-relative',
 									preferTypeOnlyAutoImports = true,
-									includePackageJsonAutoImports = 'on', -- TRIAL
+									includePackageJsonAutoImports = 'on',
 								},
 								tsserver = {
 									maxTsServerMemory = 8192,
-									-- globalPlugins = {
-									-- 	{
-									-- 		name = '@styled/typescript-styled-plugin',
-									-- 		location = vim.fn.expand '~/.volta/tools/image/packages/@styled/typescript-styled-plugin/lib/node_modules',
-									-- 		enableForWorkspaceTypeScriptVersions = true,
-									-- 	},
-									-- },
 								},
-							},
-						},
-						experimental = {
-							completion = {
-								enableServerSideFuzzyMatch = true,
 							},
 						},
 					},
@@ -202,16 +191,40 @@ return {
 			}, opts)
 		end,
 		config = function(_, opts)
-			U.lsp_attach('*', function(client, buf)
-				-- NOTE: uncomment to see
+			-- Setup global LSP configuration (nvim 0.11 native API)
+			local capabilities = vim.tbl_deep_extend(
+				'force',
+				{},
+				vim.lsp.protocol.make_client_capabilities(),
+				require('cmp_nvim_lsp').default_capabilities()
+			)
+
+			-- Global LSP settings for all servers
+			vim.lsp.config('*', {
+				capabilities = capabilities,
+			})
+
+			-- Custom on_attach behaviors using LspAttach
+			U.lsp_attach('*', function(client, bufnr)
+				-- NOTE: uncomment to see server capabilities
 				-- vim.print(client.server_capabilities)
 
-				local reuse_win = true
-				local on_list
+				-- Override K for hover with UFO fold peek integration
+				-- (nvim 0.11 sets K by default, but we want UFO integration)
+				vim.keymap.set('n', 'K', function()
+					if not require('ufo').peekFoldedLinesUnderCursor() then vim.lsp.buf.hover() end
+				end, { buffer = bufnr, desc = 'hover' })
+				vim.keymap.set(
+					'n',
+					'gd',
+					function() vim.lsp.buf.definition { reuse_win = true } end,
+					{ buffer = bufnr, desc = 'goto def' }
+				)
 
-				-- setup go to def (with filters for bits I never want)
+				-- Custom definition handler for lua_ls with filtering
 				if client.name == 'lua_ls' then
-					on_list = require('plugins.lsp.definition').on_list_fact {
+					local reuse_win = true
+					local on_list = require('plugins.lsp.definition').on_list_fact {
 						reuse_win = reuse_win,
 						filter = function(item)
 							--- WIP:
@@ -223,21 +236,17 @@ return {
 							return start ~= item.col
 						end,
 					}
+
+					-- Override gd for lua_ls with custom filtering
+					vim.keymap.set(
+						'n',
+						'gd',
+						function() vim.lsp.buf.definition { on_list = on_list, reuse_win = reuse_win } end,
+						{ buffer = bufnr, desc = 'definition (filtered)' }
+					)
 				end
 
-				--[[stylua: ignore]] --format
-					Keys.list({buffer = true }, {
-	{ 'gD', 'declaration'   , function() vim.lsp.buf.declaration() end                                                       },
-	{ 'gd', 'definition'    , function() vim.lsp.buf.definition { on_list = on_list, reuse_win = reuse_win, } end            },
-	{ 'K' , 'hover'         , function() if not require('ufo').peekFoldedLinesUnderCursor() then vim.lsp.buf.hover() end end },
-	{ 'gi', 'implementation', function() vim.lsp.buf.implementation() end                                                    },
-	{ 'gh', 'signature_help', function() vim.lsp.buf.signature_help() end                                                    },
-	{ 'gr', 'references'    , function() vim.lsp.buf.references() end                                                        },
-				})
-			end)
-
-			U.lsp_attach('*', function(client, bufnr)
-				-- highlight on hover
+				-- Highlight references on cursor hold
 				if client.server_capabilities.documentHighlightProvider then
 					vim.api.nvim_create_augroup('lsp_document_highlight', { clear = true })
 					vim.api.nvim_clear_autocmds { buffer = bufnr, group = 'lsp_document_highlight' }
@@ -254,51 +263,102 @@ return {
 						desc = 'Clear All the References',
 					})
 				end
-				-- inlay
+
+				-- Disable inlay hints by default
 				vim.lsp.inlay_hint.enable(false, { bufnr = bufnr })
 			end)
 
 			local servers = opts.servers
 
-			local capabilities = vim.tbl_deep_extend(
-				'force',
-				{},
-				vim.lsp.protocol.make_client_capabilities(),
-				require('cmp_nvim_lsp').default_capabilities()
-			)
-
-			local function setup(server)
-				local server_opts = vim.tbl_deep_extend('force', {
+			-- Configure each server using vim.lsp.config() (nvim 0.11)
+			local function configure_server(server, server_opts)
+				-- Deep copy to avoid mutations
+				local config = vim.tbl_deep_extend('force', {
 					capabilities = vim.deepcopy(capabilities),
-				}, servers[server] or {})
+				}, server_opts or {})
 
+				-- Remove mason field as it's not part of LSP config
+				local mason = config.mason
+				config.mason = nil
+
+				-- Call custom setup hook if exists
 				if opts.setup[server] then
-					if opts.setup[server](server, server_opts) then return end
+					if opts.setup[server](server, config) then return false end
 				end
-				require('lspconfig')[server].setup(server_opts)
+
+				-- Configure the server using nvim 0.11 native API
+				vim.lsp.config(server, config)
+				return true
 			end
 
-			-- get all the servers that are available thourgh mason-lspconfig
+			-- Enable servers using vim.lsp.enable() (nvim 0.11)
+			local function enable_server(server) vim.lsp.enable(server) end
+
+			-- Get all servers available through mason-lspconfig
 			local mlsp = require 'mason-lspconfig'
 			local all_mslp_servers =
-				vim.tbl_keys(require('mason-lspconfig.mappings.server').lspconfig_to_package)
+				vim.tbl_keys(require('mason-lspconfig.mappings').get_mason_map().lspconfig_to_package)
 
 			local ensure_installed = {} ---@type string[]
+			local servers_to_enable = {} ---@type string[]
+
+			-- Process all servers
 			for server, server_opts in pairs(servers) do
 				if server_opts then
 					server_opts = server_opts == true and {} or server_opts
-					-- run manual setup if mason=false or if this is a server that cannot be installed with mason-lspconfig
-					-- if server_opts.mason == false then
-					if server_opts.mason == false or not vim.tbl_contains(all_mslp_servers, server) then
-						setup(server)
-					else
-						ensure_installed[#ensure_installed + 1] = server
+
+					-- Configure server
+					local should_enable = configure_server(server, server_opts)
+
+					if should_enable then
+						-- Track for enabling later
+						table.insert(servers_to_enable, server)
+
+						-- Handle mason installation
+						if server_opts.mason == false or not vim.tbl_contains(all_mslp_servers, server) then
+							-- Manual server (not managed by mason)
+						else
+							-- Add to mason ensure_installed
+							ensure_installed[#ensure_installed + 1] = server
+						end
 					end
 				end
 			end
 
+			-- Setup mason-lspconfig
 			mlsp.setup { ensure_installed = ensure_installed }
-			mlsp.setup_handlers { setup }
+
+			-- Enable all configured servers
+			for _, server in ipairs(servers_to_enable) do
+				enable_server(server)
+			end
+
+			-- Configure diagnostics (nvim 0.11)
+			vim.diagnostic.config {
+				virtual_text = {
+					severity = vim.diagnostic.severity.ERROR,
+					source = 'if_many',
+				},
+				signs = true,
+				underline = true,
+				update_in_insert = false,
+				severity_sort = true,
+				float = {
+					border = 'rounded',
+					source = true,
+					header = '',
+					prefix = '',
+				},
+			}
+
+			-- Set rounded borders for LSP windows
+			vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
+				border = 'rounded',
+			})
+			vim.lsp.handlers['textDocument/signatureHelp'] =
+				vim.lsp.with(vim.lsp.handlers.signature_help, {
+					border = 'rounded',
+				})
 		end,
 	},
 }
