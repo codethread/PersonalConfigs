@@ -38,6 +38,7 @@ export alias gcd = git checkout develop
 export alias gcf = git config --list
 
 export alias gcl = git clone --recurse-submodules
+export alias gcls = git clone --depth 1
 export alias gnuke = git clean -dfX
 export alias guntracked = git clean -dfX --dry-run
 # export alias gclean = git clean --interactive -d
@@ -157,3 +158,26 @@ export alias gamscp = git am --show-current-patch
 export alias "git go" = git push --no-verify --force-with-lease
 export alias lg = lazygit
 
+export def "git show" [...args] {
+	^git show --ext-diff ...$args
+}
+
+export def "git d" [...args] {
+	^git difftool --no-symlinks --dir-diff ...$args
+}
+
+export def "git lg1" [] {
+	^git log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
+}
+
+export def "git lg2" [] {
+	^git log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all
+}
+
+export def "git lg" [] {
+	git lg1
+}
+
+export def "git push-mr" [] {
+	gitlab-create-mr
+}

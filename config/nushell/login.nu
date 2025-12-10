@@ -1,4 +1,4 @@
-source ct/alias/mod.nu
+source ct/interactive/mod.nu
 
 alias p = ^p
 alias als = scope aliases
