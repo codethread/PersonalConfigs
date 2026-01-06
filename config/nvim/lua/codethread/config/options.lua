@@ -59,7 +59,8 @@ vim.o.smartcase = true
 vim.opt.showmode = false -- We don't need to see things like -- INSERT -- anymore
 
 if vim.version().minor < 12 then
-	vim.opt.diffopt = 'internal,filler,closeoff,indent-heuristic,linematch:60,algorithm:histogram'
+	-- vim.opt.diffopt = 'internal,filler,closeoff,indent-heuristic,linematch:60,algorithm:histogram'
+	vim.opt.diffopt = 'internal,algorithm:histogram,indent-heuristic,linematch:32,filler,context:3'
 else
 	vim.op.diffopt:append 'inline:word'
 end

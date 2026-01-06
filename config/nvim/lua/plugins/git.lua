@@ -28,7 +28,7 @@ return {
 	},
 	{
 		'sindrets/diffview.nvim',
-		lazy = true,
+		lazy = false,
 		cmd = {
 			'DiffviewFileHistory',
 			'DiffviewOpen',
@@ -55,8 +55,5 @@ return {
 		'lewis6991/gitsigns.nvim',
 		event = { 'BufReadPre', 'BufNewFile' },
 		opts = {},
-	},
-	{
-		'tpope/vim-fugitive',
 	},
 }

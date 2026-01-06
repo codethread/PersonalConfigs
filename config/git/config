@@ -1,9 +1,8 @@
-##############################################################################80
-#################################################################################################100
-#####################################################################################################################120
 [user]
 	email = adamhalldesigns@gmail.com
 	name = codethread
+[github]
+	user = codethread
 [core]
 	excludesfile = ~/.config/git/ignore
 	editor = nvim
@@ -12,48 +11,48 @@
 [push]
 	default = simple
 	autoSetupRemote = true
-[alias]
-	lg1 = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
-	lg2 = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all
-	lg = !"git lg1"
-	diff-image = "!f() { cd -- \"${GIT_PREFIX:-.}\"; GIT_DIFF_IMAGE_ENABLED=1 git diff \"$@\"; }; f"
-	add-commit = !git add -A && git commit
-	push = "!f() { command git push \"$@\" && gitlab-create-mr 2>/dev/null || true; }; f"
-	push-mr = !gitlab-create-mr
-[merge "npm-merge-driver"]
-	name = automatically merge npm lockfiles
-	driver = npx npm-merge-driver merge %A %O %B %P
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
-[github]
-	user = codethread
-[diff]
-    tool = kitty
-    guitool = kitty.gui
-	; command = ~/.tooling/git-diff-image/git_diff_image
 [init]
 	defaultBranch = main
-[merge]
-	conflictstyle = diff3 # The diff3 conflict style adds a third section to your conflict markers showing the common ancestor's version of the conflicting lines. This can be incredibly helpful for understanding the context of the conflict and resolving it accurately.
 [rerere]
 	enabled = true
 [worktree]
 	guessRemote = true
+[pager]
+	# leave false or neovim will break
+    difftool = false
 
-[includeIf "gitdir:~/work/"] # job needs, like workspace/* so all included projects
-	path = ~/work/.gitconfig
-
-[includeIf "gitdir:~/workfiles/"] # job needs, like workspace/* so all included projects
-	path = ~/work/.gitconfig
-
+[diff]
+	# use kitty-diff with non-paged output, nice in terminal or lazy, else favour nvimdiff
+    tool = kitty
+	# don't be tempted to renable this as it will break neovim
+    # external = difft
 [difftool]
     prompt = false
     trustExitCode = true
-# > git difftool --no-symlinks --dir-diff
 [difftool "kitty"]
     cmd = kitten diff $LOCAL $REMOTE
-[difftool "kitty.gui"]
-    cmd = kitten diff $LOCAL $REMOTE
+
+[alias]
+    # Show the original commit's changes (what you wrote)
+    rc-mine = "!git -c diff.external=difft diff REBASE_HEAD^..REBASE_HEAD"
+    # Show how HEAD differs from the original commit's parent
+    # (what the target branch introduced)
+    rc-theirs = "!git -c diff.external=difft diff REBASE_HEAD^..HEAD"
+
+[merge]
+	# The diff3 conflict style adds a third section to your conflict markers showing the common ancestor's version of the conflicting lines. This can be incredibly helpful for understanding the context of the conflict and resolving it accurately.
+	conflictstyle = zdiff3
+    tool = nvim
+# prefer this as it will inherit existing settings and turn off diagnostics
+[mergetool "nvim"]
+	cmd = nvim -c "DiffviewOpen"
+
+[includeIf "gitdir:~/work/"] # job needs, like workspace/* so all included projects
+	path = ~/work/.gitconfig
+[includeIf "gitdir:~/workfiles/"] # job needs, like workspace/* so all included projects
+	path = ~/work/.gitconfig

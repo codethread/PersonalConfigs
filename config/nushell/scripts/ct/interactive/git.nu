@@ -158,24 +158,17 @@ export alias gamscp = git am --show-current-patch
 export alias "git go" = git push --no-verify --force-with-lease
 export alias lg = lazygit
 
-export def "git show" [...args] {
-	^git show --ext-diff ...$args
+# use kitty as pager
+export def "git diff" [...args] {
+	^git -c pager.difftool=true difftool -t kitty --no-symlinks --dir-diff ...$args
 }
 
-export def "git d" [...args] {
-	^git difftool --no-symlinks --dir-diff ...$args
-}
-
-export def "git lg1" [] {
+export def "git lg" [] {
 	^git log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
 }
 
 export def "git lg2" [] {
 	^git log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all
-}
-
-export def "git lg" [] {
-	git lg1
 }
 
 export def "git push-mr" [] {

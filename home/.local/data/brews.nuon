@@ -64,6 +64,10 @@
 	brew "yt-dlp"
 	brew "ical-buddy"
 
+	# git
+	brew "lazygit"
+	brew "difftastic"
+
 	# needed for gitwatch stuff
 	brew "coreutils"
 	brew "fswatch"
