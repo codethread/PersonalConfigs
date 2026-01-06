@@ -102,6 +102,10 @@ def _get_layout_config(width: Optional[int], height: Optional[int], scale: int) 
     Returns:
         Configuration string for enabled_layouts
     """
+    # BenQ RD280U (5120x3414 native, 2560x1707 logical)
+    if width == 2560 and height == 1707:
+        return "tall:bias=65,fat:bias=55,stack"
+
     # Retina displays (laptops) - always use smaller bias
     if scale == 2:
         return "tall:bias=55,fat:bias=50,stack"

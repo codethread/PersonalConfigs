@@ -23,12 +23,12 @@ PATH = '${PATH}:/opt/homebrew/bin:/opt/homebrew/sbin:~/.local/bin:~/PersonalConf
 preset = 'qwerty'
 
 [gaps]
-inner.horizontal = 5
-inner.vertical =   5
-outer.left =       5
-outer.bottom =     5
-outer.top =        5
-outer.right =      5
+inner.horizontal = [{ monitor.'BenQ RD280U' = 15 }, 5]
+inner.vertical =   [{ monitor.'BenQ RD280U' = 15 }, 5]
+outer.left =       [{ monitor.'BenQ RD280U' = 15 }, 0]
+outer.bottom =     [{ monitor.'BenQ RD280U' = 15 }, 0]
+outer.top =        [{ monitor.'BenQ RD280U' = 15 }, 0]
+outer.right =      [{ monitor.'BenQ RD280U' = 15 }, 0]
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -125,9 +125,18 @@ run = 'move-node-to-workspace primary'
 if.app-id = 'company.thebrowser.Browser'
 run = 'move-node-to-workspace alt'
 
+#####################################
+# Special
 [[on-window-detected]]
 if.app-id = 'com.figma.Desktop'
 run = 'move-node-to-workspace figma'
+
+[[on-window-detected]]
+if.app-id = 'com.anthropic.claudefordesktop'
+run = 'move-node-to-workspace figma'
+
+#####################################
+# Test
 
 # always own screen and flexible for ui testing
 [[on-window-detected]]
@@ -156,7 +165,11 @@ run = ['layout floating', 'move-node-to-workspace test']
 [[on-window-detected]]
 if.app-id = 'com.TickTick.task.mac'
 run = 'move-node-to-workspace planner'
-# run = 'move-node-to-workspace alt'
+
+[[on-window-detected]]
+if.app-id = 'com.todoist.mac.Todoist'
+run = 'move-node-to-workspace planner'
+
 [[on-window-detected]]
 if.app-id = 'md.obsidian'
 run = 'move-node-to-workspace planner'
