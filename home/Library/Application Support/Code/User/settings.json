@@ -22,8 +22,10 @@
   "editor.formatOnType": true,
   "editor.guides.indentation": true,
   "editor.inlineSuggest.enabled": true,
+  "editor.inlayHints.enabled": "offUnlessPressed",
   "editor.lineHeight": 1.8,
   "editor.lineNumbers": "relative",
+  "editor.minimap.enabled": false,
   "editor.minimap.maxColumn": 99999,
   "editor.minimap.sectionHeaderFontSize": 13,
   "editor.minimap.size": "fit",
@@ -36,6 +38,9 @@
   // "editor.rulers": [100],
   "editor.scrollBeyondLastLine": false,
   "editor.wordWrap": "on",
+
+  "containers.containerClient": "com.microsoft.visualstudio.containers.docker",
+  "containers.orchestratorClient": "com.microsoft.visualstudio.orchestrators.dockercompose",
 
   "explorer.autoReveal": false,
   "explorer.confirmDelete": false,
@@ -105,7 +110,14 @@
   "javascript.updateImportsOnFileMove.enabled": "always",
   "javascript.validate.enable": false,
 
-  "stylelint.validate": ["css", "scss", "javascript", "javascriptreact", "typescript", "typescriptreact"],
+  "stylelint.validate": [
+    "css",
+    "scss",
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
 
   "scss.validate": false,
 
@@ -386,7 +398,13 @@
   "flash-vscode.matchColor": "#3e8fb0",
   "flash-vscode.matchFontWeight": "normal",
 
+  "accessibility.voice.autoSynthesize": "on",
+
   "oil-code.disableVimKeymaps": true,
+
+  "chat.useNestedAgentsMdFiles": true,
+
+  "claudeCode.preferredLocation": "sidebar",
 
   "github.copilot.chat.codesearch.enabled": true,
   "github.copilot.chat.followUps": "never",
@@ -413,11 +431,11 @@
   "redhat.telemetry.enabled": true,
 
   "rust-analyzer.check.extraArgs": ["--target-dir", "target/check"],
-  "rust-analyzer.inlayHints.chainingHints.enable": false,
-  "rust-analyzer.inlayHints.closingBraceHints.enable": false,
-  "rust-analyzer.inlayHints.parameterHints.enable": false,
-  "rust-analyzer.inlayHints.renderColons": false,
-  "rust-analyzer.inlayHints.typeHints.enable": false,
+  // "rust-analyzer.inlayHints.chainingHints.enable": false,
+  // "rust-analyzer.inlayHints.closingBraceHints.enable": false,
+  // "rust-analyzer.inlayHints.parameterHints.enable": false,
+  // "rust-analyzer.inlayHints.renderColons": false,
+  // "rust-analyzer.inlayHints.typeHints.enable": false,
 
   "commands.commands": {
     "Close Panels": {
@@ -445,7 +463,18 @@
 
   "yaml.customTags": ["!reference sequence"],
 
+  "hexeditor.columnWidth": 16,
+  "hexeditor.defaultEndianness": "little",
+  "hexeditor.inspectorType": "aside",
+  "hexeditor.showDecodedText": true,
+
+  "debug.disassemblyView.showSourceCode": false,
+  "debug.onTaskErrors": "showErrors",
+
   "zig.zls.enabled": "on",
+  "zig.buildOnSaveArgs": ["check"],
+  "zig.path": "zig",
+
   "yaml.schemas": {
     "file:///Users/adamhall/.cursor/extensions/atlassian.atlascode-3.8.0/resources/schemas/pipelines-schema.json": "bitbucket-pipelines.yml"
   },
@@ -503,10 +532,5 @@
     "svg",
     "typescript",
     "typescriptreact"
-  ],
-  "editor.minimap.enabled": false,
-  "containers.containerClient": "com.microsoft.visualstudio.containers.docker",
-  "containers.orchestratorClient": "com.microsoft.visualstudio.orchestrators.dockercompose",
-  "accessibility.voice.autoSynthesize": "on",
-  "chat.useNestedAgentsMdFiles": true
+  ]
 }
