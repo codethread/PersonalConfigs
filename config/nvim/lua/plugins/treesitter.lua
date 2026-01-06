@@ -55,7 +55,7 @@ return {
 				-- scripting
 				{ 'awk', 'bash', 'jq', 'nu' },
 				-- langs
-				{ 'c', 'rust', 'gleam', 'zig' },
+				{ 'c', 'rust', 'gleam', 'zig', 'disassembly' },
 				{ 'go', 'gosum', 'gomod', 'gowork' },
 				-- DB
 				{ 'sql' },

@@ -9,7 +9,7 @@ Keys.tbl('<leader>', {
 	[':'] = { 'M-x [hist]', Cmd 'Telescope command_history' },
 	-- ['/'] = { '/ [hist]', Cmd 'Telescope search_history' },
 	['/'] = { 'Claude', function() require('codethread.claude').claude_query() end },
-	[','] = { '🔭', Cmd 'Telescope resume' },
+	[','] = { '🔭 Resume', Cmd 'Telescope resume' },
 	['.'] = { 'cc', function() require('codethread.claude-chat').claude_chat() end },
 
 	e = {
@@ -30,13 +30,21 @@ Keys.tbl('<leader>', {
 		group = 'Buffer',
 		b = { 'Toggle', [[<C-^>]] },
 		l = { 'list', Cmd 'Telescope buffers' },
-		f = { 'Split last', function() require('codethread.split').split() end },
 		r = { 'recent', Cmd 'Telescope oldfiles' },
 		R = { 'reload', Cmd 'e!' },
 		k = { 'kill', function() require('mini.bufremove').delete() end },
 		s = { 'Save', fns.save_buffer },
 		u = { 'Unsaved', function() require('plugins.telescope.pickers').unsaved() end },
 		O = { 'Delete Others', function() Snacks.bufdelete.other {} end },
+	},
+
+	F = {
+		group = 'Split',
+		F = { 'auto', function() require('codethread.split').split() end },
+		h = { 'Left', function() require('codethread.split').split 'left' end },
+		j = { 'Down', function() require('codethread.split').split 'down' end },
+		k = { 'Up', function() require('codethread.split').split 'up' end },
+		t = { 'Tab', function() require('codethread.split').split 'tab' end },
 	},
 
 	g = {
@@ -165,12 +173,28 @@ Keys.tbl('<leader>', {
 		l = { 'Linewrap', fns.toggle_linewrap },
 	},
 
+	d = {
+		group = 'Debug',
+		b = { 'Toggle Breakpoint', function() require('dap').toggle_breakpoint() end },
+		B = {
+			'Conditional Breakpoint',
+			function() require('dap').set_breakpoint(vim.fn.input 'Breakpoint condition: ') end,
+		},
+		c = { 'Continue', function() require('dap').continue() end },
+		e = { 'Eval', function() require('dapui').eval() end, mode = { 'n', 'v' } },
+		l = { 'Run Last', function() require('dap').run_last() end },
+		r = { 'Open REPL', function() require('dap').repl.open() end },
+		t = { 'Terminate', function() require('dap').terminate() end },
+		u = { 'Toggle UI', function() require('dapui').toggle() end },
+	},
+
 	u = {
 		group = 'Utils',
 		f = { 'format buffer', "mbggVG=='b" },
 		s = { 'autocorrect', '1z=' },
 		b = { 'Box', function() require('codethread.box').box() end },
 		r = { 'reload snippets', fns.reload_snippets },
+		j = { 'json format', Cmd '%!jq .' },
 	},
 	y = {
 		group = 'Yank',
@@ -183,29 +207,6 @@ Keys.tbl('<leader>', {
 })
 
 return {
-	-- ['<leader>v'] = { name = '+vim' },
-
-	-- a = { Cmd 'Other', 'other' },
-
-	-- b = {
-	-- 	name = '...',
-	-- },
-
-	-- d = {
-	--   function()
-	--     -- TODO: potentiall save all buffers first
-	--     local dap = require 'dap'
-	--     if dap.session() then
-	--       require('codethread.lsp.dap-hydra').debug_running_hydra:activate()
-	--     else
-	--       require('codethread.lsp.dap-hydra').debug_hydra:activate()
-	--     end
-	--   end,
-	--   '🐉 Debug',
-	-- },
-
-	-- files, buffers, buffer
-
 	W = { Cmd 'Maximize', 'Window Maximise' },
 
 	n = {
