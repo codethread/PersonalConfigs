@@ -75,7 +75,7 @@
       "Read(**/.git/hooks/**)"
     ],
     "defaultMode": "acceptEdits",
-    "additionalDirectories": ["~/.local/cache/docs", "~/.local/bin", "~/.claude", "/tmp"]
+    "additionalDirectories": ["~/.local", "~/.claude", "~/dev", "/tmp"]
   },
   "hooks": {
     "PreToolUse": [

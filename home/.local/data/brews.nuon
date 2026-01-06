@@ -12,6 +12,7 @@
 	brew "rustup"
 	brew "just"
 	brew "python@3.11"
+	brew "zig"
 
 	## NODE JS
 	tap "oven-sh/bun"

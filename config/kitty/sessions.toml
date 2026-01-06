@@ -28,15 +28,13 @@ nuphy = "~/dev/projects/nuphy_firmware/keyboards/nuphy/halo75v2/ansi"
 notes = "~/Library/Mobile Documents/com~apple~CloudDocs/Documents/Notes"
 claude-plugins = "~/dev/learn/claude-plugins"
 vault = "~/dev/Vault"
+ziggles = "~/dev/learn/ziggles/simple"
 
 [keys]
 P0 = "qmk"
 P1 = "dots"
 P2 = "claude-plugins"
-P3 = "pomo"
-P4 = "qmk_nvim"
-P5 = "git_tools"
-P6 = "git_nudge"
+P3 = "ziggles"
 P8 = "nuphy"
 P9 = "vault"
 

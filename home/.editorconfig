@@ -17,7 +17,7 @@ indent_style = space
 indent_size = 2
 
 # web
-[*.{json,js,jsx,ts,tsx,html,css}]
+[*.{json,js,jsx,ts,tsx,html,css,yml}]
 indent_style = space
 indent_size = 2
 
