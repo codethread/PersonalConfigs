@@ -5,7 +5,6 @@ use ct/core *
 use ct/tmux
 use ct/brew
 use ct/dotty
-use ct/volta
 use ct/cursor.nu *
 use ct/macos.nu *
 use ct/git *

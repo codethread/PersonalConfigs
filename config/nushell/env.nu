@@ -166,6 +166,8 @@ $env.NU_LIB_DIRS = [
 # Directories to search for plugin binaries when calling register
 $env.NU_PLUGIN_DIRS = [$env.CARGO_BIN]
 
+path add "~/.linkerd2/bin"
+
 #: }}}
 # keep this at the end
 path add -a "/usr/local/bin"
