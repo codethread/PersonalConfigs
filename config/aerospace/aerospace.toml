@@ -23,12 +23,12 @@ PATH = '${PATH}:/opt/homebrew/bin:/opt/homebrew/sbin:~/.local/bin:~/PersonalConf
 preset = 'qwerty'
 
 [gaps]
-inner.horizontal = [{ monitor.'BenQ RD280U' = 15 }, 5]
-inner.vertical =   [{ monitor.'BenQ RD280U' = 15 }, 5]
-outer.left =       [{ monitor.'BenQ RD280U' = 15 }, 0]
-outer.bottom =     [{ monitor.'BenQ RD280U' = 15 }, 0]
-outer.top =        [{ monitor.'BenQ RD280U' = 15 }, 0]
-outer.right =      [{ monitor.'BenQ RD280U' = 15 }, 0]
+inner.horizontal = [{ monitor.'BenQ RD280U' = 5 }, 5]
+inner.vertical =   [{ monitor.'BenQ RD280U' = 5 }, 5]
+outer.left =       [{ monitor.'BenQ RD280U' = 10 }, 0]
+outer.bottom =     [{ monitor.'BenQ RD280U' = 10 }, 0]
+outer.top =        [{ monitor.'BenQ RD280U' = 10 }, 0]
+outer.right =      [{ monitor.'BenQ RD280U' = 10 }, 0]
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -50,8 +50,8 @@ cmd-ctrl-j = 'focus --boundaries-action wrap-around-the-workspace down'
 cmd-ctrl-k = 'focus --boundaries-action wrap-around-the-workspace up'
 cmd-ctrl-l = 'focus --boundaries-action wrap-around-the-workspace right'
 
-cmd-ctrl-m = ['mode move', 'exec-and-forget notif --id move-help move-mode "<hjkl>move <ctrl-hjkl>resize<><HJLK>join <uiopynt>workspace1-5<><n>other"']
-cmd-ctrl-comma = 'exec-and-forget ~/.local/bin/a-full'
+cmd-ctrl-m = 'mode move'
+# cmd-ctrl-comma = 'exec-and-forget ~/.local/bin/a-full'
 # cmd-ctrl-comma = 'exec-and-forget ~/.config/aerospace/full.sh'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
@@ -62,6 +62,7 @@ cmd-ctrl-p = 'workspace planner' # things like calendar, notes, todos etc
 cmd-ctrl-y = 'workspace figma' # gets own space
 cmd-ctrl-n = 'workspace other' # all the other things i've dismissed
 cmd-ctrl-t = 'workspace test' # test should always allow floating windows for things like ui browser testing to run consistently
+cmd-ctrl-comma = 'workspace ide'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
 alt-tab = 'workspace-back-and-forth'
@@ -69,46 +70,50 @@ alt-tab = 'workspace-back-and-forth'
 alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#mode
-cmd-ctrl-semicolon = ['mode service', 'exec-and-forget notif --id service-help --aerospace "<r>reload <shift-r>flatten<><backspace>close <f>float <a>accordion<><t>tile"']
+
+# OLD: cmd-ctrl-semicolon = ['mode service', 'exec-and-forget notif --id service-help --aerospace "<r>reload <shift-r>flatten<><backspace>close <f>float <a>accordion<><t>tile"']
+cmd-ctrl-semicolon = ['mode service']
 
 # 'service' binding mode declaration.
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
 [mode.service.binding]
-esc = ['exec-and-forget notif --clear service-help', 'mode main', 'exec-and-forget notif --aerospace exited service mode']
-r = ['exec-and-forget notif --clear service-help', 'reload-config', 'mode main', 'exec-and-forget notif --aerospace reloaded config']
-shift-r = ['exec-and-forget notif --clear service-help', 'flatten-workspace-tree', 'mode main', 'exec-and-forget notif --aerospace flattened layout'] # reset layout
-backspace = ['exec-and-forget notif --clear service-help', 'close-all-windows-but-current', 'mode main', 'exec-and-forget notif --aerospace closed all other windows']
-equal = ['exec-and-forget notif --clear service-help', 'balance-sizes', 'mode main', 'exec-and-forget notif --aerospace balanced']
+esc = 'mode main'
+# OLD: r = ['exec-and-forget notif --clear service-help', 'reload-config', 'mode main', 'exec-and-forget notif --aerospace reloaded config']
+r = ['reload-config', 'mode main']
+shift-r = ['flatten-workspace-tree', 'mode main'] # reset layout
+backspace = ['close-all-windows-but-current', 'mode main']
+equal = ['balance-sizes', 'mode main']
 
-f = ['exec-and-forget notif --clear service-help', 'layout floating tiling', 'mode main', 'exec-and-forget notif --aerospace switched to floating layout']
-a = ['exec-and-forget notif --clear service-help', 'layout h_accordion', 'mode main', 'exec-and-forget notif --aerospace switched to accordion layout']
-t = ['exec-and-forget notif --clear service-help', 'layout tiling', 'mode main', 'exec-and-forget notif --aerospace switched to tiling layout']
+f = ['layout floating tiling', 'mode main']
+a = ['layout h_accordion', 'mode main']
+t = ['layout tiles', 'mode main']
 
 [mode.move.binding]
-esc = ['exec-and-forget notif --clear move-help', 'mode main']
+esc = 'mode main'
 
-h = ['exec-and-forget notif --clear move-help', 'move left', 'mode main']
-j = ['exec-and-forget notif --clear move-help', 'move down', 'mode main']
-k = ['exec-and-forget notif --clear move-help', 'move up', 'mode main']
-l = ['exec-and-forget notif --clear move-help', 'move right', 'mode main']
+h = ['move left', 'mode main']
+j = ['move down', 'mode main']
+k = ['move up', 'mode main']
+l = ['move right', 'mode main']
 
-ctrl-h = ['exec-and-forget notif --clear move-help', 'resize width +50']
-ctrl-l = ['exec-and-forget notif --clear move-help', 'resize width -50']
-ctrl-j = ['exec-and-forget notif --clear move-help', 'resize height -50']
-ctrl-k = ['exec-and-forget notif --clear move-help', 'resize height +50']
+ctrl-h = 'resize width +50'
+ctrl-l = 'resize width -50'
+ctrl-j = 'resize height -50'
+ctrl-k = 'resize height +50'
 
-shift-h = ['exec-and-forget notif --clear move-help', 'join-with left']
-shift-j = ['exec-and-forget notif --clear move-help', 'join-with down']
-shift-k = ['exec-and-forget notif --clear move-help', 'join-with up']
-shift-l = ['exec-and-forget notif --clear move-help', 'join-with right']
+shift-h = 'join-with left'
+shift-j = 'join-with down'
+shift-k = 'join-with up'
+shift-l = 'join-with right'
 
-u = ['exec-and-forget notif --clear move-help', 'move-node-to-workspace --focus-follows-window primary', 'mode main']
-i = ['exec-and-forget notif --clear move-help', 'move-node-to-workspace --focus-follows-window alt', 'mode main']
-o = ['exec-and-forget notif --clear move-help', 'move-node-to-workspace --focus-follows-window social', 'mode main']
-p = ['exec-and-forget notif --clear move-help', 'move-node-to-workspace --focus-follows-window planner', 'mode main']
-y = ['exec-and-forget notif --clear move-help', 'move-node-to-workspace --focus-follows-window figma', 'mode main']
-n = ['exec-and-forget notif --clear move-help', 'move-node-to-workspace --focus-follows-window other', 'mode main']
-t = ['exec-and-forget notif --clear move-help', 'move-node-to-workspace --focus-follows-window test', 'mode main']
+u = ['move-node-to-workspace --focus-follows-window primary', 'mode main']
+i = ['move-node-to-workspace --focus-follows-window alt', 'mode main']
+o = ['move-node-to-workspace --focus-follows-window social', 'mode main']
+p = ['move-node-to-workspace --focus-follows-window planner', 'mode main']
+y = ['move-node-to-workspace --focus-follows-window figma', 'mode main']
+n = ['move-node-to-workspace --focus-follows-window other', 'mode main']
+t = ['move-node-to-workspace --focus-follows-window test', 'mode main']
+comma = ['move-node-to-workspace --focus-follows-window ide', 'mode main']
 
 # https://nikitabobko.github.io/AeroSpace/guide#on-window-detected-callback
 #####################################
