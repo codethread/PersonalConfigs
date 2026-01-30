@@ -281,4 +281,59 @@ function M.save_register_to_clipboard()
 	M.store_to_clipboard(content)
 end
 
+function M.yank_gitlab_url()
+	local root = vim.fs.root(0, '.git')
+	local cur = vim.fn.expand '%:p'
+	if not root or not cur then return end
+	
+	local rel_path = vim.fs.relpath(root, cur, {})
+	
+	-- Get git remote URL
+	local remote_result = vim.system({ 'git', 'remote', 'get-url', 'origin' }, { cwd = root }):wait()
+	if remote_result.code ~= 0 then
+		vim.notify('Failed to get git remote', vim.log.levels.ERROR)
+		return
+	end
+	
+	local remote_url = vim.trim(remote_result.stdout)
+	
+	-- Parse GitLab URL from git remote
+	-- Supports both SSH (git@host:path/repo.git) and HTTPS (https://host/path/repo.git)
+	local gitlab_host, repo_path
+	
+	-- Try SSH format first: git@host:path/repo.git
+	gitlab_host, repo_path = remote_url:match('^git@([^:]+):(.+)%.git$')
+	
+	-- Try HTTPS format if SSH didn't match: https://host/path/repo.git
+	if not gitlab_host then
+		gitlab_host, repo_path = remote_url:match('^https?://([^/]+)/(.+)%.git$')
+	end
+	
+	if not gitlab_host or not repo_path then
+		vim.notify('Could not parse git remote URL: ' .. remote_url, vim.log.levels.ERROR)
+		return
+	end
+	
+	-- Get current branch
+	local branch_result = vim.system({ 'git', 'branch', '--show-current' }, { cwd = root }):wait()
+	if branch_result.code ~= 0 then
+		vim.notify('Failed to get current branch', vim.log.levels.ERROR)
+		return
+	end
+	
+	local branch = vim.trim(branch_result.stdout)
+	
+	-- Construct GitLab URL
+	local gitlab_url = string.format(
+		'https://%s/%s/-/blob/%s/%s',
+		gitlab_host,
+		repo_path,
+		branch,
+		rel_path
+	)
+	
+	M.store_to_clipboard(gitlab_url)
+	return gitlab_url
+end
+
 return M

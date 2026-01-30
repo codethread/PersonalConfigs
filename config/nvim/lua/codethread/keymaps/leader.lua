@@ -202,6 +202,7 @@ Keys.tbl('<leader>', {
 		y = { 'path [project_root]', fns.yank_current_file },
 		l = { 'last', fns.save_register_to_clipboard },
 		r = { 'path [home_root]', fns.yank_home_relative_path },
+		g = { 'path [gitlab]', fns.yank_gitlab_url },
 		s = { 'Search', Cmd 'Telescope neoclip' },
 	},
 })
