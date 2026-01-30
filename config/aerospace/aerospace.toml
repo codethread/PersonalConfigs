@@ -121,6 +121,9 @@ comma = ['move-node-to-workspace --focus-follows-window ide', 'mode main']
 [[on-window-detected]]
 if.app-id = 'net.kovidgoyal.kitty'
 run = 'move-node-to-workspace primary'
+[[on-window-detected]] ## not sure about this
+if.app-name-regex-substring = 'Cursor'
+run = 'move-node-to-workspace ide'
 
 # [[on-window-detected]]
 # if.app-id = 'com.google.Chrome'
