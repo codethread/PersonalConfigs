@@ -1,4 +1,12 @@
-# claude code wrapper with extra args
+# :module: claude code wrappers and helpers for tty usage
+#
+# These are written for nushell https://www.nushell.sh/ using a wrapped
+# command: https://www.nushell.sh/book/custom_commands.html#rest-parameters-with-wrapped-external-commands
+# but can likely be adapted for other shells like bash or zsh. The main
+# function of interest is `cl`
+
+# claude code wrapper with extra args to handle common mcp configs when i want
+# them as well as any default claude code args
 export def cl --wrapped [
 	--dangerously-skip-permissions(-d) # ahhhhh
 	--ui # add a ui based mcp config
@@ -16,7 +24,9 @@ export def cl --wrapped [
 	}}
 	| compact
 
-	let all_args = $custom ++ $rest
+	let all_args: list<string> = ([
+		# --no-chrome
+	] ++ $custom ++ $rest)
 	print $all_args
 	claude ...$all_args
 }
@@ -27,7 +37,5 @@ export alias _claude-prompts = jq 'select(.event == "UserPromptSubmit") | {promp
 
 # Get tool usage statistics
 export alias _claude-session-stats = jq -s 'group_by(.tool_name) | map({tool: .[0].tool_name, count: length})' .logs/claude-session-*.jsonl
-
-export alias _claude-stable = claude install 1.0.88
 
 export alias oc = opencode

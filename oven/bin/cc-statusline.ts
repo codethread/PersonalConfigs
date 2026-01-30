@@ -96,12 +96,25 @@ async function formatStatusline(input: StatuslineInput): Promise<string> {
 		parts.push(colorize.dimYellow(`${input.model.display_name}`));
 	}
 
-	// Cost and token count formatted as ($0.77 | 132K +5K)
+	// Cost and token count formatted as ($0.77 | 132K +5K | 22%)
 	const cost = input.cost.total_cost_usd.toFixed(2);
 	const currentContext = formatTokenCount(transcriptData.contextSnapshot.currentContextSize);
 	const delta = transcriptData.contextSnapshot.lastPromptDelta;
 	const deltaDisplay = delta > 0 ? ` +${formatTokenCount(delta)}` : "";
-	parts.push(colorize.dim(`($${cost} | ${currentContext}${deltaDisplay})`));
+
+	// Remaining percentage with color coding
+	const remainingPercent = input.context_window?.remaining_percentage ?? 100;
+	const remainingDisplay = `${remainingPercent.toFixed(0)}%`;
+	const coloredRemaining =
+		remainingPercent < 20
+			? colorize.red(remainingDisplay)
+			: remainingPercent < 50
+				? colorize.yellow(remainingDisplay)
+				: colorize.dim(remainingDisplay);
+
+	parts.push(
+		colorize.dim(`($${cost} | ${currentContext}${deltaDisplay} | `) + coloredRemaining + colorize.dim(")"),
+	);
 
 	// Last user prompt (truncated)
 	if (transcriptData.lastPrompt) {

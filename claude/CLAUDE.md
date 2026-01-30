@@ -2,22 +2,18 @@
 
 ## General information
 
-- the year is 2025
-- if the Update or Write tools fail to edit files after a few tries, stop and prompt the user to restart the session
+- the year is 2026
 
 ## Ways of working
 
 - read relavent README.md files when working in nested directories
-- always check CLAUDE.md files after completing work
-- ALWAYS follow `<plugin-*-suggestion>` prompt suggestions
+- always check CLAUDE.md files after completing work to ensure they remain in sync with changes
 
 ## Skills **IMPORTANT**
 
 - ALWAYS load a Skill if you think it might be useful (better to not need it, than miss valuable context)
 - ALWAYS load `lang-*` Skills when working in appropriate files
   - e.g `lang-react` Skill must be used when attempting to write/update/review React code
-- ALWAYS use `claude-code-knowledge` Skill when answering questions about claude code specific topics, e.g slash commands, skills, or authoring such tools
-- ALWAYS use `doc-writer` Skill when authoring markdown files of any kind
 
 ## Code comments
 
