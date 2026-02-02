@@ -1,5 +1,6 @@
 ---
 description: New bin tool description
+disable-model-invocation: true
 ---
 
 ## Variables

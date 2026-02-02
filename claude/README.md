@@ -82,6 +82,12 @@ Claude Code supports resuming Task agents from previous executions, allowing age
 - **Events**: PreToolUse[Bash]
 - **Purpose**: Prevents package manager conflicts, ensures correct tool usage based on project lock files
 
+#### 4. **git add -N (intent-to-add)**
+
+- **Summary**: Automatically runs `git add -N` on newly created files to make them visible in `git diff`
+- **Events**: PostToolUse[Write]
+- **Purpose**: Allows reviewing new file contents with `git diff` without staging them for commit
+
 ### Hook Interactions and Dependencies
 
 ```mermaid

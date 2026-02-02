@@ -2,16 +2,6 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Project Discovery
-
-Use `cindex` to understand the codebase structure:
-
-```bash
-cindex --markdown    # Generate markdown index of entire project with descriptions
-cindex --help        # See all cindex options
-cindex --path <dir>  # List all files recursively at path (with less relavent files filtered out)
-```
-
 ## Directories
 
 - **boot/** - System setup scripts. Go here to bootstrap a new machine.

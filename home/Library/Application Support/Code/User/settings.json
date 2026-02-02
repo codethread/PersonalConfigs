@@ -533,5 +533,6 @@
     "svg",
     "typescript",
     "typescriptreact"
-  ]
+  ],
+  "claudeCode.selectedModel": "sonnet"
 }

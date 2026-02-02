@@ -2,10 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "env": {
     "__CC_ENVS": "title off for kitty, builtin ripgrep to ensure my stuff is found",
-    "CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "true",
-    "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "true",
-    "DISABLE_BUG_COMMAND": "1",
-    "DISABLE_TELEMETRY": "1",
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1",
     "__CC_CUSTOM_ENVS_": "manpager so we can see files, CLAUDECODE tells bun.js to have less noisy cli output, ZDOTDIR avoids old shell stuff",
     "ZDOTDIR": "~/.config/zsh-claude",
     "MANPAGER": "cat",
@@ -49,7 +46,6 @@
       "~/workfiles"
     ]
   },
-  "model": "sonnet",
   "hooks": {
     "PreToolUse": [
       {
@@ -81,6 +77,15 @@
       }
     ],
     "PostToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path' | xargs git add -N 2>/dev/null || true"
+          }
+        ]
+      },
       {
         "hooks": [
           {
@@ -194,7 +199,9 @@
     "command": "cc-statusline",
     "padding": 0
   },
+  "promptSuggestionEnabled": false,
   "feedbackSurveyState": {
     "lastShownTime": 1754027278114
-  }
+  },
+  "model": "sonnet"
 }
