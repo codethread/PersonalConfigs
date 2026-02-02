@@ -56,24 +56,6 @@
             "command": "cc-hook--npm-redirect"
           }
         ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "cc-hook--session-logger"
-          }
-        ]
-      }
-    ],
-    "PermissionRequest": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "cc-hook--session-logger"
-          }
-        ]
       }
     ],
     "PostToolUse": [
@@ -85,63 +67,11 @@
             "command": "jq -r '.tool_input.file_path' | xargs git add -N 2>/dev/null || true"
           }
         ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "cc-hook--session-logger"
-          }
-        ]
-      }
-    ],
-    "PostToolUseFailure": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "cc-hook--session-logger"
-          }
-        ]
-      }
-    ],
-    "Notification": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "cc-hook--session-logger"
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "cc-hook--session-logger"
-          }
-        ]
-      }
-    ],
-    "UserPromptSubmit": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "cc-hook--session-logger"
-          }
-        ]
       }
     ],
     "SessionStart": [
       {
         "hooks": [
-          {
-            "type": "command",
-            "command": "cc-hook--session-logger"
-          },
           {
             "type": "command",
             "command": "cc-hook--context-injector session-start"
@@ -154,41 +84,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "cc-hook--session-logger"
-          },
-          {
-            "type": "command",
             "command": "cc-hook--context-injector session-end"
-          }
-        ]
-      }
-    ],
-    "SubagentStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "cc-hook--session-logger"
-          }
-        ]
-      }
-    ],
-    "SubagentStop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "cc-hook--session-logger"
-          }
-        ]
-      }
-    ],
-    "PreCompact": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "cc-hook--session-logger"
           }
         ]
       }

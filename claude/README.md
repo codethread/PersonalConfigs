@@ -27,7 +27,7 @@ graph LR
 
 ### Session Logging
 
-All hook events are captured by `cc-hook--session-logger`:
+All hook events can be captured using the `cc-logger-plugin` (see Plugin section below):
 
 ```mermaid
 graph LR
@@ -35,13 +35,13 @@ graph LR
         Event[Session Start / User Prompt / ...etc]
     end
 
-    Event --> SessionLogger[cc-hook--session-logger]
+    Event --> SessionLogger[cc-logger-plugin]
 
-    SessionLogger --> HookLogs[Hook logs in<br/>~/.local/share/claude-logs/]
-    ClaudeCode[Claude Code] --> ProjectLogs[Project logs in<br/>~/.claude/projects/]
+    SessionLogger --> ProjectLogs[Project logs in<br/>.logs/]
+    ClaudeCode[Claude Code] --> TranscriptLogs[Transcripts in<br/>~/.claude/projects/]
 
-    HookLogs --> Aggregation[Log aggregation tools<br/>oven/bin/cc-logs--*]
-    ProjectLogs --> Aggregation
+    ProjectLogs --> Aggregation[Log aggregation tools<br/>oven/bin/cc-logs--*]
+    TranscriptLogs --> Aggregation
 ```
 
 ### Log Aggregation Tools
@@ -62,15 +62,20 @@ Claude Code supports resuming Task agents from previous executions, allowing age
 - Building upon previous
 - **IMPORTANT**: At this time claude code only resumes the initital context for an agent, i.e ask agent task A, then resume them and they will recall task A, but if you ask them task B, then resume again later, they won't remember task B, just task A. This is annoying!
 
+### Plugins
+
+#### cc-logger-plugin
+
+The session logger has been extracted into a standalone plugin available at `cc-logger-plugin/` in the root of this repository.
+
+- **Purpose**: Logs all Claude Code events to structured JSONL files for analysis and debugging
+- **Events**: All events (SessionStart, SessionEnd, PreToolUse, PostToolUse, UserPromptSubmit, Stop, SubagentStop, PreCompact, Notification)
+- **Installation**: See `cc-logger-plugin/README.md` for installation instructions
+- **Log Location**: `.logs/` directory in each project
+
 ### Active Hooks
 
-#### 1. **cc-hook--session-logger**
-
-- **Summary**: Logs all Claude Code events to structured JSON files for analysis and debugging
-- **Events**: All events (SessionStart, SessionEnd, PreToolUse, PostToolUse, UserPromptSubmit, Stop, SubagentStop, PreCompact, Notification)
-- **Purpose**: Creates audit trail, enables session replay, supports analytics
-
-#### 2. **cc-hook--context-injector**
+#### 1. **cc-hook--context-injector**
 
 - **Summary**: Lists all README.md files in the project at session start
 - **Events**: SessionStart (initialize and list READMEs), SessionEnd (cleanup)
@@ -113,7 +118,7 @@ graph LR
 ### Data Flow Between Hooks
 
 1. **Session State Sharing**:
-   - `cc-hook--session-logger` creates session directories and transcript files
+   - `cc-logger-plugin` creates session log files in `.logs/` directory
    - `cc-hook--context-injector` creates minimal session state for cleanup tracking
    - Both hooks use environment variables like `CLAUDE_PROJECT_DIR` and session IDs
 

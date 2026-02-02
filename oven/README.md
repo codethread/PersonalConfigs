@@ -36,7 +36,6 @@ bun run verify
 - **bra** - Git branch switcher with fzf
 - **cc-hook--context-injector** - Claude Code hook that provides project context at session start
 - **cc-hook--npm-redirect** - Claude Code hook that redirects npm/npx/node commands to detected package manager
-- **cc-hook--session-logger** - Claude Code hook for logging session events
 - **cc-speak** - Advanced text-to-speech tool with file and section reading support
 - **cc-statusline** - Process Claude Code statusline data and display custom status
 - **cindex** - Generate an index of files in the current project
