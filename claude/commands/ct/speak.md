@@ -2,6 +2,7 @@
 allowed-tools: Bash(cc-speak:*)
 argument-hint: [optional initial message]
 description: Enable audio communication mode for the session
+disable-model-invocation: true
 ---
 
 # Enable Audio Communication Mode

@@ -9,12 +9,6 @@
 - read relavent README.md files when working in nested directories
 - always check CLAUDE.md files after completing work to ensure they remain in sync with changes
 
-## Skills **IMPORTANT**
-
-- ALWAYS load a Skill if you think it might be useful (better to not need it, than miss valuable context)
-- ALWAYS load `lang-*` Skills when working in appropriate files
-  - e.g `lang-react` Skill must be used when attempting to write/update/review React code
-
 ## Code comments
 
 ### Changes to code

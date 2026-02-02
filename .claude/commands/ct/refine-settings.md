@@ -1,5 +1,6 @@
 ---
 description: Prompt claude to refine the current settings.json
+disable-model-invocation: true
 ---
 
 /docs please read about settings within claude code, and then modify the following files:
