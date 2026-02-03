@@ -3,6 +3,8 @@
   "env": {
     "__CC_ENVS": "title off for kitty, builtin ripgrep to ensure my stuff is found",
     "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1",
+    "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "true",
+    "CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "true",
     "__CC_CUSTOM_ENVS_": "manpager so we can see files, CLAUDECODE tells bun.js to have less noisy cli output, ZDOTDIR avoids old shell stuff",
     "ZDOTDIR": "~/.config/zsh-claude",
     "MANPAGER": "cat",
