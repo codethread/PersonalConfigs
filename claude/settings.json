@@ -23,7 +23,9 @@
       "Bash(git push:*)",
       "NotebookEdit",
       "Read(**/*.key)",
+      "Read(~/*.key)",
       "Read(**/*.pem)",
+      "Read(~/*.pem)",
       "Read(**/.env)",
       "Read(**/.env.*)",
       "Read(**/.env.local)",
@@ -32,6 +34,7 @@
       "Read(**/id_rsa*)",
       "Read(**/secrets/**)",
       "Read(**/.netrc)",
+      "Read(~/.netrc)",
     ],
     "ask": [
       "Bash(chmod:*)",
