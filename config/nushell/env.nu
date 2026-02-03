@@ -4,7 +4,7 @@ use std/util "path add"
 #: fns {{{
 
 def home [p: string] {
-	$nu.home-path | path join $p
+	$nu.home-dir | path join $p
 }
 
 #: }}}

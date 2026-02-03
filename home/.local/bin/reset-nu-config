@@ -12,6 +12,6 @@ print $"removing ($ev)"
 zsh -c $"rm '($conf)' && rm '($ev)'"
 
 # ideally try to read $env.DOTFILES
-$env.DOTTY = (["~/PersonalConfigs" $nu.home-path] | path expand | str join ":")
+$env.DOTTY = (["~/PersonalConfigs" $nu.home-dir] | path expand | str join ":")
 
 /opt/homebrew/bin/dotty setup
