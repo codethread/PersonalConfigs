@@ -48,6 +48,7 @@
       "~/workfiles"
     ]
   },
+  "model": "sonnet",
   "hooks": {
     "PreToolUse": [
       {
@@ -97,9 +98,11 @@
     "command": "cc-statusline",
     "padding": 0
   },
+  "enabledPlugins": {
+    "logger@codethread-plugins": true
+  },
   "promptSuggestionEnabled": false,
   "feedbackSurveyState": {
     "lastShownTime": 1754027278114
-  },
-  "model": "sonnet"
+  }
 }
