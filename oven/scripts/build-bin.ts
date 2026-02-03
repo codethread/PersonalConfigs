@@ -7,7 +7,6 @@ import {cleanBuilds} from "./clean";
 
 const BIN_SRC_DIR = join(import.meta.dir, "..", "bin");
 const BIN_DEST_DIR = join(import.meta.dir, "..", "..", "..", ".local", "bin");
-const CC_INSPECT_BUILD_SCRIPT = join(BIN_SRC_DIR, "cc-inspect", "build.ts");
 
 async function buildExecutables(verbose = false) {
 	if (verbose) {
@@ -99,22 +98,6 @@ async function buildExecutables(verbose = false) {
 		console.log(
 			`${failures.length > 0 && !verbose ? "" : "\n"}Summary: ${successes.length} succeeded, ${failures.length} failed`,
 		);
-	}
-
-	// Build cc-inspect workspace executable
-	if (verbose) {
-		console.log("\nBuilding cc-inspect workspace...");
-	}
-
-	try {
-		const {buildExecutable} = await import(CC_INSPECT_BUILD_SCRIPT);
-		await buildExecutable(verbose);
-		if (verbose) {
-			console.log("✅ cc-inspect workspace built successfully");
-		}
-	} catch (error) {
-		console.error("\n❌ Failed to build cc-inspect workspace:");
-		console.error(`  ${error instanceof Error ? error.message : String(error)}`);
 	}
 
 	await cleanBuilds(verbose);
