@@ -30,7 +30,8 @@
       "Read(**/.env.production)",
       "Read(**/.git/hooks/**)",
       "Read(**/id_rsa*)",
-      "Read(**/secrets/**)"
+      "Read(**/secrets/**)",
+      "Read(**/.netrc)",
     ],
     "ask": [
       "Bash(chmod:*)",
@@ -48,7 +49,7 @@
       "~/workfiles"
     ]
   },
-  "model": "sonnet",
+  "model": "opusplan",
   "hooks": {
     "PreToolUse": [
       {
