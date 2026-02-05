@@ -34,7 +34,7 @@
       "Read(**/id_rsa*)",
       "Read(**/secrets/**)",
       "Read(**/.netrc)",
-      "Read(~/.netrc)",
+      "Read(~/.netrc)"
     ],
     "ask": [
       "Bash(chmod:*)",
@@ -103,7 +103,7 @@
     "padding": 0
   },
   "enabledPlugins": {
-    "logger@codethread-plugins": true
+    "logger@codethread-plugins": false
   },
   "promptSuggestionEnabled": false,
   "feedbackSurveyState": {
