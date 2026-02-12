@@ -26,6 +26,8 @@ export def sync [
 			HOMEBREW_BUNDLE_NO_UPGRADE: 1
 			HOMEBREW_BUNDLE_MAS_SKIP: (not $mas)
 		} {
+			# ensure taps are done first
+			echo $conf | grep tap | ^brew bundle --no-upgrade --file=-
 			echo $conf | ^brew bundle --no-upgrade --file=-
 		}
 	}
