@@ -291,16 +291,17 @@ function detectPackageManager(command: string, targetDir?: string): string {
 	}
 
 	// Walk up the directory tree to find lock files
+	// Priority: bun.lock > bun.lockb > pnpm-lock.yaml > yarn.lock > package-lock.json
 	let currentDir = searchDir;
 	while (currentDir !== dirname(currentDir)) {
-		if (existsSync(resolve(currentDir, "pnpm-lock.yaml"))) {
-			return "pnpm";
-		}
 		if (existsSync(resolve(currentDir, "bun.lock"))) {
 			return "bun";
 		}
 		if (existsSync(resolve(currentDir, "bun.lockb"))) {
 			return "bun";
+		}
+		if (existsSync(resolve(currentDir, "pnpm-lock.yaml"))) {
+			return "pnpm";
 		}
 		if (existsSync(resolve(currentDir, "yarn.lock"))) {
 			return "yarn";
