@@ -1,13 +1,10 @@
-# Agent instructions (via CLAUDE.md)
-
-## General information
-
-- the year is 2026
+# Agent instructions (via user CLAUDE.md)
 
 ## Ways of working
 
 - read relavent README.md files when working in nested directories
 - always check CLAUDE.md files after completing work to ensure they remain in sync with changes
+- When reporting information to me, be extremely concise and sacrifice grammar for sake of concision.
 
 ## Code comments
 

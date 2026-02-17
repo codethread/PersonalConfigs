@@ -1,14 +1,14 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "env": {
-    "__CC_ENVS": "title off for kitty, builtin ripgrep to ensure my stuff is found",
+    "CLAUDECODE": "1",
+    "CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "true",
     "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1",
     "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "true",
-    "CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "true",
-    "__CC_CUSTOM_ENVS_": "manpager so we can see files, CLAUDECODE tells bun.js to have less noisy cli output, ZDOTDIR avoids old shell stuff",
-    "ZDOTDIR": "~/.config/zsh-claude",
     "MANPAGER": "cat",
-    "CLAUDECODE": "1"
+    "ZDOTDIR": "~/.config/zsh-claude",
+    "__CC_CUSTOM_ENVS_": "manpager so we can see files, CLAUDECODE tells bun.js to have less noisy cli output, ZDOTDIR avoids old shell stuff",
+    "__CC_ENVS": "title off for kitty, builtin ripgrep to ensure my stuff is found"
   },
   "includeCoAuthoredBy": false,
   "permissions": {
@@ -16,7 +16,8 @@
       "Bash",
       "WebFetch",
       "WebSearch",
-      "mcp__context7"
+      "mcp__context7",
+      "mcp__plugin_playwright_playwright"
     ],
     "deny": [
       "Bash(wget*)",
@@ -52,19 +53,8 @@
       "~/workfiles"
     ]
   },
-  "model": "opusplan",
+  "model": "sonnet",
   "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "cc-hook--npm-redirect"
-          }
-        ]
-      }
-    ],
     "PostToolUse": [
       {
         "matcher": "Write",
@@ -76,12 +66,24 @@
         ]
       }
     ],
-    "SessionStart": [
+    "PreCompact": [
       {
+        "matcher": "",
         "hooks": [
           {
             "type": "command",
-            "command": "cc-hook--context-injector session-start"
+            "command": "bd prime"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cc-hook--npm-redirect"
           }
         ]
       }
@@ -95,6 +97,25 @@
           }
         ]
       }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cc-hook--context-injector session-start"
+          }
+        ]
+      },
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bd prime"
+          }
+        ]
+      }
     ]
   },
   "statusLine": {
@@ -103,10 +124,15 @@
     "padding": 0
   },
   "enabledPlugins": {
-    "logger@codethread-plugins": false
+    "logger@codethread-plugins": false,
+    "frontend-design@claude-plugins-official": true,
+    "typescript-lsp@claude-plugins-official": true,
+    "claude-md-management@claude-plugins-official": true
   },
   "promptSuggestionEnabled": false,
+  "skipDangerousModePermissionPrompt": true,
   "feedbackSurveyState": {
     "lastShownTime": 1754027278114
-  }
+  },
+  "effortLevel": "low"
 }

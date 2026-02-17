@@ -39,3 +39,24 @@ export alias _claude-prompts = jq 'select(.event == "UserPromptSubmit") | {promp
 export alias _claude-session-stats = jq -s 'group_by(.tool_name) | map({tool: .[0].tool_name, count: length})' .logs/claude-session-*.jsonl
 
 export alias oc = opencode
+
+# Ephemeral claude session with haiku model - deletes session files on exit
+export def cll --wrapped [...rest] {
+	let session_id = (random uuid)
+	let normalized_path = ($env.PWD | str replace --all "/" "-")
+	let project_dir = ($"~/.claude/projects/($normalized_path)" | path expand)
+
+	print $"(ansi yellow)Simple details mode(ansi reset)"
+	claude --model haiku --session-id $session_id ...$rest
+
+	for name in [$"($session_id).jsonl" $session_id] {
+		let p = ($project_dir | path join $name)
+		if ($p | path exists) {
+			if ($p | path type) == "dir" {
+				rm --recursive $p
+			} else {
+				rm $p
+			}
+		}
+	}
+}

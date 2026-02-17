@@ -2,7 +2,10 @@ source ct/interactive/mod.nu
 
 alias p = ^p
 alias als = scope aliases
-alias talk = send-to-claude (audio--record-and-transcribe)
+def talk [] {
+    let wid = (send-to-claude --check)
+    send-to-claude $"--id=($wid)" (audio--record-and-transcribe)
+}
 
 const atuin = ("~/.local/share/atuin/init.nu" | path expand)
 source (if ($atuin | path exists) { $atuin } else { null })
