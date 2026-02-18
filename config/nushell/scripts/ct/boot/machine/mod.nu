@@ -40,12 +40,6 @@ export def main [
 	try { macos }
 
 	nvim-sync
-
-	setup-speech-whisper-model
-
-	setup-speech-tts-mlx
-
-	job spawn { speak --text "setup complete" }
 }
 
 # Install various projects I use either for boot or general use (not available
@@ -124,49 +118,4 @@ def setup-bins [] {
 	cd $env.DOTFILES
 	cd oven
 	bun run build
-}
-
-def setup-speech-whisper-model [] {
-	log step "Whisper model setup"
-
-	let models_dir = ("~/dev/models" | path expand)
-	let whisper_model = ($models_dir | path join "ggml-medium.bin")
-
-	# Create models directory if it doesn't exist
-	if not ($models_dir | path exists) {
-		log tool "Creating models directory"
-		mkdir $models_dir
-	}
-
-	# Download whisper model if it doesn't exist
-	if not ($whisper_model | path exists) {
-		log tool "Downloading whisper medium model"
-		http get "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin" | save $whisper_model
-	} else {
-		log tool "Whisper medium model already exists"
-	}
-}
-
-# sets up the python env in dotfiles so that python code runs
-# then sets up the install for https://github.com/Blaizzy/mlx-audio
-def setup-speech-tts-mlx [] {
-	log step "MLX TTS setup"
-
-	let venv_dir = ($env.DOTFILES | path join ".py_venv")
-
-	# Check if speak command exists and venv is set up
-	if ($venv_dir | path exists) {
-		log tool "MLX TTS already set up"
-		return
-	}
-
-	# Create venv with Python 3.11 (3.13 is too new for dependencies)
-	if not ($venv_dir | path exists) {
-		log tool "Creating Python venv for MLX audio"
-		/opt/homebrew/opt/python@3.11/bin/python3.11 -m venv $venv_dir
-	}
-
-	# Install mlx-audio in the venv
-	log tool "Installing mlx-audio (this may take a while)"
-	bash -c $"source ($venv_dir)/bin/activate && pip install --quiet mlx-audio"
 }

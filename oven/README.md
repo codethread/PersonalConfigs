@@ -45,7 +45,6 @@ bun run verify
 - **gitlab-pipeline-watcher** - Monitor GitLab pipelines and send notifications
 - **notif** - Show macOS native notifications
 - **prepend-comment** - Add or update module documentation comments
-- **record-and-transcribe** - Record audio and transcribe using Whisper
 - **tts** - Optimized for text-to-speech (adds spoken indicators)
 
 ### Quick Usage
