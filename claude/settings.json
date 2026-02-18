@@ -53,7 +53,6 @@
       "~/workfiles"
     ]
   },
-  "model": "sonnet",
   "hooks": {
     "PostToolUse": [
       {
@@ -134,5 +133,5 @@
   "feedbackSurveyState": {
     "lastShownTime": 1754027278114
   },
-  "effortLevel": "low"
+  "effortLevel": "medium"
 }

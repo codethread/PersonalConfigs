@@ -1,0 +1,31 @@
+#!/bin/bash
+# :module: Run OpenCode reviewer with prompt passthrough
+# Debug notes (future tweaks):
+# - Verify resolved agent config: opencode debug agent reviewer
+# - Verify merged config: opencode debug config
+# - List agents + mode: opencode agent list
+# - Smoke test reviewer directly: opencode run --agent reviewer "ping" 2>/dev/null
+# - Model effort is via variant in config/opencode/opencode.json (provider.models.*.variants)
+#   and agent selects it via `variant:` in config/opencode/agents/reviewer.md
+
+set -euo pipefail
+
+if [[ $# -eq 0 ]]; then
+  echo "Usage: code-review \"your prompt\"" >&2
+  exit 1
+fi
+
+stderr_file=$(mktemp)
+trap 'rm -f "$stderr_file"' EXIT
+
+if opencode run --agent reviewer -- "$@" 2>"$stderr_file"; then
+  exit 0
+else
+  rc=$?
+  if [[ -s "$stderr_file" ]]; then
+    cat "$stderr_file" >&2
+  else
+    echo "code-review failed (exit $rc): opencode run --agent reviewer" >&2
+  fi
+  exit "$rc"
+fi

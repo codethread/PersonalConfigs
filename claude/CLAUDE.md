@@ -6,6 +6,14 @@
 - always check CLAUDE.md files after completing work to ensure they remain in sync with changes
 - When reporting information to me, be extremely concise and sacrifice grammar for sake of concision.
 
+## Mandatory final review step
+
+- After completing work and finishing verification, always run `$ code-review <prompt>` for a final review before reporting done.
+- `code-review` is long-running; always invoke it with an extremely long timeout.
+- In the review prompt, explicitly state what you worked on and why (goal and intent), not how you implemented it.
+- If work is tied to a task/plan, explicitly reference that task/plan so reviewer can assess alignment with original requirements.
+- Treat reviewer output as required follow-up: action all material feedback before final handoff.
+
 ## Code comments
 
 ### Changes to code
