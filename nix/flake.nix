@@ -17,11 +17,11 @@
 
   outputs = { self, nixpkgs, nix-darwin, home-manager, ... }:
   let
-    # Shared home-manager wiring — used by both darwin and nixos hosts
-    hmShared = {
+    # Each host picks a profile from nix/modules/profiles/ (or home.nix for full)
+    hmFor = profile: {
       home-manager.useGlobalPkgs = true;
       home-manager.useUserPackages = true;
-      home-manager.users.codethread = import ./modules/home.nix;
+      home-manager.users.codethread = import profile;
     };
   in {
     # macOS — run: darwin-rebuild switch --flake .#macbook
@@ -31,7 +31,7 @@
       modules = [
         ./hosts/darwin
         home-manager.darwinModules.home-manager
-        hmShared
+        (hmFor ./modules/profiles/full.nix) # full package set
       ];
     };
 
@@ -42,7 +42,7 @@
       modules = [
         ./hosts/nixos
         home-manager.nixosModules.home-manager
-        hmShared
+        (hmFor ./modules/profiles/homelab.nix) # minimal: low-disk / VM
       ];
     };
   };
