@@ -10,6 +10,7 @@
   # --- Nix ---
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.allowUnsupportedSystem = true; # e.g. discord, spotify on non-x86 Linux
 
   # --- Networking ---
   networking.hostName = "nixos"; # change to match your machine hostname
