@@ -5,9 +5,6 @@ let
 in {
   home.stateVersion = "24.11";
 
-  # Unfree packages (spotify, obsidian, 1password, etc.)
-  nixpkgs.config.allowUnfree = true;
-
   home.packages = with pkgs; [
 
     # --- Languages ---
