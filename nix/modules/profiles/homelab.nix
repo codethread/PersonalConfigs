@@ -9,8 +9,9 @@
 
   home.packages = with pkgs; [
 
-    # --- Editors ---
+    # --- Editors / Terminal ---
     neovim
+    kitty
 
     # --- Languages ---
     go
