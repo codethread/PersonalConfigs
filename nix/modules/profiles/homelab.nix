@@ -38,7 +38,7 @@
     difftastic
 
     # --- Apps ---
-    spotify
+    # spotify: x86_64 Linux only, no ARM binary — excluded from aarch64 VM
     obsidian
 
     # --- Utils ---
