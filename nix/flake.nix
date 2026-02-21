@@ -35,14 +35,23 @@
       ];
     };
 
-    # NixOS — run: sudo nixos-rebuild switch --flake .#nixos
-    # Rename "nixos" to match your machine hostname if preferred
+    # NixOS (real machine, Intel) — sudo nixos-rebuild switch --flake .#nixos
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
         ./hosts/nixos
         home-manager.nixosModules.home-manager
-        (hmFor ./modules/profiles/homelab.nix) # minimal: low-disk / VM
+        (hmFor ./modules/profiles/homelab.nix)
+      ];
+    };
+
+    # NixOS (VM on Apple Silicon) — sudo nixos-rebuild switch --flake .#vm
+    nixosConfigurations.vm = nixpkgs.lib.nixosSystem {
+      system = "aarch64-linux";
+      modules = [
+        ./hosts/nixos
+        home-manager.nixosModules.home-manager
+        (hmFor ./modules/profiles/homelab.nix)
       ];
     };
   };
