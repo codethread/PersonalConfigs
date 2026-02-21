@@ -15,7 +15,11 @@ export def main [
 	--force # clean even with uncommitted changes
 	--shell # rebuild shell tools like carapace
 ] {
-	macos_has_full_disk_access
+	let is_macos = ((sys host).name == "Darwin")
+
+	if $is_macos {
+		macos_has_full_disk_access
+	}
 
 	log step  Dotty setting up dotfiles
 	dotty link
@@ -25,10 +29,11 @@ export def main [
 
 	clone_tools --clean=$clean --force=$force
 
-	if not $skip_brew {
-		homebrew
+	let is_nixos = ("/etc/NIXOS" | path exists)
+	if not $skip_brew and not $is_nixos {
+		# homebrew
 	} else {
-		log skip  "Homebrew"
+		log skip "Homebrew" (if $is_nixos { "managed by Nix" } else { "" })
 	}
 
 	setup-bins
@@ -37,7 +42,9 @@ export def main [
 
 	setup-tooling --force=$shell
 
-	try { macos }
+	if $is_macos {
+		try { macos }
+	}
 
 	nvim-sync
 }
@@ -50,18 +57,18 @@ def clone_tools [
 ] {
 	log step Vendor setting up vendored projects
 
+	let is_macos = ((sys host).name == "Darwin")
+
 	let tools = [
-		[git,                                   dir,          install];
-		[git@github.com:nushell/nu_scripts.git, ~/dev/vendor, {||}]
-		[git@github.com:gitwatch/gitwatch.git, ~/dev/vendor, {|| ln -f -s ~/dev/vendor/gitwatch/gitwatch.sh ~/.local/bin/gitwatch }]
-		[git@github.com:codethread/alfred.git, ~/sync, {|| }]
-		[git@github.com:codethread/todoist-cli.git, ~/dev/vendor, {|| try { go install }}]
+		[git,                                   dir,          install,  macos_only];
+		[git@github.com:nushell/nu_scripts.git, ~/dev/vendor, {||},                false]
+		[git@github.com:gitwatch/gitwatch.git, ~/dev/vendor, {|| ln -f -s ~/dev/vendor/gitwatch/gitwatch.sh ~/.local/bin/gitwatch }, false]
+		[git@github.com:codethread/alfred.git, ~/sync, {|| },                      true]
+		[git@github.com:codethread/todoist.git, ~/dev/vendor, {|| try { go install }}, false]
 		[git@github.com:apple/container.git, ~/dev/vendor, {||
 			# only needed till they fix --publish and stopping
-			# kitty @ launch --type=os-window sh -c "BUILD_CONFIGURATION=release make all test integration && BUILD_CONFIGURATION=release make install"
-			# echo "DONE!" | save --append ~/.container.log;
-		}]
-	]
+		},                                                                          true]
+	] | where { |t| not $t.macos_only or $is_macos }
 
 	$tools | each { |t|
 		cd $t.dir

@@ -17,17 +17,6 @@
     "ask": []
   },
   "hooks": {
-    "Stop": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/x-hooks/check-make.sh"
-          }
-        ]
-      }
-    ],
     "SubagentStop": []
   }
 }

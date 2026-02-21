@@ -4,9 +4,6 @@
 	#             CORE               #
 	##################################
 
-	## HOMEBREW stuff
-	brew "mas" # Mac App Store command-line interface (needed for mas installs)
-
 	# LANGS
 	brew "go"
 	brew "rustup"
@@ -24,8 +21,10 @@
 	# SHELL
 	brew "atuin"
 	brew "starship"
-	brew "terminal-notifier" # Send macOS User Notifications from the command-line
 	brew "neovim"
+	if OS.mac?
+	  brew "terminal-notifier" # Send macOS User Notifications from the command-line
+	end
 
 	# neovim (build dependencies)
 	# brew "ninja"
@@ -35,9 +34,11 @@
 
 	# TMUX
 	brew "tmux"
-	tap "morantron/tmux-fingers"
-	brew "tmux-fingers"
 	brew "smug"
+	if OS.mac?
+	  tap "morantron/tmux-fingers"
+	  brew "tmux-fingers"
+	end
 
 	tap "rsteube/homebrew-tap" # autocompletion engine for nushell
 	brew "rsteube/tap/carapace"
@@ -48,7 +49,6 @@
 	brew "bat"
 	brew "fd"
 	brew "fzf"
-	brew "pam-reattach" # PAM module for reattaching to the users GUI (Aqua) session
 	brew "ripgrep"
 	brew "sd"
 	brew "stylua"
@@ -62,7 +62,6 @@
 	brew "ast-grep"
 	brew "ffmpeg"
 	brew "yt-dlp"
-	brew "ical-buddy"
 
 	# git
 	brew "lazygit"
@@ -76,37 +75,46 @@
 	# brew "socat" # needed till --publish released
 	# cask "container" #building from source
 
-	tap "nikitabobko/tap"
-	cask "aerospace"
-
 	brew "opencode"
 
-	# Apps
-	cask "obsidian"
-	cask "todoist-app"
-	cask "1password"
-	cask "1password-cli"
-	cask "alfred"
-	cask "google-chrome"
-	# cask "jordanbaird-ice" # Menu bar manager
-	cask "kitty"
-	cask "visual-studio-code"
-	cask "cursor"
-	cask "spotify"
-	cask "zed"
-	cask "ticktick"
+	if OS.mac?
+	  tap "nikitabobko/tap"
+	  cask "aerospace"
 
-	# Fonts: i seem to find using nerd symbols standalone with kitty works better than nerd fonts
-	cask "font-fira-code"
-	cask "font-victor-mono"
-	cask "font-symbols-only-nerd-font"
+	  brew "pam-reattach" # PAM module for reattaching to the users GUI (Aqua) session
+	  brew "ical-buddy"
 
-	mas "DaisyDisk", id: 411643860
-	mas "Magnet", id: 441258766
+	  # Apps
+	  cask "obsidian"
+	  cask "todoist-app"
+	  cask "1password"
+	  cask "1password-cli"
+	  cask "alfred"
+	  cask "google-chrome"
+	  # cask "jordanbaird-ice" # Menu bar manager
+	  cask "kitty"
+	  cask "visual-studio-code"
+	  cask "cursor"
+	  cask "spotify"
+	  cask "zed"
+	  cask "ticktick"
 
-	# mas "Dark Reader for Safari", id: 1438243180
-	# mas "Vimari", id: 1480933944
-	mas "Spokenly", id: 6740315592
+	  # Fonts: i seem to find using nerd symbols standalone with kitty works better than nerd fonts
+	  cask "font-fira-code"
+	  cask "font-victor-mono"
+	  cask "font-symbols-only-nerd-font"
+	elsif OS.linux?
+	  brew "ticktick"
+	end
+
+	if OS.mac?
+	  brew "mas" # Mac App Store command-line interface (needed for mas installs)
+	  mas "DaisyDisk", id: 411643860
+	  mas "Magnet", id: 441258766
+	  # mas "Dark Reader for Safari", id: 1438243180
+	  # mas "Vimari", id: 1480933944
+	  mas "Spokenly", id: 6740315592
+	end
 
 	# vs-vim
 	vscode "cunbidun.flash-vscode"
@@ -153,8 +161,10 @@
 	##################################
 	#             HOME               #
 	##################################
-	cask "discord"
-	cask "whatsapp"
+	if OS.mac?
+	  cask "discord"
+	  cask "whatsapp"
+	end
 
 	# Fast, disk space efficient package manager
 	# brew "pnpm"
@@ -202,14 +212,16 @@
 	# tap "facebook/fb"
 	# brew "facebook/fb/idb-companion"
 
-	# TODO: migrate notes
-	cask "logseq"
+	if OS.mac?
+	  # TODO: migrate notes
+	  cask "logseq"
 
-	cask "licecap" # screen capture
-	cask "figma"
-	cask "obs"
-	cask "proxyman"
-	cask "firefox@developer-edition"
+	  cask "licecap" # screen capture
+	  cask "figma"
+	  cask "obs"
+	  cask "proxyman"
+	  cask "firefox@developer-edition"
+	end
 
 	# mas "Key Codes", id: 414568915
 

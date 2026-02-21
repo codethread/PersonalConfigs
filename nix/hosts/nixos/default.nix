@@ -20,7 +20,8 @@
   i18n.defaultLocale = "en_GB.UTF-8";
 
   # --- Shell ---
-  programs.nushell.enable = true; # adds nushell to /etc/shells
+  # Register nushell as a valid login shell (adds it to /etc/shells)
+  environment.shells = [ pkgs.nushell ];
 
   # --- User ---
   users.users.codethread = {
