@@ -42,7 +42,7 @@
     git   # needed to clone dotfiles on fresh install
     curl
     wget
-    make
+    gnumake
   ];
 
   system.stateVersion = "24.11";
