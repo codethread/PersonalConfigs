@@ -24,7 +24,7 @@
     kitty           # terminal
 
     # Launcher (spotlight-like)
-    rofi-wayland
+    rofi
 
     # Status bar
     waybar
