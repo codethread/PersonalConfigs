@@ -32,6 +32,7 @@
     isNormalUser = true;
     extraGroups = [ "wheel" "networkmanager" "podman" ];
     shell = pkgs.nushell;
+    initialPassword = "changeme"; # change after first login with: passwd
   };
 
   # Swap: skipped in installer. Enable zram if you need swap pressure relief

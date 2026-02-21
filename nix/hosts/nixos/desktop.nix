@@ -4,12 +4,12 @@
   # --- Hyprland (Wayland compositor) ---
   programs.hyprland.enable = true;
 
-  # Minimal display manager — launches Hyprland directly
+  # Display manager — tuigreet runs as system 'greeter' user (auto-created by greetd)
   services.greetd = {
     enable = true;
     settings.default_session = {
-      command = "${pkgs.hyprland}/bin/Hyprland";
-      user = "codethread";
+      command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd Hyprland";
+      user = "greeter";
     };
   };
 
