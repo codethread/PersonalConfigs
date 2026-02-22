@@ -21,15 +21,20 @@ export def main [
 		macos_has_full_disk_access
 	}
 
+	let is_nixos = ("/etc/NIXOS" | path exists)
+
 	log step  Dotty setting up dotfiles
 	dotty link
 
 	# setup some folder structures how I like them
 	mkdir -v ~/dev/vendor/ ~/dev/learn/ ~/dev/projects/ ~/.local/cache/docs
 
-	clone_tools --clean=$clean --force=$force
+	if not $is_nixos {
+		clone_tools --clean=$clean --force=$force
+	} else {
+		log skip "Vendor" "requires SSH, run manually after key setup"
+	}
 
-	let is_nixos = ("/etc/NIXOS" | path exists)
 	if not $skip_brew and not $is_nixos {
 		# homebrew
 	} else {
@@ -38,7 +43,11 @@ export def main [
 
 	setup-bins
 
-	rustup
+	if not $is_nixos {
+		rustup
+	} else {
+		log skip "Rustup" "managed by Nix"
+	}
 
 	setup-tooling --force=$shell
 
