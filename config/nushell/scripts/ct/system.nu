@@ -16,6 +16,11 @@ export def nrs [profile: string = "vm"] {
 	sudo nixos-rebuild switch --flake $"path:($env.HOME)/PersonalConfigs/nix#($profile)"
 }
 
+# Rebuild and set boot target (use when switching would change critical components e.g. dbus)
+export def nrb [profile: string = "vm"] {
+	sudo nixos-rebuild boot --flake $"path:($env.HOME)/PersonalConfigs/nix#($profile)"
+}
+
 # I always forget
 export def symlink [original: path, symbolic: path] {
 	ln -s $original $symbolic
