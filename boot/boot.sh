@@ -71,7 +71,7 @@ mkdir -p "$XDG_CACHE_HOME"
 # sudo env PATH=... carries that PATH through to root so nixos-rebuild also finds git
 if [ -f "/etc/NIXOS" ] && ! command -v nu 2>&1 >/dev/null; then
   echo "( ◕ ◡ ◕ ) NixOS: running nixos-rebuild (profile: ${NIXOS_PROFILE})"
-  nix-shell -p git --run "sudo env PATH=\$PATH nixos-rebuild switch --flake ${DOTFILES}/nix#${NIXOS_PROFILE}"
+  sudo nixos-rebuild switch --flake "path:${DOTFILES}/nix#${NIXOS_PROFILE}"
 fi
 
 if [ -f "/etc/NIXOS" ]; then
