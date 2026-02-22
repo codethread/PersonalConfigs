@@ -2,13 +2,16 @@
 
 {
   # --- Hyprland (Wayland compositor) ---
-  programs.hyprland.enable = true;
+  programs.hyprland = {
+    enable = true;
+    withUWSM = true; # recommended: proper session env/dbus setup via uwsm
+  };
 
   # Display manager — tuigreet runs as system 'greeter' user (auto-created by greetd)
   services.greetd = {
     enable = true;
     settings.default_session = {
-      command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd Hyprland";
+      command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd 'uwsm start hyprland-uwsm.desktop'";
       user = "greeter";
     };
   };
