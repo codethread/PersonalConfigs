@@ -48,8 +48,9 @@
   # Propagate GTK theme into sessions
   environment.sessionVariables = {
     GTK_THEME = "rose-pine";
-    # VirtualBox / software-only GPU: wlroots has no hardware DRM to drive
-    WLR_NO_HARDWARE_CURSORS = "1";
-    WLR_RENDERER_ALLOW_SOFTWARE = "1";
+    # VirtualBox / software-only GPU
+    WLR_NO_HARDWARE_CURSORS = "1";     # wlroots: no hardware cursor plane
+    WLR_RENDERER_ALLOW_SOFTWARE = "1"; # wlroots: allow llvmpipe renderer
+    LIBGL_ALWAYS_SOFTWARE = "1";       # Electron/GL apps: skip GPU process entirely
   };
 }
