@@ -11,6 +11,11 @@ export def alert [msg = "Task Finished"] {
 	afplay /System/Library/Sounds/Glass.aiff
 }
 
+# Rebuild and switch NixOS configuration
+export def nrs [profile: string = "vm"] {
+	sudo nixos-rebuild switch --flake $"path:($env.HOME)/PersonalConfigs/nix#($profile)"
+}
+
 # I always forget
 export def symlink [original: path, symbolic: path] {
 	ln -s $original $symbolic
