@@ -24,11 +24,11 @@ $env.RIPGREP_CONFIG_PATH = ([$env.XDG_CONFIG_HOME ripgrep/config] | path join)
 $env.ENV_CONVERSIONS = {
 	CT_LOG: { from_string: { |s| $s | into bool } to_string: { |v| $"($v)"} }
 }
-$env.CT_USER = (match (whoami) {
+$env.CT_USER = (match ($env.USER? | default (whoami)) {
 	"adam.hall" => "work",
 	"adamhall" => "work",
 	"codethread" => "home",
-	_ => { error make { msg: $"unkown user '(whoami)'; please update env.nu with user"}},
+	_ => "home",
 })
 
 $env.KSM_WORK = ($env.CT_USER == 'work')
