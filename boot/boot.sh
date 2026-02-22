@@ -67,9 +67,13 @@ mkdir -p "$XDG_STATE_HOME"
 mkdir -p "$XDG_CACHE_HOME"
 
 # run nixos-rebuild if nushell is not yet on the system (i.e. first boot)
-# nix-shell provides git (needed by nix to evaluate the flake from a git repo);
-# sudo env PATH=... carries that PATH through to root so nixos-rebuild also finds git
+# flake.lock must exist before nixos-rebuild — generate it via nix-shell which provides
+# git (needed by nix to resolve the git repo when creating the lock file)
 if [ -f "/etc/NIXOS" ] && ! command -v nu 2>&1 >/dev/null; then
+  if [ ! -f "${DOTFILES}/nix/flake.lock" ]; then
+    echo "( ◕ ◡ ◕ ) NixOS: generating flake.lock"
+    nix-shell -p git --run "nix --extra-experimental-features 'nix-command flakes' flake update --flake ${DOTFILES}/nix"
+  fi
   echo "( ◕ ◡ ◕ ) NixOS: running nixos-rebuild (profile: ${NIXOS_PROFILE})"
   sudo nixos-rebuild switch --flake "path:${DOTFILES}/nix#${NIXOS_PROFILE}"
 fi
