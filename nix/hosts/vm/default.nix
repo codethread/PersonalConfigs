@@ -6,5 +6,5 @@
     ../../modules/nixos-system.nix
   ];
 
-  networking.hostName = "nixos";
+  networking.hostName = "vm";
 }

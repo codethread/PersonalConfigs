@@ -49,7 +49,7 @@
     nixosConfigurations.vm = nixpkgs.lib.nixosSystem {
       system = "aarch64-linux";
       modules = [
-        ./hosts/nixos
+        ./hosts/vm
         home-manager.nixosModules.home-manager
         (hmFor ./modules/profiles/homelab.nix)
       ];

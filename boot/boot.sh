@@ -39,7 +39,7 @@ fi
 # copy hardware configuration if the repo still has the empty stub
 if [ -f "/etc/NIXOS" ]; then
   _hw_src="/etc/nixos/hardware-configuration.nix"
-  _hw_dest="${DOTFILES}/nix/hosts/nixos/hardware-configuration.nix"
+  _hw_dest="${DOTFILES}/nix/hosts/${NIXOS_PROFILE}/hardware-configuration.nix"
   if [ -f "${_hw_src}" ] && grep -q '{ \.\.\. }: { }' "${_hw_dest}" 2>/dev/null; then
     echo "( ◕ ◡ ◕ ) Copying hardware configuration from installer"
     cp "${_hw_src}" "${_hw_dest}"
