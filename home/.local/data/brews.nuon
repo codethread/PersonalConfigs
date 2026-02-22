@@ -83,6 +83,8 @@
 
 	# Apps
 	cask "obsidian"
+	brew "graphviz" # markdown graph viewer for dot syntax
+
 	cask "todoist-app"
 	cask "1password"
 	cask "1password-cli"
@@ -201,6 +203,10 @@
 	# simulator MCP
 	# tap "facebook/fb"
 	# brew "facebook/fb/idb-companion"
+
+	cask "virtualbox"
+
+	brew "libimobiledevice" # native debugging utils
 
 	# TODO: migrate notes
 	cask "logseq"

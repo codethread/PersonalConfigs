@@ -5,6 +5,7 @@
     "CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "true",
     "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1",
     "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "true",
+    "ENABLE_LSP_TOOL": "true",
     "MANPAGER": "cat",
     "ZDOTDIR": "~/.config/zsh-claude",
     "__CC_CUSTOM_ENVS_": "manpager so we can see files, CLAUDECODE tells bun.js to have less noisy cli output, ZDOTDIR avoids old shell stuff",
@@ -39,9 +40,9 @@
     ],
     "ask": [
       "Bash(chmod:*)",
-      "Bash(curl:*)",
       "Bash(git rebase:*)",
-      "Bash(git cherry-pick:*)"
+      "Bash(git cherry-pick:*)",
+      "Bash(curl:*)"
     ],
     "defaultMode": "acceptEdits",
     "additionalDirectories": [
@@ -123,6 +124,8 @@
     "padding": 0
   },
   "enabledPlugins": {
+    "beads@beads-marketplace": true,
+    "code-review@ai-tools-marketplace": true,
     "logger@codethread-plugins": false,
     "frontend-design@claude-plugins-official": true,
     "typescript-lsp@claude-plugins-official": true,
