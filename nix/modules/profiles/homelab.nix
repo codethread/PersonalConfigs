@@ -33,6 +33,7 @@
     # --- Editors / Terminal ---
     neovim
     kitty
+    google-chrome
 
     # --- Languages ---
     go

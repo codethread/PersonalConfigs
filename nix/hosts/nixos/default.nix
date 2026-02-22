@@ -19,6 +19,12 @@
   networking.hostName = "nixos"; # change to match your machine hostname
   networking.networkmanager.enable = true;
 
+  # --- SSH ---
+  services.openssh = {
+    enable = true;
+    settings.PasswordAuthentication = false; # key-based only
+  };
+
   # --- Locale ---
   time.timeZone = "Europe/London"; # adjust as needed
   i18n.defaultLocale = "en_GB.UTF-8";
