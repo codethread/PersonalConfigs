@@ -24,10 +24,9 @@ $env.RIPGREP_CONFIG_PATH = ([$env.XDG_CONFIG_HOME ripgrep/config] | path join)
 $env.ENV_CONVERSIONS = {
 	CT_LOG: { from_string: { |s| $s | into bool } to_string: { |v| $"($v)"} }
 }
-$env.CT_USER = (match ($env.USER? | default (whoami)) {
+$env.CT_USER = (match ($env.USER? | default "") {
 	"adam.hall" => "work",
 	"adamhall" => "work",
-	"codethread" => "home",
 	_ => "home",
 })
 
