@@ -24,10 +24,10 @@ if [ ! -d "${DOTFILES}" ]; then
   fi
 
   if command -v git 2>&1 >/dev/null; then
-    git clone "$_clone_url" "${DOTFILES}"
+    git clone --branch linux "$_clone_url" "${DOTFILES}"
   elif [ -f "/etc/NIXOS" ]; then
     echo "  (no git in PATH, using nix-shell)"
-    nix-shell -p git --run "git clone ${_clone_url} ${DOTFILES}"
+    nix-shell -p git --run "git clone --branch linux ${_clone_url} ${DOTFILES}"
   else
     echo "missing git, likely needs developer tools"
     exit 1
