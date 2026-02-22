@@ -28,6 +28,25 @@
     fi
   '';
 
+  # Override desktop entries for Electron apps to force --disable-gpu in VMs.
+  # Without this the GPU process crashes silently and windows never appear.
+  xdg.desktopEntries = {
+    obsidian = {
+      name = "Obsidian";
+      exec = "${pkgs.obsidian}/bin/obsidian --disable-gpu %u";
+      icon = "obsidian";
+      categories = [ "Office" ];
+      mimeType = [ "x-scheme-handler/obsidian" ];
+    };
+    google-chrome = {
+      name = "Google Chrome";
+      exec = "${pkgs.google-chrome}/bin/google-chrome-stable --disable-gpu %U";
+      icon = "google-chrome";
+      categories = [ "Network" "WebBrowser" ];
+      mimeType = [ "text/html" "text/xml" "application/xhtml+xml" "x-scheme-handler/http" "x-scheme-handler/https" ];
+    };
+  };
+
   home.packages = with pkgs; [
 
     # --- Editors / Terminal ---
