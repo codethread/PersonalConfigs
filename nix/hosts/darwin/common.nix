@@ -6,6 +6,19 @@
 }:
 
 let
+  graphEasy = pkgs.perlPackages.buildPerlPackage {
+    pname = "Graph-Easy";
+    version = "0.76";
+    src = pkgs.fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Graph-Easy-0.76.tar.gz";
+      hash = "sha256-1KLBCuvvZjtZjqN/OqPjt1Ks8fu7lhIyw9vhFVAI0fo=";
+    };
+    propagatedBuildInputs = with pkgs.perlPackages; [
+      Graph
+    ];
+    meta.mainProgram = "graph-easy";
+  };
+
   homeDir = config.users.users.${config.system.primaryUser}.home;
   nixUserBin = "/etc/profiles/per-user/${config.system.primaryUser}/bin";
   syncengineStateDir = "${homeDir}/.local/state/com.codethread.syncengine";
@@ -51,6 +64,8 @@ in
     volta
     yazi
     bitwarden-cli
+    graphEasy
+    flock
   ];
 
   fonts.packages = with pkgs; [
@@ -176,10 +191,9 @@ in
       "morantron/tmux-fingers/tmux-fingers" # mouseless terminal interaction
       "codethread/wktree/wktree" # Deterministic git worktree manager
       "ical-buddy" # Get events and tasks from the macOS calendar database
-      "podman" # Homebrew tracks Podman and its macOS machine integration more closely
-      "podman-compose" # Compose wrapper kept alongside Homebrew Podman
       "rsync" # Utility that provides fast incremental file transfer
       "graphviz" # provides dot for diagraph
+      "imagemagick" # image maker
       "node" # Runtime for user-owned global npm tools
     ];
     extraConfig = ''
@@ -193,7 +207,44 @@ in
       "todoist-app" # To-do list
       "obsidian" # Knowledge base that works on top of a local folder of plain text Markdown files
       "1password" # Password manager that keeps all passwords secure behind one password
+      "1password-cli" # Command-line interface for 1Password
       "google-chrome"
+      "ungoogled-chromium" # Google Chromium, sans integration with Google
+      "visual-studio-code" # Open-source code editor
+      "zed" # Multiplayer code editor
+    ];
+
+    # Editor extensions are shared; work-only ones live in common-work.nix.
+    vscode = [
+      # vim
+      "cunbidun.flash-vscode"
+      "haphazarddev.oil-code"
+      "vscodevim.vim"
+
+      # linting
+      "dbaeumer.vscode-eslint"
+      "esbenp.prettier-vscode"
+      "biomejs.biome"
+
+      # quality of life
+      "davidsanders.search-under-cursor"
+      "usernamehw.commands"
+      "wraith13.unsaved-files-vscode"
+      "formulahendry.auto-close-tag"
+      "formulahendry.auto-rename-tag"
+
+      # theme and ui
+      "mvllow.rose-pine"
+      "jgclark.vscode-todo-highlight"
+      "kamikillerto.vscode-colorize"
+
+      # lang
+      "rust-lang.rust-analyzer"
+      "bradlc.vscode-tailwindcss"
+
+      # tools
+      "ms-playwright.playwright"
+      # "github.copilot-chat"
     ];
     # enable on boot load machine
     # bug requires login on every switch

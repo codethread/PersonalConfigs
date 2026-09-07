@@ -3,7 +3,7 @@
 Document ID: SPEC-006
 Configuration identification: SPEC-006; migrated from `specs/nix-infra.md`; canonical path `devflow/specs/nix-infra.md`.
 **Status:** Implemented
-**Last Updated:** 2026-07-23
+**Last Updated:** 2026-09-06
 
 ## [SPEC-006-S1] 1. Overview
 
@@ -36,7 +36,8 @@ Declarative system configuration and bootstrap infrastructure for all personal m
 flake.nix (inputs, overlays, system configurations)
     │
     ├─ hosts/<platform>/<machine>/   System-level: hardware, networking, users, services
-    │   └─ common.nix / base.nix    Shared platform defaults
+    │   ├─ common.nix / base.nix    Shared platform defaults (casks, brews, macOS defaults)
+    │   └─ dev-tools.nix            Heavy dev-only extras (JVM, podman) — dev + work only
     │
     ├─ profiles/<name>.nix           User-level: home-manager imports per role
     │   └─ imports features/*
@@ -154,6 +155,23 @@ Defined directly in `features/nixos-common.nix` (not via `repo-service.nix`):
 - **tmux-main** — systemd oneshot that creates the main tmux session on graphical login
 - **backup-notes** — systemd oneshot + timer that auto-commits and pushes the notes vault (`~/dev/projects/notes/vault`) every 15 minutes via git (add → stash → pull --rebase → stash pop → commit → push). Sends `notify-send` on failure when Wayland display is available.
 
+### [SPEC-006-S2.10] Darwin launchd Services
+
+Deliberately **not** shared via `hosts/darwin/common.nix` — each is tied to a repo,
+a workload, or a machine's role. Declared in the host module that wants it.
+
+| Service | Declared in | Applies to | Notes |
+|---|---|---|---|
+| `syncengine` | `hosts/darwin/common.nix` | all macOS | The one exception; keeps `~/.local/bin/syncengine` running everywhere |
+| `git-maintenance-{hourly,daily,weekly}` | `services/darwin-git-maintenance.nix` | any host setting `codethread.gitMaintenance.repositories` | No-ops when the list is empty |
+| `cc-notify` | `services/darwin-cc-notify.nix` | dev, work | Clones + runs `codethread/cc-notify`; needs SSH auth to GitHub |
+| `backup-notes` | `hosts/darwin/dev.nix` | dev | Auto-commits the notes vault every 15 min; NixOS has its own systemd equivalent |
+| `high-cpu-watch` | `hosts/darwin/dev.nix` | dev | Alerts via `cc-notify` after 10 min above 95% CPU |
+
+Adding a service to a host is a three-step change: import (or inline) the module,
+create its state dir in `system.activationScripts.postActivation`, and confirm any
+repo it depends on is cloned by an activation hook.
+
 ## [SPEC-006-S3] 3. Data Model
 
 ### [SPEC-006-S3.1] Profile Resolution
@@ -258,6 +276,8 @@ WiFi PSK stored at `/etc/codethread/nm.env` (NixOS homelab only), referenced via
 - **Lix over official Nix on macOS** — Lix is a community fork installed via `install.lix.systems/lix`. Used as the Nix implementation on Darwin.
 
 - **Homebrew alongside Nix on macOS** — Homebrew manages GUI casks and Mac App Store apps (via `mas`). Nix handles CLI tools. `nix-darwin` orchestrates both declaratively via `homebrew.casks` and `homebrew.masApps`.
+
+- **Shared-by-default profiles** — `dev`, `personal`, `work-boot`, and `work` all import `features/common.nix` unmodified. A package is only allowed to diverge when it is genuinely large (JVM toolchain, container runtime) or tied to specific hardware (`qmk`). Optimising a handful of megabytes out of a laptop is not worth two environments that silently drift; the same reasoning applies to the macOS host layer, where `hosts/darwin/common.nix` holds everything and `hosts/darwin/dev-tools.nix` holds only the heavy extras. Long-running services are the exception — they are per-machine by nature and are declared in the host module, never in `common.nix`.
 
 - **Work boot profiles for username variants** — New work macOS machines may use `adam.hall` (dotted) or `adamhall`. Bootstrap supports both with minimal `work-boot` outputs. The full `work` output is intentionally single-user and only the current full-work username auto-promotes to it when workfiles exist; update `nix/flake.nix` and the rebuild wrapper's full-work username when the provisioned username changes.
 

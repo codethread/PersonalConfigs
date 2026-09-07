@@ -213,8 +213,16 @@ in
     ]
     ++ lib.optionals (!pkgs.stdenv.isDarwin) [
       agentPkgSet.nodejs_24
+      openssh
     ]
     ++ [
+      # --- Core ---
+      # Explicit rather than relying on the login shell / system git, so every
+      # profile (including lightweight laptops) gets the same versions. Darwin
+      # keeps its system OpenSSH for UseKeychain and 1Password IdentityAgent.
+      nushell
+      git
+
       # --- Languages ---
       go
       zig
@@ -223,6 +231,7 @@ in
       pnpm
       rustup
       python311
+      luarocks
 
       # --- Shell ---
       neovim
@@ -239,6 +248,7 @@ in
       poppler-utils
       coreutils
       fswatch
+      entr
       ffmpeg
       fd
       ripgrep

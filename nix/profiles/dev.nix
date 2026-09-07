@@ -1,6 +1,10 @@
 { pkgs, ... }:
 
-# Dev profile: common packages + personal extras not needed at work.
+# Dev profile: the shared user environment plus hardware-specific extras.
+#
+# Only things tied to *this* machine's hardware belong here. Anything a laptop
+# could plausibly want goes in features/common.nix instead — a few MB of unused
+# packages is cheaper than two environments drifting apart.
 # Used by: darwinConfigurations.dev
 
 {
@@ -9,9 +13,7 @@
   ];
 
   home.packages = with pkgs; [
-    qmk
+    qmk # keyboard flashing — the keyboards live on this desk
     dos2unix # qmk dep
-    luarocks
-    entr
   ];
 }
