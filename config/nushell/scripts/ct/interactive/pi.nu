@@ -17,7 +17,7 @@ const goal_tools = [goal_complete, goal_blocked, goal_wait]
 export alias pim = pi --tools ($core_tools ++ $smart_tools ++ $goal_tools | str join ",") --provider openai-codex --model gpt-5.6-sol --thinking medium
 
 # Hard quality-first work
-export alias pih = pi --tools ($core_tools ++ $smart_tools ++ $goal_tools | str join ",") --provider openai-codex --model gpt-5.6-sol --thinking xhigh
+export alias pih = pi --tools ($core_tools ++ $smart_tools ++ $goal_tools | str join ",") --provider openai-codex --model gpt-6-astra --thinking high
 
 # Cheap lightweight work
 export alias pil = pi --tools ($core_tools | str join ",") --provider openai-codex --model gpt-5.6-luna --thinking high
