@@ -1,15 +1,35 @@
 #!/usr/bin/env bash
-# :module: intermittent cpu/mem for tmux status bar (5s on, 30s off)
+# :module: macOS/Linux CPU and memory snapshots for the tmux status bar
 
-CYCLE=35
-ON=5
+case "${1:-}" in
+	-h|--help)
+		printf 'Usage: tmux-sysstat [client-pid]\nmacOS: sampled CPU usage and kernel memory pressure.\nLinux: CPU usage since the previous snapshot and memory usage.\n'
+		exit 0
+		;;
+esac
 
-now=$(date +%s)
-phase=$(( now % CYCLE ))
+# macOS exposes a cheap, system-wide pressure classification, not a RAM-used
+# percentage. This is a coarse kernel signal, not Activity Monitor's graph.
+if [[ $(uname -s) == Darwin ]]; then
+	pressure=$(/usr/sbin/sysctl -n kern.memorystatus_vm_pressure_level 2>/dev/null)
+	case "$pressure" in
+		1) memory='#[fg=green]normal' ;;
+		2) memory='#[fg=yellow]warn' ;;
+		4) memory='#[fg=red]critical' ;;
+		*) memory='#[fg=yellow]?' ;;
+	esac
 
-if (( phase >= ON )); then
+	# Discard top's first CPU sample (since boot). Skip framework/map walks
+	# and the process table; take a one-second sample on each status refresh.
+	cpu=$(/usr/bin/top -l 2 -s 1 -n 0 -F -R | /usr/bin/awk '
+		/^CPU usage:/ { samples++; idle = $(NF-1) + 0 }
+		END { if (samples == 2) printf "%.0f%%", 100-idle; else printf "?" }
+	')
+	printf 'cpu:%s mem:%s#[fg=default]' "$cpu" "$memory"
 	exit 0
 fi
+
+[[ -r /proc/stat && -r /proc/meminfo ]] || exit 0
 
 # --- CPU usage from /proc/stat delta ---
 # per-client cache avoids bogus deltas when multiple tmux clients poll
