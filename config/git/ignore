@@ -52,10 +52,8 @@ flycheck_*.el
 
 ## VIM
 # swap
-[._]*.s[a-v][a-z]
-[._]*.sw[a-p]
-[._]s[a-v][a-z]
-[._]sw[a-p]
+?*.s[a-v][a-z]
+?*.sw[a-p]
 
 # session
 Session.vim
