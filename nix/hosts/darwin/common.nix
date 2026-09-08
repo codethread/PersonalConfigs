@@ -186,10 +186,15 @@ in
         clone_target = "https://github.com/codethread/wktree";
         trusted = true;
       } # wktree
+      {
+        name = "BRO3886/tap";
+        trusted = true;
+      } # ical
     ];
     brews = [
       "morantron/tmux-fingers/tmux-fingers" # mouseless terminal interaction
       "codethread/wktree/wktree" # Deterministic git worktree manager
+      "BRO3886/tap/ical" # native macOS Calendar CLI
       "ical-buddy" # Get events and tasks from the macOS calendar database
       "rsync" # Utility that provides fast incremental file transfer
       "graphviz" # provides dot for diagraph
@@ -212,6 +217,7 @@ in
       "ungoogled-chromium" # Google Chromium, sans integration with Google
       "visual-studio-code" # Open-source code editor
       "zed" # Multiplayer code editor
+      "opensuperwhisper" # local voice ai, large footprint
     ];
 
     # Editor extensions are shared; work-only ones live in common-work.nix.
