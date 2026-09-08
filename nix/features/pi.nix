@@ -1,7 +1,6 @@
 {
   pkgs,
   pkgsMaster ? null,
-  pi-btw-src,
   ...
 }:
 
@@ -50,21 +49,6 @@ let
     tar -xzf ${highlightJsTarball} --strip-components=1 -C "$out/node_modules/highlight.js"
   '';
 
-  piBtw = pkgs.buildNpmPackage {
-    pname = "pi-btw";
-    version = "0.4.1";
-    src = pi-btw-src;
-
-    npmDepsHash = "sha256-iPyOl0ZJUKfutTeO4NdOuQSBVS90DU84rCWeNg8QKJQ=";
-    dontNpmBuild = true;
-
-    meta = {
-      description = "A Pi extension for parallel side conversations with /btw";
-      homepage = "https://github.com/dbachelder/pi-btw";
-      license = pkgs.lib.licenses.mit;
-    };
-  };
-
   piMcpAdapterSrc = pkgs.fetchFromGitHub {
     owner = "nicobailon";
     repo = "pi-mcp-adapter";
@@ -108,7 +92,6 @@ in
   home.file = {
     ".pi/agent/packages/pi-nvim".source = piNvim;
     ".pi/agent/packages/pi-goal".source = piGoal;
-    ".pi/agent/packages/pi-btw".source = piBtw + "/lib/node_modules/pi-btw";
     ".pi/agent/packages/pi-mcp-adapter".source = piMcpAdapter + "/lib/node_modules/pi-mcp-adapter";
   };
 }

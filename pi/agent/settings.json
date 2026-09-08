@@ -32,9 +32,6 @@
       "source": "./packages/pi-nvim"
     },
     {
-      "source": "./packages/pi-btw"
-    },
-    {
       "source": "./packages/pi-goal"
     },
     {
